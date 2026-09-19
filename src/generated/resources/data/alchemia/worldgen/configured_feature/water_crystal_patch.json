@@ -1,0 +1,13 @@
+{
+  "type": "alchemia:crystal_patch",
+  "config": {
+    "state": {
+      "Name": "alchemia:water_crystal",
+      "Properties": {
+        "age": "0",
+        "facing": "up",
+        "waterlogged": "false"
+      }
+    }
+  }
+}

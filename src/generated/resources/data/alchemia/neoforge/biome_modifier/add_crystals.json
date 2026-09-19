@@ -1,0 +1,13 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#minecraft:is_overworld",
+  "features": [
+    "alchemia:air_crystal_patch",
+    "alchemia:fire_crystal_patch",
+    "alchemia:water_crystal_patch",
+    "alchemia:earth_crystal_patch",
+    "alchemia:order_crystal_patch",
+    "alchemia:entropy_crystal_patch"
+  ],
+  "step": "underground_decoration"
+}

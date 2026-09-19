@@ -1,0 +1,9 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#minecraft:is_overworld",
+  "features": [
+    "alchemia:ore_amber",
+    "alchemia:ore_cinnabar"
+  ],
+  "step": "underground_ores"
+}
