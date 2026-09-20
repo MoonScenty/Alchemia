@@ -10,6 +10,7 @@ import me.moonscenty.alchemia.registry.ModBlocks;
 import me.moonscenty.alchemia.registry.ModItems;
 import me.moonscenty.alchemia.research.ModResearch;
 import me.moonscenty.alchemia.research.NodeShape;
+import me.moonscenty.alchemia.research.ResearchPage;
 import me.moonscenty.alchemia.research.ResearchCategory;
 import me.moonscenty.alchemia.research.ResearchEntry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -42,15 +43,15 @@ public class ModResearchProvider {
                 AspectList.EMPTY, List.of(), true, NodeShape.MAJOR);
 
         entry(context, "amber", ModResearch.BASICS, ModItems.AMBER, -2, 1,
-                AspectList.of(ModAspects.CRYSTAL, 2).add(ModAspects.TRAP, 2), List.of("aspects"), false, NodeShape.PLAIN);
+                AspectList.of(ModAspects.CRYSTAL, 2).add(ModAspects.TRAP, 2), List.of("aspects"), false, NodeShape.PLAIN, "amber_from_ore_smelting", "amber_block_from_amber");
         entry(context, "quicksilver", ModResearch.ALCHEMY, ModItems.QUICKSILVER, 0, 1,
-                AspectList.of(ModAspects.METAL, 3).add(ModAspects.EXCHANGE, 2), List.of("aspects"), false, NodeShape.PLAIN);
+                AspectList.of(ModAspects.METAL, 3).add(ModAspects.EXCHANGE, 2), List.of("aspects"), false, NodeShape.PLAIN, "quicksilver_from_raw_cinnabar_smelting", "quicksilver_from_shimmerleaf");
         entry(context, "vis_crystals", ModResearch.ARCANA, ModItems.BALANCED_SHARD, 2, 1,
                 AspectList.of(ModAspects.CRYSTAL, 4).add(ModAspects.AURA, 2), List.of("aspects"), false, NodeShape.SPECIAL);
         entry(context, "greatwood", ModResearch.BASICS, ModBlocks.GREATWOOD.sapling(), -1, 2,
-                AspectList.of(ModAspects.PLANT, 4).add(ModAspects.LIFE, 2), List.of("aspects"), false, NodeShape.PLAIN);
+                AspectList.of(ModAspects.PLANT, 4).add(ModAspects.LIFE, 2), List.of("aspects"), false, NodeShape.PLAIN, "greatwood_planks");
         entry(context, "silverwood", ModResearch.ARCANA, ModBlocks.SILVERWOOD.sapling(), 1, 2,
-                AspectList.of(ModAspects.PLANT, 4).add(ModAspects.AURA, 4), List.of("greatwood"), false, NodeShape.SPECIAL);
+                AspectList.of(ModAspects.PLANT, 4).add(ModAspects.AURA, 4), List.of("greatwood"), false, NodeShape.SPECIAL, "silverwood_planks");
         entry(context, "warp", ModResearch.ELDRITCH, Items.ENDER_PEARL, 0, 3,
                 AspectList.of(ModAspects.ELDRITCH, 4).add(ModAspects.FLUX, 2), List.of("vis_crystals"), false, NodeShape.MAJOR);
     }
@@ -62,14 +63,27 @@ public class ModResearchProvider {
                 Alchemia.id("textures/gui/research_background/" + sky + ".png"), order));
     }
 
+    /**
+     * The write-up always opens with a passage, and any recipes named follow it one to a page. Splitting the passage
+     * into several is a matter of adding keys here; nothing else has to change.
+     */
+    private static List<ResearchPage> pages(String name, String... recipes) {
+        List<ResearchPage> pages = new java.util.ArrayList<>();
+        pages.add(new ResearchPage.Text("research." + Alchemia.MODID + "." + name + ".page"));
+        for (String recipe : recipes) {
+            pages.add(new ResearchPage.Recipe(Alchemia.id(recipe)));
+        }
+        return List.copyOf(pages);
+    }
+
     private static void entry(BootstrapContext<ResearchEntry> context, String name, ResourceKey<ResearchCategory> category,
             ItemLike icon, int column, int row, AspectList requirements, List<String> parents, boolean autoUnlock,
-            NodeShape shape) {
+            NodeShape shape, String... recipes) {
         context.register(ResourceKey.create(ModResearch.ENTRY_KEY, Alchemia.id(name)),
                 new ResearchEntry(category, requirements, column, row,
                         BuiltInRegistries.ITEM.wrapAsHolder(icon.asItem()),
                         parents.stream().map(Alchemia::id).toList(),
-                        List.of("research." + Alchemia.MODID + "." + name + ".page"),
+                        pages(name, recipes),
                         autoUnlock, shape));
     }
 }

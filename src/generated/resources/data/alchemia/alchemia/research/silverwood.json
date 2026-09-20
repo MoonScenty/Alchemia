@@ -3,7 +3,14 @@
   "column": 1,
   "icon": "alchemia:silverwood_sapling",
   "pages": [
-    "research.alchemia.silverwood.page"
+    {
+      "type": "text",
+      "key": "research.alchemia.silverwood.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:silverwood_planks"
+    }
   ],
   "parents": [
     "alchemia:greatwood"

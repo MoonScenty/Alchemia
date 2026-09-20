@@ -9,9 +9,14 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.aspect.Aspect;
 import me.moonscenty.alchemia.registry.ModAspects;
+import me.moonscenty.alchemia.research.ModResearch;
+import me.moonscenty.alchemia.research.ResearchEntry;
+import me.moonscenty.alchemia.research.StartingResearch;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.ResourceLocationArgument;
+import net.minecraft.core.Registry;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -31,6 +36,7 @@ public class AlchemiaCommand {
         event.getDispatcher().register(Commands.literal(Alchemia.MODID)
                 .requires(source -> source.hasPermission(2))
                 .then(aspects())
+                .then(research())
                 .then(warp()));
     }
 
@@ -42,6 +48,64 @@ public class AlchemiaCommand {
                         .then(Commands.argument("aspect", ResourceLocationArgument.id())
                                 .executes(context -> discover(context.getSource(), ResourceLocationArgument.getId(context, "aspect")))))
                 .then(Commands.literal("forget").executes(context -> forget(context.getSource())));
+    }
+
+    private static LiteralArgumentBuilder<CommandSourceStack> research() {
+        return Commands.literal("research")
+                .then(Commands.literal("list").executes(context -> listResearch(context.getSource())))
+                .then(Commands.literal("grant")
+                        .then(Commands.literal("all").executes(context -> grantAll(context.getSource())))
+                        .then(Commands.argument("entry", ResourceLocationArgument.id())
+                                .suggests((context, builder) -> SharedSuggestionProvider.suggestResource(
+                                        entries(context.getSource()).keySet(), builder))
+                                .executes(context -> grant(context.getSource(), ResourceLocationArgument.getId(context, "entry")))))
+                .then(Commands.literal("forget").executes(context -> forgetResearch(context.getSource())));
+    }
+
+    private static Registry<ResearchEntry> entries(CommandSourceStack source) {
+        return source.registryAccess().registryOrThrow(ModResearch.ENTRY_KEY);
+    }
+
+    private static int listResearch(CommandSourceStack source) throws CommandSyntaxException {
+        PlayerKnowledge knowledge = PlayerKnowledge.of(source.getPlayerOrException());
+        Registry<ResearchEntry> entries = entries(source);
+        String done = knowledge.completedResearch().stream().map(ResourceLocation::toString).sorted()
+                .reduce((a, b) -> a + ", " + b).orElse("-");
+        source.sendSuccess(() -> Component.literal("Completed " + knowledge.completedResearch().size()
+                + " of " + entries.size() + ": " + done), false);
+        return knowledge.completedResearch().size();
+    }
+
+    private static int grant(CommandSourceStack source, ResourceLocation id) throws CommandSyntaxException {
+        ServerPlayer player = source.getPlayerOrException();
+        if (!entries(source).containsKey(id)) {
+            source.sendFailure(Component.literal("No such research: " + id));
+            return 0;
+        }
+        player.setData(ModAttachments.KNOWLEDGE, PlayerKnowledge.of(player).withResearch(id));
+        source.sendSuccess(() -> Component.literal("Completed " + id), false);
+        return 1;
+    }
+
+    private static int grantAll(CommandSourceStack source) throws CommandSyntaxException {
+        ServerPlayer player = source.getPlayerOrException();
+        Registry<ResearchEntry> entries = entries(source);
+        PlayerKnowledge knowledge = PlayerKnowledge.of(player);
+        for (ResourceLocation id : entries.keySet()) {
+            knowledge = knowledge.withResearch(id);
+        }
+        player.setData(ModAttachments.KNOWLEDGE, knowledge);
+        source.sendSuccess(() -> Component.literal("Completed every piece of research"), false);
+        return entries.size();
+    }
+
+    /** Clearing the research hands back whatever starts unlocked, or the book would have nothing to open. */
+    private static int forgetResearch(CommandSourceStack source) throws CommandSyntaxException {
+        ServerPlayer player = source.getPlayerOrException();
+        player.setData(ModAttachments.KNOWLEDGE, PlayerKnowledge.of(player).withoutResearch());
+        StartingResearch.grant(player);
+        source.sendSuccess(() -> Component.literal("Back to only what a reader starts with"), false);
+        return 1;
     }
 
     private static LiteralArgumentBuilder<CommandSourceStack> warp() {
@@ -90,7 +154,7 @@ public class AlchemiaCommand {
 
     private static int forget(CommandSourceStack source) throws CommandSyntaxException {
         ServerPlayer player = source.getPlayerOrException();
-        player.setData(ModAttachments.KNOWLEDGE, PlayerKnowledge.fresh());
+        player.setData(ModAttachments.KNOWLEDGE, PlayerKnowledge.of(player).withoutAspects());
         source.sendSuccess(() -> Component.literal("Back to knowing only the primals"), false);
         return 1;
     }

@@ -3,7 +3,10 @@
   "column": 2,
   "icon": "alchemia:balanced_shard",
   "pages": [
-    "research.alchemia.vis_crystals.page"
+    {
+      "type": "text",
+      "key": "research.alchemia.vis_crystals.page"
+    }
   ],
   "parents": [
     "alchemia:aspects"

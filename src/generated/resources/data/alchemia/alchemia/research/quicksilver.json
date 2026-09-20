@@ -3,7 +3,18 @@
   "column": 0,
   "icon": "alchemia:quicksilver",
   "pages": [
-    "research.alchemia.quicksilver.page"
+    {
+      "type": "text",
+      "key": "research.alchemia.quicksilver.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:quicksilver_from_raw_cinnabar_smelting"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:quicksilver_from_shimmerleaf"
+    }
   ],
   "parents": [
     "alchemia:aspects"

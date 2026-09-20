@@ -12,6 +12,7 @@ import me.moonscenty.alchemia.research.ModResearch;
 import me.moonscenty.alchemia.research.ResearchCategory;
 import me.moonscenty.alchemia.research.ResearchEntry;
 import me.moonscenty.alchemia.research.ScanTarget;
+import me.moonscenty.alchemia.research.StartingResearch;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.gametest.framework.GameTest;
@@ -32,6 +33,51 @@ public class ResearchTests {
         Registry<ResearchCategory> categories = helper.getLevel().registryAccess().registryOrThrow(ModResearch.CATEGORY_KEY);
         helper.assertTrue(categories.size() == 6, "there should be six branches of study, loaded " + categories.size());
         helper.assertTrue(categories.containsKey(ModResearch.ARCANA.location()), "arcana should be among them");
+        helper.succeed();
+    }
+
+    /** A reader has to start somewhere, so at least one entry is handed over rather than researched. */
+    @GameTest(template = TEMPLATE)
+    public static void somethingStartsUnlocked(GameTestHelper helper) {
+        Registry<ResearchEntry> entries = helper.getLevel().registryAccess().registryOrThrow(ModResearch.ENTRY_KEY);
+        long open = entries.stream().filter(ResearchEntry::autoUnlock).count();
+        helper.assertTrue(open > 0, "no entry starts unlocked, so the book would open on nothing readable");
+        helper.succeed();
+    }
+
+    /** Handing out the starting entries twice must not differ from handing them out once. */
+    @GameTest(template = TEMPLATE)
+    public static void startingResearchIsHandedOutOnceOnly(GameTestHelper helper) {
+        Registry<ResearchEntry> entries = helper.getLevel().registryAccess().registryOrThrow(ModResearch.ENTRY_KEY);
+        PlayerKnowledge fresh = PlayerKnowledge.fresh();
+        helper.assertTrue(fresh.completedResearch().isEmpty(), "a new reader should have finished nothing");
+
+        PlayerKnowledge once = StartingResearch.fold(fresh, entries);
+        long expected = entries.stream().filter(ResearchEntry::autoUnlock).count();
+        helper.assertTrue(once.completedResearch().size() == expected,
+                "expected " + expected + " entries handed over, got " + once.completedResearch().size());
+
+        PlayerKnowledge twice = StartingResearch.fold(once, entries);
+        helper.assertTrue(twice == once, "a second login should change nothing, so the same knowledge comes back");
+        helper.assertTrue(once.discoveredAspects().equals(fresh.discoveredAspects()),
+                "handing over research must not touch which aspects are known");
+        helper.succeed();
+    }
+
+    /** Clearing one half of what a player knows must leave the other half alone. */
+    @GameTest(template = TEMPLATE)
+    public static void forgettingOneHalfKeepsTheOther(GameTestHelper helper) {
+        Registry<ResearchEntry> entries = helper.getLevel().registryAccess().registryOrThrow(ModResearch.ENTRY_KEY);
+        PlayerKnowledge full = StartingResearch.fold(PlayerKnowledge.fresh(), entries)
+                .withAspects(AspectList.of(ModAspects.METAL, 1));
+
+        PlayerKnowledge noResearch = full.withoutResearch();
+        helper.assertTrue(noResearch.completedResearch().isEmpty(), "the research should be gone");
+        helper.assertTrue(noResearch.knows(ModAspects.METAL), "the aspects should have stayed");
+
+        PlayerKnowledge noAspects = full.withoutAspects();
+        helper.assertTrue(!noAspects.knows(ModAspects.METAL), "the learned aspect should be gone");
+        helper.assertTrue(noAspects.completedResearch().equals(full.completedResearch()), "the research should have stayed");
         helper.succeed();
     }
 

@@ -3,7 +3,14 @@
   "column": -1,
   "icon": "alchemia:greatwood_sapling",
   "pages": [
-    "research.alchemia.greatwood.page"
+    {
+      "type": "text",
+      "key": "research.alchemia.greatwood.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:greatwood_planks"
+    }
   ],
   "parents": [
     "alchemia:aspects"
