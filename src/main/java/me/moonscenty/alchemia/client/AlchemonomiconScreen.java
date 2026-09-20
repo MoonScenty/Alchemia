@@ -323,6 +323,7 @@ public class AlchemonomiconScreen extends Screen {
 
         if (knowledge.hasResearch(id)) {
             lines.add(Component.translatable("research.alchemia.known").withStyle(ChatFormatting.GREEN));
+            lines.add(Component.translatable("research.alchemia.open").withStyle(ChatFormatting.DARK_GRAY));
         } else if (!research.isAvailableTo(knowledge::hasResearch)) {
             lines.add(Component.translatable("research.alchemia.locked").withStyle(ChatFormatting.DARK_GRAY));
         } else {
@@ -360,6 +361,12 @@ public class AlchemonomiconScreen extends Screen {
                 return true;
             }
         }
+        if (hovered != null && PlayerKnowledge.of(minecraft.player).hasResearch(hoveredId)) {
+            // only work that is finished can be read; what is still outstanding says so in its note instead
+            minecraft.setScreen(new ResearchPageScreen(this, hoveredId, hovered));
+            return true;
+        }
+
         dragging = true;
         return super.mouseClicked(mouseX, mouseY, button);
     }

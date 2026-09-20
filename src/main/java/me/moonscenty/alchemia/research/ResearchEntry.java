@@ -24,7 +24,7 @@ import net.minecraft.world.item.ItemStack;
  * @param row          where it sits down the page
  * @param icon         the item shown on the node
  * @param parents      research that must be finished first
- * @param pages        translation keys for the write-up, once there is a book to read it in
+ * @param pages        the write-up, turned through two at a time once the entry is opened
  * @param autoUnlock   true for the handful of entries a player simply starts with
  * @param shape        how much weight the node carries, which decides the plate it is drawn on
  */
@@ -35,7 +35,7 @@ public record ResearchEntry(
         int row,
         Holder<Item> icon,
         List<ResourceLocation> parents,
-        List<String> pages,
+        List<ResearchPage> pages,
         boolean autoUnlock,
         NodeShape shape) {
 
@@ -46,10 +46,15 @@ public record ResearchEntry(
             Codec.INT.fieldOf("row").forGetter(ResearchEntry::row),
             BuiltInRegistries.ITEM.holderByNameCodec().fieldOf("icon").forGetter(ResearchEntry::icon),
             ResourceLocation.CODEC.listOf().optionalFieldOf("parents", List.of()).forGetter(ResearchEntry::parents),
-            Codec.STRING.listOf().optionalFieldOf("pages", List.of()).forGetter(ResearchEntry::pages),
+            ResearchPage.CODEC.listOf().optionalFieldOf("pages", List.of()).forGetter(ResearchEntry::pages),
             Codec.BOOL.optionalFieldOf("auto_unlock", false).forGetter(ResearchEntry::autoUnlock),
             NodeShape.CODEC.optionalFieldOf("shape", NodeShape.PLAIN).forGetter(ResearchEntry::shape))
             .apply(instance, ResearchEntry::new));
+
+    /** The pages this player has earned the right to see, in order. */
+    public List<ResearchPage> pagesFor(java.util.function.Predicate<ResourceLocation> hasResearch) {
+        return pages.stream().filter(page -> page.isVisibleTo(hasResearch)).toList();
+    }
 
     public ItemStack iconStack() {
         return new ItemStack(icon);

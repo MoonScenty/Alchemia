@@ -3,7 +3,18 @@
   "column": -2,
   "icon": "alchemia:amber",
   "pages": [
-    "research.alchemia.amber.page"
+    {
+      "type": "text",
+      "key": "research.alchemia.amber.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:amber_from_ore_smelting"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:amber_block_from_amber"
+    }
   ],
   "parents": [
     "alchemia:aspects"

@@ -78,6 +78,10 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("research.alchemia.locked", pick("Something must come first", "먼저 알아내야 할 것이 있다"));
         add("research.alchemia.ready", pick("Ready to be worked on", "연구할 수 있다"));
         add("research.alchemia.needs", pick("Still to be found: %s", "아직 찾지 못함: %s"));
+        add("research.alchemia.open", pick("Click to read", "클릭해 읽기"));
+        add("research.alchemia.crafting", pick("On the bench", "작업대에서"));
+        add("research.alchemia.smelting", pick("In the fire", "불에서"));
+        add("research.alchemia.recipe_missing", pick("The page has faded.", "지면이 바래 알아볼 수 없다."));
         add("scan.alchemia.nothing_there", pick("There is nothing there to read.", "읽을 것이 없다."));
         add("scan.alchemia.nothing", pick("You learn nothing from the %s.", "%s에서는 아무것도 알아낼 수 없다."));
         add("scan.alchemia.already_known", pick("The %s holds nothing new.", "%s에는 새로운 것이 없다."));
@@ -99,20 +103,27 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         }
 
         String[][] research = {
-                {"aspects", "Aspects", "상", "Everything is made of six primal essences and the things they combine into.",
-                 "모든 것은 여섯 가지 원시 정수와 그것들이 결합한 것으로 이루어져 있다."},
-                {"amber", "Amber", "호박", "Sap that hardened around something long ago, and held it there.",
-                 "오래전 무언가를 감싼 채 굳어버린 수액. 그것은 아직 갇혀 있다."},
-                {"quicksilver", "Quicksilver", "수은", "A metal that will not keep still, coaxed out of cinnabar by fire.",
-                 "가만히 있지 못하는 금속. 불로 진사에서 끌어낸다."},
-                {"vis_crystals", "Vis Crystals", "비스 결정", "Where the aura runs thick, it settles into stone as crystal.",
-                 "오라가 짙게 고인 곳에서는 돌 속에 결정으로 내려앉는다."},
-                {"greatwood", "Greatwood", "거대나무", "A tree that grows broader and older than any other.",
-                 "다른 어떤 나무보다 굵고 오래 자라는 나무."},
-                {"silverwood", "Silverwood", "은빛나무", "Pale wood that draws the aura to itself, and glows faintly for it.",
-                 "오라를 끌어당기는 창백한 나무. 그 탓에 희미하게 빛난다."},
-                {"warp", "Warp", "뒤틀림", "Look too long into what should not be, and it begins looking back.",
-                 "있어서는 안 될 것을 오래 들여다보면, 그것도 당신을 들여다보기 시작한다."},
+                {"aspects", "Aspects", "상",
+                 "Everything is made of six primal essences and the things they combine into. An alchemometer will name them for you, one object at a time, and what it names is written down here as you go.",
+                 "모든 것은 여섯 가지 원시 정수와 그것들이 결합한 것으로 이루어져 있다. 알케모미터는 한 번에 하나씩 그것들의 이름을 알려주며, 알아낸 이름은 이곳에 차곡차곡 적힌다."},
+                {"amber", "Amber", "호박",
+                 "Sap that hardened around something long ago, and held it there. It breaks out of the ore whole, and takes a polish that the stone around it never will.",
+                 "오래전 무언가를 감싼 채 굳어버린 수액. 그것은 아직 갇혀 있다. 광석에서 통째로 떨어져 나오며, 주변의 돌은 결코 내지 못할 광택을 낸다."},
+                {"quicksilver", "Quicksilver", "수은",
+                 "A metal that will not keep still, coaxed out of cinnabar by fire. It pools rather than sits, and every alchemist learns early to keep a lid on it.",
+                 "가만히 있지 못하는 금속. 불로 진사에서 끌어낸다. 놓아두면 앉지 않고 고이며, 연금술사라면 일찍이 뚜껑을 덮어두는 법부터 배운다."},
+                {"vis_crystals", "Vis Crystals", "비스 결정",
+                 "Where the aura runs thick, it settles into stone as crystal. Each shade of crystal carries the essence it grew out of, and the stone around it remembers that too.",
+                 "오라가 짙게 고인 곳에서는 돌 속에 결정으로 내려앉는다. 결정의 빛깔마다 자라난 근원의 정수를 품고 있으며, 주변의 돌 또한 그것을 기억한다."},
+                {"greatwood", "Greatwood", "거대나무",
+                 "A tree that grows broader and older than any other. Its trunk thickens where lesser wood would split, and a single one will keep a workshop in timber for a season.",
+                 "다른 어떤 나무보다 굵고 오래 자라는 나무. 약한 나무라면 갈라졌을 곳에서 오히려 줄기가 두꺼워진다. 한 그루면 작업장의 한 철 목재를 댈 수 있다."},
+                {"silverwood", "Silverwood", "은빛나무",
+                 "Pale wood that draws the aura to itself, and glows faintly for it. Little that is unnatural will settle near one, which makes a grove of them a quiet place to work.",
+                 "오라를 끌어당기는 창백한 나무. 그 탓에 희미하게 빛난다. 부자연스러운 것들은 그 곁에 좀처럼 자리 잡지 못하니, 은빛나무 숲은 일하기에 조용한 곳이다."},
+                {"warp", "Warp", "뒤틀림",
+                 "Look too long into what should not be, and it begins looking back. The damage is not to the world but to the one studying it, and it does not undo itself with rest.",
+                 "있어서는 안 될 것을 오래 들여다보면, 그것도 당신을 들여다보기 시작한다. 상하는 것은 세계가 아니라 그것을 연구하는 자이며, 쉰다고 해서 되돌아오지 않는다."},
         };
         for (String[] entry : research) {
             add("research." + Alchemia.MODID + "." + entry[0], pick(entry[1], entry[2]));

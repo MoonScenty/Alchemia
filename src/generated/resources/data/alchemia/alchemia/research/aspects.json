@@ -4,7 +4,10 @@
   "column": 0,
   "icon": "alchemia:alchemometer",
   "pages": [
-    "research.alchemia.aspects.page"
+    {
+      "type": "text",
+      "key": "research.alchemia.aspects.page"
+    }
   ],
   "row": 0,
   "shape": "major"

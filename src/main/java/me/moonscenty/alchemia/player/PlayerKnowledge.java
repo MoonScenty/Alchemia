@@ -84,6 +84,16 @@ public record PlayerKnowledge(Set<Aspect> discoveredAspects, Set<ResourceLocatio
         return new PlayerKnowledge(discoveredAspects, grown);
     }
 
+    /** The same knowledge with the research cleared, keeping the aspects that have been seen. */
+    public PlayerKnowledge withoutResearch() {
+        return new PlayerKnowledge(discoveredAspects, Set.of());
+    }
+
+    /** The same knowledge back to only the obvious aspects, keeping the research that has been done. */
+    public PlayerKnowledge withoutAspects() {
+        return new PlayerKnowledge(fresh().discoveredAspects(), completedResearch);
+    }
+
     /** Reads a player's knowledge, falling back to a fresh one on the client before the first sync arrives. */
     public static PlayerKnowledge of(Player player) {
         return player.getData(ModAttachments.KNOWLEDGE);

@@ -3,7 +3,10 @@
   "column": 0,
   "icon": "minecraft:ender_pearl",
   "pages": [
-    "research.alchemia.warp.page"
+    {
+      "type": "text",
+      "key": "research.alchemia.warp.page"
+    }
   ],
   "parents": [
     "alchemia:vis_crystals"
