@@ -78,6 +78,17 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("research.alchemia.locked", pick("Something must come first", "먼저 알아내야 할 것이 있다"));
         add("research.alchemia.ready", pick("Ready to be worked on", "연구할 수 있다"));
         add("research.alchemia.needs", pick("Still to be found: %s", "아직 찾지 못함: %s"));
+        add("item.alchemia.research_notes.on", pick("Research Notes: %s", "연구 노트: %s"));
+        add("item.alchemia.research_notes.unsolved", pick("Not worked out yet", "아직 풀지 못했다"));
+        add("item.alchemia.research_notes.solved", pick("Worked out", "풀어냈다"));
+
+        add("note.alchemia.written", pick("You draw up a fresh set of notes.", "새 연구 노트를 그려냈다."));
+        add("note.alchemia.already_carried", pick("You are already carrying those notes.", "이미 그 연구 노트를 지니고 있다."));
+        add("note.alchemia.not_ready", pick("There is nothing there to work on yet.", "아직 그것을 연구할 수 없다."));
+        add("note.alchemia.no_paper", pick("You have no paper to write on.", "쓸 종이가 없다."));
+        add("note.alchemia.no_ink", pick("Your scribing tools have run dry.", "필기구의 잉크가 말랐다."));
+
+        add("research.alchemia.take_note", pick("Click to draw up notes", "클릭해 연구 노트 그리기"));
         add("research.alchemia.open", pick("Click to read", "클릭해 읽기"));
         add("research.alchemia.crafting", pick("On the bench", "작업대에서"));
         add("research.alchemia.smelting", pick("In the fire", "불에서"));

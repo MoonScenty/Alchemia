@@ -27,6 +27,7 @@ import net.minecraft.world.item.ItemStack;
  * @param pages        the write-up, turned through two at a time once the entry is opened
  * @param autoUnlock   true for the handful of entries a player simply starts with
  * @param shape        how much weight the node carries, which decides the plate it is drawn on
+ * @param complexity   how hard the note is to work out, from 1 to 3
  */
 public record ResearchEntry(
         ResourceKey<ResearchCategory> category,
@@ -37,7 +38,8 @@ public record ResearchEntry(
         List<ResourceLocation> parents,
         List<ResearchPage> pages,
         boolean autoUnlock,
-        NodeShape shape) {
+        NodeShape shape,
+        int complexity) {
 
     public static final Codec<ResearchEntry> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             ResourceKey.codec(ModResearch.CATEGORY_KEY).fieldOf("category").forGetter(ResearchEntry::category),
@@ -48,7 +50,8 @@ public record ResearchEntry(
             ResourceLocation.CODEC.listOf().optionalFieldOf("parents", List.of()).forGetter(ResearchEntry::parents),
             ResearchPage.CODEC.listOf().optionalFieldOf("pages", List.of()).forGetter(ResearchEntry::pages),
             Codec.BOOL.optionalFieldOf("auto_unlock", false).forGetter(ResearchEntry::autoUnlock),
-            NodeShape.CODEC.optionalFieldOf("shape", NodeShape.PLAIN).forGetter(ResearchEntry::shape))
+            NodeShape.CODEC.optionalFieldOf("shape", NodeShape.PLAIN).forGetter(ResearchEntry::shape),
+            Codec.intRange(1, 3).optionalFieldOf("complexity", 1).forGetter(ResearchEntry::complexity))
             .apply(instance, ResearchEntry::new));
 
     /** The pages this player has earned the right to see, in order. */

@@ -1,6 +1,7 @@
 {
   "category": "alchemia:alchemy",
   "column": 0,
+  "complexity": 2,
   "icon": "alchemia:quicksilver",
   "pages": [
     {
