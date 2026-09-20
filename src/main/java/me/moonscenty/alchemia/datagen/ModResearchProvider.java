@@ -40,20 +40,20 @@ public class ModResearchProvider {
     public static void entries(BootstrapContext<ResearchEntry> context) {
         // where everything starts: the six primals are plain enough to see without help
         entry(context, "aspects", ModResearch.BASICS, ModItems.ALCHEMOMETER, 0, 0,
-                AspectList.EMPTY, List.of(), true, NodeShape.MAJOR);
+                AspectList.EMPTY, List.of(), true, NodeShape.MAJOR, 1);
 
         entry(context, "amber", ModResearch.BASICS, ModItems.AMBER, -2, 1,
-                AspectList.of(ModAspects.CRYSTAL, 2).add(ModAspects.TRAP, 2), List.of("aspects"), false, NodeShape.PLAIN, "amber_from_ore_smelting", "amber_block_from_amber");
+                AspectList.of(ModAspects.CRYSTAL, 2).add(ModAspects.TRAP, 2), List.of("aspects"), false, NodeShape.PLAIN, 1, "amber_from_ore_smelting", "amber_block_from_amber");
         entry(context, "quicksilver", ModResearch.ALCHEMY, ModItems.QUICKSILVER, 0, 1,
-                AspectList.of(ModAspects.METAL, 3).add(ModAspects.EXCHANGE, 2), List.of("aspects"), false, NodeShape.PLAIN, "quicksilver_from_raw_cinnabar_smelting", "quicksilver_from_shimmerleaf");
+                AspectList.of(ModAspects.METAL, 3).add(ModAspects.EXCHANGE, 2), List.of("aspects"), false, NodeShape.PLAIN, 2, "quicksilver_from_raw_cinnabar_smelting", "quicksilver_from_shimmerleaf");
         entry(context, "vis_crystals", ModResearch.ARCANA, ModItems.BALANCED_SHARD, 2, 1,
-                AspectList.of(ModAspects.CRYSTAL, 4).add(ModAspects.AURA, 2), List.of("aspects"), false, NodeShape.SPECIAL);
+                AspectList.of(ModAspects.CRYSTAL, 4).add(ModAspects.AURA, 2), List.of("aspects"), false, NodeShape.SPECIAL, 2);
         entry(context, "greatwood", ModResearch.BASICS, ModBlocks.GREATWOOD.sapling(), -1, 2,
-                AspectList.of(ModAspects.PLANT, 4).add(ModAspects.LIFE, 2), List.of("aspects"), false, NodeShape.PLAIN, "greatwood_planks");
+                AspectList.of(ModAspects.PLANT, 4).add(ModAspects.LIFE, 2), List.of("aspects"), false, NodeShape.PLAIN, 1, "greatwood_planks");
         entry(context, "silverwood", ModResearch.ARCANA, ModBlocks.SILVERWOOD.sapling(), 1, 2,
-                AspectList.of(ModAspects.PLANT, 4).add(ModAspects.AURA, 4), List.of("greatwood"), false, NodeShape.SPECIAL, "silverwood_planks");
+                AspectList.of(ModAspects.PLANT, 4).add(ModAspects.AURA, 4), List.of("greatwood"), false, NodeShape.SPECIAL, 2, "silverwood_planks");
         entry(context, "warp", ModResearch.ELDRITCH, Items.ENDER_PEARL, 0, 3,
-                AspectList.of(ModAspects.ELDRITCH, 4).add(ModAspects.FLUX, 2), List.of("vis_crystals"), false, NodeShape.MAJOR);
+                AspectList.of(ModAspects.ELDRITCH, 4).add(ModAspects.FLUX, 2), List.of("vis_crystals"), false, NodeShape.MAJOR, 3);
     }
 
     private static void category(BootstrapContext<ResearchCategory> context, ResourceKey<ResearchCategory> key,
@@ -78,12 +78,12 @@ public class ModResearchProvider {
 
     private static void entry(BootstrapContext<ResearchEntry> context, String name, ResourceKey<ResearchCategory> category,
             ItemLike icon, int column, int row, AspectList requirements, List<String> parents, boolean autoUnlock,
-            NodeShape shape, String... recipes) {
+            NodeShape shape, int complexity, String... recipes) {
         context.register(ResourceKey.create(ModResearch.ENTRY_KEY, Alchemia.id(name)),
                 new ResearchEntry(category, requirements, column, row,
                         BuiltInRegistries.ITEM.wrapAsHolder(icon.asItem()),
                         parents.stream().map(Alchemia::id).toList(),
                         pages(name, recipes),
-                        autoUnlock, shape));
+                        autoUnlock, shape, complexity));
     }
 }

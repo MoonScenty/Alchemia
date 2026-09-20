@@ -4,13 +4,14 @@ import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
 
+import me.moonscenty.alchemia.player.ModAttachments;
+import me.moonscenty.alchemia.player.effect.ModEffects;
 import me.moonscenty.alchemia.registry.ModAspects;
 import me.moonscenty.alchemia.registry.ModBlockEntities;
 import me.moonscenty.alchemia.registry.ModBlocks;
 import me.moonscenty.alchemia.registry.ModCreativeTabs;
+import me.moonscenty.alchemia.registry.ModDataComponents;
 import me.moonscenty.alchemia.registry.ModFeatures;
-import me.moonscenty.alchemia.player.ModAttachments;
-import me.moonscenty.alchemia.player.effect.ModEffects;
 import me.moonscenty.alchemia.registry.ModItems;
 import me.moonscenty.alchemia.registry.WoodSet;
 import net.minecraft.resources.ResourceLocation;
@@ -31,6 +32,7 @@ public class Alchemia {
         ModBlocks.BLOCKS.register(modEventBus);
         ModBlockEntities.BLOCK_ENTITIES.register(modEventBus);
         ModItems.ITEMS.register(modEventBus);
+        ModDataComponents.COMPONENTS.register(modEventBus);
         ModCreativeTabs.CREATIVE_MODE_TABS.register(modEventBus);
         ModFeatures.FEATURES.register(modEventBus);
         ModFeatures.TRUNK_PLACERS.register(modEventBus);

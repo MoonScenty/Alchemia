@@ -1,6 +1,7 @@
 {
   "category": "alchemia:arcana",
   "column": 2,
+  "complexity": 2,
   "icon": "alchemia:balanced_shard",
   "pages": [
     {

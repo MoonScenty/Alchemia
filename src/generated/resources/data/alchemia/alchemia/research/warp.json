@@ -1,6 +1,7 @@
 {
   "category": "alchemia:eldritch",
   "column": 0,
+  "complexity": 3,
   "icon": "minecraft:ender_pearl",
   "pages": [
     {

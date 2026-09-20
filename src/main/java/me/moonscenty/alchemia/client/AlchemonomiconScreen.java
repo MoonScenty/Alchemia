@@ -11,7 +11,9 @@ import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.aspect.Aspect;
 import me.moonscenty.alchemia.aspect.AspectList;
 import me.moonscenty.alchemia.player.PlayerKnowledge;
+import me.moonscenty.alchemia.network.RequestNote;
 import me.moonscenty.alchemia.research.ModResearch;
+import me.moonscenty.alchemia.research.NoteRequests;
 import me.moonscenty.alchemia.research.ResearchCategory;
 import me.moonscenty.alchemia.research.ResearchEntry;
 import net.minecraft.ChatFormatting;
@@ -24,6 +26,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 /**
  * The alchemonomicon: a branch of study per tab, and everything in it laid out as a tree that can be dragged about.
@@ -330,7 +333,10 @@ public class AlchemonomiconScreen extends Screen {
             research.missingFor(knowledge::knows).ifPresentOrElse(
                     missing -> lines.add(Component.translatable("research.alchemia.needs", names(missing))
                             .withStyle(ChatFormatting.DARK_PURPLE)),
-                    () -> lines.add(Component.translatable("research.alchemia.ready").withStyle(ChatFormatting.AQUA)));
+                    () -> {
+                        lines.add(Component.translatable("research.alchemia.ready").withStyle(ChatFormatting.AQUA));
+                        lines.add(Component.translatable("research.alchemia.take_note").withStyle(ChatFormatting.DARK_GRAY));
+                    });
         }
         return lines;
     }
@@ -361,10 +367,17 @@ public class AlchemonomiconScreen extends Screen {
                 return true;
             }
         }
-        if (hovered != null && PlayerKnowledge.of(minecraft.player).hasResearch(hoveredId)) {
-            // only work that is finished can be read; what is still outstanding says so in its note instead
-            minecraft.setScreen(new ResearchPageScreen(this, hoveredId, hovered));
-            return true;
+        if (hovered != null) {
+            PlayerKnowledge knowledge = PlayerKnowledge.of(minecraft.player);
+            if (knowledge.hasResearch(hoveredId)) {
+                minecraft.setScreen(new ResearchPageScreen(this, hoveredId, hovered));
+                return true;
+            }
+            if (NoteRequests.isReady(knowledge, hoveredId, hovered)) {
+                // the server writes the note, since it is the one holding the paper and the ink
+                PacketDistributor.sendToServer(new RequestNote(hoveredId));
+                return true;
+            }
         }
 
         dragging = true;

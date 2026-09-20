@@ -25,6 +25,8 @@ Alchemia의 **코드**는 [MIT](LICENSE.md)입니다. 아래 에셋은 각자의
 | `node_special.png` / `node_special_done.png` | `advancements/goal_frame_unobtained` / `_obtained` |
 | `node_major.png` / `node_major_done.png` | `advancements/challenge_frame_unobtained` / `_obtained` |
 
+`textures/gui/research_table.png`의 아래쪽 인벤토리 격자(0,166 기준 184×88)도 바닐라 `gui/container/inventory.png`의 (0,76) 영역입니다. 같은 자리에 원작도 바닐라 격자를 썼습니다. 그 위의 본체는 MoonScenty가 직접 그린 것입니다.
+
 Mojang의 에셋이므로 이 저장소의 MIT 라이선스가 적용되지 않습니다. Minecraft EULA를 따릅니다.
 
 ## 연구 화면 배경
