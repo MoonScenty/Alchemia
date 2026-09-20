@@ -124,26 +124,24 @@ public class ResearchTableBlock extends BaseEntityBlock {
                 return ItemInteractionResult.sidedSuccess(level.isClientSide);
             }
         }
+        // anything else the player is holding means they want the desk itself, not to put that down on it
         return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
     }
 
-    /** An empty hand clears the desk, a piece at a time. */
+    /**
+     * Sits the player down at the desk. Clearing it is done from there rather than by right-clicking the block, so
+     * that taking the note back does not fight with opening the work in front of it.
+     */
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
         if (!(level.getBlockEntity(pos) instanceof ResearchTableBlockEntity table)) {
             return InteractionResult.PASS;
         }
-
-        for (int slot : new int[] {ResearchTableBlockEntity.SLOT_NOTES, ResearchTableBlockEntity.SLOT_TOOLS}) {
-            if (!table.get(slot).isEmpty()) {
-                if (!level.isClientSide) {
-                    player.getInventory().placeItemBackInInventory(table.put(slot, ItemStack.EMPTY));
-                    level.playSound(null, pos, SoundEvents.BOOK_PAGE_TURN, SoundSource.BLOCKS, 0.7F, 1.0F);
-                }
-                return InteractionResult.sidedSuccess(level.isClientSide);
-            }
+        if (!level.isClientSide) {
+            player.openMenu(table);
+            level.playSound(null, pos, SoundEvents.BOOK_PAGE_TURN, SoundSource.BLOCKS, 0.7F, 1.0F);
         }
-        return InteractionResult.PASS;
+        return InteractionResult.sidedSuccess(level.isClientSide);
     }
 
     @Override
