@@ -6,8 +6,10 @@ import java.util.Map;
 
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.block.CrystalType;
+import me.moonscenty.alchemia.item.AlchemonomiconItem;
 import me.moonscenty.alchemia.item.AlchemometerItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Rarity;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -27,6 +29,10 @@ public class ModItems {
     /** A sheet of vellum with a research puzzle part-drawn on it. */
     public static final DeferredItem<Item> RESEARCH_NOTES = ITEMS.registerSimpleItem("research_notes",
             new Item.Properties().stacksTo(1));
+
+    /** The book everything worked out so far is written into. */
+    public static final DeferredItem<Item> ALCHEMONOMICON = ITEMS.register("alchemonomicon",
+            () -> new AlchemonomiconItem(new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON)));
 
     public static final Map<CrystalType, DeferredItem<Item>> SHARDS = registerShards();
     public static final DeferredItem<Item> BALANCED_SHARD = ITEMS.registerSimpleItem("balanced_shard");

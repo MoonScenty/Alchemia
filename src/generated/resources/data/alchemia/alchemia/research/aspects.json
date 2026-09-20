@@ -6,5 +6,6 @@
   "pages": [
     "research.alchemia.aspects.page"
   ],
-  "row": 0
+  "row": 0,
+  "shape": "major"
 }

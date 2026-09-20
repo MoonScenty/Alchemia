@@ -1,5 +1,5 @@
 {
-  "background": "alchemia:textures/gui/research_background.png",
+  "background": "alchemia:textures/gui/research_background/alchemy.png",
   "icon": "alchemia:quicksilver",
   "sort_order": 2
 }

@@ -1,5 +1,5 @@
 {
-  "background": "alchemia:textures/gui/research_background.png",
+  "background": "alchemia:textures/gui/research_background/arcana.png",
   "icon": "alchemia:balanced_shard",
   "sort_order": 1
 }

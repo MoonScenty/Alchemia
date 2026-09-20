@@ -12,5 +12,6 @@
     "alchemia:auram": 2,
     "alchemia:vitreus": 4
   },
-  "row": 1
+  "row": 1,
+  "shape": "special"
 }

@@ -1,4 +1,4 @@
 {
-  "background": "alchemia:textures/gui/research_background.png",
+  "background": "alchemia:textures/gui/research_background/basics.png",
   "icon": "alchemia:alchemometer"
 }

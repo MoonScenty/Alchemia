@@ -26,6 +26,7 @@ import net.minecraft.world.item.ItemStack;
  * @param parents      research that must be finished first
  * @param pages        translation keys for the write-up, once there is a book to read it in
  * @param autoUnlock   true for the handful of entries a player simply starts with
+ * @param shape        how much weight the node carries, which decides the plate it is drawn on
  */
 public record ResearchEntry(
         ResourceKey<ResearchCategory> category,
@@ -35,7 +36,8 @@ public record ResearchEntry(
         Holder<Item> icon,
         List<ResourceLocation> parents,
         List<String> pages,
-        boolean autoUnlock) {
+        boolean autoUnlock,
+        NodeShape shape) {
 
     public static final Codec<ResearchEntry> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             ResourceKey.codec(ModResearch.CATEGORY_KEY).fieldOf("category").forGetter(ResearchEntry::category),
@@ -45,7 +47,8 @@ public record ResearchEntry(
             BuiltInRegistries.ITEM.holderByNameCodec().fieldOf("icon").forGetter(ResearchEntry::icon),
             ResourceLocation.CODEC.listOf().optionalFieldOf("parents", List.of()).forGetter(ResearchEntry::parents),
             Codec.STRING.listOf().optionalFieldOf("pages", List.of()).forGetter(ResearchEntry::pages),
-            Codec.BOOL.optionalFieldOf("auto_unlock", false).forGetter(ResearchEntry::autoUnlock))
+            Codec.BOOL.optionalFieldOf("auto_unlock", false).forGetter(ResearchEntry::autoUnlock),
+            NodeShape.CODEC.optionalFieldOf("shape", NodeShape.PLAIN).forGetter(ResearchEntry::shape))
             .apply(instance, ResearchEntry::new));
 
     public ItemStack iconStack() {
