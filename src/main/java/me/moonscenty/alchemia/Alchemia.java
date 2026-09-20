@@ -8,6 +8,8 @@ import me.moonscenty.alchemia.registry.ModAspects;
 import me.moonscenty.alchemia.registry.ModBlocks;
 import me.moonscenty.alchemia.registry.ModCreativeTabs;
 import me.moonscenty.alchemia.registry.ModFeatures;
+import me.moonscenty.alchemia.player.ModAttachments;
+import me.moonscenty.alchemia.player.effect.ModEffects;
 import me.moonscenty.alchemia.registry.ModItems;
 import me.moonscenty.alchemia.registry.WoodSet;
 import net.minecraft.resources.ResourceLocation;
@@ -33,6 +35,8 @@ public class Alchemia {
         ModFeatures.FOLIAGE_PLACERS.register(modEventBus);
         ModFeatures.TREE_DECORATORS.register(modEventBus);
         ModAspects.ASPECTS.register(modEventBus);
+        ModAttachments.ATTACHMENTS.register(modEventBus);
+        ModEffects.EFFECTS.register(modEventBus);
         modEventBus.addListener(this::commonSetup);
 
         modContainer.registerConfig(ModConfig.Type.COMMON, AlchemiaConfig.COMMON_SPEC);

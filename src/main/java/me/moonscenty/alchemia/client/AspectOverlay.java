@@ -9,6 +9,7 @@ import me.moonscenty.alchemia.AlchemiaConfig;
 import me.moonscenty.alchemia.aspect.Aspect;
 import me.moonscenty.alchemia.aspect.AspectList;
 import me.moonscenty.alchemia.aspect.Aspects;
+import me.moonscenty.alchemia.player.PlayerKnowledge;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
@@ -31,6 +32,7 @@ import net.neoforged.neoforge.client.event.ScreenEvent;
 @EventBusSubscriber(modid = Alchemia.MODID, value = Dist.CLIENT)
 public class AspectOverlay {
     private static final ResourceLocation BACKGROUND = Alchemia.id("textures/aspect/background.png");
+    private static final ResourceLocation UNKNOWN = Alchemia.id("textures/aspect/unknown.png");
     private static final int ICON = 16;
     private static final int SPACING = 18;
     /** How far above the slot the row sits. */
@@ -49,7 +51,7 @@ public class AspectOverlay {
 
         AspectList aspects = Aspects.of(slot.getItem());
         if (!aspects.isEmpty()) {
-            draw(event.getGuiGraphics(), screen, slot, aspects);
+            draw(event.getGuiGraphics(), screen, slot, aspects, PlayerKnowledge.of(screen.getMinecraft().player));
         }
     }
 
@@ -58,7 +60,8 @@ public class AspectOverlay {
         return Screen.hasShiftDown() != AlchemiaConfig.ALWAYS_SHOW_ASPECTS.get();
     }
 
-    private static void draw(GuiGraphics graphics, AbstractContainerScreen<?> screen, Slot slot, AspectList aspects) {
+    private static void draw(GuiGraphics graphics, AbstractContainerScreen<?> screen, Slot slot, AspectList aspects,
+            PlayerKnowledge knowledge) {
         List<Holder<Aspect>> order = aspects.sortedByAmount();
         int width = order.size() * SPACING;
         // keep the row on screen when the slot sits near an edge
@@ -72,8 +75,13 @@ public class AspectOverlay {
         for (int index = 0; index < order.size(); index++) {
             Holder<Aspect> holder = order.get(index);
             int x = left + index * SPACING;
-            drawIcon(graphics, holder.value(), x, top);
-            drawAmount(graphics, screen.getMinecraft().font, aspects.get(holder), x, top);
+            if (knowledge.knows(holder)) {
+                drawIcon(graphics, holder.value(), x, top);
+                drawAmount(graphics, screen.getMinecraft().font, aspects.get(holder), x, top);
+            } else {
+                // the aspect is there, but the player has no idea what it is yet
+                drawUnknown(graphics, x, top);
+            }
         }
 
         RenderSystem.disableBlend();
@@ -87,6 +95,14 @@ public class AspectOverlay {
         int color = aspect.color();
         graphics.setColor(((color >> 16) & 0xFF) / 255F, ((color >> 8) & 0xFF) / 255F, (color & 0xFF) / 255F, 1F);
         graphics.blit(aspect.icon(), x, y, 0, 0, ICON, ICON, ICON, ICON);
+        graphics.setColor(1F, 1F, 1F, 1F);
+    }
+
+    private static void drawUnknown(GuiGraphics graphics, int x, int y) {
+        graphics.setColor(0.1F, 0.1F, 0.1F, 0.65F);
+        graphics.blit(BACKGROUND, x - 1, y - 1, 0, 0, ICON + 2, ICON + 2, ICON + 2, ICON + 2);
+        graphics.setColor(0.55F, 0.55F, 0.6F, 1F);
+        graphics.blit(UNKNOWN, x, y, 0, 0, ICON, ICON, ICON, ICON);
         graphics.setColor(1F, 1F, 1F, 1F);
     }
 

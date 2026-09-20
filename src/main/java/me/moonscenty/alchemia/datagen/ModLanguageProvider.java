@@ -5,6 +5,7 @@ import java.util.Map;
 
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.block.CrystalType;
+import me.moonscenty.alchemia.player.effect.ModEffects;
 import me.moonscenty.alchemia.registry.ModBlocks;
 import me.moonscenty.alchemia.registry.ModItems;
 import me.moonscenty.alchemia.registry.StoneSet;
@@ -65,6 +66,38 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         addItem(ModItems.BRASS_PLATE, pick("Brass Plate", "황동 판"));
         addItem(ModItems.IRON_PLATE, pick("Iron Plate", "철 판"));
         addItem(ModItems.SALIS_MUNDUS, pick("Salis Mundus", "살리스 문두스"));
+
+
+        addEffect(ModEffects.FLUX_FLU, pick("Flux Flu", "플럭스 감기"));
+        addEffect(ModEffects.FLUX_PHAGE, pick("Flux Phage", "플럭스 역병"));
+        addEffect(ModEffects.UNNATURAL_HUNGER, pick("Unnatural Hunger", "부자연스러운 허기"));
+        addEffect(ModEffects.SUN_SCORNED, pick("Sun Scorned", "햇빛 거부"));
+        addEffect(ModEffects.BLURRED_VISION, pick("Blurred Vision", "흐릿한 시야"));
+        addEffect(ModEffects.DEADLY_GAZE, pick("Deadly Gaze", "죽음의 응시"));
+        addEffect(ModEffects.ALCHEDIARRHEA, pick("Alchediarrhea", "알케설사"));
+        addEffect(ModEffects.WARP_WARD, pick("Warp Ward", "뒤틀림 방호"));
+
+        // What warp murmurs before it does its work. Numbered to match the severity tiers.
+        String[][] whispers = {
+                {"You feel like you are being watched.", "누군가 지켜보고 있는 것 같다."},
+                {"Something moves at the edge of your sight.", "시야 끝에서 무언가 움직인다."},
+                {"For a moment, nothing is where you left it.", "잠깐, 모든 것이 제자리에 있지 않았다."},
+                {"The air itself feels thin and wrong.", "공기가 얇고 잘못된 느낌이다."},
+                {"Something is seeping out of you.", "무언가가 몸에서 배어 나온다."},
+                {"A hunger takes you that food will not answer.", "음식으로는 달랠 수 없는 허기가 덮친다."},
+                {"You hear your own name, spoken wrong.", "누군가 당신의 이름을 잘못 부른다."},
+                {"The silence has a shape to it.", "침묵에 형태가 있다."},
+                {"Your eyes will not settle on anything.", "눈이 어디에도 초점을 맞추지 못한다."},
+                {"The sun looks at you and does not approve.", "태양이 당신을 못마땅하게 내려다본다."},
+                {"Darkness closes without waiting for night.", "밤을 기다리지 않고 어둠이 닫힌다."},
+                {"What ails you is looking for company.", "당신을 괴롭히는 것이 동행을 찾고 있다."},
+                {"You are no longer entirely alone in here.", "이 안에 당신만 있는 것이 아니다."},
+                {"Whatever you look at, looks back.", "무엇을 보든, 그것도 당신을 본다."},
+                {"It has stopped being patient.", "그것이 더는 참지 않는다."},
+        };
+        for (int line = 0; line < whispers.length; line++) {
+            add("warp." + Alchemia.MODID + ".text." + line, pick(whispers[line][0], whispers[line][1]));
+        }
 
         Map<StoneSet, String[]> stoneNames = Map.of(
                 ModBlocks.ARCANE_STONE, new String[] {"Arcane Stone", "신비한 돌"},

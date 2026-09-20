@@ -45,5 +45,7 @@ Thaumcraft 5.2.4 (MC 1.8.9)의 기능을 Minecraft 1.21.1 / NeoForge 21.1 로 �
 ## 명령
 
 - `./gradlew build` / `runClient` / `runServer` / `runData`
+- 플레이어 데이터는 `player/` 패키지의 어태치먼트에 넣고, 동기화는 `sync(StreamCodec)`에 맡긴다. 커스텀 패킷을 만들지 않는다.
+- GameTest는 `makeMockServerPlayerInLevel()`로 어태치먼트를 건드리면 동기화 패킷이 막혀 크래시한다. 판정 로직을 순수 함수로 분리해서 플레이어 없이 검증한다.
 - 상 값은 `datagen/ModDataMapProvider`에 원재료만 적는다. 만들어지는 물건은 `aspect/Aspects`가 레시피에서 계산하므로 적지 않는다.
 - `./gradlew runGameTestServer` — `gametest/` 패키지의 GameTest 실행. 월드젠처럼 눈으로 확인하기 어려운 로직은 여기에 검사를 추가한다. 빈 테스트 구조물은 `Desktop/thaumref/tools/make_empty_structure.py`로 만든다.
