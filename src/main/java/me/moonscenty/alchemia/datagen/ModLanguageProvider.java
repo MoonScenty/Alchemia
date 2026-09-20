@@ -86,6 +86,13 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("note.alchemia.already_carried", pick("You are already carrying those notes.", "이미 그 연구 노트를 지니고 있다."));
         add("note.alchemia.not_ready", pick("There is nothing there to work on yet.", "아직 그것을 연구할 수 없다."));
         add("note.alchemia.no_paper", pick("You have no paper to write on.", "쓸 종이가 없다."));
+        add("note.alchemia.no_such_mix", pick("These two make nothing", "이 둘로는 아무것도 만들어지지 않는다"));
+        add("note.alchemia.pinned", pick("Pinned by the subject", "주제가 고정한 자리"));
+        add("note.alchemia.would_hold", pick("This would hold", "여기라면 이어진다"));
+        add("note.alchemia.would_not_hold", pick("Nothing here to hold on to", "이어 붙일 것이 없다"));
+        add("note.alchemia.claim", pick("Worked out. Read it back to learn %s.", "풀어냈다. 손에 들고 우클릭하면 %s을(를) 익한다."));
+        add("note.alchemia.learned", pick("You work out %s.", "%s을(를) 알아냈다."));
+        add("note.alchemia.already_known", pick("You already know that.", "이미 알고 있다."));
         add("note.alchemia.no_ink", pick("Your scribing tools have run dry.", "필기구의 잉크가 말랐다."));
 
         add("research.alchemia.take_note", pick("Click to draw up notes", "클릭해 연구 노트 그리기"));

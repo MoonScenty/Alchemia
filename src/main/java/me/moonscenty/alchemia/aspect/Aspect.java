@@ -62,6 +62,11 @@ public class Aspect {
         return components;
     }
 
+    /** Whether this aspect is made partly of the given one. Primals are made of nothing, so they never are. */
+    public boolean hasComponent(Holder<Aspect> other) {
+        return components.map(parts -> parts.stream().anyMatch(part -> part.value() == other.value())).orElse(false);
+    }
+
     public ResourceLocation id() {
         return ModAspects.REGISTRY.getKey(this);
     }

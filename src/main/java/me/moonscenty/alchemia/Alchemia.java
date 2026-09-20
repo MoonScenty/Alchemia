@@ -13,6 +13,7 @@ import me.moonscenty.alchemia.registry.ModCreativeTabs;
 import me.moonscenty.alchemia.registry.ModDataComponents;
 import me.moonscenty.alchemia.registry.ModFeatures;
 import me.moonscenty.alchemia.registry.ModItems;
+import me.moonscenty.alchemia.registry.ModMenus;
 import me.moonscenty.alchemia.registry.WoodSet;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
@@ -33,6 +34,7 @@ public class Alchemia {
         ModBlockEntities.BLOCK_ENTITIES.register(modEventBus);
         ModItems.ITEMS.register(modEventBus);
         ModDataComponents.COMPONENTS.register(modEventBus);
+        ModMenus.MENUS.register(modEventBus);
         ModCreativeTabs.CREATIVE_MODE_TABS.register(modEventBus);
         ModFeatures.FEATURES.register(modEventBus);
         ModFeatures.TRUNK_PLACERS.register(modEventBus);
