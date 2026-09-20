@@ -68,6 +68,49 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         addItem(ModItems.SALIS_MUNDUS, pick("Salis Mundus", "살리스 문두스"));
 
 
+
+        addItem(ModItems.ALCHEMOMETER, pick("Alchemometer", "알케모미터"));
+        add("scan.alchemia.nothing_there", pick("There is nothing there to read.", "읽을 것이 없다."));
+        add("scan.alchemia.nothing", pick("You learn nothing from the %s.", "%s에서는 아무것도 알아낼 수 없다."));
+        add("scan.alchemia.already_known", pick("The %s holds nothing new.", "%s에는 새로운 것이 없다."));
+        add("scan.alchemia.learned", pick("From the %s you make out: %s", "%s에서 알아냈다: %s"));
+        add("scan.alchemia.hint.unread", pick("%s — not yet read", "%s — 아직 읽지 않음"));
+        add("scan.alchemia.hint.read", pick("%s — nothing further", "%s — 더 알아낼 것 없음"));
+
+        // The branches of study. Thaumaturgy is arcana here.
+        String[][] categories = {
+                {"basics", "Basics", "기초"},
+                {"arcana", "Arcana", "비학"},
+                {"alchemy", "Alchemy", "연금술"},
+                {"artifice", "Artifice", "기교"},
+                {"golemancy", "Golemancy", "골렘학"},
+                {"eldritch", "Eldritch", "이계"},
+        };
+        for (String[] category : categories) {
+            add("research_category." + Alchemia.MODID + "." + category[0], pick(category[1], category[2]));
+        }
+
+        String[][] research = {
+                {"aspects", "Aspects", "상", "Everything is made of six primal essences and the things they combine into.",
+                 "모든 것은 여섯 가지 원시 정수와 그것들이 결합한 것으로 이루어져 있다."},
+                {"amber", "Amber", "호박", "Sap that hardened around something long ago, and held it there.",
+                 "오래전 무언가를 감싼 채 굳어버린 수액. 그것은 아직 갇혀 있다."},
+                {"quicksilver", "Quicksilver", "수은", "A metal that will not keep still, coaxed out of cinnabar by fire.",
+                 "가만히 있지 못하는 금속. 불로 진사에서 끌어낸다."},
+                {"vis_crystals", "Vis Crystals", "비스 결정", "Where the aura runs thick, it settles into stone as crystal.",
+                 "오라가 짙게 고인 곳에서는 돌 속에 결정으로 내려앉는다."},
+                {"greatwood", "Greatwood", "거대나무", "A tree that grows broader and older than any other.",
+                 "다른 어떤 나무보다 굵고 오래 자라는 나무."},
+                {"silverwood", "Silverwood", "은빛나무", "Pale wood that draws the aura to itself, and glows faintly for it.",
+                 "오라를 끌어당기는 창백한 나무. 그 탓에 희미하게 빛난다."},
+                {"warp", "Warp", "뒤틀림", "Look too long into what should not be, and it begins looking back.",
+                 "있어서는 안 될 것을 오래 들여다보면, 그것도 당신을 들여다보기 시작한다."},
+        };
+        for (String[] entry : research) {
+            add("research." + Alchemia.MODID + "." + entry[0], pick(entry[1], entry[2]));
+            add("research." + Alchemia.MODID + "." + entry[0] + ".page", pick(entry[3], entry[4]));
+        }
+
         addEffect(ModEffects.FLUX_FLU, pick("Flux Flu", "플럭스 감기"));
         addEffect(ModEffects.FLUX_PHAGE, pick("Flux Phage", "플럭스 역병"));
         addEffect(ModEffects.UNNATURAL_HUNGER, pick("Unnatural Hunger", "부자연스러운 허기"));

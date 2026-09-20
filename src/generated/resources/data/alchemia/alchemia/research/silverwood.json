@@ -1,0 +1,16 @@
+{
+  "category": "alchemia:arcana",
+  "column": 1,
+  "icon": "alchemia:silverwood_sapling",
+  "pages": [
+    "research.alchemia.silverwood.page"
+  ],
+  "parents": [
+    "alchemia:greatwood"
+  ],
+  "requirements": {
+    "alchemia:auram": 4,
+    "alchemia:herba": 4
+  },
+  "row": 2
+}

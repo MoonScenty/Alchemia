@@ -1,0 +1,16 @@
+{
+  "category": "alchemia:alchemy",
+  "column": 0,
+  "icon": "alchemia:quicksilver",
+  "pages": [
+    "research.alchemia.quicksilver.page"
+  ],
+  "parents": [
+    "alchemia:aspects"
+  ],
+  "requirements": {
+    "alchemia:metallum": 3,
+    "alchemia:permutatio": 2
+  },
+  "row": 1
+}

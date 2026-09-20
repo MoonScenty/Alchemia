@@ -1,0 +1,16 @@
+{
+  "category": "alchemia:eldritch",
+  "column": 0,
+  "icon": "minecraft:ender_pearl",
+  "pages": [
+    "research.alchemia.warp.page"
+  ],
+  "parents": [
+    "alchemia:vis_crystals"
+  ],
+  "requirements": {
+    "alchemia:alienis": 4,
+    "alchemia:vitium": 2
+  },
+  "row": 3
+}

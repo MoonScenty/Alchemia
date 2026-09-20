@@ -1,0 +1,64 @@
+package me.moonscenty.alchemia.research;
+
+import me.moonscenty.alchemia.aspect.AspectList;
+import me.moonscenty.alchemia.aspect.Aspects;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+
+/**
+ * Something a player can hold an alchemometer up to.
+ */
+public sealed interface ScanTarget {
+    /** What the thing is made of, which is what a scan actually teaches. */
+    AspectList aspects();
+
+    /** What to call it in the message that follows a scan. */
+    Component displayName();
+
+    record OfItem(ItemStack stack) implements ScanTarget {
+        @Override
+        public AspectList aspects() {
+            return Aspects.of(stack);
+        }
+
+        @Override
+        public Component displayName() {
+            return stack.getHoverName();
+        }
+    }
+
+    record OfBlock(Level level, BlockPos pos, BlockState state) implements ScanTarget {
+        @Override
+        public AspectList aspects() {
+            // a block is read through the item it would drop, which is what the aspects are written against
+            return Aspects.of(state.getBlock().asItem());
+        }
+
+        @Override
+        public Component displayName() {
+            return state.getBlock().getName();
+        }
+    }
+
+    record OfEntity(Entity entity) implements ScanTarget {
+        @Override
+        public AspectList aspects() {
+            return Aspects.of(entity.getType());
+        }
+
+        @Override
+        public Component displayName() {
+            return entity.getDisplayName();
+        }
+    }
+
+    /** Reads whatever is in front of the player, preferring a dropped item's contents over the item entity itself. */
+    static ScanTarget of(Entity entity) {
+        return entity instanceof ItemEntity item ? new OfItem(item.getItem()) : new OfEntity(entity);
+    }
+}

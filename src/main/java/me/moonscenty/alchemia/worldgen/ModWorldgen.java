@@ -13,7 +13,6 @@ import me.moonscenty.alchemia.registry.ModTags;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
-import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.features.FeatureUtils;
@@ -79,12 +78,7 @@ public class ModWorldgen {
         }
     }
 
-    public static final RegistrySetBuilder BUILDER = new RegistrySetBuilder()
-            .add(Registries.CONFIGURED_FEATURE, ModWorldgen::bootstrapConfigured)
-            .add(Registries.PLACED_FEATURE, ModWorldgen::bootstrapPlaced)
-            .add(NeoForgeRegistries.Keys.BIOME_MODIFIERS, ModWorldgen::bootstrapBiomeModifiers);
-
-    private static void bootstrapConfigured(BootstrapContext<ConfiguredFeature<?, ?>> context) {
+    public static void bootstrapConfigured(BootstrapContext<ConfiguredFeature<?, ?>> context) {
         TagMatchTest stone = new TagMatchTest(BlockTags.STONE_ORE_REPLACEABLES);
         TagMatchTest deepslate = new TagMatchTest(BlockTags.DEEPSLATE_ORE_REPLACEABLES);
 
@@ -123,7 +117,7 @@ public class ModWorldgen {
                 new BlockStateConfiguration(ModBlocks.CRYSTALS.get(type).get().defaultBlockState()))));
     }
 
-    private static void bootstrapPlaced(BootstrapContext<PlacedFeature> context) {
+    public static void bootstrapPlaced(BootstrapContext<PlacedFeature> context) {
         HolderGetter<ConfiguredFeature<?, ?>> configured = context.lookup(Registries.CONFIGURED_FEATURE);
 
         // Amber sits close to the surface, cinnabar deep down
@@ -144,7 +138,7 @@ public class ModWorldgen {
                 ore(2, HeightRangePlacement.uniform(VerticalAnchor.aboveBottom(8), VerticalAnchor.absolute(64))))));
     }
 
-    private static void bootstrapBiomeModifiers(BootstrapContext<BiomeModifier> context) {
+    public static void bootstrapBiomeModifiers(BootstrapContext<BiomeModifier> context) {
         HolderGetter<PlacedFeature> placed = context.lookup(Registries.PLACED_FEATURE);
         HolderSet<Biome> overworld = context.lookup(Registries.BIOME).getOrThrow(BiomeTags.IS_OVERWORLD);
 

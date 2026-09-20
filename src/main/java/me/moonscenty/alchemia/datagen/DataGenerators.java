@@ -5,7 +5,6 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
 import me.moonscenty.alchemia.Alchemia;
-import me.moonscenty.alchemia.worldgen.ModWorldgen;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
@@ -38,6 +37,6 @@ public class DataGenerators {
         generator.addProvider(event.includeServer(), new ModDataMapProvider(output, lookupProvider));
         generator.addProvider(event.includeServer(), new LootTableProvider(output, Set.of(),
                 List.of(new LootTableProvider.SubProviderEntry(ModBlockLootProvider::new, LootContextParamSets.BLOCK)), lookupProvider));
-        generator.addProvider(event.includeServer(), new DatapackBuiltinEntriesProvider(output, lookupProvider, ModWorldgen.BUILDER, Set.of(Alchemia.MODID)));
+        generator.addProvider(event.includeServer(), new DatapackBuiltinEntriesProvider(output, lookupProvider, ModDatapackEntries.BUILDER, Set.of(Alchemia.MODID)));
     }
 }

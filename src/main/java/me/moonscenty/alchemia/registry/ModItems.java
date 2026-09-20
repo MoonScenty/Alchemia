@@ -6,6 +6,7 @@ import java.util.Map;
 
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.block.CrystalType;
+import me.moonscenty.alchemia.item.AlchemometerItem;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -16,6 +17,9 @@ public class ModItems {
     public static final DeferredItem<Item> AMBER = ITEMS.registerSimpleItem("amber");
     public static final DeferredItem<Item> QUICKSILVER = ITEMS.registerSimpleItem("quicksilver");
     public static final DeferredItem<Item> RAW_CINNABAR = ITEMS.registerSimpleItem("raw_cinnabar");
+
+    public static final DeferredItem<Item> ALCHEMOMETER = ITEMS.register("alchemometer",
+            () -> new AlchemometerItem(new Item.Properties().stacksTo(1)));
 
     public static final Map<CrystalType, DeferredItem<Item>> SHARDS = registerShards();
     public static final DeferredItem<Item> BALANCED_SHARD = ITEMS.registerSimpleItem("balanced_shard");

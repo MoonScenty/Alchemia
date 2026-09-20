@@ -1,0 +1,16 @@
+{
+  "category": "alchemia:arcana",
+  "column": 2,
+  "icon": "alchemia:balanced_shard",
+  "pages": [
+    "research.alchemia.vis_crystals.page"
+  ],
+  "parents": [
+    "alchemia:aspects"
+  ],
+  "requirements": {
+    "alchemia:auram": 2,
+    "alchemia:vitreus": 4
+  },
+  "row": 1
+}

@@ -1,0 +1,16 @@
+{
+  "category": "alchemia:basics",
+  "column": -1,
+  "icon": "alchemia:greatwood_sapling",
+  "pages": [
+    "research.alchemia.greatwood.page"
+  ],
+  "parents": [
+    "alchemia:aspects"
+  ],
+  "requirements": {
+    "alchemia:herba": 4,
+    "alchemia:victus": 2
+  },
+  "row": 2
+}

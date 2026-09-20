@@ -1,0 +1,10 @@
+{
+  "auto_unlock": true,
+  "category": "alchemia:basics",
+  "column": 0,
+  "icon": "alchemia:alchemometer",
+  "pages": [
+    "research.alchemia.aspects.page"
+  ],
+  "row": 0
+}

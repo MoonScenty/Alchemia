@@ -1,0 +1,16 @@
+{
+  "category": "alchemia:basics",
+  "column": -2,
+  "icon": "alchemia:amber",
+  "pages": [
+    "research.alchemia.amber.page"
+  ],
+  "parents": [
+    "alchemia:aspects"
+  ],
+  "requirements": {
+    "alchemia:vinculum": 2,
+    "alchemia:vitreus": 2
+  },
+  "row": 1
+}
