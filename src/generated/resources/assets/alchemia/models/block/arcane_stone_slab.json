@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab",
+  "textures": {
+    "bottom": "alchemia:block/arcane_stone",
+    "side": "alchemia:block/arcane_stone",
+    "top": "alchemia:block/arcane_stone"
+  }
+}

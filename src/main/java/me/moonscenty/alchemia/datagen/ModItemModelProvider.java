@@ -25,6 +25,28 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.COPPER_CLUSTER.get());
         basicItem(ModItems.CINNABAR_CLUSTER.get());
 
+        basicItem(ModItems.ALCHEMIUM_INGOT.get());
+        basicItem(ModItems.BRASS_INGOT.get());
+        basicItem(ModItems.ALCHEMIUM_NUGGET.get());
+        basicItem(ModItems.BRASS_NUGGET.get());
+        basicItem(ModItems.QUICKSILVER_DROP.get());
+        basicItem(ModItems.ALCHEMIUM_GEAR.get());
+        basicItem(ModItems.BRASS_GEAR.get());
+        basicItem(ModItems.ALCHEMIUM_PLATE.get());
+        basicItem(ModItems.BRASS_PLATE.get());
+        basicItem(ModItems.IRON_PLATE.get());
+        basicItem(ModItems.SALIS_MUNDUS.get());
+
+        ModBlocks.PLANTS.forEach(plant -> {
+            String name = plant.getId().getPath();
+            withExistingParent(name, mcLoc("item/generated")).texture("layer0", modLoc("block/" + name));
+        });
+
+        ModBlocks.WOODS.forEach(wood -> {
+            String name = wood.sapling().getId().getPath();
+            withExistingParent(name, mcLoc("item/generated")).texture("layer0", modLoc("block/" + name));
+        });
+
         // Crystals show their fully grown texture in the inventory
         ModBlocks.CRYSTALS.values().forEach(crystal -> {
             String name = crystal.getId().getPath();

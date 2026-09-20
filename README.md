@@ -18,6 +18,7 @@ Thaumcraft 5.2.4 (Minecraft 1.8.9)의 게임플레이를 Minecraft 1.21.1 / NeoF
 ./gradlew runClient    # 클라이언트 실행
 ./gradlew runServer    # 서버 실행
 ./gradlew runData      # 데이터 생성 (src/generated/resources)
+./gradlew runGameTestServer  # GameTest 실행
 ```
 
 ## 구조
@@ -38,4 +39,4 @@ docs/PORTING_CONVENTIONS.md  포팅 원칙과 코드 규칙
 
 ## 라이선스
 
-[MIT](LICENSE.md)
+코드는 [MIT](LICENSE.md). 상 아이콘은 [game-icons.net](https://game-icons.net)의 Lorc가 만든 CC BY 3.0 에셋입니다. 자세한 내용은 [CREDITS.md](CREDITS.md)를 보세요.

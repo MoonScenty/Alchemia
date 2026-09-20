@@ -1,0 +1,436 @@
+{
+  "values": {
+    "#c:cobblestones": {
+      "alchemia:perditio": 1,
+      "alchemia:terra": 1
+    },
+    "#c:dusts/glowstone": {
+      "alchemia:lux": 10,
+      "alchemia:sensus": 3
+    },
+    "#c:dusts/redstone": {
+      "alchemia:potentia": 2
+    },
+    "#c:end_stones": {
+      "alchemia:tenebrae": 1,
+      "alchemia:terra": 1
+    },
+    "#c:gems/diamond": {
+      "alchemia:desiderium": 4,
+      "alchemia:vitreus": 4
+    },
+    "#c:gems/emerald": {
+      "alchemia:desiderium": 5,
+      "alchemia:vitreus": 4
+    },
+    "#c:gems/lapis": {
+      "alchemia:sensus": 3
+    },
+    "#c:gems/quartz": {
+      "alchemia:potentia": 1,
+      "alchemia:vitreus": 1
+    },
+    "#c:gravels": {
+      "alchemia:terra": 2
+    },
+    "#c:ingots/copper": {
+      "alchemia:metallum": 3,
+      "alchemia:potentia": 1
+    },
+    "#c:ingots/gold": {
+      "alchemia:desiderium": 2,
+      "alchemia:metallum": 3
+    },
+    "#c:ingots/iron": {
+      "alchemia:metallum": 4
+    },
+    "#c:netherracks": {
+      "alchemia:ignis": 1,
+      "alchemia:terra": 2
+    },
+    "#c:obsidians": {
+      "alchemia:ignis": 2,
+      "alchemia:tenebrae": 1,
+      "alchemia:terra": 2
+    },
+    "#c:ores/amber": {
+      "alchemia:terra": 1,
+      "alchemia:vinculum": 3,
+      "alchemia:vitreus": 2
+    },
+    "#c:ores/cinnabar": {
+      "alchemia:metallum": 2,
+      "alchemia:mortuus": 1,
+      "alchemia:permutatio": 2,
+      "alchemia:terra": 1
+    },
+    "#c:stones": {
+      "alchemia:terra": 2
+    },
+    "#minecraft:dirt": {
+      "alchemia:terra": 2
+    },
+    "#minecraft:fishes": {
+      "alchemia:aqua": 1,
+      "alchemia:bestia": 2,
+      "alchemia:victus": 1
+    },
+    "#minecraft:leaves": {
+      "alchemia:herba": 1
+    },
+    "#minecraft:logs": {
+      "alchemia:herba": 4
+    },
+    "#minecraft:planks": {
+      "alchemia:herba": 1
+    },
+    "#minecraft:sand": {
+      "alchemia:perditio": 1,
+      "alchemia:terra": 1
+    },
+    "#minecraft:saplings": {
+      "alchemia:herba": 3
+    },
+    "#minecraft:small_flowers": {
+      "alchemia:herba": 1,
+      "alchemia:sensus": 1
+    },
+    "#minecraft:wool": {
+      "alchemia:bestia": 2,
+      "alchemia:fabrico": 1
+    },
+    "alchemia:air_crystal": {
+      "alchemia:aer": 4,
+      "alchemia:vitreus": 2
+    },
+    "alchemia:air_shard": {
+      "alchemia:aer": 2,
+      "alchemia:vitreus": 1
+    },
+    "alchemia:alchemium_nugget": {
+      "alchemia:metallum": 1
+    },
+    "alchemia:amber": {
+      "alchemia:vinculum": 2,
+      "alchemia:vitreus": 2
+    },
+    "alchemia:arcane_stone": {
+      "alchemia:potentia": 1,
+      "alchemia:terra": 1
+    },
+    "alchemia:arcane_stone_bricks": {
+      "alchemia:potentia": 1,
+      "alchemia:terra": 1
+    },
+    "alchemia:balanced_shard": {
+      "alchemia:aer": 1,
+      "alchemia:aqua": 1,
+      "alchemia:ignis": 1,
+      "alchemia:ordo": 1,
+      "alchemia:perditio": 1,
+      "alchemia:terra": 1,
+      "alchemia:vitreus": 1
+    },
+    "alchemia:brass_nugget": {
+      "alchemia:metallum": 1
+    },
+    "alchemia:cinderpearl": {
+      "alchemia:auram": 1,
+      "alchemia:herba": 2,
+      "alchemia:ignis": 2
+    },
+    "alchemia:cinnabar_cluster": {
+      "alchemia:metallum": 4,
+      "alchemia:mortuus": 1,
+      "alchemia:ordo": 1,
+      "alchemia:permutatio": 4,
+      "alchemia:terra": 1
+    },
+    "alchemia:copper_cluster": {
+      "alchemia:metallum": 5,
+      "alchemia:ordo": 1,
+      "alchemia:terra": 1
+    },
+    "alchemia:earth_crystal": {
+      "alchemia:terra": 4,
+      "alchemia:vitreus": 2
+    },
+    "alchemia:earth_shard": {
+      "alchemia:terra": 2,
+      "alchemia:vitreus": 1
+    },
+    "alchemia:entropy_crystal": {
+      "alchemia:perditio": 4,
+      "alchemia:vitreus": 2
+    },
+    "alchemia:entropy_shard": {
+      "alchemia:perditio": 2,
+      "alchemia:vitreus": 1
+    },
+    "alchemia:fire_crystal": {
+      "alchemia:ignis": 4,
+      "alchemia:vitreus": 2
+    },
+    "alchemia:fire_shard": {
+      "alchemia:ignis": 2,
+      "alchemia:vitreus": 1
+    },
+    "alchemia:flux_crystal": {
+      "alchemia:vitium": 4,
+      "alchemia:vitreus": 2
+    },
+    "alchemia:flux_shard": {
+      "alchemia:vitium": 2,
+      "alchemia:vitreus": 1
+    },
+    "alchemia:gold_cluster": {
+      "alchemia:desiderium": 2,
+      "alchemia:metallum": 4,
+      "alchemia:ordo": 1,
+      "alchemia:terra": 1
+    },
+    "alchemia:greatwood_log": {
+      "alchemia:herba": 3,
+      "alchemia:victus": 1
+    },
+    "alchemia:greatwood_sapling": {
+      "alchemia:herba": 2,
+      "alchemia:victus": 2
+    },
+    "alchemia:iron_cluster": {
+      "alchemia:metallum": 6,
+      "alchemia:ordo": 1,
+      "alchemia:terra": 1
+    },
+    "alchemia:order_crystal": {
+      "alchemia:ordo": 4,
+      "alchemia:vitreus": 2
+    },
+    "alchemia:order_shard": {
+      "alchemia:ordo": 2,
+      "alchemia:vitreus": 1
+    },
+    "alchemia:quicksilver": {
+      "alchemia:metallum": 3,
+      "alchemia:mortuus": 1,
+      "alchemia:permutatio": 2
+    },
+    "alchemia:quicksilver_drop": {
+      "alchemia:metallum": 1
+    },
+    "alchemia:raw_cinnabar": {
+      "alchemia:metallum": 2,
+      "alchemia:mortuus": 1,
+      "alchemia:permutatio": 2,
+      "alchemia:terra": 1
+    },
+    "alchemia:salis_mundus": {
+      "alchemia:potentia": 2,
+      "alchemia:vitium": 2
+    },
+    "alchemia:shimmerleaf": {
+      "alchemia:auram": 2,
+      "alchemia:herba": 2,
+      "alchemia:potentia": 1
+    },
+    "alchemia:silverwood_log": {
+      "alchemia:auram": 1,
+      "alchemia:herba": 3
+    },
+    "alchemia:silverwood_sapling": {
+      "alchemia:auram": 2,
+      "alchemia:herba": 2
+    },
+    "alchemia:vishroom": {
+      "alchemia:auram": 1,
+      "alchemia:herba": 2,
+      "alchemia:mortuus": 1,
+      "alchemia:perditio": 1
+    },
+    "alchemia:water_crystal": {
+      "alchemia:aqua": 4,
+      "alchemia:vitreus": 2
+    },
+    "alchemia:water_shard": {
+      "alchemia:aqua": 2,
+      "alchemia:vitreus": 1
+    },
+    "minecraft:amethyst_shard": {
+      "alchemia:sensus": 1,
+      "alchemia:vitreus": 3
+    },
+    "minecraft:apple": {
+      "alchemia:herba": 2,
+      "alchemia:victus": 1
+    },
+    "minecraft:beef": {
+      "alchemia:bestia": 2,
+      "alchemia:terra": 1,
+      "alchemia:victus": 1
+    },
+    "minecraft:blaze_rod": {
+      "alchemia:ignis": 4,
+      "alchemia:potentia": 2
+    },
+    "minecraft:bone": {
+      "alchemia:mortuus": 2,
+      "alchemia:victus": 1
+    },
+    "minecraft:cactus": {
+      "alchemia:aqua": 1,
+      "alchemia:herba": 3,
+      "alchemia:perditio": 1
+    },
+    "minecraft:carrot": {
+      "alchemia:herba": 1,
+      "alchemia:sensus": 1,
+      "alchemia:victus": 1
+    },
+    "minecraft:charcoal": {
+      "alchemia:ignis": 2,
+      "alchemia:potentia": 2
+    },
+    "minecraft:chicken": {
+      "alchemia:bestia": 2,
+      "alchemia:terra": 1,
+      "alchemia:victus": 1
+    },
+    "minecraft:clay_ball": {
+      "alchemia:aqua": 1,
+      "alchemia:terra": 1
+    },
+    "minecraft:coal": {
+      "alchemia:ignis": 2,
+      "alchemia:potentia": 2
+    },
+    "minecraft:cobbled_deepslate": {
+      "alchemia:perditio": 1,
+      "alchemia:tenebrae": 1,
+      "alchemia:terra": 1
+    },
+    "minecraft:dead_bush": {
+      "alchemia:herba": 1,
+      "alchemia:perditio": 1
+    },
+    "minecraft:deepslate": {
+      "alchemia:tenebrae": 1,
+      "alchemia:terra": 2
+    },
+    "minecraft:egg": {
+      "alchemia:bestia": 1,
+      "alchemia:victus": 1
+    },
+    "minecraft:ender_pearl": {
+      "alchemia:alienis": 4,
+      "alchemia:motus": 4
+    },
+    "minecraft:feather": {
+      "alchemia:aer": 1,
+      "alchemia:volatus": 2
+    },
+    "minecraft:flint": {
+      "alchemia:instrumentum": 1,
+      "alchemia:terra": 1
+    },
+    "minecraft:ghast_tear": {
+      "alchemia:aqua": 1,
+      "alchemia:exanimis": 4,
+      "alchemia:spiritus": 4
+    },
+    "minecraft:glass": {
+      "alchemia:vitreus": 1
+    },
+    "minecraft:gunpowder": {
+      "alchemia:ignis": 4,
+      "alchemia:perditio": 4
+    },
+    "minecraft:ice": {
+      "alchemia:gelum": 4
+    },
+    "minecraft:leather": {
+      "alchemia:bestia": 2,
+      "alchemia:praemunio": 1
+    },
+    "minecraft:melon_slice": {
+      "alchemia:victus": 1
+    },
+    "minecraft:mutton": {
+      "alchemia:bestia": 2,
+      "alchemia:terra": 1,
+      "alchemia:victus": 1
+    },
+    "minecraft:nether_wart": {
+      "alchemia:herba": 1,
+      "alchemia:ignis": 1
+    },
+    "minecraft:porkchop": {
+      "alchemia:bestia": 2,
+      "alchemia:terra": 1,
+      "alchemia:victus": 1
+    },
+    "minecraft:potato": {
+      "alchemia:herba": 1,
+      "alchemia:terra": 1,
+      "alchemia:victus": 1
+    },
+    "minecraft:pumpkin": {
+      "alchemia:herba": 2
+    },
+    "minecraft:rabbit": {
+      "alchemia:bestia": 2,
+      "alchemia:terra": 1,
+      "alchemia:victus": 1
+    },
+    "minecraft:rotten_flesh": {
+      "alchemia:humanus": 1,
+      "alchemia:victus": 2
+    },
+    "minecraft:short_grass": {
+      "alchemia:aer": 1,
+      "alchemia:herba": 1
+    },
+    "minecraft:slime_ball": {
+      "alchemia:aqua": 1,
+      "alchemia:victus": 1
+    },
+    "minecraft:snowball": {
+      "alchemia:gelum": 1
+    },
+    "minecraft:soul_sand": {
+      "alchemia:spiritus": 1,
+      "alchemia:terra": 1,
+      "alchemia:vinculum": 1
+    },
+    "minecraft:soul_soil": {
+      "alchemia:spiritus": 1,
+      "alchemia:terra": 1,
+      "alchemia:vinculum": 1
+    },
+    "minecraft:spider_eye": {
+      "alchemia:bestia": 2,
+      "alchemia:mortuus": 1,
+      "alchemia:sensus": 2
+    },
+    "minecraft:stick": {
+      "alchemia:herba": 1
+    },
+    "minecraft:string": {
+      "alchemia:bestia": 2
+    },
+    "minecraft:sugar_cane": {
+      "alchemia:aer": 1,
+      "alchemia:aqua": 1,
+      "alchemia:herba": 1
+    },
+    "minecraft:torch": {
+      "alchemia:lux": 1
+    },
+    "minecraft:vine": {
+      "alchemia:herba": 1
+    },
+    "minecraft:wheat": {
+      "alchemia:herba": 2,
+      "alchemia:victus": 1
+    }
+  }
+}

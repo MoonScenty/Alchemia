@@ -1,0 +1,6 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#alchemia:has_silverwood",
+  "features": "alchemia:silverwood_tree",
+  "step": "vegetal_decoration"
+}

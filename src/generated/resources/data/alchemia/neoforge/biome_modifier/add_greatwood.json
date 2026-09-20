@@ -1,0 +1,6 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#alchemia:has_greatwood",
+  "features": "alchemia:greatwood_tree",
+  "step": "vegetal_decoration"
+}

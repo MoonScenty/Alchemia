@@ -1,7 +1,17 @@
 {
   "values": [
+    "#c:storage_blocks/alchemium",
+    "#c:storage_blocks/brass",
     "#c:ores/amber",
     "#c:ores/cinnabar",
-    "#alchemia:crystals"
+    "#alchemia:crystals",
+    "alchemia:amber_block",
+    "alchemia:amber_bricks",
+    "alchemia:arcane_stone",
+    "alchemia:arcane_stone_stairs",
+    "alchemia:arcane_stone_slab",
+    "alchemia:arcane_stone_bricks",
+    "alchemia:arcane_stone_bricks_stairs",
+    "alchemia:arcane_stone_bricks_slab"
   ]
 }

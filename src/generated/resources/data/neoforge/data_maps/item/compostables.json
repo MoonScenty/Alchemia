@@ -1,0 +1,25 @@
+{
+  "values": {
+    "alchemia:cinderpearl": {
+      "chance": 0.65
+    },
+    "alchemia:greatwood_leaves": {
+      "chance": 0.3
+    },
+    "alchemia:greatwood_sapling": {
+      "chance": 0.3
+    },
+    "alchemia:shimmerleaf": {
+      "chance": 0.65
+    },
+    "alchemia:silverwood_leaves": {
+      "chance": 0.3
+    },
+    "alchemia:silverwood_sapling": {
+      "chance": 0.3
+    },
+    "alchemia:vishroom": {
+      "chance": 0.65
+    }
+  }
+}

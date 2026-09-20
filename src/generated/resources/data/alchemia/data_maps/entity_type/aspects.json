@@ -1,0 +1,100 @@
+{
+  "values": {
+    "minecraft:blaze": {
+      "alchemia:ignis": 8,
+      "alchemia:potentia": 4
+    },
+    "minecraft:cat": {
+      "alchemia:bestia": 4,
+      "alchemia:victus": 2
+    },
+    "minecraft:chicken": {
+      "alchemia:bestia": 4,
+      "alchemia:victus": 2
+    },
+    "minecraft:cow": {
+      "alchemia:bestia": 4,
+      "alchemia:victus": 2
+    },
+    "minecraft:creeper": {
+      "alchemia:herba": 2,
+      "alchemia:ignis": 4,
+      "alchemia:perditio": 4
+    },
+    "minecraft:drowned": {
+      "alchemia:exanimis": 4,
+      "alchemia:mortuus": 2,
+      "alchemia:perditio": 1
+    },
+    "minecraft:enderman": {
+      "alchemia:alienis": 6,
+      "alchemia:motus": 4,
+      "alchemia:tenebrae": 2
+    },
+    "minecraft:horse": {
+      "alchemia:bestia": 4,
+      "alchemia:victus": 2
+    },
+    "minecraft:husk": {
+      "alchemia:exanimis": 4,
+      "alchemia:mortuus": 2,
+      "alchemia:perditio": 1
+    },
+    "minecraft:pig": {
+      "alchemia:bestia": 4,
+      "alchemia:victus": 2
+    },
+    "minecraft:rabbit": {
+      "alchemia:bestia": 4,
+      "alchemia:victus": 2
+    },
+    "minecraft:sheep": {
+      "alchemia:bestia": 4,
+      "alchemia:victus": 2
+    },
+    "minecraft:skeleton": {
+      "alchemia:exanimis": 4,
+      "alchemia:mortuus": 2,
+      "alchemia:perditio": 1
+    },
+    "minecraft:spider": {
+      "alchemia:bestia": 4,
+      "alchemia:sensus": 2,
+      "alchemia:vinculum": 2
+    },
+    "minecraft:stray": {
+      "alchemia:exanimis": 4,
+      "alchemia:mortuus": 2,
+      "alchemia:perditio": 1
+    },
+    "minecraft:villager": {
+      "alchemia:cognitio": 2,
+      "alchemia:humanus": 6,
+      "alchemia:permutatio": 2
+    },
+    "minecraft:witch": {
+      "alchemia:auram": 4,
+      "alchemia:cognitio": 2,
+      "alchemia:humanus": 4
+    },
+    "minecraft:wither_skeleton": {
+      "alchemia:exanimis": 4,
+      "alchemia:mortuus": 2,
+      "alchemia:perditio": 1
+    },
+    "minecraft:wolf": {
+      "alchemia:bestia": 4,
+      "alchemia:victus": 2
+    },
+    "minecraft:zombie": {
+      "alchemia:exanimis": 4,
+      "alchemia:mortuus": 2,
+      "alchemia:perditio": 1
+    },
+    "minecraft:zombie_villager": {
+      "alchemia:exanimis": 4,
+      "alchemia:mortuus": 2,
+      "alchemia:perditio": 1
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "group": "planks",
+  "ingredients": [
+    {
+      "tag": "alchemia:greatwood_logs"
+    }
+  ],
+  "result": {
+    "count": 4,
+    "id": "alchemia:greatwood_planks"
+  }
+}

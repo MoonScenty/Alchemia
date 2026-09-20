@@ -26,6 +26,18 @@ public class ModItems {
     public static final DeferredItem<Item> COPPER_CLUSTER = ITEMS.registerSimpleItem("copper_cluster");
     public static final DeferredItem<Item> CINNABAR_CLUSTER = ITEMS.registerSimpleItem("cinnabar_cluster");
 
+    public static final DeferredItem<Item> ALCHEMIUM_INGOT = ITEMS.registerSimpleItem("alchemium_ingot");
+    public static final DeferredItem<Item> BRASS_INGOT = ITEMS.registerSimpleItem("brass_ingot");
+    public static final DeferredItem<Item> ALCHEMIUM_NUGGET = ITEMS.registerSimpleItem("alchemium_nugget");
+    public static final DeferredItem<Item> BRASS_NUGGET = ITEMS.registerSimpleItem("brass_nugget");
+    public static final DeferredItem<Item> QUICKSILVER_DROP = ITEMS.registerSimpleItem("quicksilver_drop");
+    public static final DeferredItem<Item> ALCHEMIUM_GEAR = ITEMS.registerSimpleItem("alchemium_gear");
+    public static final DeferredItem<Item> BRASS_GEAR = ITEMS.registerSimpleItem("brass_gear");
+    public static final DeferredItem<Item> ALCHEMIUM_PLATE = ITEMS.registerSimpleItem("alchemium_plate");
+    public static final DeferredItem<Item> BRASS_PLATE = ITEMS.registerSimpleItem("brass_plate");
+    public static final DeferredItem<Item> IRON_PLATE = ITEMS.registerSimpleItem("iron_plate");
+    public static final DeferredItem<Item> SALIS_MUNDUS = ITEMS.registerSimpleItem("salis_mundus");
+
     private static Map<CrystalType, DeferredItem<Item>> registerShards() {
         Map<CrystalType, DeferredItem<Item>> shards = new EnumMap<>(CrystalType.class);
         for (CrystalType type : CrystalType.values()) {

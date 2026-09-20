@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_silverwood_planks": {
+      "conditions": {
+        "items": [
+          {
+            "items": "alchemia:silverwood_planks"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "alchemia:silverwood_slab"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_silverwood_planks"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "alchemia:silverwood_slab"
+    ]
+  }
+}

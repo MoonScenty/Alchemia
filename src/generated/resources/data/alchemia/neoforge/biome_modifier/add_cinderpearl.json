@@ -1,0 +1,6 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#alchemia:has_cinderpearl",
+  "features": "alchemia:cinderpearl_patch",
+  "step": "vegetal_decoration"
+}

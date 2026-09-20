@@ -1,5 +1,13 @@
 {
   "values": [
-    "#c:ores/amber"
+    "#c:ores/amber",
+    "#c:storage_blocks/alchemium",
+    "#c:storage_blocks/brass",
+    "alchemia:arcane_stone",
+    "alchemia:arcane_stone_stairs",
+    "alchemia:arcane_stone_slab",
+    "alchemia:arcane_stone_bricks",
+    "alchemia:arcane_stone_bricks_stairs",
+    "alchemia:arcane_stone_bricks_slab"
   ]
 }

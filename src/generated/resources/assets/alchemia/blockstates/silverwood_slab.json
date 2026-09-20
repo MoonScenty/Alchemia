@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "alchemia:block/silverwood_slab"
+    },
+    "type=double": {
+      "model": "alchemia:block/silverwood_planks"
+    },
+    "type=top": {
+      "model": "alchemia:block/silverwood_slab_top"
+    }
+  }
+}

@@ -34,6 +34,8 @@ public class DataGenerators {
         ModBlockTagsProvider blockTags = generator.addProvider(event.includeServer(), new ModBlockTagsProvider(output, lookupProvider, existingFileHelper));
         generator.addProvider(event.includeServer(), new ModItemTagsProvider(output, lookupProvider, blockTags.contentsGetter(), existingFileHelper));
         generator.addProvider(event.includeServer(), new ModRecipeProvider(output, lookupProvider));
+        generator.addProvider(event.includeServer(), new ModBiomeTagsProvider(output, lookupProvider, existingFileHelper));
+        generator.addProvider(event.includeServer(), new ModDataMapProvider(output, lookupProvider));
         generator.addProvider(event.includeServer(), new LootTableProvider(output, Set.of(),
                 List.of(new LootTableProvider.SubProviderEntry(ModBlockLootProvider::new, LootContextParamSets.BLOCK)), lookupProvider));
         generator.addProvider(event.includeServer(), new DatapackBuiltinEntriesProvider(output, lookupProvider, ModWorldgen.BUILDER, Set.of(Alchemia.MODID)));

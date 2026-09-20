@@ -3,8 +3,12 @@ package me.moonscenty.alchemia.datagen;
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.block.CrystalBlock;
 import me.moonscenty.alchemia.registry.ModBlocks;
+import me.moonscenty.alchemia.registry.StoneSet;
+import me.moonscenty.alchemia.registry.WoodSet;
 import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
 import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
@@ -24,10 +28,57 @@ public class ModBlockStateProvider extends BlockStateProvider {
         simpleBlockWithItem(ModBlocks.DEEPSLATE_CINNABAR_ORE);
 
         ModBlocks.CRYSTALS.values().forEach(this::crystal);
+
+        simpleBlockWithItem(ModBlocks.ALCHEMIUM_BLOCK);
+        simpleBlockWithItem(ModBlocks.BRASS_BLOCK);
+
+        ModBlocks.WOODS.forEach(this::wood);
+
+        ModBlocks.PLANTS.forEach(this::plant);
+
+        ModBlocks.STONE_SETS.forEach(this::stoneSet);
+        translucentBlock(ModBlocks.AMBER_BLOCK);
+        translucentBlock(ModBlocks.AMBER_BRICKS);
     }
 
     private void simpleBlockWithItem(DeferredBlock<?> block) {
         simpleBlockWithItem(block.get(), cubeAll(block.get()));
+    }
+
+    private void stoneSet(StoneSet set) {
+        simpleBlockWithItem(set.block());
+
+        ResourceLocation texture = blockTexture(set.block().get());
+        stairsBlock(set.stairs().get(), texture);
+        simpleBlockItem(set.stairs().get(), models().getExistingFile(set.stairs().getId().withPrefix("block/")));
+        slabBlock(set.slab().get(), texture, texture);
+        simpleBlockItem(set.slab().get(), models().getExistingFile(set.slab().getId().withPrefix("block/")));
+    }
+
+    private void translucentBlock(DeferredBlock<? extends Block> block) {
+        String name = block.getId().getPath();
+        simpleBlockWithItem(block.get(), models().cubeAll(name, blockTexture(block.get())).renderType("translucent"));
+    }
+
+    private void plant(DeferredBlock<? extends Block> block) {
+        String name = block.getId().getPath();
+        simpleBlock(block.get(), models().cross(name, blockTexture(block.get())).renderType("cutout"));
+    }
+
+    private void wood(WoodSet wood) {
+        logBlock(wood.log().get());
+        simpleBlockItem(wood.log().get(), models().getExistingFile(wood.log().getId().withPrefix("block/")));
+        simpleBlockWithItem(wood.planks());
+
+        ResourceLocation planks = blockTexture(wood.planks().get());
+        stairsBlock(wood.stairs().get(), planks);
+        simpleBlockItem(wood.stairs().get(), models().getExistingFile(wood.stairs().getId().withPrefix("block/")));
+        slabBlock(wood.slab().get(), planks, planks);
+        simpleBlockItem(wood.slab().get(), models().getExistingFile(wood.slab().getId().withPrefix("block/")));
+
+        // the leaf color is part of the texture, so there is no biome tint
+        simpleBlockWithItem(wood.leaves().get(), models().leaves(wood.leaves().getId().getPath(), blockTexture(wood.leaves().get())).renderType("cutout_mipped"));
+        simpleBlock(wood.sapling().get(), models().cross(wood.sapling().getId().getPath(), blockTexture(wood.sapling().get())).renderType("cutout"));
     }
 
     private void crystal(DeferredBlock<CrystalBlock> block) {
