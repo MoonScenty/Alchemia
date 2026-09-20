@@ -60,6 +60,7 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
             dropSelf(set.stairs().get());
             add(set.slab().get(), this::createSlabItemTable);
         }
+        dropSelf(ModBlocks.RESEARCH_TABLE.get());
         dropSelf(ModBlocks.AMBER_BLOCK.get());
         dropSelf(ModBlocks.AMBER_BRICKS.get());
 

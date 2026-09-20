@@ -70,6 +70,9 @@ public abstract class ModLanguageProvider extends LanguageProvider {
 
 
         addItem(ModItems.ALCHEMOMETER, pick("Alchemometer", "알케모미터"));
+        addBlock(ModBlocks.RESEARCH_TABLE, pick("Research Table", "연구 탁자"));
+        addItem(ModItems.SCRIBING_TOOLS, pick("Scribing Tools", "필기구"));
+        addItem(ModItems.RESEARCH_NOTES, pick("Research Notes", "연구 노트"));
         add("scan.alchemia.nothing_there", pick("There is nothing there to read.", "읽을 것이 없다."));
         add("scan.alchemia.nothing", pick("You learn nothing from the %s.", "%s에서는 아무것도 알아낼 수 없다."));
         add("scan.alchemia.already_known", pick("The %s holds nothing new.", "%s에는 새로운 것이 없다."));

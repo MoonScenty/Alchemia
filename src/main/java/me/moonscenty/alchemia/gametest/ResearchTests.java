@@ -4,7 +4,10 @@ import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.aspect.AspectList;
 import me.moonscenty.alchemia.player.PlayerKnowledge;
 import me.moonscenty.alchemia.registry.ModAspects;
+import me.moonscenty.alchemia.block.ResearchTableBlock;
+import me.moonscenty.alchemia.block.entity.ResearchTableBlockEntity;
 import me.moonscenty.alchemia.registry.ModBlocks;
+import me.moonscenty.alchemia.registry.ModItems;
 import me.moonscenty.alchemia.research.ModResearch;
 import me.moonscenty.alchemia.research.ResearchCategory;
 import me.moonscenty.alchemia.research.ResearchEntry;
@@ -90,6 +93,66 @@ public class ResearchTests {
         BlockPos pos = helper.absolutePos(BlockPos.ZERO);
         ScanTarget ore = new ScanTarget.OfBlock(helper.getLevel(), pos, ModBlocks.AMBER_ORE.get().defaultBlockState());
         helper.assertTrue(ore.aspects().get(ModAspects.TRAP) > 0, "amber ore should read as vinculum, read " + ore.aspects());
+        helper.succeed();
+    }
+
+    /** What is left on the desk has to show up on it, since the inkwell and note are part of the block's model. */
+    @GameTest(template = TEMPLATE)
+    public static void theDeskShowsWhatIsLeftOnIt(GameTestHelper helper) {
+        BlockPos pos = new BlockPos(2, 1, 2);
+        helper.setBlock(pos, ModBlocks.RESEARCH_TABLE.get());
+        ResearchTableBlockEntity table = (ResearchTableBlockEntity) helper.getBlockEntity(pos);
+
+        helper.assertTrue(!helper.getBlockState(pos).getValue(ResearchTableBlock.HAS_TOOLS), "a bare desk shows nothing");
+
+        table.put(ResearchTableBlockEntity.SLOT_TOOLS, new ItemStack(ModItems.SCRIBING_TOOLS.get()));
+        helper.assertTrue(helper.getBlockState(pos).getValue(ResearchTableBlock.HAS_TOOLS), "the inkwell should have appeared");
+        helper.assertTrue(!helper.getBlockState(pos).getValue(ResearchTableBlock.HAS_NOTES), "but not the note");
+
+        table.put(ResearchTableBlockEntity.SLOT_NOTES, new ItemStack(ModItems.RESEARCH_NOTES.get()));
+        helper.assertTrue(helper.getBlockState(pos).getValue(ResearchTableBlock.HAS_NOTES), "the note should have appeared too");
+
+        table.put(ResearchTableBlockEntity.SLOT_TOOLS, ItemStack.EMPTY);
+        helper.assertTrue(!helper.getBlockState(pos).getValue(ResearchTableBlock.HAS_TOOLS), "taking the tools back clears the inkwell");
+        helper.succeed();
+    }
+
+    /** The desk only takes the two things that belong on it. */
+    @GameTest(template = TEMPLATE)
+    public static void theDeskIsFussyAboutWhatGoesOnIt(GameTestHelper helper) {
+        BlockPos pos = new BlockPos(4, 1, 4);
+        helper.setBlock(pos, ModBlocks.RESEARCH_TABLE.get());
+        ResearchTableBlockEntity table = (ResearchTableBlockEntity) helper.getBlockEntity(pos);
+
+        helper.assertTrue(table.accepts(ResearchTableBlockEntity.SLOT_TOOLS, new ItemStack(ModItems.SCRIBING_TOOLS.get())),
+                "scribing tools belong in the tool slot");
+        helper.assertTrue(!table.accepts(ResearchTableBlockEntity.SLOT_TOOLS, new ItemStack(Items.DIAMOND)),
+                "a diamond does not");
+        helper.assertTrue(!table.accepts(ResearchTableBlockEntity.SLOT_NOTES, new ItemStack(ModItems.SCRIBING_TOOLS.get())),
+                "and the tools do not go in the note slot either");
+        helper.succeed();
+    }
+
+    /** Ink runs down as a note is worked through, and the tools vanish once the bottle is dry. */
+    @GameTest(template = TEMPLATE)
+    public static void inkRunsOutEventually(GameTestHelper helper) {
+        BlockPos pos = new BlockPos(6, 1, 6);
+        helper.setBlock(pos, ModBlocks.RESEARCH_TABLE.get());
+        ResearchTableBlockEntity table = (ResearchTableBlockEntity) helper.getBlockEntity(pos);
+
+        helper.assertTrue(!table.useInk(), "an empty desk has no ink to spend");
+
+        ItemStack tools = new ItemStack(ModItems.SCRIBING_TOOLS.get());
+        int capacity = tools.getMaxDamage();
+        table.put(ResearchTableBlockEntity.SLOT_TOOLS, tools);
+
+        // a bottle holding 64 points is good for 64 strokes, the last of which empties it
+        for (int used = 1; used <= capacity; used++) {
+            helper.assertTrue(table.useInk(), "the ink gave out early, after " + used);
+        }
+        helper.assertTrue(table.get(ResearchTableBlockEntity.SLOT_TOOLS).isEmpty(),
+                "the dry tools should have been cleared away");
+        helper.assertTrue(!helper.getBlockState(pos).getValue(ResearchTableBlock.HAS_TOOLS), "and the inkwell with them");
         helper.succeed();
     }
 }
