@@ -1,5 +1,5 @@
 {
-  "background": "alchemia:textures/gui/research_background.png",
+  "background": "alchemia:textures/gui/research_background/artifice.png",
   "icon": "alchemia:alchemium_gear",
   "sort_order": 3
 }

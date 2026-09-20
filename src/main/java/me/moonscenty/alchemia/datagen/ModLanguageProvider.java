@@ -73,6 +73,11 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         addBlock(ModBlocks.RESEARCH_TABLE, pick("Research Table", "연구 탁자"));
         addItem(ModItems.SCRIBING_TOOLS, pick("Scribing Tools", "필기구"));
         addItem(ModItems.RESEARCH_NOTES, pick("Research Notes", "연구 노트"));
+        addItem(ModItems.ALCHEMONOMICON, pick("Alchemonomicon", "알케모노미콘"));
+        add("research.alchemia.known", pick("Worked out", "알아냄"));
+        add("research.alchemia.locked", pick("Something must come first", "먼저 알아내야 할 것이 있다"));
+        add("research.alchemia.ready", pick("Ready to be worked on", "연구할 수 있다"));
+        add("research.alchemia.needs", pick("Still to be found: %s", "아직 찾지 못함: %s"));
         add("scan.alchemia.nothing_there", pick("There is nothing there to read.", "읽을 것이 없다."));
         add("scan.alchemia.nothing", pick("You learn nothing from the %s.", "%s에서는 아무것도 알아낼 수 없다."));
         add("scan.alchemia.already_known", pick("The %s holds nothing new.", "%s에는 새로운 것이 없다."));

@@ -39,6 +39,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.ALCHEMOMETER.get());
         basicItem(ModItems.SCRIBING_TOOLS.get());
         basicItem(ModItems.RESEARCH_NOTES.get());
+        basicItem(ModItems.ALCHEMONOMICON.get());
 
         ModBlocks.PLANTS.forEach(plant -> {
             String name = plant.getId().getPath();

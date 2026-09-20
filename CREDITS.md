@@ -15,6 +15,24 @@ Alchemia의 **코드**는 [MIT](LICENSE.md)입니다. 아래 에셋은 각자의
 
 `background.png`와 `unknown.png`는 이 저장소에서 직접 만든 것으로 MIT입니다.
 
+## 연구 노드 판 — 바닐라 마인크래프트
+
+`assets/alchemia/textures/gui/sprites/research/`의 여섯 장은 바닐라 마인크래프트 1.21.1의 업적 프레임 스프라이트를 그대로 추출한 것입니다.
+
+| 파일 | 원본 |
+|---|---|
+| `node_plain.png` / `node_plain_done.png` | `advancements/task_frame_unobtained` / `_obtained` |
+| `node_special.png` / `node_special_done.png` | `advancements/goal_frame_unobtained` / `_obtained` |
+| `node_major.png` / `node_major_done.png` | `advancements/challenge_frame_unobtained` / `_obtained` |
+
+Mojang의 에셋이므로 이 저장소의 MIT 라이선스가 적용되지 않습니다. Minecraft EULA를 따릅니다.
+
+## 연구 화면 배경
+
+`textures/gui/research_background/`의 여섯 장은 MoonScenty가 준비한 이미지를 1024×1024로 리사이즈한 것입니다. 분기별 색은 원작이 쓰던 색을 따라갔습니다 — 기초 청록, 아르카나 자홍, 연금술 녹색·호박, 장치 짙은 파랑, 골레마니 진홍, 엘드리치 보라.
+
+`textures/gui/research_overlay.png`는 이 저장소에서 값 노이즈와 별점으로 생성한 것으로 MIT입니다.
+
 ## 그 밖의 텍스처
 
 나머지 텍스처는 MoonScenty가 직접 제작했거나, 바닐라 마인크래프트 텍스처를 색조 변환해 만든 것입니다. 제작 방식은 [docs/textures/](docs/textures/)에 기록돼 있습니다.

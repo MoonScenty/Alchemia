@@ -9,6 +9,7 @@ import me.moonscenty.alchemia.registry.ModAspects;
 import me.moonscenty.alchemia.registry.ModBlocks;
 import me.moonscenty.alchemia.registry.ModItems;
 import me.moonscenty.alchemia.research.ModResearch;
+import me.moonscenty.alchemia.research.NodeShape;
 import me.moonscenty.alchemia.research.ResearchCategory;
 import me.moonscenty.alchemia.research.ResearchEntry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -27,46 +28,48 @@ import net.minecraft.world.level.ItemLike;
 public class ModResearchProvider {
     public static void categories(BootstrapContext<ResearchCategory> context) {
         // Thaumaturgy is called arcana here, following the rule on names carried over from the original
-        category(context, ModResearch.BASICS, ModItems.ALCHEMOMETER, 0);
-        category(context, ModResearch.ARCANA, ModItems.BALANCED_SHARD, 1);
-        category(context, ModResearch.ALCHEMY, ModItems.QUICKSILVER, 2);
-        category(context, ModResearch.ARTIFICE, ModItems.ALCHEMIUM_GEAR, 3);
-        category(context, ModResearch.GOLEMANCY, ModItems.BRASS_INGOT, 4);
-        category(context, ModResearch.ELDRITCH, ModItems.SHARDS.get(CrystalType.FLUX), 5);
+        category(context, ModResearch.BASICS, ModItems.ALCHEMOMETER, "basics", 0);
+        category(context, ModResearch.ARCANA, ModItems.BALANCED_SHARD, "arcana", 1);
+        category(context, ModResearch.ALCHEMY, ModItems.QUICKSILVER, "alchemy", 2);
+        category(context, ModResearch.ARTIFICE, ModItems.ALCHEMIUM_GEAR, "artifice", 3);
+        category(context, ModResearch.GOLEMANCY, ModItems.BRASS_INGOT, "golemancy", 4);
+        category(context, ModResearch.ELDRITCH, ModItems.SHARDS.get(CrystalType.FLUX), "eldritch", 5);
     }
 
     public static void entries(BootstrapContext<ResearchEntry> context) {
         // where everything starts: the six primals are plain enough to see without help
         entry(context, "aspects", ModResearch.BASICS, ModItems.ALCHEMOMETER, 0, 0,
-                AspectList.EMPTY, List.of(), true);
+                AspectList.EMPTY, List.of(), true, NodeShape.MAJOR);
 
         entry(context, "amber", ModResearch.BASICS, ModItems.AMBER, -2, 1,
-                AspectList.of(ModAspects.CRYSTAL, 2).add(ModAspects.TRAP, 2), List.of("aspects"), false);
+                AspectList.of(ModAspects.CRYSTAL, 2).add(ModAspects.TRAP, 2), List.of("aspects"), false, NodeShape.PLAIN);
         entry(context, "quicksilver", ModResearch.ALCHEMY, ModItems.QUICKSILVER, 0, 1,
-                AspectList.of(ModAspects.METAL, 3).add(ModAspects.EXCHANGE, 2), List.of("aspects"), false);
+                AspectList.of(ModAspects.METAL, 3).add(ModAspects.EXCHANGE, 2), List.of("aspects"), false, NodeShape.PLAIN);
         entry(context, "vis_crystals", ModResearch.ARCANA, ModItems.BALANCED_SHARD, 2, 1,
-                AspectList.of(ModAspects.CRYSTAL, 4).add(ModAspects.AURA, 2), List.of("aspects"), false);
+                AspectList.of(ModAspects.CRYSTAL, 4).add(ModAspects.AURA, 2), List.of("aspects"), false, NodeShape.SPECIAL);
         entry(context, "greatwood", ModResearch.BASICS, ModBlocks.GREATWOOD.sapling(), -1, 2,
-                AspectList.of(ModAspects.PLANT, 4).add(ModAspects.LIFE, 2), List.of("aspects"), false);
+                AspectList.of(ModAspects.PLANT, 4).add(ModAspects.LIFE, 2), List.of("aspects"), false, NodeShape.PLAIN);
         entry(context, "silverwood", ModResearch.ARCANA, ModBlocks.SILVERWOOD.sapling(), 1, 2,
-                AspectList.of(ModAspects.PLANT, 4).add(ModAspects.AURA, 4), List.of("greatwood"), false);
+                AspectList.of(ModAspects.PLANT, 4).add(ModAspects.AURA, 4), List.of("greatwood"), false, NodeShape.SPECIAL);
         entry(context, "warp", ModResearch.ELDRITCH, Items.ENDER_PEARL, 0, 3,
-                AspectList.of(ModAspects.ELDRITCH, 4).add(ModAspects.FLUX, 2), List.of("vis_crystals"), false);
+                AspectList.of(ModAspects.ELDRITCH, 4).add(ModAspects.FLUX, 2), List.of("vis_crystals"), false, NodeShape.MAJOR);
     }
 
     private static void category(BootstrapContext<ResearchCategory> context, ResourceKey<ResearchCategory> key,
-            ItemLike icon, int order) {
+            ItemLike icon, String sky, int order) {
         ResourceLocation iconPath = BuiltInRegistries.ITEM.getKey(icon.asItem());
-        context.register(key, new ResearchCategory(iconPath, Alchemia.id("textures/gui/research_background.png"), order));
+        context.register(key, new ResearchCategory(iconPath,
+                Alchemia.id("textures/gui/research_background/" + sky + ".png"), order));
     }
 
     private static void entry(BootstrapContext<ResearchEntry> context, String name, ResourceKey<ResearchCategory> category,
-            ItemLike icon, int column, int row, AspectList requirements, List<String> parents, boolean autoUnlock) {
+            ItemLike icon, int column, int row, AspectList requirements, List<String> parents, boolean autoUnlock,
+            NodeShape shape) {
         context.register(ResourceKey.create(ModResearch.ENTRY_KEY, Alchemia.id(name)),
                 new ResearchEntry(category, requirements, column, row,
                         BuiltInRegistries.ITEM.wrapAsHolder(icon.asItem()),
                         parents.stream().map(Alchemia::id).toList(),
                         List.of("research." + Alchemia.MODID + "." + name + ".page"),
-                        autoUnlock));
+                        autoUnlock, shape));
     }
 }
