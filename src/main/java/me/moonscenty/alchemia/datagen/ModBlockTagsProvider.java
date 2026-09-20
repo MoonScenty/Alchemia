@@ -70,6 +70,8 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
             tag(BlockTags.SLABS).add(set.slab().get());
         }
 
+        tag(BlockTags.MINEABLE_WITH_AXE).add(ModBlocks.RESEARCH_TABLE.get());
+
         tag(ModTags.Blocks.CINDERPEARL_PLACEABLE)
                 .addTag(BlockTags.SAND)
                 .addTag(BlockTags.DIRT)

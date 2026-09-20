@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import com.mojang.logging.LogUtils;
 
 import me.moonscenty.alchemia.registry.ModAspects;
+import me.moonscenty.alchemia.registry.ModBlockEntities;
 import me.moonscenty.alchemia.registry.ModBlocks;
 import me.moonscenty.alchemia.registry.ModCreativeTabs;
 import me.moonscenty.alchemia.registry.ModFeatures;
@@ -28,6 +29,7 @@ public class Alchemia {
 
     public Alchemia(IEventBus modEventBus, ModContainer modContainer) {
         ModBlocks.BLOCKS.register(modEventBus);
+        ModBlockEntities.BLOCK_ENTITIES.register(modEventBus);
         ModItems.ITEMS.register(modEventBus);
         ModCreativeTabs.CREATIVE_MODE_TABS.register(modEventBus);
         ModFeatures.FEATURES.register(modEventBus);

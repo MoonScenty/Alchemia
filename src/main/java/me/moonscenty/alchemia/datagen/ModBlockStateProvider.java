@@ -2,6 +2,7 @@ package me.moonscenty.alchemia.datagen;
 
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.block.CrystalBlock;
+import me.moonscenty.alchemia.block.ResearchTableBlock;
 import me.moonscenty.alchemia.registry.ModBlocks;
 import me.moonscenty.alchemia.registry.StoneSet;
 import me.moonscenty.alchemia.registry.WoodSet;
@@ -36,6 +37,8 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
         ModBlocks.PLANTS.forEach(this::plant);
 
+        researchTable();
+
         ModBlocks.STONE_SETS.forEach(this::stoneSet);
         translucentBlock(ModBlocks.AMBER_BLOCK);
         translucentBlock(ModBlocks.AMBER_BRICKS);
@@ -43,6 +46,28 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
     private void simpleBlockWithItem(DeferredBlock<?> block) {
         simpleBlockWithItem(block.get(), cubeAll(block.get()));
+    }
+
+    /** The desk, plus an inkwell and a spread note that only show when the state says they are there. */
+    private void researchTable() {
+        ResearchTableBlock block = ModBlocks.RESEARCH_TABLE.get();
+        ModelFile desk = models().getExistingFile(modLoc("block/research_table"));
+        ModelFile inkwell = models().getExistingFile(modLoc("block/research_table_inkwell"));
+        ModelFile scroll = models().getExistingFile(modLoc("block/research_table_scroll"));
+
+        var builder = getMultipartBuilder(block);
+        for (Direction facing : Direction.Plane.HORIZONTAL) {
+            // the model is drawn facing north, whose yaw is 180, so take that back out
+            int turn = ((int) facing.toYRot() + 180) % 360;
+            builder.part().modelFile(desk).rotationY(turn).addModel()
+                    .condition(ResearchTableBlock.FACING, facing).end();
+            builder.part().modelFile(inkwell).rotationY(turn).addModel()
+                    .condition(ResearchTableBlock.FACING, facing)
+                    .condition(ResearchTableBlock.HAS_TOOLS, true).end();
+            builder.part().modelFile(scroll).rotationY(turn).addModel()
+                    .condition(ResearchTableBlock.FACING, facing)
+                    .condition(ResearchTableBlock.HAS_NOTES, true).end();
+        }
     }
 
     private void stoneSet(StoneSet set) {

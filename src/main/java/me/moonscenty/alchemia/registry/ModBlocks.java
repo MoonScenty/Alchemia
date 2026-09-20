@@ -10,6 +10,7 @@ import java.util.function.Supplier;
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.block.CrystalBlock;
 import me.moonscenty.alchemia.block.CrystalType;
+import me.moonscenty.alchemia.block.ResearchTableBlock;
 import me.moonscenty.alchemia.block.ShimmerleafBlock;
 import me.moonscenty.alchemia.block.VishroomBlock;
 import me.moonscenty.alchemia.block.CinderpearlBlock;
@@ -49,6 +50,11 @@ public class ModBlocks {
             () -> new DropExperienceBlock(ConstantInt.of(0), BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_ORE)));
     public static final DeferredBlock<Block> DEEPSLATE_CINNABAR_ORE = register("deepslate_cinnabar_ore",
             () -> new DropExperienceBlock(ConstantInt.of(0), BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_IRON_ORE)));
+
+    public static final DeferredBlock<ResearchTableBlock> RESEARCH_TABLE = register("research_table",
+            () -> new ResearchTableBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_PLANKS)
+                    .mapColor(MapColor.COLOR_BROWN)
+                    .noOcclusion()));
 
     public static final Map<CrystalType, DeferredBlock<CrystalBlock>> CRYSTALS = registerCrystals();
 

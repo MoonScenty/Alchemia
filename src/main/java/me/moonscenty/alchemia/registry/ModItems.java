@@ -21,6 +21,13 @@ public class ModItems {
     public static final DeferredItem<Item> ALCHEMOMETER = ITEMS.register("alchemometer",
             () -> new AlchemometerItem(new Item.Properties().stacksTo(1)));
 
+    /** Quill and ink. Its damage is how much ink is left, spent a point at a time while working on a note. */
+    public static final DeferredItem<Item> SCRIBING_TOOLS = ITEMS.register("scribing_tools",
+            () -> new Item(new Item.Properties().stacksTo(1).durability(64)));
+    /** A sheet of vellum with a research puzzle part-drawn on it. */
+    public static final DeferredItem<Item> RESEARCH_NOTES = ITEMS.registerSimpleItem("research_notes",
+            new Item.Properties().stacksTo(1));
+
     public static final Map<CrystalType, DeferredItem<Item>> SHARDS = registerShards();
     public static final DeferredItem<Item> BALANCED_SHARD = ITEMS.registerSimpleItem("balanced_shard");
 
