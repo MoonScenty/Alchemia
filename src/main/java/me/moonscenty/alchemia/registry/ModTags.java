@@ -37,6 +37,14 @@ public class ModTags {
         public static final TagKey<Biome> HAS_GREATWOOD = TagKey.create(Registries.BIOME, Alchemia.id("has_greatwood"));
         public static final TagKey<Biome> HAS_SILVERWOOD = TagKey.create(Registries.BIOME, Alchemia.id("has_silverwood"));
         public static final TagKey<Biome> HAS_CINDERPEARL = TagKey.create(Registries.BIOME, Alchemia.id("has_cinderpearl"));
+
+        /**
+         * What a dark node turns the land around it into.
+         * <p>
+         * A tag rather than a named biome, so that when there is somewhere properly eerie to turn it into, that
+         * biome joins this tag and nothing in the code has to change. For now it is desert: somewhere gone wrong.
+         */
+        public static final TagKey<Biome> NODE_DARKENS_INTO = TagKey.create(Registries.BIOME, Alchemia.id("node_darkens_into"));
     }
 
     public static class Items {

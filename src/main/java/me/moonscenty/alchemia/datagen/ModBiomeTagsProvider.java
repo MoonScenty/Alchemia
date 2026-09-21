@@ -31,5 +31,9 @@ public class ModBiomeTagsProvider extends BiomeTagsProvider {
         tag(ModTags.Biomes.HAS_CINDERPEARL)
                 .add(Biomes.DESERT)
                 .addTag(BiomeTags.IS_BADLANDS);
+
+        // stands in until there is somewhere properly eerie for a dark node to make
+        tag(ModTags.Biomes.NODE_DARKENS_INTO)
+                .add(Biomes.DESERT);
     }
 }

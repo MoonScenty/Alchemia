@@ -3,7 +3,10 @@ package me.moonscenty.alchemia.aura;
 import me.moonscenty.alchemia.aspect.Aspect;
 import me.moonscenty.alchemia.aspect.AspectList;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.chunk.LevelChunk;
@@ -92,6 +95,46 @@ public final class AuraHandler {
             store(level, pos, aura.reduce(aspect, taken));
         }
         return taken;
+    }
+
+    /**
+     * Puts aura back, the way a node does.
+     * <p>
+     * A chunk already holding as much as it will take does not simply swell: the further past its base it is, the
+     * more likely the new aura spills over into the land around instead. That is what stops a node from making an
+     * endless well of one chunk while everywhere else stays thin.
+     */
+    public static void recharge(ServerLevel level, BlockPos pos, Holder<Aspect> aspect, int amount,
+            RandomSource random) {
+        AuraChunk aura = at(level, pos);
+        if (!aura.exists() || amount <= 0) {
+            return;
+        }
+
+        int here = aura.get(aspect);
+        if (here <= aura.base()) {
+            store(level, pos, aura.add(aspect, amount));
+            return;
+        }
+
+        // how far past its base it already is, measured against a tenth of the base
+        float over = (here - aura.base()) / (aura.base() * 0.1F);
+        if (random.nextFloat() > over) {
+            store(level, pos, aura.add(aspect, amount));
+        } else if (random.nextFloat() > 0.33F) {
+            spill(level, pos, aspect, amount, random);
+        }
+    }
+
+    /** Hands the aura to one of the four chunks around instead. */
+    private static void spill(ServerLevel level, BlockPos pos, Holder<Aspect> aspect, int amount,
+            RandomSource random) {
+        Direction side = Direction.Plane.HORIZONTAL.getRandomDirection(random);
+        BlockPos next = pos.offset(side.getStepX() * 16, 0, side.getStepZ() * 16);
+        AuraChunk theirs = at(level, next);
+        if (theirs.exists()) {
+            store(level, next, theirs.add(aspect, amount));
+        }
     }
 
     /**

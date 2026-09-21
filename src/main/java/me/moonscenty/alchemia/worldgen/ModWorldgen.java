@@ -26,6 +26,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.BlockStateConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
@@ -60,12 +61,15 @@ public class ModWorldgen {
 
     public static final ResourceKey<PlacedFeature> GREATWOOD_TREE_PLACED = placed("greatwood_tree");
     public static final ResourceKey<PlacedFeature> SILVERWOOD_TREE_PLACED = placed("silverwood_tree");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> AURA_NODE = configured("aura_node");
+    public static final ResourceKey<PlacedFeature> AURA_NODE_PLACED = placed("aura_node");
     public static final ResourceKey<PlacedFeature> ORE_AMBER_PLACED = placed("ore_amber");
     public static final ResourceKey<PlacedFeature> ORE_CINNABAR_PLACED = placed("ore_cinnabar");
     public static final Map<CrystalType, ResourceKey<PlacedFeature>> CRYSTAL_PATCHES_PLACED = new EnumMap<>(CrystalType.class);
 
     public static final ResourceKey<BiomeModifier> ADD_ORES = biomeModifier("add_ores");
     public static final ResourceKey<BiomeModifier> ADD_CRYSTALS = biomeModifier("add_crystals");
+    public static final ResourceKey<BiomeModifier> ADD_NODES = biomeModifier("add_nodes");
     public static final ResourceKey<BiomeModifier> ADD_GREATWOOD = biomeModifier("add_greatwood");
     public static final ResourceKey<BiomeModifier> ADD_SILVERWOOD = biomeModifier("add_silverwood");
 
@@ -113,6 +117,8 @@ public class ModWorldgen {
                 PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK,
                         new SimpleBlockConfiguration(BlockStateProvider.simple(ModBlocks.CINDERPEARL.get()))))));
 
+        context.register(AURA_NODE, new ConfiguredFeature<>(ModFeatures.AURA_NODE.get(), NoneFeatureConfiguration.INSTANCE));
+
         CRYSTAL_PATCHES.forEach((type, key) -> context.register(key, new ConfiguredFeature<>(ModFeatures.CRYSTAL_PATCH.get(),
                 new BlockStateConfiguration(ModBlocks.CRYSTALS.get(type).get().defaultBlockState()))));
     }
@@ -134,6 +140,10 @@ public class ModWorldgen {
         context.register(SILVERWOOD_TREE_PLACED, new PlacedFeature(configured.getOrThrow(SILVERWOOD_TREE),
                 tree(40, ModBlocks.SILVERWOOD.sapling().get())));
 
+        // one chunk in thirty or so gets a node, which is about what the original worked out to
+        context.register(AURA_NODE_PLACED, new PlacedFeature(configured.getOrThrow(AURA_NODE),
+                List.of(RarityFilter.onAverageOnceEvery(30), InSquarePlacement.spread(), BiomeFilter.biome())));
+
         CRYSTAL_PATCHES_PLACED.forEach((type, key) -> context.register(key, new PlacedFeature(configured.getOrThrow(CRYSTAL_PATCHES.get(type)),
                 ore(2, HeightRangePlacement.uniform(VerticalAnchor.aboveBottom(8), VerticalAnchor.absolute(64))))));
     }
@@ -154,6 +164,9 @@ public class ModWorldgen {
 
         context.register(ADD_CINDERPEARL, new BiomeModifiers.AddFeaturesBiomeModifier(biomes.getOrThrow(ModTags.Biomes.HAS_CINDERPEARL),
                 HolderSet.direct(placed.getOrThrow(CINDERPEARL_PATCH_PLACED)), GenerationStep.Decoration.VEGETAL_DECORATION));
+
+        context.register(ADD_NODES, new BiomeModifiers.AddFeaturesBiomeModifier(overworld,
+                HolderSet.direct(placed.getOrThrow(AURA_NODE_PLACED)), GenerationStep.Decoration.TOP_LAYER_MODIFICATION));
 
         List<Holder<PlacedFeature>> crystals = new ArrayList<>();
         CRYSTAL_PATCHES_PLACED.values().forEach(key -> crystals.add(placed.getOrThrow(key)));

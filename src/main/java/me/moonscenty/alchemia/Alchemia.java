@@ -12,6 +12,7 @@ import me.moonscenty.alchemia.registry.ModBlockEntities;
 import me.moonscenty.alchemia.registry.ModBlocks;
 import me.moonscenty.alchemia.registry.ModCreativeTabs;
 import me.moonscenty.alchemia.registry.ModDataComponents;
+import me.moonscenty.alchemia.registry.ModEntities;
 import me.moonscenty.alchemia.registry.ModFeatures;
 import me.moonscenty.alchemia.registry.ModItems;
 import me.moonscenty.alchemia.registry.ModMenus;
@@ -33,6 +34,7 @@ public class Alchemia {
     public Alchemia(IEventBus modEventBus, ModContainer modContainer) {
         ModBlocks.BLOCKS.register(modEventBus);
         ModBlockEntities.BLOCK_ENTITIES.register(modEventBus);
+        ModEntities.ENTITIES.register(modEventBus);
         ModItems.ITEMS.register(modEventBus);
         ModDataComponents.COMPONENTS.register(modEventBus);
         ModMenus.MENUS.register(modEventBus);
