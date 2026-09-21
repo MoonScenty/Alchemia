@@ -22,6 +22,9 @@ public class AlchemiaClientSetup {
     @SubscribeEvent
     public static void registerExtraModels(ModelEvent.RegisterAdditional event) {
         event.register(ResearchTableRenderer.QUILL);
+        for (var arm : NodeStabilizerRenderer.ARMS) {
+            event.register(arm);
+        }
     }
 
     /** Tells the book how to open itself, which only the client knows how to do. */
@@ -39,5 +42,6 @@ public class AlchemiaClientSetup {
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerBlockEntityRenderer(ModBlockEntities.RESEARCH_TABLE.get(), ResearchTableRenderer::new);
         event.registerEntityRenderer(ModEntities.AURA_NODE.get(), AuraNodeRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.NODE_STABILIZER.get(), NodeStabilizerRenderer::new);
     }
 }

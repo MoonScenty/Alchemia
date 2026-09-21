@@ -1,0 +1,15 @@
+{
+  "loader": "neoforge:obj",
+  "model": "alchemia:models/block/node_stabilizer/piston4.obj",
+  "flip_v": true,
+  "textures": {
+    "piston": "alchemia:block/node_stabilizer_piston"
+  },
+  "transform": {
+    "translation": [
+      0.5,
+      0.0,
+      0.5
+    ]
+  }
+}

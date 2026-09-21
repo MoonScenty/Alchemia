@@ -50,6 +50,7 @@ public class AuraNode extends Entity {
     /** Close enough to be the same place. */
     private static final double TOUCHING = 0.1;
 
+    private boolean held;
     private int sincePeriod = -1;
     private int lookAgainAt = -1;
     private List<AuraNode> neighbours = List.of();
@@ -64,6 +65,16 @@ public class AuraNode extends Entity {
     }
 
     // --- what it is --------------------------------------------------------
+
+    /** Whether something is holding this node still. Nothing can move it or merge with it while it is. */
+    public boolean isHeld() {
+        return held;
+    }
+
+    /** Said by whatever is doing the holding, every tick it keeps hold. */
+    public void setHeld(boolean held) {
+        this.held = held;
+    }
 
     public int getSize() {
         return entityData.get(SIZE);
@@ -147,9 +158,12 @@ public class AuraNode extends Entity {
                 feed(server);
                 type().doItsThing(this, server);
             }
-            gatherTowardsNeighbours();
+            if (!held) {
+                gatherTowardsNeighbours();
+            }
         }
 
+        // held still, but not frozen: it is still drawn in to the spot it is meant to sit
         if (getDeltaMovement().lengthSqr() > 1.0E-6) {
             setDeltaMovement(getDeltaMovement().scale(DRAG));
             setPos(position().add(getDeltaMovement()));

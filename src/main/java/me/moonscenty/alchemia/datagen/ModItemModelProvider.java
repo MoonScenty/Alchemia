@@ -15,6 +15,8 @@ public class ModItemModelProvider extends ItemModelProvider {
 
     @Override
     protected void registerModels() {
+        // shown in hand and on the ground with its arms, which the placed block draws separately
+        withExistingParent("node_stabilizer", modLoc("block/node_stabilizer/item"));
         basicItem(ModItems.AMBER.get());
         basicItem(ModItems.QUICKSILVER.get());
         basicItem(ModItems.RAW_CINNABAR.get());

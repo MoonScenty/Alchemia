@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "alchemia:arcane_stone_bricks"
+    },
+    "P": {
+      "item": "alchemia:alchemium_plate"
+    },
+    "S": {
+      "item": "alchemia:balanced_shard"
+    }
+  },
+  "pattern": [
+    " P ",
+    "PSP",
+    "BBB"
+  ],
+  "result": {
+    "count": 1,
+    "id": "alchemia:node_stabilizer"
+  }
+}

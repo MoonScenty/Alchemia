@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "alchemia:block/node_stabilizer/block"
+    }
+  }
+}

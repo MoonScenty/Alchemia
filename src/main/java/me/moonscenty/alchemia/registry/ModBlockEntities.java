@@ -1,6 +1,7 @@
 package me.moonscenty.alchemia.registry;
 
 import me.moonscenty.alchemia.Alchemia;
+import me.moonscenty.alchemia.block.entity.NodeStabilizerBlockEntity;
 import me.moonscenty.alchemia.block.entity.ResearchTableBlockEntity;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -14,6 +15,11 @@ public class ModBlockEntities {
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ResearchTableBlockEntity>> RESEARCH_TABLE =
             BLOCK_ENTITIES.register("research_table", () -> BlockEntityType.Builder
                     .of(ResearchTableBlockEntity::new, ModBlocks.RESEARCH_TABLE.get())
+                    .build(null));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<NodeStabilizerBlockEntity>> NODE_STABILIZER =
+            BLOCK_ENTITIES.register("node_stabilizer", () -> BlockEntityType.Builder
+                    .of(NodeStabilizerBlockEntity::new, ModBlocks.NODE_STABILIZER.get())
                     .build(null));
 
     private ModBlockEntities() {

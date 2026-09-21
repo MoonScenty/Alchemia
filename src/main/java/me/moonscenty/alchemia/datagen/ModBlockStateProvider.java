@@ -38,6 +38,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         ModBlocks.PLANTS.forEach(this::plant);
 
         researchTable();
+        nodeStabilizer();
 
         ModBlocks.STONE_SETS.forEach(this::stoneSet);
         translucentBlock(ModBlocks.AMBER_BLOCK);
@@ -46,6 +47,11 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
     private void simpleBlockWithItem(DeferredBlock<?> block) {
         simpleBlockWithItem(block.get(), cubeAll(block.get()));
+    }
+
+    /** Built from an obj rather than a cube, so the blockstate only has to point at it. */
+    private void nodeStabilizer() {
+        simpleBlock(ModBlocks.NODE_STABILIZER.get(), models().getExistingFile(modLoc("block/node_stabilizer/block")));
     }
 
     /** The desk, plus an inkwell and a spread note that only show when the state says they are there. */

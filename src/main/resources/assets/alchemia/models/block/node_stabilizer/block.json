@@ -1,0 +1,17 @@
+{
+  "loader": "neoforge:obj",
+  "model": "alchemia:models/block/node_stabilizer/block.obj",
+  "flip_v": true,
+  "textures": {
+    "stone": "alchemia:block/arcane_stone",
+    "bricks": "alchemia:block/arcane_stone_bricks",
+    "top": "alchemia:block/node_stabilizer_top"
+  },
+  "transform": {
+    "translation": [
+      0.5,
+      0.0,
+      0.5
+    ]
+  }
+}

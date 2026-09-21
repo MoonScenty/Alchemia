@@ -41,6 +41,10 @@ Mojang의 에셋이므로 이 저장소의 MIT 라이선스가 적용되지 않�
 
 둘 다 회색조이고, 색은 노드가 품은 상의 색으로 코드에서 입힙니다. 그래서 상 35종과 노드 7종에 대해 프레임을 따로 만들 필요가 없습니다.
 
+`textures/entity/node_bubble.png`도 이 저장소에서 절차 생성한 것입니다 — 구면 조명과 비눗막 간섭색을 계산해 그렸습니다.
+
+노드 안정기의 모델(`models/block/node_stabilizer/*.obj`)과 텍스처(`block/node_stabilizer_top.png`, `block/node_stabilizer_piston.png`)는 MoonScenty가 Blockbench로 제작했습니다.
+
 ## 그 밖의 텍스처
 
 나머지 텍스처는 MoonScenty가 직접 제작했거나, 바닐라 마인크래프트 텍스처를 색조 변환해 만든 것입니다. 제작 방식은 [docs/textures/](docs/textures/)에 기록돼 있습니다.

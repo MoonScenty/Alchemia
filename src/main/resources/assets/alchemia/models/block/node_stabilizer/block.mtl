@@ -1,0 +1,8 @@
+# Made in Blockbench 5.1.6
+newmtl m_47e41a08-b801-4a7a-cb5f-dd521658487a
+map_Kd #stone
+newmtl m_26ee961e-f780-2663-55e4-010fda81ba75
+map_Kd #bricks
+newmtl m_f2e1103d-1971-8f53-2850-6fe050b34ac2
+map_Kd #top
+newmtl none
