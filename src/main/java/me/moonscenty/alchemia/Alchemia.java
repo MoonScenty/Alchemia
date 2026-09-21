@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
 
+import me.moonscenty.alchemia.aura.ModAuraAttachment;
 import me.moonscenty.alchemia.player.ModAttachments;
 import me.moonscenty.alchemia.player.effect.ModEffects;
 import me.moonscenty.alchemia.registry.ModAspects;
@@ -42,6 +43,7 @@ public class Alchemia {
         ModFeatures.TREE_DECORATORS.register(modEventBus);
         ModAspects.ASPECTS.register(modEventBus);
         ModAttachments.ATTACHMENTS.register(modEventBus);
+        ModAuraAttachment.ATTACHMENTS.register(modEventBus);
         ModEffects.EFFECTS.register(modEventBus);
         modEventBus.addListener(this::commonSetup);
 

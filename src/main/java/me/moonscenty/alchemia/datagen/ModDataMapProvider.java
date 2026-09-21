@@ -5,6 +5,7 @@ import java.util.concurrent.CompletableFuture;
 import me.moonscenty.alchemia.aspect.Aspect;
 import me.moonscenty.alchemia.aspect.AspectList;
 import me.moonscenty.alchemia.aspect.ModDataMaps;
+import me.moonscenty.alchemia.aura.AuraTrait;
 import me.moonscenty.alchemia.block.CrystalType;
 import me.moonscenty.alchemia.registry.ModAspects;
 import me.moonscenty.alchemia.registry.ModBlocks;
@@ -15,12 +16,14 @@ import me.moonscenty.alchemia.registry.WoodSet;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
+import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.biome.Biome;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.DataMapProvider;
 import net.neoforged.neoforge.registries.datamaps.builtin.Compostable;
@@ -43,6 +46,65 @@ public class ModDataMapProvider extends DataMapProvider {
         vanillaAspects();
         modAspects();
         mobAspects();
+        biomeAura();
+    }
+
+    /**
+     * What the land does to the magic over it, carried over from the original's table of biome types.
+     * <p>
+     * Written against biome tags rather than named biomes, so anything a pack adds is covered by whatever tags it
+     * already carries.
+     * <p>
+     * A biome carrying several of these tags ends up with whichever entry the generated file happens to list last,
+     * and that file is sorted by tag name, so which one wins is arbitrary. It is close enough while every entry is
+     * within half a step of the others; a subject that needs it settled should be given its biome an entry of its
+     * own, which beats any tag.
+     */
+    private void biomeAura() {
+        var aura = builder(AuraTrait.MAP);
+
+        // wet land holds its magic well
+        land(aura, Tags.Biomes.IS_AQUATIC, 1.0F, ModAspects.WATER);
+        land(aura, BiomeTags.IS_OCEAN, 1.0F, ModAspects.WATER);
+        land(aura, BiomeTags.IS_RIVER, 1.0F, ModAspects.WATER);
+        land(aura, Tags.Biomes.IS_WET, 1.0F, ModAspects.WATER);
+        land(aura, Tags.Biomes.IS_LUSH, 1.2F, ModAspects.WATER);
+
+        land(aura, Tags.Biomes.IS_HOT, 1.0F, ModAspects.FIRE);
+        land(aura, Tags.Biomes.IS_DESERT, 0.75F, ModAspects.FIRE);
+        land(aura, BiomeTags.IS_NETHER, 0.5F, ModAspects.FIRE);
+        land(aura, BiomeTags.IS_BADLANDS, 1.0F, ModAspects.FIRE);
+        land(aura, Tags.Biomes.IS_SPOOKY, 0.75F, ModAspects.FIRE);
+
+        land(aura, Tags.Biomes.IS_DENSE_VEGETATION, 1.0F, ModAspects.ORDER);
+        land(aura, Tags.Biomes.IS_SNOWY, 0.75F, ModAspects.ORDER);
+        land(aura, Tags.Biomes.IS_COLD, 0.75F, ModAspects.ORDER);
+        land(aura, Tags.Biomes.IS_ICY, 1.0F, ModAspects.ORDER);
+        land(aura, Tags.Biomes.IS_MUSHROOM, 1.3F, ModAspects.ORDER);
+        land(aura, Tags.Biomes.IS_MAGICAL, 1.0F, ModAspects.ORDER);
+
+        land(aura, Tags.Biomes.IS_CONIFEROUS_TREE, 1.0F, ModAspects.EARTH);
+        land(aura, BiomeTags.IS_FOREST, 1.2F, ModAspects.EARTH);
+        land(aura, Tags.Biomes.IS_SANDY, 0.75F, ModAspects.EARTH);
+        land(aura, BiomeTags.IS_BEACH, 0.75F, ModAspects.EARTH);
+        land(aura, BiomeTags.IS_JUNGLE, 1.2F, ModAspects.EARTH);
+
+        land(aura, BiomeTags.IS_SAVANNA, 0.75F, ModAspects.AIR);
+        land(aura, BiomeTags.IS_MOUNTAIN, 0.75F, ModAspects.AIR);
+        land(aura, BiomeTags.IS_HILL, 1.0F, ModAspects.AIR);
+        land(aura, Tags.Biomes.IS_PLAINS, 0.75F, ModAspects.AIR);
+        land(aura, BiomeTags.IS_END, 0.5F, ModAspects.AIR);
+
+        // land that has little left in it, and holds little
+        land(aura, Tags.Biomes.IS_DRY, 0.5F, ModAspects.ENTROPY);
+        land(aura, Tags.Biomes.IS_SPARSE_VEGETATION, 0.75F, ModAspects.ENTROPY);
+        land(aura, Tags.Biomes.IS_SWAMP, 1.2F, ModAspects.ENTROPY);
+        land(aura, Tags.Biomes.IS_WASTELAND, 0.5F, ModAspects.ENTROPY);
+        land(aura, Tags.Biomes.IS_DEAD, 0.25F, ModAspects.ENTROPY);
+    }
+
+    private void land(Builder<AuraTrait, Biome> aura, TagKey<Biome> where, float level, Holder<Aspect> leaning) {
+        aura.add(where, new AuraTrait(level, leaning), true);
     }
 
     private void compostables() {

@@ -8,6 +8,8 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.aspect.Aspect;
+import me.moonscenty.alchemia.aura.AuraChunk;
+import me.moonscenty.alchemia.aura.AuraHandler;
 import me.moonscenty.alchemia.registry.ModAspects;
 import me.moonscenty.alchemia.research.ModResearch;
 import me.moonscenty.alchemia.research.ResearchEntry;
@@ -37,6 +39,7 @@ public class AlchemiaCommand {
                 .requires(source -> source.hasPermission(2))
                 .then(aspects())
                 .then(research())
+                .then(aura())
                 .then(warp()));
     }
 
@@ -106,6 +109,62 @@ public class AlchemiaCommand {
         StartingResearch.grant(player);
         source.sendSuccess(() -> Component.literal("Back to only what a reader starts with"), false);
         return 1;
+    }
+
+    private static LiteralArgumentBuilder<CommandSourceStack> aura() {
+        return Commands.literal("aura")
+                .then(Commands.literal("get").executes(context -> showAura(context.getSource())))
+                .then(Commands.literal("drain")
+                        .then(Commands.argument("aspect", ResourceLocationArgument.id())
+                                .then(Commands.argument("amount", IntegerArgumentType.integer(1, 10000))
+                                        .executes(context -> drainAura(context.getSource(),
+                                                ResourceLocationArgument.getId(context, "aspect"),
+                                                IntegerArgumentType.getInteger(context, "amount"))))))
+                .then(Commands.literal("fill").executes(context -> fillAura(context.getSource())));
+    }
+
+    private static int showAura(CommandSourceStack source) throws CommandSyntaxException {
+        ServerPlayer player = source.getPlayerOrException();
+        AuraChunk aura = AuraHandler.at(player.level(), player.blockPosition());
+        if (!aura.exists()) {
+            source.sendFailure(Component.literal("No aura here yet"));
+            return 0;
+        }
+        String held = aura.aspects().sortedByName().stream()
+                .map(aspect -> aspect.value().tag() + " " + aura.get(aspect))
+                .reduce((a, b) -> a + ", " + b).orElse("-");
+        source.sendSuccess(() -> Component.literal("Base " + aura.base() + ": " + held), false);
+        return aura.base();
+    }
+
+    private static int drainAura(CommandSourceStack source, ResourceLocation id, int amount) throws CommandSyntaxException {
+        ServerPlayer player = source.getPlayerOrException();
+        Holder<Aspect> aspect = ModAspects.REGISTRY.getHolder(id).map(holder -> (Holder<Aspect>) holder).orElse(null);
+        if (aspect == null) {
+            source.sendFailure(Component.literal("No such aspect: " + id));
+            return 0;
+        }
+        int taken = AuraHandler.drainAvailable(player.level(), player.blockPosition(), aspect, amount);
+        source.sendSuccess(() -> Component.literal("Drew " + taken + " of " + aspect.value().tag()), false);
+        return taken;
+    }
+
+    /** Puts the chunk back to as much as it will hold, for looking at how it settles afterwards. */
+    private static int fillAura(CommandSourceStack source) throws CommandSyntaxException {
+        ServerPlayer player = source.getPlayerOrException();
+        AuraChunk aura = AuraHandler.at(player.level(), player.blockPosition());
+        if (!aura.exists()) {
+            source.sendFailure(Component.literal("No aura here yet"));
+            return 0;
+        }
+        for (Holder<Aspect> primal : ModAspects.primals()) {
+            int missing = aura.base() - AuraHandler.get(player.level(), player.blockPosition(), primal);
+            if (missing > 0) {
+                AuraHandler.add(player.level(), player.blockPosition(), primal, missing);
+            }
+        }
+        source.sendSuccess(() -> Component.literal("Topped the chunk back up to " + aura.base()), false);
+        return aura.base();
     }
 
     private static LiteralArgumentBuilder<CommandSourceStack> warp() {
