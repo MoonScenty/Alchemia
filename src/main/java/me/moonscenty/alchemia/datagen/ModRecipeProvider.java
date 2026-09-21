@@ -60,6 +60,8 @@ public class ModRecipeProvider extends RecipeProvider {
         }
         stonecutting(output, ModBlocks.ARCANE_STONE_BRICKS.block(), ModBlocks.ARCANE_STONE.block(), 1);
 
+        nodeStabilizer(output);
+
         // Amber blocks and bricks are cut back and forth freely, as in the original
         compress(output, ModItems.AMBER, ModTags.Items.GEMS_AMBER, ModBlocks.AMBER_BLOCK, ModTags.Items.STORAGE_BLOCKS_AMBER);
         quadrupleFrom(output, ModBlocks.AMBER_BRICKS, ModBlocks.AMBER_BLOCK);
@@ -108,6 +110,22 @@ public class ModRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_input", has(plant))
                 .save(output, Alchemia.id(BuiltInRegistries.ITEM.getKey(result.asItem()).getPath()
                         + "_from_" + BuiltInRegistries.ITEM.getKey(plant.asItem()).getPath()));
+    }
+
+    /**
+     * Arcane stone around a balanced shard, braced with alchemium. What holds a node still is mostly a matter of
+     * having something steady to hold it against.
+     */
+    private static void nodeStabilizer(RecipeOutput output) {
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.NODE_STABILIZER.get())
+                .pattern(" P ")
+                .pattern("PSP")
+                .pattern("BBB")
+                .define('P', ModItems.ALCHEMIUM_PLATE.get())
+                .define('S', ModItems.BALANCED_SHARD.get())
+                .define('B', ModBlocks.ARCANE_STONE_BRICKS.block().get())
+                .unlockedBy("has_shard", has(ModItems.BALANCED_SHARD.get()))
+                .save(output, Alchemia.id("node_stabilizer"));
     }
 
     /** Nine small items pack into one big item and back. */

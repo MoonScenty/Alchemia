@@ -10,6 +10,7 @@ import java.util.function.Supplier;
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.block.CrystalBlock;
 import me.moonscenty.alchemia.block.CrystalType;
+import me.moonscenty.alchemia.block.NodeStabilizerBlock;
 import me.moonscenty.alchemia.block.ResearchTableBlock;
 import me.moonscenty.alchemia.block.ShimmerleafBlock;
 import me.moonscenty.alchemia.block.VishroomBlock;
@@ -54,6 +55,12 @@ public class ModBlocks {
     public static final DeferredBlock<ResearchTableBlock> RESEARCH_TABLE = register("research_table",
             () -> new ResearchTableBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_PLANKS)
                     .mapColor(MapColor.COLOR_BROWN)
+                    .noOcclusion()));
+
+    public static final DeferredBlock<NodeStabilizerBlock> NODE_STABILIZER = register("node_stabilizer",
+            () -> new NodeStabilizerBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS)
+                    .mapColor(MapColor.STONE)
+                    .lightLevel(state -> 5)
                     .noOcclusion()));
 
     public static final Map<CrystalType, DeferredBlock<CrystalBlock>> CRYSTALS = registerCrystals();
