@@ -2,6 +2,7 @@ package me.moonscenty.alchemia.registry;
 
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.worldgen.CrystalPatchFeature;
+import me.moonscenty.alchemia.worldgen.NodeFeature;
 import me.moonscenty.alchemia.worldgen.GreatwoodTrunkPlacer;
 import me.moonscenty.alchemia.worldgen.SilverwoodTrunkPlacer;
 import me.moonscenty.alchemia.worldgen.SphereFoliagePlacer;
@@ -9,6 +10,7 @@ import me.moonscenty.alchemia.worldgen.UndergrowthDecorator;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.BlockStateConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacerType;
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecoratorType;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacerType;
@@ -34,4 +36,7 @@ public class ModFeatures {
 
     public static final DeferredHolder<Feature<?>, CrystalPatchFeature> CRYSTAL_PATCH = FEATURES.register("crystal_patch",
             () -> new CrystalPatchFeature(BlockStateConfiguration.CODEC));
+
+    public static final DeferredHolder<Feature<?>, NodeFeature> AURA_NODE = FEATURES.register("aura_node",
+            () -> new NodeFeature(NoneFeatureConfiguration.CODEC));
 }

@@ -91,6 +91,12 @@ public class ModAspects {
         return REGISTRY.holders().filter(holder -> holder.value().isPrimal()).map(holder -> (Holder<Aspect>) holder).toList();
     }
 
+    /** One of the six, at random. */
+    public static Holder<Aspect> randomPrimal(net.minecraft.util.RandomSource random) {
+        List<Holder<Aspect>> all = primals();
+        return all.get(random.nextInt(all.size()));
+    }
+
     public static List<Holder<Aspect>> compounds() {
         return REGISTRY.holders().filter(holder -> !holder.value().isPrimal()).map(holder -> (Holder<Aspect>) holder).toList();
     }

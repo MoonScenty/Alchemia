@@ -35,6 +35,12 @@ Mojang의 에셋이므로 이 저장소의 MIT 라이선스가 적용되지 않�
 
 `textures/gui/research_overlay.png`는 이 저장소에서 값 노이즈와 별점으로 생성한 것으로 MIT입니다.
 
+## 노드
+
+`textures/entity/node_core.png`(2048×64, 64px 프레임 32장)와 `node_halo.png`(1024×64, 16장)는 이 저장소에서 절차 생성한 것으로 MIT입니다. 생성기는 `thaumref/tools/gen_nodes.py`에 있습니다.
+
+둘 다 회색조이고, 색은 노드가 품은 상의 색으로 코드에서 입힙니다. 그래서 상 35종과 노드 7종에 대해 프레임을 따로 만들 필요가 없습니다.
+
 ## 그 밖의 텍스처
 
 나머지 텍스처는 MoonScenty가 직접 제작했거나, 바닐라 마인크래프트 텍스처를 색조 변환해 만든 것입니다. 제작 방식은 [docs/textures/](docs/textures/)에 기록돼 있습니다.

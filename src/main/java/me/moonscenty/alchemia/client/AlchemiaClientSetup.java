@@ -4,6 +4,7 @@ package me.moonscenty.alchemia.client;
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.item.AlchemonomiconItem;
 import me.moonscenty.alchemia.registry.ModBlockEntities;
+import me.moonscenty.alchemia.registry.ModEntities;
 import me.moonscenty.alchemia.registry.ModMenus;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -37,5 +38,6 @@ public class AlchemiaClientSetup {
     @SubscribeEvent
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerBlockEntityRenderer(ModBlockEntities.RESEARCH_TABLE.get(), ResearchTableRenderer::new);
+        event.registerEntityRenderer(ModEntities.AURA_NODE.get(), AuraNodeRenderer::new);
     }
 }
