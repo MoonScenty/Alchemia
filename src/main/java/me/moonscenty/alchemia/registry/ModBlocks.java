@@ -14,6 +14,10 @@ import me.moonscenty.alchemia.block.NodeStabilizerBlock;
 import me.moonscenty.alchemia.block.ResearchTableBlock;
 import me.moonscenty.alchemia.block.ShimmerleafBlock;
 import me.moonscenty.alchemia.block.VishroomBlock;
+import me.moonscenty.alchemia.block.taint.FluxGooBlock;
+import me.moonscenty.alchemia.block.taint.TaintFibreBlock;
+import me.moonscenty.alchemia.block.taint.TaintGroundBlock;
+import me.moonscenty.alchemia.block.taint.TaintLogBlock;
 import me.moonscenty.alchemia.block.CinderpearlBlock;
 import me.moonscenty.alchemia.worldgen.ModWorldgen;
 import net.minecraft.resources.ResourceKey;
@@ -62,6 +66,44 @@ public class ModBlocks {
                     .mapColor(MapColor.STONE)
                     .lightLevel(state -> 5)
                     .noOcclusion()));
+
+    // --- taint ----------------------------------------------------------------------------------------------
+
+    /** The creeping edge of the taint. Soft, no collision, and it can be built over. */
+    public static final DeferredBlock<TaintFibreBlock> TAINT_FIBRE = register("taint_fibre",
+            () -> new TaintFibreBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.COLOR_PURPLE)
+                    .strength(1.0F)
+                    .sound(SoundType.SLIME_BLOCK)
+                    .lightLevel(TaintFibreBlock::lightOf)
+                    .noCollission()
+                    .noOcclusion()
+                    .replaceable()
+                    .randomTicks()
+                    .pushReaction(PushReaction.DESTROY)));
+
+    public static final DeferredBlock<TaintGroundBlock> TAINT_SOIL = registerTaintGround("taint_soil", TaintGroundBlock.Kind.SOIL);
+    public static final DeferredBlock<TaintGroundBlock> TAINT_CRUST = registerTaintGround("taint_crust", TaintGroundBlock.Kind.CRUST);
+    public static final DeferredBlock<TaintGroundBlock> TAINT_ROCK = registerTaintGround("taint_rock", TaintGroundBlock.Kind.ROCK);
+
+    /** Spilt flux. A puddle in eight depths that runs downhill, levels out and dries into taint. */
+    public static final DeferredBlock<FluxGooBlock> FLUX_GOO = register("flux_goo",
+            () -> new FluxGooBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.COLOR_PURPLE)
+                    .strength(0.5F)
+                    .sound(SoundType.SLIME_BLOCK)
+                    .noOcclusion()
+                    .noCollission()
+                    .replaceable()
+                    .randomTicks()
+                    .pushReaction(PushReaction.DESTROY)));
+
+    public static final DeferredBlock<TaintLogBlock> TAINT_LOG = register("taint_log",
+            () -> new TaintLogBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.COLOR_PURPLE)
+                    .strength(3.0F)
+                    .sound(SoundType.SLIME_BLOCK)
+                    .randomTicks()));
 
     public static final Map<CrystalType, DeferredBlock<CrystalBlock>> CRYSTALS = registerCrystals();
 
@@ -148,6 +190,16 @@ public class ModBlocks {
                     .pushReaction(PushReaction.DESTROY))));
         }
         return Collections.unmodifiableMap(crystals);
+    }
+
+    /** Tainted ground is tough (ten, against stone's one and a half) but gives to a pickaxe the same. */
+    private static DeferredBlock<TaintGroundBlock> registerTaintGround(String name, TaintGroundBlock.Kind kind) {
+        return register(name, () -> new TaintGroundBlock(kind, BlockBehaviour.Properties.of()
+                .mapColor(MapColor.COLOR_PURPLE)
+                .strength(10.0F, 100.0F)
+                .sound(SoundType.SLIME_BLOCK)
+                .requiresCorrectToolForDrops()
+                .randomTicks()));
     }
 
     private static <T extends Block> DeferredBlock<T> register(String name, Supplier<T> block) {

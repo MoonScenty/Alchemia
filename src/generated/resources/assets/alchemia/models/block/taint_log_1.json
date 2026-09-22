@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "alchemia:block/taint_log_top",
+    "side": "alchemia:block/taint_log_1"
+  }
+}

@@ -12,6 +12,9 @@
     "alchemia:arcane_stone_slab",
     "alchemia:arcane_stone_bricks",
     "alchemia:arcane_stone_bricks_stairs",
-    "alchemia:arcane_stone_bricks_slab"
+    "alchemia:arcane_stone_bricks_slab",
+    "alchemia:taint_soil",
+    "alchemia:taint_crust",
+    "alchemia:taint_rock"
   ]
 }

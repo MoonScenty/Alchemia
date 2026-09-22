@@ -17,6 +17,13 @@ public class ModTags {
         /** Sand, dirt and terracotta: the dry ground a cinderpearl takes root in. */
         public static final TagKey<Block> CINDERPEARL_PLACEABLE = mod("cinderpearl_placeable");
 
+        /** Everything the taint has already got: what the spread counts as its own when it looks around. */
+        public static final TagKey<Block> TAINT = mod("taint");
+        /** What the taint turns into soil, rock and crust when it has a block surrounded. */
+        public static final TagKey<Block> TAINT_ROTS_TO_SOIL = mod("taint_rots_to_soil");
+        public static final TagKey<Block> TAINT_ROTS_TO_ROCK = mod("taint_rots_to_rock");
+        public static final TagKey<Block> TAINT_ROTS_TO_CRUST = mod("taint_rots_to_crust");
+
         public static final TagKey<Block> ORES_AMBER = common("ores/amber");
         public static final TagKey<Block> ORES_CINNABAR = common("ores/cinnabar");
 

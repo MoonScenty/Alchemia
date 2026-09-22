@@ -17,6 +17,7 @@ public class ModItemModelProvider extends ItemModelProvider {
     protected void registerModels() {
         // shown in hand and on the ground with its arms, which the placed block draws separately
         withExistingParent("node_stabilizer", modLoc("block/node_stabilizer/item"));
+        withExistingParent("taint_fibre", mcLoc("item/generated")).texture("layer0", modLoc("block/taint_fibres"));
         basicItem(ModItems.AMBER.get());
         basicItem(ModItems.QUICKSILVER.get());
         basicItem(ModItems.RAW_CINNABAR.get());
@@ -39,6 +40,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.IRON_PLATE.get());
         basicItem(ModItems.SALIS_MUNDUS.get());
         basicItem(ModItems.ALCHEMOMETER.get());
+        basicItem(ModItems.NODE_PLACER.get());
         basicItem(ModItems.SCRIBING_TOOLS.get());
         basicItem(ModItems.RESEARCH_NOTES.get());
         basicItem(ModItems.ALCHEMONOMICON.get());

@@ -106,6 +106,11 @@ public class AuraTicker {
             chunk.setData(ModAuraAttachment.AURA, after);
             chunk.setUnsaved(true);
         }
+
+        // a chunk thick with flux lets some of it out as trouble, which is the one way flux leaves on its own
+        if (FluxEvents.brewing(after, random)) {
+            FluxEvents.strike(level, at, random);
+        }
     }
 
     /** Hands one point of an aspect to whichever neighbour is worst off, if the difference is worth the trouble. */

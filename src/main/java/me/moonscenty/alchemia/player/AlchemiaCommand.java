@@ -124,7 +124,20 @@ public class AlchemiaCommand {
                                         .executes(context -> drainAura(context.getSource(),
                                                 ResourceLocationArgument.getId(context, "aspect"),
                                                 IntegerArgumentType.getInteger(context, "amount"))))))
-                .then(Commands.literal("fill").executes(context -> fillAura(context.getSource())));
+                .then(Commands.literal("fill").executes(context -> fillAura(context.getSource())))
+                .then(Commands.literal("pollute")
+                        .then(Commands.argument("amount", IntegerArgumentType.integer(1, 10000))
+                                .executes(context -> pollute(context.getSource(),
+                                        IntegerArgumentType.getInteger(context, "amount")))));
+    }
+
+    /** Puts flux into the chunk, which is how the taint is given something to feed on for testing. */
+    private static int pollute(CommandSourceStack source, int amount) throws CommandSyntaxException {
+        ServerPlayer player = source.getPlayerOrException();
+        AuraHandler.add(player.level(), player.blockPosition(), ModAspects.FLUX, amount);
+        int now = AuraHandler.get(player.level(), player.blockPosition(), ModAspects.FLUX);
+        source.sendSuccess(() -> Component.literal("Flux here is now " + now), false);
+        return now;
     }
 
     private static int showAura(CommandSourceStack source) throws CommandSyntaxException {

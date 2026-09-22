@@ -10,6 +10,7 @@ import me.moonscenty.alchemia.registry.WoodSet;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
@@ -82,5 +83,25 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         tag(ModTags.Blocks.CRYSTAL_GROWABLE)
                 .addTag(BlockTags.BASE_STONE_OVERWORLD)
                 .addTag(BlockTags.BASE_STONE_NETHER);
+
+        tag(ModTags.Blocks.TAINT).add(ModBlocks.TAINT_FIBRE.get(), ModBlocks.TAINT_SOIL.get(),
+                ModBlocks.TAINT_CRUST.get(), ModBlocks.TAINT_ROCK.get(), ModBlocks.TAINT_LOG.get());
+        // what the taint eats, once it has a block surrounded, and what it turns it into
+        tag(ModTags.Blocks.TAINT_ROTS_TO_SOIL)
+                .addTag(BlockTags.DIRT).addTag(BlockTags.SAND)
+                .add(Blocks.CLAY, Blocks.GRAVEL, Blocks.SOUL_SAND, Blocks.SOUL_SOIL, Blocks.FARMLAND, Blocks.DIRT_PATH);
+        tag(ModTags.Blocks.TAINT_ROTS_TO_ROCK)
+                .addTag(BlockTags.BASE_STONE_OVERWORLD).addTag(Tags.Blocks.COBBLESTONES).addTag(Tags.Blocks.STONES)
+                .addTag(BlockTags.STONE_BRICKS).add(Blocks.SANDSTONE, Blocks.RED_SANDSTONE, Blocks.CALCITE);
+        tag(ModTags.Blocks.TAINT_ROTS_TO_CRUST)
+                .addTag(BlockTags.PLANKS).addTag(BlockTags.WOODEN_FENCES).addTag(BlockTags.WOODEN_SLABS)
+                .addTag(BlockTags.WOODEN_STAIRS).addTag(BlockTags.WOOL)
+                .add(Blocks.RED_MUSHROOM_BLOCK, Blocks.BROWN_MUSHROOM_BLOCK, Blocks.MUSHROOM_STEM,
+                        Blocks.PUMPKIN, Blocks.CARVED_PUMPKIN, Blocks.MELON, Blocks.CACTUS, Blocks.SPONGE,
+                        Blocks.WET_SPONGE, Blocks.HAY_BLOCK, Blocks.BOOKSHELF);
+
+        tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.TAINT_SOIL.get(), ModBlocks.TAINT_CRUST.get(), ModBlocks.TAINT_ROCK.get());
+        tag(BlockTags.MINEABLE_WITH_AXE).add(ModBlocks.TAINT_LOG.get());
+        tag(BlockTags.MINEABLE_WITH_HOE).add(ModBlocks.TAINT_FIBRE.get());
     }
 }

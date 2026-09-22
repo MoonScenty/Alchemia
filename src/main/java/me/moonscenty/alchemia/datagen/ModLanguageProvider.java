@@ -70,6 +70,8 @@ public abstract class ModLanguageProvider extends LanguageProvider {
 
 
         addItem(ModItems.ALCHEMOMETER, pick("Alchemometer", "알케모미터"));
+        addItem(ModItems.NODE_PLACER, pick("Node Placer", "노드 배치기"));
+        add("item.alchemia.creative_only", pick("Creative only", "크리에이티브 전용"));
         addBlock(ModBlocks.RESEARCH_TABLE, pick("Research Table", "연구 탁자"));
         addItem(ModItems.SCRIBING_TOOLS, pick("Scribing Tools", "필기구"));
         addItem(ModItems.RESEARCH_NOTES, pick("Research Notes", "연구 노트"));
@@ -87,7 +89,18 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("note.alchemia.not_ready", pick("There is nothing there to work on yet.", "아직 그것을 연구할 수 없다."));
         add("note.alchemia.no_paper", pick("You have no paper to write on.", "쓸 종이가 없다."));
         addBlock(ModBlocks.NODE_STABILIZER, pick("Node Stabilizer", "노드 안정기"));
+        addBlock(ModBlocks.TAINT_FIBRE, pick("Fibrous Taint", "오염 섬유"));
+        addBlock(ModBlocks.TAINT_SOIL, pick("Tainted Soil", "오염된 흙"));
+        addBlock(ModBlocks.TAINT_CRUST, pick("Crusted Taint", "오염 껍질"));
+        addBlock(ModBlocks.TAINT_ROCK, pick("Tainted Rock", "오염된 바위"));
+        addBlock(ModBlocks.TAINT_LOG, pick("Taintwood Log", "오염된 원목"));
+        addBlock(ModBlocks.FLUX_GOO, pick("Flux Goo", "플럭스 구스"));
+        add("entity.alchemia.taint_cloud", pick("Taint Cloud", "오염 구름"));
         add("entity.alchemia.aura_node", pick("Aura Node", "오라 노드"));
+        add("flux_event.alchemia.warp", pick("The nearby aura suddenly twists and warps, leaving your thoughts in a shambles.",
+                "주변의 오라가 갑자기 비틀리며 생각이 헝클어진다."));
+        add("flux_event.alchemia.sickness", pick("The local aura momentarily becomes unstable, hampering your magical ability.",
+                "이곳의 오라가 잠시 불안정해져 마법이 둔해진다."));
         add("node_type.alchemia.plain", pick("Normal Node", "평범한 노드"));
         add("node_type.alchemia.dark", pick("Sinister Node", "불길한 노드"));
         add("node_type.alchemia.hungry", pick("Hungry Node", "굶주린 노드"));
