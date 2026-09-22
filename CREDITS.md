@@ -43,6 +43,10 @@ Mojang의 에셋이므로 이 저장소의 MIT 라이선스가 적용되지 않�
 
 `textures/entity/node_bubble.png`도 이 저장소에서 절차 생성한 것입니다 — 구면 조명과 비눗막 간섭색을 계산해 그렸습니다.
 
+오염 텍스처 14장(`textures/block/taint_*.png`)과 플럭스 구스 2장(`flux_goo_still/flow.png`, 바닐라 물 애니메이션 스트립의 색조 변환)은 `thaumref/tools/gen_taint.py`로 만들었습니다. 섬유·흙·바위·껍질·원목 옆면·돌기 2종은 바닐라 텍스처(덩굴·흙·조약돌·엔드스톤·어두운 참나무 원목·민들레·양귀비)의 밝기를 보라색 램프에 매핑한 색조 변환이고, 원목 윗면과 종기 변형은 절차 생성입니다. 바닐라 파생분에는 Mojang의 에셋 라이선스가 적용됩니다.
+
+`textures/item/node_placer.png`(크리에이티브 전용 노드 배치기 아이콘)도 절차 생성한 것입니다. 생성기는 `thaumref/tools/gen_creative_node.py`.
+
 노드 안정기의 모델(`models/block/node_stabilizer/*.obj`)과 텍스처(`block/node_stabilizer_top.png`, `block/node_stabilizer_piston.png`)는 MoonScenty가 Blockbench로 제작했습니다.
 
 ## 그 밖의 텍스처

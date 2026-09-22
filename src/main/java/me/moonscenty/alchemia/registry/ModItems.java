@@ -7,6 +7,7 @@ import java.util.Map;
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.block.CrystalType;
 import me.moonscenty.alchemia.item.AlchemonomiconItem;
+import me.moonscenty.alchemia.item.NodePlacerItem;
 import me.moonscenty.alchemia.item.ResearchNoteItem;
 import me.moonscenty.alchemia.item.AlchemometerItem;
 import net.minecraft.world.item.Item;
@@ -30,6 +31,10 @@ public class ModItems {
     /** A sheet of vellum with a research puzzle part-drawn on it. */
     public static final DeferredItem<Item> RESEARCH_NOTES = ITEMS.register("research_notes",
             () -> new ResearchNoteItem(new Item.Properties().stacksTo(1)));
+
+    /** Creative only: puts a node wherever it is pointed, since there is no other way to carry one yet. */
+    public static final DeferredItem<Item> NODE_PLACER = ITEMS.register("node_placer",
+            () -> new NodePlacerItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
 
     /** The book everything worked out so far is written into. */
     public static final DeferredItem<Item> ALCHEMONOMICON = ITEMS.register("alchemonomicon",

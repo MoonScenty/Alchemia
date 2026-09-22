@@ -62,6 +62,14 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
         }
         dropSelf(ModBlocks.RESEARCH_TABLE.get());
         dropSelf(ModBlocks.NODE_STABILIZER.get());
+
+        // nothing tainted is worth keeping; what the growths gave in the original arrives with those items
+        add(ModBlocks.TAINT_FIBRE.get(), noDrop());
+        add(ModBlocks.TAINT_SOIL.get(), noDrop());
+        add(ModBlocks.TAINT_CRUST.get(), noDrop());
+        add(ModBlocks.TAINT_ROCK.get(), noDrop());
+        add(ModBlocks.TAINT_LOG.get(), noDrop());
+        add(ModBlocks.FLUX_GOO.get(), noDrop());
         dropSelf(ModBlocks.AMBER_BLOCK.get());
         dropSelf(ModBlocks.AMBER_BRICKS.get());
 

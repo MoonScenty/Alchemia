@@ -1,0 +1,11 @@
+{
+  "values": [
+    "#minecraft:base_stone_overworld",
+    "#c:cobblestones",
+    "#c:stones",
+    "#minecraft:stone_bricks",
+    "minecraft:sandstone",
+    "minecraft:red_sandstone",
+    "minecraft:calcite"
+  ]
+}

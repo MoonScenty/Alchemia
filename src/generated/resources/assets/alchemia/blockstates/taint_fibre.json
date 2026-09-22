@@ -1,0 +1,83 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "alchemia:block/taint/fibre_side"
+      },
+      "when": {
+        "north": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "alchemia:block/taint/fibre_side",
+        "uvlock": true,
+        "y": 90
+      },
+      "when": {
+        "east": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "alchemia:block/taint/fibre_side",
+        "uvlock": true,
+        "y": 180
+      },
+      "when": {
+        "south": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "alchemia:block/taint/fibre_side",
+        "uvlock": true,
+        "y": 270
+      },
+      "when": {
+        "west": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "alchemia:block/taint/fibre_up"
+      },
+      "when": {
+        "up": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "alchemia:block/taint/fibre_down"
+      },
+      "when": {
+        "down": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "alchemia:block/taint_growth_1"
+      },
+      "when": {
+        "growth": "1|3"
+      }
+    },
+    {
+      "apply": {
+        "model": "alchemia:block/taint_growth_2"
+      },
+      "when": {
+        "growth": "2"
+      }
+    },
+    {
+      "apply": {
+        "model": "alchemia:block/taint_growth_2",
+        "x": 180
+      },
+      "when": {
+        "growth": "4"
+      }
+    }
+  ]
+}

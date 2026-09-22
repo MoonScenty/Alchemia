@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "alchemia:block/taint_crust",
+        "weight": 4
+      },
+      {
+        "model": "alchemia:block/taint_crust_1"
+      },
+      {
+        "model": "alchemia:block/taint_crust_2"
+      }
+    ]
+  }
+}

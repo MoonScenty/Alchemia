@@ -1,0 +1,47 @@
+{
+  "parent": "minecraft:block/block",
+  "elements": [
+    {
+      "faces": {
+        "down": {
+          "cullface": "down",
+          "texture": "#goo"
+        },
+        "east": {
+          "cullface": "east",
+          "texture": "#goo"
+        },
+        "north": {
+          "cullface": "north",
+          "texture": "#goo"
+        },
+        "south": {
+          "cullface": "south",
+          "texture": "#goo"
+        },
+        "up": {
+          "texture": "#goo"
+        },
+        "west": {
+          "cullface": "west",
+          "texture": "#goo"
+        }
+      },
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        10,
+        16
+      ]
+    }
+  ],
+  "render_type": "minecraft:translucent",
+  "textures": {
+    "goo": "alchemia:block/flux_goo_still",
+    "particle": "alchemia:block/flux_goo_still"
+  }
+}

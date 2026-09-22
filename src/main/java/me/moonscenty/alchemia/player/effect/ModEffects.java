@@ -19,9 +19,12 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 public class ModEffects {
     public static final DeferredRegister<MobEffect> EFFECTS = DeferredRegister.create(Registries.MOB_EFFECT, Alchemia.MODID);
 
-    /** Saps the vis a player can draw on. The drain itself lands in step 5, when there is an aura to drain from. */
+    /**
+     * What the taint does to anything living: a point of harm every two seconds, and twice as often for each level
+     * above the first. Nothing undead minds it.
+     */
     public static final DeferredHolder<MobEffect, MobEffect> FLUX_FLU = EFFECTS.register("flux_flu",
-            () -> WarpEffect.inert(MobEffectCategory.HARMFUL, 0x8040A0));
+            () -> new FluxFluEffect(MobEffectCategory.HARMFUL, 0x8040A0));
 
     /** The flu, but it spreads to anyone standing too close. */
     public static final DeferredHolder<MobEffect, MobEffect> FLUX_PHAGE = EFFECTS.register("flux_phage",

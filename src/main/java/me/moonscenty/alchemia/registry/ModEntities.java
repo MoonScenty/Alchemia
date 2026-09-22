@@ -1,6 +1,7 @@
 package me.moonscenty.alchemia.registry;
 
 import me.moonscenty.alchemia.Alchemia;
+import me.moonscenty.alchemia.aura.TaintCloud;
 import me.moonscenty.alchemia.aura.node.AuraNode;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.EntityType;
@@ -22,6 +23,17 @@ public class ModEntities {
                     .fireImmune()
                     .noSummon()
                     .build("aura_node"));
+
+    /** A spot in the air with no body to speak of; it only has to be seen from far enough to see its rain. */
+    public static final DeferredHolder<EntityType<?>, EntityType<TaintCloud>> TAINT_CLOUD =
+            ENTITIES.register("taint_cloud", () -> EntityType.Builder
+                    .<TaintCloud>of(TaintCloud::new, MobCategory.MISC)
+                    .sized(1.0F, 1.0F)
+                    .clientTrackingRange(10)
+                    .updateInterval(20)
+                    .fireImmune()
+                    .noSummon()
+                    .build("taint_cloud"));
 
     private ModEntities() {
     }

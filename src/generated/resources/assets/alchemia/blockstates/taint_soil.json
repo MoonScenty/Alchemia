@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "alchemia:block/taint_soil",
+        "weight": 4
+      },
+      {
+        "model": "alchemia:block/taint_soil_1"
+      },
+      {
+        "model": "alchemia:block/taint_soil_2"
+      }
+    ]
+  }
+}

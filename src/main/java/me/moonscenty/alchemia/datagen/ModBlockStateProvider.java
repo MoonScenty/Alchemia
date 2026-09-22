@@ -3,6 +3,9 @@ package me.moonscenty.alchemia.datagen;
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.block.CrystalBlock;
 import me.moonscenty.alchemia.block.ResearchTableBlock;
+import me.moonscenty.alchemia.block.taint.FluxGooBlock;
+import me.moonscenty.alchemia.block.taint.TaintFibreBlock;
+import me.moonscenty.alchemia.block.taint.TaintLogBlock;
 import me.moonscenty.alchemia.registry.ModBlocks;
 import me.moonscenty.alchemia.registry.StoneSet;
 import me.moonscenty.alchemia.registry.WoodSet;
@@ -39,6 +42,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
         researchTable();
         nodeStabilizer();
+        taint();
 
         ModBlocks.STONE_SETS.forEach(this::stoneSet);
         translucentBlock(ModBlocks.AMBER_BLOCK);
@@ -47,6 +51,95 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
     private void simpleBlockWithItem(DeferredBlock<?> block) {
         simpleBlockWithItem(block.get(), cubeAll(block.get()));
+    }
+
+    /**
+     * The taint. Ground and bark come in three looks each, picked at random by position, so a patch is not a tiled
+     * repeat; most of it is plain, with a boil here and there.
+     */
+    private void taint() {
+        spotted(ModBlocks.TAINT_SOIL);
+        spotted(ModBlocks.TAINT_CRUST);
+        simpleBlockWithItem(ModBlocks.TAINT_ROCK.get(), models().cubeAll("taint_rock", modLoc("block/taint_rock")));
+        taintLog();
+        taintFibre();
+        fluxGoo();
+    }
+
+    private static final int[] SPOT_WEIGHTS = {4, 1, 1};
+    private static final String[] SPOT_SUFFIX = {"", "_1", "_2"};
+
+    private void spotted(DeferredBlock<? extends Block> block) {
+        String name = block.getId().getPath();
+        ConfiguredModel[] looks = new ConfiguredModel[SPOT_SUFFIX.length];
+        for (int i = 0; i < looks.length; i++) {
+            looks[i] = ConfiguredModel.builder()
+                    .modelFile(models().cubeAll(name + SPOT_SUFFIX[i], modLoc("block/" + name + SPOT_SUFFIX[i])))
+                    .weight(SPOT_WEIGHTS[i])
+                    .buildLast();
+        }
+        getVariantBuilder(block.get()).partialState().setModels(looks);
+        simpleBlockItem(block.get(), models().getExistingFile(modLoc("block/" + name)));
+    }
+
+    private void taintLog() {
+        ResourceLocation top = modLoc("block/taint_log_top");
+        for (Direction.Axis axis : Direction.Axis.values()) {
+            ConfiguredModel[] looks = new ConfiguredModel[SPOT_SUFFIX.length];
+            for (int i = 0; i < looks.length; i++) {
+                ModelFile model = models().cubeColumn("taint_log" + SPOT_SUFFIX[i], modLoc("block/taint_log" + SPOT_SUFFIX[i]), top);
+                looks[i] = ConfiguredModel.builder()
+                        .modelFile(model)
+                        .rotationX(axis == Direction.Axis.Y ? 0 : 90)
+                        .rotationY(axis == Direction.Axis.X ? 90 : 0)
+                        .weight(SPOT_WEIGHTS[i])
+                        .buildLast();
+            }
+            getVariantBuilder(ModBlocks.TAINT_LOG.get()).partialState()
+                    .with(TaintLogBlock.AXIS, axis)
+                    .setModels(looks);
+        }
+        simpleBlockItem(ModBlocks.TAINT_LOG.get(), models().getExistingFile(modLoc("block/taint_log")));
+    }
+
+    /** Goo is a slab of varying height wearing the animated ripple on every face. */
+    private void fluxGoo() {
+        ResourceLocation still = modLoc("block/flux_goo_still");
+        getVariantBuilder(ModBlocks.FLUX_GOO.get()).forAllStates(state -> {
+            int depth = state.getValue(FluxGooBlock.LEVEL);
+            int height = 2 + depth * 2;
+            ModelFile model = models().getBuilder("flux_goo_" + depth)
+                    .parent(models().getExistingFile(mcLoc("block/block")))
+                    .texture("particle", still)
+                    .texture("goo", still)
+                    .renderType("translucent")
+                    .element().from(0, 0, 0).to(16, height, 16)
+                    .allFaces((side, face) -> face.texture("#goo").cullface(side == Direction.UP ? null : side))
+                    .end();
+            return ConfiguredModel.builder().modelFile(model).build();
+        });
+        simpleBlockItem(ModBlocks.FLUX_GOO.get(), models().getExistingFile(modLoc("block/flux_goo_7")));
+    }
+
+    /** Fibres are a vine: a face for each side they cling to, and a sprout on top of that for the growths. */
+    private void taintFibre() {
+        ModelFile side = models().getExistingFile(modLoc("block/taint/fibre_side"));
+        ModelFile up = models().getExistingFile(modLoc("block/taint/fibre_up"));
+        ModelFile down = models().getExistingFile(modLoc("block/taint/fibre_down"));
+        ModelFile sproutOne = models().cross("taint_growth_1", modLoc("block/taint_growth_1")).renderType("cutout");
+        ModelFile sproutTwo = models().cross("taint_growth_2", modLoc("block/taint_growth_2")).renderType("cutout");
+
+        var builder = getMultipartBuilder(ModBlocks.TAINT_FIBRE.get());
+        builder.part().modelFile(side).addModel().condition(TaintFibreBlock.NORTH, true).end();
+        builder.part().modelFile(side).rotationY(90).uvLock(true).addModel().condition(TaintFibreBlock.EAST, true).end();
+        builder.part().modelFile(side).rotationY(180).uvLock(true).addModel().condition(TaintFibreBlock.SOUTH, true).end();
+        builder.part().modelFile(side).rotationY(270).uvLock(true).addModel().condition(TaintFibreBlock.WEST, true).end();
+        builder.part().modelFile(up).addModel().condition(TaintFibreBlock.UP, true).end();
+        builder.part().modelFile(down).addModel().condition(TaintFibreBlock.DOWN, true).end();
+        // the three floor growths share two pictures; the hanging one is the second picture upside down
+        builder.part().modelFile(sproutOne).addModel().condition(TaintFibreBlock.GROWTH, 1, 3).end();
+        builder.part().modelFile(sproutTwo).addModel().condition(TaintFibreBlock.GROWTH, 2).end();
+        builder.part().modelFile(sproutTwo).rotationX(180).addModel().condition(TaintFibreBlock.GROWTH, TaintFibreBlock.HANGING).end();
     }
 
     /** Built from an obj rather than a cube, so the blockstate only has to point at it. */
