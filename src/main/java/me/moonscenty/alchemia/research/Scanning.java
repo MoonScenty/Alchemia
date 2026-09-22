@@ -6,6 +6,7 @@ import java.util.Optional;
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.aspect.Aspect;
 import me.moonscenty.alchemia.aspect.AspectList;
+import me.moonscenty.alchemia.aura.node.AuraNode;
 import me.moonscenty.alchemia.player.ModAttachments;
 import me.moonscenty.alchemia.player.PlayerKnowledge;
 import net.minecraft.ChatFormatting;
@@ -100,12 +101,22 @@ public final class Scanning {
         player.sendSystemMessage(message.copy().withStyle(colour));
     }
 
+    /**
+     * Whether an alchemometer can be held up to something.
+     * <p>
+     * Being pickable is the usual test, but a node deliberately is not: it cannot be hit or stood on. It is still
+     * the one thing most worth reading, so it is let through by name.
+     */
+    public static boolean readable(Entity entity) {
+        return !entity.isSpectator() && (entity.isPickable() || entity instanceof AuraNode);
+    }
+
     private static EntityHitResult findEntity(Player player, Vec3 eye, Vec3 aim, double maxDistanceSqr) {
         AABB search = player.getBoundingBox().expandTowards(player.getLookAngle().scale(REACH)).inflate(1);
         EntityHitResult closest = null;
         double closestDistance = maxDistanceSqr;
 
-        for (Entity candidate : player.level().getEntities(player, search, entity -> !entity.isSpectator() && entity.isPickable())) {
+        for (Entity candidate : player.level().getEntities(player, search, Scanning::readable)) {
             Optional<Vec3> touch = candidate.getBoundingBox().inflate(0.3).clip(eye, aim);
             if (touch.isEmpty()) {
                 continue;

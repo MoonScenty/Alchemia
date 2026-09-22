@@ -227,6 +227,19 @@ public class AuraNode extends Entity {
 
     // --- being left alone --------------------------------------------------
 
+    /**
+     * How far off a node may still be drawn.
+     * <p>
+     * The usual cutoff is worked out from how big a thing is, which would drop something this small at about thirty
+     * blocks. A node is meant to be picked out across a valley by anyone with the lenses for it, so it says so.
+     */
+    private static final double SEEN_FROM = 96.0;
+
+    @Override
+    public boolean shouldRenderAtSqrDistance(double distance) {
+        return distance < SEEN_FROM * SEEN_FROM;
+    }
+
     @Override
     public boolean isPickable() {
         return false;

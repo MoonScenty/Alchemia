@@ -3,7 +3,7 @@ package me.moonscenty.alchemia.worldgen;
 import com.mojang.serialization.Codec;
 
 import me.moonscenty.alchemia.block.CrystalBlock;
-import me.moonscenty.alchemia.registry.ModTags;
+import me.moonscenty.alchemia.block.CrystalGrowth;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
@@ -40,7 +40,7 @@ public class CrystalPatchFeature extends Feature<BlockStateConfiguration> {
                 continue;
             }
 
-            Direction support = findSupport(level, pos, random);
+            Direction support = CrystalGrowth.support(level, pos, random);
             if (support == null) {
                 continue;
             }
@@ -53,16 +53,5 @@ public class CrystalPatchFeature extends Feature<BlockStateConfiguration> {
         }
 
         return placed;
-    }
-
-    private static Direction findSupport(WorldGenLevel level, BlockPos pos, RandomSource random) {
-        for (Direction direction : Direction.allShuffled(random)) {
-            BlockPos supportPos = pos.relative(direction);
-            BlockState state = level.getBlockState(supportPos);
-            if (state.is(ModTags.Blocks.CRYSTAL_GROWABLE) && state.isFaceSturdy(level, supportPos, direction.getOpposite())) {
-                return direction;
-            }
-        }
-        return null;
     }
 }

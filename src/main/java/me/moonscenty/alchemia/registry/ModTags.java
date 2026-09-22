@@ -48,6 +48,14 @@ public class ModTags {
     }
 
     public static class Items {
+        /**
+         * Worn or carried, anything in here shows aura nodes without an instrument in hand.
+         * <p>
+         * Empty until the goggles of revealing arrive; the sight is written against the tag so they only have to
+         * join it.
+         */
+        public static final TagKey<Item> REVEALS = mod("reveals");
+
         public static final TagKey<Item> SHARDS = mod("shards");
         public static final TagKey<Item> CLUSTERS = mod("clusters");
 

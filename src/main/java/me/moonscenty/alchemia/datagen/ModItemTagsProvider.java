@@ -32,6 +32,9 @@ public class ModItemTagsProvider extends ItemTagsProvider {
         copy(Tags.Blocks.ORE_RATES_SINGULAR, Tags.Items.ORE_RATES_SINGULAR);
         copy(Tags.Blocks.ORE_RATES_DENSE, Tags.Items.ORE_RATES_DENSE);
 
+        // nothing reveals nodes on its own yet, but the tag has to exist for the sight to read it
+        tag(ModTags.Items.REVEALS);
+
         tag(ModTags.Items.GEMS_AMBER).add(ModItems.AMBER.get());
         tag(ModTags.Items.GEMS_QUICKSILVER).add(ModItems.QUICKSILVER.get());
         tag(Tags.Items.GEMS).addTag(ModTags.Items.GEMS_AMBER).addTag(ModTags.Items.GEMS_QUICKSILVER);

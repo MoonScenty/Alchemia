@@ -1,6 +1,10 @@
 package me.moonscenty.alchemia.gametest;
 
+import java.util.List;
+
 import me.moonscenty.alchemia.Alchemia;
+import me.moonscenty.alchemia.aura.node.AuraNode;
+import me.moonscenty.alchemia.aura.node.NodeType;
 import me.moonscenty.alchemia.registry.ModBlocks;
 import me.moonscenty.alchemia.registry.WoodSet;
 import me.moonscenty.alchemia.worldgen.ModWorldgen;
@@ -13,6 +17,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
@@ -44,6 +49,47 @@ public class WorldgenTests {
         helper.assertTrue(shimmerleaf > 0, "no shimmerleaf grew under the silverwood");
         helper.assertTrue(vishroom > 0, "no vishroom grew under the silverwood");
         helper.succeed();
+    }
+
+    /**
+     * About one silverwood in three has a pure node in its heart. Enough trees are grown, one after another on the
+     * same spot, that missing every time would be a fault rather than bad luck.
+     */
+    @GameTest(template = TEMPLATE)
+    public static void silverwoodSometimesHasANodeInItsHeart(GameTestHelper helper) {
+        layGround(helper, 3);
+        // a full run of the space is also the way to prove no node is placed anywhere else
+        for (int attempt = 0; attempt < 20; attempt++) {
+            clearAbove(helper, 3);
+            place(helper, ModWorldgen.SILVERWOOD_TREE);
+            List<AuraNode> nodes = helper.getLevel().getEntitiesOfClass(AuraNode.class,
+                    new AABB(helper.absolutePos(TREE_BASE)).inflate(4, 16, 4));
+            if (nodes.isEmpty()) {
+                continue;
+            }
+            AuraNode node = nodes.getFirst();
+            helper.assertTrue(node.type() == NodeType.PURE, "the node in a silverwood should be pure, was " + node.type());
+            BlockPos foot = helper.absolutePos(TREE_BASE);
+            helper.assertTrue(helper.getLevel().getBlockState(node.blockPosition()).is(ModBlocks.SILVERWOOD.log().get()),
+                    "the node should sit inside the wood, but hangs at " + node.blockPosition() + " with the tree at " + foot);
+            helper.assertTrue(node.blockPosition().getY() > foot.getY(),
+                    "the node should hang partway up the trunk, not at the foot");
+            helper.succeed();
+            return;
+        }
+        helper.fail("twenty silverwoods grew and not one had a node in it");
+    }
+
+    private static void clearAbove(GameTestHelper helper, int radius) {
+        for (int x = -radius - 3; x <= radius + 3; x++) {
+            for (int z = -radius - 3; z <= radius + 3; z++) {
+                for (int y = 0; y < 20; y++) {
+                    helper.setBlock(TREE_BASE.offset(x, y, z), Blocks.AIR);
+                }
+            }
+        }
+        helper.getLevel().getEntitiesOfClass(AuraNode.class, new AABB(helper.absolutePos(TREE_BASE)).inflate(8, 20, 8))
+                .forEach(AuraNode::discard);
     }
 
     @GameTest(template = TEMPLATE)

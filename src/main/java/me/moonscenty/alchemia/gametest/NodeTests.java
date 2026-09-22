@@ -5,12 +5,15 @@ import java.util.Map;
 
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.aspect.Aspect;
+import me.moonscenty.alchemia.aspect.AspectList;
 import me.moonscenty.alchemia.aura.AuraGeneration;
 import me.moonscenty.alchemia.aura.AuraHandler;
 import me.moonscenty.alchemia.aura.ModAuraAttachment;
 import me.moonscenty.alchemia.aura.node.AuraNode;
 import me.moonscenty.alchemia.aura.node.NodeType;
 import me.moonscenty.alchemia.registry.ModAspects;
+import me.moonscenty.alchemia.research.ScanTarget;
+import me.moonscenty.alchemia.research.Scanning;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.gametest.framework.GameTest;
@@ -146,6 +149,28 @@ public class NodeTests {
         AuraHandler.recharge(helper.getLevel(), away, ModAspects.AIR, 10, RandomSource.create(17L));
         helper.assertTrue(AuraHandler.get(helper.getLevel(), away, ModAspects.AIR) == 0,
                 "unloaded land should still read as empty");
+        helper.succeed();
+    }
+
+    /** A reading of a node is a reading of whatever it is made of, however large it has grown. */
+    @GameTest(template = TEMPLATE)
+    public static void aNodeReadsAsWhatItIsMadeOf(GameTestHelper helper) {
+        AuraNode node = node(helper, RandomSource.create(7L));
+        ScanTarget target = ScanTarget.of(node);
+        helper.assertTrue(target instanceof ScanTarget.OfNode, "a node should be read as a node, not as any old entity");
+
+        AspectList read = target.aspects();
+        helper.assertTrue(read.get(node.aspect()) == node.getSize(),
+                "reading a node should give its aspect in the amount it has grown to");
+        helper.succeed();
+    }
+
+    /** A node cannot be hit or stood on, which once meant an alchemometer could not find it either. */
+    @GameTest(template = TEMPLATE)
+    public static void aNodeCanBeReadEvenThoughNothingCanTouchIt(GameTestHelper helper) {
+        AuraNode node = node(helper, RandomSource.create(8L));
+        helper.assertTrue(!node.isPickable(), "a node should still be untouchable");
+        helper.assertTrue(Scanning.readable(node), "an alchemometer should be able to read a node all the same");
         helper.succeed();
     }
 }

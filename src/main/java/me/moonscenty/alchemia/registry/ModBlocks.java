@@ -142,6 +142,7 @@ public class ModBlocks {
                     .strength(0.25F)
                     .sound(SoundType.AMETHYST_CLUSTER)
                     .lightLevel(CrystalBlock::getLightLevel)
+                    .randomTicks()
                     .forceSolidOn()
                     .noOcclusion()
                     .pushReaction(PushReaction.DESTROY))));

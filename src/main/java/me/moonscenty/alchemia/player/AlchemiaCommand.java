@@ -10,6 +10,8 @@ import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.aspect.Aspect;
 import me.moonscenty.alchemia.aura.AuraChunk;
 import me.moonscenty.alchemia.aura.AuraHandler;
+import me.moonscenty.alchemia.aura.node.AuraNode;
+import me.moonscenty.alchemia.aura.node.NodeType;
 import me.moonscenty.alchemia.registry.ModAspects;
 import me.moonscenty.alchemia.research.ModResearch;
 import me.moonscenty.alchemia.research.ResearchEntry;
@@ -23,13 +25,14 @@ import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 
 /**
- * Operator commands for poking at a player's knowledge and warp, so both can be exercised before the things that
- * normally drive them exist.
+ * Operator commands for poking at a player's knowledge and warp, and at the aura and its nodes, so all of it can be
+ * exercised before the things that normally drive them exist.
  */
 @EventBusSubscriber(modid = Alchemia.MODID)
 public class AlchemiaCommand {
@@ -40,6 +43,7 @@ public class AlchemiaCommand {
                 .then(aspects())
                 .then(research())
                 .then(aura())
+                .then(node())
                 .then(warp()));
     }
 
@@ -165,6 +169,62 @@ public class AlchemiaCommand {
         }
         source.sendSuccess(() -> Component.literal("Topped the chunk back up to " + aura.base()), false);
         return aura.base();
+    }
+
+    /**
+     * Hangs a node in front of the player, for testing anything that wants one until there is a way to carry one.
+     * The original had a creative-only item for this; a command does the same without needing a picture.
+     */
+    private static LiteralArgumentBuilder<CommandSourceStack> node() {
+        LiteralArgumentBuilder<CommandSourceStack> spawn = Commands.literal("spawn")
+                .executes(context -> spawnNode(context.getSource(), null, null, 0));
+        for (NodeType type : NodeType.values()) {
+            spawn.then(Commands.literal(type.getSerializedName())
+                    .executes(context -> spawnNode(context.getSource(), type, null, 0))
+                    .then(Commands.argument("aspect", ResourceLocationArgument.id())
+                            .suggests((context, builder) -> SharedSuggestionProvider.suggestResource(
+                                    ModAspects.REGISTRY.keySet(), builder))
+                            .executes(context -> spawnNode(context.getSource(), type,
+                                    ResourceLocationArgument.getId(context, "aspect"), 0))
+                            .then(Commands.argument("size", IntegerArgumentType.integer(1, 10000))
+                                    .executes(context -> spawnNode(context.getSource(), type,
+                                            ResourceLocationArgument.getId(context, "aspect"),
+                                            IntegerArgumentType.getInteger(context, "size"))))));
+        }
+        return Commands.literal("node").then(spawn);
+    }
+
+    private static int spawnNode(CommandSourceStack source, NodeType type, ResourceLocation aspectId, int size)
+            throws CommandSyntaxException {
+        ServerPlayer player = source.getPlayerOrException();
+        Holder<Aspect> aspect = null;
+        if (aspectId != null) {
+            aspect = ModAspects.REGISTRY.getHolder(aspectId).map(holder -> (Holder<Aspect>) holder).orElse(null);
+            if (aspect == null) {
+                source.sendFailure(Component.literal("No such aspect: " + aspectId));
+                return 0;
+            }
+        }
+
+        // two blocks out along the player's look, at eye height, which puts it where they can see it at once
+        Vec3 at = player.getEyePosition().add(player.getLookAngle().scale(2.0));
+        AuraNode node = new AuraNode(player.level());
+        node.moveTo(at.x, at.y, at.z, 0.0F, 0.0F);
+        node.drawUp(player.getRandom());
+        if (type != null) {
+            node.setType(type);
+        }
+        if (aspect != null) {
+            node.setAspect(aspect);
+        }
+        if (size > 0) {
+            node.setSize(size);
+        }
+        player.level().addFreshEntity(node);
+
+        source.sendSuccess(() -> Component.literal("Hung a " + node.type().getSerializedName() + " node of "
+                + node.aspect().value().tag() + " " + node.getSize()), false);
+        return node.getSize();
     }
 
     private static LiteralArgumentBuilder<CommandSourceStack> warp() {
