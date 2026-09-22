@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import me.moonscenty.alchemia.Alchemia;
+import me.moonscenty.alchemia.aura.node.NodeType;
 import me.moonscenty.alchemia.block.CrystalType;
 import me.moonscenty.alchemia.registry.ModBlocks;
 import me.moonscenty.alchemia.registry.ModFeatures;
@@ -107,10 +108,12 @@ public class ModWorldgen {
                 BlockStateProvider.simple(ModBlocks.SILVERWOOD.leaves().get()),
                 new SphereFoliagePlacer(ConstantInt.of(3), ConstantInt.of(0), 3),
                 new TwoLayersFeatureSize(1, 1, 2))
-                // shimmerleaf carpets the ground under a silverwood, with vishrooms here and there
+                // shimmerleaf carpets the ground under a silverwood, with vishrooms here and there, and about one
+                // tree in three has a small pure node in the heart of its trunk
                 .decorators(List.of(
                         new UndergrowthDecorator(BlockStateProvider.simple(ModBlocks.SHIMMERLEAF.get()), BlockTags.DIRT, 18, 8),
-                        new UndergrowthDecorator(BlockStateProvider.simple(ModBlocks.VISHROOM.get()), BlockTags.DIRT, 10, 6)))
+                        new UndergrowthDecorator(BlockStateProvider.simple(ModBlocks.VISHROOM.get()), BlockTags.DIRT, 10, 6),
+                        new NodeInTreeDecorator(0.3F, NodeType.PURE, 0.33F)))
                 .ignoreVines().build()));
 
         context.register(CINDERPEARL_PATCH, new ConfiguredFeature<>(Feature.FLOWER, FeatureUtils.simpleRandomPatchConfiguration(18,

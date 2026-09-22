@@ -1,8 +1,11 @@
 package me.moonscenty.alchemia.research;
 
+import me.moonscenty.alchemia.aspect.Aspect;
 import me.moonscenty.alchemia.aspect.AspectList;
 import me.moonscenty.alchemia.aspect.Aspects;
+import me.moonscenty.alchemia.aura.node.AuraNode;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -57,8 +60,30 @@ public sealed interface ScanTarget {
         }
     }
 
+    /**
+     * A node, which is nothing but the aspect it is made of.
+     * <p>
+     * There is no entry for it in the data map because no two nodes hold the same thing. What it teaches is read
+     * off the node in front of the player, and how much of it there is says how large the node has grown.
+     */
+    record OfNode(AuraNode node) implements ScanTarget {
+        @Override
+        public AspectList aspects() {
+            Holder<Aspect> aspect = node.aspect();
+            return aspect == null ? AspectList.EMPTY : AspectList.EMPTY.add(aspect, node.getSize());
+        }
+
+        @Override
+        public Component displayName() {
+            return node.type().displayName();
+        }
+    }
+
     /** Reads whatever is in front of the player, preferring a dropped item's contents over the item entity itself. */
     static ScanTarget of(Entity entity) {
-        return entity instanceof ItemEntity item ? new OfItem(item.getItem()) : new OfEntity(entity);
+        if (entity instanceof ItemEntity item) {
+            return new OfItem(item.getItem());
+        }
+        return entity instanceof AuraNode node ? new OfNode(node) : new OfEntity(entity);
     }
 }

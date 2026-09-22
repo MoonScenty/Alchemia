@@ -126,6 +126,6 @@ public class ModBlockStateProvider extends BlockStateProvider {
                     .rotationX(facing == Direction.UP ? 0 : facing == Direction.DOWN ? 180 : 90)
                     .rotationY(facing.getAxis().isVertical() ? 0 : ((int) facing.toYRot() + 180) % 360)
                     .build();
-        }, CrystalBlock.WATERLOGGED);
+        }, CrystalBlock.WATERLOGGED, CrystalBlock.GENERATION);
     }
 }

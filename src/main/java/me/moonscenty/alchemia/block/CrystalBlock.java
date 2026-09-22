@@ -5,6 +5,8 @@ import java.util.Map;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
@@ -27,10 +29,16 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 /**
  * A vis crystal growing on a solid face. It has four sizes and drops one shard per size.
+ * <p>
+ * It lives off the aura, growing and seeding where there is plenty and wasting away where there is none; the rules
+ * are in {@link CrystalGrowth}. Which generation a crystal is says how far it is from one the world made.
  */
 public class CrystalBlock extends Block implements SimpleWaterloggedBlock {
     public static final int MAX_AGE = 3;
     public static final IntegerProperty AGE = BlockStateProperties.AGE_3;
+    /** The first generation is what the world made; each seeding is one further on, and the last does not seed. */
+    public static final int LAST_GENERATION = 4;
+    public static final IntegerProperty GENERATION = IntegerProperty.create("generation", 1, LAST_GENERATION);
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
@@ -44,7 +52,8 @@ public class CrystalBlock extends Block implements SimpleWaterloggedBlock {
     public CrystalBlock(CrystalType type, Properties properties) {
         super(properties);
         this.type = type;
-        registerDefaultState(stateDefinition.any().setValue(AGE, 0).setValue(FACING, Direction.UP).setValue(WATERLOGGED, false));
+        registerDefaultState(stateDefinition.any().setValue(AGE, 0).setValue(FACING, Direction.UP).setValue(WATERLOGGED, false)
+                .setValue(GENERATION, 1));
     }
 
     public CrystalType getType() {
@@ -124,7 +133,12 @@ public class CrystalBlock extends Block implements SimpleWaterloggedBlock {
     }
 
     @Override
+    protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+        CrystalGrowth.tick(state, level, pos, random);
+    }
+
+    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(AGE, FACING, WATERLOGGED);
+        builder.add(AGE, FACING, WATERLOGGED, GENERATION);
     }
 }

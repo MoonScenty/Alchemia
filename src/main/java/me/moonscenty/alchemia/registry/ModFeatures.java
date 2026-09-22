@@ -6,6 +6,7 @@ import me.moonscenty.alchemia.worldgen.NodeFeature;
 import me.moonscenty.alchemia.worldgen.GreatwoodTrunkPlacer;
 import me.moonscenty.alchemia.worldgen.SilverwoodTrunkPlacer;
 import me.moonscenty.alchemia.worldgen.SphereFoliagePlacer;
+import me.moonscenty.alchemia.worldgen.NodeInTreeDecorator;
 import me.moonscenty.alchemia.worldgen.UndergrowthDecorator;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.levelgen.feature.Feature;
@@ -33,6 +34,8 @@ public class ModFeatures {
     public static final DeferredRegister<TreeDecoratorType<?>> TREE_DECORATORS = DeferredRegister.create(Registries.TREE_DECORATOR_TYPE, Alchemia.MODID);
     public static final DeferredHolder<TreeDecoratorType<?>, TreeDecoratorType<UndergrowthDecorator>> UNDERGROWTH = TREE_DECORATORS.register("undergrowth",
             () -> new TreeDecoratorType<>(UndergrowthDecorator.CODEC));
+    public static final DeferredHolder<TreeDecoratorType<?>, TreeDecoratorType<NodeInTreeDecorator>> NODE_IN_TREE = TREE_DECORATORS.register("node_in_tree",
+            () -> new TreeDecoratorType<>(NodeInTreeDecorator.CODEC));
 
     public static final DeferredHolder<Feature<?>, CrystalPatchFeature> CRYSTAL_PATCH = FEATURES.register("crystal_patch",
             () -> new CrystalPatchFeature(BlockStateConfiguration.CODEC));

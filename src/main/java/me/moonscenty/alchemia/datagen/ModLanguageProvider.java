@@ -88,6 +88,13 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("note.alchemia.no_paper", pick("You have no paper to write on.", "쓸 종이가 없다."));
         addBlock(ModBlocks.NODE_STABILIZER, pick("Node Stabilizer", "노드 안정기"));
         add("entity.alchemia.aura_node", pick("Aura Node", "오라 노드"));
+        add("node_type.alchemia.plain", pick("Normal Node", "평범한 노드"));
+        add("node_type.alchemia.dark", pick("Sinister Node", "불길한 노드"));
+        add("node_type.alchemia.hungry", pick("Hungry Node", "굶주린 노드"));
+        add("node_type.alchemia.pure", pick("Pure Node", "순수한 노드"));
+        add("node_type.alchemia.tainted", pick("Tainted Node", "오염된 노드"));
+        add("node_type.alchemia.unstable", pick("Unstable Node", "불안정한 노드"));
+        add("node_type.alchemia.astral", pick("Astral Node", "천상의 노드"));
         add("note.alchemia.no_such_mix", pick("These two make nothing", "이 둘로는 아무것도 만들어지지 않는다"));
         add("note.alchemia.pinned", pick("Pinned by the subject", "주제가 고정한 자리"));
         add("note.alchemia.would_hold", pick("This would hold", "여기라면 이어진다"));

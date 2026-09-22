@@ -6,6 +6,7 @@
       "Properties": {
         "age": "0",
         "facing": "up",
+        "generation": "1",
         "waterlogged": "false"
       }
     }

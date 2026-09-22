@@ -8,6 +8,7 @@ import me.moonscenty.alchemia.aura.BiomePaint;
 import me.moonscenty.alchemia.registry.ModAspects;
 import me.moonscenty.alchemia.registry.ModTags;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.StringRepresentable;
@@ -49,6 +50,11 @@ public enum NodeType implements StringRepresentable {
     @Override
     public String getSerializedName() {
         return name;
+    }
+
+    /** What this kind is called, for the label on a node and for what a reading of one says. */
+    public Component displayName() {
+        return Component.translatable("node_type.alchemia." + name);
     }
 
     /** Everything but a hungry node is worth something to the land around it. */
