@@ -25,6 +25,15 @@ public final class NoteGeneration {
     private static final int TEARS_PER_COMPLEXITY = 2;
     /** A pinned aspect needs somewhere to go, so it is never left with fewer neighbours than this. */
     private static final int MIN_WAYS_OUT = 2;
+    /**
+     * How much more of a primal the sheet holds than the one answer the drawing found needs.
+     * <p>
+     * The reader is not meant to be walked down a single line: the slack is what lets them go a longer way round,
+     * or waste a little working out which way round it is.
+     */
+    private static final float SLACK = 1.5F;
+    /** How many boards are drawn before the tearing is given up on and a whole one handed over instead. */
+    private static final int ATTEMPTS = 8;
 
     private NoteGeneration() {
     }
@@ -43,8 +52,46 @@ public final class NoteGeneration {
             board.put(ends.get(index), ResearchNote.Cell.pinned(ends.get(index), wanted.get(index)));
         }
 
-        tear(board, entry.complexity() * TEARS_PER_COMPLEXITY, random);
-        return new ResearchNote(research, budget(wanted.size(), radius, random), List.copyOf(board.values()), false);
+        // a note nobody can work out is worse than an easy one, so each torn board is checked and, if it cannot
+        // be crossed at all, torn again from scratch
+        Map<HexGrid.Hex, ResearchNote.Cell> whole = new LinkedHashMap<>(board);
+        ResearchNote note = null;
+        for (int attempt = 0; attempt < ATTEMPTS && note == null; attempt++) {
+            board = new LinkedHashMap<>(whole);
+            tear(board, entry.complexity() * TEARS_PER_COMPLEXITY, random);
+            note = affordable(research, board, wanted.size(), radius, random);
+        }
+        if (note == null) {
+            // nothing torn worked, so the sheet goes out whole: wide open, but solvable
+            note = affordable(research, whole, wanted.size(), radius, random);
+        }
+        return note != null ? note
+                : new ResearchNote(research, budget(wanted.size(), radius, random), List.copyOf(whole.values()), false);
+    }
+
+    /**
+     * The note for a board, with enough on the sheet to work it out.
+     * <p>
+     * The drawing works out one answer and then makes sure the sheet holds more than it takes. Without that the
+     * budget is a guess: a board torn so the only way across runs through dear compounds can cost more primals than
+     * any fixed allowance carries.
+     *
+     * @return the note, or null if no chain of aspects crosses this board at all
+     */
+    private static ResearchNote affordable(ResourceLocation research, Map<HexGrid.Hex, ResearchNote.Cell> board,
+            int ends, int radius, RandomSource random) {
+        ResearchNote note = new ResearchNote(research, budget(ends, radius, random), List.copyOf(board.values()), false);
+        List<NoteSolving.Placement> answer = NoteSolving.solve(ModAspects.REGISTRY, note).orElse(null);
+        if (answer == null) {
+            return null;
+        }
+
+        AspectList needed = NoteSolving.costOf(answer).scale(SLACK);
+        AspectList budget = note.budget();
+        for (Holder<Aspect> primal : needed.sortedByName()) {
+            budget = budget.mergeMax(primal, needed.get(primal));
+        }
+        return new ResearchNote(research, budget, note.cells(), false);
     }
 
     /**
