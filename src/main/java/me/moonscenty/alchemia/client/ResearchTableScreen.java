@@ -33,6 +33,11 @@ import net.neoforged.neoforge.network.PacketDistributor;
 public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMenu> {
     private static final ResourceLocation PANEL = Alchemia.id("textures/gui/research_table.png");
     /**
+     * The player's own pack, lifted out of the vanilla inventory screen rather than copied into the panel, so the
+     * rack matches whatever resource pack is on and Mojang's artwork stays out of this repository.
+     */
+    private static final ResourceLocation PACK = ResourceLocation.withDefaultNamespace("textures/gui/container/inventory.png");
+    /**
      * Cell plates exist at these widths and are only ever drawn at one of them.
      * <p>
      * The screen picks the largest that fits rather than scaling one to taste: a sprite stretched by some fraction is
@@ -45,16 +50,22 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
      * Whole numbers rather than the irrational height of a regular hexagon, and the second of each pair even, since
      * odd columns sit half a pitch down. Cells then land on exactly the pixels their plates were drawn for, and the
      * edge two neighbours share is the same pixels twice over instead of two lines a hair apart.
+     * <p>
+     * These are measured off MoonScenty's drawing by thaumref/tools/apply_user_hex.py, not worked out from a regular
+     * hexagon, since the drawing is not quite one; redraw the plate and run that again. The measurement has a couple
+     * of pixels of daylight added, so the board reads as separate cells rather than one mesh.
      */
-    private static final int[][] CELL_PITCH = {{24, 28}, {18, 20}, {15, 18}, {12, 14}};
+    private static final int[][] CELL_PITCH = {{22, 28}, {17, 22}, {14, 18}, {12, 16}};
 
     private static final int SHEET = 256;
     private static final int PANEL_W = 255;
     private static final int PANEL_H = 167;
+    /** Where the pack is drawn on the screen, and where it sits in the vanilla sheet it is taken from. */
     private static final int RACK_X = 40;
-    private static final int RACK_Y = 166;
-    private static final int RACK_W = 184;
-    private static final int RACK_H = 88;
+    private static final int RACK_Y = 170;
+    private static final int RACK_FROM_Y = 79;
+    private static final int RACK_W = 176;
+    private static final int RACK_H = 87;
 
     /** The leather square the board is laid out on. */
     private static final int BOARD_X = 94;
@@ -64,16 +75,16 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
     private static final int BOARD_PAD = 4;
 
     /** The recess down the left of the panel, where what the sheet holds is racked up. */
-    private static final int POOL_X = 15;
-    private static final int POOL_Y = 36;
+    private static final int POOL_X = 17;
+    private static final int POOL_Y = 38;
     private static final int POOL_COLUMNS = 4;
     private static final int POOL_STEP = 18;
 
     // The two dishes and the plate between them, measured off the drawn panel.
-    private static final int MIX_A_X = 21;
-    private static final int MIX_B_X = 72;
+    private static final int MIX_A_X = 19;
+    private static final int MIX_B_X = 73;
     private static final int MIX_Y = 135;
-    private static final int MIX_OUT_X = 49;
+    private static final int MIX_OUT_X = 46;
 
     private static final int ICON = 16;
 
@@ -85,13 +96,13 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
     public ResearchTableScreen(ResearchTableMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);
         imageWidth = PANEL_W;
-        imageHeight = 255;
+        imageHeight = RACK_Y + RACK_H;
     }
 
     @Override
     protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
         graphics.blit(PANEL, leftPos, topPos, 0, 0, PANEL_W, PANEL_H, SHEET, SHEET);
-        graphics.blit(PANEL, leftPos + RACK_X, topPos + RACK_Y + 1, 0, RACK_Y, RACK_W, RACK_H, SHEET, SHEET);
+        graphics.blit(PACK, leftPos + RACK_X, topPos + RACK_Y, 0, RACK_FROM_Y, RACK_W, RACK_H, SHEET, SHEET);
     }
 
     @Override

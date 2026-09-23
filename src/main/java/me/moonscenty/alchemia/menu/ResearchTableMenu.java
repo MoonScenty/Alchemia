@@ -31,8 +31,8 @@ public class ResearchTableMenu extends AbstractContainerMenu {
     private static final int TABLE_SLOTS = 2;
 
     // Where the slots sit on the drawn panel.
-    private static final int TOOLS_X = 14;
-    private static final int NOTES_X = 70;
+    private static final int TOOLS_X = 19;
+    private static final int NOTES_X = 72;
     private static final int TABLE_Y = 10;
     private static final int PACK_X = 48;
     private static final int PACK_Y = 175;

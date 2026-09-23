@@ -2,8 +2,13 @@ package me.moonscenty.alchemia.research;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
+import java.util.PriorityQueue;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -156,6 +161,171 @@ public final class NoteSolving {
             }
         }
         return seen;
+    }
+
+
+    // --- working one out ------------------------------------------------------
+
+    /** One aspect written into one cell. */
+    public record Placement(HexGrid.Hex at, Holder<Aspect> aspect) {
+    }
+
+    /**
+     * What it takes off the sheet to end up with one of an aspect: the aspect itself if it is primal, otherwise
+     * everything its parts take, since a compound is mixed up from them.
+     */
+    public static AspectList primalCost(Holder<Aspect> aspect) {
+        // the search asks this of every aspect at every step, and the answer never changes
+        return COSTS.computeIfAbsent(aspect, held -> Optional.ofNullable(primalCost(held, new HashSet<>()))).orElse(null);
+    }
+
+    private static final Map<Holder<Aspect>, Optional<AspectList>> COSTS = new ConcurrentHashMap<>();
+
+    private static AspectList primalCost(Holder<Aspect> aspect, Set<Holder<Aspect>> seen) {
+        if (aspect.value().isPrimal()) {
+            return AspectList.of(aspect, 1);
+        }
+        // a compound that somehow lists itself among its parts would never come out, so it costs nothing knowable
+        if (!seen.add(aspect)) {
+            return null;
+        }
+        AspectList total = AspectList.EMPTY;
+        for (Holder<Aspect> part : aspect.value().components().orElse(List.of())) {
+            AspectList theirs = primalCost(part, seen);
+            if (theirs == null) {
+                return null;
+            }
+            total = total.add(theirs);
+        }
+        seen.remove(aspect);
+        return total;
+    }
+
+    /**
+     * A cheap way of working a note out: which aspect goes in which cell so that every pinned one ends up on the
+     * same chain.
+     * <p>
+     * Pinned cells are joined to the chain one at a time, each by the cheapest run of cells that reaches it, cost
+     * being the primals the aspects along it take to mix up. That is not provably the cheapest answer overall, but
+     * it is an answer, which is what the drawing of a note needs in order to promise there is one.
+     *
+     * @return the placements, or nothing if no run of aspects joins them at all
+     */
+    public static Optional<List<Placement>> solve(Registry<Aspect> aspects, ResearchNote note) {
+        List<ResearchNote.Cell> pinned = note.pinnedCells();
+        if (pinned.size() <= 1) {
+            return Optional.of(List.of());
+        }
+
+        List<Placement> answer = new ArrayList<>();
+        ResearchNote working = note;
+        Set<HexGrid.Hex> chain = new HashSet<>();
+        chain.add(pinned.getFirst().at());
+
+        for (int index = 1; index < pinned.size(); index++) {
+            List<Placement> leg = cheapestRun(aspects, working, chain, pinned.get(index).at());
+            if (leg == null) {
+                return Optional.empty();
+            }
+            for (Placement step : leg) {
+                working = place(working, step.at(), Optional.of(step.aspect()));
+            }
+            answer.addAll(leg);
+            chain = reach(working, pinned.getFirst().at());
+            if (!chain.contains(pinned.get(index).at())) {
+                return Optional.empty();
+            }
+        }
+        return isSolved(working) ? Optional.of(List.copyOf(answer)) : Optional.empty();
+    }
+
+    /** What a whole answer costs off the sheet. */
+    public static AspectList costOf(List<Placement> answer) {
+        AspectList total = AspectList.EMPTY;
+        for (Placement step : answer) {
+            AspectList cost = primalCost(step.aspect());
+            if (cost != null) {
+                total = total.add(cost);
+            }
+        }
+        return total;
+    }
+
+    /** Where a search has got to: a cell and what was written in it, since that decides what may come next. */
+    private record Reached(HexGrid.Hex at, Holder<Aspect> aspect) {
+    }
+
+    /**
+     * The cheapest run of blank cells from anywhere on the chain to a pinned cell, every step holding to the one
+     * before it. Searched over cell and aspect together and by cost rather than by length, so a long run of cheap
+     * aspects is preferred to a short run of dear ones.
+     */
+    private static List<Placement> cheapestRun(Registry<Aspect> aspects, ResearchNote note, Set<HexGrid.Hex> chain,
+            HexGrid.Hex target) {
+        Holder<Aspect> goal = note.cellAt(target).flatMap(ResearchNote.Cell::aspect).orElse(null);
+        if (goal == null) {
+            return null;
+        }
+        List<Holder<Aspect>> writable = aspects.holders()
+                .map(holder -> (Holder<Aspect>) holder)
+                .filter(holder -> primalCost(holder) != null)
+                .toList();
+
+        Map<Reached, Integer> best = new HashMap<>();
+        Map<Reached, Reached> cameFrom = new HashMap<>();
+        PriorityQueue<Reached> queue = new PriorityQueue<>(Comparator.comparingInt(best::get));
+
+        for (HexGrid.Hex at : chain) {
+            Holder<Aspect> held = note.cellAt(at).flatMap(ResearchNote.Cell::aspect).orElse(null);
+            if (held != null) {
+                Reached start = new Reached(at, held);
+                best.put(start, 0);
+                cameFrom.put(start, null);
+                queue.add(start);
+            }
+        }
+
+        while (!queue.isEmpty()) {
+            Reached here = queue.poll();
+            int spent = best.get(here);
+            for (HexGrid.Hex next : here.at().neighbours()) {
+                ResearchNote.Cell cell = note.cellAt(next).orElse(null);
+                if (cell == null) {
+                    continue;
+                }
+                if (next.equals(target)) {
+                    if (linked(here.aspect(), goal)) {
+                        return trace(cameFrom, here);
+                    }
+                    continue;
+                }
+                // a cell that is pinned, or already written in, is not the reader's to use on the way past
+                if (cell.pinned() || cell.aspect().isPresent()) {
+                    continue;
+                }
+                for (Holder<Aspect> lay : writable) {
+                    if (!linked(here.aspect(), lay)) {
+                        continue;
+                    }
+                    Reached step = new Reached(next, lay);
+                    int cost = spent + primalCost(lay).total();
+                    if (cost < best.getOrDefault(step, Integer.MAX_VALUE)) {
+                        best.put(step, cost);
+                        cameFrom.put(step, here);
+                        queue.add(step);
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    private static List<Placement> trace(Map<Reached, Reached> cameFrom, Reached last) {
+        List<Placement> run = new ArrayList<>();
+        for (Reached at = last; at != null && cameFrom.get(at) != null; at = cameFrom.get(at)) {
+            run.addFirst(new Placement(at.at(), at.aspect()));
+        }
+        return run;
     }
 
     /**
