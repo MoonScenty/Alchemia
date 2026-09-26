@@ -207,6 +207,8 @@ public class AlchemonomiconScreen extends Screen {
 
     /** The plate is a square larger than the icon it carries, drawn a pixel out so the icon lands in the middle. */
     private void drawTabPlate(GuiGraphics graphics, int x, int y, boolean left, boolean open) {
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
         ResourceLocation plate = left
                 ? (open ? TAB_LEFT_OPEN : TAB_LEFT)
                 : (open ? TAB_RIGHT_OPEN : TAB_RIGHT);
@@ -264,6 +266,9 @@ public class AlchemonomiconScreen extends Screen {
             int y = centreY + research.row() * STEP - PLATE / 2;
 
             boolean known = knowledge.hasResearch(entry.getKey().location());
+            // the item drawn on the last plate ended its own batch, and that put blending back off
+            RenderSystem.enableBlend();
+            RenderSystem.defaultBlendFunc();
             graphics.blitSprite(research.shape().sprite(known), x, y, PLATE, PLATE);
             graphics.renderItem(research.iconStack(), x + ICON_INSET, y + ICON_INSET);
 

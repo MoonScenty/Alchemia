@@ -463,7 +463,18 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
                 dishA, dishB);
     }
 
+    /**
+     * One aspect, painted in its own colour.
+     * <p>
+     * Blending is turned on every single time rather than once for the lot. Drawing a string ends the font's batch,
+     * and ending a batch puts back the state that batch wanted, which for text means blending off. So the first
+     * aspect in a row would come out soft and every one after it hard: a mask meant to fade at the edge would be
+     * fully opaque wherever it was not fully clear, and a round icon would read as a solid disc. That is where the
+     * black rim around these icons came from, back when their edges were still dark.
+     */
     private void drawAspect(GuiGraphics graphics, Holder<Aspect> aspect, int x, int y) {
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
         int colour = aspect.value().color();
         graphics.setColor(((colour >> 16) & 0xFF) / 255F, ((colour >> 8) & 0xFF) / 255F, (colour & 0xFF) / 255F, 1F);
         graphics.blit(aspect.value().icon(), x, y, 0, 0, ICON, ICON, ICON, ICON);
