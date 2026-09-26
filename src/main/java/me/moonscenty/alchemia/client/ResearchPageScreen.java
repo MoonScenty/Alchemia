@@ -2,14 +2,20 @@ package me.moonscenty.alchemia.client;
 
 import java.util.List;
 import java.util.Optional;
+import com.mojang.blaze3d.systems.RenderSystem;
 
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.player.PlayerKnowledge;
 import me.moonscenty.alchemia.research.ResearchEntry;
+import me.moonscenty.alchemia.crafting.ArcaneShapedRecipe;
+import me.moonscenty.alchemia.crafting.ArcaneRecipe;
+import me.moonscenty.alchemia.aspect.AspectList;
+import me.moonscenty.alchemia.aspect.Aspect;
 import me.moonscenty.alchemia.research.ResearchPage;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.item.ItemStack;
@@ -42,6 +48,8 @@ public class ResearchPageScreen extends Screen {
     /** Breathing room between the writing and the edge of the sheet. */
     private static final int PAD = 10;
     private static final int LINE = 9;
+    /** How big an aspect icon is drawn beside a price. */
+    private static final int ICON = 12;
     private static final int TURN_W = 12;
     private static final int TURN_H = 17;
 
@@ -166,12 +174,13 @@ public class ResearchPageScreen extends Screen {
 
         net.minecraft.world.item.crafting.Recipe<?> recipe = found.get().value();
         List<Ingredient> ingredients = recipe.getIngredients();
-        int columns = recipe instanceof ShapedRecipe shaped ? shaped.getWidth() : gridWidth(ingredients.size());
-        int rows = recipe instanceof ShapedRecipe shaped ? shaped.getHeight()
-                : Math.ceilDiv(ingredients.size(), columns);
+        int columns = shapeOf(recipe, true, gridWidth(ingredients.size()));
+        int rows = shapeOf(recipe, false, Math.ceilDiv(ingredients.size(), columns));
 
         Component heading = Component.translatable(recipe instanceof AbstractCookingRecipe
-                ? "research.alchemia.smelting" : "research.alchemia.crafting");
+                ? "research.alchemia.smelting"
+                : recipe instanceof ArcaneRecipe ? "research.alchemia.arcane_crafting"
+                : "research.alchemia.crafting");
         graphics.drawString(font, heading, x + (usable - font.width(heading)) / 2, y, 0xFF3A2A18, false);
         y += LINE * 2;
 
@@ -190,6 +199,45 @@ public class ResearchPageScreen extends Screen {
         int middle = y + (rows * SLOT - SLOT) / 2;
         drawArrow(graphics, gx + gridW + 3, middle + SLOT / 2);
         drawStack(graphics, gx + gridW + arrow, middle, recipe.getResultItem(minecraft.level.registryAccess()));
+
+        if (recipe instanceof ArcaneRecipe arcane && !arcane.cost().isEmpty()) {
+            drawCost(graphics, arcane.cost(), x, y + rows * SLOT + LINE, usable);
+        }
+    }
+
+    /**
+     * What the work asks of a wand, written under the grid.
+     * <p>
+     * Without it the page would show a recipe that simply does not come out at the bench, with nothing on the page
+     * to say why. The aspects are drawn in their own colours and the amounts beside them.
+     */
+    private void drawCost(GuiGraphics graphics, AspectList cost, int x, int y, int usable) {
+        List<Holder<Aspect>> asked = cost.sortedByName();
+        int step = ICON + font.width("000") + 6;
+        int gx = x + Math.max(0, (usable - asked.size() * step) / 2);
+
+        for (Holder<Aspect> aspect : asked) {
+            RenderSystem.enableBlend();
+            RenderSystem.defaultBlendFunc();
+            int colour = aspect.value().color();
+            graphics.setColor(((colour >> 16) & 0xFF) / 255F, ((colour >> 8) & 0xFF) / 255F,
+                    (colour & 0xFF) / 255F, 1F);
+            graphics.blit(aspect.value().icon(), gx, y, 0, 0, ICON, ICON, ICON, ICON);
+            graphics.setColor(1F, 1F, 1F, 1F);
+            graphics.drawString(font, String.valueOf(cost.get(aspect)), gx + ICON + 2, y + 4, 0xFF4A3520, false);
+            gx += step;
+        }
+    }
+
+    /** How wide or tall a recipe is laid out, when it says so itself. */
+    private static int shapeOf(net.minecraft.world.item.crafting.Recipe<?> recipe, boolean wide, int otherwise) {
+        if (recipe instanceof ShapedRecipe shaped) {
+            return wide ? shaped.getWidth() : shaped.getHeight();
+        }
+        if (recipe instanceof ArcaneShapedRecipe arcane) {
+            return wide ? arcane.pattern().width() : arcane.pattern().height();
+        }
+        return otherwise;
     }
 
     /** Shapeless recipes carry no shape, so they are laid out in whatever square fits. */

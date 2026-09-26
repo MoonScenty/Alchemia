@@ -54,6 +54,37 @@ public class ModResearchProvider {
                 AspectList.of(ModAspects.PLANT, 4).add(ModAspects.AURA, 4), List.of("greatwood"), false, NodeShape.SPECIAL, 2, "silverwood_planks");
         entry(context, "warp", ModResearch.ELDRITCH, Items.ENDER_PEARL, 0, 3,
                 AspectList.of(ModAspects.ELDRITCH, 4).add(ModAspects.FLUX, 2), List.of("vis_crystals"), false, NodeShape.MAJOR, 3);
+
+        // --- the wand and the bench it is worked at -------------------------------------------------------
+
+        // given for nothing: a wand is what the whole branch is worked with, so there is no first wand to earn
+        entry(context, "wand", ModResearch.ARCANA, ModItems.WAND, 3, 0,
+                AspectList.EMPTY, List.of(), true, NodeShape.MAJOR, 1, "wand_cap_iron", "wand");
+        entry(context, "arcane_workbench", ModResearch.ARCANA, ModBlocks.ARCANE_WORKBENCH, 4, 1,
+                AspectList.of(ModAspects.CRAFT, 4).add(ModAspects.AURA, 2), List.of("wand"), false, NodeShape.MAJOR, 2);
+        entry(context, "charger", ModResearch.ARCANA, ModBlocks.ARCANE_WORKBENCH_CHARGER, 5, 2,
+                AspectList.of(ModAspects.AURA, 4).add(ModAspects.ENERGY, 4).add(ModAspects.CRYSTAL, 2),
+                List.of("arcane_workbench"), false, NodeShape.PLAIN, 2);
+
+        entry(context, "wand_cap_gold", ModResearch.ARCANA, ModItems.WAND_CAPS.get("gold"), 4, 3,
+                AspectList.of(ModAspects.METAL, 3).add(ModAspects.DESIRE, 3).add(ModAspects.TOOL, 3),
+                List.of("arcane_workbench"), false, NodeShape.PLAIN, 2, "wand_cap_gold");
+        entry(context, "wand_cap_brass", ModResearch.ARCANA, ModItems.WAND_CAPS.get("brass"), 5, 4,
+                AspectList.of(ModAspects.METAL, 3).add(ModAspects.ENERGY, 3).add(ModAspects.TOOL, 3),
+                List.of("wand_cap_gold"), false, NodeShape.PLAIN, 2, "wand_cap_brass");
+        entry(context, "wand_cap_alchemium", ModResearch.ARCANA, ModItems.WAND_CAPS.get("alchemium"), 6, 5,
+                AspectList.of(ModAspects.METAL, 6).add(ModAspects.ENERGY, 6).add(ModAspects.TOOL, 3)
+                        .add(ModAspects.AURA, 3),
+                List.of("wand_cap_brass"), false, NodeShape.SPECIAL, 3, "wand_cap_alchemium");
+
+        entry(context, "wand_rod_greatwood", ModResearch.ARCANA, ModItems.WAND_RODS.get("greatwood"), 2, 3,
+                AspectList.of(ModAspects.TOOL, 3).add(ModAspects.PLANT, 6).add(ModAspects.ENERGY, 3),
+                List.of("arcane_workbench", "greatwood"), false, NodeShape.PLAIN, 2, "wand_rod_greatwood");
+
+        entry(context, "arcane_stone", ModResearch.ARTIFICE, ModBlocks.ARCANE_STONE.block(), 3, 2,
+                AspectList.of(ModAspects.EARTH, 4).add(ModAspects.AURA, 2).add(ModAspects.CRYSTAL, 2),
+                List.of("arcane_workbench"), false, NodeShape.PLAIN, 2, "arcane_stone",
+                "arcane_stone_bricks_from_arcane_stone");
     }
 
     private static void category(BootstrapContext<ResearchCategory> context, ResourceKey<ResearchCategory> key,

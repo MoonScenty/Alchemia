@@ -1,0 +1,29 @@
+{
+  "category": "alchemia:artifice",
+  "column": 3,
+  "complexity": 2,
+  "icon": "alchemia:arcane_stone",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.arcane_stone.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:arcane_stone"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:arcane_stone_bricks_from_arcane_stone"
+    }
+  ],
+  "parents": [
+    "alchemia:arcane_workbench"
+  ],
+  "requirements": {
+    "alchemia:auram": 2,
+    "alchemia:terra": 4,
+    "alchemia:vitreus": 2
+  },
+  "row": 2
+}

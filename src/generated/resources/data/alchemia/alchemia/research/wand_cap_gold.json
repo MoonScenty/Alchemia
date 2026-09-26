@@ -1,0 +1,25 @@
+{
+  "category": "alchemia:arcana",
+  "column": 4,
+  "complexity": 2,
+  "icon": "alchemia:wand_cap_gold",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.wand_cap_gold.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:wand_cap_gold"
+    }
+  ],
+  "parents": [
+    "alchemia:arcane_workbench"
+  ],
+  "requirements": {
+    "alchemia:desiderium": 3,
+    "alchemia:instrumentum": 3,
+    "alchemia:metallum": 3
+  },
+  "row": 3
+}

@@ -1,0 +1,25 @@
+{
+  "category": "alchemia:arcana",
+  "column": 5,
+  "complexity": 2,
+  "icon": "alchemia:wand_cap_brass",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.wand_cap_brass.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:wand_cap_brass"
+    }
+  ],
+  "parents": [
+    "alchemia:wand_cap_gold"
+  ],
+  "requirements": {
+    "alchemia:instrumentum": 3,
+    "alchemia:metallum": 3,
+    "alchemia:potentia": 3
+  },
+  "row": 4
+}

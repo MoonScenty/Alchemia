@@ -1,0 +1,21 @@
+{
+  "type": "alchemia:arcane_shaped",
+  "key": {
+    "N": {
+      "tag": "c:nuggets/gold"
+    }
+  },
+  "pattern": [
+    "NNN",
+    "N N"
+  ],
+  "result": {
+    "count": 1,
+    "id": "alchemia:wand_cap_gold"
+  },
+  "vis": {
+    "alchemia:aer": 24,
+    "alchemia:ignis": 24,
+    "alchemia:ordo": 24
+  }
+}

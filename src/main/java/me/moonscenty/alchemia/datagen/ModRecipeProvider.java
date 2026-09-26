@@ -1,10 +1,15 @@
 package me.moonscenty.alchemia.datagen;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.Optional;
+import java.util.Map;
 
 import me.moonscenty.alchemia.Alchemia;
+import me.moonscenty.alchemia.crafting.ArcaneShapedRecipe;
+import me.moonscenty.alchemia.aspect.AspectList;
 import me.moonscenty.alchemia.crafting.ArcaneWandRecipe;
 import me.moonscenty.alchemia.registry.ModBlocks;
+import me.moonscenty.alchemia.registry.ModAspects;
 import me.moonscenty.alchemia.registry.ModItems;
 import me.moonscenty.alchemia.registry.ModTags;
 import me.moonscenty.alchemia.registry.StoneSet;
@@ -26,6 +31,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.ShapedRecipePattern;
 import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.common.Tags;
 
@@ -57,8 +63,9 @@ public class ModRecipeProvider extends RecipeProvider {
                 new ItemStack(ModItems.SALIS_MUNDUS.get()));
 
         wand(output);
+        arcane(output);
 
-        // Arcane stone itself is shaped on the arcane workbench, which does not exist yet
+        // arcane stone itself is shaped on the arcane workbench; these are what it is worked into afterwards
         quadrupleFrom(output, ModBlocks.ARCANE_STONE_BRICKS.block(), ModBlocks.ARCANE_STONE.block());
         for (StoneSet set : ModBlocks.STONE_SETS) {
             stairBuilder(set.stairs(), Ingredient.of(set.block())).unlockedBy("has_input", has(set.block())).save(output);
@@ -213,5 +220,42 @@ public class ModRecipeProvider extends RecipeProvider {
 
         SpecialRecipeBuilder.special(category -> new ArcaneWandRecipe())
                 .save(output, Alchemia.id("arcane_wand").toString());
+    }
+
+    /**
+     * What is shaped on the arcane workbench, and what it costs in vis.
+     * <p>
+     * The prices are the original's: eight times what the piece is reckoned to be worth, split across the primals
+     * that go into the work. A cap is order, fire and air; a rod is entropy alone, since cutting a wand out of a
+     * log is mostly undoing what the tree made.
+     */
+    private void arcane(RecipeOutput output) {
+        arcane(output, "wand_cap_gold", new ItemStack(ModItems.WAND_CAPS.get("gold").get()),
+                AspectList.of(ModAspects.ORDER, 24).add(ModAspects.FIRE, 24).add(ModAspects.AIR, 24),
+                Map.of('N', Ingredient.of(Tags.Items.NUGGETS_GOLD)), "NNN", "N N");
+
+        arcane(output, "wand_cap_brass", new ItemStack(ModItems.WAND_CAPS.get("brass").get()),
+                AspectList.of(ModAspects.ORDER, 24).add(ModAspects.FIRE, 24).add(ModAspects.AIR, 24),
+                Map.of('N', Ingredient.of(ModTags.Items.NUGGETS_BRASS)), "NNN", "N N");
+
+        arcane(output, "wand_cap_alchemium", new ItemStack(ModItems.WAND_CAPS.get("alchemium").get()),
+                AspectList.of(ModAspects.ORDER, 48).add(ModAspects.FIRE, 48).add(ModAspects.AIR, 48),
+                Map.of('N', Ingredient.of(ModTags.Items.NUGGETS_ALCHEMIUM)), "NNN", "N N");
+
+        arcane(output, "wand_rod_greatwood", new ItemStack(ModItems.WAND_RODS.get("greatwood").get()),
+                AspectList.of(ModAspects.ENTROPY, 24),
+                Map.of('G', Ingredient.of(ModBlocks.GREATWOOD.log())), " G", "G ");
+
+        arcane(output, "arcane_stone", new ItemStack(ModBlocks.ARCANE_STONE.block(), 9),
+                AspectList.of(ModAspects.EARTH, 5).add(ModAspects.FIRE, 5),
+                Map.of('S', Ingredient.of(Tags.Items.STONES), 'C', Ingredient.of(ModTags.Items.SHARDS)),
+                "SSS", "SCS", "SSS");
+    }
+
+    private void arcane(RecipeOutput output, String name, ItemStack result, AspectList cost,
+            Map<Character, Ingredient> key, String... pattern) {
+        output.accept(Alchemia.id(name),
+                new ArcaneShapedRecipe("", ShapedRecipePattern.of(key, pattern), result, cost, Optional.empty()),
+                null);
     }
 }
