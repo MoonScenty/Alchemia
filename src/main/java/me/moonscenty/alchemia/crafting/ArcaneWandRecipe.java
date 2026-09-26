@@ -28,6 +28,14 @@ import me.moonscenty.alchemia.wand.WandRod;
  * It costs nothing. It has to: the bench takes its price out of a wand, and this is where the first one comes from.
  */
 public class ArcaneWandRecipe implements ArcaneRecipe {
+    /**
+     * The one there ever needs to be, since the recipe carries nothing of its own.
+     * <p>
+     * It has to be shared rather than made anew, because the codec that sends it to a client refuses to write
+     * anything that is not the very value it was built around.
+     */
+    public static final ArcaneWandRecipe INSTANCE = new ArcaneWandRecipe();
+
     /** Where each piece has to lie. The rod runs corner to corner, so the caps sit at the two free corners. */
     private static final int LOWER_CAP = 6;
     private static final int ROD = 4;
@@ -92,11 +100,25 @@ public class ArcaneWandRecipe implements ArcaneRecipe {
         return ModRecipes.ARCANE_WAND.get();
     }
 
+    /**
+     * Every one of these is the same as every other, and saying so is not idle: the recipe reaches a client through
+     * a codec that compares what it is given against what it was built with.
+     */
+    @Override
+    public boolean equals(Object other) {
+        return other instanceof ArcaneWandRecipe;
+    }
+
+    @Override
+    public int hashCode() {
+        return ArcaneWandRecipe.class.hashCode();
+    }
+
     /** Nothing to write down: the recipe is the same every time and reads what it needs off the bench. */
     public static class Serializer implements RecipeSerializer<ArcaneWandRecipe> {
-        private static final MapCodec<ArcaneWandRecipe> CODEC = MapCodec.unit(ArcaneWandRecipe::new);
+        private static final MapCodec<ArcaneWandRecipe> CODEC = MapCodec.unit(INSTANCE);
         private static final StreamCodec<RegistryFriendlyByteBuf, ArcaneWandRecipe> STREAM_CODEC =
-                StreamCodec.unit(new ArcaneWandRecipe());
+                StreamCodec.unit(INSTANCE);
 
         @Override
         public MapCodec<ArcaneWandRecipe> codec() {

@@ -218,7 +218,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_cap", has(ModItems.WAND_CAPS.get("iron").get()))
                 .save(output);
 
-        SpecialRecipeBuilder.special(category -> new ArcaneWandRecipe())
+        SpecialRecipeBuilder.special(category -> ArcaneWandRecipe.INSTANCE)
                 .save(output, Alchemia.id("arcane_wand").toString());
     }
 
