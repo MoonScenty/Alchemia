@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "C": {
+      "item": "alchemia:wand_cap_iron"
+    },
+    "S": {
+      "tag": "c:rods/wooden"
+    }
+  },
+  "pattern": [
+    "  C",
+    " S ",
+    "C  "
+  ],
+  "result": {
+    "count": 1,
+    "id": "alchemia:wand"
+  }
+}

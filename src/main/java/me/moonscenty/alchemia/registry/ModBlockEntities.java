@@ -1,6 +1,8 @@
 package me.moonscenty.alchemia.registry;
 
 import me.moonscenty.alchemia.Alchemia;
+import me.moonscenty.alchemia.block.entity.ArcaneWorkbenchBlockEntity;
+import me.moonscenty.alchemia.block.entity.ArcaneWorkbenchChargerBlockEntity;
 import me.moonscenty.alchemia.block.entity.NodeStabilizerBlockEntity;
 import me.moonscenty.alchemia.block.entity.ResearchTableBlockEntity;
 import net.minecraft.core.registries.Registries;
@@ -21,6 +23,17 @@ public class ModBlockEntities {
             BLOCK_ENTITIES.register("node_stabilizer", () -> BlockEntityType.Builder
                     .of(NodeStabilizerBlockEntity::new, ModBlocks.NODE_STABILIZER.get())
                     .build(null));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ArcaneWorkbenchBlockEntity>> ARCANE_WORKBENCH =
+            BLOCK_ENTITIES.register("arcane_workbench", () -> BlockEntityType.Builder
+                    .of(ArcaneWorkbenchBlockEntity::new, ModBlocks.ARCANE_WORKBENCH.get())
+                    .build(null));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ArcaneWorkbenchChargerBlockEntity>>
+            ARCANE_WORKBENCH_CHARGER = BLOCK_ENTITIES.register("arcane_workbench_charger",
+                    () -> BlockEntityType.Builder
+                            .of(ArcaneWorkbenchChargerBlockEntity::new, ModBlocks.ARCANE_WORKBENCH_CHARGER.get())
+                            .build(null));
 
     private ModBlockEntities() {
     }

@@ -71,7 +71,8 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
             tag(BlockTags.SLABS).add(set.slab().get());
         }
 
-        tag(BlockTags.MINEABLE_WITH_AXE).add(ModBlocks.RESEARCH_TABLE.get());
+        tag(BlockTags.MINEABLE_WITH_AXE).add(ModBlocks.RESEARCH_TABLE.get(), ModBlocks.ARCANE_WORKBENCH.get(),
+                ModBlocks.ARCANE_WORKBENCH_CHARGER.get());
 
         tag(ModTags.Blocks.CINDERPEARL_PLACEABLE)
                 .addTag(BlockTags.SAND)

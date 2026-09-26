@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "alchemia:item/wand/rod_silverwood",
+    "layer1": "alchemia:item/wand/cap_void"
+  }
+}

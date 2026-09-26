@@ -1,0 +1,19 @@
+{
+  "loader": "neoforge:obj",
+  "model": "alchemia:models/block/charger/block.obj",
+  "flip_v": true,
+  "textures": {
+    "particle": "alchemia:block/greatwood_log",
+    "wood": "alchemia:block/greatwood_log",
+    "band": "alchemia:block/charger_pole",
+    "crystal": "alchemia:block/charger_crystal",
+    "stone": "alchemia:block/arcane_stone"
+  },
+  "transform": {
+    "translation": [
+      0.5,
+      0.0,
+      0.5
+    ]
+  }
+}
