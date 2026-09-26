@@ -8,6 +8,7 @@ import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.player.PlayerKnowledge;
 import me.moonscenty.alchemia.research.ResearchEntry;
 import me.moonscenty.alchemia.crafting.ArcaneShapedRecipe;
+import me.moonscenty.alchemia.crafting.CrucibleRecipe;
 import me.moonscenty.alchemia.crafting.ArcaneRecipe;
 import me.moonscenty.alchemia.aspect.AspectList;
 import me.moonscenty.alchemia.aspect.Aspect;
@@ -180,6 +181,7 @@ public class ResearchPageScreen extends Screen {
         Component heading = Component.translatable(recipe instanceof AbstractCookingRecipe
                 ? "research.alchemia.smelting"
                 : recipe instanceof ArcaneRecipe ? "research.alchemia.arcane_crafting"
+                : recipe instanceof CrucibleRecipe ? "research.alchemia.crucible"
                 : "research.alchemia.crafting");
         graphics.drawString(font, heading, x + (usable - font.width(heading)) / 2, y, 0xFF3A2A18, false);
         y += LINE * 2;
@@ -200,9 +202,26 @@ public class ResearchPageScreen extends Screen {
         drawArrow(graphics, gx + gridW + 3, middle + SLOT / 2);
         drawStack(graphics, gx + gridW + arrow, middle, recipe.getResultItem(minecraft.level.registryAccess()));
 
-        if (recipe instanceof ArcaneRecipe arcane && !arcane.cost().isEmpty()) {
-            drawCost(graphics, arcane.cost(), x, y + rows * SLOT + LINE, usable);
+        AspectList asked = asked(recipe);
+        if (!asked.isEmpty()) {
+            drawCost(graphics, asked, x, y + rows * SLOT + LINE, usable);
         }
+    }
+
+    /**
+     * What aspects a recipe wants, whichever kind it is.
+     * <p>
+     * A wand pays for work at the arcane workbench; a crucible wants the aspects already dissolved in it. They are
+     * different things, but the page says both the same way, because to a reader they are the same question.
+     */
+    private static AspectList asked(net.minecraft.world.item.crafting.Recipe<?> recipe) {
+        if (recipe instanceof ArcaneRecipe arcane) {
+            return arcane.cost();
+        }
+        if (recipe instanceof CrucibleRecipe crucible) {
+            return crucible.aspects();
+        }
+        return AspectList.EMPTY;
     }
 
     /**

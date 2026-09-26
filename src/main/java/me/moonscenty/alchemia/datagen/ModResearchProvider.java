@@ -81,6 +81,16 @@ public class ModResearchProvider {
                 AspectList.of(ModAspects.TOOL, 3).add(ModAspects.PLANT, 6).add(ModAspects.ENERGY, 3),
                 List.of("arcane_workbench", "greatwood"), false, NodeShape.PLAIN, 2, "wand_rod_greatwood");
 
+        // --- the crucible ---------------------------------------------------------------------------------
+
+        entry(context, "crucible", ModResearch.ALCHEMY, ModBlocks.CRUCIBLE, 0, 2,
+                AspectList.of(ModAspects.WATER, 4).add(ModAspects.FIRE, 4).add(ModAspects.EXCHANGE, 2),
+                List.of("wand"), false, NodeShape.MAJOR, 2);
+        entry(context, "metallurgy", ModResearch.ALCHEMY, ModItems.ALCHEMIUM_INGOT, -1, 3,
+                AspectList.of(ModAspects.METAL, 6).add(ModAspects.EXCHANGE, 4).add(ModAspects.FIRE, 2),
+                List.of("crucible"), false, NodeShape.PLAIN, 3,
+                "alchemium_ingot_from_iron", "brass_ingot_from_iron");
+
         entry(context, "arcane_stone", ModResearch.ARTIFICE, ModBlocks.ARCANE_STONE.block(), 3, 2,
                 AspectList.of(ModAspects.EARTH, 4).add(ModAspects.AURA, 2).add(ModAspects.CRYSTAL, 2),
                 List.of("arcane_workbench"), false, NodeShape.PLAIN, 2, "arcane_stone",

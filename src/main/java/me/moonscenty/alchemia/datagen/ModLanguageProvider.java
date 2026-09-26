@@ -149,6 +149,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("research.alchemia.open", pick("Click to read", "클릭해 읽기"));
         add("research.alchemia.crafting", pick("On the bench", "작업대에서"));
         add("research.alchemia.arcane_crafting", pick("At the arcane workbench", "비전 작업대에서"));
+        add("research.alchemia.crucible", pick("In the crucible", "도가니에서"));
         add("research.alchemia.smelting", pick("In the fire", "불에서"));
         add("research.alchemia.recipe_missing", pick("The page has faded.", "지면이 바래 알아볼 수 없다."));
         add("scan.alchemia.nothing_there", pick("There is nothing there to read.", "읽을 것이 없다."));
@@ -214,6 +215,12 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                 {"arcane_stone", "Arcane Stone", "비전 석재",
                  "Common stone with a shard worked into it, and it stops being common. It takes the aura the way a wick takes oil, which is why every worthwhile structure in this craft is built of it.",
                  "흔한 돌에 조각을 섞어 넣으면 더는 흔하지 않게 된다. 심지가 기름을 빨아들이듯 오라를 머금는다. 이 기예에서 값나가는 구조물이 하나같이 이것으로 지어지는 이유다."},
+                {"crucible", "Crucible", "도가니",
+                 "A pot of water kept over a fire. Anything dropped into it comes apart into what it is made of, and once the right things are floating in the water, one last thing thrown in boils the lot into something new.",
+                 "불 위에 올려 둔 물 냄비. 떨어뜨린 것은 무엇이든 제 본바탕으로 풀어지고, 물에 알맞은 것들이 떠 있게 되면 마지막 하나를 던져 넣어 전부를 새것으로 끓여낸다."},
+                {"metallurgy", "Metallurgy", "야금",
+                 "Iron does not want to be anything else, and a crucible is how you argue with it. Steeped in earth and order it comes out alchemium; in energy and water, brass.",
+                 "철은 다른 것이 되기를 원하지 않으며, 도가니는 그와 다투는 방법이다. 땅과 질서에 담그면 알케미움으로, 힘과 물에 담그면 황동으로 나온다."},
                 {"warp", "Warp", "뒤틀림",
                  "Look too long into what should not be, and it begins looking back. The damage is not to the world but to the one studying it, and it does not undo itself with rest.",
                  "있어서는 안 될 것을 오래 들여다보면, 그것도 당신을 들여다보기 시작한다. 상하는 것은 세계가 아니라 그것을 연구하는 자이며, 쉰다고 해서 되돌아오지 않는다."},

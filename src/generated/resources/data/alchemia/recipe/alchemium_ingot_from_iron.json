@@ -1,0 +1,15 @@
+{
+  "type": "alchemia:crucible",
+  "aspects": {
+    "alchemia:ordo": 2,
+    "alchemia:terra": 2
+  },
+  "catalyst": {
+    "tag": "c:ingots/iron"
+  },
+  "research": "alchemia:metallurgy",
+  "result": {
+    "count": 1,
+    "id": "alchemia:alchemium_ingot"
+  }
+}

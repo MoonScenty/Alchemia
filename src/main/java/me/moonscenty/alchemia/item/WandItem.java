@@ -6,6 +6,7 @@ import me.moonscenty.alchemia.aspect.Aspect;
 import me.moonscenty.alchemia.aspect.AspectList;
 import me.moonscenty.alchemia.aura.AuraHandler;
 import me.moonscenty.alchemia.registry.ModAspects;
+import me.moonscenty.alchemia.registry.ModBlocks;
 import me.moonscenty.alchemia.registry.ModDataComponents;
 import me.moonscenty.alchemia.registry.ModItems;
 import me.moonscenty.alchemia.registry.ModWandParts;
@@ -27,6 +28,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.AbstractCauldronBlock;
 import net.minecraft.world.level.block.Blocks;
 
 /**
@@ -195,25 +197,41 @@ public class WandItem extends Item implements VisHolder {
     // --- what it can be pointed at ------------------------------------------
 
     /**
-     * A shelf of books and a wand make an Alchemonomicon. The shelf is used up doing it, which is the whole cost of
-     * starting down this road.
+     * The two things a wand does to a block it is pointed at.
+     * <p>
+     * A shelf of books becomes an Alchemonomicon, and a cauldron becomes a crucible. Both use up what they are
+     * worked on, which is the whole cost of either: the knowledge and the pot are cheap, and everything after is not.
      */
     @Override
     public InteractionResult useOn(UseOnContext context) {
         Level level = context.getLevel();
         BlockPos pos = context.getClickedPos();
-        if (!level.getBlockState(pos).is(Blocks.BOOKSHELF)) {
-            return InteractionResult.PASS;
+
+        if (level.getBlockState(pos).is(Blocks.BOOKSHELF)) {
+            if (!level.isClientSide) {
+                level.removeBlock(pos, false);
+                drop(level, pos, new ItemStack(ModItems.ALCHEMONOMICON.get()));
+                level.playSound(null, pos, SoundEvents.ILLUSIONER_CAST_SPELL, SoundSource.BLOCKS, 0.7F, 1.4F);
+            }
+            return InteractionResult.sidedSuccess(level.isClientSide);
         }
-        if (!level.isClientSide) {
-            level.removeBlock(pos, false);
-            ItemEntity book = new ItemEntity(level, pos.getX() + 0.5, pos.getY() + 0.3, pos.getZ() + 0.5,
-                    new ItemStack(ModItems.ALCHEMONOMICON.get()));
-            book.setDeltaMovement(0, 0, 0);
-            level.addFreshEntity(book);
-            level.playSound(null, pos, SoundEvents.ILLUSIONER_CAST_SPELL, SoundSource.BLOCKS, 0.7F, 1.4F);
+
+        // any cauldron, full or empty. What was in it is tipped out, as it would be
+        if (level.getBlockState(pos).getBlock() instanceof AbstractCauldronBlock) {
+            if (!level.isClientSide) {
+                level.setBlockAndUpdate(pos, ModBlocks.CRUCIBLE.get().defaultBlockState());
+                level.playSound(null, pos, SoundEvents.ANVIL_USE, SoundSource.BLOCKS, 0.5F, 1.6F);
+            }
+            return InteractionResult.sidedSuccess(level.isClientSide);
         }
-        return InteractionResult.sidedSuccess(level.isClientSide);
+
+        return InteractionResult.PASS;
+    }
+
+    private static void drop(Level level, BlockPos pos, ItemStack stack) {
+        ItemEntity item = new ItemEntity(level, pos.getX() + 0.5, pos.getY() + 0.3, pos.getZ() + 0.5, stack);
+        item.setDeltaMovement(0, 0, 0);
+        level.addFreshEntity(item);
     }
 
     // --- what it says about itself ------------------------------------------

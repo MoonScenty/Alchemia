@@ -1,0 +1,22 @@
+{
+  "category": "alchemia:alchemy",
+  "column": 0,
+  "complexity": 2,
+  "icon": "alchemia:crucible",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.crucible.page"
+    }
+  ],
+  "parents": [
+    "alchemia:wand"
+  ],
+  "requirements": {
+    "alchemia:aqua": 4,
+    "alchemia:ignis": 4,
+    "alchemia:permutatio": 2
+  },
+  "row": 2,
+  "shape": "major"
+}

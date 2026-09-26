@@ -3,9 +3,11 @@ package me.moonscenty.alchemia.block;
 import com.mojang.serialization.MapCodec;
 
 import me.moonscenty.alchemia.block.entity.CrucibleBlockEntity;
+import me.moonscenty.alchemia.registry.ModBlockEntities;
 import me.moonscenty.alchemia.registry.ModTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
@@ -19,6 +21,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -93,9 +97,9 @@ public class CrucibleBlock extends BaseEntityBlock {
         return !below.hasProperty(BlockStateProperties.LIT) || below.getValue(BlockStateProperties.LIT);
     }
 
-    /** Whether the pot is doing anything: wet and hot at once. */
-    public static boolean boiling(BlockGetter level, BlockPos pos, BlockState state) {
-        return state.getValue(LEVEL) > 0 && heated(level, pos);
+    /** Whether the pot is doing anything: wet, and hot enough for long enough. */
+    public static boolean boiling(BlockGetter level, BlockPos pos) {
+        return level.getBlockEntity(pos) instanceof CrucibleBlockEntity crucible && crucible.working();
     }
 
     /**
@@ -109,12 +113,13 @@ public class CrucibleBlock extends BaseEntityBlock {
             Player player, InteractionHand hand, BlockHitResult hit) {
         int filled = state.getValue(LEVEL);
 
+        if (!(level.getBlockEntity(pos) instanceof CrucibleBlockEntity crucible)) {
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        }
+
         if (held.is(Items.WATER_BUCKET) && filled < FULL) {
             if (!level.isClientSide) {
-                level.setBlockAndUpdate(pos, state.setValue(LEVEL, FULL));
-                if (level.getBlockEntity(pos) instanceof CrucibleBlockEntity crucible) {
-                    crucible.empty();
-                }
+                crucible.fill();
                 if (!player.getAbilities().instabuild) {
                     player.setItemInHand(hand, new ItemStack(Items.BUCKET));
                 }
@@ -125,10 +130,7 @@ public class CrucibleBlock extends BaseEntityBlock {
 
         if (held.is(Items.BUCKET) && filled == FULL) {
             if (!level.isClientSide) {
-                level.setBlockAndUpdate(pos, state.setValue(LEVEL, 0));
-                if (level.getBlockEntity(pos) instanceof CrucibleBlockEntity crucible) {
-                    crucible.empty();
-                }
+                crucible.drain();
                 if (!player.getAbilities().instabuild) {
                     held.shrink(1);
                     player.getInventory().placeItemBackInInventory(new ItemStack(Items.WATER_BUCKET));
@@ -148,16 +150,32 @@ public class CrucibleBlock extends BaseEntityBlock {
     }
 
     @Override
-    protected void randomTick(BlockState state, net.minecraft.server.level.ServerLevel level, BlockPos pos,
-            RandomSource random) {
-        if (level.isRainingAt(pos.above()) && random.nextFloat() < 0.05F && !heated(level, pos)) {
-            level.setBlockAndUpdate(pos, state.setValue(LEVEL, state.getValue(LEVEL) + 1));
+    protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+        if (level.isRainingAt(pos.above()) && random.nextFloat() < 0.05F && !heated(level, pos)
+                && level.getBlockEntity(pos) instanceof CrucibleBlockEntity crucible) {
+            crucible.fill();
         }
+    }
+
+    /** A pot broken with something in it lets it all go into the air at once. */
+    @Override
+    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState replacement, boolean moving) {
+        if (!state.is(replacement.getBlock()) && level.getBlockEntity(pos) instanceof CrucibleBlockEntity crucible) {
+            crucible.spillAll();
+        }
+        super.onRemove(state, level, pos, replacement, moving);
+    }
+
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state,
+            BlockEntityType<T> type) {
+        return level.isClientSide ? null
+                : createTickerHelper(type, ModBlockEntities.CRUCIBLE.get(), CrucibleBlockEntity::tick);
     }
 
     @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
-        if (!boiling(level, pos, state)) {
+        if (!boiling(level, pos)) {
             return;
         }
         double top = pos.getY() + 0.3 + state.getValue(LEVEL) * 0.22;

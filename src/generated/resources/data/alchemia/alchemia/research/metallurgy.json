@@ -1,0 +1,29 @@
+{
+  "category": "alchemia:alchemy",
+  "column": -1,
+  "complexity": 3,
+  "icon": "alchemia:alchemium_ingot",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.metallurgy.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:alchemium_ingot_from_iron"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:brass_ingot_from_iron"
+    }
+  ],
+  "parents": [
+    "alchemia:crucible"
+  ],
+  "requirements": {
+    "alchemia:ignis": 2,
+    "alchemia:metallum": 6,
+    "alchemia:permutatio": 4
+  },
+  "row": 3
+}

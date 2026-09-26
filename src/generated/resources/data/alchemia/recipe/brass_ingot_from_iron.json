@@ -1,0 +1,15 @@
+{
+  "type": "alchemia:crucible",
+  "aspects": {
+    "alchemia:aqua": 1,
+    "alchemia:potentia": 1
+  },
+  "catalyst": {
+    "tag": "c:ingots/iron"
+  },
+  "research": "alchemia:metallurgy",
+  "result": {
+    "count": 1,
+    "id": "alchemia:brass_ingot"
+  }
+}

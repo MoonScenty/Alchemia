@@ -31,6 +31,12 @@ public class ModRecipes {
     public static final DeferredHolder<RecipeSerializer<?>, ArcaneWandRecipe.Serializer> ARCANE_WAND =
             SERIALIZERS.register("arcane_wand", ArcaneWandRecipe.Serializer::new);
 
+    public static final DeferredHolder<RecipeType<?>, RecipeType<CrucibleRecipe>> CRUCIBLE =
+            TYPES.register("crucible", () -> RecipeType.<CrucibleRecipe>simple(Alchemia.id("crucible")));
+
+    public static final DeferredHolder<RecipeSerializer<?>, CrucibleRecipe.Serializer> CRUCIBLE_SERIALIZER =
+            SERIALIZERS.register("crucible", CrucibleRecipe.Serializer::new);
+
     private ModRecipes() {
     }
 }

@@ -6,6 +6,7 @@ import java.util.Map;
 
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.crafting.ArcaneShapedRecipe;
+import me.moonscenty.alchemia.crafting.CrucibleRecipe;
 import me.moonscenty.alchemia.aspect.AspectList;
 import me.moonscenty.alchemia.crafting.ArcaneWandRecipe;
 import me.moonscenty.alchemia.registry.ModBlocks;
@@ -64,6 +65,7 @@ public class ModRecipeProvider extends RecipeProvider {
 
         wand(output);
         arcane(output);
+        crucible(output);
 
         // arcane stone itself is shaped on the arcane workbench; these are what it is worked into afterwards
         quadrupleFrom(output, ModBlocks.ARCANE_STONE_BRICKS.block(), ModBlocks.ARCANE_STONE.block());
@@ -257,5 +259,27 @@ public class ModRecipeProvider extends RecipeProvider {
         output.accept(Alchemia.id(name),
                 new ArcaneShapedRecipe("", ShapedRecipePattern.of(key, pattern), result, cost, Optional.empty()),
                 null);
+    }
+
+    /**
+     * What is boiled out of a crucible.
+     * <p>
+     * A crucible recipe is not a shape but a state: what has to be dissolved in the water already, and the one
+     * thing thrown in afterwards to finish it. The thing thrown in is used up either way, so an iron ingot dropped
+     * into a pot that is not ready simply comes apart into what iron is made of.
+     */
+    private void crucible(RecipeOutput output) {
+        crucible(output, "alchemium_ingot_from_iron", Ingredient.of(Tags.Items.INGOTS_IRON),
+                AspectList.of(ModAspects.EARTH, 2).add(ModAspects.ORDER, 2),
+                new ItemStack(ModItems.ALCHEMIUM_INGOT.get()), "metallurgy");
+        crucible(output, "brass_ingot_from_iron", Ingredient.of(Tags.Items.INGOTS_IRON),
+                AspectList.of(ModAspects.ENERGY, 1).add(ModAspects.WATER, 1),
+                new ItemStack(ModItems.BRASS_INGOT.get()), "metallurgy");
+    }
+
+    private void crucible(RecipeOutput output, String name, Ingredient catalyst, AspectList aspects,
+            ItemStack result, String research) {
+        output.accept(Alchemia.id(name),
+                new CrucibleRecipe(catalyst, aspects, result, Optional.of(Alchemia.id(research))), null);
     }
 }
