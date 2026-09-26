@@ -88,7 +88,14 @@ public class AspectOverlay {
         graphics.pose().popPose();
     }
 
+    /**
+     * Blending is turned on again for every icon, not once for the list: the count drawn beside the last one ends
+     * the font's batch, and that puts blending back off. Without this the first icon fades at its edge and the rest
+     * come out as hard discs.
+     */
     private static void drawIcon(GuiGraphics graphics, Aspect aspect, int x, int y) {
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
         graphics.setColor(0.1F, 0.1F, 0.1F, 0.65F);
         graphics.blit(BACKGROUND, x - 1, y - 1, 0, 0, ICON + 2, ICON + 2, ICON + 2, ICON + 2);
 
@@ -99,6 +106,8 @@ public class AspectOverlay {
     }
 
     private static void drawUnknown(GuiGraphics graphics, int x, int y) {
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
         graphics.setColor(0.1F, 0.1F, 0.1F, 0.65F);
         graphics.blit(BACKGROUND, x - 1, y - 1, 0, 0, ICON + 2, ICON + 2, ICON + 2, ICON + 2);
         graphics.setColor(0.55F, 0.55F, 0.6F, 1F);
