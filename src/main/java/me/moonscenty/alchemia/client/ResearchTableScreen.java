@@ -1,7 +1,9 @@
 package me.moonscenty.alchemia.client;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -15,12 +17,15 @@ import me.moonscenty.alchemia.research.NoteSolving;
 import me.moonscenty.alchemia.research.ResearchEntry;
 import me.moonscenty.alchemia.research.ResearchNote;
 import net.minecraft.ChatFormatting;
+import com.mojang.blaze3d.systems.RenderSystem;
+
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Inventory;
 import net.neoforged.neoforge.network.PacketDistributor;
 
@@ -32,6 +37,8 @@ import net.neoforged.neoforge.network.PacketDistributor;
  */
 public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMenu> {
     private static final ResourceLocation PANEL = Alchemia.id("textures/gui/research_table.png");
+    /** The letters that settle on the leather while the reader works; see thaumref/tools/gen_script.py. */
+    private static final ResourceLocation SCRIPT = Alchemia.id("textures/misc/script.png");
     /**
      * Cell plates exist at these widths and are only ever drawn at one of them.
      * <p>
@@ -95,12 +102,34 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
 
     private static final int ICON = 16;
 
+    // The script that settles on the leather. It says nothing: it is there so the page looks written on rather
+    // than blank, and so the empty half of a torn board is not simply dead space.
+    private static final int LETTERS = 24;
+    private static final int LETTER = 16;
+    /** How often another letter is tried for, and how far out one may land. */
+    private static final long SETTLES = 250L;
+    private static final int SPAN = 7;
+    /** A letter lasts somewhere in here, then is gone. */
+    private static final long LASTS = 15_000L;
+    private static final long LASTS_UP_TO = 10_000L;
+    /** How dark a letter ever gets. Faint enough to read the board straight through it. */
+    private static final float FAINTEST = 0.33F;
+
     /** What the reader has picked up and is about to write down. */
     private Holder<Aspect> held;
     private Holder<Aspect> dishA;
     private Holder<Aspect> dishB;
     /** Which page of the rack is showing. Clamped every time it is read, since the sheet's stock grows as it mixes. */
     private int page;
+
+    /** A letter on the leather, and when it settled and when it will have gone. */
+    private record Rune(long born, long gone, int letter) {
+    }
+
+    private final Map<HexGrid.Hex, Rune> runes = new HashMap<>();
+    private final RandomSource random = RandomSource.create();
+    private long nextRune;
+    private ResourceLocation written;
 
     public ResearchTableScreen(ResearchTableMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);
@@ -199,6 +228,7 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
         // clipped to the leather, so nothing can ever creep onto the boards around it
         graphics.enableScissor(leftPos + BOARD_X, topPos + BOARD_Y,
                 leftPos + BOARD_X + BOARD_W, topPos + BOARD_Y + BOARD_H);
+        drawScript(graphics, note, layout);
         for (ResearchNote.Cell cell : note.cells()) {
             int x = layout.x(cell.at());
             int y = layout.y(cell.at());
@@ -211,6 +241,72 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
                     drawAspect(graphics, aspect, x + (size - ICON) / 2, y + (size - ICON) / 2));
         }
         graphics.disableScissor();
+    }
+
+    // --- the script on the leather -----------------------------------------
+
+    /**
+     * Letters settling on the empty parts of the leather and fading off again.
+     * <p>
+     * They spell nothing and mean nothing. A note is torn out of a ring, so most boards leave a good deal of bare
+     * leather around them, and this is what keeps that from reading as a blank page.
+     * <p>
+     * They land on the board's own grid rather than anywhere at all, which keeps them out from under the cells and
+     * lines them up with what is written.
+     */
+    private void drawScript(GuiGraphics graphics, ResearchNote note, Layout layout) {
+        if (!note.research().equals(written)) {
+            // a different note is a different page; what settled on the last one does not carry over
+            runes.clear();
+            written = note.research();
+        }
+        long now = System.currentTimeMillis();
+        settle(note, layout, now);
+
+        // left on afterwards: what is drawn next is the cells and the aspects, which are alpha the whole way through
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        runes.values().removeIf(rune -> rune.gone() <= now);
+        for (Map.Entry<HexGrid.Hex, Rune> entry : runes.entrySet()) {
+            Rune rune = entry.getValue();
+            float through = (float) (now - rune.born()) / (rune.gone() - rune.born());
+            // up over the first quarter, held, then away over the last half
+            float alpha = through < 0.25F ? through * 2F : through > 0.5F ? 1F - through : 0.5F;
+
+            graphics.setColor(0F, 0F, 0F, alpha * FAINTEST);
+            graphics.blit(SCRIPT, letterX(layout, entry.getKey()), letterY(layout, entry.getKey()),
+                    rune.letter() * LETTER, 0, LETTER, LETTER, LETTERS * LETTER, LETTER);
+        }
+        graphics.setColor(1F, 1F, 1F, 1F);
+    }
+
+    /** Tries to put one more letter down. Nothing happens most of the time, which is what makes them drift in. */
+    private void settle(ResearchNote note, Layout layout, long now) {
+        if (now < nextRune) {
+            return;
+        }
+        nextRune = now + SETTLES;
+
+        HexGrid.Hex at = new HexGrid.Hex(random.nextInt(2 * SPAN + 1) - SPAN, random.nextInt(2 * SPAN + 1) - SPAN);
+        if (runes.containsKey(at) || note.cellAt(at).isPresent()) {
+            return;
+        }
+        int x = letterX(layout, at);
+        int y = letterY(layout, at);
+        // whole letters only: a half one sliced off by the scissor would read as a smudge on the frame
+        if (x < leftPos + BOARD_X || x + LETTER > leftPos + BOARD_X + BOARD_W
+                || y < topPos + BOARD_Y || y + LETTER > topPos + BOARD_Y + BOARD_H) {
+            return;
+        }
+        runes.put(at, new Rune(now, now + LASTS + random.nextInt((int) LASTS_UP_TO), random.nextInt(LETTERS)));
+    }
+
+    private int letterX(Layout layout, HexGrid.Hex at) {
+        return layout.x(at) + (layout.size() - LETTER) / 2;
+    }
+
+    private int letterY(Layout layout, HexGrid.Hex at) {
+        return layout.y(at) + (layout.size() - LETTER) / 2;
     }
 
     /** The cell the pointer is over, if any. */
