@@ -1,6 +1,7 @@
 package me.moonscenty.alchemia.gametest;
 
 import me.moonscenty.alchemia.Alchemia;
+import io.netty.buffer.Unpooled;
 import me.moonscenty.alchemia.aspect.AspectList;
 import me.moonscenty.alchemia.aura.AuraHandler;
 import me.moonscenty.alchemia.item.WandItem;
@@ -11,9 +12,12 @@ import me.moonscenty.alchemia.wand.WandCap;
 import me.moonscenty.alchemia.wand.WandRod;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
@@ -77,6 +81,26 @@ public class WandTests {
         helper.assertTrue(drawn > 0, "there was fire to be had");
         helper.assertValueEqual(AuraHandler.get(helper.getLevel(), where, ModAspects.FIRE),
                 before - drawn, "what the wand took is what the chunk lost");
+        helper.succeed();
+    }
+
+    /**
+     * The recipe that puts a wand together has to survive being sent to a client.
+     * <p>
+     * It carries nothing, so it is written with a codec that sends no bytes at all — but that codec refuses to
+     * write anything that is not the very value it was built around, and the recipe read back out of the file is a
+     * different object. Every one of these has to count as the same one, or joining a world throws.
+     */
+    @GameTest(template = TEMPLATE)
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    public static void theWandRecipeSurvivesBeingSent(GameTestHelper helper) {
+        RecipeHolder<?> found = helper.getLevel().getRecipeManager()
+                .byKey(Alchemia.id("arcane_wand")).orElse(null);
+        helper.assertTrue(found != null, "the bench knows how to put a wand together");
+
+        RegistryFriendlyByteBuf buffer =
+                new RegistryFriendlyByteBuf(Unpooled.buffer(), helper.getLevel().registryAccess());
+        ((StreamCodec) found.value().getSerializer().streamCodec()).encode(buffer, found.value());
         helper.succeed();
     }
 }
