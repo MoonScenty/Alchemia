@@ -73,6 +73,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         addItem(ModItems.NODE_PLACER, pick("Node Placer", "노드 배치기"));
         add("item.alchemia.creative_only", pick("Creative only", "크리에이티브 전용"));
         addBlock(ModBlocks.RESEARCH_TABLE, pick("Research Table", "연구 탁자"));
+        addBlock(ModBlocks.CRUCIBLE, pick("Crucible", "도가니"));
         addBlock(ModBlocks.ARCANE_WORKBENCH, pick("Arcane Workbench", "비전 작업대"));
         addBlock(ModBlocks.ARCANE_WORKBENCH_CHARGER, pick("Arcane Workbench Charger", "비전 작업대 충전기"));
 

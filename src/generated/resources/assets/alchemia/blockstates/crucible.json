@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "level=0": {
+      "model": "alchemia:block/crucible"
+    },
+    "level=1": {
+      "model": "alchemia:block/crucible_level1"
+    },
+    "level=2": {
+      "model": "alchemia:block/crucible_level2"
+    },
+    "level=3": {
+      "model": "alchemia:block/crucible_full"
+    }
+  }
+}

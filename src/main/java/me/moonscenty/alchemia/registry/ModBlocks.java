@@ -10,6 +10,7 @@ import java.util.function.Supplier;
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.block.ArcaneWorkbenchBlock;
 import me.moonscenty.alchemia.block.ArcaneWorkbenchChargerBlock;
+import me.moonscenty.alchemia.block.CrucibleBlock;
 import me.moonscenty.alchemia.block.CrystalBlock;
 import me.moonscenty.alchemia.block.CrystalType;
 import me.moonscenty.alchemia.block.NodeStabilizerBlock;
@@ -66,6 +67,11 @@ public class ModBlocks {
     public static final DeferredBlock<ArcaneWorkbenchBlock> ARCANE_WORKBENCH = register("arcane_workbench",
             () -> new ArcaneWorkbenchBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CRAFTING_TABLE)
                     .mapColor(MapColor.COLOR_BROWN)
+                    .noOcclusion()));
+
+    public static final DeferredBlock<CrucibleBlock> CRUCIBLE = register("crucible",
+            () -> new CrucibleBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CAULDRON)
+                    .mapColor(MapColor.METAL)
                     .noOcclusion()));
 
     /** Stands on top of a workbench and fills the wand left on it. */

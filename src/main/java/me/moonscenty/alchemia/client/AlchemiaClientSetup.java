@@ -1,6 +1,8 @@
 package me.moonscenty.alchemia.client;
 
 
+import me.moonscenty.alchemia.block.entity.CrucibleBlockEntity;
+import me.moonscenty.alchemia.registry.ModBlocks;
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.registry.ModWandParts;
 import me.moonscenty.alchemia.registry.ModItems;
@@ -18,6 +20,7 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraft.client.renderer.entity.NoopRenderer;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.ModelEvent;
+import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 
 /** Client-side wiring: extra models to bake, and who draws what. */
@@ -43,6 +46,24 @@ public class AlchemiaClientSetup {
     public static void registerScreens(RegisterMenuScreensEvent event) {
         event.register(ModMenus.RESEARCH_TABLE.get(), ResearchTableScreen::new);
         event.register(ModMenus.ARCANE_WORKBENCH.get(), ArcaneWorkbenchScreen::new);
+    }
+
+    /**
+     * What colour the water in a crucible reads as.
+     * <p>
+     * The model's liquid face carries a tint index, and this is what fills it in. A pot that has had nothing thrown
+     * in it is plain water; after that it drifts towards whatever is dissolved, so what is in the pot can be read
+     * across a room without opening anything.
+     */
+    @SubscribeEvent
+    public static void registerBlockColours(RegisterColorHandlersEvent.Block event) {
+        event.register((state, level, pos, tint) -> {
+            if (level != null && pos != null
+                    && level.getBlockEntity(pos) instanceof CrucibleBlockEntity crucible) {
+                return crucible.colour();
+            }
+            return 0x3F76E4;
+        }, ModBlocks.CRUCIBLE.get());
     }
 
     @SubscribeEvent

@@ -24,6 +24,9 @@ public class ModTags {
         public static final TagKey<Block> TAINT_ROTS_TO_ROCK = mod("taint_rots_to_rock");
         public static final TagKey<Block> TAINT_ROTS_TO_CRUST = mod("taint_rots_to_crust");
 
+        /** What counts as a fire under a crucible. Anything with a light to it only counts while it is lit. */
+        public static final TagKey<Block> HEATS_CRUCIBLE = mod("heats_crucible");
+
         public static final TagKey<Block> ORES_AMBER = common("ores/amber");
         public static final TagKey<Block> ORES_CINNABAR = common("ores/cinnabar");
 

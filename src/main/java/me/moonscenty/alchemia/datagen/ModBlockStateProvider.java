@@ -6,6 +6,7 @@ import me.moonscenty.alchemia.block.ResearchTableBlock;
 import me.moonscenty.alchemia.block.taint.FluxGooBlock;
 import me.moonscenty.alchemia.block.taint.TaintFibreBlock;
 import me.moonscenty.alchemia.block.taint.TaintLogBlock;
+import me.moonscenty.alchemia.block.CrucibleBlock;
 import me.moonscenty.alchemia.registry.ModBlocks;
 import me.moonscenty.alchemia.registry.StoneSet;
 import me.moonscenty.alchemia.registry.WoodSet;
@@ -41,6 +42,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         ModBlocks.PLANTS.forEach(this::plant);
 
         researchTable();
+        crucible();
         arcaneWorkbench();
         arcaneWorkbenchCharger();
         nodeStabilizer();
@@ -142,6 +144,38 @@ public class ModBlockStateProvider extends BlockStateProvider {
         builder.part().modelFile(sproutOne).addModel().condition(TaintFibreBlock.GROWTH, 1, 3).end();
         builder.part().modelFile(sproutTwo).addModel().condition(TaintFibreBlock.GROWTH, 2).end();
         builder.part().modelFile(sproutTwo).rotationX(180).addModel().condition(TaintFibreBlock.GROWTH, TaintFibreBlock.HANGING).end();
+    }
+
+    /**
+     * The pot, dry and then at each of its three depths.
+     * <p>
+     * Built on vanilla's cauldron models rather than drawn again: they already have the shape and, for the wet
+     * ones, the liquid face with a tint on it. Only the pictures are ours, and the liquid takes its colour from
+     * what is dissolved in the pot rather than from the water texture.
+     */
+    private void crucible() {
+        ModelFile dry = crucibleModel("crucible", "block/cauldron", false);
+        ModelFile[] wet = {
+                crucibleModel("crucible_level1", "block/template_cauldron_level1", true),
+                crucibleModel("crucible_level2", "block/template_cauldron_level2", true),
+                crucibleModel("crucible_full", "block/template_cauldron_full", true),
+        };
+        getVariantBuilder(ModBlocks.CRUCIBLE.get()).forAllStates(state -> {
+            int filled = state.getValue(CrucibleBlock.LEVEL);
+            return ConfiguredModel.builder()
+                    .modelFile(filled == 0 ? dry : wet[filled - 1])
+                    .build();
+        });
+    }
+
+    private ModelFile crucibleModel(String name, String parent, boolean wet) {
+        var model = models().withExistingParent(name, mcLoc(parent))
+                .texture("particle", modLoc("block/crucible_side"))
+                .texture("top", modLoc("block/crucible_top"))
+                .texture("side", modLoc("block/crucible_side"))
+                .texture("bottom", modLoc("block/crucible_bottom"))
+                .texture("inside", modLoc("block/crucible_inner"));
+        return wet ? model.texture("content", mcLoc("block/water_still")) : model;
     }
 
     /** Drawn from a model made in Blockbench, so the blockstate only has to point at it. */

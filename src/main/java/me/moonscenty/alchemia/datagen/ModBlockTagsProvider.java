@@ -40,7 +40,14 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
                 .addTag(ModTags.Blocks.STORAGE_BLOCKS_BRASS)
                 .addTag(ModTags.Blocks.ORES_AMBER)
                 .addTag(ModTags.Blocks.ORES_CINNABAR)
-                .addTag(ModTags.Blocks.CRYSTALS);
+                .addTag(ModTags.Blocks.CRYSTALS)
+                .add(ModBlocks.CRUCIBLE.get());
+
+        // what counts as a fire under a crucible. Anything with a lit state is only counted while it is lit,
+        // which the block asks about itself, since a tag cannot say it.
+        tag(ModTags.Blocks.HEATS_CRUCIBLE).add(
+                Blocks.FIRE, Blocks.SOUL_FIRE, Blocks.LAVA, Blocks.MAGMA_BLOCK,
+                Blocks.CAMPFIRE, Blocks.SOUL_CAMPFIRE);
         tag(BlockTags.NEEDS_STONE_TOOL)
                 .addTag(ModTags.Blocks.ORES_AMBER)
                 .addTag(ModTags.Blocks.STORAGE_BLOCKS_ALCHEMIUM)

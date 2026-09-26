@@ -3,6 +3,7 @@ package me.moonscenty.alchemia.registry;
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.block.entity.ArcaneWorkbenchBlockEntity;
 import me.moonscenty.alchemia.block.entity.ArcaneWorkbenchChargerBlockEntity;
+import me.moonscenty.alchemia.block.entity.CrucibleBlockEntity;
 import me.moonscenty.alchemia.block.entity.NodeStabilizerBlockEntity;
 import me.moonscenty.alchemia.block.entity.ResearchTableBlockEntity;
 import net.minecraft.core.registries.Registries;
@@ -34,6 +35,11 @@ public class ModBlockEntities {
                     () -> BlockEntityType.Builder
                             .of(ArcaneWorkbenchChargerBlockEntity::new, ModBlocks.ARCANE_WORKBENCH_CHARGER.get())
                             .build(null));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<CrucibleBlockEntity>> CRUCIBLE =
+            BLOCK_ENTITIES.register("crucible", () -> BlockEntityType.Builder
+                    .of(CrucibleBlockEntity::new, ModBlocks.CRUCIBLE.get())
+                    .build(null));
 
     private ModBlockEntities() {
     }

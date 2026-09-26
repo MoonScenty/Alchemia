@@ -27,6 +27,7 @@ public class ModItemModelProvider extends ItemModelProvider {
     protected void registerModels() {
         wands();
         // shown in hand and on the ground with its arms, which the placed block draws separately
+        withExistingParent("crucible", modLoc("block/crucible"));
         withExistingParent("arcane_workbench", modLoc("block/arcane_workbench"));
         withExistingParent("arcane_workbench_charger", modLoc("block/charger/item"));
         withExistingParent("node_stabilizer", modLoc("block/node_stabilizer/item"));
