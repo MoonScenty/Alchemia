@@ -73,6 +73,33 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         addItem(ModItems.NODE_PLACER, pick("Node Placer", "노드 배치기"));
         add("item.alchemia.creative_only", pick("Creative only", "크리에이티브 전용"));
         addBlock(ModBlocks.RESEARCH_TABLE, pick("Research Table", "연구 탁자"));
+        addBlock(ModBlocks.ARCANE_WORKBENCH, pick("Arcane Workbench", "비전 작업대"));
+        addBlock(ModBlocks.ARCANE_WORKBENCH_CHARGER, pick("Arcane Workbench Charger", "비전 작업대 충전기"));
+
+        // the wand and the pieces it is put together from
+        add("item.alchemia.wand", pick("Wand", "완드"));
+        add("item.alchemia.wand.named", pick("%s Capped %s Wand", "%s 씌운 %s 완드"));
+        add("item.alchemia.wand.vis", pick("%s %s / %s", "%s %s / %s"));
+        add("item.alchemia.wand.charge", pick("Draws %s faster", "%s만큼 빨리 채워짐"));
+        add("item.alchemia.wand.discount", pick("Spends %s%% more", "%s%% 더 씀"));
+        addWandRod("wood", "Wooden", "나무");
+        addWandRod("greatwood", "Greatwood", "거대나무");
+        addWandRod("silverwood", "Silverwood", "은빛나무");
+        addWandRod("reed", "Reed", "갈대");
+        addWandRod("obsidian", "Obsidian", "흑요석");
+        addWandRod("blaze", "Blaze", "블레이즈");
+        addWandRod("ice", "Ice", "얼음");
+        addWandRod("quartz", "Quartz", "석영");
+        addWandRod("bone", "Bone", "뼈");
+        addWandCap("iron", "Iron", "철");
+        addWandCap("gold", "Gold", "금");
+        addWandCap("brass", "Brass", "황동");
+        addWandCap("alchemium", "Alchemium", "알케미움");
+        addWandCap("void", "Void", "공허");
+        add("gui.alchemia.vis_cost", pick("%s of %s", "%s / %s"));
+        add("gui.alchemia.no_wand", pick("A wand must be laid on the bench", "작업대에 완드를 올려야 한다"));
+        add("gui.alchemia.not_enough_vis", pick("The wand does not hold enough", "완드에 든 것이 모자라다"));
+        add("gui.alchemia.not_researched", pick("You do not know how this is made", "만드는 법을 아직 모른다"));
         addItem(ModItems.SCRIBING_TOOLS, pick("Scribing Tools", "필기구"));
         addItem(ModItems.RESEARCH_NOTES, pick("Research Notes", "연구 노트"));
         addItem(ModItems.ALCHEMONOMICON, pick("Alchemonomicon", "알케모노미콘"));
@@ -302,5 +329,18 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         protected String pick(String english, String korean) {
             return korean;
         }
+    }
+
+    /** A rod, and the cap item made of the same metal, both named after the stuff they are made of. */
+    private void addWandRod(String rod, String english, String korean) {
+        add("wand_rod.alchemia." + rod, pick(english, korean));
+        if (!rod.equals("wood")) {
+            add("item.alchemia.wand_rod_" + rod, pick(english + " Wand Rod", korean + " 완드 막대"));
+        }
+    }
+
+    private void addWandCap(String cap, String english, String korean) {
+        add("wand_cap.alchemia." + cap, pick(english, korean));
+        add("item.alchemia.wand_cap_" + cap, pick(english + " Wand Cap", korean + " 완드 캡"));
     }
 }

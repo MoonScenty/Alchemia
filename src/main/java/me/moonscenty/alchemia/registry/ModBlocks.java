@@ -8,6 +8,8 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 import me.moonscenty.alchemia.Alchemia;
+import me.moonscenty.alchemia.block.ArcaneWorkbenchBlock;
+import me.moonscenty.alchemia.block.ArcaneWorkbenchChargerBlock;
 import me.moonscenty.alchemia.block.CrystalBlock;
 import me.moonscenty.alchemia.block.CrystalType;
 import me.moonscenty.alchemia.block.NodeStabilizerBlock;
@@ -60,6 +62,19 @@ public class ModBlocks {
             () -> new ResearchTableBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_PLANKS)
                     .mapColor(MapColor.COLOR_BROWN)
                     .noOcclusion()));
+
+    public static final DeferredBlock<ArcaneWorkbenchBlock> ARCANE_WORKBENCH = register("arcane_workbench",
+            () -> new ArcaneWorkbenchBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CRAFTING_TABLE)
+                    .mapColor(MapColor.COLOR_BROWN)
+                    .noOcclusion()));
+
+    /** Stands on top of a workbench and fills the wand left on it. */
+    public static final DeferredBlock<ArcaneWorkbenchChargerBlock> ARCANE_WORKBENCH_CHARGER =
+            register("arcane_workbench_charger",
+                    () -> new ArcaneWorkbenchChargerBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_PLANKS)
+                            .mapColor(MapColor.COLOR_BROWN)
+                            .lightLevel(state -> 6)
+                            .noOcclusion()));
 
     public static final DeferredBlock<NodeStabilizerBlock> NODE_STABILIZER = register("node_stabilizer",
             () -> new NodeStabilizerBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS)

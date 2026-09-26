@@ -41,6 +41,8 @@ public class ModBlockStateProvider extends BlockStateProvider {
         ModBlocks.PLANTS.forEach(this::plant);
 
         researchTable();
+        arcaneWorkbench();
+        arcaneWorkbenchCharger();
         nodeStabilizer();
         taint();
 
@@ -140,6 +142,17 @@ public class ModBlockStateProvider extends BlockStateProvider {
         builder.part().modelFile(sproutOne).addModel().condition(TaintFibreBlock.GROWTH, 1, 3).end();
         builder.part().modelFile(sproutTwo).addModel().condition(TaintFibreBlock.GROWTH, 2).end();
         builder.part().modelFile(sproutTwo).rotationX(180).addModel().condition(TaintFibreBlock.GROWTH, TaintFibreBlock.HANGING).end();
+    }
+
+    /** Drawn from a model made in Blockbench, so the blockstate only has to point at it. */
+    private void arcaneWorkbench() {
+        simpleBlock(ModBlocks.ARCANE_WORKBENCH.get(), models().getExistingFile(modLoc("block/arcane_workbench")));
+    }
+
+    /** Four posts and a crystal, built into one obj by thaumref/tools/gen_charger.py. */
+    private void arcaneWorkbenchCharger() {
+        simpleBlock(ModBlocks.ARCANE_WORKBENCH_CHARGER.get(),
+                models().getExistingFile(modLoc("block/charger/block")));
     }
 
     /** Built from an obj rather than a cube, so the blockstate only has to point at it. */

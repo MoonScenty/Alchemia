@@ -1,6 +1,8 @@
 {
   "values": [
     "alchemia:research_table",
+    "alchemia:arcane_workbench",
+    "alchemia:arcane_workbench_charger",
     "alchemia:taint_log"
   ]
 }

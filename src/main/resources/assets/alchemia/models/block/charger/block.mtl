@@ -1,0 +1,5 @@
+# Built by thaumref/tools/gen_charger.py
+newmtl wood
+newmtl band
+newmtl crystal
+newmtl stone

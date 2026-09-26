@@ -5,6 +5,7 @@ import java.util.EnumMap;
 import java.util.Map;
 
 import me.moonscenty.alchemia.Alchemia;
+import me.moonscenty.alchemia.item.WandItem;
 import me.moonscenty.alchemia.block.CrystalType;
 import me.moonscenty.alchemia.item.AlchemonomiconItem;
 import me.moonscenty.alchemia.item.NodePlacerItem;
@@ -40,6 +41,16 @@ public class ModItems {
     public static final DeferredItem<Item> ALCHEMONOMICON = ITEMS.register("alchemonomicon",
             () -> new AlchemonomiconItem(new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON)));
 
+    /** A wand. What it is made of lives in its components, so there is only ever one item. */
+    public static final DeferredItem<Item> WAND = ITEMS.register("wand",
+            () -> new WandItem(new Item.Properties()));
+
+    /** The metal ends, as they are before they are worked onto a rod. */
+    public static final Map<String, DeferredItem<Item>> WAND_CAPS = registerWandCaps();
+
+    /** The shafts. A plain wooden one is a vanilla stick, so it is not in here. */
+    public static final Map<String, DeferredItem<Item>> WAND_RODS = registerWandRods();
+
     public static final Map<CrystalType, DeferredItem<Item>> SHARDS = registerShards();
     public static final DeferredItem<Item> BALANCED_SHARD = ITEMS.registerSimpleItem("balanced_shard");
 
@@ -60,6 +71,28 @@ public class ModItems {
     public static final DeferredItem<Item> BRASS_PLATE = ITEMS.registerSimpleItem("brass_plate");
     public static final DeferredItem<Item> IRON_PLATE = ITEMS.registerSimpleItem("iron_plate");
     public static final DeferredItem<Item> SALIS_MUNDUS = ITEMS.registerSimpleItem("salis_mundus");
+
+    /**
+     * One item to a rod, wearing the same picture the wand wears. The rod sprites were drawn to serve as both, so
+     * a rod in the hand looks like the rod on the wand rather than like a swatch of what it is made of.
+     */
+    private static Map<String, DeferredItem<Item>> registerWandRods() {
+        Map<String, DeferredItem<Item>> rods = new java.util.LinkedHashMap<>();
+        for (String stuff : new String[] {"greatwood", "silverwood", "reed", "obsidian",
+                "blaze", "ice", "quartz", "bone"}) {
+            rods.put(stuff, ITEMS.registerSimpleItem("wand_rod_" + stuff));
+        }
+        return rods;
+    }
+
+    /** One item to a cap. */
+    private static Map<String, DeferredItem<Item>> registerWandCaps() {
+        Map<String, DeferredItem<Item>> caps = new java.util.LinkedHashMap<>();
+        for (String metal : new String[] {"iron", "gold", "brass", "alchemium", "void"}) {
+            caps.put(metal, ITEMS.registerSimpleItem("wand_cap_" + metal));
+        }
+        return caps;
+    }
 
     private static Map<CrystalType, DeferredItem<Item>> registerShards() {
         Map<CrystalType, DeferredItem<Item>> shards = new EnumMap<>(CrystalType.class);

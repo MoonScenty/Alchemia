@@ -61,6 +61,8 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
             add(set.slab().get(), this::createSlabItemTable);
         }
         dropSelf(ModBlocks.RESEARCH_TABLE.get());
+        dropSelf(ModBlocks.ARCANE_WORKBENCH.get());
+        dropSelf(ModBlocks.ARCANE_WORKBENCH_CHARGER.get());
         dropSelf(ModBlocks.NODE_STABILIZER.get());
 
         // nothing tainted is worth keeping; what the growths gave in the original arrives with those items

@@ -3,6 +3,7 @@ package me.moonscenty.alchemia.datagen;
 import java.util.concurrent.CompletableFuture;
 
 import me.moonscenty.alchemia.Alchemia;
+import me.moonscenty.alchemia.crafting.ArcaneWandRecipe;
 import me.moonscenty.alchemia.registry.ModBlocks;
 import me.moonscenty.alchemia.registry.ModItems;
 import me.moonscenty.alchemia.registry.ModTags;
@@ -17,6 +18,7 @@ import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
+import net.minecraft.data.recipes.SpecialRecipeBuilder;
 import net.minecraft.data.recipes.SingleItemRecipeBuilder;
 import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
 import net.minecraft.tags.TagKey;
@@ -49,6 +51,12 @@ public class ModRecipeProvider extends RecipeProvider {
         plate(output, ModItems.IRON_PLATE, Tags.Items.INGOTS_IRON);
         gear(output, ModItems.ALCHEMIUM_GEAR, ModTags.Items.NUGGETS_ALCHEMIUM);
         gear(output, ModItems.BRASS_GEAR, ModTags.Items.NUGGETS_BRASS);
+
+        // a balanced shard put in a furnace comes out as salis mundus, exactly as in the original
+        cook(output, "salis_mundus", Ingredient.of(ModItems.BALANCED_SHARD), has(ModItems.BALANCED_SHARD),
+                new ItemStack(ModItems.SALIS_MUNDUS.get()));
+
+        wand(output);
 
         // Arcane stone itself is shaped on the arcane workbench, which does not exist yet
         quadrupleFrom(output, ModBlocks.ARCANE_STONE_BRICKS.block(), ModBlocks.ARCANE_STONE.block());
@@ -173,5 +181,37 @@ public class ModRecipeProvider extends RecipeProvider {
         SimpleCookingRecipeBuilder.blasting(input, RecipeCategory.MISC, result, 1.0F, 100)
                 .unlockedBy("has_input", unlockedBy)
                 .save(output, Alchemia.id(name + "_blasting"));
+    }
+
+    /**
+     * The first wand, and the caps it is made with.
+     * <p>
+     * Both are worked at a plain bench, as they were in the original, and they have to be: an arcane workbench takes
+     * its price out of a wand, so the first one cannot be made at one. Every other pairing of rod and cap is put
+     * together at the arcane workbench by {@code alchemia:arcane_wand}, which is written in code because nine rods
+     * against five caps is forty-five results and none of them is worth a file.
+     * <p>
+     * A wand with nothing written on it is a wooden rod with iron caps, so this recipe needs no components: leaving
+     * them off says the same thing and keeps the item stacking with one built at the bench.
+     */
+    private void wand(RecipeOutput output) {
+        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ModItems.WAND_CAPS.get("iron").get())
+                .pattern("NNN")
+                .pattern("N N")
+                .define('N', Tags.Items.NUGGETS_IRON)
+                .unlockedBy("has_nugget", has(Tags.Items.NUGGETS_IRON))
+                .save(output);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ModItems.WAND.get())
+                .pattern("  C")
+                .pattern(" S ")
+                .pattern("C  ")
+                .define('C', ModItems.WAND_CAPS.get("iron").get())
+                .define('S', Tags.Items.RODS_WOODEN)
+                .unlockedBy("has_cap", has(ModItems.WAND_CAPS.get("iron").get()))
+                .save(output);
+
+        SpecialRecipeBuilder.special(category -> new ArcaneWandRecipe())
+                .save(output, Alchemia.id("arcane_wand").toString());
     }
 }
