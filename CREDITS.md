@@ -4,16 +4,20 @@ Alchemia의 **코드**는 [MIT](LICENSE.md)입니다. 아래 에셋은 각자의
 
 ## 상 아이콘 — CC BY 3.0
 
-`assets/alchemia/textures/aspect/`의 상 아이콘 35종은 [game-icons.net](https://game-icons.net)의 **Lorc**가 만든 아이콘입니다.
+`assets/alchemia/textures/aspect/`의 상 아이콘은 [game-icons.net](https://game-icons.net)의 **Lorc**가 만든 아이콘입니다.
 
 - 라이선스: [Creative Commons Attribution 3.0 Unported (CC BY 3.0)](https://creativecommons.org/licenses/by/3.0/)
-- 변경 사항: 32×32로 축소하고 흰색/투명으로 단색화했습니다.
+- 변경 사항: 512×512 원본을 32×32로 단계적으로 축소하고, 밝기를 알파로 옮겨 흰색 마스크로 만들었습니다. 생성기는 `thaumref/tools/gen_aspect_icons.py`.
 
 > Icons made by Lorc. Available on https://game-icons.net
 
-같은 아이콘이 Thaumcraft에도 쓰였습니다. 원작자가 CC BY 3.0으로 공개한 것을 각자 가져다 쓴 것이며, Thaumcraft에서 가져온 것이 아닙니다.
+어느 아이콘이 어느 상인지는 `thaumref/tools/aspect_icon_matches.tsv`에 적어 두었습니다. 다시 뽑을 때 그 표를 보면 됩니다.
 
-`background.png`와 `unknown.png`는 이 저장소에서 직접 만든 것으로 MIT입니다.
+`ignis`·`ordo`·`perditio` 세 종은 그림 자체가 둥글지 않아 **Delapouite**의 `circle` 아이콘을 테두리로 입혔습니다. `vacuos`는 그 `circle` 자체입니다. 같은 CC BY 3.0입니다.
+
+> Icons made by Lorc and Delapouite. Available on https://game-icons.net
+
+35종 전부 game-icons.net 원본에서 만들었습니다. 생성기는 `thaumref/tools/gen_aspect_icons.py`(통째로 쓰는 32종)와 `gen_aspect_glyphs.py`(테두리를 입히는 3종)입니다.
 
 ## 연구 노드 판 — 바닐라 마인크래프트
 
