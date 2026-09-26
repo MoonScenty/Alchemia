@@ -147,6 +147,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("research.alchemia.take_note", pick("Click to draw up notes", "클릭해 연구 노트 그리기"));
         add("research.alchemia.open", pick("Click to read", "클릭해 읽기"));
         add("research.alchemia.crafting", pick("On the bench", "작업대에서"));
+        add("research.alchemia.arcane_crafting", pick("At the arcane workbench", "비전 작업대에서"));
         add("research.alchemia.smelting", pick("In the fire", "불에서"));
         add("research.alchemia.recipe_missing", pick("The page has faded.", "지면이 바래 알아볼 수 없다."));
         add("scan.alchemia.nothing_there", pick("There is nothing there to read.", "읽을 것이 없다."));
@@ -188,6 +189,30 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                 {"silverwood", "Silverwood", "은빛나무",
                  "Pale wood that draws the aura to itself, and glows faintly for it. Little that is unnatural will settle near one, which makes a grove of them a quiet place to work.",
                  "오라를 끌어당기는 창백한 나무. 그 탓에 희미하게 빛난다. 부자연스러운 것들은 그 곁에 좀처럼 자리 잡지 못하니, 은빛나무 숲은 일하기에 조용한 곳이다."},
+                {"wand", "Wands", "완드",
+                 "A rod with a cap at each end, and nothing else. The caps let vis in and out; the rod decides how much of it will sit still. Held in a hand it fills itself from the air, slowly, wherever the aura has not been worked out.",
+                 "양 끝에 캡을 씌운 막대, 그게 전부다. 캡은 비스가 드나드는 문이고, 막대는 얼마나 머무를지를 정한다. 손에 들고 있으면 오라가 마르지 않은 곳에서 천천히 스스로 찬다."},
+                {"arcane_workbench", "Arcane Workbench", "비전 작업대",
+                 "A bench with a cloth laid over it and a place to set a wand down. What is shaped here costs vis as well as materials, and the vis comes out of the wand — so the bench is only ever as good as what is lying on it.",
+                 "천을 덮고 완드를 놓을 자리를 낸 작업대. 여기서 만드는 것은 재료 말고도 비스를 먹으며, 그 비스는 완드에서 나온다. 그러니 작업대는 그 위에 놓인 것만큼만 쓸모가 있다."},
+                {"charger", "Charger", "충전기",
+                 "Four posts and a crystal, standing over a workbench. It fills the wand left below it and does nothing else — no faster than a hand would, but a hand has other work to do.",
+                 "작업대 위에 세우는 기둥 넷과 결정 하나. 아래 놓인 완드를 채우는 것 말고는 아무것도 하지 않는다. 손에 쥐는 것보다 빠르지도 않지만, 손은 다른 일을 해야 한다."},
+                {"wand_cap_gold", "Gold Caps", "금 캡",
+                 "Iron grips vis badly and lets a tenth of every working slip. Gold does not. It is softer and dearer and worth both, for the first cap that does not charge for the privilege.",
+                 "철은 비스를 어설프게 붙들어 일할 때마다 열에 하나를 흘린다. 금은 그러지 않는다. 무르고 비싸지만 둘 다 값한다. 값을 더 받지 않는 첫 캡이다."},
+                {"wand_cap_brass", "Brass Caps", "황동 캡",
+                 "An alloy that pulls harder at the air than either metal in it. It spends no better than gold, but it fills faster, which over a long afternoon is the same thing.",
+                 "섞인 어느 금속보다도 공기를 세게 잡아당기는 합금. 쓰는 값은 금과 다르지 않지만 차는 속도가 빠르다. 긴 오후 동안에는 결국 같은 이야기다."},
+                {"wand_cap_alchemium", "Alchemium Caps", "알케미움 캡",
+                 "Metal that has been taught what it is for. A tenth of every working comes back, which is the first time a cap has given anything rather than taken it.",
+                 "무엇에 쓰이는지를 배운 금속. 일할 때마다 열에 하나가 되돌아온다. 캡이 가져가는 대신 내어준 것은 이번이 처음이다."},
+                {"wand_rod_greatwood", "Greatwood Rods", "거대나무 막대",
+                 "Cut from a tree that grew slowly and held on to it. A greatwood rod carries two and a half times what a stick will, which is the difference between working and stopping to wait.",
+                 "느리게 자라며 그것을 품어온 나무에서 잘라낸다. 거대나무 막대는 막대기의 두 배 반을 담는다. 일을 계속하느냐 기다리느냐의 차이다."},
+                {"arcane_stone", "Arcane Stone", "비전 석재",
+                 "Common stone with a shard worked into it, and it stops being common. It takes the aura the way a wick takes oil, which is why every worthwhile structure in this craft is built of it.",
+                 "흔한 돌에 조각을 섞어 넣으면 더는 흔하지 않게 된다. 심지가 기름을 빨아들이듯 오라를 머금는다. 이 기예에서 값나가는 구조물이 하나같이 이것으로 지어지는 이유다."},
                 {"warp", "Warp", "뒤틀림",
                  "Look too long into what should not be, and it begins looking back. The damage is not to the world but to the one studying it, and it does not undo itself with rest.",
                  "있어서는 안 될 것을 오래 들여다보면, 그것도 당신을 들여다보기 시작한다. 상하는 것은 세계가 아니라 그것을 연구하는 자이며, 쉰다고 해서 되돌아오지 않는다."},

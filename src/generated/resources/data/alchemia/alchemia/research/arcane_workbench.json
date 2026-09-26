@@ -1,0 +1,21 @@
+{
+  "category": "alchemia:arcana",
+  "column": 4,
+  "complexity": 2,
+  "icon": "alchemia:arcane_workbench",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.arcane_workbench.page"
+    }
+  ],
+  "parents": [
+    "alchemia:wand"
+  ],
+  "requirements": {
+    "alchemia:auram": 2,
+    "alchemia:fabrico": 4
+  },
+  "row": 1,
+  "shape": "major"
+}

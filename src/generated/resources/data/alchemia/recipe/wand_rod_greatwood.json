@@ -1,0 +1,19 @@
+{
+  "type": "alchemia:arcane_shaped",
+  "key": {
+    "G": {
+      "item": "alchemia:greatwood_log"
+    }
+  },
+  "pattern": [
+    " G",
+    "G "
+  ],
+  "result": {
+    "count": 1,
+    "id": "alchemia:wand_rod_greatwood"
+  },
+  "vis": {
+    "alchemia:perditio": 24
+  }
+}

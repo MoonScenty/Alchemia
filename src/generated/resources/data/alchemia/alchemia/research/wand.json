@@ -1,0 +1,22 @@
+{
+  "auto_unlock": true,
+  "category": "alchemia:arcana",
+  "column": 3,
+  "icon": "alchemia:wand",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.wand.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:wand_cap_iron"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:wand"
+    }
+  ],
+  "row": 0,
+  "shape": "major"
+}

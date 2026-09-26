@@ -1,0 +1,21 @@
+{
+  "category": "alchemia:arcana",
+  "column": 5,
+  "complexity": 2,
+  "icon": "alchemia:arcane_workbench_charger",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.charger.page"
+    }
+  ],
+  "parents": [
+    "alchemia:arcane_workbench"
+  ],
+  "requirements": {
+    "alchemia:auram": 4,
+    "alchemia:potentia": 4,
+    "alchemia:vitreus": 2
+  },
+  "row": 2
+}

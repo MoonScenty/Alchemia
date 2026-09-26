@@ -75,7 +75,9 @@ public class ModItemTagsProvider extends ItemTagsProvider {
         copy(BlockTags.LEAVES, ItemTags.LEAVES);
         copy(BlockTags.SAPLINGS, ItemTags.SAPLINGS);
 
+        // the balanced shard counts as one too, as it did in the original, so anything asking for "a shard" takes it
         ModItems.SHARDS.values().forEach(shard -> tag(ModTags.Items.SHARDS).add(shard.get()));
+        tag(ModTags.Items.SHARDS).add(ModItems.BALANCED_SHARD.get());
         tag(ModTags.Items.CLUSTERS).add(ModItems.IRON_CLUSTER.get(), ModItems.GOLD_CLUSTER.get(),
                 ModItems.COPPER_CLUSTER.get(), ModItems.CINNABAR_CLUSTER.get());
     }

@@ -1,0 +1,24 @@
+{
+  "type": "alchemia:arcane_shaped",
+  "key": {
+    "C": {
+      "tag": "alchemia:shards"
+    },
+    "S": {
+      "tag": "c:stones"
+    }
+  },
+  "pattern": [
+    "SSS",
+    "SCS",
+    "SSS"
+  ],
+  "result": {
+    "count": 9,
+    "id": "alchemia:arcane_stone"
+  },
+  "vis": {
+    "alchemia:ignis": 5,
+    "alchemia:terra": 5
+  }
+}
