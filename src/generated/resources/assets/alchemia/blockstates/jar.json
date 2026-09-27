@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "fill=0": {
+      "model": "alchemia:block/jar/jar"
+    },
+    "fill=1": {
+      "model": "alchemia:block/jar/jar_1"
+    },
+    "fill=2": {
+      "model": "alchemia:block/jar/jar_2"
+    },
+    "fill=3": {
+      "model": "alchemia:block/jar/jar_3"
+    },
+    "fill=4": {
+      "model": "alchemia:block/jar/jar_4"
+    }
+  }
+}

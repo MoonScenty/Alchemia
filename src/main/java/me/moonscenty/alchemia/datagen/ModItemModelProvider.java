@@ -31,6 +31,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         wands();
         // shown in hand and on the ground with its arms, which the placed block draws separately
         held("crucible", modLoc("block/crucible"));
+        held("jar", modLoc("block/jar/jar"));
         // a straight length rather than the bare middle: a four pixel cube in a slot is a speck
         withExistingParent("tube", modLoc("block/tube/item"));
         withExistingParent("essentia_smelter", modLoc("block/essentia_smelter"));

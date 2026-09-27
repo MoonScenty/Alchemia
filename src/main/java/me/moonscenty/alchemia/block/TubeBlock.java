@@ -161,7 +161,9 @@ public class TubeBlock extends BaseEntityBlock {
         if (level.getBlockState(at).getBlock() instanceof TubeBlock) {
             return Link.TUBE;
         }
-        return level.getBlockEntity(at) instanceof EssentiaHolder ? Link.BLOCK : Link.NONE;
+        // the side the neighbour is touched on is the opposite of the one the tube reaches out along
+        return level.getBlockEntity(at) instanceof EssentiaHolder holder
+                && holder.reachableFrom(side.getOpposite()) ? Link.BLOCK : Link.NONE;
     }
 
     @Override

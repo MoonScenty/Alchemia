@@ -2,6 +2,7 @@ package me.moonscenty.alchemia.essentia;
 
 import me.moonscenty.alchemia.aspect.Aspect;
 import me.moonscenty.alchemia.aspect.AspectList;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 
 /**
@@ -27,5 +28,15 @@ public interface EssentiaHolder {
     /** Takes one out, and says whether there was one. A holder that never gives anything up says no. */
     default boolean release(Holder<Aspect> aspect) {
         return false;
+    }
+
+    /**
+     * Whether a pipe touching this side can reach in at all.
+     * <p>
+     * A jar has a lid and glass, and only the lid is a way in. Most things are open on every side and say so by
+     * saying nothing.
+     */
+    default boolean reachableFrom(Direction side) {
+        return true;
     }
 }

@@ -2,6 +2,7 @@ package me.moonscenty.alchemia.client;
 
 
 import me.moonscenty.alchemia.block.entity.CrucibleBlockEntity;
+import me.moonscenty.alchemia.block.entity.JarBlockEntity;
 import me.moonscenty.alchemia.registry.ModBlocks;
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.registry.ModWandParts;
@@ -65,6 +66,12 @@ public class AlchemiaClientSetup {
             }
             return 0x3F76E4;
         }, ModBlocks.CRUCIBLE.get());
+
+        // the liquid standing in a jar, in the colour of whatever the jar is holding
+        event.register((state, level, pos, tint) ->
+                level != null && pos != null && level.getBlockEntity(pos) instanceof JarBlockEntity jar
+                        ? jar.colour()
+                        : 0xFFFFFF, ModBlocks.JAR.get());
     }
 
     @SubscribeEvent

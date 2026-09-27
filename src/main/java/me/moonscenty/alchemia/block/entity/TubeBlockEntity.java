@@ -79,7 +79,8 @@ public class TubeBlockEntity extends BlockEntity {
     private static List<EssentiaHolder> besideMe(Level level, BlockPos pos) {
         List<EssentiaHolder> out = new ArrayList<>();
         for (Direction side : Direction.values()) {
-            if (level.getBlockEntity(pos.relative(side)) instanceof EssentiaHolder holder) {
+            if (level.getBlockEntity(pos.relative(side)) instanceof EssentiaHolder holder
+                    && holder.reachableFrom(side.getOpposite())) {
                 out.add(holder);
             }
         }
@@ -114,7 +115,8 @@ public class TubeBlockEntity extends BlockEntity {
                         }
                     }
                     case BLOCK -> {
-                        if (level.getBlockEntity(next) instanceof EssentiaHolder holder) {
+                        if (level.getBlockEntity(next) instanceof EssentiaHolder holder
+                                && holder.reachableFrom(side.getOpposite())) {
                             out.add(holder);
                         }
                     }

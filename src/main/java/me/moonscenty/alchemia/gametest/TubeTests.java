@@ -3,6 +3,7 @@ package me.moonscenty.alchemia.gametest;
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.block.TubeBlock;
 import me.moonscenty.alchemia.block.entity.AlembicBlockEntity;
+import me.moonscenty.alchemia.block.entity.JarBlockEntity;
 import me.moonscenty.alchemia.block.entity.TubeBlockEntity;
 import me.moonscenty.alchemia.registry.ModAspects;
 import me.moonscenty.alchemia.registry.ModBlocks;
@@ -101,6 +102,50 @@ public class TubeTests {
 
         run(helper, START.east(2), 60);
         helper.assertValueEqual(from.amount(), 1, "it is still where it was");
+        helper.succeed();
+    }
+
+    /**
+     * A jar takes a pipe on its lid and nowhere else.
+     * <p>
+     * A tube beside one sees glass and treats it as nothing at all, so a wall of jars has to be piped along the
+     * top rather than threaded through.
+     */
+    @GameTest(template = TEMPLATE)
+    public static void aJarIsOnlyOpenAtTheTop(GameTestHelper helper) {
+        helper.setBlock(START, ModBlocks.JAR.get());
+        helper.setBlock(START.above(), ModBlocks.TUBE.get());
+        helper.setBlock(START.east(), ModBlocks.TUBE.get());
+
+        helper.assertValueEqual(helper.getBlockState(START.above())
+                        .getValue(TubeBlock.SIDES.get(Direction.DOWN)), TubeBlock.Link.BLOCK,
+                "the tube on the lid reaches in");
+        helper.assertValueEqual(helper.getBlockState(START.east())
+                        .getValue(TubeBlock.SIDES.get(Direction.WEST)), TubeBlock.Link.NONE,
+                "the one against the glass does not");
+        helper.succeed();
+    }
+
+    /** Essentia carried down a pipe and into a jar through its lid. */
+    @GameTest(template = TEMPLATE)
+    public static void aJarFillsThroughItsLid(GameTestHelper helper) {
+        AlembicBlockEntity from = alembic(helper, START);
+        pipe(helper, START.east(), 3);
+        helper.setBlock(START.east(3).above(), ModBlocks.TUBE.get());
+        helper.setBlock(START.east(3).above(2), ModBlocks.TUBE.get());
+        helper.setBlock(START.east(4).above(2), ModBlocks.TUBE.get());
+        helper.setBlock(START.east(4).above(), ModBlocks.JAR.get());
+
+        JarBlockEntity jar = (JarBlockEntity) helper.getLevel()
+                .getBlockEntity(helper.absolutePos(START.east(4).above()));
+        for (int filled = 0; filled < 4; filled++) {
+            from.accept(ModAspects.FIRE);
+        }
+
+        run(helper, START.east(4).above(2), 60);
+        helper.assertTrue(jar.amount() > 0, "it came down the pipe and into the jar");
+        helper.assertValueEqual(jar.holding().orElseThrow().value(), ModAspects.FIRE.value(),
+                "and it is what set off");
         helper.succeed();
     }
 }

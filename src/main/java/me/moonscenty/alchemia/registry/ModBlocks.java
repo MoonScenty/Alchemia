@@ -12,6 +12,7 @@ import me.moonscenty.alchemia.block.ArcaneWorkbenchBlock;
 import me.moonscenty.alchemia.block.ArcaneWorkbenchChargerBlock;
 import me.moonscenty.alchemia.block.AlembicBlock;
 import me.moonscenty.alchemia.block.CrucibleBlock;
+import me.moonscenty.alchemia.block.JarBlock;
 import me.moonscenty.alchemia.block.TubeBlock;
 import me.moonscenty.alchemia.block.EssentiaSmelterBlock;
 import me.moonscenty.alchemia.block.CrystalBlock;
@@ -85,6 +86,11 @@ public class ModBlocks {
     public static final DeferredBlock<AlembicBlock> ALEMBIC = register("alembic",
             () -> new AlembicBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS)
                     .mapColor(MapColor.STONE)
+                    .noOcclusion()));
+
+    public static final DeferredBlock<JarBlock> JAR = register("jar",
+            () -> new JarBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS)
+                    .mapColor(MapColor.NONE)
                     .noOcclusion()));
 
     public static final DeferredBlock<TubeBlock> TUBE = register("tube",

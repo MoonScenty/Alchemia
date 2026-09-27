@@ -9,6 +9,7 @@ import me.moonscenty.alchemia.block.taint.TaintLogBlock;
 import me.moonscenty.alchemia.block.AlembicBlock;
 import me.moonscenty.alchemia.block.EssentiaSmelterBlock;
 import me.moonscenty.alchemia.block.CrucibleBlock;
+import me.moonscenty.alchemia.block.JarBlock;
 import me.moonscenty.alchemia.block.TubeBlock;
 import me.moonscenty.alchemia.registry.ModBlocks;
 import me.moonscenty.alchemia.registry.StoneSet;
@@ -47,6 +48,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         researchTable();
         crucible();
         tube();
+        jar();
         essentiaSmelter();
         alembic();
         arcaneWorkbench();
@@ -183,6 +185,17 @@ public class ModBlockStateProvider extends BlockStateProvider {
                 .texture("bottom", modLoc("block/crucible_bottom"))
                 .texture("inside", modLoc("block/crucible_inner"));
         return wet ? model.texture("content", mcLoc("block/water_still")) : model;
+    }
+
+    /** The jar, and the essentia standing in it at four heights. */
+    private void jar() {
+        getVariantBuilder(ModBlocks.JAR.get()).forAllStates(state -> {
+            int fill = state.getValue(JarBlock.FILL);
+            return ConfiguredModel.builder()
+                    .modelFile(models().getExistingFile(
+                            modLoc("block/jar/jar" + (fill == 0 ? "" : "_" + fill))))
+                    .build();
+        });
     }
 
     /**
