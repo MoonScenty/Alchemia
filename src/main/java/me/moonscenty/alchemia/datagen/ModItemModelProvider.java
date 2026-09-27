@@ -27,7 +27,9 @@ public class ModItemModelProvider extends ItemModelProvider {
     protected void registerModels() {
         wands();
         // shown in hand and on the ground with its arms, which the placed block draws separately
-        withExistingParent("crucible", modLoc("block/crucible"));
+        // carried flat, as a cauldron is: the block model is thin walls and reads as a smudge in a slot
+        withExistingParent("crucible", mcLoc("item/generated")).texture("layer0", modLoc("item/crucible"));
+        withExistingParent("tube", modLoc("block/tube/core"));
         withExistingParent("essentia_smelter", modLoc("block/essentia_smelter"));
         withExistingParent("alembic", modLoc("block/alembic/item"));
         withExistingParent("arcane_workbench", modLoc("block/arcane_workbench"));
