@@ -9,6 +9,7 @@ import me.moonscenty.alchemia.block.taint.TaintLogBlock;
 import me.moonscenty.alchemia.block.AlembicBlock;
 import me.moonscenty.alchemia.block.EssentiaSmelterBlock;
 import me.moonscenty.alchemia.block.CrucibleBlock;
+import me.moonscenty.alchemia.block.TubeBlock;
 import me.moonscenty.alchemia.registry.ModBlocks;
 import me.moonscenty.alchemia.registry.StoneSet;
 import me.moonscenty.alchemia.registry.WoodSet;
@@ -45,6 +46,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
         researchTable();
         crucible();
+        tube();
         essentiaSmelter();
         alembic();
         arcaneWorkbench();
@@ -174,12 +176,42 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
     private ModelFile crucibleModel(String name, String parent, boolean wet) {
         var model = models().withExistingParent(name, mcLoc(parent))
-                .texture("particle", modLoc("block/crucible_side"))
+                // what flies off when it is broken or stood on: the stone it is set into rather than its own iron
+                .texture("particle", modLoc("block/arcane_stone"))
                 .texture("top", modLoc("block/crucible_top"))
                 .texture("side", modLoc("block/crucible_side"))
                 .texture("bottom", modLoc("block/crucible_bottom"))
                 .texture("inside", modLoc("block/crucible_inner"));
         return wet ? model.texture("content", mcLoc("block/water_still")) : model;
+    }
+
+    /**
+     * The pipe, put together a side at a time.
+     * <p>
+     * The middle is always there; each side adds an arm, and a plain arm or one with a collar depending on what it
+     * is up against. The four horizontal arms are the one drawn model turned about the upright; up and down are
+     * models of their own, since a blockstate cannot turn an east-pointing thing to face up.
+     */
+    private void tube() {
+        ModelFile core = models().getExistingFile(modLoc("block/tube/core"));
+        var builder = getMultipartBuilder(ModBlocks.TUBE.get());
+        builder.part().modelFile(core).addModel().end();
+
+        for (Direction side : Direction.values()) {
+            for (TubeBlock.Link link : new TubeBlock.Link[] {TubeBlock.Link.TUBE, TubeBlock.Link.BLOCK}) {
+                String shape = link == TubeBlock.Link.TUBE ? "arm" : "connector";
+                var part = builder.part();
+                if (side.getAxis().isVertical()) {
+                    part.modelFile(models().getExistingFile(
+                            modLoc("block/tube/" + shape + (side == Direction.UP ? "_up" : "_down"))));
+                } else {
+                    // the arm is drawn reaching east, so every other bearing is that many quarter turns on
+                    part.modelFile(models().getExistingFile(modLoc("block/tube/" + shape)))
+                            .rotationY(((int) side.toYRot() + 90) % 360);
+                }
+                part.addModel().condition(TubeBlock.SIDES.get(side), link).end();
+            }
+        }
     }
 
     /** A furnace in every way the blockstate cares about: it faces somewhere, and it is lit or it is not. */

@@ -5,6 +5,7 @@ import me.moonscenty.alchemia.block.entity.ArcaneWorkbenchBlockEntity;
 import me.moonscenty.alchemia.block.entity.ArcaneWorkbenchChargerBlockEntity;
 import me.moonscenty.alchemia.block.entity.AlembicBlockEntity;
 import me.moonscenty.alchemia.block.entity.CrucibleBlockEntity;
+import me.moonscenty.alchemia.block.entity.TubeBlockEntity;
 import me.moonscenty.alchemia.block.entity.EssentiaSmelterBlockEntity;
 import me.moonscenty.alchemia.block.entity.NodeStabilizerBlockEntity;
 import me.moonscenty.alchemia.block.entity.ResearchTableBlockEntity;
@@ -51,6 +52,11 @@ public class ModBlockEntities {
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<AlembicBlockEntity>> ALEMBIC =
             BLOCK_ENTITIES.register("alembic", () -> BlockEntityType.Builder
                     .of(AlembicBlockEntity::new, ModBlocks.ALEMBIC.get())
+                    .build(null));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<TubeBlockEntity>> TUBE =
+            BLOCK_ENTITIES.register("tube", () -> BlockEntityType.Builder
+                    .of(TubeBlockEntity::new, ModBlocks.TUBE.get())
                     .build(null));
 
     private ModBlockEntities() {

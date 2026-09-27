@@ -76,6 +76,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         addBlock(ModBlocks.CRUCIBLE, pick("Crucible", "도가니"));
         addBlock(ModBlocks.ESSENTIA_SMELTER, pick("Essentia Smelter", "에센시아 제련로"));
         addBlock(ModBlocks.ALEMBIC, pick("Alembic", "증류기"));
+        addBlock(ModBlocks.TUBE, pick("Essentia Tube", "에센시아 관"));
         add("block.alchemia.alembic.empty", pick("Empty", "비어 있다"));
         add("gui.alchemia.essentia_held", pick("Essentia  %s / %s", "에센시아  %s / %s"));
         add("gui.alchemia.essentia_empty", pick("Nothing in it yet", "아직 아무것도 없다"));

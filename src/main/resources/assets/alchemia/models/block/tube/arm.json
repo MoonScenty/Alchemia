@@ -1,0 +1,85 @@
+{
+  "textures": {
+    "0": "alchemia:block/tube",
+    "particle": "alchemia:block/tube"
+  },
+  "elements": [
+    {
+      "from": [
+        10,
+        6,
+        6
+      ],
+      "to": [
+        16,
+        10,
+        10
+      ],
+      "rotation": {
+        "angle": 0,
+        "axis": "y",
+        "origin": [
+          10,
+          6,
+          6
+        ]
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            11,
+            7,
+            15
+          ],
+          "texture": "#0"
+        },
+        "east": {
+          "uv": [
+            7,
+            11,
+            11,
+            15
+          ],
+          "texture": "#0"
+        },
+        "south": {
+          "uv": [
+            1,
+            11,
+            7,
+            15
+          ],
+          "texture": "#0"
+        },
+        "west": {
+          "uv": [
+            7,
+            11,
+            11,
+            15
+          ],
+          "texture": "#0"
+        },
+        "up": {
+          "uv": [
+            1,
+            11,
+            7,
+            15
+          ],
+          "texture": "#0"
+        },
+        "down": {
+          "uv": [
+            1,
+            11,
+            7,
+            15
+          ],
+          "texture": "#0"
+        }
+      }
+    }
+  ]
+}

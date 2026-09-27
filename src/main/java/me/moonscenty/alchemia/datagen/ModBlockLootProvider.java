@@ -62,6 +62,7 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
         }
         dropSelf(ModBlocks.RESEARCH_TABLE.get());
         dropSelf(ModBlocks.CRUCIBLE.get());
+        dropSelf(ModBlocks.TUBE.get());
         dropSelf(ModBlocks.ESSENTIA_SMELTER.get());
         dropSelf(ModBlocks.ALEMBIC.get());
         dropSelf(ModBlocks.ARCANE_WORKBENCH.get());

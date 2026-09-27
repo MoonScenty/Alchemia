@@ -4,6 +4,7 @@ import me.moonscenty.alchemia.aspect.Aspect;
 import me.moonscenty.alchemia.aspect.AspectList;
 import me.moonscenty.alchemia.aspect.Aspects;
 import me.moonscenty.alchemia.block.EssentiaSmelterBlock;
+import me.moonscenty.alchemia.essentia.EssentiaHolder;
 import me.moonscenty.alchemia.menu.EssentiaSmelterMenu;
 import me.moonscenty.alchemia.registry.ModBlockEntities;
 import net.minecraft.core.BlockPos;
@@ -39,7 +40,7 @@ import net.minecraft.world.level.block.state.BlockState;
  * difference is where the work goes — nothing comes out of the front, and a smelter with nothing over it simply
  * fills up and stops.
  */
-public class EssentiaSmelterBlockEntity extends BlockEntity implements WorldlyContainer, MenuProvider {
+public class EssentiaSmelterBlockEntity extends BlockEntity implements WorldlyContainer, MenuProvider, EssentiaHolder {
     public static final int SLOT_INPUT = 0;
     public static final int SLOT_FUEL = 1;
 
@@ -102,8 +103,26 @@ public class EssentiaSmelterBlockEntity extends BlockEntity implements WorldlyCo
         super(ModBlockEntities.ESSENTIA_SMELTER.get(), pos, state);
     }
 
+    @Override
     public AspectList held() {
         return held;
+    }
+
+    /**
+     * Lets a tube take one. It gives but never takes: a smelter makes essentia, and anything piped back into one
+     * would only sit there, since nothing in it ever reads what it is holding.
+     */
+    @Override
+    public boolean release(Holder<Aspect> aspect) {
+        if (held.get(aspect) <= 0) {
+            return false;
+        }
+        held = held.reduce(aspect, 1);
+        if (level != null) {
+            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
+        }
+        setChanged();
+        return true;
     }
 
     public boolean lit() {

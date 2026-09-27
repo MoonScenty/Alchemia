@@ -3,7 +3,9 @@ package me.moonscenty.alchemia.block.entity;
 import java.util.Optional;
 
 import me.moonscenty.alchemia.aspect.Aspect;
+import me.moonscenty.alchemia.aspect.AspectList;
 import me.moonscenty.alchemia.aura.AuraHandler;
+import me.moonscenty.alchemia.essentia.EssentiaHolder;
 import me.moonscenty.alchemia.registry.ModAspects;
 import me.moonscenty.alchemia.registry.ModBlockEntities;
 import net.minecraft.core.BlockPos;
@@ -27,7 +29,7 @@ import net.minecraft.world.level.block.state.BlockState;
  * each takes the first thing it is offered, so what comes out separated is separated by how many pots are there
  * rather than by any setting.
  */
-public class AlembicBlockEntity extends BlockEntity {
+public class AlembicBlockEntity extends BlockEntity implements EssentiaHolder {
     /** How much one holds. */
     public static final int CAPACITY = 32;
 
@@ -50,12 +52,33 @@ public class AlembicBlockEntity extends BlockEntity {
         return amount <= 0;
     }
 
+    @Override
+    public AspectList held() {
+        return holding == null ? AspectList.EMPTY : AspectList.of(holding, amount);
+    }
+
+    /** Gives one up to a tube, and empties out properly when the last one goes. */
+    @Override
+    public boolean release(Holder<Aspect> aspect) {
+        if (holding == null || holding.value() != aspect.value() || amount <= 0) {
+            return false;
+        }
+        amount--;
+        if (amount == 0) {
+            holding = null;
+        }
+        changed();
+        return true;
+    }
+
     /** Whether one more of this would fit. An empty vessel will take anything; a full one takes nothing. */
+    @Override
     public boolean wants(Holder<Aspect> aspect) {
         return amount < CAPACITY && (holding == null || holding.value() == aspect.value());
     }
 
     /** Takes one. Says so, since the smelter only lets go of what was actually caught. */
+    @Override
     public boolean accept(Holder<Aspect> aspect) {
         if (!wants(aspect)) {
             return false;

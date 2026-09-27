@@ -3,7 +3,7 @@
   "textures": {
     "bottom": "alchemia:block/crucible_bottom",
     "inside": "alchemia:block/crucible_inner",
-    "particle": "alchemia:block/crucible_side",
+    "particle": "alchemia:block/arcane_stone",
     "side": "alchemia:block/crucible_side",
     "top": "alchemia:block/crucible_top"
   }

@@ -12,6 +12,7 @@ import me.moonscenty.alchemia.block.ArcaneWorkbenchBlock;
 import me.moonscenty.alchemia.block.ArcaneWorkbenchChargerBlock;
 import me.moonscenty.alchemia.block.AlembicBlock;
 import me.moonscenty.alchemia.block.CrucibleBlock;
+import me.moonscenty.alchemia.block.TubeBlock;
 import me.moonscenty.alchemia.block.EssentiaSmelterBlock;
 import me.moonscenty.alchemia.block.CrystalBlock;
 import me.moonscenty.alchemia.block.CrystalType;
@@ -84,6 +85,11 @@ public class ModBlocks {
     public static final DeferredBlock<AlembicBlock> ALEMBIC = register("alembic",
             () -> new AlembicBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS)
                     .mapColor(MapColor.STONE)
+                    .noOcclusion()));
+
+    public static final DeferredBlock<TubeBlock> TUBE = register("tube",
+            () -> new TubeBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BARS)
+                    .mapColor(MapColor.GOLD)
                     .noOcclusion()));
 
     /** Stands on top of a workbench and fills the wand left on it. */
