@@ -132,6 +132,9 @@ public class ModItemModelProvider extends ItemModelProvider {
     private void distillery() {
         basicItem(ModItems.FILTER.get());
         basicItem(ModItems.JAR_BRACE.get());
+        basicItem(ModItems.VOID_SEED.get());
+        basicItem(ModItems.VOID_INGOT.get());
+        basicItem(ModItems.VOID_NUGGET.get());
 
         withExistingParent("phial_filled", mcLoc("item/generated"))
                 .texture("layer0", modLoc("item/phial_contents"))

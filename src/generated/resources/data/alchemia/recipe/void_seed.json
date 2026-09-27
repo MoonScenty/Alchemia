@@ -1,0 +1,16 @@
+{
+  "type": "alchemia:crucible",
+  "aspects": {
+    "alchemia:alienis": 2,
+    "alchemia:tenebrae": 8,
+    "alchemia:vacuos": 8
+  },
+  "catalyst": {
+    "item": "minecraft:wheat_seeds"
+  },
+  "research": "alchemia:void_metal",
+  "result": {
+    "count": 1,
+    "id": "alchemia:void_seed"
+  }
+}

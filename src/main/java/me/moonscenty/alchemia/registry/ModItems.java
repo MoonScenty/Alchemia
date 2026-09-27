@@ -90,6 +90,16 @@ public class ModItems {
     /** Fitted to a jar, it lets the jar be filled but not emptied. */
     public static final DeferredItem<Item> JAR_BRACE = ITEMS.registerSimpleItem("jar_brace");
 
+    // --- void metal -----------------------------------------------------------------------------------------
+
+    /** A wheat seed with the life boiled out of it and something else boiled in. */
+    public static final DeferredItem<Item> VOID_SEED = ITEMS.registerSimpleItem("void_seed");
+
+    /** Metal that eats light. What the last of the wand caps is drawn out of. */
+    public static final DeferredItem<Item> VOID_INGOT = ITEMS.registerSimpleItem("void_ingot");
+
+    public static final DeferredItem<Item> VOID_NUGGET = ITEMS.registerSimpleItem("void_nugget");
+
     /**
      * One item to a rod, wearing the same picture the wand wears. The rod sprites were drawn to serve as both, so
      * a rod in the hand looks like the rod on the wand rather than like a swatch of what it is made of.

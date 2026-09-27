@@ -108,6 +108,13 @@ public class ModResearchProvider {
                 List.of("tubes"), false, NodeShape.PLAIN, 3,
                 "tube_filter", "tube_restrict", "tube_oneway", "tube_buffer");
 
+        // the last of the caps hangs off this one, since void metal is the only thing it can be drawn from
+        entry(context, "void_metal", ModResearch.ALCHEMY, ModItems.VOID_INGOT, -2, 4,
+                AspectList.of(ModAspects.VOID, 6).add(ModAspects.DARKNESS, 6).add(ModAspects.METAL, 4)
+                        .add(ModAspects.ELDRITCH, 2),
+                List.of("metallurgy"), false, NodeShape.SPECIAL, 3,
+                "void_seed", "void_ingot", "wand_cap_void");
+
         entry(context, "arcane_stone", ModResearch.ARTIFICE, ModBlocks.ARCANE_STONE.block(), 3, 2,
                 AspectList.of(ModAspects.EARTH, 4).add(ModAspects.AURA, 2).add(ModAspects.CRYSTAL, 2),
                 List.of("arcane_workbench"), false, NodeShape.PLAIN, 2, "arcane_stone",

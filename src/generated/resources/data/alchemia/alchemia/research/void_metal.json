@@ -1,0 +1,35 @@
+{
+  "category": "alchemia:alchemy",
+  "column": -2,
+  "complexity": 3,
+  "icon": "alchemia:void_ingot",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.void_metal.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:void_seed"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:void_ingot"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:wand_cap_void"
+    }
+  ],
+  "parents": [
+    "alchemia:metallurgy"
+  ],
+  "requirements": {
+    "alchemia:alienis": 2,
+    "alchemia:metallum": 4,
+    "alchemia:tenebrae": 6,
+    "alchemia:vacuos": 6
+  },
+  "row": 4,
+  "shape": "special"
+}

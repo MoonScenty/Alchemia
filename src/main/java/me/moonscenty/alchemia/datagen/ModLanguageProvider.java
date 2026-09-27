@@ -66,6 +66,9 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         addItem(ModItems.BRASS_PLATE, pick("Brass Plate", "황동 판"));
         addItem(ModItems.IRON_PLATE, pick("Iron Plate", "철 판"));
         addItem(ModItems.SALIS_MUNDUS, pick("Salis Mundus", "살리스 문두스"));
+        addItem(ModItems.VOID_SEED, pick("Void Seed", "공허 씨앗"));
+        addItem(ModItems.VOID_INGOT, pick("Void Ingot", "공허 주괴"));
+        addItem(ModItems.VOID_NUGGET, pick("Void Nugget", "공허 조각"));
 
 
 
@@ -260,6 +263,9 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                 {"tube_filter", "Sorting the Flow", "흐름 가려 쓰기",
                  "Four ways of telling a length of pipe what to do with what passes through it: let one thing by and turn the rest back, let it by one way only, let it by half as fast, or keep a little in hand for when the works wants it.",
                  "관에게 지나가는 것을 어찌하라 이를 방법 넷. 하나만 지나가게 하고 나머지는 돌려보내거나, 한쪽으로만 내보내거나, 절반만 흘리거나, 공방이 찾을 때를 대비해 조금 쥐고 있게 하거나."},
+                {"void_metal", "Void Metal", "공허 금속",
+                 "A seed steeped in darkness stops being a seed, and what it becomes, steeped again in metal, sets as an ingot. It will not set at all without a point of flux in the water: the metal wants something wrong in it. What is drawn from it gives back a third of every working, and the caps drawn from it are the last a wand will ever want.",
+                 "어둠에 담근 씨앗은 씨앗이기를 그만두고, 그렇게 된 것을 다시 금속에 담그면 주괴로 굳는다. 물에 플럭스가 한 점 없으면 아예 굳지 않는다. 이 금속은 제 안에 잘못된 것을 원한다. 여기서 뽑아낸 캡은 일할 때마다 셋에 하나를 돌려주며, 완드가 바랄 마지막 캡이다."},
                 {"warp", "Warp", "뒤틀림",
                  "Look too long into what should not be, and it begins looking back. The damage is not to the world but to the one studying it, and it does not undo itself with rest.",
                  "있어서는 안 될 것을 오래 들여다보면, 그것도 당신을 들여다보기 시작한다. 상하는 것은 세계가 아니라 그것을 연구하는 자이며, 쉰다고 해서 되돌아오지 않는다."},

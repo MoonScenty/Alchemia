@@ -83,6 +83,8 @@ public class ModTags {
         public static final TagKey<Item> NUGGETS_ALCHEMIUM = common("nuggets/alchemium");
         public static final TagKey<Item> NUGGETS_BRASS = common("nuggets/brass");
         public static final TagKey<Item> NUGGETS_QUICKSILVER = common("nuggets/quicksilver");
+        public static final TagKey<Item> INGOTS_VOID = common("ingots/void");
+        public static final TagKey<Item> NUGGETS_VOID = common("nuggets/void");
         public static final TagKey<Item> GEARS = common("gears");
         public static final TagKey<Item> GEARS_ALCHEMIUM = common("gears/alchemium");
         public static final TagKey<Item> GEARS_BRASS = common("gears/brass");

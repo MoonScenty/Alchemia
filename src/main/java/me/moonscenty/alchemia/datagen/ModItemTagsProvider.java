@@ -47,11 +47,15 @@ public class ModItemTagsProvider extends ItemTagsProvider {
 
         tag(ModTags.Items.INGOTS_ALCHEMIUM).add(ModItems.ALCHEMIUM_INGOT.get());
         tag(ModTags.Items.INGOTS_BRASS).add(ModItems.BRASS_INGOT.get());
-        tag(Tags.Items.INGOTS).addTag(ModTags.Items.INGOTS_ALCHEMIUM).addTag(ModTags.Items.INGOTS_BRASS);
+        tag(ModTags.Items.INGOTS_VOID).add(ModItems.VOID_INGOT.get());
+        tag(Tags.Items.INGOTS).addTag(ModTags.Items.INGOTS_ALCHEMIUM).addTag(ModTags.Items.INGOTS_BRASS)
+                .addTag(ModTags.Items.INGOTS_VOID);
         tag(ModTags.Items.NUGGETS_ALCHEMIUM).add(ModItems.ALCHEMIUM_NUGGET.get());
         tag(ModTags.Items.NUGGETS_BRASS).add(ModItems.BRASS_NUGGET.get());
+        tag(ModTags.Items.NUGGETS_VOID).add(ModItems.VOID_NUGGET.get());
         tag(ModTags.Items.NUGGETS_QUICKSILVER).add(ModItems.QUICKSILVER_DROP.get());
-        tag(Tags.Items.NUGGETS).addTag(ModTags.Items.NUGGETS_ALCHEMIUM).addTag(ModTags.Items.NUGGETS_BRASS).addTag(ModTags.Items.NUGGETS_QUICKSILVER);
+        tag(Tags.Items.NUGGETS).addTag(ModTags.Items.NUGGETS_ALCHEMIUM).addTag(ModTags.Items.NUGGETS_BRASS).addTag(ModTags.Items.NUGGETS_QUICKSILVER)
+                .addTag(ModTags.Items.NUGGETS_VOID);
         tag(ModTags.Items.GEARS_ALCHEMIUM).add(ModItems.ALCHEMIUM_GEAR.get());
         tag(ModTags.Items.GEARS_BRASS).add(ModItems.BRASS_GEAR.get());
         tag(ModTags.Items.GEARS).addTag(ModTags.Items.GEARS_ALCHEMIUM).addTag(ModTags.Items.GEARS_BRASS);

@@ -71,6 +71,7 @@ public class ModRecipeProvider extends RecipeProvider {
         arcane(output);
         crucible(output);
         distillery(output);
+        voidMetal(output);
 
         // arcane stone itself is shaped on the arcane workbench; these are what it is worked into afterwards
         quadrupleFrom(output, ModBlocks.ARCANE_STONE_BRICKS.block(), ModBlocks.ARCANE_STONE.block());
@@ -390,6 +391,31 @@ public class ModRecipeProvider extends RecipeProvider {
         crucible(output, "brass_ingot_from_iron", Ingredient.of(Tags.Items.INGOTS_IRON),
                 AspectList.of(ModAspects.ENERGY, 1).add(ModAspects.WATER, 1),
                 new ItemStack(ModItems.BRASS_INGOT.get()), "metallurgy");
+    }
+
+    /**
+     * Void metal, which is boiled rather than mined.
+     * <p>
+     * A wheat seed steeped in darkness stops being a seed; the thing it becomes, steeped again in metal, comes out
+     * as an ingot. The prices are the original's, and so is the oddity that the second boiling wants a point of
+     * flux in the water -- the metal will not set without something wrong in it.
+     */
+    private void voidMetal(RecipeOutput output) {
+        crucible(output, "void_seed", Ingredient.of(Items.WHEAT_SEEDS),
+                AspectList.of(ModAspects.DARKNESS, 8).add(ModAspects.VOID, 8).add(ModAspects.ELDRITCH, 2),
+                new ItemStack(ModItems.VOID_SEED.get()), "void_metal");
+        crucible(output, "void_ingot", Ingredient.of(ModItems.VOID_SEED),
+                AspectList.of(ModAspects.METAL, 7).add(ModAspects.FLUX, 1),
+                new ItemStack(ModItems.VOID_INGOT.get()), "void_metal");
+
+        compress(output, ModItems.VOID_NUGGET, ModTags.Items.NUGGETS_VOID,
+                ModItems.VOID_INGOT, ModTags.Items.INGOTS_VOID);
+
+        // the last of the caps, and the dearest: nine times what an iron one costs, across all four of the primals
+        arcane(output, "wand_cap_void", "void_metal", new ItemStack(ModItems.WAND_CAPS.get("void").get()),
+                AspectList.of(ModAspects.ENTROPY, 72).add(ModAspects.ORDER, 72)
+                        .add(ModAspects.FIRE, 72).add(ModAspects.AIR, 72),
+                Map.of('N', Ingredient.of(ModTags.Items.NUGGETS_VOID)), "NNN", "N N");
     }
 
     private void crucible(RecipeOutput output, String name, Ingredient catalyst, AspectList aspects,

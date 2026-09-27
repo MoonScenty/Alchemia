@@ -1,0 +1,23 @@
+{
+  "type": "alchemia:arcane_shaped",
+  "key": {
+    "N": {
+      "tag": "c:nuggets/void"
+    }
+  },
+  "pattern": [
+    "NNN",
+    "N N"
+  ],
+  "research": "alchemia:void_metal",
+  "result": {
+    "count": 1,
+    "id": "alchemia:wand_cap_void"
+  },
+  "vis": {
+    "alchemia:aer": 72,
+    "alchemia:ignis": 72,
+    "alchemia:ordo": 72,
+    "alchemia:perditio": 72
+  }
+}

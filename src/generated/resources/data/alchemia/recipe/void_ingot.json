@@ -1,0 +1,15 @@
+{
+  "type": "alchemia:crucible",
+  "aspects": {
+    "alchemia:metallum": 7,
+    "alchemia:vitium": 1
+  },
+  "catalyst": {
+    "item": "alchemia:void_seed"
+  },
+  "research": "alchemia:void_metal",
+  "result": {
+    "count": 1,
+    "id": "alchemia:void_ingot"
+  }
+}
