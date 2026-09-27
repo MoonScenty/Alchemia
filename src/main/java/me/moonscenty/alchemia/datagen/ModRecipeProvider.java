@@ -1,16 +1,19 @@
 package me.moonscenty.alchemia.datagen;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.List;
 import java.util.Optional;
 import java.util.Map;
 
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.crafting.ArcaneShapedRecipe;
 import me.moonscenty.alchemia.crafting.ArcaneShapelessRecipe;
+import me.moonscenty.alchemia.crafting.InfusionRecipe;
 import me.moonscenty.alchemia.crafting.LabelRecipe;
 import me.moonscenty.alchemia.crafting.CrucibleRecipe;
 import me.moonscenty.alchemia.aspect.AspectList;
 import me.moonscenty.alchemia.crafting.ArcaneWandRecipe;
+import me.moonscenty.alchemia.block.CrystalType;
 import me.moonscenty.alchemia.registry.ModBlocks;
 import me.moonscenty.alchemia.registry.ModAspects;
 import me.moonscenty.alchemia.registry.ModItems;
@@ -72,6 +75,7 @@ public class ModRecipeProvider extends RecipeProvider {
         crucible(output);
         distillery(output);
         voidMetal(output);
+        infusion(output);
 
         // arcane stone itself is shaped on the arcane workbench; these are what it is worked into afterwards
         quadrupleFrom(output, ModBlocks.ARCANE_STONE_BRICKS.block(), ModBlocks.ARCANE_STONE.block());
@@ -375,6 +379,81 @@ public class ModRecipeProvider extends RecipeProvider {
                         'R', Ingredient.of(ModBlocks.TUBE_RESTRICT),
                         'T', Ingredient.of(ModBlocks.TUBE)),
                 "PVP", "T T", "PRP");
+    }
+
+    /**
+     * The altar, and the seven rods that can only be made on one.
+     * <p>
+     * The rod prices are the original's: twice the rod is reckoned to be worth in whatever it is chiefly made of,
+     * and once each in a couple of aspects that say what it is for. Silverwood pays once in everything instead,
+     * which is the whole point of silverwood.
+     */
+    private void infusion(RecipeOutput output) {
+        arcane(output, "infusion_matrix", "infusion", new ItemStack(ModBlocks.INFUSION_MATRIX.get()),
+                AspectList.of(ModAspects.ORDER, 100),
+                Map.of('S', Ingredient.of(ModBlocks.ARCANE_STONE_BRICKS.block()),
+                        'B', Ingredient.of(ModTags.Items.SHARDS),
+                        'N', Ingredient.of(ModItems.BALANCED_SHARD)),
+                "SBS", "BNB", "SBS");
+
+        arcane(output, "arcane_pedestal", "infusion", new ItemStack(ModBlocks.ARCANE_PEDESTAL.get()),
+                AspectList.of(ModAspects.AIR, 5),
+                Map.of('S', Ingredient.of(ModBlocks.ARCANE_STONE.slab()),
+                        'B', Ingredient.of(ModBlocks.ARCANE_STONE.block())),
+                "SSS", " B ", "SSS");
+
+        arcane(output, "arcane_pillar", "infusion", new ItemStack(ModBlocks.ARCANE_PILLAR.get(), 2),
+                AspectList.of(ModAspects.EARTH, 10),
+                Map.of('S', Ingredient.of(ModBlocks.ARCANE_STONE_BRICKS.block()),
+                        'B', Ingredient.of(ModBlocks.ARCANE_STONE.block())),
+                "S", "B", "S");
+
+        // the rods: what it is made of in the middle, a balanced shard and its own element around it
+        rod(output, "obsidian", Ingredient.of(Items.OBSIDIAN), 3,
+                AspectList.of(ModAspects.EARTH, 12).add(ModAspects.ENERGY, 6).add(ModAspects.DARKNESS, 6),
+                CrystalType.EARTH);
+        rod(output, "ice", Ingredient.of(Items.ICE), 3,
+                AspectList.of(ModAspects.WATER, 12).add(ModAspects.ENERGY, 6).add(ModAspects.COLD, 6),
+                CrystalType.WATER);
+        rod(output, "quartz", Ingredient.of(Items.QUARTZ_BLOCK), 3,
+                AspectList.of(ModAspects.ORDER, 12).add(ModAspects.ENERGY, 6).add(ModAspects.CRYSTAL, 6),
+                CrystalType.ORDER);
+        rod(output, "reed", Ingredient.of(Items.SUGAR_CANE), 3,
+                AspectList.of(ModAspects.AIR, 12).add(ModAspects.ENERGY, 6).add(ModAspects.MOTION, 6),
+                CrystalType.AIR);
+        rod(output, "blaze", Ingredient.of(Items.BLAZE_ROD), 3,
+                AspectList.of(ModAspects.FIRE, 12).add(ModAspects.ENERGY, 6).add(ModAspects.BEAST, 6),
+                CrystalType.FIRE);
+        rod(output, "bone", Ingredient.of(Items.BONE), 3,
+                AspectList.of(ModAspects.ENTROPY, 12).add(ModAspects.ENERGY, 6).add(ModAspects.UNDEAD, 6),
+                CrystalType.ENTROPY);
+
+        // silverwood is the exception: a little of everything, and every primal shard laid out around it
+        List<Ingredient> around = new java.util.ArrayList<>();
+        around.add(Ingredient.of(ModItems.BALANCED_SHARD));
+        AspectList evenly = AspectList.of(ModAspects.ENERGY, 9);
+        for (CrystalType type : CrystalType.values()) {
+            if (type.generatesNaturally()) {
+                around.add(Ingredient.of(ModItems.SHARDS.get(type)));
+                evenly = evenly.add(type.aspect(), 9);
+            }
+        }
+        infusion(output, "wand_rod_silverwood", Ingredient.of(ModBlocks.SILVERWOOD.log()), around,
+                new ItemStack(ModItems.WAND_RODS.get("silverwood").get()), evenly, 5, "wand_rods");
+    }
+
+    /** One wand rod: the stuff it is cut from, with a balanced shard and a shard of its own element beside it. */
+    private void rod(RecipeOutput output, String name, Ingredient from, int instability, AspectList cost,
+            CrystalType element) {
+        infusion(output, "wand_rod_" + name, from,
+                List.of(Ingredient.of(ModItems.BALANCED_SHARD), Ingredient.of(ModItems.SHARDS.get(element))),
+                new ItemStack(ModItems.WAND_RODS.get(name).get()), cost, instability, "wand_rods");
+    }
+
+    private void infusion(RecipeOutput output, String name, Ingredient central, List<Ingredient> ring,
+            ItemStack result, AspectList essentia, int instability, String research) {
+        output.accept(Alchemia.id(name), new InfusionRecipe(central, ring, result, essentia, instability,
+                Optional.of(Alchemia.id(research))), null);
     }
 
     /**

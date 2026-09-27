@@ -1,0 +1,36 @@
+{
+  "category": "alchemia:arcana",
+  "column": 7,
+  "complexity": 3,
+  "icon": "alchemia:infusion_matrix",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.infusion.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:infusion_matrix"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:arcane_pedestal"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:arcane_pillar"
+    }
+  ],
+  "parents": [
+    "alchemia:arcane_workbench",
+    "alchemia:vis_crystals"
+  ],
+  "requirements": {
+    "alchemia:auram": 6,
+    "alchemia:fabrico": 6,
+    "alchemia:ordo": 4,
+    "alchemia:potentia": 4
+  },
+  "row": 2,
+  "shape": "major"
+}

@@ -115,6 +115,19 @@ public class ModResearchProvider {
                 List.of("metallurgy"), false, NodeShape.SPECIAL, 3,
                 "void_seed", "void_ingot", "wand_cap_void");
 
+        // --- the altar, and what can only be made on one --------------------------------------------------
+
+        entry(context, "infusion", ModResearch.ARCANA, ModBlocks.INFUSION_MATRIX, 7, 2,
+                AspectList.of(ModAspects.AURA, 6).add(ModAspects.CRAFT, 6).add(ModAspects.ORDER, 4)
+                        .add(ModAspects.ENERGY, 4),
+                List.of("arcane_workbench", "vis_crystals"), false, NodeShape.MAJOR, 3,
+                "infusion_matrix", "arcane_pedestal", "arcane_pillar");
+        entry(context, "wand_rods", ModResearch.ARCANA, ModItems.WAND_RODS.get("silverwood"), 8, 4,
+                AspectList.of(ModAspects.TOOL, 6).add(ModAspects.AURA, 6).add(ModAspects.ENERGY, 6),
+                List.of("infusion", "silverwood"), false, NodeShape.PLAIN, 3,
+                "wand_rod_obsidian", "wand_rod_ice", "wand_rod_quartz", "wand_rod_reed",
+                "wand_rod_blaze", "wand_rod_bone", "wand_rod_silverwood");
+
         entry(context, "arcane_stone", ModResearch.ARTIFICE, ModBlocks.ARCANE_STONE.block(), 3, 2,
                 AspectList.of(ModAspects.EARTH, 4).add(ModAspects.AURA, 2).add(ModAspects.CRYSTAL, 2),
                 List.of("arcane_workbench"), false, NodeShape.PLAIN, 2, "arcane_stone",

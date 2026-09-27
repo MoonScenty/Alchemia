@@ -1,0 +1,44 @@
+{
+  "type": "alchemia:infusion",
+  "central": {
+    "item": "alchemia:silverwood_log"
+  },
+  "essentia": {
+    "alchemia:aer": 9,
+    "alchemia:aqua": 9,
+    "alchemia:ignis": 9,
+    "alchemia:ordo": 9,
+    "alchemia:perditio": 9,
+    "alchemia:potentia": 9,
+    "alchemia:terra": 9
+  },
+  "instability": 5,
+  "research": "alchemia:wand_rods",
+  "result": {
+    "count": 1,
+    "id": "alchemia:wand_rod_silverwood"
+  },
+  "ring": [
+    {
+      "item": "alchemia:balanced_shard"
+    },
+    {
+      "item": "alchemia:air_shard"
+    },
+    {
+      "item": "alchemia:fire_shard"
+    },
+    {
+      "item": "alchemia:water_shard"
+    },
+    {
+      "item": "alchemia:earth_shard"
+    },
+    {
+      "item": "alchemia:order_shard"
+    },
+    {
+      "item": "alchemia:entropy_shard"
+    }
+  ]
+}

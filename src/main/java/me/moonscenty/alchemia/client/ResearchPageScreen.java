@@ -9,6 +9,7 @@ import me.moonscenty.alchemia.player.PlayerKnowledge;
 import me.moonscenty.alchemia.research.ResearchEntry;
 import me.moonscenty.alchemia.crafting.ArcaneShapedRecipe;
 import me.moonscenty.alchemia.crafting.CrucibleRecipe;
+import me.moonscenty.alchemia.crafting.InfusionRecipe;
 import me.moonscenty.alchemia.crafting.ArcaneRecipe;
 import me.moonscenty.alchemia.aspect.AspectList;
 import me.moonscenty.alchemia.aspect.Aspect;
@@ -182,6 +183,7 @@ public class ResearchPageScreen extends Screen {
                 ? "research.alchemia.smelting"
                 : recipe instanceof ArcaneRecipe ? "research.alchemia.arcane_crafting"
                 : recipe instanceof CrucibleRecipe ? "research.alchemia.in_crucible"
+                : recipe instanceof InfusionRecipe ? "research.alchemia.in_matrix"
                 : "research.alchemia.crafting");
         graphics.drawString(font, heading, x + (usable - font.width(heading)) / 2, y, 0xFF3A2A18, false);
         y += LINE * 2;

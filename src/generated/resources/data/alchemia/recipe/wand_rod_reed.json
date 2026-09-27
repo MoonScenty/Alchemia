@@ -1,0 +1,25 @@
+{
+  "type": "alchemia:infusion",
+  "central": {
+    "item": "minecraft:sugar_cane"
+  },
+  "essentia": {
+    "alchemia:aer": 12,
+    "alchemia:motus": 6,
+    "alchemia:potentia": 6
+  },
+  "instability": 3,
+  "research": "alchemia:wand_rods",
+  "result": {
+    "count": 1,
+    "id": "alchemia:wand_rod_reed"
+  },
+  "ring": [
+    {
+      "item": "alchemia:balanced_shard"
+    },
+    {
+      "item": "alchemia:air_shard"
+    }
+  ]
+}

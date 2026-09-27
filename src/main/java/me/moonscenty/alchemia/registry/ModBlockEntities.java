@@ -11,6 +11,7 @@ import me.moonscenty.alchemia.block.entity.CrucibleBlockEntity;
 import me.moonscenty.alchemia.block.entity.JarBlockEntity;
 import me.moonscenty.alchemia.block.entity.TubeBlockEntity;
 import me.moonscenty.alchemia.block.entity.EssentiaSmelterBlockEntity;
+import me.moonscenty.alchemia.block.entity.InfusionMatrixBlockEntity;
 import me.moonscenty.alchemia.block.entity.NodeStabilizerBlockEntity;
 import me.moonscenty.alchemia.block.entity.ResearchTableBlockEntity;
 import net.minecraft.core.registries.Registries;
@@ -91,6 +92,12 @@ public class ModBlockEntities {
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ArcanePedestalBlockEntity>>
             ARCANE_PEDESTAL = BLOCK_ENTITIES.register("arcane_pedestal", () -> BlockEntityType.Builder
                     .of(ArcanePedestalBlockEntity::new, ModBlocks.ARCANE_PEDESTAL.get())
+                    .build(null));
+
+    /** What an infusion is: what is being made, what is owed for it, and how badly it is going. */
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<InfusionMatrixBlockEntity>>
+            INFUSION_MATRIX = BLOCK_ENTITIES.register("infusion_matrix", () -> BlockEntityType.Builder
+                    .of(InfusionMatrixBlockEntity::new, ModBlocks.INFUSION_MATRIX.get())
                     .build(null));
 
     private ModBlockEntities() {

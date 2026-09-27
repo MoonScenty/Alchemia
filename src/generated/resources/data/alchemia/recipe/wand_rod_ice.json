@@ -1,0 +1,25 @@
+{
+  "type": "alchemia:infusion",
+  "central": {
+    "item": "minecraft:ice"
+  },
+  "essentia": {
+    "alchemia:aqua": 12,
+    "alchemia:gelum": 6,
+    "alchemia:potentia": 6
+  },
+  "instability": 3,
+  "research": "alchemia:wand_rods",
+  "result": {
+    "count": 1,
+    "id": "alchemia:wand_rod_ice"
+  },
+  "ring": [
+    {
+      "item": "alchemia:balanced_shard"
+    },
+    {
+      "item": "alchemia:water_shard"
+    }
+  ]
+}

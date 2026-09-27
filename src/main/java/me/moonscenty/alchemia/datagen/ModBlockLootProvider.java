@@ -76,6 +76,7 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
         dropSelf(ModBlocks.NODE_STABILIZER.get());
         dropSelf(ModBlocks.ARCANE_PEDESTAL.get());
         dropSelf(ModBlocks.ARCANE_PILLAR.get());
+        dropSelf(ModBlocks.INFUSION_MATRIX.get());
 
         // nothing tainted is worth keeping; what the growths gave in the original arrives with those items
         add(ModBlocks.TAINT_FIBRE.get(), noDrop());

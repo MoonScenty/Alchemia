@@ -1,0 +1,27 @@
+{
+  "type": "alchemia:arcane_shaped",
+  "key": {
+    "B": {
+      "tag": "alchemia:shards"
+    },
+    "N": {
+      "item": "alchemia:balanced_shard"
+    },
+    "S": {
+      "item": "alchemia:arcane_stone_bricks"
+    }
+  },
+  "pattern": [
+    "SBS",
+    "BNB",
+    "SBS"
+  ],
+  "research": "alchemia:infusion",
+  "result": {
+    "count": 1,
+    "id": "alchemia:infusion_matrix"
+  },
+  "vis": {
+    "alchemia:ordo": 100
+  }
+}

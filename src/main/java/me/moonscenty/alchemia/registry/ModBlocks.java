@@ -22,6 +22,7 @@ import me.moonscenty.alchemia.block.CrucibleBlock;
 import me.moonscenty.alchemia.block.JarBlock;
 import me.moonscenty.alchemia.block.TubeBlock;
 import me.moonscenty.alchemia.block.EssentiaSmelterBlock;
+import me.moonscenty.alchemia.block.InfusionMatrixBlock;
 import me.moonscenty.alchemia.block.CrystalBlock;
 import me.moonscenty.alchemia.block.CrystalType;
 import me.moonscenty.alchemia.block.NodeStabilizerBlock;
@@ -134,6 +135,13 @@ public class ModBlocks {
     public static final DeferredBlock<ArcanePillarBlock> ARCANE_PILLAR = register("arcane_pillar",
             () -> new ArcanePillarBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS)
                     .mapColor(MapColor.STONE)
+                    .noOcclusion()));
+
+    /** Eight stones turning in the air, which is where everything dear is made. */
+    public static final DeferredBlock<InfusionMatrixBlock> INFUSION_MATRIX = register("infusion_matrix",
+            () -> new InfusionMatrixBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS)
+                    .mapColor(MapColor.STONE)
+                    .lightLevel(state -> 7)
                     .noOcclusion()));
 
     /** Stands on top of a workbench and fills the wand left on it. */

@@ -92,6 +92,12 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         addBlock(ModBlocks.JAR, pick("Warded Jar", "봉인된 단지"));
         addBlock(ModBlocks.ARCANE_PEDESTAL, pick("Arcane Pedestal", "비전 받침대"));
         addBlock(ModBlocks.ARCANE_PILLAR, pick("Arcane Pillar", "비전 기둥"));
+        addBlock(ModBlocks.INFUSION_MATRIX, pick("Runic Matrix", "룬 결계"));
+        add("block.alchemia.infusion_matrix.idle", pick("Still", "조용하다"));
+        add("block.alchemia.infusion_matrix.busy", pick("Already working", "이미 일하고 있다"));
+        add("block.alchemia.infusion_matrix.nothing", pick("What is laid out here makes nothing", "여기 놓인 것으로는 아무것도 되지 않는다"));
+        add("block.alchemia.infusion_matrix.gathering", pick("Drawing in what it needs", "필요한 것을 끌어당기고 있다"));
+        add("block.alchemia.infusion_matrix.owed", pick("Still thirsty for %s", "아직 %s을(를) 원한다"));
         addItem(ModItems.FILTER, pick("Filter", "여과망"));
         addItem(ModItems.PHIAL, pick("Phial", "유리병"));
         add("item.alchemia.phial.filled", pick("Phial of %s", "%s 유리병"));
@@ -182,6 +188,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("research.alchemia.crafting", pick("On the bench", "작업대에서"));
         add("research.alchemia.arcane_crafting", pick("At the arcane workbench", "비전 작업대에서"));
         add("research.alchemia.in_crucible", pick("In the crucible", "도가니에서"));
+        add("research.alchemia.in_matrix", pick("At the matrix", "룬 결계에서"));
         add("research.alchemia.smelting", pick("In the fire", "불에서"));
         add("research.alchemia.recipe_missing", pick("The page has faded.", "지면이 바래 알아볼 수 없다."));
         add("scan.alchemia.nothing_there", pick("There is nothing there to read.", "읽을 것이 없다."));

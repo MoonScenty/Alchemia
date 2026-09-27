@@ -1,0 +1,24 @@
+{
+  "type": "alchemia:arcane_shaped",
+  "key": {
+    "B": {
+      "item": "alchemia:arcane_stone"
+    },
+    "S": {
+      "item": "alchemia:arcane_stone_bricks"
+    }
+  },
+  "pattern": [
+    "S",
+    "B",
+    "S"
+  ],
+  "research": "alchemia:infusion",
+  "result": {
+    "count": 2,
+    "id": "alchemia:arcane_pillar"
+  },
+  "vis": {
+    "alchemia:terra": 10
+  }
+}

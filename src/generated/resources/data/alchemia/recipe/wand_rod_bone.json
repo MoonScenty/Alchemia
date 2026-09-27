@@ -1,0 +1,25 @@
+{
+  "type": "alchemia:infusion",
+  "central": {
+    "item": "minecraft:bone"
+  },
+  "essentia": {
+    "alchemia:exanimis": 6,
+    "alchemia:perditio": 12,
+    "alchemia:potentia": 6
+  },
+  "instability": 3,
+  "research": "alchemia:wand_rods",
+  "result": {
+    "count": 1,
+    "id": "alchemia:wand_rod_bone"
+  },
+  "ring": [
+    {
+      "item": "alchemia:balanced_shard"
+    },
+    {
+      "item": "alchemia:entropy_shard"
+    }
+  ]
+}

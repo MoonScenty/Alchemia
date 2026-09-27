@@ -1,0 +1,25 @@
+{
+  "type": "alchemia:infusion",
+  "central": {
+    "item": "minecraft:obsidian"
+  },
+  "essentia": {
+    "alchemia:potentia": 6,
+    "alchemia:tenebrae": 6,
+    "alchemia:terra": 12
+  },
+  "instability": 3,
+  "research": "alchemia:wand_rods",
+  "result": {
+    "count": 1,
+    "id": "alchemia:wand_rod_obsidian"
+  },
+  "ring": [
+    {
+      "item": "alchemia:balanced_shard"
+    },
+    {
+      "item": "alchemia:earth_shard"
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "type": "alchemia:arcane_shaped",
+  "key": {
+    "B": {
+      "item": "alchemia:arcane_stone"
+    },
+    "S": {
+      "item": "alchemia:arcane_stone_slab"
+    }
+  },
+  "pattern": [
+    "SSS",
+    " B ",
+    "SSS"
+  ],
+  "research": "alchemia:infusion",
+  "result": {
+    "count": 1,
+    "id": "alchemia:arcane_pedestal"
+  },
+  "vis": {
+    "alchemia:aer": 5
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "category": "alchemia:arcana",
+  "column": 8,
+  "complexity": 3,
+  "icon": "alchemia:wand_rod_silverwood",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.wand_rods.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:wand_rod_obsidian"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:wand_rod_ice"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:wand_rod_quartz"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:wand_rod_reed"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:wand_rod_blaze"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:wand_rod_bone"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:wand_rod_silverwood"
+    }
+  ],
+  "parents": [
+    "alchemia:infusion",
+    "alchemia:silverwood"
+  ],
+  "requirements": {
+    "alchemia:auram": 6,
+    "alchemia:instrumentum": 6,
+    "alchemia:potentia": 6
+  },
+  "row": 4
+}

@@ -37,6 +37,8 @@ public class AlchemiaClientSetup {
     @SubscribeEvent
     public static void registerExtraModels(ModelEvent.RegisterAdditional event) {
         event.register(ResearchTableRenderer.QUILL);
+        // the matrix has no block model of its own; its eight stones are asked for here and drawn by hand
+        event.register(InfusionMatrixRenderer.CUBE);
         for (var arm : NodeStabilizerRenderer.ARMS) {
             event.register(arm);
         }
@@ -114,6 +116,7 @@ public class AlchemiaClientSetup {
         event.registerEntityRenderer(ModEntities.TAINT_CLOUD.get(), NoopRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.NODE_STABILIZER.get(), NodeStabilizerRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.ARCANE_PEDESTAL.get(), ArcanePedestalRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.INFUSION_MATRIX.get(), InfusionMatrixRenderer::new);
     }
 
     /**

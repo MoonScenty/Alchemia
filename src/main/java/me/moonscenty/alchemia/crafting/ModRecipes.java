@@ -42,6 +42,13 @@ public class ModRecipes {
     public static final DeferredHolder<RecipeSerializer<?>, CrucibleRecipe.Serializer> CRUCIBLE_SERIALIZER =
             SERIALIZERS.register("crucible", CrucibleRecipe.Serializer::new);
 
+    /** What is worked at an infusion matrix: one thing held under it and a ring of things around it. */
+    public static final DeferredHolder<RecipeType<?>, RecipeType<InfusionRecipe>> INFUSION =
+            TYPES.register("infusion", () -> RecipeType.<InfusionRecipe>simple(Alchemia.id("infusion")));
+
+    public static final DeferredHolder<RecipeSerializer<?>, InfusionRecipe.Serializer> INFUSION_SERIALIZER =
+            SERIALIZERS.register("infusion", InfusionRecipe.Serializer::new);
+
     private ModRecipes() {
     }
 }

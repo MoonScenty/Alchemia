@@ -265,6 +265,10 @@ public class ModBlockStateProvider extends BlockStateProvider {
                 .rotationY((int) state.getValue(ArcanePillarBlock.FACING).toYRot())
                 .build());
         itemModels().withExistingParent("arcane_pillar", modLoc("block/pillar/block"));
+
+        // the matrix draws nothing of itself: the blockstate points at an empty model and the renderer does the rest
+        simpleBlock(ModBlocks.INFUSION_MATRIX.get(), models().getExistingFile(modLoc("block/infusion_matrix")));
+        itemModels().withExistingParent("infusion_matrix", modLoc("block/infusion_cube"));
     }
 
     /** A furnace in every way the blockstate cares about: it faces somewhere, and it is lit or it is not. */
