@@ -29,7 +29,8 @@ public class ModItemModelProvider extends ItemModelProvider {
         // shown in hand and on the ground with its arms, which the placed block draws separately
         // carried flat, as a cauldron is: the block model is thin walls and reads as a smudge in a slot
         withExistingParent("crucible", mcLoc("item/generated")).texture("layer0", modLoc("item/crucible"));
-        withExistingParent("tube", modLoc("block/tube/core"));
+        // a straight length rather than the bare middle: a four pixel cube in a slot is a speck
+        withExistingParent("tube", modLoc("block/tube/item"));
         withExistingParent("essentia_smelter", modLoc("block/essentia_smelter"));
         withExistingParent("alembic", modLoc("block/alembic/item"));
         withExistingParent("arcane_workbench", modLoc("block/arcane_workbench"));
