@@ -4,7 +4,10 @@ import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.block.CrystalBlock;
 import me.moonscenty.alchemia.registry.ModBlocks;
 import me.moonscenty.alchemia.registry.ModItems;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.data.PackOutput;
+import net.neoforged.neoforge.client.model.generators.ItemModelBuilder;
 import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
@@ -27,8 +30,7 @@ public class ModItemModelProvider extends ItemModelProvider {
     protected void registerModels() {
         wands();
         // shown in hand and on the ground with its arms, which the placed block draws separately
-        // carried flat, as a cauldron is: the block model is thin walls and reads as a smudge in a slot
-        withExistingParent("crucible", mcLoc("item/generated")).texture("layer0", modLoc("item/crucible"));
+        held("crucible", modLoc("block/crucible"));
         // a straight length rather than the bare middle: a four pixel cube in a slot is a speck
         withExistingParent("tube", modLoc("block/tube/item"));
         withExistingParent("essentia_smelter", modLoc("block/essentia_smelter"));
@@ -113,5 +115,30 @@ public class ModItemModelProvider extends ItemModelProvider {
             withExistingParent("wand_rod_" + RODS[rod], mcLoc("item/handheld"))
                     .texture("layer0", modLoc("item/wand/rod_" + RODS[rod]));
         }
+    }
+
+    /**
+     * A block shown as itself in a slot, in a hand and on the ground.
+     * <p>
+     * The poses would normally come from inheriting {@code minecraft:block/block}, but a model can only have one
+     * parent and these need theirs for the shape. Vanilla's cauldron, which ours is built on, carries no poses of
+     * its own — it never needed any, since Mojang draw the cauldron item flat — so they are written out here.
+     */
+    private ItemModelBuilder held(String name, ResourceLocation model) {
+        return withExistingParent(name, model)
+                .transforms()
+                .transform(ItemDisplayContext.GUI)
+                        .rotation(30, 225, 0).scale(0.625F).end()
+                .transform(ItemDisplayContext.GROUND)
+                        .translation(0, 3, 0).scale(0.25F).end()
+                .transform(ItemDisplayContext.FIXED)
+                        .scale(0.5F).end()
+                .transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND)
+                        .rotation(75, 45, 0).translation(0, 2.5F, 0).scale(0.375F).end()
+                .transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND)
+                        .rotation(0, 45, 0).scale(0.4F).end()
+                .transform(ItemDisplayContext.FIRST_PERSON_LEFT_HAND)
+                        .rotation(0, 225, 0).scale(0.4F).end()
+                .end();
     }
 }
