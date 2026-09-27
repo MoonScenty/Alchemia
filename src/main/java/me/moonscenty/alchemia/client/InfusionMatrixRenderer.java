@@ -14,6 +14,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.phys.AABB;
 
 /**
  * The eight stones a matrix is made of, turning in the air.
@@ -147,9 +148,27 @@ public class InfusionMatrixRenderer implements BlockEntityRenderer<InfusionMatri
                         / InfusionMatrixBlockEntity.WORST;
     }
 
-    /** It is drawn well outside its own block, so it must not be cut off at the edge of one. */
+    /**
+     * How much room the drawing takes, which is a good deal more than the block it belongs to.
+     * <p>
+     * The matrix draws the whole altar: eight stones turning in its own block, and four pillars standing two
+     * blocks down, one block out and two blocks tall. Left at the usual single block, the drawing is thrown away
+     * the moment that one block falls outside the view, and the pillars vanish at certain angles while you are
+     * standing among them.
+     */
     @Override
-    public boolean shouldRenderOffScreen(InfusionMatrixBlockEntity matrix) {
-        return true;
+    public AABB getRenderBoundingBox(InfusionMatrixBlockEntity matrix) {
+        return new AABB(matrix.getBlockPos()).inflate(2.0, 3.0, 2.0);
+    }
+
+    /**
+     * How far off a matrix is still drawn.
+     * <p>
+     * Further than the usual sixty-four: an altar is a thing you walk up to across a room you built for it, and
+     * the pillars popping in at the door would give that away.
+     */
+    @Override
+    public int getViewDistance() {
+        return 96;
     }
 }
