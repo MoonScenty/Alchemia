@@ -87,11 +87,22 @@ public class InfusionMatrixBlock extends BaseEntityBlock {
         if (level.isClientSide) {
             return ItemInteractionResult.SUCCESS;
         }
-        if (matrix.busy()) {
-            say(player, "block.alchemia.infusion_matrix.busy");
-        } else if (!matrix.start(player)) {
-            say(player, "block.alchemia.infusion_matrix.nothing");
-            level.playSound(null, pos, SoundEvents.DISPENSER_FAIL, SoundSource.BLOCKS, 0.6F, 1.0F);
+        switch (matrix.wake(player)) {
+            case WOKEN -> {
+                say(player, "block.alchemia.infusion_matrix.woken");
+                level.playSound(null, pos, SoundEvents.BEACON_ACTIVATE, SoundSource.BLOCKS, 0.8F, 1.0F);
+            }
+            case UNBUILT -> {
+                say(player, "block.alchemia.infusion_matrix.unbuilt");
+                level.playSound(null, pos, SoundEvents.DISPENSER_FAIL, SoundSource.BLOCKS, 0.6F, 1.0F);
+            }
+            case BUSY -> say(player, "block.alchemia.infusion_matrix.busy");
+            case NOTHING -> {
+                say(player, "block.alchemia.infusion_matrix.nothing");
+                level.playSound(null, pos, SoundEvents.DISPENSER_FAIL, SoundSource.BLOCKS, 0.6F, 1.0F);
+            }
+            default -> {
+            }
         }
         return ItemInteractionResult.CONSUME;
     }
@@ -107,7 +118,8 @@ public class InfusionMatrixBlock extends BaseEntityBlock {
             return InteractionResult.SUCCESS;
         }
         if (!matrix.busy()) {
-            say(player, "block.alchemia.infusion_matrix.idle");
+            say(player, matrix.awake() ? "block.alchemia.infusion_matrix.idle"
+                    : "block.alchemia.infusion_matrix.asleep");
         } else if (matrix.owed().isEmpty()) {
             say(player, "block.alchemia.infusion_matrix.gathering");
         } else {

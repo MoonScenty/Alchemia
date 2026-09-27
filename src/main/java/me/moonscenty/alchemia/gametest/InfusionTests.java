@@ -61,9 +61,19 @@ public class InfusionTests {
         return player;
     }
 
+    /** The altar itself: a pedestal two below, and arcane stone at the four corners waiting to be woken. */
+    private static void altar(GameTestHelper helper) {
+        helper.setBlock(MATRIX, ModBlocks.INFUSION_MATRIX.get());
+        for (int east = -1; east <= 1; east += 2) {
+            for (int south = -1; south <= 1; south += 2) {
+                helper.setBlock(MATRIX.offset(east, -2, south), ModBlocks.ARCANE_STONE.block().get());
+            }
+        }
+    }
+
     /** The whole working: an obsidian rod, laid out and made. */
     private static InfusionMatrixBlockEntity laidOut(GameTestHelper helper) {
-        helper.setBlock(MATRIX, ModBlocks.INFUSION_MATRIX.get());
+        altar(helper);
         stand(helper, MATRIX.below(2), new ItemStack(Items.OBSIDIAN));
         stand(helper, MATRIX.offset(2, -2, 0), new ItemStack(ModItems.BALANCED_SHARD.get()));
         stand(helper, MATRIX.offset(-2, -2, 0),
@@ -80,6 +90,51 @@ public class InfusionTests {
         for (int tick = 0; tick < turns * InfusionMatrixBlockEntity.CYCLE + turns; tick++) {
             InfusionMatrixBlockEntity.tick(helper.getLevel(), at, helper.getLevel().getBlockState(at), matrix);
         }
+    }
+
+    /** The first touch of a wand turns the corner stones into pillars and sets the matrix turning. */
+    @GameTest(template = TEMPLATE)
+    public static void theFirstTouchWakesTheAltar(GameTestHelper helper) {
+        InfusionMatrixBlockEntity matrix = laidOut(helper);
+        Player player = scholar(helper);
+
+        helper.assertTrue(!matrix.awake(), "a matrix hung over loose stone is asleep");
+        helper.assertValueEqual(matrix.wake(player), InfusionMatrixBlockEntity.Woken.WOKEN, "the wand woke it");
+        helper.assertTrue(matrix.awake(), "and it is awake");
+        helper.assertBlockPresent(ModBlocks.ARCANE_PILLAR.get(), MATRIX.offset(1, -2, 1));
+        helper.assertBlockPresent(ModBlocks.ARCANE_PILLAR.get(), MATRIX.offset(-1, -2, -1));
+
+        helper.assertValueEqual(matrix.wake(player), InfusionMatrixBlockEntity.Woken.STARTED,
+                "and the touch after that starts the working");
+        helper.succeed();
+    }
+
+    /** Without its four corners there is no altar, and nothing wakes. */
+    @GameTest(template = TEMPLATE)
+    public static void itWillNotWakeWithoutAnAltar(GameTestHelper helper) {
+        InfusionMatrixBlockEntity matrix = laidOut(helper);
+        helper.setBlock(MATRIX.offset(1, -2, 1), Blocks.AIR);
+
+        helper.assertValueEqual(matrix.wake(scholar(helper)), InfusionMatrixBlockEntity.Woken.UNBUILT,
+                "three corners is not an altar");
+        helper.assertTrue(!matrix.awake(), "so it stayed asleep");
+        helper.succeed();
+    }
+
+    /** Pulling a pillar out from under a working ends it and puts the matrix back to sleep. */
+    @GameTest(template = TEMPLATE)
+    public static void breakingTheAltarEndsTheWorking(GameTestHelper helper) {
+        InfusionMatrixBlockEntity matrix = laidOut(helper);
+        Player player = scholar(helper);
+        matrix.wake(player);
+        matrix.wake(player);
+        helper.assertTrue(matrix.busy(), "the working started");
+
+        helper.setBlock(MATRIX.offset(-1, -2, 1), Blocks.AIR);
+        run(helper, matrix, 2);
+        helper.assertTrue(!matrix.busy(), "and came apart with the altar");
+        helper.assertTrue(!matrix.awake(), "which also put the stones back to sleep");
+        helper.succeed();
     }
 
     /** The matrix finds the ring below it, one pedestal to a column. */
@@ -99,7 +154,9 @@ public class InfusionTests {
     @GameTest(template = TEMPLATE)
     public static void itStartsOnWhatIsLaidOut(GameTestHelper helper) {
         InfusionMatrixBlockEntity matrix = laidOut(helper);
-        helper.assertTrue(matrix.start(scholar(helper)), "the working was laid out right");
+        Player player = scholar(helper);
+        matrix.wake(player);
+        helper.assertTrue(matrix.start(player), "the working was laid out right");
         helper.assertTrue(matrix.busy(), "so it started");
         helper.assertTrue(!matrix.owed().isEmpty(), "and it owes for it");
         helper.succeed();
@@ -109,6 +166,7 @@ public class InfusionTests {
     @GameTest(template = TEMPLATE)
     public static void itWantsTheResearchDone(GameTestHelper helper) {
         InfusionMatrixBlockEntity matrix = laidOut(helper);
+        matrix.wake(scholar(helper));
         helper.assertTrue(!matrix.start(helper.makeMockPlayer(GameType.SURVIVAL)),
                 "nobody makes a rod by accident");
         helper.assertTrue(!matrix.busy(), "and nothing started");
@@ -119,7 +177,9 @@ public class InfusionTests {
     @GameTest(template = TEMPLATE, timeoutTicks = 600)
     public static void itDrinksAndFinishes(GameTestHelper helper) {
         InfusionMatrixBlockEntity matrix = laidOut(helper);
-        matrix.start(scholar(helper));
+        Player player = scholar(helper);
+        matrix.wake(player);
+        matrix.start(player);
 
         // twelve of one essentia is the longest part, and then a turn apiece for the two things on the ring
         run(helper, matrix, 20);
@@ -140,7 +200,9 @@ public class InfusionTests {
     @GameTest(template = TEMPLATE)
     public static void takingTheWorkAwayEndsIt(GameTestHelper helper) {
         InfusionMatrixBlockEntity matrix = laidOut(helper);
-        matrix.start(scholar(helper));
+        Player player = scholar(helper);
+        matrix.wake(player);
+        matrix.start(player);
         helper.setBlock(MATRIX.below(2), Blocks.AIR);
 
         run(helper, matrix, 1);

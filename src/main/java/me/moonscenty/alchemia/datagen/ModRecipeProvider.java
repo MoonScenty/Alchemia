@@ -402,12 +402,6 @@ public class ModRecipeProvider extends RecipeProvider {
                         'B', Ingredient.of(ModBlocks.ARCANE_STONE.block())),
                 "SSS", " B ", "SSS");
 
-        arcane(output, "arcane_pillar", "infusion", new ItemStack(ModBlocks.ARCANE_PILLAR.get(), 2),
-                AspectList.of(ModAspects.EARTH, 10),
-                Map.of('S', Ingredient.of(ModBlocks.ARCANE_STONE_BRICKS.block()),
-                        'B', Ingredient.of(ModBlocks.ARCANE_STONE.block())),
-                "S", "B", "S");
-
         // the rods: what it is made of in the middle, a balanced shard and its own element around it
         rod(output, "obsidian", Ingredient.of(Items.OBSIDIAN), 3,
                 AspectList.of(ModAspects.EARTH, 12).add(ModAspects.ENERGY, 6).add(ModAspects.DARKNESS, 6),

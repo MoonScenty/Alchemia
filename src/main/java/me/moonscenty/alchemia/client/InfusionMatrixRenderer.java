@@ -51,8 +51,10 @@ public class InfusionMatrixRenderer implements BlockEntityRenderer<InfusionMatri
         Minecraft client = Minecraft.getInstance();
         BakedModel stone = client.getModelManager().getModel(CUBE);
         float ticks = matrix.getLevel() == null ? 0.0F : matrix.getLevel().getGameTime() % 100000L + partial;
-        // nothing snaps into motion: the working takes a few seconds to come up to speed and back down again
-        float running = Math.min(1.0F, (matrix.turning() + (matrix.busy() ? partial : 0.0F)) / WINDS_UP);
+        // nothing snaps into motion: a woken altar takes a few seconds to come up to speed
+        float running = matrix.awake()
+                ? Math.min(1.0F, (matrix.turning() + partial) / WINDS_UP)
+                : 0.0F;
         float shake = matrix.busy() ? matrix.instability() * running : 0.0F;
 
         pose.pushPose();

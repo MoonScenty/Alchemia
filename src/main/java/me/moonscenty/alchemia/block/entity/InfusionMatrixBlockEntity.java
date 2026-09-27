@@ -2,6 +2,7 @@ package me.moonscenty.alchemia.block.entity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import me.moonscenty.alchemia.aspect.Aspect;
@@ -9,12 +10,16 @@ import me.moonscenty.alchemia.aspect.AspectList;
 import me.moonscenty.alchemia.crafting.InfusionInput;
 import me.moonscenty.alchemia.crafting.InfusionRecipe;
 import me.moonscenty.alchemia.crafting.ModRecipes;
+import me.moonscenty.alchemia.block.ArcanePillarBlock;
 import me.moonscenty.alchemia.essentia.EssentiaReach;
 import me.moonscenty.alchemia.player.PlayerKnowledge;
 import me.moonscenty.alchemia.registry.ModBlockEntities;
+import me.moonscenty.alchemia.registry.ModBlocks;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.protocol.Packet;
@@ -57,12 +62,17 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
     /** No work is ever worse than this, however it is laid out. */
     public static final int WORST = 25;
 
+    /** How often a matrix that is awake looks around to see whether its altar is still standing. */
+    private static final int LOOKS_ROUND = 100;
+
+    /** Whether the altar under it is built and the stones have been woken. */
+    private boolean awake;
     private ResourceLocation working;
     private AspectList owed = AspectList.EMPTY;
     private List<BlockPos> ring = List.of();
     private int instability;
     private int counter;
-    /** How long it has been running, which is what the drawing uses to wind itself up. */
+    /** How long it has been awake, which is what the drawing uses to wind itself up. */
     private int turning;
 
     public InfusionMatrixBlockEntity(BlockPos pos, BlockState state) {
@@ -71,6 +81,10 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
 
     public boolean busy() {
         return working != null;
+    }
+
+    public boolean awake() {
+        return awake;
     }
 
     public int instability() {
@@ -86,6 +100,107 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
         return owed;
     }
 
+    // --- building it -------------------------------------------------------
+
+    /**
+     * Where the four pillars stand, and which way each is turned.
+     * <p>
+     * The pillar is drawn leaning towards the north-east corner of its own block, so the four of them have to be
+     * turned a quarter apart to lean away from the middle together. The turn a pillar is given is read off its
+     * facing, which is why these four look arbitrary: south is no turn at all, and each quarter after it goes
+     * round the corners in order.
+     */
+    private static final Map<Vec3i, Direction> CORNERS = Map.of(
+            new Vec3i(1, -2, -1), Direction.SOUTH,
+            new Vec3i(1, -2, 1), Direction.WEST,
+            new Vec3i(-1, -2, 1), Direction.NORTH,
+            new Vec3i(-1, -2, -1), Direction.EAST);
+
+    /**
+     * Raises the altar: the four stones at the corners become pillars.
+     * <p>
+     * This is what the first touch of a wand does. Nothing is placed and nothing is spent -- the stone is already
+     * there, and what the wand does is tell it what it is for. A works is built by hand and then woken, which is a
+     * better moment than setting down four pillars one at a time and wondering whether they count.
+     *
+     * @return whether anything was raised
+     */
+    public static boolean raise(Level level, BlockPos pos) {
+        boolean raised = false;
+        for (Map.Entry<Vec3i, Direction> corner : CORNERS.entrySet()) {
+            BlockPos at = pos.offset(corner.getKey());
+            if (!level.getBlockState(at).is(ModBlocks.ARCANE_STONE.block().get())) {
+                continue;
+            }
+            level.setBlock(at, ModBlocks.ARCANE_PILLAR.get().defaultBlockState()
+                    .setValue(ArcanePillarBlock.FACING, corner.getValue()), Block.UPDATE_ALL);
+            raised = true;
+        }
+        return raised;
+    }
+
+    /**
+     * Whether there is an altar under this at all: a pedestal to work on and four pillars at the corners.
+     * <p>
+     * A matrix with nothing under it is eight stones hanging in a room. It will not wake and, if the altar is
+     * pulled apart under a working, it will not go on with it.
+     */
+    public boolean built(Level level) {
+        if (!(level.getBlockEntity(worldPosition.below(UNDER)) instanceof ArcanePedestalBlockEntity)) {
+            return false;
+        }
+        for (Vec3i corner : CORNERS.keySet()) {
+            if (!(level.getBlockState(worldPosition.offset(corner)).getBlock() instanceof ArcanePillarBlock)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * What a wand does when it is pointed at the matrix.
+     * <p>
+     * The first touch wakes the altar: the corner stones become pillars and the stones begin to turn. Every touch
+     * after that sets a working going. Two touches rather than one because waking is a thing you do once to a
+     * building and starting is a thing you do every time, and it would be a poor altar that could not tell you
+     * which of the two it had just done.
+     *
+     * @return what happened, for the wand to say out loud
+     */
+    public Woken wake(Player player) {
+        if (level == null || level.isClientSide) {
+            return Woken.NOTHING;
+        }
+        if (!awake) {
+            raise(level, worldPosition);
+            if (!built(level)) {
+                return Woken.UNBUILT;
+            }
+            awake = true;
+            turning = 0;
+            changed();
+            return Woken.WOKEN;
+        }
+        if (busy()) {
+            return Woken.BUSY;
+        }
+        return start(player) ? Woken.STARTED : Woken.NOTHING;
+    }
+
+    /** What came of pointing a wand at it. */
+    public enum Woken {
+        /** The altar is not finished, so nothing happened. */
+        UNBUILT,
+        /** The stones have begun to turn. */
+        WOKEN,
+        /** A working has started. */
+        STARTED,
+        /** It is already at work. */
+        BUSY,
+        /** What is laid out makes nothing. */
+        NOTHING
+    }
+
     // --- starting ----------------------------------------------------------
 
     /**
@@ -94,7 +209,7 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
      * @return whether the work started
      */
     public boolean start(Player player) {
-        if (level == null || level.isClientSide || busy()) {
+        if (level == null || level.isClientSide || busy() || !awake) {
             return false;
         }
         ArcanePedestalBlockEntity under = stand(level, worldPosition.below(UNDER));
@@ -141,10 +256,23 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
     // --- working -----------------------------------------------------------
 
     public static void tick(Level level, BlockPos pos, BlockState state, InfusionMatrixBlockEntity matrix) {
-        if (!matrix.busy()) {
+        if (!matrix.awake) {
             return;
         }
         matrix.turning++;
+        // an altar taken apart under a working stops being an altar, and a matrix left hanging goes back to sleep
+        if (matrix.turning % (matrix.busy() ? CYCLE : LOOKS_ROUND) == 0 && !matrix.built(level)) {
+            if (matrix.busy()) {
+                matrix.fail((ServerLevel) level, pos);
+            }
+            matrix.awake = false;
+            matrix.turning = 0;
+            matrix.changed();
+            return;
+        }
+        if (!matrix.busy()) {
+            return;
+        }
         if (++matrix.counter < CYCLE) {
             return;
         }
@@ -224,12 +352,13 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
         stop();
     }
 
+    /** The working is over, one way or another. The altar stays awake: it is still an altar. */
     private void stop() {
         working = null;
         owed = AspectList.EMPTY;
         ring = List.of();
         instability = 0;
-        turning = 0;
+        counter = 0;
         changed();
     }
 
@@ -293,6 +422,7 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
+        awake = tag.getBoolean("awake");
         working = tag.contains("working") ? ResourceLocation.parse(tag.getString("working")) : null;
         owed = AspectList.CODEC
                 .parse(registries.createSerializationContext(NbtOps.INSTANCE), tag.get("owed"))
@@ -309,6 +439,9 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
     @Override
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.saveAdditional(tag, registries);
+        if (awake) {
+            tag.putBoolean("awake", true);
+        }
         if (working != null) {
             tag.putString("working", working.toString());
         }

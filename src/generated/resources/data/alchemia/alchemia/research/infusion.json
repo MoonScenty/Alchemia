@@ -15,10 +15,6 @@
     {
       "type": "recipe",
       "recipe": "alchemia:arcane_pedestal"
-    },
-    {
-      "type": "recipe",
-      "recipe": "alchemia:arcane_pillar"
     }
   ],
   "parents": [

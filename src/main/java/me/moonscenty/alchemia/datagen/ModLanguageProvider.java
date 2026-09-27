@@ -93,7 +93,10 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         addBlock(ModBlocks.ARCANE_PEDESTAL, pick("Arcane Pedestal", "비전 받침대"));
         addBlock(ModBlocks.ARCANE_PILLAR, pick("Arcane Pillar", "비전 기둥"));
         addBlock(ModBlocks.INFUSION_MATRIX, pick("Runic Matrix", "룬 결계"));
-        add("block.alchemia.infusion_matrix.idle", pick("Still", "조용하다"));
+        add("block.alchemia.infusion_matrix.asleep", pick("The stones hang still", "돌이 가만히 떠 있다"));
+        add("block.alchemia.infusion_matrix.idle", pick("Awake, and waiting", "깨어서 기다리고 있다"));
+        add("block.alchemia.infusion_matrix.woken", pick("The altar wakes", "제단이 깨어난다"));
+        add("block.alchemia.infusion_matrix.unbuilt", pick("The altar is not finished", "제단이 아직 완성되지 않았다"));
         add("block.alchemia.infusion_matrix.busy", pick("Already working", "이미 일하고 있다"));
         add("block.alchemia.infusion_matrix.nothing", pick("What is laid out here makes nothing", "여기 놓인 것으로는 아무것도 되지 않는다"));
         add("block.alchemia.infusion_matrix.gathering", pick("Drawing in what it needs", "필요한 것을 끌어당기고 있다"));

@@ -121,7 +121,7 @@ public class ModResearchProvider {
                 AspectList.of(ModAspects.AURA, 6).add(ModAspects.CRAFT, 6).add(ModAspects.ORDER, 4)
                         .add(ModAspects.ENERGY, 4),
                 List.of("arcane_workbench", "vis_crystals"), false, NodeShape.MAJOR, 3,
-                "infusion_matrix", "arcane_pedestal", "arcane_pillar");
+                "infusion_matrix", "arcane_pedestal");
         entry(context, "wand_rods", ModResearch.ARCANA, ModItems.WAND_RODS.get("silverwood"), 8, 4,
                 AspectList.of(ModAspects.TOOL, 6).add(ModAspects.AURA, 6).add(ModAspects.ENERGY, 6),
                 List.of("infusion", "silverwood"), false, NodeShape.PLAIN, 3,
