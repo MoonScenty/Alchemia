@@ -7,6 +7,7 @@ import com.mojang.serialization.MapCodec;
 
 import me.moonscenty.alchemia.aspect.Aspect;
 import me.moonscenty.alchemia.block.entity.FilterTubeBlockEntity;
+import me.moonscenty.alchemia.item.PhialItem;
 import me.moonscenty.alchemia.registry.ModItems;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -30,8 +31,8 @@ import net.neoforged.neoforge.registries.DeferredItem;
 /**
  * A length of pipe that lets one essentia by and turns the rest back.
  * <p>
- * What it lets by is told to it with a vis crystal, since a crystal is that aspect made solid and there is one for
- * each of the six primals. Crouch and click to make it forget again. Two filters set to different things in one run
+ * What it lets by is told to it by holding a phial of that essentia against it, or a vis crystal, which is the
+ * same thing in solid form and comes to hand earlier. Crouch and click to make it forget again. Two filters set to different things in one run
  * pass nothing at all, which is the honest answer rather than a special case.
  */
 public class FilterTubeBlock extends TubeBlock {
@@ -56,11 +57,11 @@ public class FilterTubeBlock extends TubeBlock {
         return level.getBlockEntity(pos) instanceof FilterTubeBlockEntity filter ? filter.only() : Optional.empty();
     }
 
-    /** Set with a crystal of the aspect it is to let by. */
+    /** Set with a phial of what it is to let by, or with a crystal of it. */
     @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
             Player player, InteractionHand hand, BlockHitResult hit) {
-        Optional<Holder<Aspect>> aspect = crystallised(stack);
+        Optional<Holder<Aspect>> aspect = PhialItem.inside(stack).or(() -> crystallised(stack));
         if (aspect.isEmpty() || !(level.getBlockEntity(pos) instanceof FilterTubeBlockEntity filter)) {
             return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         }

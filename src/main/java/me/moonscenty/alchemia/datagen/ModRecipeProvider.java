@@ -6,6 +6,8 @@ import java.util.Map;
 
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.crafting.ArcaneShapedRecipe;
+import me.moonscenty.alchemia.crafting.ArcaneShapelessRecipe;
+import me.moonscenty.alchemia.crafting.LabelRecipe;
 import me.moonscenty.alchemia.crafting.CrucibleRecipe;
 import me.moonscenty.alchemia.aspect.AspectList;
 import me.moonscenty.alchemia.crafting.ArcaneWandRecipe;
@@ -17,6 +19,7 @@ import me.moonscenty.alchemia.registry.StoneSet;
 import me.moonscenty.alchemia.registry.WoodSet;
 import net.minecraft.advancements.Criterion;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.RecipeCategory;
@@ -27,6 +30,7 @@ import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.data.recipes.SpecialRecipeBuilder;
 import net.minecraft.data.recipes.SingleItemRecipeBuilder;
 import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -66,6 +70,7 @@ public class ModRecipeProvider extends RecipeProvider {
         wand(output);
         arcane(output);
         crucible(output);
+        distillery(output);
 
         // arcane stone itself is shaped on the arcane workbench; these are what it is worked into afterwards
         quadrupleFrom(output, ModBlocks.ARCANE_STONE_BRICKS.block(), ModBlocks.ARCANE_STONE.block());
@@ -256,9 +261,119 @@ public class ModRecipeProvider extends RecipeProvider {
 
     private void arcane(RecipeOutput output, String name, ItemStack result, AspectList cost,
             Map<Character, Ingredient> key, String... pattern) {
-        output.accept(Alchemia.id(name),
-                new ArcaneShapedRecipe("", ShapedRecipePattern.of(key, pattern), result, cost, Optional.empty()),
-                null);
+        arcane(output, name, null, result, cost, key, pattern);
+    }
+
+    /** The same, for the ones that are only shown once the research behind them is done. */
+    private void arcane(RecipeOutput output, String name, String research, ItemStack result, AspectList cost,
+            Map<Character, Ingredient> key, String... pattern) {
+        output.accept(Alchemia.id(name), new ArcaneShapedRecipe("", ShapedRecipePattern.of(key, pattern), result,
+                cost, Optional.ofNullable(research).map(Alchemia::id)), null);
+    }
+
+    /** Worked at the arcane workbench, but laid out anyhow: most of the tube fittings are one thing plus another. */
+    private void shapeless(RecipeOutput output, String name, String research, ItemStack result, AspectList cost,
+            Ingredient... ingredients) {
+        NonNullList<Ingredient> laid = NonNullList.of(Ingredient.EMPTY, ingredients);
+        output.accept(Alchemia.id(name), new ArcaneShapelessRecipe("", laid, result, cost,
+                Optional.ofNullable(research).map(Alchemia::id)), null);
+    }
+
+    /**
+     * The distillery: what catches essentia, what carries it, and what it is kept in.
+     * <p>
+     * The prices and the shapes are the original's. The one substitution is the tube's quicksilver nugget, which
+     * the original spelled as the fifth of its nine nuggets.
+     */
+    private void distillery(RecipeOutput output) {
+        arcane(output, "filter", "distillation", new ItemStack(ModItems.FILTER.get(), 2),
+                AspectList.of(ModAspects.ORDER, 15).add(ModAspects.WATER, 15),
+                Map.of('G', Ingredient.of(Tags.Items.INGOTS_GOLD),
+                        'W', Ingredient.of(ModBlocks.SILVERWOOD.planks())), "GWG");
+
+        arcane(output, "essentia_smelter", "distillation", new ItemStack(ModBlocks.ESSENTIA_SMELTER.get()),
+                AspectList.of(ModAspects.FIRE, 25).add(ModAspects.WATER, 25),
+                Map.of('B', Ingredient.of(ModItems.BRASS_PLATE),
+                        'C', Ingredient.of(ModBlocks.CRUCIBLE),
+                        'F', Ingredient.of(Items.FURNACE),
+                        'S', Ingredient.of(Tags.Items.COBBLESTONES)),
+                "BCB", "SFS", "SSS");
+
+        arcane(output, "alembic", "distillation", new ItemStack(ModBlocks.ALEMBIC.get()),
+                AspectList.of(ModAspects.AIR, 15).add(ModAspects.WATER, 25),
+                Map.of('W', Ingredient.of(ModBlocks.GREATWOOD.planks()),
+                        'F', Ingredient.of(ModItems.FILTER),
+                        'S', Ingredient.of(ModItems.BRASS_PLATE),
+                        'B', Ingredient.of(Items.BUCKET)),
+                "WFW", "SBS", "WFW");
+
+        // the only one of the lot worked at a plain bench: glass and a lump of clay for the stopper
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.PHIAL.get(), 8)
+                .pattern(" C ").pattern("G G").pattern(" G ")
+                .define('G', Tags.Items.GLASS_BLOCKS)
+                .define('C', Items.CLAY_BALL)
+                .unlockedBy("has_glass", has(Tags.Items.GLASS_BLOCKS))
+                .save(output);
+
+        arcane(output, "jar", "jar_label", new ItemStack(ModBlocks.JAR.get()),
+                AspectList.of(ModAspects.WATER, 5),
+                Map.of('G', Ingredient.of(Tags.Items.GLASS_PANES),
+                        'W', Ingredient.of(ItemTags.WOODEN_SLABS)),
+                "GWG", "G G", "GGG");
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModItems.JAR_LABEL.get(), 4)
+                .requires(Tags.Items.DYES_BLACK)
+                .requires(Tags.Items.SLIME_BALLS)
+                .requires(Items.PAPER, 4)
+                .unlockedBy("has_paper", has(Items.PAPER))
+                .save(output);
+
+        // writing an aspect on a label and rubbing it out again are both in code: an aspect is not a shape
+        SpecialRecipeBuilder.special(LabelRecipe::new).save(output, Alchemia.id("jar_label_writing").toString());
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.JAR_BRACE.get(), 2)
+                .pattern("NSN").pattern("S S").pattern("NSN")
+                .define('N', ModTags.Items.NUGGETS_BRASS)
+                .define('S', Tags.Items.RODS_WOODEN)
+                .unlockedBy("has_nugget", has(ModTags.Items.NUGGETS_BRASS))
+                .save(output);
+
+        tubes(output);
+    }
+
+    /** The pipework: one recipe for the plain length, and one apiece for what is done to it afterwards. */
+    private void tubes(RecipeOutput output) {
+        arcane(output, "tube", "tubes", new ItemStack(ModBlocks.TUBE.get(), 8),
+                AspectList.of(ModAspects.WATER, 5).add(ModAspects.ORDER, 5),
+                Map.of('I', Ingredient.of(Tags.Items.INGOTS_IRON),
+                        'B', Ingredient.of(Tags.Items.NUGGETS_GOLD),
+                        'G', Ingredient.of(Tags.Items.GLASS_BLOCKS),
+                        'Q', Ingredient.of(ModTags.Items.NUGGETS_QUICKSILVER)),
+                " Q ", "IGI", " B ");
+
+        shapeless(output, "tube_valve", "tubes", new ItemStack(ModBlocks.TUBE_VALVE.get()),
+                AspectList.of(ModAspects.WATER, 5).add(ModAspects.ORDER, 5),
+                Ingredient.of(ModBlocks.TUBE), Ingredient.of(Items.LEVER));
+
+        shapeless(output, "tube_filter", "tube_filter", new ItemStack(ModBlocks.TUBE_FILTER.get()),
+                AspectList.of(ModAspects.WATER, 5).add(ModAspects.ORDER, 10),
+                Ingredient.of(ModBlocks.TUBE), Ingredient.of(ModItems.FILTER));
+
+        shapeless(output, "tube_restrict", "tube_filter", new ItemStack(ModBlocks.TUBE_RESTRICT.get()),
+                AspectList.of(ModAspects.WATER, 5).add(ModAspects.EARTH, 10),
+                Ingredient.of(ModBlocks.TUBE), Ingredient.of(Tags.Items.STONES));
+
+        shapeless(output, "tube_oneway", "tube_filter", new ItemStack(ModBlocks.TUBE_ONEWAY.get()),
+                AspectList.of(ModAspects.WATER, 5).add(ModAspects.ORDER, 10).add(ModAspects.ENTROPY, 10),
+                Ingredient.of(ModBlocks.TUBE), Ingredient.of(Tags.Items.DYES_BLUE));
+
+        arcane(output, "tube_buffer", "tube_filter", new ItemStack(ModBlocks.TUBE_BUFFER.get()),
+                AspectList.of(ModAspects.WATER, 25).add(ModAspects.ORDER, 25),
+                Map.of('P', Ingredient.of(ModItems.PHIAL),
+                        'V', Ingredient.of(ModBlocks.TUBE_VALVE),
+                        'R', Ingredient.of(ModBlocks.TUBE_RESTRICT),
+                        'T', Ingredient.of(ModBlocks.TUBE)),
+                "PVP", "T T", "PRP");
     }
 
     /**

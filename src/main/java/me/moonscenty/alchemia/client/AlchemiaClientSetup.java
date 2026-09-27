@@ -1,7 +1,13 @@
 package me.moonscenty.alchemia.client;
 
+import java.util.List;
 
+import me.moonscenty.alchemia.aspect.Aspect;
 import me.moonscenty.alchemia.block.entity.CrucibleBlockEntity;
+import me.moonscenty.alchemia.registry.ModDataComponents;
+import net.minecraft.core.Holder;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import me.moonscenty.alchemia.block.entity.JarBlockEntity;
 import me.moonscenty.alchemia.registry.ModBlocks;
 import me.moonscenty.alchemia.Alchemia;
@@ -41,6 +47,31 @@ public class AlchemiaClientSetup {
     public static void onClientSetup(FMLClientSetupEvent event) {
         AlchemonomiconItem.opener = () -> Minecraft.getInstance().setScreen(new AlchemonomiconScreen());
         registerWandVariants();
+
+        // a phial and a label are each drawn one way empty and another way with something named on them
+        for (Item item : List.of(ModItems.PHIAL.get(), ModItems.JAR_LABEL.get())) {
+            ItemProperties.register(item, Alchemia.id("filled"), (stack, level, holder, seed) ->
+                    stack.has(ModDataComponents.ESSENTIA.get()) ? 1 : 0);
+        }
+    }
+
+    /**
+     * What colour the essentia in a phial reads as, and the ink on a label.
+     * <p>
+     * Both are drawn grey and coloured here, the same as the liquid in a jar, so one picture serves thirty-five
+     * aspects. The layer that takes the colour differs: a phial is filled behind its glass, a label is written on
+     * top of its paper.
+     */
+    @SubscribeEvent
+    public static void registerItemColours(RegisterColorHandlersEvent.Item event) {
+        event.register((stack, tint) -> tint == 0 ? named(stack) : 0xFFFFFF, ModItems.PHIAL.get());
+        event.register((stack, tint) -> tint == 1 ? named(stack) : 0xFFFFFF, ModItems.JAR_LABEL.get());
+    }
+
+    /** The colour of the aspect an item names, or white if it names none. */
+    private static int named(ItemStack stack) {
+        Holder<Aspect> aspect = stack.get(ModDataComponents.ESSENTIA.get());
+        return aspect == null ? 0xFFFFFF : aspect.value().color();
     }
 
     @SubscribeEvent
@@ -70,7 +101,8 @@ public class AlchemiaClientSetup {
         // the liquid standing in a jar, in the colour of whatever the jar is holding
         event.register((state, level, pos, tint) ->
                 level != null && pos != null && level.getBlockEntity(pos) instanceof JarBlockEntity jar
-                        ? jar.colour()
+                        ? (tint == 1 ? jar.label().map(aspect -> aspect.value().color()).orElse(0xFFFFFF)
+                                     : jar.colour())
                         : 0xFFFFFF, ModBlocks.JAR.get());
     }
 

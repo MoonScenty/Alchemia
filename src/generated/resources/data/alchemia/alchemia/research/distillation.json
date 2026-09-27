@@ -1,0 +1,34 @@
+{
+  "category": "alchemia:alchemy",
+  "column": 1,
+  "complexity": 3,
+  "icon": "alchemia:essentia_smelter",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.distillation.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:filter"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:essentia_smelter"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:alembic"
+    }
+  ],
+  "parents": [
+    "alchemia:crucible"
+  ],
+  "requirements": {
+    "alchemia:aqua": 4,
+    "alchemia:fabrico": 4,
+    "alchemia:ignis": 4
+  },
+  "row": 4,
+  "shape": "major"
+}

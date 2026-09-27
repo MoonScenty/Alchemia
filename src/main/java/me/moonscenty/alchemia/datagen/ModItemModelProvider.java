@@ -43,6 +43,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         withExistingParent("arcane_workbench_charger", modLoc("block/charger/item"));
         withExistingParent("node_stabilizer", modLoc("block/node_stabilizer/item"));
         withExistingParent("taint_fibre", mcLoc("item/generated")).texture("layer0", modLoc("block/taint_fibres"));
+        distillery();
         basicItem(ModItems.AMBER.get());
         basicItem(ModItems.QUICKSILVER.get());
         basicItem(ModItems.RAW_CINNABAR.get());
@@ -119,6 +120,38 @@ public class ModItemModelProvider extends ItemModelProvider {
             withExistingParent("wand_rod_" + RODS[rod], mcLoc("item/handheld"))
                     .texture("layer0", modLoc("item/wand/rod_" + RODS[rod]));
         }
+    }
+
+    /**
+     * The phial and the label, each of which is two pictures in one item.
+     * <p>
+     * An empty phial is glass and nothing else; a full one has the essentia drawn behind the glass, tinted by
+     * whatever it is holding. A label is the same trick with paper and ink. Which of the two is shown comes from a
+     * single number the item hands the renderer, since that is all an override can be asked to test.
+     */
+    private void distillery() {
+        basicItem(ModItems.FILTER.get());
+        basicItem(ModItems.JAR_BRACE.get());
+
+        withExistingParent("phial_filled", mcLoc("item/generated"))
+                .texture("layer0", modLoc("item/phial_contents"))
+                .texture("layer1", modLoc("item/phial"));
+        withExistingParent("jar_label_written", mcLoc("item/generated"))
+                .texture("layer0", modLoc("item/jar_label"))
+                .texture("layer1", modLoc("item/jar_label_overlay"));
+
+        filled("phial", "phial_filled");
+        filled("jar_label", "jar_label_written");
+    }
+
+    /** An item that is drawn one way empty and another way full, with the full picture kept in its own file. */
+    private void filled(String name, String full) {
+        withExistingParent(name, mcLoc("item/generated"))
+                .texture("layer0", modLoc("item/" + name))
+                .override()
+                        .predicate(Alchemia.id("filled"), 1)
+                        .model(getExistingFile(modLoc("item/" + full)))
+                        .end();
     }
 
     /**

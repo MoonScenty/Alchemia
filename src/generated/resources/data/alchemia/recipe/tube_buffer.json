@@ -1,0 +1,31 @@
+{
+  "type": "alchemia:arcane_shaped",
+  "key": {
+    "P": {
+      "item": "alchemia:phial"
+    },
+    "R": {
+      "item": "alchemia:tube_restrict"
+    },
+    "T": {
+      "item": "alchemia:tube"
+    },
+    "V": {
+      "item": "alchemia:tube_valve"
+    }
+  },
+  "pattern": [
+    "PVP",
+    "T T",
+    "PRP"
+  ],
+  "research": "alchemia:tube_filter",
+  "result": {
+    "count": 1,
+    "id": "alchemia:tube_buffer"
+  },
+  "vis": {
+    "alchemia:aqua": 25,
+    "alchemia:ordo": 25
+  }
+}

@@ -4,6 +4,8 @@
     "0": "alchemia:block/jar_glass",
     "1": "alchemia:block/greatwood_planks",
     "liquid": "minecraft:block/water_still",
+    "paper": "alchemia:item/jar_label",
+    "writing": "alchemia:item/jar_label_overlay",
     "particle": "alchemia:block/jar_glass"
   },
   "elements": [

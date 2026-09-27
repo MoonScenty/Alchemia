@@ -91,6 +91,23 @@ public class ModResearchProvider {
                 List.of("crucible"), false, NodeShape.PLAIN, 3,
                 "alchemium_ingot_from_iron", "brass_ingot_from_iron");
 
+        // --- distilling, and the plumbing that follows from it ---------------------------------------------
+
+        entry(context, "distillation", ModResearch.ALCHEMY, ModBlocks.ESSENTIA_SMELTER, 1, 4,
+                AspectList.of(ModAspects.FIRE, 4).add(ModAspects.WATER, 4).add(ModAspects.CRAFT, 4),
+                List.of("crucible"), false, NodeShape.MAJOR, 3, "filter", "essentia_smelter", "alembic");
+        entry(context, "jar_label", ModResearch.ALCHEMY, ModBlocks.JAR, 0, 5,
+                AspectList.of(ModAspects.CRYSTAL, 4).add(ModAspects.VOID, 4).add(ModAspects.TRAP, 2),
+                List.of("distillation"), false, NodeShape.PLAIN, 2,
+                "jar", "phial", "jar_label", "jar_brace");
+        entry(context, "tubes", ModResearch.ALCHEMY, ModBlocks.TUBE, 2, 5,
+                AspectList.of(ModAspects.WATER, 3).add(ModAspects.EXCHANGE, 6),
+                List.of("distillation"), false, NodeShape.PLAIN, 2, "tube", "tube_valve");
+        entry(context, "tube_filter", ModResearch.ALCHEMY, ModBlocks.TUBE_FILTER, 3, 6,
+                AspectList.of(ModAspects.WATER, 3).add(ModAspects.EXCHANGE, 6).add(ModAspects.ORDER, 3),
+                List.of("tubes"), false, NodeShape.PLAIN, 3,
+                "tube_filter", "tube_restrict", "tube_oneway", "tube_buffer");
+
         entry(context, "arcane_stone", ModResearch.ARTIFICE, ModBlocks.ARCANE_STONE.block(), 3, 2,
                 AspectList.of(ModAspects.EARTH, 4).add(ModAspects.AURA, 2).add(ModAspects.CRYSTAL, 2),
                 List.of("arcane_workbench"), false, NodeShape.PLAIN, 2, "arcane_stone",

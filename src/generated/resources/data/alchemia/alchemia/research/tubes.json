@@ -1,0 +1,28 @@
+{
+  "category": "alchemia:alchemy",
+  "column": 2,
+  "complexity": 2,
+  "icon": "alchemia:tube",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.tubes.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:tube"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:tube_valve"
+    }
+  ],
+  "parents": [
+    "alchemia:distillation"
+  ],
+  "requirements": {
+    "alchemia:aqua": 3,
+    "alchemia:permutatio": 6
+  },
+  "row": 5
+}

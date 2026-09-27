@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "alchemia:item/phial_contents",
+    "layer1": "alchemia:item/phial"
+  }
+}

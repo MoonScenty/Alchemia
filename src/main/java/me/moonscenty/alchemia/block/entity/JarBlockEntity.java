@@ -37,6 +37,10 @@ public class JarBlockEntity extends BlockEntity implements EssentiaHolder {
 
     private Holder<Aspect> holding;
     private int amount;
+    /** The aspect written on the label stuck to it, if there is one. */
+    private Holder<Aspect> label;
+    /** Whether a brace has been fitted, which stops anything being drawn back out. */
+    private boolean braced;
 
     public JarBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.JAR.get(), pos, state);
@@ -50,14 +54,47 @@ public class JarBlockEntity extends BlockEntity implements EssentiaHolder {
         return amount;
     }
 
+    public Optional<Holder<Aspect>> label() {
+        return Optional.ofNullable(label);
+    }
+
+    public boolean braced() {
+        return braced;
+    }
+
+    /**
+     * Sticks a label on, or takes it off again.
+     * <p>
+     * A labelled jar keeps the aspect whether or not there is any of it left, which is the whole point: an empty jar
+     * on a shelf still says what belongs in it, and a tube that would otherwise drop something else in cannot.
+     */
+    public void label(Holder<Aspect> aspect) {
+        label = aspect;
+        if (aspect != null) {
+            holding = aspect;
+        } else if (amount == 0) {
+            holding = null;
+        }
+        changed();
+    }
+
+    public void brace(boolean fitted) {
+        braced = fitted;
+        changed();
+    }
+
     @Override
     public AspectList held() {
         return holding == null ? AspectList.EMPTY : AspectList.of(holding, amount);
     }
 
+    /** A labelled jar takes what its label says and nothing else, full or empty. */
     @Override
     public boolean wants(Holder<Aspect> aspect) {
-        return amount < CAPACITY && (holding == null || holding.value() == aspect.value());
+        if (amount >= CAPACITY) {
+            return false;
+        }
+        return label != null ? label.value() == aspect.value() : holding == null || holding.value() == aspect.value();
     }
 
     @Override
@@ -71,13 +108,14 @@ public class JarBlockEntity extends BlockEntity implements EssentiaHolder {
         return true;
     }
 
+    /** A braced jar is a jar you fill and leave. Nothing comes back out of one until the brace comes off. */
     @Override
     public boolean release(Holder<Aspect> aspect) {
-        if (holding == null || holding.value() != aspect.value() || amount <= 0) {
+        if (braced || holding == null || holding.value() != aspect.value() || amount <= 0) {
             return false;
         }
         amount--;
-        if (amount == 0) {
+        if (amount == 0 && label == null) {
             holding = null;
         }
         changed();
@@ -95,7 +133,7 @@ public class JarBlockEntity extends BlockEntity implements EssentiaHolder {
         if (level instanceof ServerLevel served && amount > 0) {
             AuraHandler.add(served, worldPosition, ModAspects.FLUX, amount);
         }
-        holding = null;
+        holding = label;
         amount = 0;
     }
 
@@ -116,7 +154,9 @@ public class JarBlockEntity extends BlockEntity implements EssentiaHolder {
             return;
         }
         int shown = amount <= 0 ? 0 : Math.max(1, amount * STEPS / CAPACITY);
-        BlockState updated = getBlockState().setValue(JarBlock.FILL, Math.min(STEPS, shown));
+        BlockState updated = getBlockState()
+                .setValue(JarBlock.FILL, Math.min(STEPS, shown))
+                .setValue(JarBlock.LABELLED, label != null);
         if (updated != getBlockState()) {
             level.setBlock(worldPosition, updated, Block.UPDATE_ALL);
         } else {
@@ -128,10 +168,9 @@ public class JarBlockEntity extends BlockEntity implements EssentiaHolder {
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
         amount = tag.getInt("amount");
-        holding = tag.contains("aspect")
-                ? ModAspects.REGISTRY.getHolder(ResourceLocation.parse(tag.getString("aspect")))
-                        .map(found -> (Holder<Aspect>) found).orElse(null)
-                : null;
+        holding = named(tag, "aspect");
+        label = named(tag, "label");
+        braced = tag.getBoolean("braced");
     }
 
     @Override
@@ -141,9 +180,24 @@ public class JarBlockEntity extends BlockEntity implements EssentiaHolder {
         if (holding != null) {
             tag.putString("aspect", holding.value().id().toString());
         }
+        if (label != null) {
+            tag.putString("label", label.value().id().toString());
+        }
+        if (braced) {
+            tag.putBoolean("braced", true);
+        }
     }
 
     /** The colour of what is standing in it is drawn from this, so it has to reach the client on its own. */
+    /** An aspect written down under some name in the tag, if it is there and still exists. */
+    @SuppressWarnings("unchecked")
+    private static Holder<Aspect> named(CompoundTag tag, String key) {
+        return tag.contains(key)
+                ? ModAspects.REGISTRY.getHolder(ResourceLocation.parse(tag.getString(key)))
+                        .map(found -> (Holder<Aspect>) found).orElse(null)
+                : null;
+    }
+
     @Override
     public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
         return saveWithoutMetadata(registries);

@@ -1,0 +1,14 @@
+{
+  "parent": "minecraft:item/generated",
+  "overrides": [
+    {
+      "model": "alchemia:item/jar_label_written",
+      "predicate": {
+        "alchemia:filled": 1.0
+      }
+    }
+  ],
+  "textures": {
+    "layer0": "alchemia:item/jar_label"
+  }
+}

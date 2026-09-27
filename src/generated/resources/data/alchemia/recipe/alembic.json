@@ -1,0 +1,31 @@
+{
+  "type": "alchemia:arcane_shaped",
+  "key": {
+    "B": {
+      "item": "minecraft:bucket"
+    },
+    "F": {
+      "item": "alchemia:filter"
+    },
+    "S": {
+      "item": "alchemia:brass_plate"
+    },
+    "W": {
+      "item": "alchemia:greatwood_planks"
+    }
+  },
+  "pattern": [
+    "WFW",
+    "SBS",
+    "WFW"
+  ],
+  "research": "alchemia:distillation",
+  "result": {
+    "count": 1,
+    "id": "alchemia:alembic"
+  },
+  "vis": {
+    "alchemia:aer": 15,
+    "alchemia:aqua": 25
+  }
+}

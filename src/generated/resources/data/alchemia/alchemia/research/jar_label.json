@@ -1,0 +1,37 @@
+{
+  "category": "alchemia:alchemy",
+  "column": 0,
+  "complexity": 2,
+  "icon": "alchemia:jar",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.jar_label.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:jar"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:phial"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:jar_label"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:jar_brace"
+    }
+  ],
+  "parents": [
+    "alchemia:distillation"
+  ],
+  "requirements": {
+    "alchemia:vacuos": 4,
+    "alchemia:vinculum": 2,
+    "alchemia:vitreus": 4
+  },
+  "row": 5
+}

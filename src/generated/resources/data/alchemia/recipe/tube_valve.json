@@ -1,0 +1,20 @@
+{
+  "type": "alchemia:arcane_shapeless",
+  "ingredients": [
+    {
+      "item": "alchemia:tube"
+    },
+    {
+      "item": "minecraft:lever"
+    }
+  ],
+  "research": "alchemia:tubes",
+  "result": {
+    "count": 1,
+    "id": "alchemia:tube_valve"
+  },
+  "vis": {
+    "alchemia:aqua": 5,
+    "alchemia:ordo": 5
+  }
+}

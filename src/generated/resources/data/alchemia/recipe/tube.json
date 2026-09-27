@@ -1,0 +1,31 @@
+{
+  "type": "alchemia:arcane_shaped",
+  "key": {
+    "B": {
+      "tag": "c:nuggets/gold"
+    },
+    "G": {
+      "tag": "c:glass_blocks"
+    },
+    "I": {
+      "tag": "c:ingots/iron"
+    },
+    "Q": {
+      "tag": "c:nuggets/quicksilver"
+    }
+  },
+  "pattern": [
+    " Q ",
+    "IGI",
+    " B "
+  ],
+  "research": "alchemia:tubes",
+  "result": {
+    "count": 8,
+    "id": "alchemia:tube"
+  },
+  "vis": {
+    "alchemia:aqua": 5,
+    "alchemia:ordo": 5
+  }
+}

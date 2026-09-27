@@ -1,6 +1,7 @@
 package me.moonscenty.alchemia.registry;
 
 import me.moonscenty.alchemia.Alchemia;
+import me.moonscenty.alchemia.aspect.Aspect;
 import me.moonscenty.alchemia.aspect.AspectList;
 import me.moonscenty.alchemia.research.ResearchNote;
 import me.moonscenty.alchemia.wand.WandCap;
@@ -43,6 +44,19 @@ public class ModDataComponents {
             COMPONENTS.register("vis", () -> DataComponentType.<AspectList>builder()
                     .persistent(AspectList.CODEC)
                     .networkSynchronized(AspectList.STREAM_CODEC)
+                    .build());
+
+    /**
+     * The one aspect a phial or a label names.
+     * <p>
+     * How much of it is not written down: a phial is always eight and a label is a word rather than a measure.
+     * An item without this component is an empty phial or a blank label, which is also what makes the two models
+     * easy to pick between.
+     */
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Holder<Aspect>>> ESSENTIA =
+            COMPONENTS.register("essentia", () -> DataComponentType.<Holder<Aspect>>builder()
+                    .persistent(ModAspects.REGISTRY.holderByNameCodec())
+                    .networkSynchronized(ByteBufCodecs.holderRegistry(ModAspects.KEY))
                     .build());
 
     private ModDataComponents() {

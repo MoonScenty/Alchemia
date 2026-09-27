@@ -1,19 +1,154 @@
 {
   "variants": {
-    "fill=0": {
+    "facing=east,fill=0,labelled=false": {
+      "model": "alchemia:block/jar/jar",
+      "y": 90
+    },
+    "facing=east,fill=0,labelled=true": {
+      "model": "alchemia:block/jar/jar_labelled",
+      "y": 90
+    },
+    "facing=east,fill=1,labelled=false": {
+      "model": "alchemia:block/jar/jar_1",
+      "y": 90
+    },
+    "facing=east,fill=1,labelled=true": {
+      "model": "alchemia:block/jar/jar_labelled_1",
+      "y": 90
+    },
+    "facing=east,fill=2,labelled=false": {
+      "model": "alchemia:block/jar/jar_2",
+      "y": 90
+    },
+    "facing=east,fill=2,labelled=true": {
+      "model": "alchemia:block/jar/jar_labelled_2",
+      "y": 90
+    },
+    "facing=east,fill=3,labelled=false": {
+      "model": "alchemia:block/jar/jar_3",
+      "y": 90
+    },
+    "facing=east,fill=3,labelled=true": {
+      "model": "alchemia:block/jar/jar_labelled_3",
+      "y": 90
+    },
+    "facing=east,fill=4,labelled=false": {
+      "model": "alchemia:block/jar/jar_4",
+      "y": 90
+    },
+    "facing=east,fill=4,labelled=true": {
+      "model": "alchemia:block/jar/jar_labelled_4",
+      "y": 90
+    },
+    "facing=north,fill=0,labelled=false": {
       "model": "alchemia:block/jar/jar"
     },
-    "fill=1": {
+    "facing=north,fill=0,labelled=true": {
+      "model": "alchemia:block/jar/jar_labelled"
+    },
+    "facing=north,fill=1,labelled=false": {
       "model": "alchemia:block/jar/jar_1"
     },
-    "fill=2": {
+    "facing=north,fill=1,labelled=true": {
+      "model": "alchemia:block/jar/jar_labelled_1"
+    },
+    "facing=north,fill=2,labelled=false": {
       "model": "alchemia:block/jar/jar_2"
     },
-    "fill=3": {
+    "facing=north,fill=2,labelled=true": {
+      "model": "alchemia:block/jar/jar_labelled_2"
+    },
+    "facing=north,fill=3,labelled=false": {
       "model": "alchemia:block/jar/jar_3"
     },
-    "fill=4": {
+    "facing=north,fill=3,labelled=true": {
+      "model": "alchemia:block/jar/jar_labelled_3"
+    },
+    "facing=north,fill=4,labelled=false": {
       "model": "alchemia:block/jar/jar_4"
+    },
+    "facing=north,fill=4,labelled=true": {
+      "model": "alchemia:block/jar/jar_labelled_4"
+    },
+    "facing=south,fill=0,labelled=false": {
+      "model": "alchemia:block/jar/jar",
+      "y": 180
+    },
+    "facing=south,fill=0,labelled=true": {
+      "model": "alchemia:block/jar/jar_labelled",
+      "y": 180
+    },
+    "facing=south,fill=1,labelled=false": {
+      "model": "alchemia:block/jar/jar_1",
+      "y": 180
+    },
+    "facing=south,fill=1,labelled=true": {
+      "model": "alchemia:block/jar/jar_labelled_1",
+      "y": 180
+    },
+    "facing=south,fill=2,labelled=false": {
+      "model": "alchemia:block/jar/jar_2",
+      "y": 180
+    },
+    "facing=south,fill=2,labelled=true": {
+      "model": "alchemia:block/jar/jar_labelled_2",
+      "y": 180
+    },
+    "facing=south,fill=3,labelled=false": {
+      "model": "alchemia:block/jar/jar_3",
+      "y": 180
+    },
+    "facing=south,fill=3,labelled=true": {
+      "model": "alchemia:block/jar/jar_labelled_3",
+      "y": 180
+    },
+    "facing=south,fill=4,labelled=false": {
+      "model": "alchemia:block/jar/jar_4",
+      "y": 180
+    },
+    "facing=south,fill=4,labelled=true": {
+      "model": "alchemia:block/jar/jar_labelled_4",
+      "y": 180
+    },
+    "facing=west,fill=0,labelled=false": {
+      "model": "alchemia:block/jar/jar",
+      "y": 270
+    },
+    "facing=west,fill=0,labelled=true": {
+      "model": "alchemia:block/jar/jar_labelled",
+      "y": 270
+    },
+    "facing=west,fill=1,labelled=false": {
+      "model": "alchemia:block/jar/jar_1",
+      "y": 270
+    },
+    "facing=west,fill=1,labelled=true": {
+      "model": "alchemia:block/jar/jar_labelled_1",
+      "y": 270
+    },
+    "facing=west,fill=2,labelled=false": {
+      "model": "alchemia:block/jar/jar_2",
+      "y": 270
+    },
+    "facing=west,fill=2,labelled=true": {
+      "model": "alchemia:block/jar/jar_labelled_2",
+      "y": 270
+    },
+    "facing=west,fill=3,labelled=false": {
+      "model": "alchemia:block/jar/jar_3",
+      "y": 270
+    },
+    "facing=west,fill=3,labelled=true": {
+      "model": "alchemia:block/jar/jar_labelled_3",
+      "y": 270
+    },
+    "facing=west,fill=4,labelled=false": {
+      "model": "alchemia:block/jar/jar_4",
+      "y": 270
+    },
+    "facing=west,fill=4,labelled=true": {
+      "model": "alchemia:block/jar/jar_labelled_4",
+      "y": 270
     }
   }
 }

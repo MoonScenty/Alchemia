@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "alchemia:item/jar_label",
+    "layer1": "alchemia:item/jar_label_overlay"
+  }
+}

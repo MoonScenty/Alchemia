@@ -1,0 +1,37 @@
+{
+  "category": "alchemia:alchemy",
+  "column": 3,
+  "complexity": 3,
+  "icon": "alchemia:tube_filter",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.tube_filter.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:tube_filter"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:tube_restrict"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:tube_oneway"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:tube_buffer"
+    }
+  ],
+  "parents": [
+    "alchemia:tubes"
+  ],
+  "requirements": {
+    "alchemia:aqua": 3,
+    "alchemia:ordo": 3,
+    "alchemia:permutatio": 6
+  },
+  "row": 6
+}

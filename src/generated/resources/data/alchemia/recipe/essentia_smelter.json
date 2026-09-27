@@ -1,0 +1,31 @@
+{
+  "type": "alchemia:arcane_shaped",
+  "key": {
+    "B": {
+      "item": "alchemia:brass_plate"
+    },
+    "C": {
+      "item": "alchemia:crucible"
+    },
+    "F": {
+      "item": "minecraft:furnace"
+    },
+    "S": {
+      "tag": "c:cobblestones"
+    }
+  },
+  "pattern": [
+    "BCB",
+    "SFS",
+    "SSS"
+  ],
+  "research": "alchemia:distillation",
+  "result": {
+    "count": 1,
+    "id": "alchemia:essentia_smelter"
+  },
+  "vis": {
+    "alchemia:aqua": 25,
+    "alchemia:ignis": 25
+  }
+}

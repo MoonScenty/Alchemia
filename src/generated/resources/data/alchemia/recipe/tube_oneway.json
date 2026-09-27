@@ -1,0 +1,21 @@
+{
+  "type": "alchemia:arcane_shapeless",
+  "ingredients": [
+    {
+      "item": "alchemia:tube"
+    },
+    {
+      "tag": "c:dyes/blue"
+    }
+  ],
+  "research": "alchemia:tube_filter",
+  "result": {
+    "count": 1,
+    "id": "alchemia:tube_oneway"
+  },
+  "vis": {
+    "alchemia:aqua": 5,
+    "alchemia:ordo": 10,
+    "alchemia:perditio": 10
+  }
+}

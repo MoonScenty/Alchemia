@@ -1,0 +1,20 @@
+{
+  "type": "alchemia:arcane_shapeless",
+  "ingredients": [
+    {
+      "item": "alchemia:tube"
+    },
+    {
+      "tag": "c:stones"
+    }
+  ],
+  "research": "alchemia:tube_filter",
+  "result": {
+    "count": 1,
+    "id": "alchemia:tube_restrict"
+  },
+  "vis": {
+    "alchemia:aqua": 5,
+    "alchemia:terra": 10
+  }
+}

@@ -87,6 +87,14 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("block.alchemia.tube_buffer.empty", pick("Empty", "비어 있다"));
         add("block.alchemia.tube_buffer.holding", pick("%s — %s / %s", "%s — %s / %s"));
         addBlock(ModBlocks.JAR, pick("Warded Jar", "봉인된 단지"));
+        addItem(ModItems.FILTER, pick("Filter", "여과망"));
+        addItem(ModItems.PHIAL, pick("Phial", "유리병"));
+        add("item.alchemia.phial.filled", pick("Phial of %s", "%s 유리병"));
+        add("item.alchemia.phial.holding", pick("%s — %s points", "%s — %s점"));
+        addItem(ModItems.JAR_LABEL, pick("Jar Label", "단지 라벨"));
+        add("item.alchemia.jar_label.written", pick("Label: %s", "%s 라벨"));
+        add("item.alchemia.jar_label.blank", pick("Nothing written on it yet", "아직 아무것도 적혀 있지 않다"));
+        addItem(ModItems.JAR_BRACE, pick("Jar Brace", "단지 고정대"));
         add("block.alchemia.jar.empty", pick("Empty", "비어 있다"));
         add("block.alchemia.jar.holding", pick("%s — %s of %s", "%s — %s / %s"));
         add("block.alchemia.alembic.empty", pick("Empty", "비어 있다"));
@@ -240,6 +248,18 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                 {"metallurgy", "Metallurgy", "야금",
                  "Iron does not want to be anything else, and a crucible is how you argue with it. Steeped in earth and order it comes out alchemium; in energy and water, brass.",
                  "철은 다른 것이 되기를 원하지 않으며, 도가니는 그와 다투는 방법이다. 땅과 질서에 담그면 알케미움으로, 힘과 물에 담그면 황동으로 나온다."},
+                {"distillation", "Distillation", "증류",
+                 "Burning a thing is a crude way to ask what it is made of, but it is an honest one. A smelter sends the answer up as smoke, and alembics stacked above it catch that smoke one aspect at a time.",
+                 "무엇으로 이루어졌는지 묻는 데에 태우는 것은 거칠지만 정직한 방법이다. 제련로가 그 답을 연기로 올려 보내고, 위에 쌓아 올린 증류기가 연기를 상 하나씩 받아 낸다."},
+                {"jar_label", "Jars and Labels", "단지와 라벨",
+                 "Essentia will not sit in the open. A warded jar holds sixty-four of one kind and refuses the rest; a label tells it which kind before there is any, so a shelf can be laid out empty and filled later. A brace lets a jar be filled and never emptied.",
+                 "에센시아는 열린 데에 머물지 않는다. 봉인된 단지는 한 가지를 예순넷까지 담고 나머지는 받지 않는다. 라벨은 아직 아무것도 없을 때 무엇을 담을지 미리 일러 주니, 선반을 빈 채로 먼저 늘어놓고 나중에 채울 수 있다. 고정대를 물리면 채우기만 되고 비울 수는 없다."},
+                {"tubes", "Essentia Tubes", "에센시아 관",
+                 "Brass pipe with glass in the middle of it. The far end does the pulling rather than the near one, so a run fills whatever still has room instead of whatever it reached first. A valve on the line shuts it, by hand or by redstone.",
+                 "가운데에 유리를 끼운 황동 관. 당기는 쪽은 보내는 끝이 아니라 받는 끝이다. 그래서 한 줄기는 먼저 닿은 곳이 아니라 아직 자리가 남은 곳을 채운다. 줄기에 밸브를 물리면 손으로도 레드스톤으로도 막을 수 있다."},
+                {"tube_filter", "Sorting the Flow", "흐름 가려 쓰기",
+                 "Four ways of telling a length of pipe what to do with what passes through it: let one thing by and turn the rest back, let it by one way only, let it by half as fast, or keep a little in hand for when the works wants it.",
+                 "관에게 지나가는 것을 어찌하라 이를 방법 넷. 하나만 지나가게 하고 나머지는 돌려보내거나, 한쪽으로만 내보내거나, 절반만 흘리거나, 공방이 찾을 때를 대비해 조금 쥐고 있게 하거나."},
                 {"warp", "Warp", "뒤틀림",
                  "Look too long into what should not be, and it begins looking back. The damage is not to the world but to the one studying it, and it does not undo itself with rest.",
                  "있어서는 안 될 것을 오래 들여다보면, 그것도 당신을 들여다보기 시작한다. 상하는 것은 세계가 아니라 그것을 연구하는 자이며, 쉰다고 해서 되돌아오지 않는다."},

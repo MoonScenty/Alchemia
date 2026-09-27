@@ -4,6 +4,7 @@ import me.moonscenty.alchemia.Alchemia;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -30,6 +31,10 @@ public class ModRecipes {
 
     public static final DeferredHolder<RecipeSerializer<?>, ArcaneWandRecipe.Serializer> ARCANE_WAND =
             SERIALIZERS.register("arcane_wand", ArcaneWandRecipe.Serializer::new);
+
+    /** Writing a jar label, and rubbing one out. A plain bench recipe, not an arcane one. */
+    public static final DeferredHolder<RecipeSerializer<?>, SimpleCraftingRecipeSerializer<LabelRecipe>> JAR_LABEL =
+            SERIALIZERS.register("jar_label", () -> new SimpleCraftingRecipeSerializer<>(LabelRecipe::new));
 
     public static final DeferredHolder<RecipeType<?>, RecipeType<CrucibleRecipe>> CRUCIBLE =
             TYPES.register("crucible", () -> RecipeType.<CrucibleRecipe>simple(Alchemia.id("crucible")));

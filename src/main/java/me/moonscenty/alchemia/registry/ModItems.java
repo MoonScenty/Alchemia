@@ -5,6 +5,8 @@ import java.util.EnumMap;
 import java.util.Map;
 
 import me.moonscenty.alchemia.Alchemia;
+import me.moonscenty.alchemia.item.JarLabelItem;
+import me.moonscenty.alchemia.item.PhialItem;
 import me.moonscenty.alchemia.item.WandItem;
 import me.moonscenty.alchemia.block.CrystalType;
 import me.moonscenty.alchemia.item.AlchemonomiconItem;
@@ -71,6 +73,22 @@ public class ModItems {
     public static final DeferredItem<Item> BRASS_PLATE = ITEMS.registerSimpleItem("brass_plate");
     public static final DeferredItem<Item> IRON_PLATE = ITEMS.registerSimpleItem("iron_plate");
     public static final DeferredItem<Item> SALIS_MUNDUS = ITEMS.registerSimpleItem("salis_mundus");
+
+    // --- the fittings of the distillery ---------------------------------------------------------------------
+
+    /** A gauze in a wooden frame. What an alembic catches its essentia in, and what a filter tube is sieved with. */
+    public static final DeferredItem<Item> FILTER = ITEMS.registerSimpleItem("filter");
+
+    /** Carries eight of one essentia by hand. */
+    public static final DeferredItem<Item> PHIAL = ITEMS.register("phial",
+            () -> new PhialItem(new Item.Properties()));
+
+    /** Says what belongs in a jar, whether or not any of it is in there. */
+    public static final DeferredItem<Item> JAR_LABEL = ITEMS.register("jar_label",
+            () -> new JarLabelItem(new Item.Properties()));
+
+    /** Fitted to a jar, it lets the jar be filled but not emptied. */
+    public static final DeferredItem<Item> JAR_BRACE = ITEMS.registerSimpleItem("jar_brace");
 
     /**
      * One item to a rod, wearing the same picture the wand wears. The rod sprites were drawn to serve as both, so

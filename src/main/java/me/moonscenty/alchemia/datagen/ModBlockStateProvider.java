@@ -189,13 +189,21 @@ public class ModBlockStateProvider extends BlockStateProvider {
         return wet ? model.texture("content", mcLoc("block/water_still")) : model;
     }
 
-    /** The jar, and the essentia standing in it at four heights. */
+    /**
+     * The jar, the essentia standing in it at four heights, and the label stuck on it.
+     * <p>
+     * The label is drawn on the north face of the model, so the side it ends up on is a matter of how far the whole
+     * jar is turned. An unlabelled jar is turned too, and nobody can tell.
+     */
     private void jar() {
         getVariantBuilder(ModBlocks.JAR.get()).forAllStates(state -> {
             int fill = state.getValue(JarBlock.FILL);
+            String label = state.getValue(JarBlock.LABELLED) ? "jar_labelled" : "jar";
             return ConfiguredModel.builder()
                     .modelFile(models().getExistingFile(
-                            modLoc("block/jar/jar" + (fill == 0 ? "" : "_" + fill))))
+                            modLoc("block/jar/" + label + (fill == 0 ? "" : "_" + fill))))
+                    // the label is drawn facing north, so every other bearing is that far round from it
+                    .rotationY(((int) state.getValue(JarBlock.FACING).toYRot() + 180) % 360)
                     .build();
         });
     }
