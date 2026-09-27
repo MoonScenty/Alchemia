@@ -1,6 +1,7 @@
 package me.moonscenty.alchemia.registry;
 
 import me.moonscenty.alchemia.Alchemia;
+import me.moonscenty.alchemia.item.WandItem;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
@@ -15,6 +16,10 @@ public class ModCreativeTabs {
             .title(Component.translatable("itemGroup.alchemia"))
             .withTabsBefore(CreativeModeTabs.SPAWN_EGGS)
             .icon(() -> ModItems.BALANCED_SHARD.get().getDefaultInstance())
-            .displayItems((parameters, output) -> ModItems.ITEMS.getEntries().forEach(item -> output.accept(item.get())))
+            .displayItems((parameters, output) -> {
+                ModItems.ITEMS.getEntries().forEach(item -> output.accept(item.get()));
+                // a wand nobody has to charge, for trying out what a charged one is for
+                output.accept(WandItem.brimming(WandItem.of(ModWandParts.SILVERWOOD, ModWandParts.VOID)));
+            })
             .build());
 }

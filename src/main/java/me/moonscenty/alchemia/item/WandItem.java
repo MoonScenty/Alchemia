@@ -120,6 +120,21 @@ public class WandItem extends Item implements VisHolder {
         return true;
     }
 
+    /**
+     * The same wand with every primal filled to the brim.
+     * <p>
+     * Only the creative menu has any use for this. Everything else fills a wand slowly and on purpose, which is
+     * most of what having a wand feels like.
+     */
+    public static ItemStack brimming(ItemStack stack) {
+        AspectList full = AspectList.EMPTY;
+        for (Holder<Aspect> aspect : ModAspects.primals()) {
+            full = full.add(aspect, capacity(stack) * FINE);
+        }
+        stack.set(ModDataComponents.VIS.get(), full);
+        return stack;
+    }
+
     /** Puts vis in, in hundredths, and says how much would not fit. */
     private static int put(ItemStack stack, Holder<Aspect> aspect, int amount) {
         if (!aspect.value().isPrimal()) {
