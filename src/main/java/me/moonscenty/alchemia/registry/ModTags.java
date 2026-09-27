@@ -27,6 +27,13 @@ public class ModTags {
         /** What counts as a fire under a crucible. Anything with a light to it only counts while it is lit. */
         public static final TagKey<Block> HEATS_CRUCIBLE = mod("heats_crucible");
 
+        /**
+         * What holds an infusion steady, when a pair of them is set either side of the matrix.
+         * <p>
+         * A tag rather than a list in code, so that a pack can decide what its own altars are decorated with.
+         */
+        public static final TagKey<Block> STABILISES_INFUSION = mod("stabilises_infusion");
+
         public static final TagKey<Block> ORES_AMBER = common("ores/amber");
         public static final TagKey<Block> ORES_CINNABAR = common("ores/cinnabar");
 

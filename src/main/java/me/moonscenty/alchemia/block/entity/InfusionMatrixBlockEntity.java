@@ -14,6 +14,7 @@ import me.moonscenty.alchemia.essentia.EssentiaReach;
 import me.moonscenty.alchemia.player.PlayerKnowledge;
 import me.moonscenty.alchemia.registry.ModBlockEntities;
 import me.moonscenty.alchemia.registry.ModBlocks;
+import me.moonscenty.alchemia.registry.ModTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
@@ -53,6 +54,9 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
     /** How far out the ring of pedestals may stand, and how far below the matrix they may be. */
     private static final int RING = 8;
     private static final int DEEP = 10;
+    /** How far out the matrix counts skulls and candles, and how far above itself it bothers looking. */
+    private static final int STEADIED = 12;
+    private static final int STEADIED_UP = 5;
     /** How far the matrix reaches for essentia. No pipe is needed: a shelf of jars nearby is the plumbing. */
     private static final int JARS = 12;
     /** How far under the matrix the thing being worked on stands. */
@@ -183,14 +187,47 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
             boolean holding = !stand.held().isEmpty();
             against += holding ? 3 : 2;
 
-            // straight through the matrix and the same distance out the other side
-            ArcanePedestalBlockEntity opposite = stand(level, new BlockPos(
-                    2 * worldPosition.getX() - at.getX(), at.getY(), 2 * worldPosition.getZ() - at.getZ()));
+            ArcanePedestalBlockEntity opposite = stand(level, mirror(at));
             if (opposite != null) {
                 against -= holding && !opposite.held().isEmpty() ? 3 : 2;
             }
         }
-        return Math.max(0, against);
+        return against + steadying(level);
+    }
+
+    /** Straight through the matrix and the same distance out the other side, at the same height. */
+    private BlockPos mirror(BlockPos at) {
+        return new BlockPos(2 * worldPosition.getX() - at.getX(), at.getY(),
+                2 * worldPosition.getZ() - at.getZ());
+    }
+
+    /**
+     * What the skulls and candles round about are doing, in tenths.
+     * <p>
+     * A pair set either side of the matrix takes something off the working. A single one adds a little instead:
+     * one skull on one side of an altar is not a decoration, it is a lump on one side of a spinning thing.
+     * <p>
+     * It is counted in tenths and then cut down to whole numbers, so a couple of candles are worth nothing and it
+     * takes ten paired skulls to be worth a point. They are meant to be the last thing you reach for, not the
+     * first.
+     */
+    private int steadying(Level level) {
+        int tenths = 0;
+        for (int east = -STEADIED; east <= STEADIED; east++) {
+            for (int south = -STEADIED; south <= STEADIED; south++) {
+                if (east == 0 && south == 0) {
+                    continue;
+                }
+                for (int up = -DEEP; up <= STEADIED_UP; up++) {
+                    BlockPos at = worldPosition.offset(east, up, south);
+                    if (!level.getBlockState(at).is(ModTags.Blocks.STABILISES_INFUSION)) {
+                        continue;
+                    }
+                    tenths += level.getBlockState(mirror(at)).is(ModTags.Blocks.STABILISES_INFUSION) ? -1 : 1;
+                }
+            }
+        }
+        return tenths / 10;
     }
 
     /** Both blocks of all four corners. */
@@ -303,8 +340,8 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
         working = found.get().id();
         owed = recipe.essentia();
         ring = List.copyOf(holding);
-        // what the recipe asks for, and what the ring is doing about it
-        instability = Math.min(WORST, recipe.instability() + symmetry(level));
+        // what the recipe asks for, and what the altar around it is doing about that
+        instability = Math.max(0, Math.min(WORST, recipe.instability() + symmetry(level)));
         counter = 0;
         level.playSound(null, worldPosition, SoundEvents.BEACON_ACTIVATE, SoundSource.BLOCKS, 0.7F, 1.6F);
         changed();

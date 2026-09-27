@@ -118,6 +118,7 @@
   "block.alchemia.infusion_matrix.lopsided": "Awake, but the ring pulls one way (%s)",
   "block.alchemia.infusion_matrix.nothing": "What is laid out here makes nothing",
   "block.alchemia.infusion_matrix.owed": "Still thirsty for %s",
+  "block.alchemia.infusion_matrix.steadied": "Awake, and held steady (%s)",
   "block.alchemia.infusion_matrix.steady": "Awake, and evenly laid out",
   "block.alchemia.infusion_matrix.unbuilt": "The altar is not finished",
   "block.alchemia.infusion_matrix.woken": "The altar wakes",

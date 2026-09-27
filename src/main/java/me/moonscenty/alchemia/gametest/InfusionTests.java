@@ -180,6 +180,30 @@ public class InfusionTests {
         helper.succeed();
     }
 
+    /**
+     * Skulls set in pairs either side of the matrix take something off a working; a lone one puts a little on.
+     * <p>
+     * Counted in tenths, so it takes ten pairs to be worth a whole point of instability. They are meant to be the
+     * last thing you reach for after the ring is already laid out properly, not the first.
+     */
+    @GameTest(template = TEMPLATE)
+    public static void skullsInPairsHoldItSteady(GameTestHelper helper) {
+        InfusionMatrixBlockEntity matrix = laidOut(helper);
+        helper.assertValueEqual(matrix.symmetry(helper.getLevel()), 0, "nothing about it yet");
+
+        // ten pairs, set either side of the matrix
+        for (int pair = 0; pair < 10; pair++) {
+            helper.setBlock(MATRIX.offset(3 + pair, -2, 4), Blocks.SKELETON_SKULL);
+            helper.setBlock(MATRIX.offset(-3 - pair, -2, -4), Blocks.SKELETON_SKULL);
+        }
+        helper.assertValueEqual(matrix.symmetry(helper.getLevel()), -2, "twenty paired skulls are worth two points");
+
+        helper.setBlock(MATRIX.offset(0, -2, 5), Blocks.SKELETON_SKULL);
+        helper.assertValueEqual(matrix.symmetry(helper.getLevel()), -1,
+                "and one on its own puts a little back on");
+        helper.succeed();
+    }
+
     /** What the ring is doing is carried into the working itself. */
     @GameTest(template = TEMPLATE)
     public static void theRingMakesTheWorkingDangerous(GameTestHelper helper) {
