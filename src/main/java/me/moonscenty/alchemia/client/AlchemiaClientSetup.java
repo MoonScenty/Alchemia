@@ -113,6 +113,7 @@ public class AlchemiaClientSetup {
         // a cloud is all particles, so there is nothing to draw for the entity itself
         event.registerEntityRenderer(ModEntities.TAINT_CLOUD.get(), NoopRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.NODE_STABILIZER.get(), NodeStabilizerRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.ARCANE_PEDESTAL.get(), ArcanePedestalRenderer::new);
     }
 
     /**

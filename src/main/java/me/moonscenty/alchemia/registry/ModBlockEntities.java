@@ -1,6 +1,7 @@
 package me.moonscenty.alchemia.registry;
 
 import me.moonscenty.alchemia.Alchemia;
+import me.moonscenty.alchemia.block.entity.ArcanePedestalBlockEntity;
 import me.moonscenty.alchemia.block.entity.ArcaneWorkbenchBlockEntity;
 import me.moonscenty.alchemia.block.entity.ArcaneWorkbenchChargerBlockEntity;
 import me.moonscenty.alchemia.block.entity.AlembicBlockEntity;
@@ -84,6 +85,12 @@ public class ModBlockEntities {
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<JarBlockEntity>> JAR =
             BLOCK_ENTITIES.register("jar", () -> BlockEntityType.Builder
                     .of(JarBlockEntity::new, ModBlocks.JAR.get())
+                    .build(null));
+
+    /** What one pedestal is holding up. */
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ArcanePedestalBlockEntity>>
+            ARCANE_PEDESTAL = BLOCK_ENTITIES.register("arcane_pedestal", () -> BlockEntityType.Builder
+                    .of(ArcanePedestalBlockEntity::new, ModBlocks.ARCANE_PEDESTAL.get())
                     .build(null));
 
     private ModBlockEntities() {

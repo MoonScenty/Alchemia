@@ -1,0 +1,18 @@
+{
+  "loader": "neoforge:obj",
+  "model": "alchemia:models/block/pillar/pillar.obj",
+  "flip_v": true,
+  "textures": {
+    "arcane_stone": "alchemia:block/arcane_stone",
+    "arcane_stone_bricks": "alchemia:block/arcane_stone_bricks",
+    "arcane_stone_bricks_glyphed": "alchemia:block/arcane_stone_bricks_glyphed",
+    "particle": "alchemia:block/arcane_stone"
+  },
+  "transform": {
+    "translation": [
+      0.5,
+      0.0,
+      0.5
+    ]
+  }
+}

@@ -44,7 +44,8 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
                 .add(ModBlocks.CRUCIBLE.get(), ModBlocks.ESSENTIA_SMELTER.get(), ModBlocks.ALEMBIC.get(),
                         ModBlocks.TUBE.get(), ModBlocks.JAR.get())
                 .add(ModBlocks.TUBE_VALVE.get(), ModBlocks.TUBE_ONEWAY.get(), ModBlocks.TUBE_RESTRICT.get(),
-                        ModBlocks.TUBE_FILTER.get(), ModBlocks.TUBE_BUFFER.get());
+                        ModBlocks.TUBE_FILTER.get(), ModBlocks.TUBE_BUFFER.get())
+                .add(ModBlocks.ARCANE_PEDESTAL.get(), ModBlocks.ARCANE_PILLAR.get());
 
         // what counts as a fire under a crucible. Anything with a lit state is only counted while it is lit,
         // which the block asks about itself, since a tag cannot say it.

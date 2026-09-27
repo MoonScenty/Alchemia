@@ -8,6 +8,8 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 import me.moonscenty.alchemia.Alchemia;
+import me.moonscenty.alchemia.block.ArcanePedestalBlock;
+import me.moonscenty.alchemia.block.ArcanePillarBlock;
 import me.moonscenty.alchemia.block.ArcaneWorkbenchBlock;
 import me.moonscenty.alchemia.block.ArcaneWorkbenchChargerBlock;
 import me.moonscenty.alchemia.block.BufferTubeBlock;
@@ -119,6 +121,20 @@ public class ModBlocks {
     /** Keeps a few points of its own, so the works has something to draw on between boilings. */
     public static final DeferredBlock<BufferTubeBlock> TUBE_BUFFER =
             register("tube_buffer", () -> new BufferTubeBlock(tubing()));
+
+    // --- the infusion altar ---------------------------------------------------------------------------------
+
+    /** Holds up one thing where a matrix can reach it. */
+    public static final DeferredBlock<ArcanePedestalBlock> ARCANE_PEDESTAL = register("arcane_pedestal",
+            () -> new ArcanePedestalBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS)
+                    .mapColor(MapColor.STONE)
+                    .noOcclusion()));
+
+    /** Four of them at the corners are what an altar is built out of. */
+    public static final DeferredBlock<ArcanePillarBlock> ARCANE_PILLAR = register("arcane_pillar",
+            () -> new ArcanePillarBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS)
+                    .mapColor(MapColor.STONE)
+                    .noOcclusion()));
 
     /** Stands on top of a workbench and fills the wand left on it. */
     public static final DeferredBlock<ArcaneWorkbenchChargerBlock> ARCANE_WORKBENCH_CHARGER =
