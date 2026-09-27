@@ -74,6 +74,10 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("item.alchemia.creative_only", pick("Creative only", "크리에이티브 전용"));
         addBlock(ModBlocks.RESEARCH_TABLE, pick("Research Table", "연구 탁자"));
         addBlock(ModBlocks.CRUCIBLE, pick("Crucible", "도가니"));
+        addBlock(ModBlocks.ESSENTIA_SMELTER, pick("Essentia Smelter", "에센시아 제련로"));
+        addBlock(ModBlocks.ALEMBIC, pick("Alembic", "증류기"));
+        add("block.alchemia.alembic.empty", pick("Empty", "비어 있다"));
+        add("block.alchemia.alembic.holding", pick("%s — %s of %s", "%s — %s / %s"));
         addBlock(ModBlocks.ARCANE_WORKBENCH, pick("Arcane Workbench", "비전 작업대"));
         addBlock(ModBlocks.ARCANE_WORKBENCH_CHARGER, pick("Arcane Workbench Charger", "비전 작업대 충전기"));
 
@@ -149,7 +153,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("research.alchemia.open", pick("Click to read", "클릭해 읽기"));
         add("research.alchemia.crafting", pick("On the bench", "작업대에서"));
         add("research.alchemia.arcane_crafting", pick("At the arcane workbench", "비전 작업대에서"));
-        add("research.alchemia.crucible", pick("In the crucible", "도가니에서"));
+        add("research.alchemia.in_crucible", pick("In the crucible", "도가니에서"));
         add("research.alchemia.smelting", pick("In the fire", "불에서"));
         add("research.alchemia.recipe_missing", pick("The page has faded.", "지면이 바래 알아볼 수 없다."));
         add("scan.alchemia.nothing_there", pick("There is nothing there to read.", "읽을 것이 없다."));

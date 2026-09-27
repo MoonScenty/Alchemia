@@ -6,6 +6,8 @@ import me.moonscenty.alchemia.block.ResearchTableBlock;
 import me.moonscenty.alchemia.block.taint.FluxGooBlock;
 import me.moonscenty.alchemia.block.taint.TaintFibreBlock;
 import me.moonscenty.alchemia.block.taint.TaintLogBlock;
+import me.moonscenty.alchemia.block.AlembicBlock;
+import me.moonscenty.alchemia.block.EssentiaSmelterBlock;
 import me.moonscenty.alchemia.block.CrucibleBlock;
 import me.moonscenty.alchemia.registry.ModBlocks;
 import me.moonscenty.alchemia.registry.StoneSet;
@@ -43,6 +45,8 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
         researchTable();
         crucible();
+        essentiaSmelter();
+        alembic();
         arcaneWorkbench();
         arcaneWorkbenchCharger();
         nodeStabilizer();
@@ -176,6 +180,35 @@ public class ModBlockStateProvider extends BlockStateProvider {
                 .texture("bottom", modLoc("block/crucible_bottom"))
                 .texture("inside", modLoc("block/crucible_inner"));
         return wet ? model.texture("content", mcLoc("block/water_still")) : model;
+    }
+
+    /** A furnace in every way the blockstate cares about: it faces somewhere, and it is lit or it is not. */
+    private void essentiaSmelter() {
+        ModelFile off = models().orientable("essentia_smelter",
+                modLoc("block/smelter_side"), modLoc("block/smelter_front"), modLoc("block/smelter_top"));
+        ModelFile on = models().orientable("essentia_smelter_on",
+                modLoc("block/smelter_side"), modLoc("block/smelter_front_on"), modLoc("block/smelter_top"));
+        horizontalBlock(ModBlocks.ESSENTIA_SMELTER.get(),
+                state -> state.getValue(EssentiaSmelterBlock.LIT) ? on : off);
+    }
+
+    /**
+     * The vessel, with and without the stand it would otherwise be standing on.
+     * <p>
+     * MoonScenty drew it facing west, which is where its filter is. A model drawn facing north is turned by the
+     * yaw plus a half turn; this one wants a further quarter on top of that to bring its west round to the front.
+     */
+    private void alembic() {
+        ModelFile body = models().getExistingFile(modLoc("block/alembic/block"));
+        ModelFile legs = models().getExistingFile(modLoc("block/alembic/leg"));
+        var builder = getMultipartBuilder(ModBlocks.ALEMBIC.get());
+        for (Direction facing : Direction.Plane.HORIZONTAL) {
+            int turn = ((int) facing.toYRot() + 270) % 360;
+            builder.part().modelFile(body).rotationY(turn).addModel()
+                    .condition(AlembicBlock.FACING, facing).end();
+            builder.part().modelFile(legs).rotationY(turn).addModel()
+                    .condition(AlembicBlock.FACING, facing).condition(AlembicBlock.LEGS, true).end();
+        }
     }
 
     /** Drawn from a model made in Blockbench, so the blockstate only has to point at it. */

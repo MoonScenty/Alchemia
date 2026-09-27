@@ -10,7 +10,9 @@ import java.util.function.Supplier;
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.block.ArcaneWorkbenchBlock;
 import me.moonscenty.alchemia.block.ArcaneWorkbenchChargerBlock;
+import me.moonscenty.alchemia.block.AlembicBlock;
 import me.moonscenty.alchemia.block.CrucibleBlock;
+import me.moonscenty.alchemia.block.EssentiaSmelterBlock;
 import me.moonscenty.alchemia.block.CrystalBlock;
 import me.moonscenty.alchemia.block.CrystalType;
 import me.moonscenty.alchemia.block.NodeStabilizerBlock;
@@ -72,6 +74,16 @@ public class ModBlocks {
     public static final DeferredBlock<CrucibleBlock> CRUCIBLE = register("crucible",
             () -> new CrucibleBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CAULDRON)
                     .mapColor(MapColor.METAL)
+                    .noOcclusion()));
+
+    public static final DeferredBlock<EssentiaSmelterBlock> ESSENTIA_SMELTER = register("essentia_smelter",
+            () -> new EssentiaSmelterBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE)
+                    .mapColor(MapColor.STONE)
+                    .lightLevel(state -> state.getValue(EssentiaSmelterBlock.LIT) ? 13 : 0)));
+
+    public static final DeferredBlock<AlembicBlock> ALEMBIC = register("alembic",
+            () -> new AlembicBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS)
+                    .mapColor(MapColor.STONE)
                     .noOcclusion()));
 
     /** Stands on top of a workbench and fills the wand left on it. */

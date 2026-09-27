@@ -3,7 +3,9 @@ package me.moonscenty.alchemia.registry;
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.block.entity.ArcaneWorkbenchBlockEntity;
 import me.moonscenty.alchemia.block.entity.ArcaneWorkbenchChargerBlockEntity;
+import me.moonscenty.alchemia.block.entity.AlembicBlockEntity;
 import me.moonscenty.alchemia.block.entity.CrucibleBlockEntity;
+import me.moonscenty.alchemia.block.entity.EssentiaSmelterBlockEntity;
 import me.moonscenty.alchemia.block.entity.NodeStabilizerBlockEntity;
 import me.moonscenty.alchemia.block.entity.ResearchTableBlockEntity;
 import net.minecraft.core.registries.Registries;
@@ -39,6 +41,16 @@ public class ModBlockEntities {
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<CrucibleBlockEntity>> CRUCIBLE =
             BLOCK_ENTITIES.register("crucible", () -> BlockEntityType.Builder
                     .of(CrucibleBlockEntity::new, ModBlocks.CRUCIBLE.get())
+                    .build(null));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<EssentiaSmelterBlockEntity>>
+            ESSENTIA_SMELTER = BLOCK_ENTITIES.register("essentia_smelter", () -> BlockEntityType.Builder
+                    .of(EssentiaSmelterBlockEntity::new, ModBlocks.ESSENTIA_SMELTER.get())
+                    .build(null));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<AlembicBlockEntity>> ALEMBIC =
+            BLOCK_ENTITIES.register("alembic", () -> BlockEntityType.Builder
+                    .of(AlembicBlockEntity::new, ModBlocks.ALEMBIC.get())
                     .build(null));
 
     private ModBlockEntities() {

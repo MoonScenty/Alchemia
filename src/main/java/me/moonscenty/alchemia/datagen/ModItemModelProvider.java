@@ -28,6 +28,8 @@ public class ModItemModelProvider extends ItemModelProvider {
         wands();
         // shown in hand and on the ground with its arms, which the placed block draws separately
         withExistingParent("crucible", modLoc("block/crucible"));
+        withExistingParent("essentia_smelter", modLoc("block/essentia_smelter"));
+        withExistingParent("alembic", modLoc("block/alembic/item"));
         withExistingParent("arcane_workbench", modLoc("block/arcane_workbench"));
         withExistingParent("arcane_workbench_charger", modLoc("block/charger/item"));
         withExistingParent("node_stabilizer", modLoc("block/node_stabilizer/item"));

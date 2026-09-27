@@ -1,0 +1,16 @@
+{
+  "loader": "neoforge:obj",
+  "model": "alchemia:models/block/alembic/leg.obj",
+  "flip_v": true,
+  "textures": {
+    "particle": "alchemia:block/arcane_stone",
+    "stone": "alchemia:block/arcane_stone"
+  },
+  "transform": {
+    "translation": [
+      0.5,
+      0.0,
+      0.5
+    ]
+  }
+}

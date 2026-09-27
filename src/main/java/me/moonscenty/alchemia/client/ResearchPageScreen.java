@@ -181,7 +181,7 @@ public class ResearchPageScreen extends Screen {
         Component heading = Component.translatable(recipe instanceof AbstractCookingRecipe
                 ? "research.alchemia.smelting"
                 : recipe instanceof ArcaneRecipe ? "research.alchemia.arcane_crafting"
-                : recipe instanceof CrucibleRecipe ? "research.alchemia.crucible"
+                : recipe instanceof CrucibleRecipe ? "research.alchemia.in_crucible"
                 : "research.alchemia.crafting");
         graphics.drawString(font, heading, x + (usable - font.width(heading)) / 2, y, 0xFF3A2A18, false);
         y += LINE * 2;
