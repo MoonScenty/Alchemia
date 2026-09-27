@@ -24,9 +24,15 @@ import net.minecraft.world.level.block.state.BlockState;
 public class ArcanePillarBlock extends Block {
     public static final MapCodec<ArcanePillarBlock> CODEC = simpleCodec(ArcanePillarBlock::new);
 
-    /** Where a matrix would be, if this corner belongs to one. */
+    /**
+     * Where a matrix would be, if this corner belongs to one.
+     * <p>
+     * Eight places, not four: a corner stands two blocks high and either of them may be the one broken, so the
+     * matrix is two up from the foot or one up from the head.
+     */
     private static final Vec3i[] MATRICES = {
-            new Vec3i(1, 2, 1), new Vec3i(1, 2, -1), new Vec3i(-1, 2, 1), new Vec3i(-1, 2, -1)};
+            new Vec3i(1, 2, 1), new Vec3i(1, 2, -1), new Vec3i(-1, 2, 1), new Vec3i(-1, 2, -1),
+            new Vec3i(1, 1, 1), new Vec3i(1, 1, -1), new Vec3i(-1, 1, 1), new Vec3i(-1, 1, -1)};
 
     public ArcanePillarBlock(Properties properties) {
         super(properties);

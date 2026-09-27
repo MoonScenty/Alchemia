@@ -144,31 +144,45 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
         return standing(level, ModBlocks.ARCANE_PILLAR.get()) || standing(level, ModBlocks.ARCANE_STONE.block().get());
     }
 
-    /** A pedestal to work on, and the same thing at each of the four corners. */
+    /**
+     * A pedestal to work on, and the same thing standing two high at each of the four corners.
+     * <p>
+     * Two high because a pillar is two blocks tall, which is the shape the original altar is built to and the
+     * shape the picture is drawn at. One block to a corner would be a different building.
+     */
     private boolean standing(Level level, Block corner) {
         if (!(level.getBlockEntity(worldPosition.below(UNDER)) instanceof ArcanePedestalBlockEntity)) {
             return false;
         }
-        for (Vec3i at : CORNERS) {
-            if (!level.getBlockState(worldPosition.offset(at)).is(corner)) {
+        for (BlockPos at : columns()) {
+            if (!level.getBlockState(at).is(corner)) {
                 return false;
             }
         }
         return true;
     }
 
+    /** Both blocks of all four corners. */
+    private List<BlockPos> columns() {
+        List<BlockPos> all = new ArrayList<>();
+        for (Vec3i corner : CORNERS) {
+            BlockPos foot = worldPosition.offset(corner);
+            all.add(foot);
+            all.add(foot.above());
+        }
+        return all;
+    }
+
     /** Wakes the corners: the stone stops being drawn and the matrix draws a pillar standing where it was. */
     private void raise(Level level) {
-        for (Vec3i corner : CORNERS) {
-            level.setBlock(worldPosition.offset(corner),
-                    ModBlocks.ARCANE_PILLAR.get().defaultBlockState(), Block.UPDATE_ALL);
+        for (BlockPos at : columns()) {
+            level.setBlock(at, ModBlocks.ARCANE_PILLAR.get().defaultBlockState(), Block.UPDATE_ALL);
         }
     }
 
     /** And gives the stone back. */
     private void lower(Level level) {
-        for (Vec3i corner : CORNERS) {
-            BlockPos at = worldPosition.offset(corner);
+        for (BlockPos at : columns()) {
             if (level.getBlockState(at).is(ModBlocks.ARCANE_PILLAR.get())) {
                 level.setBlock(at, ModBlocks.ARCANE_STONE.block().get().defaultBlockState(), Block.UPDATE_ALL);
             }

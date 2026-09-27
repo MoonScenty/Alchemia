@@ -69,6 +69,7 @@ public class InfusionTests {
         for (int east = -1; east <= 1; east += 2) {
             for (int south = -1; south <= 1; south += 2) {
                 helper.setBlock(MATRIX.offset(east, -2, south), ModBlocks.ARCANE_STONE.block().get());
+                helper.setBlock(MATRIX.offset(east, -1, south), ModBlocks.ARCANE_STONE.block().get());
             }
         }
     }
@@ -103,8 +104,9 @@ public class InfusionTests {
         helper.assertTrue(!matrix.awake(), "a matrix hung over loose stone is asleep");
         helper.assertValueEqual(matrix.wake(player), InfusionMatrixBlockEntity.Woken.WOKEN, "the wand woke it");
         helper.assertTrue(matrix.awake(), "and it is awake");
-        // the stone stops being drawn, and the matrix draws a pillar standing where it was
+        // both blocks of the corner stop being drawn, and the matrix draws a pillar standing where they were
         helper.assertBlockPresent(ModBlocks.ARCANE_PILLAR.get(), MATRIX.offset(1, -2, 1));
+        helper.assertBlockPresent(ModBlocks.ARCANE_PILLAR.get(), MATRIX.offset(1, -1, 1));
 
         helper.assertValueEqual(matrix.wake(player), InfusionMatrixBlockEntity.Woken.STARTED,
                 "and the touch after that starts the working");
@@ -127,6 +129,7 @@ public class InfusionTests {
         run(helper, matrix, 2);
         helper.assertTrue(!matrix.awake(), "the altar went back to sleep");
         helper.assertBlockPresent(ModBlocks.ARCANE_STONE.block().get(), MATRIX.offset(-1, -2, -1));
+        helper.assertBlockPresent(ModBlocks.ARCANE_STONE.block().get(), MATRIX.offset(-1, -1, -1));
         helper.succeed();
     }
 
