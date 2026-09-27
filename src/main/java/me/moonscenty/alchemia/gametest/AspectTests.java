@@ -202,6 +202,40 @@ public class AspectTests {
         helper.succeed();
     }
 
+    /**
+     * What a thing was steeped in counts as much as what it was made from.
+     * <p>
+     * A void seed traced through its ingredients alone is a wheat seed, which is the one thing it is no longer:
+     * the whole of what happened to it happened in the water.
+     */
+    @GameTest(template = TEMPLATE)
+    public static void whatWasBoiledIntoItCounts(GameTestHelper helper) {
+        AspectList seed = Aspects.of(new ItemStack(ModItems.VOID_SEED.get()));
+        Alchemia.LOGGER.info("void seed reads as {}", seed);
+        helper.assertTrue(seed.get(ModAspects.DARKNESS) > 0, "a void seed should reek of tenebrae, was " + seed);
+        helper.assertTrue(seed.get(ModAspects.VOID) > 0, "and of vacuos, was " + seed);
+
+        AspectList ingot = Aspects.of(new ItemStack(ModItems.ALCHEMIUM_INGOT.get()));
+        Alchemia.LOGGER.info("alchemium ingot reads as {}", ingot);
+        helper.assertTrue(ingot.get(ModAspects.METAL) > 0, "it is still metal, was " + ingot);
+        helper.assertTrue(ingot.get(ModAspects.ORDER) > 0, "with the ordo it was steeped in, was " + ingot);
+        helper.succeed();
+    }
+
+    /** And what was drunk out of the jars at a matrix counts the same way. */
+    @GameTest(template = TEMPLATE)
+    public static void whatWasInfusedIntoItCounts(GameTestHelper helper) {
+        AspectList rod = Aspects.of(new ItemStack(ModItems.WAND_RODS.get("obsidian").get()));
+        Alchemia.LOGGER.info("obsidian rod reads as {}", rod);
+        helper.assertTrue(rod.get(ModAspects.ENERGY) > 0, "an infused rod carries the potentia it drank, was " + rod);
+        helper.assertTrue(rod.get(ModAspects.DARKNESS) > 0, "and the tenebrae, was " + rod);
+
+        AspectList stone = Aspects.of(new ItemStack(net.minecraft.world.item.Items.OBSIDIAN));
+        helper.assertTrue(rod.total() > stone.total(),
+                "and is worth more than the block it was cut from, " + rod + " against " + stone);
+        helper.succeed();
+    }
+
     /** Enchantments belong to the one stack, so they must not leak into every other copy of the item. */
     @GameTest(template = TEMPLATE)
     public static void enchantmentsAddToTheOneStack(GameTestHelper helper) {

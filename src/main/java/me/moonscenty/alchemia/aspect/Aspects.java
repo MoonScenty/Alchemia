@@ -9,6 +9,8 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import me.moonscenty.alchemia.Alchemia;
+import me.moonscenty.alchemia.crafting.CrucibleRecipe;
+import me.moonscenty.alchemia.crafting.InfusionRecipe;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
@@ -24,6 +26,10 @@ import net.minecraft.world.item.crafting.RecipeManager;
  * Anything listed in the aspect data map answers for itself. Everything else is traced back through the recipes that
  * make it: the aspects of the ingredients are added up, then thinned out, since crafting always loses a little. That
  * way a modded item nobody has written down still ends up with sensible aspects.
+ * <p>
+ * What was paid in essentia counts as much as what was laid on the bench. A thing boiled in a crucible or worked at
+ * a matrix is mostly made of what it was steeped in, and a trace that ignored that would say a void seed is a wheat
+ * seed with a bad temper.
  */
 public final class Aspects {
     /** Crafting is lossy, so a result never quite carries the whole of what went into it. */
@@ -115,7 +121,7 @@ public final class Aspects {
             return AspectList.EMPTY;
         }
 
-        AspectList total = AspectList.EMPTY;
+        AspectList total = paid(recipe);
         for (Ingredient ingredient : recipe.getIngredients()) {
             if (ingredient.isEmpty()) {
                 continue;
@@ -132,6 +138,38 @@ public final class Aspects {
 
         return total.scale(CRAFTING_LOSS / result.getCount());
     }
+
+    /**
+     * What was paid for the working in essentia, on top of what was laid on the bench.
+     * <p>
+     * A crucible recipe and an infusion recipe both cost more than their ingredients: what is dissolved in the
+     * water, and what is drunk out of the jars. Counting only the ingredients would make a void seed read as a
+     * wheat seed, which is the one thing it is not any more -- the whole of what happened to it happened in the
+     * water.
+     * <p>
+     * Vis paid at the arcane workbench is left out on purpose. That comes out of the aura and goes back to it;
+     * it is what the bench costs to run, not what the thing is made of.
+     */
+    private static AspectList paid(Recipe<?> recipe) {
+        if (recipe instanceof CrucibleRecipe boiled) {
+            return boiled.aspects();
+        }
+        if (recipe instanceof InfusionRecipe infused) {
+            return infused.essentia();
+        }
+        return AspectList.EMPTY;
+    }
+
+    /**
+     * Which of the recipes that make a thing is asked first.
+     * <p>
+     * A thing that can be boiled in a crucible can usually also be packed out of nine of its own nuggets, and
+     * that second recipe says nothing about it: an alchemium ingot traced through its nuggets comes back as plain
+     * metal, with no sign of the earth and order it was steeped in. So the workings that cost essentia are asked
+     * first, because they are where the thing came from; the others only cut it up and put it back together.
+     */
+    private static final java.util.Comparator<RecipeHolder<?>> BY_WHAT_IT_SAYS =
+            java.util.Comparator.comparingInt(holder -> paid(holder.value()).isEmpty() ? 1 : 0);
 
     private static ItemStack resultOf(Recipe<?> recipe) {
         try {
@@ -155,6 +193,8 @@ public final class Aspects {
                 index.computeIfAbsent(result.getItem(), item -> new ArrayList<>()).add(holder);
             }
         }
+        // the trace takes the first recipe that answers, so the ones that say most about the thing go first
+        index.values().forEach(made -> made.sort(BY_WHAT_IT_SAYS));
         return index;
     }
 }
