@@ -10,6 +10,11 @@ import java.util.function.Supplier;
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.block.ArcaneWorkbenchBlock;
 import me.moonscenty.alchemia.block.ArcaneWorkbenchChargerBlock;
+import me.moonscenty.alchemia.block.BufferTubeBlock;
+import me.moonscenty.alchemia.block.FilterTubeBlock;
+import me.moonscenty.alchemia.block.OnewayTubeBlock;
+import me.moonscenty.alchemia.block.RestrictTubeBlock;
+import me.moonscenty.alchemia.block.ValveTubeBlock;
 import me.moonscenty.alchemia.block.AlembicBlock;
 import me.moonscenty.alchemia.block.CrucibleBlock;
 import me.moonscenty.alchemia.block.JarBlock;
@@ -93,10 +98,27 @@ public class ModBlocks {
                     .mapColor(MapColor.NONE)
                     .noOcclusion()));
 
-    public static final DeferredBlock<TubeBlock> TUBE = register("tube",
-            () -> new TubeBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BARS)
-                    .mapColor(MapColor.GOLD)
-                    .noOcclusion()));
+    public static final DeferredBlock<TubeBlock> TUBE = register("tube", () -> new TubeBlock(tubing()));
+
+    /** Shut by a redstone signal, or by hand. */
+    public static final DeferredBlock<ValveTubeBlock> TUBE_VALVE =
+            register("tube_valve", () -> new ValveTubeBlock(tubing()));
+
+    /** Lets essentia by one way only. */
+    public static final DeferredBlock<OnewayTubeBlock> TUBE_ONEWAY =
+            register("tube_oneway", () -> new OnewayTubeBlock(tubing()));
+
+    /** Narrows the way through, so a run that comes through it carries less. */
+    public static final DeferredBlock<RestrictTubeBlock> TUBE_RESTRICT =
+            register("tube_restrict", () -> new RestrictTubeBlock(tubing()));
+
+    /** Lets one aspect by and turns the rest back. */
+    public static final DeferredBlock<FilterTubeBlock> TUBE_FILTER =
+            register("tube_filter", () -> new FilterTubeBlock(tubing()));
+
+    /** Keeps a few points of its own, so the works has something to draw on between boilings. */
+    public static final DeferredBlock<BufferTubeBlock> TUBE_BUFFER =
+            register("tube_buffer", () -> new BufferTubeBlock(tubing()));
 
     /** Stands on top of a workbench and fills the wand left on it. */
     public static final DeferredBlock<ArcaneWorkbenchChargerBlock> ARCANE_WORKBENCH_CHARGER =
@@ -219,6 +241,13 @@ public class ModBlocks {
                 register(name + "_sapling", () -> new SaplingBlock(grower, BlockBehaviour.Properties.ofFullCopy(Blocks.DARK_OAK_SAPLING))),
                 register(name + "_stairs", () -> new StairBlock(planks.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(planks.get()))),
                 register(name + "_slab", () -> new SlabBlock(BlockBehaviour.Properties.ofFullCopy(planks.get()))));
+    }
+
+    /** Brass pipework: all six kinds of tube are the same thing to hit and the same thing to look at. */
+    private static BlockBehaviour.Properties tubing() {
+        return BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BARS)
+                .mapColor(MapColor.GOLD)
+                .noOcclusion();
     }
 
     private static Map<CrystalType, DeferredBlock<CrystalBlock>> registerCrystals() {

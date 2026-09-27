@@ -33,7 +33,10 @@ public class ModItemModelProvider extends ItemModelProvider {
         held("crucible", modLoc("block/crucible"));
         held("jar", modLoc("block/jar/jar"));
         // a straight length rather than the bare middle: a four pixel cube in a slot is a speck
-        withExistingParent("tube", modLoc("block/tube/item"));
+        for (String kind : new String[] {"tube", "tube_valve", "tube_oneway", "tube_restrict", "tube_filter",
+                "tube_buffer"}) {
+            withExistingParent(kind, modLoc("block/tube/item"));
+        }
         withExistingParent("essentia_smelter", modLoc("block/essentia_smelter"));
         withExistingParent("alembic", modLoc("block/alembic/item"));
         withExistingParent("arcane_workbench", modLoc("block/arcane_workbench"));

@@ -4,6 +4,8 @@ import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.block.entity.ArcaneWorkbenchBlockEntity;
 import me.moonscenty.alchemia.block.entity.ArcaneWorkbenchChargerBlockEntity;
 import me.moonscenty.alchemia.block.entity.AlembicBlockEntity;
+import me.moonscenty.alchemia.block.entity.BufferTubeBlockEntity;
+import me.moonscenty.alchemia.block.entity.FilterTubeBlockEntity;
 import me.moonscenty.alchemia.block.entity.CrucibleBlockEntity;
 import me.moonscenty.alchemia.block.entity.JarBlockEntity;
 import me.moonscenty.alchemia.block.entity.TubeBlockEntity;
@@ -55,9 +57,28 @@ public class ModBlockEntities {
                     .of(AlembicBlockEntity::new, ModBlocks.ALEMBIC.get())
                     .build(null));
 
+    /**
+     * The plain pipe and the three kinds that only differ in what they let by.
+     * <p>
+     * A valve, a one-way and a restrict all keep their answer in the blockstate, so there is nothing for them to
+     * remember from one tick to the next that a plain tube does not remember too, and one type serves all four.
+     */
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<TubeBlockEntity>> TUBE =
             BLOCK_ENTITIES.register("tube", () -> BlockEntityType.Builder
-                    .of(TubeBlockEntity::new, ModBlocks.TUBE.get())
+                    .of(TubeBlockEntity::new, ModBlocks.TUBE.get(), ModBlocks.TUBE_VALVE.get(),
+                            ModBlocks.TUBE_ONEWAY.get(), ModBlocks.TUBE_RESTRICT.get())
+                    .build(null));
+
+    /** The filter remembers the aspect it was told to let by. */
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<FilterTubeBlockEntity>> TUBE_FILTER =
+            BLOCK_ENTITIES.register("tube_filter", () -> BlockEntityType.Builder
+                    .of(FilterTubeBlockEntity::new, ModBlocks.TUBE_FILTER.get())
+                    .build(null));
+
+    /** The buffer remembers what it is sitting on. */
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BufferTubeBlockEntity>> TUBE_BUFFER =
+            BLOCK_ENTITIES.register("tube_buffer", () -> BlockEntityType.Builder
+                    .of(BufferTubeBlockEntity::new, ModBlocks.TUBE_BUFFER.get())
                     .build(null));
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<JarBlockEntity>> JAR =

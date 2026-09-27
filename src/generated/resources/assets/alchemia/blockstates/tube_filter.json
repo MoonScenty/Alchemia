@@ -1,0 +1,111 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "alchemia:block/tube/core"
+      }
+    },
+    {
+      "apply": {
+        "model": "alchemia:block/tube/arm_down"
+      },
+      "when": {
+        "down": "tube"
+      }
+    },
+    {
+      "apply": {
+        "model": "alchemia:block/tube/connector_down"
+      },
+      "when": {
+        "down": "block"
+      }
+    },
+    {
+      "apply": {
+        "model": "alchemia:block/tube/arm_up"
+      },
+      "when": {
+        "up": "tube"
+      }
+    },
+    {
+      "apply": {
+        "model": "alchemia:block/tube/connector_up"
+      },
+      "when": {
+        "up": "block"
+      }
+    },
+    {
+      "apply": {
+        "model": "alchemia:block/tube/arm",
+        "y": 270
+      },
+      "when": {
+        "north": "tube"
+      }
+    },
+    {
+      "apply": {
+        "model": "alchemia:block/tube/connector",
+        "y": 270
+      },
+      "when": {
+        "north": "block"
+      }
+    },
+    {
+      "apply": {
+        "model": "alchemia:block/tube/arm",
+        "y": 90
+      },
+      "when": {
+        "south": "tube"
+      }
+    },
+    {
+      "apply": {
+        "model": "alchemia:block/tube/connector",
+        "y": 90
+      },
+      "when": {
+        "south": "block"
+      }
+    },
+    {
+      "apply": {
+        "model": "alchemia:block/tube/arm",
+        "y": 180
+      },
+      "when": {
+        "west": "tube"
+      }
+    },
+    {
+      "apply": {
+        "model": "alchemia:block/tube/connector",
+        "y": 180
+      },
+      "when": {
+        "west": "block"
+      }
+    },
+    {
+      "apply": {
+        "model": "alchemia:block/tube/arm"
+      },
+      "when": {
+        "east": "tube"
+      }
+    },
+    {
+      "apply": {
+        "model": "alchemia:block/tube/connector"
+      },
+      "when": {
+        "east": "block"
+      }
+    }
+  ]
+}

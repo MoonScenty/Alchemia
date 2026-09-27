@@ -1,5 +1,7 @@
 package me.moonscenty.alchemia.datagen;
 
+import java.util.List;
+
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.block.CrystalBlock;
 import me.moonscenty.alchemia.block.ResearchTableBlock;
@@ -201,13 +203,23 @@ public class ModBlockStateProvider extends BlockStateProvider {
     /**
      * The pipe, put together a side at a time.
      * <p>
+     * Every kind of pipe is put together the same way and out of the same pieces, as they were in the original: what
+     * a valve or a filter does is not something you can see from the outside.
+     * <p>
      * The middle is always there; each side adds an arm, and a plain arm or one with a collar depending on what it
      * is up against. The four horizontal arms are the one drawn model turned about the upright; up and down are
      * models of their own, since a blockstate cannot turn an east-pointing thing to face up.
      */
     private void tube() {
+        for (DeferredBlock<? extends TubeBlock> kind : List.of(ModBlocks.TUBE, ModBlocks.TUBE_VALVE,
+                ModBlocks.TUBE_ONEWAY, ModBlocks.TUBE_RESTRICT, ModBlocks.TUBE_FILTER, ModBlocks.TUBE_BUFFER)) {
+            tube(kind.get());
+        }
+    }
+
+    private void tube(TubeBlock block) {
         ModelFile core = models().getExistingFile(modLoc("block/tube/core"));
-        var builder = getMultipartBuilder(ModBlocks.TUBE.get());
+        var builder = getMultipartBuilder(block);
         builder.part().modelFile(core).addModel().end();
 
         for (Direction side : Direction.values()) {

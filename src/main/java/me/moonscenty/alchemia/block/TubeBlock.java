@@ -2,14 +2,16 @@ package me.moonscenty.alchemia.block;
 
 import java.util.EnumMap;
 import java.util.Map;
+import java.util.Optional;
 
 import com.mojang.serialization.MapCodec;
 
+import me.moonscenty.alchemia.aspect.Aspect;
 import me.moonscenty.alchemia.block.entity.TubeBlockEntity;
 import me.moonscenty.alchemia.essentia.EssentiaHolder;
-import me.moonscenty.alchemia.registry.ModBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -91,7 +93,7 @@ public class TubeBlock extends BaseEntityBlock {
     }
 
     @Override
-    protected MapCodec<TubeBlock> codec() {
+    protected MapCodec<? extends TubeBlock> codec() {
         return CODEC;
     }
 
@@ -155,6 +157,27 @@ public class TubeBlock extends BaseEntityBlock {
         }
     }
 
+    /**
+     * Whether essentia may pass through this tube, coming in by one side and leaving by another.
+     * <p>
+     * Plain pipe minds neither side. A valve minds whether it is shut, and a one-way minds which way it is pointed.
+     *
+     * @param out the side it would leave by, or null when this is the tube the essentia stops in
+     */
+    public boolean passes(BlockState state, Direction in, Direction out) {
+        return true;
+    }
+
+    /** The one aspect this tube will let by, if it insists on one. */
+    public Optional<Holder<Aspect>> insistsOn(BlockGetter level, BlockPos pos) {
+        return Optional.empty();
+    }
+
+    /** How many turns a run waits for having come through this tube. */
+    public int holdsUp() {
+        return 0;
+    }
+
     /** What lies on one side of a tube: another tube, something that holds essentia, or nothing to speak of. */
     public static Link linkTo(BlockGetter level, BlockPos pos, Direction side) {
         BlockPos at = pos.relative(side);
@@ -166,10 +189,22 @@ public class TubeBlock extends BaseEntityBlock {
                 && holder.reachableFrom(side.getOpposite()) ? Link.BLOCK : Link.NONE;
     }
 
+    /**
+     * Every kind of tube is pumped the same way.
+     * <p>
+     * The ticker is written out rather than got from {@code createTickerHelper}, which matches one type of block
+     * entity and one only: the odd kinds of pipe keep their own, and all of them want this same pull.
+     */
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state,
             BlockEntityType<T> type) {
-        return level.isClientSide ? null
-                : createTickerHelper(type, ModBlockEntities.TUBE.get(), TubeBlockEntity::tick);
+        if (level.isClientSide) {
+            return null;
+        }
+        return (world, pos, at, entity) -> {
+            if (entity instanceof TubeBlockEntity tube) {
+                TubeBlockEntity.tick(world, pos, at, tube);
+            }
+        };
     }
 }

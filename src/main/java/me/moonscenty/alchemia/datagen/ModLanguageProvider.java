@@ -77,6 +77,15 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         addBlock(ModBlocks.ESSENTIA_SMELTER, pick("Essentia Smelter", "에센시아 제련로"));
         addBlock(ModBlocks.ALEMBIC, pick("Alembic", "증류기"));
         addBlock(ModBlocks.TUBE, pick("Essentia Tube", "에센시아 관"));
+        addBlock(ModBlocks.TUBE_VALVE, pick("Essentia Valve", "에센시아 밸브"));
+        addBlock(ModBlocks.TUBE_ONEWAY, pick("One-way Essentia Tube", "역류방지 에센시아 관"));
+        addBlock(ModBlocks.TUBE_RESTRICT, pick("Restricted Essentia Tube", "제한 에센시아 관"));
+        addBlock(ModBlocks.TUBE_FILTER, pick("Essentia Filter Tube", "여과 에센시아 관"));
+        addBlock(ModBlocks.TUBE_BUFFER, pick("Essentia Buffer", "에센시아 완충기"));
+        add("block.alchemia.tube_filter.open", pick("Lets anything by", "아무것이나 지나간다"));
+        add("block.alchemia.tube_filter.only", pick("Lets only %s by", "%s만 지나간다"));
+        add("block.alchemia.tube_buffer.empty", pick("Empty", "비어 있다"));
+        add("block.alchemia.tube_buffer.holding", pick("%s — %s / %s", "%s — %s / %s"));
         addBlock(ModBlocks.JAR, pick("Warded Jar", "봉인된 단지"));
         add("block.alchemia.jar.empty", pick("Empty", "비어 있다"));
         add("block.alchemia.jar.holding", pick("%s — %s of %s", "%s — %s / %s"));
