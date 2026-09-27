@@ -75,10 +75,6 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
         dropSelf(ModBlocks.ARCANE_WORKBENCH_CHARGER.get());
         dropSelf(ModBlocks.NODE_STABILIZER.get());
         dropSelf(ModBlocks.ARCANE_PEDESTAL.get());
-        // a pillar is two stones that have been woken, and breaking one gives both back
-        add(ModBlocks.ARCANE_PILLAR.get(), block -> LootTable.lootTable().withPool(applyExplosionCondition(block,
-                LootPool.lootPool().setRolls(ConstantValue.exactly(2.0F))
-                        .add(LootItem.lootTableItem(ModBlocks.ARCANE_STONE.block().get())))));
         dropSelf(ModBlocks.INFUSION_MATRIX.get());
 
         // nothing tainted is worth keeping; what the growths gave in the original arrives with those items

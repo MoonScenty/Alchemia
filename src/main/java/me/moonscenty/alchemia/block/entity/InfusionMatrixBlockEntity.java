@@ -10,7 +10,6 @@ import me.moonscenty.alchemia.aspect.AspectList;
 import me.moonscenty.alchemia.crafting.InfusionInput;
 import me.moonscenty.alchemia.crafting.InfusionRecipe;
 import me.moonscenty.alchemia.crafting.ModRecipes;
-import me.moonscenty.alchemia.block.ArcanePillarBlock;
 import me.moonscenty.alchemia.essentia.EssentiaReach;
 import me.moonscenty.alchemia.player.PlayerKnowledge;
 import me.moonscenty.alchemia.registry.ModBlockEntities;
@@ -63,8 +62,14 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
     /** No work is ever worse than this, however it is laid out. */
     public static final int WORST = 25;
 
-    /** How often a matrix that is awake looks around to see whether its altar is still standing. */
-    private static final int LOOKS_ROUND = 100;
+    /**
+     * How often a matrix that is awake looks around to see whether its altar is still standing.
+     * <p>
+     * Once a second. A corner stone is not a neighbour of the matrix, so nothing tells it when one is broken, and
+     * five seconds of pillars still standing over a hole is long enough for somebody to break a second one trying
+     * to work out what went wrong.
+     */
+    private static final int LOOKS_ROUND = 20;
 
     /** Whether the altar under it is built and the stones have been woken. */
     private boolean awake;
@@ -116,66 +121,19 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
     /**
      * Where the four pillars stand, and which way each is turned.
      * <p>
-     * The pillar is drawn leaning towards the north-east corner of its own block, so the four of them have to be
-     * turned a quarter apart to lean away from the middle together. The turn a pillar is given is read off its
-     * facing, which is why these four look arbitrary: south is no turn at all, and each quarter after it goes
-     * round the corners in order.
+     * The pillar is nothing but a picture: the stone stays a stone and a woken matrix draws a pillar standing on
+     * it. Turning the stone into a block of its own was worse in every way it could be -- the top half of the
+     * picture stood in a block of air that could not be hit, breaking one left the rest standing as ruins, and the
+     * whole thing had to be put back by hand afterwards. A stone with a pillar drawn over it is still a stone.
      */
-    private static final Map<Vec3i, Direction> CORNERS = Map.of(
-            new Vec3i(1, -2, -1), Direction.NORTH,
-            new Vec3i(1, -2, 1), Direction.EAST,
-            new Vec3i(-1, -2, 1), Direction.SOUTH,
-            new Vec3i(-1, -2, -1), Direction.WEST);
+    public static final List<Vec3i> CORNERS = List.of(
+            new Vec3i(1, -2, -1),
+            new Vec3i(1, -2, 1),
+            new Vec3i(-1, -2, 1),
+            new Vec3i(-1, -2, -1));
 
     /**
-     * Raises the altar: the four stones at the corners become pillars.
-     * <p>
-     * This is what the first touch of a wand does. Nothing is placed and nothing is spent -- the stone is already
-     * there, and what the wand does is tell it what it is for. A works is built by hand and then woken, which is a
-     * better moment than setting down four pillars one at a time and wondering whether they count.
-     *
-     * A pillar stands two blocks tall, so it is built from two, and the upper stone is swallowed by the one below
-     * it. Raising a pillar out of a single stone would leave the picture standing in a block of somebody else's
-     * air, which is how you end up with a wall built through your altar.
-     *
-     * @return whether anything was raised
-     */
-    public static boolean raise(Level level, BlockPos pos) {
-        boolean raised = false;
-        for (Map.Entry<Vec3i, Direction> corner : CORNERS.entrySet()) {
-            BlockPos at = pos.offset(corner.getKey());
-            if (!stone(level, at) || !stone(level, at.above())) {
-                continue;
-            }
-            level.setBlock(at, ModBlocks.ARCANE_PILLAR.get().defaultBlockState()
-                    .setValue(ArcanePillarBlock.FACING, corner.getValue()), Block.UPDATE_ALL);
-            level.setBlock(at.above(), Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
-            raised = true;
-        }
-        return raised;
-    }
-
-    /** Every pillar still standing becomes the two stones it was built from. */
-    public static void lower(Level level, BlockPos pos) {
-        for (Vec3i corner : CORNERS.keySet()) {
-            BlockPos at = pos.offset(corner);
-            if (!(level.getBlockState(at).getBlock() instanceof ArcanePillarBlock)) {
-                continue;
-            }
-            BlockState was = ModBlocks.ARCANE_STONE.block().get().defaultBlockState();
-            level.setBlock(at, was, Block.UPDATE_ALL);
-            if (level.getBlockState(at.above()).canBeReplaced()) {
-                level.setBlock(at.above(), was, Block.UPDATE_ALL);
-            }
-        }
-    }
-
-    private static boolean stone(Level level, BlockPos at) {
-        return level.getBlockState(at).is(ModBlocks.ARCANE_STONE.block().get());
-    }
-
-    /**
-     * Whether there is an altar under this at all: a pedestal to work on and four pillars at the corners.
+     * Whether there is an altar under this at all: a pedestal to work on and a stone at each corner.
      * <p>
      * A matrix with nothing under it is eight stones hanging in a room. It will not wake and, if the altar is
      * pulled apart under a working, it will not go on with it.
@@ -184,8 +142,8 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
         if (!(level.getBlockEntity(worldPosition.below(UNDER)) instanceof ArcanePedestalBlockEntity)) {
             return false;
         }
-        for (Vec3i corner : CORNERS.keySet()) {
-            if (!(level.getBlockState(worldPosition.offset(corner)).getBlock() instanceof ArcanePillarBlock)) {
+        for (Vec3i corner : CORNERS) {
+            if (!level.getBlockState(worldPosition.offset(corner)).is(ModBlocks.ARCANE_STONE.block().get())) {
                 return false;
             }
         }
@@ -207,7 +165,6 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
             return Woken.NOTHING;
         }
         if (!awake) {
-            raise(level, worldPosition);
             if (!built(level)) {
                 return Woken.UNBUILT;
             }
@@ -299,7 +256,7 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
             if (matrix.busy()) {
                 matrix.fail((ServerLevel) level, pos);
             }
-            matrix.sleep(level, pos);
+            matrix.sleep();
             return;
         }
         if (!matrix.busy()) {
@@ -395,17 +352,15 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
     }
 
     /**
-     * Back to sleep, and back to stone.
+     * Back to sleep.
      * <p>
-     * An altar is only an altar while all of it is standing. Take one pillar out and the rest are four-fifths of
-     * nothing, so they are given back as the stone they were built from rather than left standing as ruins nobody
-     * can use and everybody has to break by hand.
+     * An altar is only an altar while all of it is standing. Take one stone out of a corner and the pillars stop
+     * being drawn, which is both the whole of the tidying up and the clearest possible way of saying what broke.
      */
-    public void sleep(Level level, BlockPos pos) {
+    public void sleep() {
         awake = false;
         watch = 0;
         woken = 0;
-        lower(level, pos);
         changed();
     }
 

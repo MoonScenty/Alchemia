@@ -62,16 +62,13 @@ public class InfusionTests {
     }
 
     /**
-     * The altar itself: a pedestal two below, and a pillar's worth of arcane stone at each of the four corners.
-     * <p>
-     * Two stones to a corner, since a pillar stands two blocks tall and is built from both.
+     * The altar itself: a pedestal two below, and a stone at each corner for a pillar to be drawn standing on.
      */
     private static void altar(GameTestHelper helper) {
         helper.setBlock(MATRIX, ModBlocks.INFUSION_MATRIX.get());
         for (int east = -1; east <= 1; east += 2) {
             for (int south = -1; south <= 1; south += 2) {
                 helper.setBlock(MATRIX.offset(east, -2, south), ModBlocks.ARCANE_STONE.block().get());
-                helper.setBlock(MATRIX.offset(east, -1, south), ModBlocks.ARCANE_STONE.block().get());
             }
         }
     }
@@ -97,7 +94,7 @@ public class InfusionTests {
         }
     }
 
-    /** The first touch of a wand turns the corner stones into pillars and sets the matrix turning. */
+    /** The first touch of a wand wakes the altar; the touch after that starts the working. */
     @GameTest(template = TEMPLATE)
     public static void theFirstTouchWakesTheAltar(GameTestHelper helper) {
         InfusionMatrixBlockEntity matrix = laidOut(helper);
@@ -106,38 +103,29 @@ public class InfusionTests {
         helper.assertTrue(!matrix.awake(), "a matrix hung over loose stone is asleep");
         helper.assertValueEqual(matrix.wake(player), InfusionMatrixBlockEntity.Woken.WOKEN, "the wand woke it");
         helper.assertTrue(matrix.awake(), "and it is awake");
-        helper.assertBlockPresent(ModBlocks.ARCANE_PILLAR.get(), MATRIX.offset(1, -2, 1));
-        helper.assertBlockPresent(ModBlocks.ARCANE_PILLAR.get(), MATRIX.offset(-1, -2, -1));
-        helper.assertBlockPresent(Blocks.AIR, MATRIX.offset(1, -1, 1));
+        // the stones stay stones: a pillar is a picture the matrix draws over them
+        helper.assertBlockPresent(ModBlocks.ARCANE_STONE.block().get(), MATRIX.offset(1, -2, 1));
 
         helper.assertValueEqual(matrix.wake(player), InfusionMatrixBlockEntity.Woken.STARTED,
                 "and the touch after that starts the working");
         helper.succeed();
     }
 
-    /** One stone to a corner is not a pillar: a pillar stands two blocks tall and is built from two. */
+    /**
+     * Take one corner out and the altar stops being one, within the second.
+     * <p>
+     * A corner stone is not a neighbour of the matrix, so nothing tells it when one goes; it has to look. What is
+     * worth holding to is that one stone is enough, since somebody who breaks one and sees nothing happen will
+     * break another to find out why.
+     */
     @GameTest(template = TEMPLATE)
-    public static void aPillarIsTwoStones(GameTestHelper helper) {
-        InfusionMatrixBlockEntity matrix = laidOut(helper);
-        helper.setBlock(MATRIX.offset(1, -1, 1), Blocks.AIR);
-
-        helper.assertValueEqual(matrix.wake(scholar(helper)), InfusionMatrixBlockEntity.Woken.UNBUILT,
-                "a single stone raises nothing");
-        helper.assertBlockPresent(ModBlocks.ARCANE_STONE.block().get(), MATRIX.offset(1, -2, 1));
-        helper.succeed();
-    }
-
-    /** Take one pillar out and the rest are stone again: an altar is only an altar while all of it stands. */
-    @GameTest(template = TEMPLATE)
-    public static void breakingOnePillarLowersTheRest(GameTestHelper helper) {
+    public static void breakingOneCornerPutsItToSleep(GameTestHelper helper) {
         InfusionMatrixBlockEntity matrix = laidOut(helper);
         matrix.wake(scholar(helper));
         helper.setBlock(MATRIX.offset(1, -2, 1), Blocks.AIR);
 
-        run(helper, matrix, 6);
+        run(helper, matrix, 2);
         helper.assertTrue(!matrix.awake(), "the altar went back to sleep");
-        helper.assertBlockPresent(ModBlocks.ARCANE_STONE.block().get(), MATRIX.offset(-1, -2, -1));
-        helper.assertBlockPresent(ModBlocks.ARCANE_STONE.block().get(), MATRIX.offset(-1, -1, -1));
         helper.succeed();
     }
 
@@ -146,7 +134,6 @@ public class InfusionTests {
     public static void itWillNotWakeWithoutAnAltar(GameTestHelper helper) {
         InfusionMatrixBlockEntity matrix = laidOut(helper);
         helper.setBlock(MATRIX.offset(1, -2, 1), Blocks.AIR);
-        helper.setBlock(MATRIX.offset(1, -1, 1), Blocks.AIR);
 
         helper.assertValueEqual(matrix.wake(scholar(helper)), InfusionMatrixBlockEntity.Woken.UNBUILT,
                 "three corners is not an altar");

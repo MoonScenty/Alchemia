@@ -9,7 +9,6 @@ import java.util.function.Supplier;
 
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.block.ArcanePedestalBlock;
-import me.moonscenty.alchemia.block.ArcanePillarBlock;
 import me.moonscenty.alchemia.block.ArcaneWorkbenchBlock;
 import me.moonscenty.alchemia.block.ArcaneWorkbenchChargerBlock;
 import me.moonscenty.alchemia.block.BufferTubeBlock;
@@ -128,12 +127,6 @@ public class ModBlocks {
     /** Holds up one thing where a matrix can reach it. */
     public static final DeferredBlock<ArcanePedestalBlock> ARCANE_PEDESTAL = register("arcane_pedestal",
             () -> new ArcanePedestalBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS)
-                    .mapColor(MapColor.STONE)
-                    .noOcclusion()));
-
-    /** Four of them at the corners are what an altar is built out of. */
-    public static final DeferredBlock<ArcanePillarBlock> ARCANE_PILLAR = register("arcane_pillar",
-            () -> new ArcanePillarBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS)
                     .mapColor(MapColor.STONE)
                     .noOcclusion()));
 

@@ -39,6 +39,8 @@ public class AlchemiaClientSetup {
         event.register(ResearchTableRenderer.QUILL);
         // the matrix has no block model of its own; its eight stones are asked for here and drawn by hand
         event.register(InfusionMatrixRenderer.CUBE);
+        // an altar's pillars are a picture a woken matrix draws, not four blocks somebody placed
+        event.register(InfusionMatrixRenderer.PILLAR);
         for (var arm : NodeStabilizerRenderer.ARMS) {
             event.register(arm);
         }

@@ -91,7 +91,6 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("block.alchemia.tube_buffer.holding", pick("%s — %s / %s", "%s — %s / %s"));
         addBlock(ModBlocks.JAR, pick("Warded Jar", "봉인된 단지"));
         addBlock(ModBlocks.ARCANE_PEDESTAL, pick("Arcane Pedestal", "비전 받침대"));
-        addBlock(ModBlocks.ARCANE_PILLAR, pick("Arcane Pillar", "비전 기둥"));
         addBlock(ModBlocks.INFUSION_MATRIX, pick("Runic Matrix", "룬 결계"));
         add("block.alchemia.infusion_matrix.asleep", pick("The stones hang still", "돌이 가만히 떠 있다"));
         add("block.alchemia.infusion_matrix.idle", pick("Awake, and waiting", "깨어서 기다리고 있다"));

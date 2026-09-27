@@ -29,6 +29,22 @@ import net.minecraft.util.Mth;
 public class InfusionMatrixRenderer implements BlockEntityRenderer<InfusionMatrixBlockEntity> {
     public static final ModelResourceLocation CUBE =
             ModelResourceLocation.standalone(Alchemia.id("block/infusion_cube"));
+    public static final ModelResourceLocation PILLAR =
+            ModelResourceLocation.standalone(Alchemia.id("block/pillar/block"));
+
+    /**
+     * Where each pillar stands, and how far it is turned.
+     * <p>
+     * The model leans towards its own north-east corner, so each of the four is turned to lean back in towards
+     * the middle. A quarter turn here is counter-clockwise seen from above, the other way round from the turn a
+     * blockstate gives a model, which is why these are written out rather than worked out.
+     */
+    private static final float[][] PILLARS = {
+            {1, -2, -1, 180},
+            {1, -2, 1, 90},
+            {-1, -2, 1, 0},
+            {-1, -2, -1, 270},
+    };
 
     /** How far each stone sits from the middle, and how big it is drawn. */
     private static final float OUT = 0.25F;
@@ -59,6 +75,21 @@ public class InfusionMatrixRenderer implements BlockEntityRenderer<InfusionMatri
         // nothing snaps into motion: a woken altar takes a few seconds to come up to speed
         float running = Math.min(1.0F, since / WINDS_UP);
         float shake = matrix.busy() ? matrix.instability() * running : 0.0F;
+
+        // the altar itself, drawn by the matrix because it is the matrix that knows it is an altar
+        if (matrix.awake()) {
+            BakedModel pillar = client.getModelManager().getModel(PILLAR);
+            for (float[] corner : PILLARS) {
+                pose.pushPose();
+                pose.translate(corner[0] + 0.5, corner[1], corner[2] + 0.5);
+                pose.mulPose(Axis.YP.rotationDegrees(corner[3]));
+                pose.translate(-0.5, 0.0, -0.5);
+                client.getBlockRenderer().getModelRenderer().renderModel(pose.last(),
+                        buffers.getBuffer(RenderType.cutout()), null, pillar,
+                        1.0F, 1.0F, 1.0F, light, OverlayTexture.NO_OVERLAY);
+                pose.popPose();
+            }
+        }
 
         pose.pushPose();
         pose.translate(0.5, 0.5, 0.5);

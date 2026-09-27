@@ -9,7 +9,6 @@ import me.moonscenty.alchemia.block.taint.FluxGooBlock;
 import me.moonscenty.alchemia.block.taint.TaintFibreBlock;
 import me.moonscenty.alchemia.block.taint.TaintLogBlock;
 import me.moonscenty.alchemia.block.AlembicBlock;
-import me.moonscenty.alchemia.block.ArcanePillarBlock;
 import me.moonscenty.alchemia.block.EssentiaSmelterBlock;
 import me.moonscenty.alchemia.block.CrucibleBlock;
 import me.moonscenty.alchemia.block.JarBlock;
@@ -250,21 +249,14 @@ public class ModBlockStateProvider extends BlockStateProvider {
     }
 
     /**
-     * The pedestal, and the pillars that stand at the corners.
+     * The pedestal, and the matrix that has no model of its own.
      * <p>
-     * The pillar is drawn leaning one way; the other three bearings are that model turned a quarter at a time, so
-     * four set around a matrix lean outward together.
+     * The pillars are not here because they are not blocks. A woken matrix draws four of them over the stones at
+     * its corners, and a stone with a pillar drawn over it is still a stone to break.
      */
     private void altar() {
         simpleBlock(ModBlocks.ARCANE_PEDESTAL.get(), models().getExistingFile(modLoc("block/pedestal")));
         itemModels().withExistingParent("arcane_pedestal", modLoc("block/pedestal"));
-
-        ModelFile pillar = models().getExistingFile(modLoc("block/pillar/block"));
-        getVariantBuilder(ModBlocks.ARCANE_PILLAR.get()).forAllStates(state -> ConfiguredModel.builder()
-                .modelFile(pillar)
-                .rotationY((int) state.getValue(ArcanePillarBlock.FACING).toYRot())
-                .build());
-        itemModels().withExistingParent("arcane_pillar", modLoc("block/pillar/block"));
 
         // the matrix draws nothing of itself: the blockstate points at an empty model and the renderer does the rest
         simpleBlock(ModBlocks.INFUSION_MATRIX.get(), models().getExistingFile(modLoc("block/infusion_matrix")));
