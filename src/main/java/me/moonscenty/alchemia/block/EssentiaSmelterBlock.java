@@ -11,8 +11,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Containers;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -89,41 +88,17 @@ public class EssentiaSmelterBlock extends BaseEntityBlock {
         return state.rotate(mirror.getRotation(state.getValue(FACING)));
     }
 
-    /**
-     * Puts what is held into whichever slot will take it.
-     * <p>
-     * Anything that burns is fuel and anything else is work, which leaves nothing to choose and so nothing to get
-     * wrong. Coal is never smelted here even though it has aspects of its own; that is the price of not asking.
-     */
+    /** Opens the screen, whatever is in hand. A furnace does the same, and this is a furnace. */
     @Override
-    protected ItemInteractionResult useItemOn(ItemStack held, BlockState state, Level level, BlockPos pos,
-            Player player, InteractionHand hand, BlockHitResult hit) {
-        if (held.isEmpty() || !(level.getBlockEntity(pos) instanceof EssentiaSmelterBlockEntity smelter)) {
-            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
-        }
-        int slot = held.getBurnTime(net.minecraft.world.item.crafting.RecipeType.SMELTING) > 0
-                ? EssentiaSmelterBlockEntity.SLOT_FUEL
-                : EssentiaSmelterBlockEntity.SLOT_INPUT;
-        if (!smelter.canPlaceItem(slot, held)) {
-            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
-        }
-
-        ItemStack there = smelter.getItem(slot);
-        if (!there.isEmpty() && (!ItemStack.isSameItemSameComponents(there, held)
-                || there.getCount() >= there.getMaxStackSize())) {
-            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player,
+            BlockHitResult hit) {
+        if (!(level.getBlockEntity(pos) instanceof EssentiaSmelterBlockEntity smelter)) {
+            return InteractionResult.PASS;
         }
         if (!level.isClientSide) {
-            if (there.isEmpty()) {
-                smelter.setItem(slot, held.split(1));
-            } else {
-                there.grow(1);
-                held.shrink(1);
-                smelter.setChanged();
-            }
-            level.playSound(null, pos, SoundEvents.ITEM_FRAME_ADD_ITEM, SoundSource.BLOCKS, 0.5F, 1.0F);
+            player.openMenu(smelter, buffer -> buffer.writeBlockPos(pos));
         }
-        return ItemInteractionResult.sidedSuccess(level.isClientSide);
+        return InteractionResult.sidedSuccess(level.isClientSide);
     }
 
     @Override

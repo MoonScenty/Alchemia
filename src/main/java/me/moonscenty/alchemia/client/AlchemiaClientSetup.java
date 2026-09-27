@@ -46,6 +46,7 @@ public class AlchemiaClientSetup {
     public static void registerScreens(RegisterMenuScreensEvent event) {
         event.register(ModMenus.RESEARCH_TABLE.get(), ResearchTableScreen::new);
         event.register(ModMenus.ARCANE_WORKBENCH.get(), ArcaneWorkbenchScreen::new);
+        event.register(ModMenus.ESSENTIA_SMELTER.get(), EssentiaSmelterScreen::new);
     }
 
     /**

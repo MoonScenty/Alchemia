@@ -2,10 +2,12 @@ package me.moonscenty.alchemia.registry;
 
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.menu.ArcaneWorkbenchMenu;
+import me.moonscenty.alchemia.menu.EssentiaSmelterMenu;
 import me.moonscenty.alchemia.menu.ResearchTableMenu;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.inventory.MenuType;
+import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -20,6 +22,11 @@ public class ModMenus {
     public static final DeferredHolder<MenuType<?>, MenuType<ArcaneWorkbenchMenu>> ARCANE_WORKBENCH =
             MENUS.register("arcane_workbench",
                     () -> new MenuType<>(ArcaneWorkbenchMenu::new, FeatureFlags.VANILLA_SET));
+
+    /** Carries the block's position across, since the screen reads what is dissolved off the block itself. */
+    public static final DeferredHolder<MenuType<?>, MenuType<EssentiaSmelterMenu>> ESSENTIA_SMELTER =
+            MENUS.register("essentia_smelter",
+                    () -> IMenuTypeExtension.create(EssentiaSmelterMenu::new));
 
     private ModMenus() {
     }

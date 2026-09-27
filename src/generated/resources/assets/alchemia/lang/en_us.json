@@ -138,6 +138,8 @@
   "entity.alchemia.taint_cloud": "Taint Cloud",
   "flux_event.alchemia.sickness": "The local aura momentarily becomes unstable, hampering your magical ability.",
   "flux_event.alchemia.warp": "The nearby aura suddenly twists and warps, leaving your thoughts in a shambles.",
+  "gui.alchemia.essentia_empty": "Nothing in it yet",
+  "gui.alchemia.essentia_held": "Essentia  %s / %s",
   "gui.alchemia.no_wand": "A wand must be laid on the bench",
   "gui.alchemia.not_enough_vis": "The wand does not hold enough",
   "gui.alchemia.not_researched": "You do not know how this is made",
