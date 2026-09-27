@@ -161,6 +161,44 @@ public class InfusionTests {
         helper.succeed();
     }
 
+    /**
+     * A ring laid out in pairs is steady; one pedestal hanging off the end of it is not.
+     * <p>
+     * This is most of what makes a working dangerous, and the whole reason an altar is a thing you lay out rather
+     * than a thing you scatter.
+     */
+    @GameTest(template = TEMPLATE)
+    public static void aLopsidedRingIsWhatGoesWrong(GameTestHelper helper) {
+        InfusionMatrixBlockEntity matrix = laidOut(helper);
+        helper.assertValueEqual(matrix.symmetry(helper.getLevel()), 0, "two pedestals facing each other are even");
+
+        stand(helper, MATRIX.offset(0, -2, 3), new ItemStack(Items.IRON_INGOT));
+        helper.assertTrue(matrix.symmetry(helper.getLevel()) > 0, "a third with nothing opposite it is not");
+
+        stand(helper, MATRIX.offset(0, -2, -3), new ItemStack(Items.IRON_INGOT));
+        helper.assertValueEqual(matrix.symmetry(helper.getLevel()), 0, "and its opposite number settles it again");
+        helper.succeed();
+    }
+
+    /** What the ring is doing is carried into the working itself. */
+    @GameTest(template = TEMPLATE)
+    public static void theRingMakesTheWorkingDangerous(GameTestHelper helper) {
+        InfusionMatrixBlockEntity matrix = laidOut(helper);
+        Player player = scholar(helper);
+        stand(helper, MATRIX.offset(0, -2, 3), new ItemStack(Items.IRON_INGOT));
+
+        matrix.wake(player);
+        matrix.start(player);
+        helper.assertTrue(!matrix.busy(), "a ring with a stray ingot on it is not a recipe");
+
+        helper.setBlock(MATRIX.offset(0, -2, 3), Blocks.AIR);
+        stand(helper, MATRIX.offset(0, -2, 3), ItemStack.EMPTY);
+        matrix.start(player);
+        helper.assertTrue(matrix.busy(), "an empty pedestal is not an ingredient");
+        helper.assertTrue(matrix.instability() > 3, "but it is a lopsided ring, and the working knows it");
+        helper.succeed();
+    }
+
     /** The matrix finds the ring below it, one pedestal to a column. */
     @GameTest(template = TEMPLATE)
     public static void itFindsTheRing(GameTestHelper helper) {

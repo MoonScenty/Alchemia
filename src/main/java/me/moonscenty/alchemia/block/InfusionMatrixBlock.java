@@ -117,9 +117,15 @@ public class InfusionMatrixBlock extends BaseEntityBlock {
         if (level.isClientSide) {
             return InteractionResult.SUCCESS;
         }
-        if (!matrix.busy()) {
-            say(player, matrix.awake() ? "block.alchemia.infusion_matrix.idle"
-                    : "block.alchemia.infusion_matrix.asleep");
+        if (!matrix.awake()) {
+            say(player, "block.alchemia.infusion_matrix.asleep");
+        } else if (!matrix.busy()) {
+            // said before the working rather than during it, since this is the one thing you can still fix
+            int lopsided = matrix.symmetry(level);
+            player.displayClientMessage((lopsided == 0
+                    ? Component.translatable("block.alchemia.infusion_matrix.steady")
+                    : Component.translatable("block.alchemia.infusion_matrix.lopsided", lopsided))
+                    .withStyle(ChatFormatting.GRAY), true);
         } else if (matrix.owed().isEmpty()) {
             say(player, "block.alchemia.infusion_matrix.gathering");
         } else {

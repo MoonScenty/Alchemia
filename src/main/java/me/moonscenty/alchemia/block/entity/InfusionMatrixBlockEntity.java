@@ -162,6 +162,37 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
         return true;
     }
 
+    /**
+     * How badly the ring is laid out, which is most of what makes a working dangerous.
+     * <p>
+     * Every pedestal counts against the work, and every pedestal with an opposite number -- the same pedestal
+     * standing the same distance the other side of the matrix -- cancels itself out again. Lay the ring out in
+     * pairs and the working is as steady as the recipe allows; hang one pedestal off the end of it and the whole
+     * thing starts twitching.
+     * <p>
+     * Symmetry rather than tidiness, and about the matrix rather than about any wall, so a works can be built into
+     * whatever room it has. The one rule is that it be built both sides at once.
+     */
+    public int symmetry(Level level) {
+        int against = 0;
+        for (BlockPos at : around(level, worldPosition)) {
+            ArcanePedestalBlockEntity stand = stand(level, at);
+            if (stand == null) {
+                continue;
+            }
+            boolean holding = !stand.held().isEmpty();
+            against += holding ? 3 : 2;
+
+            // straight through the matrix and the same distance out the other side
+            ArcanePedestalBlockEntity opposite = stand(level, new BlockPos(
+                    2 * worldPosition.getX() - at.getX(), at.getY(), 2 * worldPosition.getZ() - at.getZ()));
+            if (opposite != null) {
+                against -= holding && !opposite.held().isEmpty() ? 3 : 2;
+            }
+        }
+        return Math.max(0, against);
+    }
+
     /** Both blocks of all four corners. */
     private List<BlockPos> columns() {
         List<BlockPos> all = new ArrayList<>();
@@ -272,7 +303,8 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
         working = found.get().id();
         owed = recipe.essentia();
         ring = List.copyOf(holding);
-        instability = Math.min(WORST, recipe.instability());
+        // what the recipe asks for, and what the ring is doing about it
+        instability = Math.min(WORST, recipe.instability() + symmetry(level));
         counter = 0;
         level.playSound(null, worldPosition, SoundEvents.BEACON_ACTIVATE, SoundSource.BLOCKS, 0.7F, 1.6F);
         changed();
