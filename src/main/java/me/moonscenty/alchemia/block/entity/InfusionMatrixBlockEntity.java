@@ -34,6 +34,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -72,8 +73,17 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
     private List<BlockPos> ring = List.of();
     private int instability;
     private int counter;
-    /** How long it has been awake, which is what the drawing uses to wind itself up. */
-    private int turning;
+    /**
+     * When it woke, by the world clock.
+     * <p>
+     * The drawing needs to know how long the stones have been turning, and a counter ticked up on the server is
+     * no use for that: a client only hears about it when something else happens to be synced, so the number it
+     * draws with jumps about and the stones shiver in place instead of turning. A moment in time is sent once and
+     * stays true.
+     */
+    private long woken;
+    /** Ticks since it woke, for looking round at the altar now and then. */
+    private int watch;
 
     public InfusionMatrixBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.INFUSION_MATRIX.get(), pos, state);
@@ -91,8 +101,9 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
         return instability;
     }
 
-    public int turning() {
-        return turning;
+    /** When the stones began to turn, by the world clock. */
+    public long wokenAt() {
+        return woken;
     }
 
     /** What is still to be drunk, for anything that wants to say so. */
@@ -111,10 +122,10 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
      * round the corners in order.
      */
     private static final Map<Vec3i, Direction> CORNERS = Map.of(
-            new Vec3i(1, -2, -1), Direction.SOUTH,
-            new Vec3i(1, -2, 1), Direction.WEST,
-            new Vec3i(-1, -2, 1), Direction.NORTH,
-            new Vec3i(-1, -2, -1), Direction.EAST);
+            new Vec3i(1, -2, -1), Direction.NORTH,
+            new Vec3i(1, -2, 1), Direction.EAST,
+            new Vec3i(-1, -2, 1), Direction.SOUTH,
+            new Vec3i(-1, -2, -1), Direction.WEST);
 
     /**
      * Raises the altar: the four stones at the corners become pillars.
@@ -123,20 +134,44 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
      * there, and what the wand does is tell it what it is for. A works is built by hand and then woken, which is a
      * better moment than setting down four pillars one at a time and wondering whether they count.
      *
+     * A pillar stands two blocks tall, so it is built from two, and the upper stone is swallowed by the one below
+     * it. Raising a pillar out of a single stone would leave the picture standing in a block of somebody else's
+     * air, which is how you end up with a wall built through your altar.
+     *
      * @return whether anything was raised
      */
     public static boolean raise(Level level, BlockPos pos) {
         boolean raised = false;
         for (Map.Entry<Vec3i, Direction> corner : CORNERS.entrySet()) {
             BlockPos at = pos.offset(corner.getKey());
-            if (!level.getBlockState(at).is(ModBlocks.ARCANE_STONE.block().get())) {
+            if (!stone(level, at) || !stone(level, at.above())) {
                 continue;
             }
             level.setBlock(at, ModBlocks.ARCANE_PILLAR.get().defaultBlockState()
                     .setValue(ArcanePillarBlock.FACING, corner.getValue()), Block.UPDATE_ALL);
+            level.setBlock(at.above(), Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
             raised = true;
         }
         return raised;
+    }
+
+    /** Every pillar still standing becomes the two stones it was built from. */
+    public static void lower(Level level, BlockPos pos) {
+        for (Vec3i corner : CORNERS.keySet()) {
+            BlockPos at = pos.offset(corner);
+            if (!(level.getBlockState(at).getBlock() instanceof ArcanePillarBlock)) {
+                continue;
+            }
+            BlockState was = ModBlocks.ARCANE_STONE.block().get().defaultBlockState();
+            level.setBlock(at, was, Block.UPDATE_ALL);
+            if (level.getBlockState(at.above()).canBeReplaced()) {
+                level.setBlock(at.above(), was, Block.UPDATE_ALL);
+            }
+        }
+    }
+
+    private static boolean stone(Level level, BlockPos at) {
+        return level.getBlockState(at).is(ModBlocks.ARCANE_STONE.block().get());
     }
 
     /**
@@ -177,7 +212,8 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
                 return Woken.UNBUILT;
             }
             awake = true;
-            turning = 0;
+            woken = level.getGameTime();
+            watch = 0;
             changed();
             return Woken.WOKEN;
         }
@@ -241,7 +277,6 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
         ring = List.copyOf(holding);
         instability = Math.min(WORST, recipe.instability());
         counter = 0;
-        turning = 0;
         level.playSound(null, worldPosition, SoundEvents.BEACON_ACTIVATE, SoundSource.BLOCKS, 0.7F, 1.6F);
         changed();
         return true;
@@ -259,15 +294,12 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
         if (!matrix.awake) {
             return;
         }
-        matrix.turning++;
-        // an altar taken apart under a working stops being an altar, and a matrix left hanging goes back to sleep
-        if (matrix.turning % (matrix.busy() ? CYCLE : LOOKS_ROUND) == 0 && !matrix.built(level)) {
+        // an altar taken apart under a working stops being an altar, and what is left of it goes back to stone
+        if (++matrix.watch % (matrix.busy() ? CYCLE : LOOKS_ROUND) == 0 && !matrix.built(level)) {
             if (matrix.busy()) {
                 matrix.fail((ServerLevel) level, pos);
             }
-            matrix.awake = false;
-            matrix.turning = 0;
-            matrix.changed();
+            matrix.sleep(level, pos);
             return;
         }
         if (!matrix.busy()) {
@@ -362,6 +394,21 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
         changed();
     }
 
+    /**
+     * Back to sleep, and back to stone.
+     * <p>
+     * An altar is only an altar while all of it is standing. Take one pillar out and the rest are four-fifths of
+     * nothing, so they are given back as the stone they were built from rather than left standing as ruins nobody
+     * can use and everybody has to break by hand.
+     */
+    public void sleep(Level level, BlockPos pos) {
+        awake = false;
+        watch = 0;
+        woken = 0;
+        lower(level, pos);
+        changed();
+    }
+
     /** Made worse by something going wrong, which makes the next thing going wrong likelier. */
     public void worsen() {
         instability = Math.min(WORST, instability + 1);
@@ -428,7 +475,7 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
                 .parse(registries.createSerializationContext(NbtOps.INSTANCE), tag.get("owed"))
                 .result().orElse(AspectList.EMPTY);
         instability = tag.getInt("instability");
-        turning = tag.getInt("turning");
+        woken = tag.getLong("woken");
         List<BlockPos> stands = new ArrayList<>();
         for (long packed : tag.getLongArray("ring")) {
             stands.add(BlockPos.of(packed));
@@ -449,7 +496,7 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
                 .encodeStart(registries.createSerializationContext(NbtOps.INSTANCE), owed)
                 .result().ifPresent(written -> tag.put("owed", written));
         tag.putInt("instability", instability);
-        tag.putInt("turning", turning);
+        tag.putLong("woken", woken);
         tag.putLongArray("ring", ring.stream().mapToLong(BlockPos::asLong).toArray());
     }
 

@@ -33,9 +33,9 @@ public class InfusionMatrixRenderer implements BlockEntityRenderer<InfusionMatri
     /** How far each stone sits from the middle, and how big it is drawn. */
     private static final float OUT = 0.25F;
     private static final float SMALL = 0.45F;
-    /** How the cluster is tipped, and how long one turn of it takes in ticks. */
+    /** How the cluster is tipped, and how far it turns in a tick once it is up to speed. */
     private static final float TIP_X = 35.0F, TIP_Z = 45.0F;
-    private static final float TURNS_IN = 360.0F;
+    private static final float TURNS_BY = 1.0F;
     /** How long the working takes to wind up to full speed, in ticks. */
     private static final float WINDS_UP = 60.0F;
     /** How far a stone wanders at its worst, and how fast it wanders there and back. */
@@ -50,16 +50,19 @@ public class InfusionMatrixRenderer implements BlockEntityRenderer<InfusionMatri
             int light, int overlay) {
         Minecraft client = Minecraft.getInstance();
         BakedModel stone = client.getModelManager().getModel(CUBE);
-        float ticks = matrix.getLevel() == null ? 0.0F : matrix.getLevel().getGameTime() % 100000L + partial;
+        if (matrix.getLevel() == null) {
+            return;
+        }
+        float ticks = matrix.getLevel().getGameTime() + partial;
+        // how long the stones have been turning, taken from the world clock so that every frame agrees
+        float since = matrix.awake() ? Math.max(0.0F, ticks - matrix.wokenAt()) : 0.0F;
         // nothing snaps into motion: a woken altar takes a few seconds to come up to speed
-        float running = matrix.awake()
-                ? Math.min(1.0F, (matrix.turning() + partial) / WINDS_UP)
-                : 0.0F;
+        float running = Math.min(1.0F, since / WINDS_UP);
         float shake = matrix.busy() ? matrix.instability() * running : 0.0F;
 
         pose.pushPose();
         pose.translate(0.5, 0.5, 0.5);
-        pose.mulPose(Axis.YP.rotationDegrees(ticks % TURNS_IN * running));
+        pose.mulPose(Axis.YP.rotationDegrees(turned(since)));
         pose.mulPose(Axis.XP.rotationDegrees(TIP_X * running));
         pose.mulPose(Axis.ZP.rotationDegrees(TIP_Z * running));
 
@@ -91,6 +94,19 @@ public class InfusionMatrixRenderer implements BlockEntityRenderer<InfusionMatri
             }
         }
         pose.popPose();
+    }
+
+    /**
+     * How far round the cluster has come since it woke.
+     * <p>
+     * Worked out from how far it has turned rather than from how fast it is turning, because the two are not the
+     * same thing while it is still winding up: multiplying the angle by the speed would wind the whole turn
+     * backwards every time the speed rose, which is a stutter rather than a start.
+     */
+    private static float turned(float since) {
+        return since < WINDS_UP
+                ? TURNS_BY * since * since / (2.0F * WINDS_UP)
+                : TURNS_BY * (since - WINDS_UP / 2.0F);
     }
 
     /** How far one stone has wandered off its corner just now. Shaky work shakes itself apart slowly. */
