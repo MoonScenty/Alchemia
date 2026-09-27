@@ -121,10 +121,12 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
     /**
      * Where the four pillars stand, and which way each is turned.
      * <p>
-     * The pillar is nothing but a picture: the stone stays a stone and a woken matrix draws a pillar standing on
-     * it. Turning the stone into a block of its own was worse in every way it could be -- the top half of the
-     * picture stood in a block of air that could not be hit, breaking one left the rest standing as ruins, and the
-     * whole thing had to be put back by hand afterwards. A stone with a pillar drawn over it is still a stone.
+     * What stands there is a picture the matrix draws. The stone under it is turned into a corner block that
+     * draws nothing at all, because a pillar drawn over an arcane stone leaves the top half of the stone standing
+     * out around the shaft, and a whole block does not hide behind a tapering one.
+     * <p>
+     * So the corner is invisible but solid: the foot of the picture is the part you can break, the two blocks of
+     * shaft above it are air, and breaking the corner gives the stone back.
      */
     public static final List<Vec3i> CORNERS = List.of(
             new Vec3i(1, -2, -1),
@@ -139,15 +141,38 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
      * pulled apart under a working, it will not go on with it.
      */
     public boolean built(Level level) {
+        return standing(level, ModBlocks.ARCANE_PILLAR.get()) || standing(level, ModBlocks.ARCANE_STONE.block().get());
+    }
+
+    /** A pedestal to work on, and the same thing at each of the four corners. */
+    private boolean standing(Level level, Block corner) {
         if (!(level.getBlockEntity(worldPosition.below(UNDER)) instanceof ArcanePedestalBlockEntity)) {
             return false;
         }
-        for (Vec3i corner : CORNERS) {
-            if (!level.getBlockState(worldPosition.offset(corner)).is(ModBlocks.ARCANE_STONE.block().get())) {
+        for (Vec3i at : CORNERS) {
+            if (!level.getBlockState(worldPosition.offset(at)).is(corner)) {
                 return false;
             }
         }
         return true;
+    }
+
+    /** Wakes the corners: the stone stops being drawn and the matrix draws a pillar standing where it was. */
+    private void raise(Level level) {
+        for (Vec3i corner : CORNERS) {
+            level.setBlock(worldPosition.offset(corner),
+                    ModBlocks.ARCANE_PILLAR.get().defaultBlockState(), Block.UPDATE_ALL);
+        }
+    }
+
+    /** And gives the stone back. */
+    private void lower(Level level) {
+        for (Vec3i corner : CORNERS) {
+            BlockPos at = worldPosition.offset(corner);
+            if (level.getBlockState(at).is(ModBlocks.ARCANE_PILLAR.get())) {
+                level.setBlock(at, ModBlocks.ARCANE_STONE.block().get().defaultBlockState(), Block.UPDATE_ALL);
+            }
+        }
     }
 
     /**
@@ -168,6 +193,7 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
             if (!built(level)) {
                 return Woken.UNBUILT;
             }
+            raise(level);
             awake = true;
             woken = level.getGameTime();
             watch = 0;
@@ -253,10 +279,7 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
         }
         // an altar taken apart under a working stops being an altar, and what is left of it goes back to stone
         if (++matrix.watch % (matrix.busy() ? CYCLE : LOOKS_ROUND) == 0 && !matrix.built(level)) {
-            if (matrix.busy()) {
-                matrix.fail((ServerLevel) level, pos);
-            }
-            matrix.sleep();
+            matrix.sleep(level);
             return;
         }
         if (!matrix.busy()) {
@@ -354,13 +377,19 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
     /**
      * Back to sleep.
      * <p>
-     * An altar is only an altar while all of it is standing. Take one stone out of a corner and the pillars stop
-     * being drawn, which is both the whole of the tidying up and the clearest possible way of saying what broke.
+     * An altar is only an altar while all of it is standing. Take one corner out and the pillars stop being drawn
+     * and the other three corners are arcane stone again, which is both the tidying up and the clearest possible
+     * way of saying what broke.
      */
-    public void sleep() {
+    public void sleep(Level level) {
+        // a working needs an altar under it, so whatever was being made comes apart with the building
+        if (busy() && level instanceof ServerLevel served) {
+            fail(served, worldPosition);
+        }
         awake = false;
         watch = 0;
         woken = 0;
+        lower(level);
         changed();
     }
 

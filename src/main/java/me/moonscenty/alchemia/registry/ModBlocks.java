@@ -9,6 +9,7 @@ import java.util.function.Supplier;
 
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.block.ArcanePedestalBlock;
+import me.moonscenty.alchemia.block.ArcanePillarBlock;
 import me.moonscenty.alchemia.block.ArcaneWorkbenchBlock;
 import me.moonscenty.alchemia.block.ArcaneWorkbenchChargerBlock;
 import me.moonscenty.alchemia.block.BufferTubeBlock;
@@ -135,6 +136,15 @@ public class ModBlocks {
             () -> new InfusionMatrixBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS)
                     .mapColor(MapColor.STONE)
                     .lightLevel(state -> 7)
+                    .noOcclusion()));
+
+    /**
+     * A corner of an altar. Never placed by hand: the matrix makes one out of arcane stone when it wakes, and
+     * gives the stone back when it sleeps, so there is no item and no recipe.
+     */
+    public static final DeferredBlock<ArcanePillarBlock> ARCANE_PILLAR = registerBlockOnly("arcane_pillar",
+            () -> new ArcanePillarBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS)
+                    .mapColor(MapColor.STONE)
                     .noOcclusion()));
 
     /** Stands on top of a workbench and fills the wand left on it. */
@@ -291,6 +301,11 @@ public class ModBlocks {
                 .sound(SoundType.SLIME_BLOCK)
                 .requiresCorrectToolForDrops()
                 .randomTicks()));
+    }
+
+    /** A block with no item to it: something the world puts down, never a player. */
+    private static <T extends Block> DeferredBlock<T> registerBlockOnly(String name, Supplier<T> block) {
+        return BLOCKS.register(name, block);
     }
 
     private static <T extends Block> DeferredBlock<T> register(String name, Supplier<T> block) {

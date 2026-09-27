@@ -260,6 +260,8 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
         // the matrix draws nothing of itself: the blockstate points at an empty model and the renderer does the rest
         simpleBlock(ModBlocks.INFUSION_MATRIX.get(), models().getExistingFile(modLoc("block/infusion_matrix")));
+        // the corner draws nothing either: the pillar standing on it is drawn by the matrix
+        simpleBlock(ModBlocks.ARCANE_PILLAR.get(), models().getExistingFile(modLoc("block/infusion_matrix")));
         itemModels().withExistingParent("infusion_matrix", modLoc("block/infusion_cube"));
     }
 

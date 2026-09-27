@@ -76,6 +76,8 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
         dropSelf(ModBlocks.NODE_STABILIZER.get());
         dropSelf(ModBlocks.ARCANE_PEDESTAL.get());
         dropSelf(ModBlocks.INFUSION_MATRIX.get());
+        // a corner is arcane stone that has been told what it is for; broken, it is arcane stone again
+        dropOther(ModBlocks.ARCANE_PILLAR.get(), ModBlocks.ARCANE_STONE.block().get());
 
         // nothing tainted is worth keeping; what the growths gave in the original arrives with those items
         add(ModBlocks.TAINT_FIBRE.get(), noDrop());

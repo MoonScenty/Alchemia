@@ -147,6 +147,16 @@ public class InfusionMatrixBlock extends BaseEntityBlock {
         player.displayClientMessage(Component.translatable(key).withStyle(ChatFormatting.GRAY), true);
     }
 
+    /** Taking the matrix away takes the altar with it: the corners are arcane stone again. */
+    @Override
+    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState replacement, boolean moving) {
+        if (!state.is(replacement.getBlock())
+                && level.getBlockEntity(pos) instanceof InfusionMatrixBlockEntity matrix && matrix.awake()) {
+            matrix.sleep(level);
+        }
+        super.onRemove(state, level, pos, replacement, moving);
+    }
+
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state,
             BlockEntityType<T> type) {
