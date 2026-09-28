@@ -32,6 +32,7 @@ import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
+import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 
 /** Client-side wiring: extra models to bake, and who draws what. */
 @EventBusSubscriber(modid = Alchemia.MODID, value = Dist.CLIENT)
@@ -140,6 +141,18 @@ public class AlchemiaClientSetup {
                         ? (tint == 1 ? jar.label().map(aspect -> aspect.value().color()).orElse(0xFFFFFF)
                                      : jar.colour())
                         : 0xFFFFFF, ModBlocks.JAR.get());
+    }
+
+    /**
+     * The blocks whose breaking chips must not be dyed by the colour they give out.
+     * <p>
+     * See {@link PlainBreakParticles} for why. All three are tinted by what stands inside them rather than by
+     * anything about the block, and all three are broken often enough for it to show.
+     */
+    @SubscribeEvent
+    public static void registerClientExtensions(RegisterClientExtensionsEvent event) {
+        event.registerBlock(PlainBreakParticles.INSTANCE,
+                ModBlocks.CRUCIBLE.get(), ModBlocks.JAR.get(), ModBlocks.TUBE_FILTER.get());
     }
 
     @SubscribeEvent
