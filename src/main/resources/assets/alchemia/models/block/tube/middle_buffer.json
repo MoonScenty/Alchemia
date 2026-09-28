@@ -1,9 +1,7 @@
 {
   "textures": {
-    "1": "alchemia:block/tube",
-    "2": "alchemia:block/greatwood_planks",
-    "particle": "alchemia:block/greatwood_planks",
-    "3": "alchemia:block/brass_block"
+    "buffer": "alchemia:block/tube_buffer",
+    "particle": "alchemia:block/tube_buffer"
   },
   "elements": [
     {
@@ -25,7 +23,7 @@
             12,
             12
           ],
-          "texture": "#2"
+          "texture": "#buffer"
         },
         "east": {
           "uv": [
@@ -34,7 +32,7 @@
             12,
             12
           ],
-          "texture": "#2"
+          "texture": "#buffer"
         },
         "south": {
           "uv": [
@@ -43,7 +41,7 @@
             12,
             12
           ],
-          "texture": "#2"
+          "texture": "#buffer"
         },
         "west": {
           "uv": [
@@ -52,7 +50,7 @@
             12,
             12
           ],
-          "texture": "#2"
+          "texture": "#buffer"
         },
         "up": {
           "uv": [
@@ -61,7 +59,7 @@
             12,
             12
           ],
-          "texture": "#2"
+          "texture": "#buffer"
         },
         "down": {
           "uv": [
@@ -70,7 +68,7 @@
             12,
             12
           ],
-          "texture": "#2"
+          "texture": "#buffer"
         }
       }
     }

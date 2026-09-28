@@ -1,9 +1,7 @@
 {
   "textures": {
-    "1": "alchemia:block/tube",
-    "2": "alchemia:block/greatwood_planks",
-    "particle": "alchemia:block/greatwood_planks",
-    "3": "alchemia:block/brass_block"
+    "swood_plank": "alchemia:block/silverwood_planks",
+    "particle": "alchemia:block/silverwood_planks"
   },
   "elements": [
     {
@@ -25,7 +23,7 @@
             1,
             6
           ],
-          "texture": "#2"
+          "texture": "#swood_plank"
         },
         "east": {
           "uv": [
@@ -34,7 +32,7 @@
             6,
             6
           ],
-          "texture": "#2"
+          "texture": "#swood_plank"
         },
         "south": {
           "uv": [
@@ -43,7 +41,7 @@
             2,
             6
           ],
-          "texture": "#2"
+          "texture": "#swood_plank"
         },
         "west": {
           "uv": [
@@ -52,7 +50,7 @@
             6,
             6
           ],
-          "texture": "#2"
+          "texture": "#swood_plank"
         },
         "up": {
           "uv": [
@@ -61,7 +59,7 @@
             2,
             6
           ],
-          "texture": "#2"
+          "texture": "#swood_plank"
         },
         "down": {
           "uv": [
@@ -70,7 +68,7 @@
             2,
             6
           ],
-          "texture": "#2"
+          "texture": "#swood_plank"
         }
       }
     },
@@ -93,7 +91,7 @@
             1,
             6
           ],
-          "texture": "#2"
+          "texture": "#swood_plank"
         },
         "east": {
           "uv": [
@@ -102,7 +100,7 @@
             6,
             6
           ],
-          "texture": "#2"
+          "texture": "#swood_plank"
         },
         "south": {
           "uv": [
@@ -111,7 +109,7 @@
             2,
             6
           ],
-          "texture": "#2"
+          "texture": "#swood_plank"
         },
         "west": {
           "uv": [
@@ -120,7 +118,7 @@
             6,
             6
           ],
-          "texture": "#2"
+          "texture": "#swood_plank"
         },
         "up": {
           "uv": [
@@ -129,7 +127,7 @@
             2,
             6
           ],
-          "texture": "#2"
+          "texture": "#swood_plank"
         },
         "down": {
           "uv": [
@@ -138,7 +136,7 @@
             2,
             6
           ],
-          "texture": "#2"
+          "texture": "#swood_plank"
         }
       }
     }

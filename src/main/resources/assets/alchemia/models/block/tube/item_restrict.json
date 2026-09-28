@@ -1,10 +1,9 @@
 {
   "parent": "minecraft:block/block",
   "textures": {
-    "1": "alchemia:block/tube",
-    "2": "alchemia:block/greatwood_planks",
-    "particle": "alchemia:block/greatwood_planks",
-    "3": "alchemia:block/brass_block"
+    "swood_plank": "alchemia:block/silverwood_planks",
+    "tube": "alchemia:block/tube",
+    "particle": "alchemia:block/silverwood_planks"
   },
   "elements": [
     {
@@ -26,7 +25,7 @@
             4,
             4
           ],
-          "texture": "#1"
+          "texture": "#tube"
         },
         "east": {
           "uv": [
@@ -35,7 +34,7 @@
             4,
             4
           ],
-          "texture": "#1"
+          "texture": "#tube"
         },
         "south": {
           "uv": [
@@ -44,7 +43,7 @@
             4,
             4
           ],
-          "texture": "#1"
+          "texture": "#tube"
         },
         "west": {
           "uv": [
@@ -53,7 +52,7 @@
             4,
             4
           ],
-          "texture": "#1"
+          "texture": "#tube"
         },
         "up": {
           "uv": [
@@ -62,7 +61,7 @@
             4,
             4
           ],
-          "texture": "#1"
+          "texture": "#tube"
         },
         "down": {
           "uv": [
@@ -71,7 +70,7 @@
             4,
             4
           ],
-          "texture": "#1"
+          "texture": "#tube"
         }
       }
     },
@@ -94,7 +93,7 @@
             7,
             15
           ],
-          "texture": "#1"
+          "texture": "#tube"
         },
         "east": {
           "uv": [
@@ -103,7 +102,7 @@
             11,
             15
           ],
-          "texture": "#1"
+          "texture": "#tube"
         },
         "south": {
           "uv": [
@@ -112,7 +111,7 @@
             7,
             15
           ],
-          "texture": "#1"
+          "texture": "#tube"
         },
         "west": {
           "uv": [
@@ -121,7 +120,7 @@
             11,
             15
           ],
-          "texture": "#1"
+          "texture": "#tube"
         },
         "up": {
           "uv": [
@@ -130,7 +129,7 @@
             7,
             15
           ],
-          "texture": "#1"
+          "texture": "#tube"
         },
         "down": {
           "uv": [
@@ -139,7 +138,7 @@
             7,
             15
           ],
-          "texture": "#1"
+          "texture": "#tube"
         }
       }
     },
@@ -162,7 +161,7 @@
             7,
             15
           ],
-          "texture": "#1"
+          "texture": "#tube"
         },
         "west": {
           "uv": [
@@ -171,7 +170,7 @@
             11,
             15
           ],
-          "texture": "#1"
+          "texture": "#tube"
         },
         "north": {
           "uv": [
@@ -180,7 +179,7 @@
             7,
             15
           ],
-          "texture": "#1"
+          "texture": "#tube"
         },
         "east": {
           "uv": [
@@ -189,7 +188,7 @@
             11,
             15
           ],
-          "texture": "#1"
+          "texture": "#tube"
         },
         "up": {
           "uv": [
@@ -198,7 +197,7 @@
             7,
             15
           ],
-          "texture": "#1"
+          "texture": "#tube"
         },
         "down": {
           "uv": [
@@ -207,7 +206,7 @@
             7,
             15
           ],
-          "texture": "#1"
+          "texture": "#tube"
         }
       }
     },
@@ -230,7 +229,7 @@
             1,
             6
           ],
-          "texture": "#2"
+          "texture": "#swood_plank"
         },
         "east": {
           "uv": [
@@ -239,7 +238,7 @@
             6,
             6
           ],
-          "texture": "#2"
+          "texture": "#swood_plank"
         },
         "south": {
           "uv": [
@@ -248,7 +247,7 @@
             2,
             6
           ],
-          "texture": "#2"
+          "texture": "#swood_plank"
         },
         "west": {
           "uv": [
@@ -257,7 +256,7 @@
             6,
             6
           ],
-          "texture": "#2"
+          "texture": "#swood_plank"
         },
         "up": {
           "uv": [
@@ -266,7 +265,7 @@
             2,
             6
           ],
-          "texture": "#2"
+          "texture": "#swood_plank"
         },
         "down": {
           "uv": [
@@ -275,7 +274,7 @@
             2,
             6
           ],
-          "texture": "#2"
+          "texture": "#swood_plank"
         }
       }
     },
@@ -298,7 +297,7 @@
             1,
             6
           ],
-          "texture": "#2"
+          "texture": "#swood_plank"
         },
         "east": {
           "uv": [
@@ -307,7 +306,7 @@
             6,
             6
           ],
-          "texture": "#2"
+          "texture": "#swood_plank"
         },
         "south": {
           "uv": [
@@ -316,7 +315,7 @@
             2,
             6
           ],
-          "texture": "#2"
+          "texture": "#swood_plank"
         },
         "west": {
           "uv": [
@@ -325,7 +324,7 @@
             6,
             6
           ],
-          "texture": "#2"
+          "texture": "#swood_plank"
         },
         "up": {
           "uv": [
@@ -334,7 +333,7 @@
             2,
             6
           ],
-          "texture": "#2"
+          "texture": "#swood_plank"
         },
         "down": {
           "uv": [
@@ -343,7 +342,7 @@
             2,
             6
           ],
-          "texture": "#2"
+          "texture": "#swood_plank"
         }
       }
     },
@@ -366,7 +365,7 @@
             1,
             6
           ],
-          "texture": "#2"
+          "texture": "#swood_plank"
         },
         "west": {
           "uv": [
@@ -375,7 +374,7 @@
             6,
             6
           ],
-          "texture": "#2"
+          "texture": "#swood_plank"
         },
         "north": {
           "uv": [
@@ -384,7 +383,7 @@
             2,
             6
           ],
-          "texture": "#2"
+          "texture": "#swood_plank"
         },
         "east": {
           "uv": [
@@ -393,7 +392,7 @@
             6,
             6
           ],
-          "texture": "#2"
+          "texture": "#swood_plank"
         },
         "up": {
           "uv": [
@@ -402,7 +401,7 @@
             2,
             6
           ],
-          "texture": "#2"
+          "texture": "#swood_plank"
         },
         "down": {
           "uv": [
@@ -411,7 +410,7 @@
             2,
             6
           ],
-          "texture": "#2"
+          "texture": "#swood_plank"
         }
       }
     },
@@ -434,7 +433,7 @@
             1,
             6
           ],
-          "texture": "#2"
+          "texture": "#swood_plank"
         },
         "west": {
           "uv": [
@@ -443,7 +442,7 @@
             6,
             6
           ],
-          "texture": "#2"
+          "texture": "#swood_plank"
         },
         "north": {
           "uv": [
@@ -452,7 +451,7 @@
             2,
             6
           ],
-          "texture": "#2"
+          "texture": "#swood_plank"
         },
         "east": {
           "uv": [
@@ -461,7 +460,7 @@
             6,
             6
           ],
-          "texture": "#2"
+          "texture": "#swood_plank"
         },
         "up": {
           "uv": [
@@ -470,7 +469,7 @@
             2,
             6
           ],
-          "texture": "#2"
+          "texture": "#swood_plank"
         },
         "down": {
           "uv": [
@@ -479,7 +478,7 @@
             2,
             6
           ],
-          "texture": "#2"
+          "texture": "#swood_plank"
         }
       }
     }

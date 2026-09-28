@@ -1,10 +1,9 @@
 {
   "parent": "minecraft:block/block",
   "textures": {
-    "1": "alchemia:block/tube",
-    "2": "alchemia:block/greatwood_planks",
-    "particle": "alchemia:block/greatwood_planks",
-    "3": "alchemia:block/brass_block"
+    "arcane_stone_blue": "alchemia:block/arcane_stone_blue",
+    "tube": "alchemia:block/tube",
+    "particle": "alchemia:block/arcane_stone_blue"
   },
   "elements": [
     {
@@ -26,7 +25,7 @@
             4,
             4
           ],
-          "texture": "#1"
+          "texture": "#tube"
         },
         "east": {
           "uv": [
@@ -35,7 +34,7 @@
             4,
             4
           ],
-          "texture": "#1"
+          "texture": "#tube"
         },
         "south": {
           "uv": [
@@ -44,7 +43,7 @@
             4,
             4
           ],
-          "texture": "#1"
+          "texture": "#tube"
         },
         "west": {
           "uv": [
@@ -53,7 +52,7 @@
             4,
             4
           ],
-          "texture": "#1"
+          "texture": "#tube"
         },
         "up": {
           "uv": [
@@ -62,7 +61,7 @@
             4,
             4
           ],
-          "texture": "#1"
+          "texture": "#tube"
         },
         "down": {
           "uv": [
@@ -71,7 +70,7 @@
             4,
             4
           ],
-          "texture": "#1"
+          "texture": "#tube"
         }
       }
     },
@@ -94,7 +93,7 @@
             7,
             15
           ],
-          "texture": "#1"
+          "texture": "#tube"
         },
         "east": {
           "uv": [
@@ -103,7 +102,7 @@
             11,
             15
           ],
-          "texture": "#1"
+          "texture": "#tube"
         },
         "south": {
           "uv": [
@@ -112,7 +111,7 @@
             7,
             15
           ],
-          "texture": "#1"
+          "texture": "#tube"
         },
         "west": {
           "uv": [
@@ -121,7 +120,7 @@
             11,
             15
           ],
-          "texture": "#1"
+          "texture": "#tube"
         },
         "up": {
           "uv": [
@@ -130,7 +129,7 @@
             7,
             15
           ],
-          "texture": "#1"
+          "texture": "#tube"
         },
         "down": {
           "uv": [
@@ -139,7 +138,7 @@
             7,
             15
           ],
-          "texture": "#1"
+          "texture": "#tube"
         }
       }
     },
@@ -162,7 +161,7 @@
             7,
             15
           ],
-          "texture": "#1"
+          "texture": "#tube"
         },
         "west": {
           "uv": [
@@ -171,7 +170,7 @@
             11,
             15
           ],
-          "texture": "#1"
+          "texture": "#tube"
         },
         "north": {
           "uv": [
@@ -180,7 +179,7 @@
             7,
             15
           ],
-          "texture": "#1"
+          "texture": "#tube"
         },
         "east": {
           "uv": [
@@ -189,7 +188,7 @@
             11,
             15
           ],
-          "texture": "#1"
+          "texture": "#tube"
         },
         "up": {
           "uv": [
@@ -198,7 +197,7 @@
             7,
             15
           ],
-          "texture": "#1"
+          "texture": "#tube"
         },
         "down": {
           "uv": [
@@ -207,7 +206,7 @@
             7,
             15
           ],
-          "texture": "#1"
+          "texture": "#tube"
         }
       }
     },
@@ -239,7 +238,7 @@
             2,
             1
           ],
-          "texture": "#2"
+          "texture": "#arcane_stone_blue"
         },
         "east": {
           "uv": [
@@ -248,7 +247,7 @@
             6,
             1
           ],
-          "texture": "#2"
+          "texture": "#arcane_stone_blue"
         },
         "south": {
           "uv": [
@@ -257,7 +256,7 @@
             2,
             1
           ],
-          "texture": "#2"
+          "texture": "#arcane_stone_blue"
         },
         "west": {
           "uv": [
@@ -266,7 +265,7 @@
             6,
             1
           ],
-          "texture": "#2"
+          "texture": "#arcane_stone_blue"
         },
         "up": {
           "uv": [
@@ -275,7 +274,7 @@
             2,
             6
           ],
-          "texture": "#2"
+          "texture": "#arcane_stone_blue"
         },
         "down": {
           "uv": [
@@ -284,7 +283,7 @@
             2,
             6
           ],
-          "texture": "#2"
+          "texture": "#arcane_stone_blue"
         }
       }
     },
@@ -316,7 +315,7 @@
             2,
             1
           ],
-          "texture": "#2"
+          "texture": "#arcane_stone_blue"
         },
         "east": {
           "uv": [
@@ -325,7 +324,7 @@
             6,
             1
           ],
-          "texture": "#2"
+          "texture": "#arcane_stone_blue"
         },
         "south": {
           "uv": [
@@ -334,7 +333,7 @@
             2,
             1
           ],
-          "texture": "#2"
+          "texture": "#arcane_stone_blue"
         },
         "west": {
           "uv": [
@@ -343,7 +342,7 @@
             6,
             1
           ],
-          "texture": "#2"
+          "texture": "#arcane_stone_blue"
         },
         "up": {
           "uv": [
@@ -352,7 +351,7 @@
             2,
             6
           ],
-          "texture": "#2"
+          "texture": "#arcane_stone_blue"
         },
         "down": {
           "uv": [
@@ -361,7 +360,7 @@
             2,
             6
           ],
-          "texture": "#2"
+          "texture": "#arcane_stone_blue"
         }
       }
     },
@@ -393,7 +392,7 @@
             2,
             6
           ],
-          "texture": "#2"
+          "texture": "#arcane_stone_blue"
         },
         "east": {
           "uv": [
@@ -402,7 +401,7 @@
             1,
             6
           ],
-          "texture": "#2"
+          "texture": "#arcane_stone_blue"
         },
         "south": {
           "uv": [
@@ -411,7 +410,7 @@
             2,
             6
           ],
-          "texture": "#2"
+          "texture": "#arcane_stone_blue"
         },
         "west": {
           "uv": [
@@ -420,7 +419,7 @@
             2,
             6
           ],
-          "texture": "#2"
+          "texture": "#arcane_stone_blue"
         },
         "up": {
           "uv": [
@@ -429,7 +428,7 @@
             2,
             2
           ],
-          "texture": "#2"
+          "texture": "#arcane_stone_blue"
         },
         "down": {
           "uv": [
@@ -438,7 +437,7 @@
             2,
             1
           ],
-          "texture": "#2"
+          "texture": "#arcane_stone_blue"
         }
       }
     },
@@ -470,7 +469,7 @@
             2,
             6
           ],
-          "texture": "#2"
+          "texture": "#arcane_stone_blue"
         },
         "east": {
           "uv": [
@@ -479,7 +478,7 @@
             1,
             6
           ],
-          "texture": "#2"
+          "texture": "#arcane_stone_blue"
         },
         "south": {
           "uv": [
@@ -488,7 +487,7 @@
             2,
             6
           ],
-          "texture": "#2"
+          "texture": "#arcane_stone_blue"
         },
         "west": {
           "uv": [
@@ -497,7 +496,7 @@
             2,
             6
           ],
-          "texture": "#2"
+          "texture": "#arcane_stone_blue"
         },
         "up": {
           "uv": [
@@ -506,7 +505,7 @@
             2,
             2
           ],
-          "texture": "#2"
+          "texture": "#arcane_stone_blue"
         },
         "down": {
           "uv": [
@@ -515,7 +514,7 @@
             2,
             1
           ],
-          "texture": "#2"
+          "texture": "#arcane_stone_blue"
         }
       }
     }

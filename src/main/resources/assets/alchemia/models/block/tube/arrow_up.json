@@ -1,9 +1,7 @@
 {
   "textures": {
-    "1": "alchemia:block/tube",
-    "2": "alchemia:block/greatwood_planks",
-    "particle": "alchemia:block/greatwood_planks",
-    "3": "alchemia:block/brass_block"
+    "arcane_stone_blue": "alchemia:block/arcane_stone_blue",
+    "particle": "alchemia:block/arcane_stone_blue"
   },
   "elements": [
     {
@@ -34,7 +32,7 @@
             2,
             1
           ],
-          "texture": "#2"
+          "texture": "#arcane_stone_blue"
         },
         "up": {
           "uv": [
@@ -43,7 +41,7 @@
             6,
             1
           ],
-          "texture": "#2"
+          "texture": "#arcane_stone_blue"
         },
         "south": {
           "uv": [
@@ -52,7 +50,7 @@
             2,
             1
           ],
-          "texture": "#2"
+          "texture": "#arcane_stone_blue"
         },
         "down": {
           "uv": [
@@ -61,7 +59,7 @@
             6,
             1
           ],
-          "texture": "#2"
+          "texture": "#arcane_stone_blue"
         },
         "west": {
           "uv": [
@@ -70,7 +68,7 @@
             2,
             6
           ],
-          "texture": "#2"
+          "texture": "#arcane_stone_blue"
         },
         "east": {
           "uv": [
@@ -79,7 +77,7 @@
             2,
             6
           ],
-          "texture": "#2"
+          "texture": "#arcane_stone_blue"
         }
       }
     },
@@ -111,7 +109,7 @@
             2,
             1
           ],
-          "texture": "#2"
+          "texture": "#arcane_stone_blue"
         },
         "up": {
           "uv": [
@@ -120,7 +118,7 @@
             6,
             1
           ],
-          "texture": "#2"
+          "texture": "#arcane_stone_blue"
         },
         "south": {
           "uv": [
@@ -129,7 +127,7 @@
             2,
             1
           ],
-          "texture": "#2"
+          "texture": "#arcane_stone_blue"
         },
         "down": {
           "uv": [
@@ -138,7 +136,7 @@
             6,
             1
           ],
-          "texture": "#2"
+          "texture": "#arcane_stone_blue"
         },
         "west": {
           "uv": [
@@ -147,7 +145,7 @@
             2,
             6
           ],
-          "texture": "#2"
+          "texture": "#arcane_stone_blue"
         },
         "east": {
           "uv": [
@@ -156,7 +154,7 @@
             2,
             6
           ],
-          "texture": "#2"
+          "texture": "#arcane_stone_blue"
         }
       }
     },
@@ -188,7 +186,7 @@
             2,
             6
           ],
-          "texture": "#2"
+          "texture": "#arcane_stone_blue"
         },
         "up": {
           "uv": [
@@ -197,7 +195,7 @@
             1,
             6
           ],
-          "texture": "#2"
+          "texture": "#arcane_stone_blue"
         },
         "south": {
           "uv": [
@@ -206,7 +204,7 @@
             2,
             6
           ],
-          "texture": "#2"
+          "texture": "#arcane_stone_blue"
         },
         "down": {
           "uv": [
@@ -215,7 +213,7 @@
             2,
             6
           ],
-          "texture": "#2"
+          "texture": "#arcane_stone_blue"
         },
         "west": {
           "uv": [
@@ -224,7 +222,7 @@
             2,
             2
           ],
-          "texture": "#2"
+          "texture": "#arcane_stone_blue"
         },
         "east": {
           "uv": [
@@ -233,7 +231,7 @@
             2,
             1
           ],
-          "texture": "#2"
+          "texture": "#arcane_stone_blue"
         }
       }
     },
@@ -265,7 +263,7 @@
             2,
             6
           ],
-          "texture": "#2"
+          "texture": "#arcane_stone_blue"
         },
         "up": {
           "uv": [
@@ -274,7 +272,7 @@
             1,
             6
           ],
-          "texture": "#2"
+          "texture": "#arcane_stone_blue"
         },
         "south": {
           "uv": [
@@ -283,7 +281,7 @@
             2,
             6
           ],
-          "texture": "#2"
+          "texture": "#arcane_stone_blue"
         },
         "down": {
           "uv": [
@@ -292,7 +290,7 @@
             2,
             6
           ],
-          "texture": "#2"
+          "texture": "#arcane_stone_blue"
         },
         "west": {
           "uv": [
@@ -301,7 +299,7 @@
             2,
             2
           ],
-          "texture": "#2"
+          "texture": "#arcane_stone_blue"
         },
         "east": {
           "uv": [
@@ -310,7 +308,7 @@
             2,
             1
           ],
-          "texture": "#2"
+          "texture": "#arcane_stone_blue"
         }
       }
     }

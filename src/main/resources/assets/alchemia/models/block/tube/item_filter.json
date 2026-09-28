@@ -1,10 +1,9 @@
 {
   "parent": "minecraft:block/block",
   "textures": {
-    "1": "alchemia:block/tube",
-    "2": "alchemia:block/greatwood_planks",
-    "particle": "alchemia:block/greatwood_planks",
-    "3": "alchemia:block/brass_block"
+    "swood_plank": "alchemia:block/silverwood_planks",
+    "tube": "alchemia:block/tube",
+    "particle": "alchemia:block/silverwood_planks"
   },
   "elements": [
     {
@@ -26,7 +25,7 @@
             11,
             11
           ],
-          "texture": "#2",
+          "texture": "#swood_plank",
           "tintindex": 0
         },
         "east": {
@@ -36,7 +35,7 @@
             11,
             11
           ],
-          "texture": "#2",
+          "texture": "#swood_plank",
           "tintindex": 0
         },
         "south": {
@@ -46,7 +45,7 @@
             11,
             11
           ],
-          "texture": "#2",
+          "texture": "#swood_plank",
           "tintindex": 0
         },
         "west": {
@@ -56,7 +55,7 @@
             11,
             11
           ],
-          "texture": "#2",
+          "texture": "#swood_plank",
           "tintindex": 0
         },
         "up": {
@@ -66,7 +65,7 @@
             11,
             11
           ],
-          "texture": "#2",
+          "texture": "#swood_plank",
           "tintindex": 0
         },
         "down": {
@@ -76,7 +75,7 @@
             11,
             11
           ],
-          "texture": "#2",
+          "texture": "#swood_plank",
           "tintindex": 0
         }
       }
@@ -100,7 +99,7 @@
             7,
             15
           ],
-          "texture": "#1"
+          "texture": "#tube"
         },
         "east": {
           "uv": [
@@ -109,7 +108,7 @@
             11,
             15
           ],
-          "texture": "#1"
+          "texture": "#tube"
         },
         "south": {
           "uv": [
@@ -118,7 +117,7 @@
             7,
             15
           ],
-          "texture": "#1"
+          "texture": "#tube"
         },
         "west": {
           "uv": [
@@ -127,7 +126,7 @@
             11,
             15
           ],
-          "texture": "#1"
+          "texture": "#tube"
         },
         "up": {
           "uv": [
@@ -136,7 +135,7 @@
             7,
             15
           ],
-          "texture": "#1"
+          "texture": "#tube"
         },
         "down": {
           "uv": [
@@ -145,7 +144,7 @@
             7,
             15
           ],
-          "texture": "#1"
+          "texture": "#tube"
         }
       }
     },
@@ -168,7 +167,7 @@
             7,
             15
           ],
-          "texture": "#1"
+          "texture": "#tube"
         },
         "west": {
           "uv": [
@@ -177,7 +176,7 @@
             11,
             15
           ],
-          "texture": "#1"
+          "texture": "#tube"
         },
         "north": {
           "uv": [
@@ -186,7 +185,7 @@
             7,
             15
           ],
-          "texture": "#1"
+          "texture": "#tube"
         },
         "east": {
           "uv": [
@@ -195,7 +194,7 @@
             11,
             15
           ],
-          "texture": "#1"
+          "texture": "#tube"
         },
         "up": {
           "uv": [
@@ -204,7 +203,7 @@
             7,
             15
           ],
-          "texture": "#1"
+          "texture": "#tube"
         },
         "down": {
           "uv": [
@@ -213,7 +212,7 @@
             7,
             15
           ],
-          "texture": "#1"
+          "texture": "#tube"
         }
       }
     }
