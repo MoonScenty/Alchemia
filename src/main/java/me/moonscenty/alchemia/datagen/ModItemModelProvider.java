@@ -99,19 +99,15 @@ public class ModItemModelProvider extends ItemModelProvider {
         });
     }
 
-    /** Every rod against every cap, plus the wand itself picking between them. */
+    /**
+     * The wand itself, picking between the forty-five that are already written down.
+     * <p>
+     * A built wand is a model, not two pictures stacked: a rod standing between two ferrules, wearing the surface
+     * of whatever it was made of. The forty-five are not built here because they all come from one drawing with
+     * two textures swapped, which {@code tools/gen_wand3d.py} does once rather than this doing it every run.
+     */
     private void wands() {
-        for (String rod : RODS) {
-            for (String cap : CAPS) {
-                withExistingParent("wand_" + rod + "_" + cap, mcLoc("item/handheld"))
-                        .texture("layer0", modLoc("item/wand/rod_" + rod))
-                        .texture("layer1", modLoc("item/wand/cap_" + cap));
-            }
-        }
-
-        var wand = withExistingParent("wand", mcLoc("item/handheld"))
-                .texture("layer0", modLoc("item/wand/rod_" + RODS[0]))
-                .texture("layer1", modLoc("item/wand/cap_" + CAPS[0]));
+        var wand = withExistingParent("wand", modLoc("item/wand_" + RODS[0] + "_" + CAPS[0]));
         for (int rod = 0; rod < RODS.length; rod++) {
             for (int cap = 0; cap < CAPS.length; cap++) {
                 wand.override()
