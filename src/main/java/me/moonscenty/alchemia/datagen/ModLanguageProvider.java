@@ -112,6 +112,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("item.alchemia.jar_label.blank", pick("Nothing written on it yet", "아직 아무것도 적혀 있지 않다"));
         addItem(ModItems.JAR_BRACE, pick("Jar Brace", "단지 고정대"));
         add("block.alchemia.jar.empty", pick("Empty", "비어 있다"));
+        add("item.alchemia.jar.labelled", pick("Labelled: %s", "라벨: %s"));
         add("block.alchemia.jar.holding", pick("%s — %s of %s", "%s — %s / %s"));
         add("block.alchemia.alembic.empty", pick("Empty", "비어 있다"));
         add("gui.alchemia.essentia_held", pick("Essentia  %s / %s", "에센시아  %s / %s"));

@@ -194,6 +194,7 @@
   "item.alchemia.gold_cluster": "Gold Cluster",
   "item.alchemia.iron_cluster": "Iron Cluster",
   "item.alchemia.iron_plate": "Iron Plate",
+  "item.alchemia.jar.labelled": "Labelled: %s",
   "item.alchemia.jar_brace": "Jar Brace",
   "item.alchemia.jar_label": "Jar Label",
   "item.alchemia.jar_label.blank": "Nothing written on it yet",

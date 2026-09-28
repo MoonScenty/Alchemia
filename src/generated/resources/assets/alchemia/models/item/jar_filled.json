@@ -1,5 +1,5 @@
 {
-  "parent": "alchemia:block/jar/jar",
+  "parent": "alchemia:block/jar/jar_4",
   "display": {
     "firstperson_lefthand": {
       "rotation": [
@@ -73,13 +73,5 @@
         0
       ]
     }
-  },
-  "overrides": [
-    {
-      "model": "alchemia:item/jar_filled",
-      "predicate": {
-        "alchemia:filled": 1.0
-      }
-    }
-  ]
+  }
 }

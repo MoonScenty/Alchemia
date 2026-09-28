@@ -194,6 +194,7 @@
   "item.alchemia.gold_cluster": "금 군집",
   "item.alchemia.iron_cluster": "철 군집",
   "item.alchemia.iron_plate": "철 판",
+  "item.alchemia.jar.labelled": "라벨: %s",
   "item.alchemia.jar_brace": "단지 고정대",
   "item.alchemia.jar_label": "단지 라벨",
   "item.alchemia.jar_label.blank": "아직 아무것도 적혀 있지 않다",

@@ -5,6 +5,7 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
 import me.moonscenty.alchemia.Alchemia;
@@ -20,6 +21,7 @@ import me.moonscenty.alchemia.block.ValveTubeBlock;
 import me.moonscenty.alchemia.block.AlembicBlock;
 import me.moonscenty.alchemia.block.CrucibleBlock;
 import me.moonscenty.alchemia.block.JarBlock;
+import me.moonscenty.alchemia.item.JarBlockItem;
 import me.moonscenty.alchemia.block.TubeBlock;
 import me.moonscenty.alchemia.block.EssentiaSmelterBlock;
 import me.moonscenty.alchemia.block.InfusionMatrixBlock;
@@ -99,7 +101,8 @@ public class ModBlocks {
     public static final DeferredBlock<JarBlock> JAR = register("jar",
             () -> new JarBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS)
                     .mapColor(MapColor.NONE)
-                    .noOcclusion()));
+                    .noOcclusion()),
+            JarBlockItem::new);
 
     public static final DeferredBlock<TubeBlock> TUBE = register("tube", () -> new TubeBlock(tubing()));
 
@@ -309,8 +312,14 @@ public class ModBlocks {
     }
 
     private static <T extends Block> DeferredBlock<T> register(String name, Supplier<T> block) {
+        return register(name, block, BlockItem::new);
+    }
+
+    /** The same, for a block whose item has something of its own to say. */
+    private static <T extends Block> DeferredBlock<T> register(String name, Supplier<T> block,
+            BiFunction<Block, Item.Properties, BlockItem> asItem) {
         DeferredBlock<T> registered = BLOCKS.register(name, block);
-        ModItems.ITEMS.register(name, () -> new BlockItem(registered.get(), new Item.Properties()));
+        ModItems.ITEMS.register(name, () -> asItem.apply(registered.get(), new Item.Properties()));
         return registered;
     }
 }

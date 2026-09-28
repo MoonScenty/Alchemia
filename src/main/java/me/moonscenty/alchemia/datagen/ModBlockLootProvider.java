@@ -4,6 +4,7 @@ import java.util.Set;
 
 import me.moonscenty.alchemia.block.CrystalBlock;
 import me.moonscenty.alchemia.registry.ModBlocks;
+import me.moonscenty.alchemia.registry.ModDataComponents;
 import me.moonscenty.alchemia.registry.ModItems;
 import me.moonscenty.alchemia.registry.StoneSet;
 import me.moonscenty.alchemia.registry.WoodSet;
@@ -18,6 +19,7 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.functions.CopyComponentsFunction;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
@@ -68,7 +70,11 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
         dropSelf(ModBlocks.TUBE_RESTRICT.get());
         dropSelf(ModBlocks.TUBE_FILTER.get());
         dropSelf(ModBlocks.TUBE_BUFFER.get());
-        dropSelf(ModBlocks.JAR.get());
+        // a jar keeps what is in it and what is written on it when it is taken up off the floor
+        add(ModBlocks.JAR.get(), block -> createSingleItemTable(block).apply(
+                CopyComponentsFunction.copyComponents(CopyComponentsFunction.Source.BLOCK_ENTITY)
+                        .include(ModDataComponents.CONTENTS.get())
+                        .include(ModDataComponents.ESSENTIA.get())));
         dropSelf(ModBlocks.ESSENTIA_SMELTER.get());
         dropSelf(ModBlocks.ALEMBIC.get());
         dropSelf(ModBlocks.ARCANE_WORKBENCH.get());

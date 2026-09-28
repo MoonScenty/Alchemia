@@ -186,15 +186,17 @@ public class JarBlock extends BaseEntityBlock {
         return label;
     }
 
-    /** What a broken jar leaves behind: its fittings, which outlast the glass, and its contents, which do not. */
+    /**
+     * What a broken jar leaves behind: the brace, which comes off, and the jar itself.
+     * <p>
+     * The essentia and the label go with the jar rather than falling out of it -- the loot table copies them onto
+     * the dropped item. The brace is a separate thing that was fitted to the outside of it, so it lands separately.
+     */
     @Override
     protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState replacement, boolean moving) {
-        if (!state.is(replacement.getBlock()) && level.getBlockEntity(pos) instanceof JarBlockEntity jar) {
-            jar.label().ifPresent(aspect -> popResource(level, pos, labelFor(aspect)));
-            if (jar.braced()) {
-                popResource(level, pos, new ItemStack(ModItems.JAR_BRACE.get()));
-            }
-            jar.spill();
+        if (!state.is(replacement.getBlock()) && level.getBlockEntity(pos) instanceof JarBlockEntity jar
+                && jar.braced()) {
+            popResource(level, pos, new ItemStack(ModItems.JAR_BRACE.get()));
         }
         super.onRemove(state, level, pos, replacement, moving);
     }

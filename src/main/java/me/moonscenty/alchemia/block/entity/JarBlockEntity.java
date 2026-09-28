@@ -9,10 +9,12 @@ import me.moonscenty.alchemia.block.JarBlock;
 import me.moonscenty.alchemia.essentia.EssentiaHolder;
 import me.moonscenty.alchemia.registry.ModAspects;
 import me.moonscenty.alchemia.registry.ModBlockEntities;
+import me.moonscenty.alchemia.registry.ModDataComponents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -128,13 +130,37 @@ public class JarBlockEntity extends BlockEntity implements EssentiaHolder {
         return side == Direction.UP;
     }
 
-    /** What a broken jar lets go: all of it, into the air. */
-    public void spill() {
-        if (level instanceof ServerLevel served && amount > 0) {
-            AuraHandler.add(served, worldPosition, ModAspects.FLUX, amount);
+    /**
+     * What a jar taken up off the floor carries with it: what is in it, and what is written on it.
+     * <p>
+     * A warded jar is warded whether or not it is standing on anything. Breaking one and finding the essentia
+     * gone into the air would make a jar a thing you dare not move, and a shelf of jars something you build once
+     * and never touch again.
+     */
+    @Override
+    protected void collectImplicitComponents(DataComponentMap.Builder components) {
+        super.collectImplicitComponents(components);
+        if (holding != null && amount > 0) {
+            components.set(ModDataComponents.CONTENTS.get(), AspectList.of(holding, amount));
         }
-        holding = label;
-        amount = 0;
+        if (label != null) {
+            components.set(ModDataComponents.ESSENTIA.get(), label);
+        }
+    }
+
+    /** And what it carried back out when it is set down again. */
+    @Override
+    protected void applyImplicitComponents(DataComponentInput components) {
+        super.applyImplicitComponents(components);
+        AspectList inside = components.get(ModDataComponents.CONTENTS.get());
+        if (inside != null && !inside.isEmpty()) {
+            holding = inside.sortedByAmount().getFirst();
+            amount = Math.min(CAPACITY, inside.get(holding));
+        }
+        label = components.get(ModDataComponents.ESSENTIA.get());
+        if (label != null && holding == null) {
+            holding = label;
+        }
     }
 
     /** The colour the liquid is drawn in. */

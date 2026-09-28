@@ -8,6 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.data.PackOutput;
 import net.neoforged.neoforge.client.model.generators.ItemModelBuilder;
+import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
@@ -31,7 +32,10 @@ public class ModItemModelProvider extends ItemModelProvider {
         wands();
         // shown in hand and on the ground with its arms, which the placed block draws separately
         held("crucible", modLoc("block/crucible"));
-        held("jar", modLoc("block/jar/jar"));
+        // a jar in the hand shows what is in it, the same as one on a shelf does
+        ModelFile fullJar = held("jar_filled", modLoc("block/jar/jar_4"));
+        held("jar", modLoc("block/jar/jar"))
+                .override().predicate(Alchemia.id("filled"), 1).model(fullJar).end();
         held("arcane_pedestal", modLoc("block/pedestal"));
         // all eight stones, turned the way the renderer turns them. A model cannot turn a box a quarter, so the
         // turning was done on paper and written out as which glyph lands on which side (tools/gen_matrix_item.py)

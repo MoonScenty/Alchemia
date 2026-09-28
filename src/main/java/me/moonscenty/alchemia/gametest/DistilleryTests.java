@@ -10,6 +10,7 @@ import me.moonscenty.alchemia.crafting.LabelRecipe;
 import me.moonscenty.alchemia.item.PhialItem;
 import me.moonscenty.alchemia.registry.ModAspects;
 import me.moonscenty.alchemia.registry.ModBlocks;
+import me.moonscenty.alchemia.aspect.AspectList;
 import me.moonscenty.alchemia.registry.ModDataComponents;
 import me.moonscenty.alchemia.registry.ModItems;
 import net.minecraft.core.BlockPos;
@@ -24,6 +25,7 @@ import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.GameType;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -167,6 +169,40 @@ public class DistilleryTests {
 
         useOn(helper, START, new ItemStack(ModItems.PHIAL.get()));
         helper.assertValueEqual(jar.amount(), PhialItem.DRAUGHT + 1, "and a phial gets nothing out of it either");
+        helper.succeed();
+    }
+
+    /**
+     * A warded jar keeps what is in it when it is broken, and gives it back when it is set down again.
+     * <p>
+     * That is what being warded means. A jar that spilled its essentia on being moved would be a jar nobody dares
+     * move, and a shelf of them something you build once and then build the room around.
+     */
+    @GameTest(template = TEMPLATE)
+    public static void aBrokenJarKeepsWhatIsInIt(GameTestHelper helper) {
+        JarBlockEntity jar = jar(helper, START);
+        for (int one = 0; one < 20; one++) {
+            jar.accept(ModAspects.FIRE);
+        }
+        jar.label(ModAspects.FIRE);
+
+        List<ItemStack> dropped = Block.getDrops(helper.getBlockState(START), helper.getLevel(),
+                helper.absolutePos(START), jar);
+        helper.assertValueEqual(dropped.size(), 1, "one jar came back");
+
+        ItemStack picked = dropped.getFirst();
+        AspectList inside = picked.get(ModDataComponents.CONTENTS.get());
+        helper.assertTrue(inside != null && inside.get(ModAspects.FIRE) == 20,
+                "with the fire still in it, was " + inside);
+        helper.assertTrue(picked.get(ModDataComponents.ESSENTIA.get()) != null, "and its label still on it");
+
+        // and set down again it is the same jar
+        helper.setBlock(START.east(), ModBlocks.JAR.get());
+        JarBlockEntity back = (JarBlockEntity) helper.getLevel()
+                .getBlockEntity(helper.absolutePos(START.east()));
+        back.applyComponentsFromItemStack(picked);
+        helper.assertValueEqual(back.amount(), 20, "the essentia came back with it");
+        helper.assertTrue(back.label().isPresent(), "and so did the label");
         helper.succeed();
     }
 

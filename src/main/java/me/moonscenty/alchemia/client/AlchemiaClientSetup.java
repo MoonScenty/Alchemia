@@ -3,6 +3,7 @@ package me.moonscenty.alchemia.client;
 import java.util.List;
 
 import me.moonscenty.alchemia.aspect.Aspect;
+import me.moonscenty.alchemia.aspect.AspectList;
 import me.moonscenty.alchemia.block.entity.CrucibleBlockEntity;
 import me.moonscenty.alchemia.registry.ModDataComponents;
 import net.minecraft.core.Holder;
@@ -58,6 +59,8 @@ public class AlchemiaClientSetup {
             ItemProperties.register(item, Alchemia.id("filled"), (stack, level, holder, seed) ->
                     stack.has(ModDataComponents.ESSENTIA.get()) ? 1 : 0);
         }
+        ItemProperties.register(ModBlocks.JAR.get().asItem(), Alchemia.id("filled"),
+                (stack, level, holder, seed) -> stack.has(ModDataComponents.CONTENTS.get()) ? 1 : 0);
     }
 
     /**
@@ -71,6 +74,8 @@ public class AlchemiaClientSetup {
     public static void registerItemColours(RegisterColorHandlersEvent.Item event) {
         event.register((stack, tint) -> tint == 0 ? named(stack) : PLAIN, ModItems.PHIAL.get());
         event.register((stack, tint) -> tint == 1 ? named(stack) : PLAIN, ModItems.JAR_LABEL.get());
+        // the liquid standing in a jar held in the hand, in the colour of whatever it is
+        event.register((stack, tint) -> tint == 0 ? inside(stack) : PLAIN, ModBlocks.JAR.get().asItem());
     }
 
     /**
@@ -82,6 +87,13 @@ public class AlchemiaClientSetup {
      * liquid in a jar was never troubled by this.
      */
     private static final int PLAIN = FastColor.ARGB32.opaque(0xFFFFFF);
+
+    /** The colour of what is in a jar that has been picked up. */
+    private static int inside(ItemStack stack) {
+        AspectList held = stack.get(ModDataComponents.CONTENTS.get());
+        return held == null || held.isEmpty() ? PLAIN
+                : FastColor.ARGB32.opaque(held.sortedByAmount().getFirst().value().color());
+    }
 
     /** The colour of the aspect an item names, or white if it names none. */
     private static int named(ItemStack stack) {

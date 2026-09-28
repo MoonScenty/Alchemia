@@ -59,6 +59,18 @@ public class ModDataComponents {
                     .networkSynchronized(ByteBufCodecs.holderRegistry(ModAspects.KEY))
                     .build());
 
+    /**
+     * What a vessel taken up off the floor still has in it.
+     * <p>
+     * A warded jar is warded whether or not it is standing on anything, so breaking one hands back the jar with
+     * its essentia still inside rather than letting the lot go into the air.
+     */
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<AspectList>> CONTENTS =
+            COMPONENTS.register("contents", () -> DataComponentType.<AspectList>builder()
+                    .persistent(AspectList.CODEC)
+                    .networkSynchronized(AspectList.STREAM_CODEC)
+                    .build());
+
     private ModDataComponents() {
     }
 }
