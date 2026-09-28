@@ -10,7 +10,6 @@ import me.moonscenty.alchemia.block.taint.TaintFibreBlock;
 import me.moonscenty.alchemia.block.taint.TaintLogBlock;
 import me.moonscenty.alchemia.block.AlembicBlock;
 import me.moonscenty.alchemia.block.OnewayTubeBlock;
-import me.moonscenty.alchemia.block.ValveTubeBlock;
 import me.moonscenty.alchemia.block.EssentiaSmelterBlock;
 import me.moonscenty.alchemia.block.CrucibleBlock;
 import me.moonscenty.alchemia.block.JarBlock;
@@ -215,12 +214,9 @@ public class ModBlockStateProvider extends BlockStateProvider {
     /**
      * The pipe, put together a side at a time.
      * <p>
-     * Every kind of pipe is put together the same way and out of the same pieces, as they were in the original: what
-     * a valve or a filter does is not something you can see from the outside.
-     * <p>
-     * The middle is always there; each side adds an arm, and a plain arm or one with a collar depending on what it
-     * is up against. The four horizontal arms are the one drawn model turned about the upright; up and down are
-     * models of their own, since a blockstate cannot turn an east-pointing thing to face up.
+     * Six kinds out of the same handful of pieces. The arms and the collars are shared; the middle is what tells
+     * one kind from another, and three of them wear a mark besides -- an arrow where a one-way points, a band on
+     * every joined side of a restrict, and, drawn elsewhere, the wheel of a valve.
      */
     private void tube() {
         tube(ModBlocks.TUBE.get(), "plain");
@@ -245,16 +241,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
                     .condition(TubeBlock.SIDES.get(side), TubeBlock.Link.TUBE, TubeBlock.Link.BLOCK)
                     .end();
         }
-        // the handle, on the side it stands on, lying over or standing up as the valve is shut or open
-        for (Direction side : Direction.values()) {
-            for (boolean open : new boolean[] {false, true}) {
-                var part = getMultipartBuilder(ModBlocks.TUBE_VALVE.get()).part();
-                reaching(part, "handle_" + (open ? "open" : "shut"), side).addModel()
-                        .condition(ValveTubeBlock.FACING, side)
-                        .condition(ValveTubeBlock.OPEN, open)
-                        .end();
-            }
-        }
+        // the valve's wheel is not here: it is pointed and turned by hand, in ValveHandleRenderer
     }
 
     /**

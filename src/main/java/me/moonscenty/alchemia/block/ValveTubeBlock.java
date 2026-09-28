@@ -11,6 +11,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import me.moonscenty.alchemia.block.entity.ValveTubeBlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -109,10 +111,20 @@ public class ValveTubeBlock extends TubeBlock {
         }
     }
 
+    /** Worked, and the moment written down so the handle can be seen swinging round to its new place. */
     private static void turn(Level level, BlockPos pos, BlockState state, boolean open) {
-        if (!level.isClientSide) {
-            level.setBlock(pos, state.setValue(OPEN, open), Block.UPDATE_ALL);
-            level.playSound(null, pos, SoundEvents.LEVER_CLICK, SoundSource.BLOCKS, 0.4F, open ? 0.6F : 0.5F);
+        if (level.isClientSide) {
+            return;
         }
+        level.setBlock(pos, state.setValue(OPEN, open), Block.UPDATE_ALL);
+        if (level.getBlockEntity(pos) instanceof ValveTubeBlockEntity valve) {
+            valve.worked(level.getGameTime());
+        }
+        level.playSound(null, pos, SoundEvents.LEVER_CLICK, SoundSource.BLOCKS, 0.4F, open ? 0.6F : 0.5F);
+    }
+
+    @Override
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return new ValveTubeBlockEntity(pos, state);
     }
 }

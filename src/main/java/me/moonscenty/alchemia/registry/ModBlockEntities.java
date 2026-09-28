@@ -10,6 +10,7 @@ import me.moonscenty.alchemia.block.entity.FilterTubeBlockEntity;
 import me.moonscenty.alchemia.block.entity.CrucibleBlockEntity;
 import me.moonscenty.alchemia.block.entity.JarBlockEntity;
 import me.moonscenty.alchemia.block.entity.TubeBlockEntity;
+import me.moonscenty.alchemia.block.entity.ValveTubeBlockEntity;
 import me.moonscenty.alchemia.block.entity.EssentiaSmelterBlockEntity;
 import me.moonscenty.alchemia.block.entity.InfusionMatrixBlockEntity;
 import me.moonscenty.alchemia.block.entity.NodeStabilizerBlockEntity;
@@ -62,13 +63,19 @@ public class ModBlockEntities {
     /**
      * The plain pipe and the three kinds that only differ in what they let by.
      * <p>
-     * A valve, a one-way and a restrict all keep their answer in the blockstate, so there is nothing for them to
-     * remember from one tick to the next that a plain tube does not remember too, and one type serves all four.
+     * A one-way and a restrict keep their answer in the blockstate, so there is nothing for them to remember from
+     * one tick to the next that a plain tube does not remember too, and one type serves all three.
      */
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<TubeBlockEntity>> TUBE =
             BLOCK_ENTITIES.register("tube", () -> BlockEntityType.Builder
-                    .of(TubeBlockEntity::new, ModBlocks.TUBE.get(), ModBlocks.TUBE_VALVE.get(),
+                    .of(TubeBlockEntity::new, ModBlocks.TUBE.get(),
                             ModBlocks.TUBE_ONEWAY.get(), ModBlocks.TUBE_RESTRICT.get())
+                    .build(null));
+
+    /** The valve remembers when it was last worked, so its handle can be seen swinging rather than snapping. */
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ValveTubeBlockEntity>> TUBE_VALVE =
+            BLOCK_ENTITIES.register("tube_valve", () -> BlockEntityType.Builder
+                    .of(ValveTubeBlockEntity::new, ModBlocks.TUBE_VALVE.get())
                     .build(null));
 
     /** The filter remembers the aspect it was told to let by. */

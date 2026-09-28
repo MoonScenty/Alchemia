@@ -44,6 +44,8 @@ public class AlchemiaClientSetup {
         event.register(InfusionMatrixRenderer.CUBE);
         // an altar's pillars are a picture a woken matrix draws, not four blocks somebody placed
         event.register(InfusionMatrixRenderer.PILLAR);
+        // a valve's wheel is turned by hand in code, so it is asked for rather than named by a blockstate
+        event.register(ValveHandleRenderer.HANDLE);
         for (var arm : NodeStabilizerRenderer.ARMS) {
             event.register(arm);
         }
@@ -149,6 +151,7 @@ public class AlchemiaClientSetup {
         event.registerBlockEntityRenderer(ModBlockEntities.NODE_STABILIZER.get(), NodeStabilizerRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.ARCANE_PEDESTAL.get(), ArcanePedestalRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.INFUSION_MATRIX.get(), InfusionMatrixRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.TUBE_VALVE.get(), ValveHandleRenderer::new);
     }
 
     /**
