@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/handheld",
   "textures": {
-    "layer0": "alchemia:item/wand/rod_blaze"
+    "layer0": "alchemia:item/wand/rod_blaze_mat"
   }
 }

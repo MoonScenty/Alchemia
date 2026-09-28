@@ -125,10 +125,11 @@ public class ModItemModelProvider extends ItemModelProvider {
             withExistingParent("wand_cap_" + cap, mcLoc("item/generated"))
                     .texture("layer0", modLoc("item/wand/cap_" + cap + "_mat"));
         }
-        // the rod sprite serves as its own item picture; only the wooden one has no item, being a plain stick
+        // a loose rod has a picture of its own, drawn as one rather than as the strip laid under a wand's caps;
+        // only the wooden one has no item, being a plain stick
         for (int rod = 1; rod < RODS.length; rod++) {
             withExistingParent("wand_rod_" + RODS[rod], mcLoc("item/handheld"))
-                    .texture("layer0", modLoc("item/wand/rod_" + RODS[rod]));
+                    .texture("layer0", modLoc("item/wand/rod_" + RODS[rod] + "_mat"));
         }
     }
 
