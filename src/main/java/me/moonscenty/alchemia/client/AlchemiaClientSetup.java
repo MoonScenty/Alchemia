@@ -6,6 +6,7 @@ import me.moonscenty.alchemia.aspect.Aspect;
 import me.moonscenty.alchemia.block.entity.CrucibleBlockEntity;
 import me.moonscenty.alchemia.registry.ModDataComponents;
 import net.minecraft.core.Holder;
+import net.minecraft.util.FastColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import me.moonscenty.alchemia.block.entity.JarBlockEntity;
@@ -68,14 +69,24 @@ public class AlchemiaClientSetup {
      */
     @SubscribeEvent
     public static void registerItemColours(RegisterColorHandlersEvent.Item event) {
-        event.register((stack, tint) -> tint == 0 ? named(stack) : 0xFFFFFF, ModItems.PHIAL.get());
-        event.register((stack, tint) -> tint == 1 ? named(stack) : 0xFFFFFF, ModItems.JAR_LABEL.get());
+        event.register((stack, tint) -> tint == 0 ? named(stack) : PLAIN, ModItems.PHIAL.get());
+        event.register((stack, tint) -> tint == 1 ? named(stack) : PLAIN, ModItems.JAR_LABEL.get());
     }
+
+    /**
+     * White, and said properly.
+     * <p>
+     * An item tint is read as four bytes, not three: the renderer takes the top byte as how opaque the face is.
+     * A colour written as six digits therefore says "perfectly clear", and a phial tinted with plain white
+     * vanishes out of the slot altogether. A block tint has no such byte and is read as three, which is why the
+     * liquid in a jar was never troubled by this.
+     */
+    private static final int PLAIN = FastColor.ARGB32.opaque(0xFFFFFF);
 
     /** The colour of the aspect an item names, or white if it names none. */
     private static int named(ItemStack stack) {
         Holder<Aspect> aspect = stack.get(ModDataComponents.ESSENTIA.get());
-        return aspect == null ? 0xFFFFFF : aspect.value().color();
+        return aspect == null ? PLAIN : FastColor.ARGB32.opaque(aspect.value().color());
     }
 
     @SubscribeEvent
