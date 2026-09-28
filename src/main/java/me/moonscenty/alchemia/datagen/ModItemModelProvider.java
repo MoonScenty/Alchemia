@@ -32,6 +32,9 @@ public class ModItemModelProvider extends ItemModelProvider {
         // shown in hand and on the ground with its arms, which the placed block draws separately
         held("crucible", modLoc("block/crucible"));
         held("jar", modLoc("block/jar/jar"));
+        held("arcane_pedestal", modLoc("block/pedestal"));
+        // one of the eight stones. Eight of them at slot size would be a smudge; one reads as what it is
+        held("infusion_matrix", modLoc("block/infusion_cube"));
         // a straight length rather than the bare middle: a four pixel cube in a slot is a speck
         for (String kind : new String[] {"tube", "tube_valve", "tube_oneway", "tube_restrict", "tube_filter",
                 "tube_buffer"}) {
