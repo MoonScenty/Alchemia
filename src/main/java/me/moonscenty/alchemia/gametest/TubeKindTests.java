@@ -2,6 +2,7 @@ package me.moonscenty.alchemia.gametest;
 
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.block.OnewayTubeBlock;
+import me.moonscenty.alchemia.block.TubeBlock;
 import me.moonscenty.alchemia.block.ValveTubeBlock;
 import me.moonscenty.alchemia.block.entity.AlembicBlockEntity;
 import me.moonscenty.alchemia.block.entity.BufferTubeBlockEntity;
@@ -76,6 +77,29 @@ public class TubeKindTests {
         helper.setBlock(valve, helper.getBlockState(valve).setValue(ValveTubeBlock.OPEN, true));
         run(helper, START.east(3), 4 * TURN);
         helper.assertTrue(!to.isEmpty(), "and it flows again once it is opened");
+        helper.succeed();
+    }
+
+    /**
+     * A handle is not a socket. Nothing joins to the side a valve's handle stands on, from either end.
+     * <p>
+     * Both ends have to agree about it, or a tube laid against the handle would grow an arm into it and the pipe
+     * would look joined while nothing went through.
+     */
+    @GameTest(template = TEMPLATE)
+    public static void aValveHandleIsNotASocket(GameTestHelper helper) {
+        helper.setBlock(START, ModBlocks.TUBE_VALVE.get().defaultBlockState()
+                .setValue(ValveTubeBlock.FACING, Direction.EAST));
+        helper.setBlock(START.east(), ModBlocks.TUBE.get());
+        helper.setBlock(START.west(), ModBlocks.TUBE.get());
+
+        helper.assertValueEqual(helper.getBlockState(START).getValue(TubeBlock.SIDES.get(Direction.EAST)),
+                TubeBlock.Link.NONE, "the valve keeps that side for its handle");
+        helper.assertValueEqual(helper.getBlockState(START).getValue(TubeBlock.SIDES.get(Direction.WEST)),
+                TubeBlock.Link.TUBE, "and joins on the other side as any pipe would");
+        helper.assertValueEqual(helper.getBlockState(START.east())
+                        .getValue(TubeBlock.SIDES.get(Direction.WEST)), TubeBlock.Link.NONE,
+                "and the pipe against the handle knows better than to reach for it");
         helper.succeed();
     }
 

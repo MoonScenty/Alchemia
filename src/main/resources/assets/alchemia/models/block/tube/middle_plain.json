@@ -1,7 +1,9 @@
 {
   "textures": {
-    "0": "alchemia:block/tube",
-    "particle": "alchemia:block/tube"
+    "1": "alchemia:block/tube",
+    "2": "alchemia:block/greatwood_planks",
+    "particle": "alchemia:block/greatwood_planks",
+    "3": "alchemia:block/brass_block"
   },
   "elements": [
     {
@@ -15,15 +17,6 @@
         10,
         10
       ],
-      "rotation": {
-        "angle": 0,
-        "axis": "y",
-        "origin": [
-          6,
-          6,
-          6
-        ]
-      },
       "faces": {
         "north": {
           "uv": [
@@ -32,7 +25,7 @@
             4,
             4
           ],
-          "texture": "#0"
+          "texture": "#1"
         },
         "east": {
           "uv": [
@@ -41,7 +34,7 @@
             4,
             4
           ],
-          "texture": "#0"
+          "texture": "#1"
         },
         "south": {
           "uv": [
@@ -50,7 +43,7 @@
             4,
             4
           ],
-          "texture": "#0"
+          "texture": "#1"
         },
         "west": {
           "uv": [
@@ -59,7 +52,7 @@
             4,
             4
           ],
-          "texture": "#0"
+          "texture": "#1"
         },
         "up": {
           "uv": [
@@ -68,7 +61,7 @@
             4,
             4
           ],
-          "texture": "#0"
+          "texture": "#1"
         },
         "down": {
           "uv": [
@@ -77,10 +70,9 @@
             4,
             4
           ],
-          "texture": "#0"
+          "texture": "#1"
         }
       }
     }
-  ],
-  "parent": "minecraft:block/block"
+  ]
 }

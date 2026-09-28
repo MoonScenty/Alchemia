@@ -128,7 +128,7 @@ public class TubeBlock extends BaseEntityBlock {
         BlockState state = defaultBlockState();
         for (Direction side : Direction.values()) {
             state = state.setValue(SIDES.get(side),
-                    linkTo(context.getLevel(), context.getClickedPos(), side));
+                    linkTo(context.getLevel(), context.getClickedPos(), side, state));
         }
         return state;
     }
@@ -136,7 +136,7 @@ public class TubeBlock extends BaseEntityBlock {
     @Override
     protected BlockState updateShape(BlockState state, Direction towards, BlockState neighbour, LevelAccessor level,
             BlockPos pos, BlockPos neighbourPos) {
-        return state.setValue(SIDES.get(towards), linkTo(level, pos, towards));
+        return state.setValue(SIDES.get(towards), linkTo(level, pos, towards, state));
     }
 
     /**
@@ -150,7 +150,7 @@ public class TubeBlock extends BaseEntityBlock {
     protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState before, boolean moving) {
         BlockState joined = state;
         for (Direction side : Direction.values()) {
-            joined = joined.setValue(SIDES.get(side), linkTo(level, pos, side));
+            joined = joined.setValue(SIDES.get(side), linkTo(level, pos, side, joined));
         }
         if (joined != state) {
             level.setBlock(pos, joined, Block.UPDATE_CLIENTS);
@@ -178,14 +178,33 @@ public class TubeBlock extends BaseEntityBlock {
         return 0;
     }
 
-    /** What lies on one side of a tube: another tube, something that holds essentia, or nothing to speak of. */
-    public static Link linkTo(BlockGetter level, BlockPos pos, Direction side) {
-        BlockPos at = pos.relative(side);
-        if (level.getBlockState(at).getBlock() instanceof TubeBlock) {
-            return Link.TUBE;
+    /**
+     * Whether this tube has a side to spare there at all.
+     * <p>
+     * Plain pipe is open on all six. A valve has a handle on one of them, and a handle is not a socket: nothing
+     * joins to the side it stands on, tube or vessel.
+     */
+    public boolean spare(BlockState state, Direction side) {
+        return true;
+    }
+
+    /**
+     * What lies on one side of a tube: another tube, something that holds essentia, or nothing to speak of.
+     * <p>
+     * Both ends have a say. A tube with a handle in the way refuses, and so does a neighbour with a handle in the
+     * way, which is why the state being built is handed in rather than read back out of the world -- during
+     * placement it is not in the world yet.
+     */
+    public static Link linkTo(BlockGetter level, BlockPos pos, Direction side, BlockState self) {
+        if (self.getBlock() instanceof TubeBlock tube && !tube.spare(self, side)) {
+            return Link.NONE;
+        }
+        BlockState beside = level.getBlockState(pos.relative(side));
+        if (beside.getBlock() instanceof TubeBlock other) {
+            return other.spare(beside, side.getOpposite()) ? Link.TUBE : Link.NONE;
         }
         // the side the neighbour is touched on is the opposite of the one the tube reaches out along
-        return level.getBlockEntity(at) instanceof EssentiaHolder holder
+        return level.getBlockEntity(pos.relative(side)) instanceof EssentiaHolder holder
                 && holder.reachableFrom(side.getOpposite()) ? Link.BLOCK : Link.NONE;
     }
 

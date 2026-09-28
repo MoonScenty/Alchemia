@@ -2,7 +2,7 @@
   "multipart": [
     {
       "apply": {
-        "model": "alchemia:block/tube/core"
+        "model": "alchemia:block/tube/middle_plain"
       }
     },
     {
@@ -10,12 +10,12 @@
         "model": "alchemia:block/tube/arm_down"
       },
       "when": {
-        "down": "tube"
+        "down": "tube|block"
       }
     },
     {
       "apply": {
-        "model": "alchemia:block/tube/connector_down"
+        "model": "alchemia:block/tube/collar_down"
       },
       "when": {
         "down": "block"
@@ -26,12 +26,12 @@
         "model": "alchemia:block/tube/arm_up"
       },
       "when": {
-        "up": "tube"
+        "up": "tube|block"
       }
     },
     {
       "apply": {
-        "model": "alchemia:block/tube/connector_up"
+        "model": "alchemia:block/tube/collar_up"
       },
       "when": {
         "up": "block"
@@ -43,12 +43,12 @@
         "y": 270
       },
       "when": {
-        "north": "tube"
+        "north": "tube|block"
       }
     },
     {
       "apply": {
-        "model": "alchemia:block/tube/connector",
+        "model": "alchemia:block/tube/collar",
         "y": 270
       },
       "when": {
@@ -61,12 +61,12 @@
         "y": 90
       },
       "when": {
-        "south": "tube"
+        "south": "tube|block"
       }
     },
     {
       "apply": {
-        "model": "alchemia:block/tube/connector",
+        "model": "alchemia:block/tube/collar",
         "y": 90
       },
       "when": {
@@ -79,12 +79,12 @@
         "y": 180
       },
       "when": {
-        "west": "tube"
+        "west": "tube|block"
       }
     },
     {
       "apply": {
-        "model": "alchemia:block/tube/connector",
+        "model": "alchemia:block/tube/collar",
         "y": 180
       },
       "when": {
@@ -96,15 +96,129 @@
         "model": "alchemia:block/tube/arm"
       },
       "when": {
-        "east": "tube"
+        "east": "tube|block"
       }
     },
     {
       "apply": {
-        "model": "alchemia:block/tube/connector"
+        "model": "alchemia:block/tube/collar"
       },
       "when": {
         "east": "block"
+      }
+    },
+    {
+      "apply": {
+        "model": "alchemia:block/tube/handle_shut_down"
+      },
+      "when": {
+        "facing": "down",
+        "open": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "alchemia:block/tube/handle_open_down"
+      },
+      "when": {
+        "facing": "down",
+        "open": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "alchemia:block/tube/handle_shut_up"
+      },
+      "when": {
+        "facing": "up",
+        "open": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "alchemia:block/tube/handle_open_up"
+      },
+      "when": {
+        "facing": "up",
+        "open": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "alchemia:block/tube/handle_shut",
+        "y": 270
+      },
+      "when": {
+        "facing": "north",
+        "open": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "alchemia:block/tube/handle_open",
+        "y": 270
+      },
+      "when": {
+        "facing": "north",
+        "open": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "alchemia:block/tube/handle_shut",
+        "y": 90
+      },
+      "when": {
+        "facing": "south",
+        "open": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "alchemia:block/tube/handle_open",
+        "y": 90
+      },
+      "when": {
+        "facing": "south",
+        "open": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "alchemia:block/tube/handle_shut",
+        "y": 180
+      },
+      "when": {
+        "facing": "west",
+        "open": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "alchemia:block/tube/handle_open",
+        "y": 180
+      },
+      "when": {
+        "facing": "west",
+        "open": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "alchemia:block/tube/handle_shut"
+      },
+      "when": {
+        "facing": "east",
+        "open": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "alchemia:block/tube/handle_open"
+      },
+      "when": {
+        "facing": "east",
+        "open": "true"
       }
     }
   ]

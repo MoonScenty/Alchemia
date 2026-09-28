@@ -9,6 +9,8 @@ import me.moonscenty.alchemia.block.taint.FluxGooBlock;
 import me.moonscenty.alchemia.block.taint.TaintFibreBlock;
 import me.moonscenty.alchemia.block.taint.TaintLogBlock;
 import me.moonscenty.alchemia.block.AlembicBlock;
+import me.moonscenty.alchemia.block.OnewayTubeBlock;
+import me.moonscenty.alchemia.block.ValveTubeBlock;
 import me.moonscenty.alchemia.block.EssentiaSmelterBlock;
 import me.moonscenty.alchemia.block.CrucibleBlock;
 import me.moonscenty.alchemia.block.JarBlock;
@@ -22,6 +24,7 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
 import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
+import net.neoforged.neoforge.client.model.generators.MultiPartBlockStateBuilder;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.registries.DeferredBlock;
@@ -220,48 +223,90 @@ public class ModBlockStateProvider extends BlockStateProvider {
      * models of their own, since a blockstate cannot turn an east-pointing thing to face up.
      */
     private void tube() {
-        for (DeferredBlock<? extends TubeBlock> kind : List.of(ModBlocks.TUBE, ModBlocks.TUBE_VALVE,
-                ModBlocks.TUBE_ONEWAY, ModBlocks.TUBE_RESTRICT, ModBlocks.TUBE_FILTER, ModBlocks.TUBE_BUFFER)) {
-            tube(kind.get());
-        }
-    }
+        tube(ModBlocks.TUBE.get(), "plain");
+        tube(ModBlocks.TUBE_VALVE.get(), "plain");
+        tube(ModBlocks.TUBE_ONEWAY.get(), "plain");
+        tube(ModBlocks.TUBE_RESTRICT.get(), "plain");
+        tube(ModBlocks.TUBE_FILTER.get(), "filter");
+        tube(ModBlocks.TUBE_BUFFER.get(), "buffer");
 
-    private void tube(TubeBlock block) {
-        ModelFile core = models().getExistingFile(modLoc("block/tube/core"));
-        var builder = getMultipartBuilder(block);
-        builder.part().modelFile(core).addModel().end();
-
+        // the arrow only where it points, and only if there is an arm there for it to sit on
         for (Direction side : Direction.values()) {
-            for (TubeBlock.Link link : new TubeBlock.Link[] {TubeBlock.Link.TUBE, TubeBlock.Link.BLOCK}) {
-                String shape = link == TubeBlock.Link.TUBE ? "arm" : "connector";
-                var part = builder.part();
-                if (side.getAxis().isVertical()) {
-                    part.modelFile(models().getExistingFile(
-                            modLoc("block/tube/" + shape + (side == Direction.UP ? "_up" : "_down"))));
-                } else {
-                    // the arm is drawn reaching east, so every other bearing is that many quarter turns on
-                    part.modelFile(models().getExistingFile(modLoc("block/tube/" + shape)))
-                            .rotationY(((int) side.toYRot() + 90) % 360);
-                }
-                part.addModel().condition(TubeBlock.SIDES.get(side), link).end();
+            var part = getMultipartBuilder(ModBlocks.TUBE_ONEWAY.get()).part();
+            reaching(part, "arrow", side).addModel()
+                    .condition(OnewayTubeBlock.FACING, side)
+                    .condition(TubeBlock.SIDES.get(side), TubeBlock.Link.TUBE, TubeBlock.Link.BLOCK)
+                    .end();
+        }
+        // the bands on every side that is joined to something
+        for (Direction side : Direction.values()) {
+            var part = getMultipartBuilder(ModBlocks.TUBE_RESTRICT.get()).part();
+            reaching(part, "band", side).addModel()
+                    .condition(TubeBlock.SIDES.get(side), TubeBlock.Link.TUBE, TubeBlock.Link.BLOCK)
+                    .end();
+        }
+        // the handle, on the side it stands on, lying over or standing up as the valve is shut or open
+        for (Direction side : Direction.values()) {
+            for (boolean open : new boolean[] {false, true}) {
+                var part = getMultipartBuilder(ModBlocks.TUBE_VALVE.get()).part();
+                reaching(part, "handle_" + (open ? "open" : "shut"), side).addModel()
+                        .condition(ValveTubeBlock.FACING, side)
+                        .condition(ValveTubeBlock.OPEN, open)
+                        .end();
             }
         }
     }
 
     /**
+     * The pipe, put together a side at a time.
+     * <p>
+     * The middle is always there; each side that is joined to anything adds an arm, and a side that meets a vessel
+     * rather than a pipe adds a collar on the end of it. Every kind of tube is built the same way out of the same
+     * pieces -- only the middle tells them apart, which is as it was in the original.
+     */
+    private void tube(TubeBlock block, String middle) {
+        var builder = getMultipartBuilder(block);
+        builder.part().modelFile(models().getExistingFile(modLoc("block/tube/middle_" + middle)))
+                .addModel().end();
+
+        for (Direction side : Direction.values()) {
+            reaching(builder.part(), "arm", side).addModel()
+                    .condition(TubeBlock.SIDES.get(side), TubeBlock.Link.TUBE, TubeBlock.Link.BLOCK)
+                    .end();
+            reaching(builder.part(), "collar", side).addModel()
+                    .condition(TubeBlock.SIDES.get(side), TubeBlock.Link.BLOCK)
+                    .end();
+        }
+    }
+
+    /**
+     * One piece pointed at one side.
+     * <p>
+     * The four bearings round the compass are the drawn model turned about the upright; up and down are models of
+     * their own, since a blockstate cannot turn an east-pointing thing to face up.
+     */
+    private ConfiguredModel.Builder<MultiPartBlockStateBuilder.PartBuilder> reaching(
+            ConfiguredModel.Builder<MultiPartBlockStateBuilder.PartBuilder> part, String piece, Direction side) {
+        if (side.getAxis().isVertical()) {
+            return part.modelFile(models().getExistingFile(
+                    modLoc("block/tube/" + piece + (side == Direction.UP ? "_up" : "_down"))));
+        }
+        // the piece is drawn reaching east, so every other bearing is that many quarter turns on
+        return part.modelFile(models().getExistingFile(modLoc("block/tube/" + piece)))
+                .rotationY(((int) side.toYRot() + 90) % 360);
+    }
+
+    /**
      * The pedestal, and the matrix that has no model of its own.
      * <p>
-     * The pillars are not here because they are not blocks. A woken matrix draws four of them over the stones at
-     * its corners, and a stone with a pillar drawn over it is still a stone to break.
+     * The pillars are not here because they are not blocks. A woken matrix draws four of them over the corners of
+     * its altar, and the corner it draws over is a block that draws nothing at all.
      */
     private void altar() {
         simpleBlock(ModBlocks.ARCANE_PEDESTAL.get(), models().getExistingFile(modLoc("block/pedestal")));
-
-        // the matrix draws nothing of itself: the blockstate points at an empty model and the renderer does the rest
         simpleBlock(ModBlocks.INFUSION_MATRIX.get(), models().getExistingFile(modLoc("block/infusion_matrix")));
         // the corner draws nothing either: the pillar standing on it is drawn by the matrix
         simpleBlock(ModBlocks.ARCANE_PILLAR.get(), models().getExistingFile(modLoc("block/infusion_matrix")));
-
     }
 
     /** A furnace in every way the blockstate cares about: it faces somewhere, and it is lit or it is not. */

@@ -15,6 +15,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
 
 /**
@@ -31,11 +32,17 @@ public class ValveTubeBlock extends TubeBlock {
     /** What the redstone was doing last time anyone looked. */
     public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
 
+    /** Which side the handle stands on. Nothing joins to that side: a handle is not a socket. */
+    public static final DirectionProperty FACING = BlockStateProperties.FACING;
+
     public static final MapCodec<ValveTubeBlock> CODEC = simpleCodec(ValveTubeBlock::new);
 
     public ValveTubeBlock(Properties properties) {
         super(properties);
-        registerDefaultState(defaultBlockState().setValue(OPEN, true).setValue(POWERED, false));
+        registerDefaultState(defaultBlockState()
+                .setValue(OPEN, true)
+                .setValue(POWERED, false)
+                .setValue(FACING, Direction.UP));
     }
 
     @Override
@@ -46,7 +53,7 @@ public class ValveTubeBlock extends TubeBlock {
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
-        builder.add(OPEN, POWERED);
+        builder.add(OPEN, POWERED, FACING);
     }
 
     /** A shut valve is not a way through, whichever way you came at it. */
@@ -55,10 +62,30 @@ public class ValveTubeBlock extends TubeBlock {
         return state.getValue(OPEN);
     }
 
+    /** The side a handle stands on is no use for joining, so it is worked out before the sides are. */
+    @Override
+    public boolean spare(BlockState state, Direction side) {
+        return state.getValue(FACING) != side;
+    }
+
+    /**
+     * Laid with the handle towards whoever laid it.
+     * <p>
+     * A valve is a thing you come back to and turn, so the handle faces the way you were standing. It is worked
+     * out before the sides are, since the side it lands on stops being a side at all.
+     */
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         boolean powered = context.getLevel().hasNeighborSignal(context.getClickedPos());
-        return super.getStateForPlacement(context).setValue(POWERED, powered).setValue(OPEN, !powered);
+        BlockState stood = defaultBlockState()
+                .setValue(FACING, context.getNearestLookingDirection().getOpposite())
+                .setValue(POWERED, powered)
+                .setValue(OPEN, !powered);
+        for (Direction side : Direction.values()) {
+            stood = stood.setValue(SIDES.get(side),
+                    linkTo(context.getLevel(), context.getClickedPos(), side, stood));
+        }
+        return stood;
     }
 
     /** Opened and shut by hand. */

@@ -5,6 +5,7 @@ import java.util.List;
 import me.moonscenty.alchemia.aspect.Aspect;
 import me.moonscenty.alchemia.aspect.AspectList;
 import me.moonscenty.alchemia.block.entity.CrucibleBlockEntity;
+import me.moonscenty.alchemia.block.entity.FilterTubeBlockEntity;
 import me.moonscenty.alchemia.registry.ModDataComponents;
 import net.minecraft.core.Holder;
 import net.minecraft.util.FastColor;
@@ -124,6 +125,12 @@ public class AlchemiaClientSetup {
             }
             return 0x3F76E4;
         }, ModBlocks.CRUCIBLE.get());
+
+        // a filter tube wears the colour of the one thing it lets by, which is the only way to read a run of pipe
+        event.register((state, level, pos, tint) ->
+                level != null && pos != null && level.getBlockEntity(pos) instanceof FilterTubeBlockEntity filter
+                        ? filter.only().map(aspect -> aspect.value().color()).orElse(0xFFFFFF)
+                        : 0xFFFFFF, ModBlocks.TUBE_FILTER.get());
 
         // the liquid standing in a jar, in the colour of whatever the jar is holding
         event.register((state, level, pos, tint) ->

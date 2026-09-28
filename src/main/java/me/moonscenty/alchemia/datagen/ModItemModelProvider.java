@@ -40,11 +40,13 @@ public class ModItemModelProvider extends ItemModelProvider {
         // all eight stones, turned the way the renderer turns them. A model cannot turn a box a quarter, so the
         // turning was done on paper and written out as which glyph lands on which side (tools/gen_matrix_item.py)
         held("infusion_matrix", modLoc("block/infusion_cluster"));
-        // a straight length rather than the bare middle: a four pixel cube in a slot is a speck
-        for (String kind : new String[] {"tube", "tube_valve", "tube_oneway", "tube_restrict", "tube_filter",
-                "tube_buffer"}) {
-            withExistingParent(kind, modLoc("block/tube/item"));
-        }
+        // a straight length of pipe rather than the bare middle, and each kind wearing whatever tells it apart
+        withExistingParent("tube", modLoc("block/tube/item_plain"));
+        withExistingParent("tube_valve", modLoc("block/tube/item_valve"));
+        withExistingParent("tube_oneway", modLoc("block/tube/item_oneway"));
+        withExistingParent("tube_restrict", modLoc("block/tube/item_restrict"));
+        withExistingParent("tube_filter", modLoc("block/tube/item_filter"));
+        withExistingParent("tube_buffer", modLoc("block/tube/item_buffer"));
         withExistingParent("essentia_smelter", modLoc("block/essentia_smelter"));
         withExistingParent("alembic", modLoc("block/alembic/item"));
         withExistingParent("arcane_workbench", modLoc("block/arcane_workbench"));
