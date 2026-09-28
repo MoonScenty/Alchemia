@@ -25,7 +25,8 @@ import net.minecraft.world.phys.AABB;
  * Draws the arms on top of a stabiliser, and the shell it keeps around whatever it is holding.
  * <p>
  * The arms work in and out rather than turning, which is how the original read: a thing bracing something rather
- * than spinning for show.
+ * than spinning for show. Each one is a bar leaning at forty-five degrees towards what is held, and it slides
+ * along that lean, so it rises as it reaches -- an arm that went straight sideways would leave the stone.
  */
 public class NodeStabilizerRenderer implements BlockEntityRenderer<NodeStabilizerBlockEntity> {
     public static final ModelResourceLocation[] ARMS = {
@@ -38,8 +39,10 @@ public class NodeStabilizerRenderer implements BlockEntityRenderer<NodeStabilize
             Direction.SOUTH, Direction.NORTH, Direction.WEST, Direction.EAST,
     };
 
-    /** How far out an arm reaches when it is holding something. */
+    /** How far out along its own lean an arm reaches when it is holding something. */
     private static final float THROW = 0.37F;
+    /** An arm leans at forty-five degrees, so its reach is shared evenly between outwards and upwards. */
+    private static final float LEAN = 0.70710677F;
     /** How much wider than the node the shell around it is drawn. */
     private static final float SHELL = 1.35F;
 
@@ -64,7 +67,8 @@ public class NodeStabilizerRenderer implements BlockEntityRenderer<NodeStabilize
         for (int index = 0; index < ARMS.length; index++) {
             Direction way = FACING[index];
             pose.pushPose();
-            pose.translate(way.getStepX() * out, 0.0F, way.getStepZ() * out);
+            // an arm slides along the way it leans -- up and out together -- not sideways out of the stone
+            pose.translate(way.getStepX() * out * LEAN, out * LEAN, way.getStepZ() * out * LEAN);
             drawArm(pose, buffers, ARMS[index], light, overlay);
             pose.popPose();
         }
@@ -130,5 +134,12 @@ public class NodeStabilizerRenderer implements BlockEntityRenderer<NodeStabilize
     @Override
     public int getViewDistance() {
         return 96;
+    }
+
+    /** The shell sits wherever the node is, which is up and away from the stone the arms stand on. */
+    @Override
+    public AABB getRenderBoundingBox(NodeStabilizerBlockEntity stabilizer) {
+        var anchor = stabilizer.anchor();
+        return new AABB(anchor, anchor).inflate(4.0);
     }
 }
