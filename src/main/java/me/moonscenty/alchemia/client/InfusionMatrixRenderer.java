@@ -36,15 +36,15 @@ public class InfusionMatrixRenderer implements BlockEntityRenderer<InfusionMatri
     /**
      * Where each pillar stands, and how far it is turned.
      * <p>
-     * The model leans towards its own north-east corner, so each of the four is turned to lean back in towards
-     * the middle. A quarter turn here is counter-clockwise seen from above, the other way round from the turn a
+     * The model leans towards its own south-east corner, so each of the four is turned to lean back in towards the
+     * middle. A quarter turn here is counter-clockwise seen from above, the other way round from the turn a
      * blockstate gives a model, which is why these are written out rather than worked out.
      */
     private static final float[][] PILLARS = {
-            {1, -2, -1, 180},
-            {1, -2, 1, 90},
-            {-1, -2, 1, 0},
-            {-1, -2, -1, 270},
+            {1, -2, -1, 270},
+            {1, -2, 1, 180},
+            {-1, -2, 1, 90},
+            {-1, -2, -1, 0},
     };
 
     /** How far each stone sits from the middle, and how big it is drawn. */

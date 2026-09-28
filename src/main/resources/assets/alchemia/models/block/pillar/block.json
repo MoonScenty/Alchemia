@@ -4,7 +4,6 @@
   "flip_v": true,
   "textures": {
     "arcane_stone": "alchemia:block/arcane_stone",
-    "arcane_stone_bricks": "alchemia:block/arcane_stone_bricks",
     "arcane_stone_bricks_glyphed": "alchemia:block/arcane_stone_bricks_glyphed",
     "particle": "alchemia:block/arcane_stone"
   },
