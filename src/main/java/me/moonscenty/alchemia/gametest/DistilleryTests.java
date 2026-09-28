@@ -4,6 +4,7 @@ import java.util.List;
 
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.block.JarBlock;
+import me.moonscenty.alchemia.block.entity.AlembicBlockEntity;
 import me.moonscenty.alchemia.block.entity.JarBlockEntity;
 import me.moonscenty.alchemia.crafting.LabelRecipe;
 import me.moonscenty.alchemia.item.PhialItem;
@@ -16,12 +17,14 @@ import net.minecraft.core.Direction;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.GameType;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.gametest.GameTestHolder;
@@ -44,13 +47,30 @@ public class DistilleryTests {
         return (JarBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(at));
     }
 
-    /** Puts the stack in a hand and uses it on the top of that block, the way a person would. */
+    /**
+     * Right-clicks the top of a block with something in hand, the whole way round.
+     * <p>
+     * The whole way round matters. Minecraft asks the block about the item first, then asks the block on its own,
+     * and only if both pass does it ask the item -- so a block that answers every click with a sentence about its
+     * contents is a block no item can ever be used on. Calling the item straight would prove nothing about that.
+     */
     private static void useOn(GameTestHelper helper, BlockPos at, ItemStack held) {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, held);
         BlockPos where = helper.absolutePos(at);
         BlockHitResult hit = new BlockHitResult(Vec3.atCenterOf(where), Direction.UP, where, false);
-        held.getItem().useOn(new UseOnContext(player, InteractionHand.MAIN_HAND, hit));
+        BlockState state = helper.getLevel().getBlockState(where);
+
+        ItemInteractionResult first = state.useItemOn(player.getMainHandItem(), helper.getLevel(), player,
+                InteractionHand.MAIN_HAND, hit);
+        if (first.consumesAction()) {
+            return;
+        }
+        if (first == ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION
+                && state.useWithoutItem(helper.getLevel(), player, hit).consumesAction()) {
+            return;
+        }
+        player.getMainHandItem().useOn(new UseOnContext(player, InteractionHand.MAIN_HAND, hit));
     }
 
     private static ItemStack phialOf(net.minecraft.core.Holder<me.moonscenty.alchemia.aspect.Aspect> aspect) {
@@ -70,6 +90,34 @@ public class DistilleryTests {
 
         useOn(helper, START, phialOf(ModAspects.FIRE));
         helper.assertValueEqual(jar.amount(), PhialItem.DRAUGHT, "and poured it back");
+        helper.succeed();
+    }
+
+    /**
+     * A vessel that answers every click with a sentence about itself is a vessel nothing can be used on.
+     * <p>
+     * The jar and the alembic both say what is in them when you click them, which is worth having. What is not
+     * worth having is that sentence eating the click: for a while a phial held against a jar did nothing at all,
+     * because the jar got there first and said "Fire, 8 of 64" instead.
+     */
+    @GameTest(template = TEMPLATE)
+    public static void aVesselDoesNotTalkOverThePhial(GameTestHelper helper) {
+        JarBlockEntity jar = jar(helper, START);
+        for (int one = 0; one < PhialItem.DRAUGHT; one++) {
+            jar.accept(ModAspects.FIRE);
+        }
+
+        useOn(helper, START, new ItemStack(ModItems.PHIAL.get()));
+        helper.assertValueEqual(jar.amount(), 0, "the phial got at it through the jar being chatty");
+
+        helper.setBlock(START.above(), ModBlocks.ALEMBIC.get());
+        AlembicBlockEntity alembic = (AlembicBlockEntity) helper.getLevel()
+                .getBlockEntity(helper.absolutePos(START.above()));
+        for (int one = 0; one < PhialItem.DRAUGHT; one++) {
+            alembic.accept(ModAspects.WATER);
+        }
+        useOn(helper, START.above(), new ItemStack(ModItems.PHIAL.get()));
+        helper.assertValueEqual(alembic.amount(), 0, "and at the alembic too");
         helper.succeed();
     }
 

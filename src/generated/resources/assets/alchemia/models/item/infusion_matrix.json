@@ -1,5 +1,5 @@
 {
-  "parent": "alchemia:block/infusion_cube",
+  "parent": "alchemia:block/infusion_cluster",
   "display": {
     "firstperson_lefthand": {
       "rotation": [

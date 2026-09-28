@@ -156,6 +156,12 @@ public class JarBlock extends BaseEntityBlock {
         if (!(level.getBlockEntity(pos) instanceof JarBlockEntity jar)) {
             return InteractionResult.PASS;
         }
+        // a block that only reports what is in it must not swallow the click: Minecraft asks the block with
+        // the item first, then the block on its own, and only then the item itself. A jar that answers a phial
+        // with a sentence about its contents is a jar the phial can never be used on.
+        if (!player.getMainHandItem().isEmpty()) {
+            return InteractionResult.PASS;
+        }
         if (level.isClientSide) {
             return InteractionResult.SUCCESS;
         }

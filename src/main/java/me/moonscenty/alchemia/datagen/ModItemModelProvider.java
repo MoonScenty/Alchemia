@@ -33,8 +33,9 @@ public class ModItemModelProvider extends ItemModelProvider {
         held("crucible", modLoc("block/crucible"));
         held("jar", modLoc("block/jar/jar"));
         held("arcane_pedestal", modLoc("block/pedestal"));
-        // one of the eight stones. Eight of them at slot size would be a smudge; one reads as what it is
-        held("infusion_matrix", modLoc("block/infusion_cube"));
+        // all eight stones, turned the way the renderer turns them. A model cannot turn a box a quarter, so the
+        // turning was done on paper and written out as which glyph lands on which side (tools/gen_matrix_item.py)
+        held("infusion_matrix", modLoc("block/infusion_cluster"));
         // a straight length rather than the bare middle: a four pixel cube in a slot is a speck
         for (String kind : new String[] {"tube", "tube_valve", "tube_oneway", "tube_restrict", "tube_filter",
                 "tube_buffer"}) {
