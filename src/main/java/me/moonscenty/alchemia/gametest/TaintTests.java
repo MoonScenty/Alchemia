@@ -20,6 +20,7 @@ import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
@@ -175,6 +176,52 @@ public class TaintTests {
         helper.assertTrue(!happened.name().equals("warp") && !happened.name().equals("sickness"),
                 "with nobody about, neither warp nor sickness should have come of it");
         helper.assertTrue(fluxLeft(helper) == before - happened.cost(), "and the chunk should have paid for it");
+        helper.succeed();
+    }
+
+    /** The six sides a fibre can take hold of, for the tests that check all of them at once. */
+    private static final BooleanProperty[] SIDES = {
+            TaintFibreBlock.NORTH, TaintFibreBlock.EAST, TaintFibreBlock.SOUTH,
+            TaintFibreBlock.WEST, TaintFibreBlock.UP, TaintFibreBlock.DOWN,
+    };
+
+    /**
+     * Fibres take hold of leaves.
+     * <p>
+     * Leaves hold nothing up -- no torch, no ladder -- so asking whether a fibre could stand on them said no, and a
+     * fibre in a canopy the taint had eaten drew no face at all. It was still there to walk through and to break;
+     * there was simply nothing to see.
+     */
+    @GameTest(template = TEMPLATE)
+    public static void fibresTakeHoldOfLeaves(GameTestHelper helper) {
+        for (Direction side : Direction.values()) {
+            helper.setBlock(HERE.relative(side), Blocks.OAK_LEAVES);
+        }
+        BlockState fibres = TaintSpread.fibres(helper.getLevel(), helper.absolutePos(HERE));
+        for (BooleanProperty side : SIDES) {
+            helper.assertTrue(fibres.getValue(side), "a fibre walled in by leaves should hold on at " + side.getName());
+        }
+
+        helper.setBlock(HERE, fibres);
+        helper.assertTrue(fibres.canSurvive(helper.getLevel(), helper.absolutePos(HERE)), "and it should stay there");
+        helper.succeed();
+    }
+
+    /**
+     * A fibre with nothing at all to hold on to goes, rather than standing about drawing nothing.
+     * <p>
+     * Every part of the fibre's picture is a sheet spread over some neighbouring face. With no face to spread over
+     * there is no picture, and an invisible block is worse than an empty one.
+     */
+    @GameTest(template = TEMPLATE)
+    public static void aFibreWithNothingToHoldGoes(GameTestHelper helper) {
+        helper.setBlock(HERE.below(), Blocks.STONE);
+        helper.setBlock(HERE, TaintSpread.fibres(helper.getLevel(), helper.absolutePos(HERE)));
+        helper.assertBlockPresent(ModBlocks.TAINT_FIBRE.get(), HERE);
+
+        // the floor it was lying on is taken away and there is nothing else within reach
+        helper.setBlock(HERE.below(), Blocks.AIR);
+        helper.assertBlockPresent(Blocks.AIR, HERE);
         helper.succeed();
     }
 }

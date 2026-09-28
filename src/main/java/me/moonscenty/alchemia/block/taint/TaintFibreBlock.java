@@ -18,6 +18,7 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.MultifaceBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -81,13 +82,35 @@ public class TaintFibreBlock extends Block implements Tainted {
 
     // --- taking hold ---------------------------------------------------------
 
+    /**
+     * Whether there is a whole face on that side for a fibre to spread itself over.
+     * <p>
+     * Not the same question as whether something can be stood on. Leaves hold nothing up -- no torch, no ladder --
+     * but they are a full face all the same, and a creeping thing lies flat across them; the game asks it this way
+     * for its own glowing lichen. Asking the standing-on question instead left fibres in a tainted canopy with no
+     * side to draw themselves on, which is to say invisible.
+     */
+    public static boolean clingsTo(LevelReader level, BlockPos pos, Direction side) {
+        BlockPos next = pos.relative(side);
+        return MultifaceBlock.canAttachTo(level, side, next, level.getBlockState(next));
+    }
+
     /** Reads which faces there are to cling to, and what grows here, off the surroundings. */
     public static BlockState fitted(LevelReader level, BlockPos pos, BlockState state) {
         for (Direction side : Direction.values()) {
-            BlockPos next = pos.relative(side);
-            state = state.setValue(FACES.get(side), level.getBlockState(next).isFaceSturdy(level, next, side.getOpposite()));
+            state = state.setValue(FACES.get(side), clingsTo(level, pos, side));
         }
         return state.setValue(GROWTH, growthAt(pos, state.getValue(DOWN), state.getValue(UP)));
+    }
+
+    /** Whether a fibre has taken hold of anything at all. One that has not is nothing to look at. */
+    private static boolean holdsOn(BlockState state) {
+        for (BooleanProperty face : FACES.values()) {
+            if (state.getValue(face)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -119,9 +142,18 @@ public class TaintFibreBlock extends Block implements Tainted {
     }
 
     @Override
+    protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
+        return holdsOn(fitted(level, pos, state));
+    }
+
+    @Override
     protected BlockState updateShape(BlockState state, Direction direction, BlockState neighborState,
             LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
         BlockState refitted = fitted(level, pos, state);
+        // nothing left to hold on to: a fibre that draws no face at all would be an invisible block
+        if (!holdsOn(refitted)) {
+            return Blocks.AIR.defaultBlockState();
+        }
         // a plain fibre with nothing untainted to hold has lost its purpose
         if (refitted.getValue(GROWTH) == 0 && TaintSpread.onlyBesideTaint(level, pos)) {
             return Blocks.AIR.defaultBlockState();

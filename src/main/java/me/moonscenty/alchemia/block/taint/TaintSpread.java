@@ -98,8 +98,7 @@ public final class TaintSpread {
 
     public static boolean besideSolid(LevelReader level, BlockPos pos) {
         for (Direction side : Direction.values()) {
-            BlockPos next = pos.relative(side);
-            if (level.getBlockState(next).isFaceSturdy(level, next, side.getOpposite())) {
+            if (TaintFibreBlock.clingsTo(level, pos, side)) {
                 return true;
             }
         }
@@ -114,7 +113,7 @@ public final class TaintSpread {
         for (Direction side : Direction.values()) {
             BlockPos next = pos.relative(side);
             BlockState there = level.getBlockState(next);
-            if (!there.isAir() && !there.is(ModTags.Blocks.TAINT) && there.isFaceSturdy(level, next, side.getOpposite())) {
+            if (!there.isAir() && !there.is(ModTags.Blocks.TAINT) && TaintFibreBlock.clingsTo(level, pos, side)) {
                 return false;
             }
         }
