@@ -15,6 +15,7 @@ import me.moonscenty.alchemia.research.ResearchCategory;
 import me.moonscenty.alchemia.research.ResearchEntry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
@@ -90,6 +91,14 @@ public class ModResearchProvider {
                 AspectList.of(ModAspects.METAL, 6).add(ModAspects.EXCHANGE, 4).add(ModAspects.FIRE, 2),
                 List.of("crucible"), false, NodeShape.PLAIN, 3,
                 "alchemium_ingot_from_iron", "brass_ingot_from_iron");
+
+        // both are the crucible turned on a fire rather than on a metal: one holds the heat, the other the light
+        entry(context, "alumentum", ModResearch.ALCHEMY, ModItems.ALUMENTUM, -3, 2,
+                AspectList.of(ModAspects.FIRE, 6).add(ModAspects.ENERGY, 4).add(ModAspects.ENTROPY, 2),
+                List.of("crucible"), false, NodeShape.PLAIN, 2, "alumentum");
+        entry(context, "nitor", ModResearch.ALCHEMY, ModBlocks.NITOR.get(DyeColor.WHITE), -3, 4,
+                AspectList.of(ModAspects.LIGHT, 6).add(ModAspects.FIRE, 4).add(ModAspects.ENERGY, 4),
+                List.of("crucible"), false, NodeShape.PLAIN, 2, "nitor");
 
         // --- distilling, and the plumbing that follows from it ---------------------------------------------
 

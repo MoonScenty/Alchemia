@@ -80,6 +80,10 @@ public class AlchemiaClientSetup {
         event.register((stack, tint) -> tint == 1 ? named(stack) : PLAIN, ModItems.JAR_LABEL.get());
         // the liquid standing in a jar held in the hand, in the colour of whatever it is
         event.register((stack, tint) -> tint == 0 ? inside(stack) : PLAIN, ModBlocks.JAR.get().asItem());
+        // a flame in a slot is two layers: the grey flame, which takes the dye, and its bead, which does not.
+        // a dye's colour is already opaque, so unlike the phial and the label it needs no wrapping
+        ModBlocks.NITOR.forEach((colour, flame) -> event.register(
+                (stack, tint) -> tint == 0 ? colour.getTextureDiffuseColor() : PLAIN, flame.get().asItem()));
     }
 
     /**
@@ -141,6 +145,10 @@ public class AlchemiaClientSetup {
                         ? (tint == 1 ? jar.label().map(aspect -> aspect.value().color()).orElse(0xFFFFFF)
                                      : jar.colour())
                         : 0xFFFFFF, ModBlocks.JAR.get());
+
+        // a flame is drawn in grey and painted by the kind of flame it is; its bead is a second layer, undyed
+        ModBlocks.NITOR.forEach((colour, flame) -> event.register(
+                (state, level, pos, tint) -> tint == 0 ? colour.getTextureDiffuseColor() : -1, flame.get()));
     }
 
     /**

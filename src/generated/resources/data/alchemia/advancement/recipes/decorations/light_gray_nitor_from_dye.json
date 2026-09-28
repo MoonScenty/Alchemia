@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_nitor": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#alchemia:nitor"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "alchemia:light_gray_nitor_from_dye"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_nitor"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "alchemia:light_gray_nitor_from_dye"
+    ]
+  }
+}

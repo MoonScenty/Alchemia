@@ -1,0 +1,51 @@
+{
+  "ambientocclusion": false,
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "particle": "alchemia:block/nitor",
+    "flame": "alchemia:block/nitor",
+    "core": "alchemia:block/nitor_core"
+  },
+  "elements": [
+    {
+      "from": [0.8, 0, 8],
+      "to": [15.2, 16, 8],
+      "rotation": {"origin": [8, 8, 8], "axis": "y", "angle": 45, "rescale": true},
+      "shade": false,
+      "faces": {
+        "north": {"uv": [0, 0, 16, 16], "texture": "#flame", "tintindex": 0},
+        "south": {"uv": [0, 0, 16, 16], "texture": "#flame", "tintindex": 0}
+      }
+    },
+    {
+      "from": [0.8, 0, 8],
+      "to": [15.2, 16, 8],
+      "rotation": {"origin": [8, 8, 8], "axis": "y", "angle": -45, "rescale": true},
+      "shade": false,
+      "faces": {
+        "north": {"uv": [0, 0, 16, 16], "texture": "#flame", "tintindex": 0},
+        "south": {"uv": [0, 0, 16, 16], "texture": "#flame", "tintindex": 0}
+      }
+    },
+    {
+      "from": [5.6, 2.6, 7.8],
+      "to": [10.4, 6.4, 8.2],
+      "rotation": {"origin": [8, 8, 8], "axis": "y", "angle": 45, "rescale": true},
+      "shade": false,
+      "faces": {
+        "north": {"uv": [5.6, 9.6, 10.4, 13.4], "texture": "#core"},
+        "south": {"uv": [5.6, 9.6, 10.4, 13.4], "texture": "#core"}
+      }
+    },
+    {
+      "from": [5.6, 2.6, 7.8],
+      "to": [10.4, 6.4, 8.2],
+      "rotation": {"origin": [8, 8, 8], "axis": "y", "angle": -45, "rescale": true},
+      "shade": false,
+      "faces": {
+        "north": {"uv": [5.6, 9.6, 10.4, 13.4], "texture": "#core"},
+        "south": {"uv": [5.6, 9.6, 10.4, 13.4], "texture": "#core"}
+      }
+    }
+  ]
+}

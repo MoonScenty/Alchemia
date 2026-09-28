@@ -1,0 +1,16 @@
+{
+  "type": "alchemia:crucible",
+  "aspects": {
+    "alchemia:ignis": 3,
+    "alchemia:perditio": 3,
+    "alchemia:potentia": 3
+  },
+  "catalyst": {
+    "tag": "minecraft:coals"
+  },
+  "research": "alchemia:alumentum",
+  "result": {
+    "count": 1,
+    "id": "alchemia:alumentum"
+  }
+}

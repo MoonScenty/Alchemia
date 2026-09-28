@@ -6,11 +6,13 @@ import me.moonscenty.alchemia.block.entity.AlembicBlockEntity;
 import me.moonscenty.alchemia.block.entity.EssentiaSmelterBlockEntity;
 import me.moonscenty.alchemia.registry.ModAspects;
 import me.moonscenty.alchemia.registry.ModBlocks;
+import me.moonscenty.alchemia.registry.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
@@ -23,13 +25,19 @@ import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 public class SmelterTests {
     private static final String TEMPLATE = "empty_32x40x32";
     private static final BlockPos WHERE = new BlockPos(2, 1, 2);
+    /** Long enough that the difference between ten ticks a point and eight is more than one point. */
+    private static final int WATCHED = 200;
 
     private static EssentiaSmelterBlockEntity smelter(GameTestHelper helper, ItemStack input) {
+        return smelter(helper, input, new ItemStack(Items.COAL, 8));
+    }
+
+    private static EssentiaSmelterBlockEntity smelter(GameTestHelper helper, ItemStack input, ItemStack fuel) {
         helper.setBlock(WHERE, ModBlocks.ESSENTIA_SMELTER.get());
         EssentiaSmelterBlockEntity smelter =
                 (EssentiaSmelterBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(WHERE));
         smelter.setItem(EssentiaSmelterBlockEntity.SLOT_INPUT, input);
-        smelter.setItem(EssentiaSmelterBlockEntity.SLOT_FUEL, new ItemStack(Items.COAL, 8));
+        smelter.setItem(EssentiaSmelterBlockEntity.SLOT_FUEL, fuel);
         return smelter;
     }
 
@@ -91,6 +99,40 @@ public class SmelterTests {
                 "the lower one stands on its own legs");
         helper.assertFalse(helper.getBlockState(WHERE.above(2)).getValue(AlembicBlock.LEGS),
                 "the upper one stands on the lower");
+        helper.succeed();
+    }
+
+    /**
+     * Alumentum burns for four coals and hurries the work by a fifth.
+     * <p>
+     * Both halves matter and only one of them is visible: a fuel that lasted four times as long but worked at the
+     * same speed would be a convenience, and this is meant to be something a player spends to go faster.
+     */
+    @GameTest(template = TEMPLATE, timeoutTicks = 400)
+    public static void alumentumBurnsLongAndHurriesTheWork(GameTestHelper helper) {
+        helper.assertValueEqual(new ItemStack(ModItems.ALUMENTUM.get()).getBurnTime(RecipeType.SMELTING),
+                new ItemStack(Items.COAL).getBurnTime(RecipeType.SMELTING) * 4,
+                "alumentum is worth four coals in anything that takes fuel");
+
+        // the same fire, the same iron, the same number of ticks: the hurried one is further along
+        EssentiaSmelterBlockEntity coal = smelter(helper, new ItemStack(Items.IRON_INGOT, 32));
+        run(helper, coal, WATCHED);
+
+        BlockPos aside = WHERE.east(4);
+        helper.setBlock(aside, ModBlocks.ESSENTIA_SMELTER.get());
+        EssentiaSmelterBlockEntity fired =
+                (EssentiaSmelterBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(aside));
+        fired.setItem(EssentiaSmelterBlockEntity.SLOT_INPUT, new ItemStack(Items.IRON_INGOT, 32));
+        fired.setItem(EssentiaSmelterBlockEntity.SLOT_FUEL, new ItemStack(ModItems.ALUMENTUM.get(), 4));
+        BlockPos at = helper.absolutePos(aside);
+        for (int tick = 0; tick < WATCHED; tick++) {
+            EssentiaSmelterBlockEntity.tick(helper.getLevel(), at, helper.getLevel().getBlockState(at), fired);
+        }
+
+        helper.assertTrue(coal.held().total() > 0, "the one on coal got somewhere");
+        helper.assertTrue(fired.held().total() > coal.held().total(),
+                "and the one on alumentum got further in the same time: "
+                        + fired.held().total() + " against " + coal.held().total());
         helper.succeed();
     }
 }

@@ -11,6 +11,7 @@ import me.moonscenty.alchemia.registry.ModItems;
 import me.moonscenty.alchemia.registry.StoneSet;
 import me.moonscenty.alchemia.registry.WoodSet;
 import net.minecraft.data.PackOutput;
+import net.minecraft.world.item.DyeColor;
 import net.neoforged.neoforge.common.data.LanguageProvider;
 
 /**
@@ -20,6 +21,25 @@ public abstract class ModLanguageProvider extends LanguageProvider {
     protected ModLanguageProvider(PackOutput output, String locale) {
         super(output, Alchemia.MODID, locale);
     }
+
+    /** What each dye is called, for the sixteen flames and anything else that comes in a set of them. */
+    private static final Map<DyeColor, String[]> DYE_NAMES = Map.ofEntries(
+            Map.entry(DyeColor.WHITE, new String[]{"White", "하얀"}),
+            Map.entry(DyeColor.ORANGE, new String[]{"Orange", "주황"}),
+            Map.entry(DyeColor.MAGENTA, new String[]{"Magenta", "자홍"}),
+            Map.entry(DyeColor.LIGHT_BLUE, new String[]{"Light Blue", "하늘"}),
+            Map.entry(DyeColor.YELLOW, new String[]{"Yellow", "노란"}),
+            Map.entry(DyeColor.LIME, new String[]{"Lime", "연두"}),
+            Map.entry(DyeColor.PINK, new String[]{"Pink", "분홍"}),
+            Map.entry(DyeColor.GRAY, new String[]{"Gray", "회색"}),
+            Map.entry(DyeColor.LIGHT_GRAY, new String[]{"Light Gray", "밝은 회색"}),
+            Map.entry(DyeColor.CYAN, new String[]{"Cyan", "청록"}),
+            Map.entry(DyeColor.PURPLE, new String[]{"Purple", "보라"}),
+            Map.entry(DyeColor.BLUE, new String[]{"Blue", "파란"}),
+            Map.entry(DyeColor.BROWN, new String[]{"Brown", "갈색"}),
+            Map.entry(DyeColor.GREEN, new String[]{"Green", "초록"}),
+            Map.entry(DyeColor.RED, new String[]{"Red", "빨간"}),
+            Map.entry(DyeColor.BLACK, new String[]{"Black", "검은"}));
 
     /** Picks the text for this provider's language. */
     protected abstract String pick(String english, String korean);
@@ -66,6 +86,11 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         addItem(ModItems.BRASS_PLATE, pick("Brass Plate", "황동 판"));
         addItem(ModItems.IRON_PLATE, pick("Iron Plate", "철 판"));
         addItem(ModItems.SALIS_MUNDUS, pick("Salis Mundus", "살리스 문두스"));
+        addItem(ModItems.ALUMENTUM, pick("Alumentum", "알루멘툼"));
+        // one flame to a dye, and the dye's own name in front of it -- white is simply "nitor"
+        ModBlocks.NITOR.forEach((colour, flame) -> addBlock(flame,
+                colour == DyeColor.WHITE ? pick("Nitor", "니토르")
+                        : pick(DYE_NAMES.get(colour)[0] + " Nitor", DYE_NAMES.get(colour)[1] + " 니토르")));
         addItem(ModItems.VOID_SEED, pick("Void Seed", "공허 씨앗"));
         addItem(ModItems.VOID_INGOT, pick("Void Ingot", "공허 주괴"));
         addItem(ModItems.VOID_NUGGET, pick("Void Nugget", "공허 조각"));
@@ -281,6 +306,12 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                 {"void_metal", "Void Metal", "공허 금속",
                  "A seed steeped in darkness stops being a seed, and what it becomes, steeped again in metal, sets as an ingot. It will not set at all without a point of flux in the water: the metal wants something wrong in it. What is drawn from it gives back a third of every working, and the caps drawn from it are the last a wand will ever want.",
                  "어둠에 담근 씨앗은 씨앗이기를 그만두고, 그렇게 된 것을 다시 금속에 담그면 주괴로 굳는다. 물에 플럭스가 한 점 없으면 아예 굳지 않는다. 이 금속은 제 안에 잘못된 것을 원한다. 여기서 뽑아낸 캡은 일할 때마다 셋에 하나를 돌려주며, 완드가 바랄 마지막 캡이다."},
+                {"alumentum", "Alumentum", "알루멘툼",
+                 "Coal that has been round again. What comes out of the water holds four times the fire it went in with, and in an essentia smelter it does one thing more: the work goes a fifth quicker while it lasts. A slow furnace is the price of a smelter, and this is the one thing that can be spent against it.",
+                 "한 번 더 돌린 석탄이다. 물에서 나온 것은 들어갈 때의 네 배를 품고 있고, 에센시아 제련로에서는 한 가지를 더 한다 — 타는 동안 일이 5분의 1만큼 빨라진다. 느린 것이 제련로의 값인데, 그 값에 맞설 수 있는 것이 이것 하나다."},
+                {"nitor", "Nitor", "니토르",
+                 "Light with nothing burning under it. It never goes out and never wants feeding, which is worth the glowstone it costs, and it hangs wherever it is put -- floor, wall, ceiling, open air. A flame that needed something to stand on would be a torch. A dye put to one changes its colour and nothing else; there are sixteen and none is the original.",
+                 "밑에서 타는 것이 없는 불빛이다. 꺼지지 않고 먹일 것도 없으니 발광석 값을 한다. 바닥이든 벽이든 천장이든 허공이든 놓은 자리에 그대로 걸린다. 받칠 것이 있어야 하는 불꽃은 횃불이다. 염료를 대면 색만 바뀐다. 열여섯 가지가 있고 그중 원래 것은 없다."},
                 {"warp", "Warp", "뒤틀림",
                  "Look too long into what should not be, and it begins looking back. The damage is not to the world but to the one studying it, and it does not undo itself with rest.",
                  "있어서는 안 될 것을 오래 들여다보면, 그것도 당신을 들여다보기 시작한다. 상하는 것은 세계가 아니라 그것을 연구하는 자이며, 쉰다고 해서 되돌아오지 않는다."},

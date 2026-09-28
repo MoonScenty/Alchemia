@@ -5,6 +5,7 @@ import java.util.EnumMap;
 import java.util.Map;
 
 import me.moonscenty.alchemia.Alchemia;
+import me.moonscenty.alchemia.item.AlumentumItem;
 import me.moonscenty.alchemia.item.JarLabelItem;
 import me.moonscenty.alchemia.item.PhialItem;
 import me.moonscenty.alchemia.item.WandItem;
@@ -73,6 +74,9 @@ public class ModItems {
     public static final DeferredItem<Item> BRASS_PLATE = ITEMS.registerSimpleItem("brass_plate");
     public static final DeferredItem<Item> IRON_PLATE = ITEMS.registerSimpleItem("iron_plate");
     public static final DeferredItem<Item> SALIS_MUNDUS = ITEMS.registerSimpleItem("salis_mundus");
+    /** Coal that has been through the crucible: four times the fire in it, and it hurries a smelter along. */
+    public static final DeferredItem<AlumentumItem> ALUMENTUM =
+            ITEMS.register("alumentum", () -> new AlumentumItem(new Item.Properties()));
 
     // --- the fittings of the distillery ---------------------------------------------------------------------
 

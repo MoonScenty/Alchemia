@@ -36,12 +36,14 @@ import me.moonscenty.alchemia.block.taint.TaintFibreBlock;
 import me.moonscenty.alchemia.block.taint.TaintGroundBlock;
 import me.moonscenty.alchemia.block.taint.TaintLogBlock;
 import me.moonscenty.alchemia.block.CinderpearlBlock;
+import me.moonscenty.alchemia.block.NitorBlock;
 import me.moonscenty.alchemia.worldgen.ModWorldgen;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DropExperienceBlock;
@@ -204,6 +206,9 @@ public class ModBlocks {
 
     public static final Map<CrystalType, DeferredBlock<CrystalBlock>> CRYSTALS = registerCrystals();
 
+    /** One to a dye, sharing a grey picture that each paints with its own colour. */
+    public static final Map<DyeColor, DeferredBlock<NitorBlock>> NITOR = registerNitor();
+
     public static final DeferredBlock<Block> ALCHEMIUM_BLOCK = register("alchemium_block",
             () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).mapColor(MapColor.COLOR_PURPLE)));
     public static final DeferredBlock<Block> BRASS_BLOCK = register("brass_block",
@@ -278,6 +283,27 @@ public class ModBlocks {
         return BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BARS)
                 .mapColor(MapColor.GOLD)
                 .noOcclusion();
+    }
+
+    private static Map<DyeColor, DeferredBlock<NitorBlock>> registerNitor() {
+        Map<DyeColor, DeferredBlock<NitorBlock>> flames = new EnumMap<>(DyeColor.class);
+        for (DyeColor colour : DyeColor.values()) {
+            flames.put(colour, register(name(colour), () -> new NitorBlock(BlockBehaviour.Properties.of()
+                    .mapColor(colour)
+                    .strength(0.1F)
+                    .sound(SoundType.WOOL)
+                    .lightLevel(state -> 15)
+                    .noCollission()
+                    .noOcclusion()
+                    .instabreak()
+                    .pushReaction(PushReaction.DESTROY), colour)));
+        }
+        return Map.copyOf(flames);
+    }
+
+    /** White is simply "nitor"; the other fifteen say which dye went into them. */
+    public static String name(DyeColor colour) {
+        return colour == DyeColor.WHITE ? "nitor" : colour.getName() + "_nitor";
     }
 
     private static Map<CrystalType, DeferredBlock<CrystalBlock>> registerCrystals() {

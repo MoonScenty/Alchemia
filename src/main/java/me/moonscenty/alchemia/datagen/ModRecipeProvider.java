@@ -38,6 +38,8 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.ShapedRecipePattern;
 import net.minecraft.world.level.ItemLike;
@@ -464,6 +466,34 @@ public class ModRecipeProvider extends RecipeProvider {
         crucible(output, "brass_ingot_from_iron", Ingredient.of(Tags.Items.INGOTS_IRON),
                 AspectList.of(ModAspects.ENERGY, 1).add(ModAspects.WATER, 1),
                 new ItemStack(ModItems.BRASS_INGOT.get()), "metallurgy");
+
+        // coal boiled until it is four coals, and glowstone boiled until it is light with nothing under it
+        crucible(output, "alumentum", Ingredient.of(ItemTags.COALS),
+                AspectList.of(ModAspects.ENERGY, 3).add(ModAspects.FIRE, 3).add(ModAspects.ENTROPY, 3),
+                new ItemStack(ModItems.ALUMENTUM.get()), "alumentum");
+        crucible(output, "nitor", Ingredient.of(Items.GLOWSTONE_DUST),
+                AspectList.of(ModAspects.ENERGY, 3).add(ModAspects.FIRE, 3).add(ModAspects.LIGHT, 3),
+                new ItemStack(ModBlocks.NITOR.get(DyeColor.WHITE).get(), NITOR_AT_A_TIME), "nitor");
+        nitorDyes(output);
+    }
+
+    /** How many flames one boiling of glowstone makes. */
+    private static final int NITOR_AT_A_TIME = 4;
+
+    /**
+     * A flame takes a dye like wool does.
+     * <p>
+     * Any of the sixteen goes in and the dyed one comes out, so a flame can be changed its mind about rather than
+     * boiled again. The white one is no more the original than the rest -- it is only the one the crucible makes.
+     */
+    private void nitorDyes(RecipeOutput output) {
+        for (DyeColor colour : DyeColor.values()) {
+            ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModBlocks.NITOR.get(colour).get())
+                    .requires(ModTags.Items.NITOR)
+                    .requires(DyeItem.byColor(colour))
+                    .unlockedBy("has_nitor", has(ModTags.Items.NITOR))
+                    .save(output, Alchemia.id(ModBlocks.name(colour) + "_from_dye"));
+        }
     }
 
     /**

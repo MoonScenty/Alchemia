@@ -5,8 +5,10 @@ import me.moonscenty.alchemia.aspect.AspectList;
 import me.moonscenty.alchemia.aspect.Aspects;
 import me.moonscenty.alchemia.block.EssentiaSmelterBlock;
 import me.moonscenty.alchemia.essentia.EssentiaHolder;
+import me.moonscenty.alchemia.item.AlumentumItem;
 import me.moonscenty.alchemia.menu.EssentiaSmelterMenu;
 import me.moonscenty.alchemia.registry.ModBlockEntities;
+import me.moonscenty.alchemia.registry.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
@@ -55,6 +57,8 @@ public class EssentiaSmelterBlockEntity extends BlockEntity implements WorldlyCo
     public static final int CAPACITY = 50;
     /** How long a point of essentia takes to boil out of something, in ticks. */
     private static final int PER_ASPECT = 10;
+    /** What a point costs while alumentum is in the fire: four fifths of the usual, as the original had it. */
+    private static final int PER_ASPECT_HURRIED = PER_ASPECT * AlumentumItem.HURRIES_BY / 5;
     /** How often it lets one point go upwards. */
     private static final int POURS_EVERY = 40;
 
@@ -65,6 +69,8 @@ public class EssentiaSmelterBlockEntity extends BlockEntity implements WorldlyCo
     private int cooked;
     private int cooksFor;
     private int counter;
+    /** Whether what is burning now was alumentum, remembered because the fuel is gone by the time it matters. */
+    private boolean hurried;
 
     /**
      * What the screen needs that is not an item: how far the fuel and the work have got.
@@ -173,6 +179,7 @@ public class EssentiaSmelterBlockEntity extends BlockEntity implements WorldlyCo
         }
         ItemStack fuel = contents.get(SLOT_FUEL);
         int lasts = fuel.isEmpty() ? 0 : fuel.getBurnTime(RecipeType.SMELTING);
+        hurried = fuel.is(ModItems.ALUMENTUM.get());
         if (lasts <= 0) {
             return;
         }
@@ -194,7 +201,7 @@ public class EssentiaSmelterBlockEntity extends BlockEntity implements WorldlyCo
         }
         ItemStack input = contents.get(SLOT_INPUT);
         AspectList made = Aspects.of(input);
-        cooksFor = made.total() * PER_ASPECT;
+        cooksFor = Math.max(1, made.total() * (hurried ? PER_ASPECT_HURRIED : PER_ASPECT));
         if (++cooked < cooksFor) {
             return;
         }
@@ -325,6 +332,7 @@ public class EssentiaSmelterBlockEntity extends BlockEntity implements WorldlyCo
         burning = tag.getInt("burning");
         burnsFor = tag.getInt("burnsFor");
         cooked = tag.getInt("cooked");
+        hurried = tag.getBoolean("hurried");
         held = AspectList.CODEC
                 .parse(registries.createSerializationContext(NbtOps.INSTANCE), tag.get("held"))
                 .result().orElse(AspectList.EMPTY);
@@ -337,6 +345,7 @@ public class EssentiaSmelterBlockEntity extends BlockEntity implements WorldlyCo
         tag.putInt("burning", burning);
         tag.putInt("burnsFor", burnsFor);
         tag.putInt("cooked", cooked);
+        tag.putBoolean("hurried", hurried);
         AspectList.CODEC
                 .encodeStart(registries.createSerializationContext(NbtOps.INSTANCE), held)
                 .result().ifPresent(written -> tag.put("held", written));

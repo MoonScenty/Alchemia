@@ -60,6 +60,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         nodeStabilizer();
         altar();
         taint();
+        nitor();
 
         ModBlocks.STONE_SETS.forEach(this::stoneSet);
         translucentBlock(ModBlocks.AMBER_BLOCK);
@@ -81,6 +82,23 @@ public class ModBlockStateProvider extends BlockStateProvider {
         taintLog();
         taintFibre();
         fluxGoo();
+    }
+
+    /**
+     * Sixteen flames off one drawing.
+     * <p>
+     * The picture is grey and the colour is put on when it is drawn, so all sixteen name the same model and the
+     * same two pictures. The item is the flame and its bead as two flat layers, the first of which takes the dye.
+     */
+    private void nitor() {
+        ModelFile flame = models().getExistingFile(modLoc("block/nitor"));
+        ModBlocks.NITOR.forEach((colour, block) -> {
+            simpleBlock(block.get(), flame);
+            itemModels().getBuilder(ModBlocks.name(colour))
+                    .parent(itemModels().getExistingFile(mcLoc("item/generated")))
+                    .texture("layer0", modLoc("block/nitor"))
+                    .texture("layer1", modLoc("block/nitor_core"));
+        });
     }
 
     private static final int[] SPOT_WEIGHTS = {4, 1, 1};

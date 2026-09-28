@@ -24,6 +24,8 @@ public class ModItemTagsProvider extends ItemTagsProvider {
 
     @Override
     protected void addTags(HolderLookup.Provider provider) {
+        ModBlocks.NITOR.values().forEach(flame -> tag(ModTags.Items.NITOR).add(flame.get().asItem()));
+
         copy(ModTags.Blocks.ORES_AMBER, ModTags.Items.ORES_AMBER);
         copy(ModTags.Blocks.ORES_CINNABAR, ModTags.Items.ORES_CINNABAR);
         copy(Tags.Blocks.ORES, Tags.Items.ORES);

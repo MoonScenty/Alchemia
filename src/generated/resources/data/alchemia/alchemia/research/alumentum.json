@@ -1,0 +1,25 @@
+{
+  "category": "alchemia:alchemy",
+  "column": -3,
+  "complexity": 2,
+  "icon": "alchemia:alumentum",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.alumentum.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:alumentum"
+    }
+  ],
+  "parents": [
+    "alchemia:crucible"
+  ],
+  "requirements": {
+    "alchemia:ignis": 6,
+    "alchemia:perditio": 2,
+    "alchemia:potentia": 4
+  },
+  "row": 2
+}

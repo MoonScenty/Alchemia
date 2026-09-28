@@ -1,0 +1,16 @@
+{
+  "type": "alchemia:crucible",
+  "aspects": {
+    "alchemia:ignis": 3,
+    "alchemia:lux": 3,
+    "alchemia:potentia": 3
+  },
+  "catalyst": {
+    "item": "minecraft:glowstone_dust"
+  },
+  "research": "alchemia:nitor",
+  "result": {
+    "count": 4,
+    "id": "alchemia:nitor"
+  }
+}

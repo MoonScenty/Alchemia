@@ -72,6 +72,8 @@ public class ModTags {
          * join it.
          */
         public static final TagKey<Item> REVEALS = mod("reveals");
+        /** All sixteen flames, so that a dye can be put to any of them without naming all sixteen. */
+        public static final TagKey<Item> NITOR = mod("nitor");
 
         public static final TagKey<Item> SHARDS = mod("shards");
         public static final TagKey<Item> CLUSTERS = mod("clusters");

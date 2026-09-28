@@ -96,6 +96,7 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
         dropSelf(ModBlocks.AMBER_BRICKS.get());
 
         ModBlocks.PLANTS.forEach(plant -> dropSelf(plant.get()));
+        ModBlocks.NITOR.values().forEach(flame -> dropSelf(flame.get()));
 
         ModBlocks.CRYSTALS.forEach((type, crystal) -> add(crystal.get(), createCrystalDrops(crystal.get(), ModItems.SHARDS.get(type).get())));
     }

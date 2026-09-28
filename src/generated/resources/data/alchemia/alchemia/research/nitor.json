@@ -1,0 +1,25 @@
+{
+  "category": "alchemia:alchemy",
+  "column": -3,
+  "complexity": 2,
+  "icon": "alchemia:nitor",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.nitor.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:nitor"
+    }
+  ],
+  "parents": [
+    "alchemia:crucible"
+  ],
+  "requirements": {
+    "alchemia:ignis": 4,
+    "alchemia:lux": 6,
+    "alchemia:potentia": 4
+  },
+  "row": 4
+}
