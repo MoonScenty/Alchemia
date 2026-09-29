@@ -199,7 +199,10 @@ public class ModItems {
                     () -> new HoeItem(tier, new Item.Properties().attributes(
                             HoeItem.createAttributes(tier, -2.0F, -1.0F)))));
         }
-        return Map.copyOf(made);
+        // unmodifiableMap rather than Map.copyOf: a copied map hands its entries back in an order the
+        // running machine picks for itself, and everything written out of this one -- tag files above all
+        // -- would come out shuffled from one run to the next
+        return Collections.unmodifiableMap(made);
     }
 
     private static Map<String, DeferredItem<Item>> registerMetalArmour() {
@@ -216,7 +219,10 @@ public class ModItems {
                                 new Item.Properties().durability(type.getDurability(lasts.get(metal))))));
             }
         }
-        return Map.copyOf(made);
+        // unmodifiableMap rather than Map.copyOf: a copied map hands its entries back in an order the
+        // running machine picks for itself, and everything written out of this one -- tag files above all
+        // -- would come out shuffled from one run to the next
+        return Collections.unmodifiableMap(made);
     }
 
     /** Alchemium and void alone. Iron, gold and brass are finished when they leave the workbench. */

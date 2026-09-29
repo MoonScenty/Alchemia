@@ -1,12 +1,12 @@
 {
   "values": [
-    "alchemia:alchemium_axe",
-    "alchemia:void_axe",
-    "alchemia:void_pickaxe",
     "alchemia:alchemium_pickaxe",
-    "alchemia:void_shovel",
+    "alchemia:alchemium_axe",
+    "alchemia:alchemium_shovel",
     "alchemia:alchemium_hoe",
-    "alchemia:void_hoe",
-    "alchemia:alchemium_shovel"
+    "alchemia:void_pickaxe",
+    "alchemia:void_axe",
+    "alchemia:void_shovel",
+    "alchemia:void_hoe"
   ]
 }

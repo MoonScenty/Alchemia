@@ -1,13 +1,13 @@
 {
   "values": [
-    "alchemia:void_helmet",
-    "alchemia:void_boots",
-    "alchemia:void_leggings",
     "alchemia:alchemium_helmet",
-    "alchemia:void_chestplate",
+    "alchemia:alchemium_chestplate",
     "alchemia:alchemium_leggings",
     "alchemia:alchemium_boots",
-    "alchemia:alchemium_chestplate",
+    "alchemia:void_helmet",
+    "alchemia:void_chestplate",
+    "alchemia:void_leggings",
+    "alchemia:void_boots",
     "alchemia:goggles_of_revealing",
     "alchemia:traveller_boots"
   ]

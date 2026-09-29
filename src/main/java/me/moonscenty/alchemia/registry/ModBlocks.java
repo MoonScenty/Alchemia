@@ -309,7 +309,10 @@ public class ModBlocks {
                     .instabreak()
                     .pushReaction(PushReaction.DESTROY), colour)));
         }
-        return Map.copyOf(flames);
+        // unmodifiableMap rather than Map.copyOf: a copied map hands its entries back in an order the
+        // running machine picks for itself, and everything written out of this one -- tag files above all
+        // -- would come out shuffled from one run to the next
+        return Collections.unmodifiableMap(flames);
     }
 
     /** White is simply "nitor"; the other fifteen say which dye went into them. */

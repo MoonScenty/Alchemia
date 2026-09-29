@@ -1,20 +1,20 @@
 {
   "values": [
-    "alchemia:gray_nitor",
-    "alchemia:brown_nitor",
-    "alchemia:pink_nitor",
-    "alchemia:black_nitor",
-    "alchemia:cyan_nitor",
-    "alchemia:magenta_nitor",
-    "alchemia:green_nitor",
     "alchemia:nitor",
-    "alchemia:light_gray_nitor",
-    "alchemia:lime_nitor",
+    "alchemia:orange_nitor",
+    "alchemia:magenta_nitor",
     "alchemia:light_blue_nitor",
+    "alchemia:yellow_nitor",
+    "alchemia:lime_nitor",
+    "alchemia:pink_nitor",
+    "alchemia:gray_nitor",
+    "alchemia:light_gray_nitor",
+    "alchemia:cyan_nitor",
     "alchemia:purple_nitor",
     "alchemia:blue_nitor",
+    "alchemia:brown_nitor",
+    "alchemia:green_nitor",
     "alchemia:red_nitor",
-    "alchemia:orange_nitor",
-    "alchemia:yellow_nitor"
+    "alchemia:black_nitor"
   ]
 }
