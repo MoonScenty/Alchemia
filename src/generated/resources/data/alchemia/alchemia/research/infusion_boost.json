@@ -1,0 +1,32 @@
+{
+  "category": "alchemia:artifice",
+  "column": 5,
+  "complexity": 3,
+  "icon": "alchemia:infusion_speed_stone",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.infusion_boost.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:infusion_speed_stone"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:infusion_cost_stone"
+    }
+  ],
+  "parents": [
+    "alchemia:infusion",
+    "alchemia:alumentum",
+    "alchemia:nitor"
+  ],
+  "requirements": {
+    "alchemia:aer": 3,
+    "alchemia:aqua": 3,
+    "alchemia:permutatio": 3,
+    "alchemia:potentia": 6
+  },
+  "row": 4
+}

@@ -49,8 +49,18 @@ import net.minecraft.world.level.block.state.BlockState;
  * only warning you get that it is about to go wrong.
  */
 public class InfusionMatrixBlockEntity extends BlockEntity {
-    /** How long a turn of the work takes. */
+    /** How long a turn of the work takes when nothing has been built to change it. */
     public static final int CYCLE = 20;
+    /** What a working costs when nothing has been built to change it, in hundredths. */
+    public static final int FULL_COST = 100;
+    /** Nothing an altar can be built out of takes a working below half price. */
+    public static final int CHEAPEST = 50;
+
+    /** What one stone under a corner does to the length of a turn and to the price, per the original. */
+    private static final int SPEED_STONE_CYCLE = -2;
+    private static final int SPEED_STONE_COST = 1;
+    private static final int COST_STONE_CYCLE = 1;
+    private static final int COST_STONE_COST = -2;
     /** How far out the ring of pedestals may stand, and how far below the matrix they may be. */
     private static final int RING = 8;
     private static final int DEEP = 10;
@@ -81,6 +91,9 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
     private AspectList owed = AspectList.EMPTY;
     private List<BlockPos> ring = List.of();
     private int instability;
+    /** How long this working's turns are and what it is paying, read off the altar when the work began. */
+    private int cycle = CYCLE;
+    private int cost = FULL_COST;
     private int counter;
     /**
      * When it woke, by the world clock.
@@ -108,6 +121,16 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
 
     public int instability() {
         return instability;
+    }
+
+    /** How long a turn of the working now under way takes. */
+    public int cycle() {
+        return cycle;
+    }
+
+    /** What the working now under way is paying, in hundredths of the recipe's price. */
+    public int cost() {
+        return cost;
     }
 
     /** When the stones began to turn, by the world clock. */
@@ -193,6 +216,49 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
             }
         }
         return against + steadying(level);
+    }
+
+    /**
+     * What the four stones under the altar's corners do to a working.
+     * <p>
+     * One stone to a corner, a course below the pillar's foot, and each pulls the length of a turn one way and
+     * the price the other: haste is paid for and thrift is waited for. Four of a kind is the whole of either --
+     * twelve ticks to a turn, or eight parts in a hundred off the bill -- and they can be mixed, which is the
+     * only reason there are two of them rather than one with a switch.
+     * <p>
+     * Read once when the work begins and not again. An altar rebuilt under a working keeps the bargain it was
+     * started on, which is the same rule the ring and the instability already follow.
+     */
+    private void reckon(Level level) {
+        cycle = CYCLE;
+        cost = FULL_COST;
+        for (Vec3i corner : CORNERS) {
+            BlockState under = level.getBlockState(worldPosition.offset(corner).below());
+            if (under.is(ModBlocks.INFUSION_SPEED_STONE.get())) {
+                cycle += SPEED_STONE_CYCLE;
+                cost += SPEED_STONE_COST;
+            } else if (under.is(ModBlocks.INFUSION_COST_STONE.get())) {
+                cycle += COST_STONE_CYCLE;
+                cost += COST_STONE_COST;
+            }
+        }
+        cycle = Math.max(1, cycle);
+        cost = Math.max(CHEAPEST, cost);
+    }
+
+    /** What a recipe actually costs on this altar. A price cut below a whole point is no cut at all. */
+    private AspectList priced(AspectList asked) {
+        if (cost == FULL_COST) {
+            return asked;
+        }
+        AspectList paying = AspectList.EMPTY;
+        for (Holder<Aspect> aspect : asked.sortedByAmount()) {
+            int points = asked.get(aspect) * cost / FULL_COST;
+            if (points > 0) {
+                paying = paying.add(aspect, points);
+            }
+        }
+        return paying;
     }
 
     /** Straight through the matrix and the same distance out the other side, at the same height. */
@@ -338,7 +404,8 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
 
         InfusionRecipe recipe = found.get().value();
         working = found.get().id();
-        owed = recipe.essentia();
+        reckon(level);
+        owed = priced(recipe.essentia());
         ring = List.copyOf(holding);
         // what the recipe asks for, and what the altar around it is doing about that
         instability = Math.max(0, Math.min(WORST, recipe.instability() + symmetry(level)));
@@ -361,14 +428,14 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
             return;
         }
         // an altar taken apart under a working stops being an altar, and what is left of it goes back to stone
-        if (++matrix.watch % (matrix.busy() ? CYCLE : LOOKS_ROUND) == 0 && !matrix.built(level)) {
+        if (++matrix.watch % (matrix.busy() ? matrix.cycle : LOOKS_ROUND) == 0 && !matrix.built(level)) {
             matrix.sleep(level);
             return;
         }
         if (!matrix.busy()) {
             return;
         }
-        if (++matrix.counter < CYCLE) {
+        if (++matrix.counter < matrix.cycle) {
             return;
         }
         matrix.counter = 0;
@@ -454,6 +521,9 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
         ring = List.of();
         instability = 0;
         counter = 0;
+        // an idle altar keeps no bargain; the next working reads the stones again for itself
+        cycle = CYCLE;
+        cost = FULL_COST;
         changed();
     }
 
@@ -542,6 +612,8 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
                 .parse(registries.createSerializationContext(NbtOps.INSTANCE), tag.get("owed"))
                 .result().orElse(AspectList.EMPTY);
         instability = tag.getInt("instability");
+        cycle = tag.contains("cycle") ? tag.getInt("cycle") : CYCLE;
+        cost = tag.contains("cost") ? tag.getInt("cost") : FULL_COST;
         woken = tag.getLong("woken");
         List<BlockPos> stands = new ArrayList<>();
         for (long packed : tag.getLongArray("ring")) {
@@ -563,6 +635,8 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
                 .encodeStart(registries.createSerializationContext(NbtOps.INSTANCE), owed)
                 .result().ifPresent(written -> tag.put("owed", written));
         tag.putInt("instability", instability);
+        tag.putInt("cycle", cycle);
+        tag.putInt("cost", cost);
         tag.putLong("woken", woken);
         tag.putLongArray("ring", ring.stream().mapToLong(BlockPos::asLong).toArray());
     }

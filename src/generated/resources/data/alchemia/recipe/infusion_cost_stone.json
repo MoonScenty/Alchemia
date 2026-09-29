@@ -1,0 +1,28 @@
+{
+  "type": "alchemia:arcane_shaped",
+  "key": {
+    "A": {
+      "item": "alchemia:alumentum"
+    },
+    "G": {
+      "item": "minecraft:gold_block"
+    },
+    "S": {
+      "item": "alchemia:arcane_stone"
+    }
+  },
+  "pattern": [
+    "SAS",
+    "AGA",
+    "SAS"
+  ],
+  "result": {
+    "count": 1,
+    "id": "alchemia:infusion_cost_stone"
+  },
+  "vis": {
+    "alchemia:aqua": 250,
+    "alchemia:ordo": 250,
+    "alchemia:perditio": 250
+  }
+}

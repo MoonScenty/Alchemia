@@ -131,6 +131,13 @@ public class ModResearchProvider {
                         .add(ModAspects.ENERGY, 4),
                 List.of("arcane_workbench", "vis_crystals"), false, NodeShape.MAJOR, 3,
                 "infusion_matrix", "arcane_pedestal");
+        // what an altar is built on rather than what it makes: two stones, and a choice between them
+        entry(context, "infusion_boost", ModResearch.ARTIFICE, ModBlocks.INFUSION_SPEED_STONE, 5, 4,
+                AspectList.of(ModAspects.ENERGY, 6).add(ModAspects.AIR, 3).add(ModAspects.WATER, 3)
+                        .add(ModAspects.EXCHANGE, 3),
+                List.of("infusion", "alumentum", "nitor"), false, NodeShape.PLAIN, 3,
+                "infusion_speed_stone", "infusion_cost_stone");
+
         entry(context, "wand_rods", ModResearch.ARCANA, ModItems.WAND_RODS.get("silverwood"), 8, 4,
                 AspectList.of(ModAspects.TOOL, 6).add(ModAspects.AURA, 6).add(ModAspects.ENERGY, 6),
                 List.of("infusion", "silverwood"), false, NodeShape.PLAIN, 3,

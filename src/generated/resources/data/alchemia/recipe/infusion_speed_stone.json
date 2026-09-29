@@ -1,0 +1,28 @@
+{
+  "type": "alchemia:arcane_shaped",
+  "key": {
+    "G": {
+      "item": "minecraft:gold_block"
+    },
+    "N": {
+      "tag": "alchemia:nitor"
+    },
+    "S": {
+      "item": "alchemia:arcane_stone"
+    }
+  },
+  "pattern": [
+    "SNS",
+    "NGN",
+    "SNS"
+  ],
+  "result": {
+    "count": 1,
+    "id": "alchemia:infusion_speed_stone"
+  },
+  "vis": {
+    "alchemia:aer": 250,
+    "alchemia:ordo": 250,
+    "alchemia:perditio": 250
+  }
+}

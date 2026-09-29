@@ -38,6 +38,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -264,6 +265,20 @@ public class ModRecipeProvider extends RecipeProvider {
                 AspectList.of(ModAspects.EARTH, 5).add(ModAspects.FIRE, 5),
                 Map.of('S', Ingredient.of(Tags.Items.STONES), 'C', Ingredient.of(ModTags.Items.SHARDS)),
                 "SSS", "SCS", "SSS");
+
+        // the two altar stones: the same eight stones round a block of gold, with light or with fuel packed in
+        arcane(output, "infusion_speed_stone", new ItemStack(ModBlocks.INFUSION_SPEED_STONE.get()),
+                AspectList.of(ModAspects.AIR, 250).add(ModAspects.ORDER, 250).add(ModAspects.ENTROPY, 250),
+                Map.of('S', Ingredient.of(ModBlocks.ARCANE_STONE.block()),
+                        'N', Ingredient.of(ModTags.Items.NITOR),
+                        'G', Ingredient.of(Blocks.GOLD_BLOCK)),
+                "SNS", "NGN", "SNS");
+        arcane(output, "infusion_cost_stone", new ItemStack(ModBlocks.INFUSION_COST_STONE.get()),
+                AspectList.of(ModAspects.WATER, 250).add(ModAspects.ORDER, 250).add(ModAspects.ENTROPY, 250),
+                Map.of('S', Ingredient.of(ModBlocks.ARCANE_STONE.block()),
+                        'A', Ingredient.of(ModItems.ALUMENTUM),
+                        'G', Ingredient.of(Blocks.GOLD_BLOCK)),
+                "SAS", "AGA", "SAS");
     }
 
     private void arcane(RecipeOutput output, String name, ItemStack result, AspectList cost,

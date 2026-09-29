@@ -63,6 +63,8 @@ public class ModBlockStateProvider extends BlockStateProvider {
         nitor();
 
         ModBlocks.STONE_SETS.forEach(this::stoneSet);
+        simpleBlockWithItem(ModBlocks.INFUSION_SPEED_STONE);
+        simpleBlockWithItem(ModBlocks.INFUSION_COST_STONE);
         translucentBlock(ModBlocks.AMBER_BLOCK);
         translucentBlock(ModBlocks.AMBER_BRICKS);
     }

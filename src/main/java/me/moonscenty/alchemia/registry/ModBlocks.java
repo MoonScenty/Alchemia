@@ -223,6 +223,17 @@ public class ModBlocks {
     public static final StoneSet ARCANE_STONE_BRICKS = registerStoneSet("arcane_stone_bricks", MapColor.COLOR_BLACK);
     public static final List<StoneSet> STONE_SETS = List.of(ARCANE_STONE, ARCANE_STONE_BRICKS);
 
+    /**
+     * The two stones an altar is built on top of, laid two below its corners.
+     * <p>
+     * They are arcane stone with a mark cut in it and nothing else -- no block entity, no state. What they do is
+     * done by the matrix, which counts them when a working starts.
+     */
+    public static final DeferredBlock<Block> INFUSION_SPEED_STONE =
+            register("infusion_speed_stone", () -> new Block(stone(MapColor.COLOR_BLACK)));
+    public static final DeferredBlock<Block> INFUSION_COST_STONE =
+            register("infusion_cost_stone", () -> new Block(stone(MapColor.COLOR_BLACK)));
+
     // Amber is see-through, and soft enough to break by hand
     public static final DeferredBlock<HalfTransparentBlock> AMBER_BLOCK = register("amber_block", () -> new HalfTransparentBlock(amber()));
     public static final DeferredBlock<HalfTransparentBlock> AMBER_BRICKS = register("amber_bricks", () -> new HalfTransparentBlock(amber()));

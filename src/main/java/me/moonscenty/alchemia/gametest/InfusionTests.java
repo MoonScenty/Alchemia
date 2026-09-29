@@ -1,6 +1,7 @@
 package me.moonscenty.alchemia.gametest;
 
 import me.moonscenty.alchemia.Alchemia;
+import me.moonscenty.alchemia.aspect.AspectList;
 import me.moonscenty.alchemia.block.entity.ArcanePedestalBlockEntity;
 import me.moonscenty.alchemia.block.entity.InfusionMatrixBlockEntity;
 import me.moonscenty.alchemia.block.entity.JarBlockEntity;
@@ -20,6 +21,7 @@ import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
+import net.neoforged.neoforge.registries.DeferredBlock;
 
 /**
  * An infusion from end to end: laid out, started, drunk and finished.
@@ -70,6 +72,15 @@ public class InfusionTests {
             for (int south = -1; south <= 1; south += 2) {
                 helper.setBlock(MATRIX.offset(east, -2, south), ModBlocks.ARCANE_STONE.block().get());
                 helper.setBlock(MATRIX.offset(east, -1, south), ModBlocks.ARCANE_STONE.block().get());
+            }
+        }
+    }
+
+    /** One of the two stones laid under all four corners, a course below the pillars' feet. */
+    private static void under(GameTestHelper helper, DeferredBlock<net.minecraft.world.level.block.Block> stone) {
+        for (int east = -1; east <= 1; east += 2) {
+            for (int south = -1; south <= 1; south += 2) {
+                helper.setBlock(MATRIX.offset(east, -3, south), stone.get());
             }
         }
     }
@@ -293,6 +304,41 @@ public class InfusionTests {
 
         run(helper, matrix, 1);
         helper.assertTrue(!matrix.busy(), "with nothing to work on there is no working");
+        helper.succeed();
+    }
+
+    /**
+     * Four speed stones shorten a turn, and four cost stones cut the bill.
+     * <p>
+     * Both are read once, when the working begins, and both are what makes the four corners of an altar worth
+     * digging out again after it is built. An altar with nothing under it keeps the plain twenty ticks and pays
+     * the recipe in full, which is the case that has to keep working.
+     */
+    @GameTest(template = TEMPLATE)
+    public static void theStonesUnderAnAltarChangeThePriceAndThePace(GameTestHelper helper) {
+        InfusionMatrixBlockEntity plain = laidOut(helper);
+        Player player = scholar(helper);
+        plain.wake(player);
+        plain.wake(player);
+        helper.assertValueEqual(plain.cycle(), InfusionMatrixBlockEntity.CYCLE, "a bare altar turns at twenty");
+        helper.assertValueEqual(plain.cost(), InfusionMatrixBlockEntity.FULL_COST, "and pays in full");
+        AspectList full = plain.owed();
+
+        under(helper, ModBlocks.INFUSION_SPEED_STONE);
+        InfusionMatrixBlockEntity hurried = laidOut(helper);
+        hurried.wake(player);
+        hurried.wake(player);
+        helper.assertValueEqual(hurried.cycle(), 12, "four speed stones take a turn down to twelve");
+        helper.assertTrue(hurried.cost() > InfusionMatrixBlockEntity.FULL_COST, "and charge for it");
+
+        under(helper, ModBlocks.INFUSION_COST_STONE);
+        InfusionMatrixBlockEntity thrifty = laidOut(helper);
+        thrifty.wake(player);
+        thrifty.wake(player);
+        helper.assertValueEqual(thrifty.cycle(), 24, "four cost stones make a turn longer");
+        helper.assertValueEqual(thrifty.cost(), 92, "and take eight parts in a hundred off the bill");
+        helper.assertTrue(thrifty.owed().total() <= full.total(),
+                "which is less essentia to find, not more: " + thrifty.owed().total() + " of " + full.total());
         helper.succeed();
     }
 }
