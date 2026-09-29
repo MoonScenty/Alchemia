@@ -6,7 +6,12 @@ import java.util.List;
 import java.util.Map;
 
 import me.moonscenty.alchemia.Alchemia;
+import java.util.function.Supplier;
+
+import me.moonscenty.alchemia.aspect.AspectList;
 import me.moonscenty.alchemia.item.AlumentumItem;
+import me.moonscenty.alchemia.item.FocusItem;
+import me.moonscenty.alchemia.wand.Focus;
 import me.moonscenty.alchemia.item.GogglesItem;
 import me.moonscenty.alchemia.item.TravellerBootsItem;
 import me.moonscenty.alchemia.item.CrystallizedEssenceItem;
@@ -75,6 +80,14 @@ public class ModItems {
 
     /** The shafts. A plain wooden one is a vanilla stick, so it is not in here. */
     public static final Map<String, DeferredItem<Item>> WAND_RODS = registerWandRods();
+
+    /**
+     * The twelve foci, which are what a wand is pointed at something for.
+     * <p>
+     * What each one does when it goes off is not here yet. What is here is the part that is the same for all
+     * twelve and that the rest will be built on: the price, the wait, and whether an autocaster will take it.
+     */
+    public static final Map<String, DeferredItem<FocusItem>> FOCI = registerFoci();
 
     public static final Map<CrystalType, DeferredItem<Item>> SHARDS = registerShards();
     public static final DeferredItem<Item> BALANCED_SHARD = ITEMS.registerSimpleItem("balanced_shard");
@@ -162,6 +175,65 @@ public class ModItems {
     }
 
     /** One item to a cap. */
+    /**
+     * The twelve foci, each with the numbers the original gave it.
+     * <p>
+     * The kinds are written as suppliers rather than made here and now: the aspects a price is quoted in are
+     * registry entries, and this class is read before the registries are filled.
+     */
+    private static Map<String, DeferredItem<FocusItem>> registerFoci() {
+        Map<String, Supplier<Focus>> kinds = new java.util.LinkedHashMap<>();
+        // held down rather than let off, and charged for every tick of it
+        kinds.put("fire", () -> Focus.of(0xE55104, AspectList.of(ModAspects.FIRE, 2)).heldDown().inTurrets());
+        kinds.put("frost", () -> Focus.of(0x4F69CC, AspectList.of(ModAspects.WATER, 2)
+                .add(ModAspects.FIRE, 1).add(ModAspects.ENTROPY, 2)).cooldown(200).inTurrets());
+        kinds.put("shock", () -> Focus.of(0x9FB3BF, AspectList.of(ModAspects.AIR, 8)).cooldown(250).inTurrets());
+        // a penny a block, for as long as the button is down
+        kinds.put("excavation", () -> Focus.of(0x064006, AspectList.of(ModAspects.EARTH, 1)).heldDown());
+        kinds.put("grapple", () -> Focus.of(0x1515FF, AspectList.of(ModAspects.WATER, 10)
+                .add(ModAspects.AIR, 10)).cooldown(250));
+        kinds.put("hellbat", () -> Focus.of(0xDC3602, AspectList.of(ModAspects.FIRE, 10)
+                .add(ModAspects.ENTROPY, 5).add(ModAspects.AIR, 5)).cooldown(1000).inTurrets());
+        kinds.put("pech", () -> Focus.of(0x229944, AspectList.of(ModAspects.EARTH, 2)
+                .add(ModAspects.ENTROPY, 2).add(ModAspects.WATER, 2)).cooldown(250).inTurrets());
+        // the dearest of them by a long way, and the only one that takes a wall out of the world
+        kinds.put("hole", () -> Focus.of(0x091429, AspectList.of(ModAspects.ENTROPY, 25)
+                .add(ModAspects.AIR, 25).add(ModAspects.EARTH, 25)));
+        kinds.put("primal", () -> Focus.of(0xA5A1C1, primalCost()).cooldown(500).inTurrets());
+        kinds.put("shard", () -> Focus.of(0x9929BD, AspectList.of(ModAspects.FIRE, 1)
+                .add(ModAspects.ENTROPY, 1).add(ModAspects.AIR, 1)).cooldown(300).inTurrets());
+        kinds.put("trade", () -> Focus.of(0x857B93, AspectList.of(ModAspects.ENTROPY, 1)
+                .add(ModAspects.EARTH, 1).add(ModAspects.ORDER, 1)));
+        kinds.put("builder", () -> Focus.of(0x85EB93, AspectList.of(ModAspects.AIR, 1)
+                .add(ModAspects.EARTH, 1).add(ModAspects.ORDER, 1)));
+
+        Map<String, DeferredItem<FocusItem>> made = new java.util.LinkedHashMap<>();
+        kinds.forEach((name, kind) -> made.put(name, ITEMS.register("focus_" + name,
+                () -> new FocusItem(kind.get(), new Item.Properties()))));
+        // unmodifiableMap rather than Map.copyOf, for the reason written above registerMetalTools
+        return Collections.unmodifiableMap(made);
+    }
+
+    /**
+     * Ten of each of the six.
+     * <p>
+     * The original asked ten plus a random even number up to eight, redrawn every fifth of a second, so the price
+     * shimmered on the tooltip and the wand paid a different bill each time. Only the ten is here. The wobble is
+     * something a wand pays, and nothing pays anything yet; it goes back in where the price is actually charged.
+     * <p>
+     * The six are named one by one rather than asked for with {@code ModAspects.primals()}: that reads the aspect
+     * registry, and this runs while the item registry is being filled, when the aspect registry is still empty.
+     * A holder can be pointed at before it holds anything; a list of them cannot be counted.
+     */
+    private static AspectList primalCost() {
+        return AspectList.of(ModAspects.AIR, 10)
+                .add(ModAspects.EARTH, 10)
+                .add(ModAspects.FIRE, 10)
+                .add(ModAspects.WATER, 10)
+                .add(ModAspects.ORDER, 10)
+                .add(ModAspects.ENTROPY, 10);
+    }
+
     private static Map<String, DeferredItem<Item>> registerWandCaps() {
         Map<String, DeferredItem<Item>> caps = new java.util.LinkedHashMap<>();
         for (String metal : new String[] {"iron", "gold", "brass", "alchemium", "void"}) {

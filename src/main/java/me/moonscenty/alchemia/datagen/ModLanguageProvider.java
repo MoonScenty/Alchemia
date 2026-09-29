@@ -42,6 +42,38 @@ public abstract class ModLanguageProvider extends LanguageProvider {
             Map.entry(DyeColor.RED, new String[]{"Red", "빨간"}),
             Map.entry(DyeColor.BLACK, new String[]{"Black", "검은"}));
 
+    /**
+     * The twelve foci and the two lines of price under each of them.
+     * <p>
+     * The names are the original's. Several of them say nothing about what the focus does -- a pech's curse is
+     * named after what taught it rather than what it inflicts -- and renaming them for clarity would be renaming
+     * somebody else's spells.
+     */
+    private void foci() {
+        add("item.alchemia.focus.cost", pick("Vis Cost:", "비스 값:"));
+        add("item.alchemia.focus.cost_per_tick", pick("Vis Cost (per tick):", "비스 값 (틱당):"));
+        add("item.alchemia.focus.cost_line", "  %s x %s");
+
+        String[][] foci = {
+                {"fire", "Fire", "불꽃"},
+                {"frost", "Frost", "서리"},
+                {"shock", "Shock", "충격"},
+                {"excavation", "Excavation", "발굴"},
+                {"grapple", "Grappler", "갈고리"},
+                {"hellbat", "Nine Hells", "아홉 지옥"},
+                {"pech", "Pech's Curse", "펙의 저주"},
+                {"hole", "Portable Hole", "이동식 구멍"},
+                {"primal", "Primal", "원시"},
+                {"shard", "Vis Shard", "비스 조각"},
+                {"trade", "Equal Trade", "등가교환"},
+                {"builder", "Builder", "건설"},
+        };
+        for (String[] focus : foci) {
+            add("item.alchemia.focus_" + focus[0],
+                    pick("Wand Focus: " + focus[1], "완드 포커스: " + focus[2]));
+        }
+    }
+
     /** Picks the text for this provider's language. */
     protected abstract String pick(String english, String korean);
 
@@ -163,6 +195,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("item.alchemia.wand.vis", pick("%s %s / %s", "%s %s / %s"));
         add("item.alchemia.wand.charge", pick("Draws %s faster", "%s만큼 빨리 채워짐"));
         add("item.alchemia.wand.discount", pick("Spends %s%% more", "%s%% 더 씀"));
+        foci();
         addWandRod("wood", "Wooden", "나무");
         addWandRod("greatwood", "Greatwood", "거대나무");
         addWandRod("silverwood", "Silverwood", "은빛나무");

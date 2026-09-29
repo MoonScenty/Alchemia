@@ -25,6 +25,7 @@ public class ModItemTagsProvider extends ItemTagsProvider {
     @Override
     protected void addTags(HolderLookup.Provider provider) {
         ModBlocks.NITOR.values().forEach(flame -> tag(ModTags.Items.NITOR).add(flame.get().asItem()));
+        ModItems.FOCI.values().forEach(focus -> tag(ModTags.Items.FOCI).add(focus.get()));
         metalGear();
         tag(net.minecraft.tags.ItemTags.HEAD_ARMOR).add(ModItems.GOGGLES.get());
         tag(net.minecraft.tags.ItemTags.DURABILITY_ENCHANTABLE).add(ModItems.GOGGLES.get());

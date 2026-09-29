@@ -4,7 +4,11 @@ import me.moonscenty.alchemia.Alchemia;
 import io.netty.buffer.Unpooled;
 import me.moonscenty.alchemia.aspect.AspectList;
 import me.moonscenty.alchemia.aura.AuraHandler;
+import me.moonscenty.alchemia.item.FocusItem;
 import me.moonscenty.alchemia.item.WandItem;
+import me.moonscenty.alchemia.registry.ModItems;
+import me.moonscenty.alchemia.registry.ModTags;
+import me.moonscenty.alchemia.wand.Focus;
 import me.moonscenty.alchemia.registry.ModAspects;
 import me.moonscenty.alchemia.registry.ModDataComponents;
 import me.moonscenty.alchemia.registry.ModWandParts;
@@ -101,6 +105,48 @@ public class WandTests {
         RegistryFriendlyByteBuf buffer =
                 new RegistryFriendlyByteBuf(Unpooled.buffer(), helper.getLevel().registryAccess());
         ((StreamCodec) found.value().getSerializer().streamCodec()).encode(buffer, found.value());
+        helper.succeed();
+    }
+
+    /**
+     * Twelve foci, each with a price, and every one of them in the tag a pouch slot will ask.
+     * <p>
+     * A focus with no price would be free to use and a focus outside the tag could not be put away, and neither
+     * would show up anywhere until the thing that reads it was written.
+     */
+    @GameTest(template = TEMPLATE)
+    public static void thereAreTwelveFociAndEachCostsSomething(GameTestHelper helper) {
+        helper.assertValueEqual(ModItems.FOCI.size(), 12, "twelve foci");
+        ModItems.FOCI.forEach((name, held) -> {
+            FocusItem focus = held.get();
+            helper.assertTrue(!focus.focus().cost().isEmpty(), name + " costs something to use");
+            helper.assertTrue(new ItemStack(focus).is(ModTags.Items.FOCI), name + " is a focus to a slot");
+        });
+        helper.succeed();
+    }
+
+    /**
+     * The numbers the original gave a few of them, spot-checked.
+     * <p>
+     * These are the two kinds of price there are -- one charged when the wand goes off, one charged every tick it
+     * is held down -- and getting the flag the wrong way round would make a portable hole cost its whole bill
+     * sixty times a second.
+     */
+    @GameTest(template = TEMPLATE)
+    public static void theFociKeptTheirNumbers(GameTestHelper helper) {
+        Focus fire = ModItems.FOCI.get("fire").get().focus();
+        helper.assertValueEqual(fire.cost().get(ModAspects.FIRE), 2, "fire asks two fire");
+        helper.assertTrue(fire.perTick(), "fire is charged by the tick");
+        helper.assertTrue(fire.turret(), "an autocaster will take fire");
+
+        Focus hole = ModItems.FOCI.get("hole").get().focus();
+        helper.assertValueEqual(hole.cost().get(ModAspects.EARTH), 25, "a hole asks twenty-five earth");
+        helper.assertTrue(!hole.perTick(), "a hole is charged once");
+        helper.assertTrue(!hole.turret(), "no autocaster takes a hole");
+
+        Focus primal = ModItems.FOCI.get("primal").get().focus();
+        helper.assertValueEqual(primal.cost().size(), 6, "primal asks all six");
+        helper.assertValueEqual(primal.cooldown(), 500, "primal waits half a second");
         helper.succeed();
     }
 }

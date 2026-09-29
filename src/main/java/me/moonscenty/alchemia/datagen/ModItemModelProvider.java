@@ -133,6 +133,10 @@ public class ModItemModelProvider extends ItemModelProvider {
                         .texture("layer0", modLoc("item/wand/cap_" + cap + "_inert_mat"));
             }
         }
+        // one picture apiece, all drawn as one set by tools/gen_foci.py
+        ModItems.FOCI.keySet().forEach(name -> withExistingParent("focus_" + name, mcLoc("item/generated"))
+                .texture("layer0", modLoc("item/wand/focus_" + name)));
+
         // a loose rod has a picture of its own, drawn as one rather than as the strip laid under a wand's caps;
         // only the wooden one has no item, being a plain stick
         for (int rod = 1; rod < RODS.length; rod++) {

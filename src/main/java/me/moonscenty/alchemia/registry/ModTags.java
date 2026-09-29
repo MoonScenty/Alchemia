@@ -75,6 +75,14 @@ public class ModTags {
         /** All sixteen flames, so that a dye can be put to any of them without naming all sixteen. */
         public static final TagKey<Item> NITOR = mod("nitor");
 
+        /**
+         * The twelve foci, so that a slot can ask for "a focus" rather than naming all twelve.
+         * <p>
+         * The original asked whether the item was an {@code ItemFocusBasic}. A tag says the same thing and lets
+         * an add-on's focus into the pouch without it having to extend anything of ours.
+         */
+        public static final TagKey<Item> FOCI = mod("foci");
+
         public static final TagKey<Item> SHARDS = mod("shards");
         public static final TagKey<Item> CLUSTERS = mod("clusters");
 
