@@ -153,6 +153,11 @@ public class ModResearchProvider {
                 List.of("infusion", "alumentum", "nitor"), false, NodeShape.PLAIN, 3,
                 "infusion_speed_stone", "infusion_cost_stone");
 
+        entry(context, "traveller_boots", ModResearch.ARTIFICE, ModItems.TRAVELLER_BOOTS, 7, 4,
+                AspectList.of(ModAspects.MOTION, 3).add(ModAspects.EARTH, 3).add(ModAspects.FLIGHT, 3)
+                        .add(ModAspects.WATER, 3),
+                List.of("infusion"), false, NodeShape.PLAIN, 2, "traveller_boots");
+
         // what an altar can put on somebody else's tools, which is the only enchanting in the mod
         entry(context, "infusion_enchantment", ModResearch.ARCANA, Items.ENCHANTED_BOOK, 9, 2,
                 AspectList.of(ModAspects.AURA, 6).add(ModAspects.TOOL, 6).add(ModAspects.CRAFT, 4)

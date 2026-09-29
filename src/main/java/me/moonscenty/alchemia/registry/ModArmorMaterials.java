@@ -44,10 +44,9 @@ public final class ModArmorMaterials {
      * The traveller's boots, which are leather with a band round them and not a metal at all.
      * <p>
      * Leather's own numbers, because that is what they are made of. What is worth having about them is not what
-     * they stop.
+     * they stop. How long they last is set on the item, not here, since the original set it outright rather
+     * than as so many times a base.
      */
-    public static final int TRAVELLER_LASTS = 5;
-
     public static final DeferredHolder<ArmorMaterial, ArmorMaterial> TRAVELLER =
             MATERIALS.register("traveller", () -> new ArmorMaterial(stops(1, 3, 2, 1), 15,
                     SoundEvents.ARMOR_EQUIP_LEATHER, () -> Ingredient.of(net.minecraft.world.item.Items.LEATHER),

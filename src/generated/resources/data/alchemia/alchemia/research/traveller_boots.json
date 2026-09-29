@@ -1,0 +1,26 @@
+{
+  "category": "alchemia:artifice",
+  "column": 7,
+  "complexity": 2,
+  "icon": "alchemia:traveller_boots",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.traveller_boots.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:traveller_boots"
+    }
+  ],
+  "parents": [
+    "alchemia:infusion"
+  ],
+  "requirements": {
+    "alchemia:aqua": 3,
+    "alchemia:motus": 3,
+    "alchemia:terra": 3,
+    "alchemia:volatus": 3
+  },
+  "row": 4
+}

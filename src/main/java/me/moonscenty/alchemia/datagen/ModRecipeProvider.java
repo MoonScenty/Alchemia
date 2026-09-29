@@ -456,6 +456,15 @@ public class ModRecipeProvider extends RecipeProvider {
         infusion(output, "wand_rod_silverwood", Ingredient.of(ModBlocks.SILVERWOOD.log()), around,
                 new ItemStack(ModItems.WAND_RODS.get("silverwood").get()), evenly, 5, "wand_rods");
 
+        // boots for walking, made of ordinary boots and the things that go fast
+        infusion(output, "traveller_boots", Ingredient.of(Items.LEATHER_BOOTS),
+                List.of(Ingredient.of(ModItems.SHARDS.get(CrystalType.AIR)),
+                        Ingredient.of(ModItems.SHARDS.get(CrystalType.AIR)),
+                        Ingredient.of(Items.STRING), Ingredient.of(Items.STRING),
+                        Ingredient.of(Items.FEATHER), Ingredient.of(Items.COD)),
+                new ItemStack(ModItems.TRAVELLER_BOOTS.get()),
+                AspectList.of(ModAspects.FLIGHT, 25).add(ModAspects.MOTION, 25), 1, "traveller_boots");
+
         // the two caps a workbench can only cast. Salis mundus round them, and the altar does the rest
         infusion(output, "wand_cap_alchemium", Ingredient.of(ModItems.INERT_CAPS.get("alchemium")),
                 salis(3), new ItemStack(ModItems.WAND_CAPS.get("alchemium").get()),
