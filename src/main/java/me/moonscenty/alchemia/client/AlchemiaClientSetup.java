@@ -78,7 +78,7 @@ public class AlchemiaClientSetup {
     public static void registerItemColours(RegisterColorHandlersEvent.Item event) {
         event.register((stack, tint) -> tint == 0 ? named(stack) : PLAIN, ModItems.PHIAL.get());
         // a crystal is drawn in grey and painted by the one point it holds
-        event.register((stack, tint) -> tint == 0 ? named(stack) : PLAIN, ModItems.VIS_CRYSTAL.get());
+        event.register((stack, tint) -> tint == 0 ? named(stack) : PLAIN, ModItems.CRYSTALLIZED_ESSENCE.get());
         event.register((stack, tint) -> tint == 1 ? named(stack) : PLAIN, ModItems.JAR_LABEL.get());
         // the liquid standing in a jar held in the hand, in the colour of whatever it is
         event.register((stack, tint) -> tint == 0 ? inside(stack) : PLAIN, ModBlocks.JAR.get().asItem());

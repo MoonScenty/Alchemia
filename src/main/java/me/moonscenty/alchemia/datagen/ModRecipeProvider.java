@@ -495,7 +495,7 @@ public class ModRecipeProvider extends RecipeProvider {
         enchantment(output, InfusionEnchantment.ESSENCE,
                 AspectList.of(ModAspects.BEAST, 8).add(ModAspects.FLUX, 12),
                 List.of(Ingredient.of(ModItems.RESEARCH_NOTES),
-                        Ingredient.of(Items.ENCHANTED_BOOK), Ingredient.of(ModItems.VIS_CRYSTAL)));
+                        Ingredient.of(Items.ENCHANTED_BOOK), Ingredient.of(ModItems.CRYSTALLIZED_ESSENCE)));
     }
 
     /** One working that puts something on a tool: the tools it will take, and what is laid round them. */

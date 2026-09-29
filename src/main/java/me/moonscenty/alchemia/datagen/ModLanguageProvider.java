@@ -88,9 +88,10 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         addItem(ModItems.IRON_PLATE, pick("Iron Plate", "철 판"));
         addItem(ModItems.SALIS_MUNDUS, pick("Salis Mundus", "살리스 문두스"));
         addItem(ModItems.ALUMENTUM, pick("Alumentum", "알루멘툼"));
-        addItem(ModItems.VIS_CRYSTAL, pick("Vis Crystal", "비스 결정"));
-        add("item.alchemia.vis_crystal.of", pick("%s Crystal", "%s 결정"));
-        add("item.alchemia.vis_crystal.holding", pick("One point of %s", "%s 한 점"));
+        // not "Aer Crystal": that is the crystal growing on a node, and two things under one name is one too many
+        addItem(ModItems.CRYSTALLIZED_ESSENCE, pick("Crystallized Essence", "결정화된 에센시아"));
+        add("item.alchemia.crystallized_essence.of", pick("Crystallized %s", "결정화된 %s"));
+        add("item.alchemia.crystallized_essence.holding", pick("One point of %s", "%s 한 점"));
         addInfusionEnchantments();
         addBlock(ModBlocks.INFUSION_SPEED_STONE, pick("Infusion Speed Stone", "주입 속도석"));
         addBlock(ModBlocks.INFUSION_COST_STONE, pick("Infusion Cost Stone", "주입 절약석"));

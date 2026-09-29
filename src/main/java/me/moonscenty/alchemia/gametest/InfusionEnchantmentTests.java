@@ -189,11 +189,11 @@ public class InfusionEnchantmentTests {
                 helper.getLevel().damageSources().playerAttack(player), drops, true);
 
         helper.assertTrue(drops.stream().anyMatch(
-                        dropped -> dropped.getItem().is(ModItems.VIS_CRYSTAL.get())),
+                        dropped -> dropped.getItem().is(ModItems.CRYSTALLIZED_ESSENCE.get())),
                 "it gave up a crystal of what it was made of");
-        drops.stream().filter(dropped -> dropped.getItem().is(ModItems.VIS_CRYSTAL.get())).forEach(dropped ->
+        drops.stream().filter(dropped -> dropped.getItem().is(ModItems.CRYSTALLIZED_ESSENCE.get())).forEach(dropped ->
                 helper.assertTrue(
-                        me.moonscenty.alchemia.item.VisCrystalItem.inside(dropped.getItem()).isPresent(),
+                        me.moonscenty.alchemia.item.CrystallizedEssenceItem.inside(dropped.getItem()).isPresent(),
                         "and the crystal has something in it"));
         helper.succeed();
     }

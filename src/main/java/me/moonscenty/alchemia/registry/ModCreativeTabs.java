@@ -2,7 +2,7 @@ package me.moonscenty.alchemia.registry;
 
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.item.PhialItem;
-import me.moonscenty.alchemia.item.VisCrystalItem;
+import me.moonscenty.alchemia.item.CrystallizedEssenceItem;
 import me.moonscenty.alchemia.item.WandItem;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -26,7 +26,7 @@ public class ModCreativeTabs {
                 // first, which is a long way round for somebody only wanting to see what the colours look like
                 ModAspects.REGISTRY.holders().forEach(aspect -> {
                     output.accept(PhialItem.filled(ModItems.PHIAL.get().getDefaultInstance(), aspect));
-                    output.accept(VisCrystalItem.of(aspect));
+                    output.accept(CrystallizedEssenceItem.of(aspect));
                 });
             })
             .build());

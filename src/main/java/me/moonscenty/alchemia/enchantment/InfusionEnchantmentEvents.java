@@ -333,7 +333,7 @@ public final class InfusionEnchantmentEvents {
             var aspect = left.sortedByAmount().get(player.level().random.nextInt(left.sortedByAmount().size()));
             left = left.reduce(aspect, 1);
             event.getDrops().add(new ItemEntity(level, where.x, where.y, where.z,
-                    me.moonscenty.alchemia.item.VisCrystalItem.of(aspect)));
+                    me.moonscenty.alchemia.item.CrystallizedEssenceItem.of(aspect)));
         }
     }
 

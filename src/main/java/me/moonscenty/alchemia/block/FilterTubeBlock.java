@@ -96,7 +96,7 @@ public class FilterTubeBlock extends TubeBlock {
                 .copy().withStyle(ChatFormatting.GRAY), true);
     }
 
-    /** The aspect a vis crystal is made of, if the held thing is one. */
+    /** The aspect a primal shard is made of, if the held thing is one. Not the vis crystal, which is another thing. */
     private static Optional<Holder<Aspect>> crystallised(ItemStack stack) {
         for (Map.Entry<CrystalType, DeferredItem<Item>> entry : ModItems.SHARDS.entrySet()) {
             if (stack.is(entry.getValue().get())) {
