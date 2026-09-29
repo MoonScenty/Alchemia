@@ -64,6 +64,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         ModItems.METAL_TOOLS.forEach((name, tool) -> withExistingParent(name, mcLoc("item/handheld"))
                 .texture("layer0", modLoc("item/" + name)));
         ModItems.METAL_ARMOUR.forEach((name, piece) -> basicItem(piece.get()));
+        // the traveller's boots have a model of their own, in models/item/, and datagen does not write over it
         basicItem(ModItems.IRON_CLUSTER.get());
         basicItem(ModItems.GOLD_CLUSTER.get());
         basicItem(ModItems.COPPER_CLUSTER.get());

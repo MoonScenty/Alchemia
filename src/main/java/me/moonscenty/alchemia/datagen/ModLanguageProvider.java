@@ -91,6 +91,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         // not "Aer Crystal": that is the crystal growing on a node, and two things under one name is one too many
         addItem(ModItems.CRYSTALLIZED_ESSENCE, pick("Crystallized Essence", "결정화된 에센시아"));
         addMetalGear();
+        addItem(ModItems.TRAVELLER_BOOTS, pick("Traveller's Boots", "여행자의 장화"));
         add("item.alchemia.crystallized_essence.of", pick("Crystallized %s", "결정화된 %s"));
         add("item.alchemia.crystallized_essence.holding", pick("One point of %s", "%s 한 점"));
         addInfusionEnchantments();

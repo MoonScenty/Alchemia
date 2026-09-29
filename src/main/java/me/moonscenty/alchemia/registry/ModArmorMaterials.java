@@ -40,6 +40,19 @@ public final class ModArmorMaterials {
             MATERIALS.register("void", () -> material("void", stops(3, 7, 6, 3), 10,
                     () -> Ingredient.of(ModItems.VOID_INGOT)));
 
+    /**
+     * The traveller's boots, which are leather with a band round them and not a metal at all.
+     * <p>
+     * Leather's own numbers, because that is what they are made of. What is worth having about them is not what
+     * they stop.
+     */
+    public static final int TRAVELLER_LASTS = 5;
+
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> TRAVELLER =
+            MATERIALS.register("traveller", () -> new ArmorMaterial(stops(1, 3, 2, 1), 15,
+                    SoundEvents.ARMOR_EQUIP_LEATHER, () -> Ingredient.of(net.minecraft.world.item.Items.LEATHER),
+                    List.of(new ArmorMaterial.Layer(Alchemia.id("traveller_boots"))), 0.0F, 0.0F));
+
     private ModArmorMaterials() {
     }
 

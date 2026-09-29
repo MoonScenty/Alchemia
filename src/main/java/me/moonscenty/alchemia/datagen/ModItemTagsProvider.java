@@ -26,6 +26,10 @@ public class ModItemTagsProvider extends ItemTagsProvider {
     protected void addTags(HolderLookup.Provider provider) {
         ModBlocks.NITOR.values().forEach(flame -> tag(ModTags.Items.NITOR).add(flame.get().asItem()));
         metalGear();
+        tag(net.minecraft.tags.ItemTags.FOOT_ARMOR).add(ModItems.TRAVELLER_BOOTS.get());
+        tag(net.minecraft.tags.ItemTags.DURABILITY_ENCHANTABLE).add(ModItems.TRAVELLER_BOOTS.get());
+        tag(net.minecraft.tags.ItemTags.ARMOR_ENCHANTABLE).add(ModItems.TRAVELLER_BOOTS.get());
+        tag(net.minecraft.tags.ItemTags.EQUIPPABLE_ENCHANTABLE).add(ModItems.TRAVELLER_BOOTS.get());
 
         copy(ModTags.Blocks.ORES_AMBER, ModTags.Items.ORES_AMBER);
         copy(ModTags.Blocks.ORES_CINNABAR, ModTags.Items.ORES_CINNABAR);

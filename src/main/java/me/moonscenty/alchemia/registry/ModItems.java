@@ -87,6 +87,12 @@ public class ModItems {
     public static final Map<String, DeferredItem<Item>> METAL_TOOLS = registerMetalTools();
     public static final Map<String, DeferredItem<Item>> METAL_ARMOUR = registerMetalArmour();
 
+    /** Leather boots with a band round them, drawn as a model rather than stretched over the leg. */
+    public static final DeferredItem<ArmorItem> TRAVELLER_BOOTS = ITEMS.register("traveller_boots",
+            () -> new ArmorItem(ModArmorMaterials.TRAVELLER, ArmorItem.Type.BOOTS,
+                    new Item.Properties().durability(
+                            ArmorItem.Type.BOOTS.getDurability(ModArmorMaterials.TRAVELLER_LASTS))));
+
     /** One point of any essentia, set hard enough to carry. Drawn once in grey and painted by what is in it. */
     public static final DeferredItem<CrystallizedEssenceItem> CRYSTALLIZED_ESSENCE =
             ITEMS.register("crystallized_essence", () -> new CrystallizedEssenceItem(new Item.Properties()));

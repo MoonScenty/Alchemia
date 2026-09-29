@@ -12,6 +12,8 @@ import net.minecraft.util.FastColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import me.moonscenty.alchemia.block.entity.JarBlockEntity;
+import me.moonscenty.alchemia.client.armour.TravellerBootsExtensions;
+import me.moonscenty.alchemia.client.armour.TravellerBootsModel;
 import me.moonscenty.alchemia.registry.ModBlocks;
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.registry.ModWandParts;
@@ -163,6 +165,14 @@ public class AlchemiaClientSetup {
     public static void registerClientExtensions(RegisterClientExtensionsEvent event) {
         event.registerBlock(PlainBreakParticles.INSTANCE,
                 ModBlocks.CRUCIBLE.get(), ModBlocks.JAR.get(), ModBlocks.TUBE_FILTER.get());
+        // boots with a foot on them: a model, not a sheet stretched over the leg
+        event.registerItem(TravellerBootsExtensions.INSTANCE, ModItems.TRAVELLER_BOOTS.get());
+    }
+
+    /** The shape a worn pair of traveller's boots is built from. */
+    @SubscribeEvent
+    public static void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
+        event.registerLayerDefinition(TravellerBootsModel.LAYER, TravellerBootsModel::createLayer);
     }
 
     @SubscribeEvent

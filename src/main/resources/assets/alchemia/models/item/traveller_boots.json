@@ -1,0 +1,615 @@
+{
+  "textures": {
+    "0": "alchemia:block/brass_block",
+    "1": "alchemia:item/traveller_boots_leather",
+    "particle": "alchemia:block/brass_block"
+  },
+  "elements": [
+    {
+      "name": "left_sole",
+      "from": [
+        2,
+        0,
+        3
+      ],
+      "to": [
+        7,
+        2,
+        12
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            14,
+            7,
+            16
+          ],
+          "texture": "#1"
+        },
+        "east": {
+          "uv": [
+            4,
+            14,
+            13,
+            16
+          ],
+          "texture": "#1"
+        },
+        "south": {
+          "uv": [
+            2,
+            14,
+            7,
+            16
+          ],
+          "texture": "#1"
+        },
+        "west": {
+          "uv": [
+            4,
+            14,
+            13,
+            16
+          ],
+          "texture": "#1"
+        },
+        "up": {
+          "uv": [
+            2,
+            3,
+            7,
+            12
+          ],
+          "texture": "#1"
+        },
+        "down": {
+          "uv": [
+            2,
+            3,
+            7,
+            12
+          ],
+          "texture": "#1"
+        }
+      }
+    },
+    {
+      "name": "left_foot",
+      "from": [
+        2,
+        2,
+        4
+      ],
+      "to": [
+        7,
+        5,
+        12
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            5,
+            7,
+            8
+          ],
+          "texture": "#1"
+        },
+        "east": {
+          "uv": [
+            4,
+            5,
+            12,
+            8
+          ],
+          "texture": "#1"
+        },
+        "south": {
+          "uv": [
+            2,
+            5,
+            7,
+            8
+          ],
+          "texture": "#1"
+        },
+        "west": {
+          "uv": [
+            4,
+            5,
+            12,
+            8
+          ],
+          "texture": "#1"
+        },
+        "up": {
+          "uv": [
+            2,
+            4,
+            7,
+            12
+          ],
+          "texture": "#1"
+        },
+        "down": {
+          "uv": [
+            2,
+            4,
+            7,
+            12
+          ],
+          "texture": "#1"
+        }
+      }
+    },
+    {
+      "name": "left_ankle",
+      "from": [
+        2,
+        5,
+        7
+      ],
+      "to": [
+        7,
+        9,
+        12
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            4,
+            7,
+            8
+          ],
+          "texture": "#1"
+        },
+        "east": {
+          "uv": [
+            7,
+            4,
+            12,
+            8
+          ],
+          "texture": "#1"
+        },
+        "south": {
+          "uv": [
+            2,
+            4,
+            7,
+            8
+          ],
+          "texture": "#1"
+        },
+        "west": {
+          "uv": [
+            7,
+            4,
+            12,
+            8
+          ],
+          "texture": "#1"
+        },
+        "up": {
+          "uv": [
+            2,
+            7,
+            7,
+            12
+          ],
+          "texture": "#1"
+        }
+      }
+    },
+    {
+      "name": "left_band",
+      "from": [
+        1.8,
+        5.5,
+        6.8
+      ],
+      "to": [
+        7.2,
+        7,
+        12.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            9,
+            7,
+            10
+          ],
+          "texture": "#0"
+        },
+        "east": {
+          "uv": [
+            7,
+            9,
+            12,
+            10
+          ],
+          "texture": "#0"
+        },
+        "south": {
+          "uv": [
+            2,
+            9,
+            7,
+            10
+          ],
+          "texture": "#0"
+        },
+        "west": {
+          "uv": [
+            7,
+            9,
+            12,
+            10
+          ],
+          "texture": "#0"
+        }
+      }
+    },
+    {
+      "name": "right_sole",
+      "from": [
+        9,
+        0,
+        3
+      ],
+      "to": [
+        14,
+        2,
+        12
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            2,
+            14,
+            7,
+            16
+          ],
+          "texture": "#1"
+        },
+        "east": {
+          "uv": [
+            4,
+            14,
+            13,
+            16
+          ],
+          "texture": "#1"
+        },
+        "south": {
+          "uv": [
+            2,
+            14,
+            7,
+            16
+          ],
+          "texture": "#1"
+        },
+        "west": {
+          "uv": [
+            4,
+            14,
+            13,
+            16
+          ],
+          "texture": "#1"
+        },
+        "up": {
+          "uv": [
+            9,
+            3,
+            14,
+            12
+          ],
+          "texture": "#1"
+        },
+        "down": {
+          "uv": [
+            9,
+            3,
+            14,
+            12
+          ],
+          "texture": "#1"
+        }
+      }
+    },
+    {
+      "name": "right_foot",
+      "from": [
+        9,
+        2,
+        4
+      ],
+      "to": [
+        14,
+        5,
+        12
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            9,
+            5,
+            14,
+            8
+          ],
+          "texture": "#1"
+        },
+        "east": {
+          "uv": [
+            4,
+            5,
+            12,
+            8
+          ],
+          "texture": "#1"
+        },
+        "south": {
+          "uv": [
+            9,
+            5,
+            14,
+            8
+          ],
+          "texture": "#1"
+        },
+        "west": {
+          "uv": [
+            4,
+            5,
+            12,
+            8
+          ],
+          "texture": "#1"
+        },
+        "up": {
+          "uv": [
+            9,
+            4,
+            14,
+            12
+          ],
+          "texture": "#1"
+        },
+        "down": {
+          "uv": [
+            9,
+            4,
+            14,
+            12
+          ],
+          "texture": "#1"
+        }
+      }
+    },
+    {
+      "name": "right_ankle",
+      "from": [
+        9,
+        5,
+        7
+      ],
+      "to": [
+        14,
+        9,
+        12
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            9,
+            4,
+            14,
+            8
+          ],
+          "texture": "#1"
+        },
+        "east": {
+          "uv": [
+            7,
+            4,
+            12,
+            8
+          ],
+          "texture": "#1"
+        },
+        "south": {
+          "uv": [
+            9,
+            4,
+            14,
+            8
+          ],
+          "texture": "#1"
+        },
+        "west": {
+          "uv": [
+            7,
+            4,
+            12,
+            8
+          ],
+          "texture": "#1"
+        },
+        "up": {
+          "uv": [
+            9,
+            7,
+            14,
+            12
+          ],
+          "texture": "#1"
+        }
+      }
+    },
+    {
+      "name": "right_band",
+      "from": [
+        8.8,
+        5.5,
+        6.8
+      ],
+      "to": [
+        14.2,
+        7,
+        12.2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            9,
+            9,
+            14,
+            10
+          ],
+          "texture": "#0"
+        },
+        "east": {
+          "uv": [
+            7,
+            9,
+            12,
+            10
+          ],
+          "texture": "#0"
+        },
+        "south": {
+          "uv": [
+            9,
+            9,
+            14,
+            10
+          ],
+          "texture": "#0"
+        },
+        "west": {
+          "uv": [
+            7,
+            9,
+            12,
+            10
+          ],
+          "texture": "#0"
+        }
+      }
+    }
+  ],
+  "display": {
+    "thirdperson_righthand": {
+      "translation": [
+        0,
+        3,
+        1
+      ],
+      "scale": [
+        0.55,
+        0.55,
+        0.55
+      ]
+    },
+    "thirdperson_lefthand": {
+      "translation": [
+        0,
+        3,
+        1
+      ],
+      "scale": [
+        0.55,
+        0.55,
+        0.55
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        0,
+        -45,
+        0
+      ],
+      "translation": [
+        0,
+        3,
+        0
+      ],
+      "scale": [
+        0.5,
+        0.5,
+        0.5
+      ]
+    },
+    "firstperson_lefthand": {
+      "rotation": [
+        0,
+        45,
+        0
+      ],
+      "translation": [
+        0,
+        3,
+        0
+      ],
+      "scale": [
+        0.5,
+        0.5,
+        0.5
+      ]
+    },
+    "ground": {
+      "translation": [
+        0,
+        2,
+        0
+      ],
+      "scale": [
+        0.5,
+        0.5,
+        0.5
+      ]
+    },
+    "gui": {
+      "rotation": [
+        30,
+        -135,
+        0
+      ],
+      "translation": [
+        0,
+        -1,
+        0
+      ],
+      "scale": [
+        0.86,
+        0.86,
+        0.86
+      ]
+    },
+    "head": {
+      "translation": [
+        0,
+        13,
+        0
+      ]
+    },
+    "fixed": {
+      "rotation": [
+        0,
+        -180,
+        0
+      ],
+      "scale": [
+        0.9,
+        0.9,
+        0.9
+      ]
+    }
+  }
+}
