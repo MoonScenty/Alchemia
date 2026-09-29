@@ -92,6 +92,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         addItem(ModItems.CRYSTALLIZED_ESSENCE, pick("Crystallized Essence", "결정화된 에센시아"));
         addMetalGear();
         addItem(ModItems.TRAVELLER_BOOTS, pick("Traveller's Boots", "여행자의 장화"));
+        addItem(ModItems.GOGGLES, pick("Goggles of Revealing", "계시의 고글"));
         add("item.alchemia.crystallized_essence.of", pick("Crystallized %s", "결정화된 %s"));
         add("item.alchemia.crystallized_essence.holding", pick("One point of %s", "%s 한 점"));
         addInfusionEnchantments();
@@ -331,6 +332,9 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                 {"void_gear", "Void Gear", "공허 장비",
                  "The other sort of good. It cuts faster and hits harder than anything, reaches what netherite reaches, and wears out in a hundred and fifty swings. A suit of it stops nearly what diamond stops and goes to pieces faster than leather. It is not the better metal; it is the metal for the one job that has to be done now.",
                  "다른 종류의 좋음이다. 무엇보다 빠르게 깎고 세게 치며 네더라이트가 닿는 데까지 닿는데, 백쉰 번을 휘두르면 닳아 없어진다. 갑옷은 다이아몬드에 가깝게 막으면서 가죽보다 빨리 부서진다. 더 나은 금속이 아니라, 지금 당장 해야 하는 한 가지 일을 위한 금속이다."},
+                {"goggles", "Goggles of Revealing", "계시의 고글",
+                 "Two alchemometers looking through brass. An aura node is invisible to anyone not wearing a pair, which makes these the first thing to build and the last thing to take off: half of what this craft is built on cannot be seen at all until they are on your face.",
+                 "놋쇠에 물린 알케모미터 둘. 이것을 쓰지 않은 사람에게 오라 노드는 보이지 않는다. 그래서 가장 먼저 만들고 가장 나중에 벗는 물건이 된다 — 이 기예가 딛고 선 것의 절반이 이걸 쓰기 전에는 아예 보이지 않는다."},
                 {"traveller_boots", "Traveller's Boots", "여행자의 장화",
                  "They stop almost nothing. What they are worth is the walking: a step up a whole block without jumping, a push along the ground, a hold on the air that is not quite flying, and a fall that is forgotten as fast as it happens. Somebody who spends the day between a works and a mine will not take them off for a suit that stops arrows.",
                  "막아 주는 것은 거의 없다. 값어치는 걷는 데 있다. 뛰지 않고 한 칸을 오르고, 땅을 밀어 나아가고, 허공에서도 발이 듣고, 떨어지는 동안 떨어진 것이 잊힌다. 하루를 공방과 광산 사이에서 보내는 사람은 화살을 막아 주는 갑옷을 위해 이것을 벗지 않는다."},

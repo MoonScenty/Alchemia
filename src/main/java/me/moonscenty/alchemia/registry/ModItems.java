@@ -7,6 +7,7 @@ import java.util.Map;
 
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.item.AlumentumItem;
+import me.moonscenty.alchemia.item.GogglesItem;
 import me.moonscenty.alchemia.item.TravellerBootsItem;
 import me.moonscenty.alchemia.item.CrystallizedEssenceItem;
 import me.moonscenty.alchemia.item.JarLabelItem;
@@ -87,6 +88,10 @@ public class ModItems {
      */
     public static final Map<String, DeferredItem<Item>> METAL_TOOLS = registerMetalTools();
     public static final Map<String, DeferredItem<Item>> METAL_ARMOUR = registerMetalArmour();
+
+    /** Brass and glass on the face, drawn as a model. Wearing them is what makes an aura node visible. */
+    public static final DeferredItem<GogglesItem> GOGGLES = ITEMS.register("goggles_of_revealing",
+            () -> new GogglesItem(ModArmorMaterials.GOGGLES, new Item.Properties()));
 
     /** Leather boots with a band round them, drawn as a model rather than stretched over the leg. */
     public static final DeferredItem<TravellerBootsItem> TRAVELLER_BOOTS = ITEMS.register("traveller_boots",

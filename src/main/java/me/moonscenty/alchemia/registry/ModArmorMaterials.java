@@ -52,6 +52,18 @@ public final class ModArmorMaterials {
                     SoundEvents.ARMOR_EQUIP_LEATHER, () -> Ingredient.of(net.minecraft.world.item.Items.LEATHER),
                     List.of(new ArmorMaterial.Layer(Alchemia.id("traveller_boots"))), 0.0F, 0.0F));
 
+    /**
+     * The goggles, which stop about what a hat stops.
+     * <p>
+     * A material of their own rather than the boots', because the sheet a piece is drawn from is named here and
+     * nowhere else. Two pieces sharing a material would be two pieces sharing a picture, however different the
+     * models hung on them are.
+     */
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> GOGGLES =
+            MATERIALS.register("goggles", () -> new ArmorMaterial(stops(1, 3, 2, 1), 15,
+                    SoundEvents.ARMOR_EQUIP_IRON, () -> Ingredient.of(ModItems.BRASS_INGOT),
+                    List.of(new ArmorMaterial.Layer(Alchemia.id("goggles"))), 0.0F, 0.0F));
+
     private ModArmorMaterials() {
     }
 

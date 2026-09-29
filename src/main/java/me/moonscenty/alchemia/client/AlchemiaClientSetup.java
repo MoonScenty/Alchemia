@@ -12,8 +12,7 @@ import net.minecraft.util.FastColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import me.moonscenty.alchemia.block.entity.JarBlockEntity;
-import me.moonscenty.alchemia.client.armour.TravellerBootsExtensions;
-import me.moonscenty.alchemia.client.armour.TravellerBootsModel;
+import me.moonscenty.alchemia.client.armour.ModArmourLayers;
 import me.moonscenty.alchemia.client.particle.MoteParticle;
 import me.moonscenty.alchemia.registry.ModBlocks;
 import me.moonscenty.alchemia.Alchemia;
@@ -168,8 +167,9 @@ public class AlchemiaClientSetup {
     public static void registerClientExtensions(RegisterClientExtensionsEvent event) {
         event.registerBlock(PlainBreakParticles.INSTANCE,
                 ModBlocks.CRUCIBLE.get(), ModBlocks.JAR.get(), ModBlocks.TUBE_FILTER.get());
-        // boots with a foot on them: a model, not a sheet stretched over the leg
-        event.registerItem(TravellerBootsExtensions.INSTANCE, ModItems.TRAVELLER_BOOTS.get());
+        // a foot on a boot and a lens in front of an eye: models, not sheets stretched over the body
+        event.registerItem(ModArmourLayers.BOOTS_DRAWN, ModItems.TRAVELLER_BOOTS.get());
+        event.registerItem(ModArmourLayers.GOGGLES_DRAWN, ModItems.GOGGLES.get());
     }
 
     /** What draws a mote of light. */
@@ -178,10 +178,11 @@ public class AlchemiaClientSetup {
         event.registerSpriteSet(ModParticles.MOTE.get(), MoteParticle.Maker::new);
     }
 
-    /** The shape a worn pair of traveller's boots is built from. */
+    /** The shapes the pieces of armour we draw as models are built from. */
     @SubscribeEvent
     public static void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
-        event.registerLayerDefinition(TravellerBootsModel.LAYER, TravellerBootsModel::createLayer);
+        event.registerLayerDefinition(ModArmourLayers.TRAVELLER_BOOTS, ModArmourLayers::boots);
+        event.registerLayerDefinition(ModArmourLayers.GOGGLES, ModArmourLayers::goggles);
     }
 
     @SubscribeEvent

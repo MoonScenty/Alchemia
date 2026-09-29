@@ -26,6 +26,10 @@ public class ModItemTagsProvider extends ItemTagsProvider {
     protected void addTags(HolderLookup.Provider provider) {
         ModBlocks.NITOR.values().forEach(flame -> tag(ModTags.Items.NITOR).add(flame.get().asItem()));
         metalGear();
+        tag(net.minecraft.tags.ItemTags.HEAD_ARMOR).add(ModItems.GOGGLES.get());
+        tag(net.minecraft.tags.ItemTags.DURABILITY_ENCHANTABLE).add(ModItems.GOGGLES.get());
+        tag(net.minecraft.tags.ItemTags.ARMOR_ENCHANTABLE).add(ModItems.GOGGLES.get());
+        tag(net.minecraft.tags.ItemTags.EQUIPPABLE_ENCHANTABLE).add(ModItems.GOGGLES.get());
         tag(net.minecraft.tags.ItemTags.FOOT_ARMOR).add(ModItems.TRAVELLER_BOOTS.get());
         tag(net.minecraft.tags.ItemTags.DURABILITY_ENCHANTABLE).add(ModItems.TRAVELLER_BOOTS.get());
         tag(net.minecraft.tags.ItemTags.ARMOR_ENCHANTABLE).add(ModItems.TRAVELLER_BOOTS.get());
@@ -39,8 +43,8 @@ public class ModItemTagsProvider extends ItemTagsProvider {
         copy(Tags.Blocks.ORE_RATES_SINGULAR, Tags.Items.ORE_RATES_SINGULAR);
         copy(Tags.Blocks.ORE_RATES_DENSE, Tags.Items.ORE_RATES_DENSE);
 
-        // nothing reveals nodes on its own yet, but the tag has to exist for the sight to read it
-        tag(ModTags.Items.REVEALS);
+        // what an aura node can be seen through. The sight reads this and nothing else
+        tag(ModTags.Items.REVEALS).add(ModItems.GOGGLES.get());
 
         tag(ModTags.Items.GEMS_AMBER).add(ModItems.AMBER.get());
         tag(ModTags.Items.GEMS_QUICKSILVER).add(ModItems.QUICKSILVER.get());

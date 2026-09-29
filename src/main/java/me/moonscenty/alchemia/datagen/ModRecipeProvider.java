@@ -270,6 +270,16 @@ public class ModRecipeProvider extends RecipeProvider {
                 Map.of('S', Ingredient.of(Tags.Items.STONES), 'C', Ingredient.of(ModTags.Items.SHARDS)),
                 "SSS", "SCS", "SSS");
 
+        // goggles: two alchemometers looking through brass, held on with leather
+        arcane(output, "goggles_of_revealing", "goggles",
+                new ItemStack(ModItems.GOGGLES.get()),
+                AspectList.of(ModAspects.AIR, 25).add(ModAspects.FIRE, 25).add(ModAspects.WATER, 25)
+                        .add(ModAspects.EARTH, 25).add(ModAspects.ENTROPY, 25).add(ModAspects.ORDER, 25),
+                Map.of('T', Ingredient.of(ModItems.ALCHEMOMETER),
+                        'G', Ingredient.of(ModTags.Items.INGOTS_BRASS),
+                        'L', Ingredient.of(Items.LEATHER)),
+                "LGL", "L L", "TGT");
+
         // the two altar stones: the same eight stones round a block of gold, with light or with fuel packed in
         arcane(output, "infusion_speed_stone", new ItemStack(ModBlocks.INFUSION_SPEED_STONE.get()),
                 AspectList.of(ModAspects.AIR, 250).add(ModAspects.ORDER, 250).add(ModAspects.ENTROPY, 250),

@@ -1,0 +1,25 @@
+{
+  "category": "alchemia:artifice",
+  "column": 5,
+  "complexity": 2,
+  "icon": "alchemia:goggles_of_revealing",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.goggles.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:goggles_of_revealing"
+    }
+  ],
+  "parents": [
+    "alchemia:arcane_workbench"
+  ],
+  "requirements": {
+    "alchemia:auram": 3,
+    "alchemia:potentia": 3,
+    "alchemia:sensus": 3
+  },
+  "row": 2
+}

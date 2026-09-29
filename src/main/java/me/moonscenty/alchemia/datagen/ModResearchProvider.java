@@ -153,6 +153,10 @@ public class ModResearchProvider {
                 List.of("infusion", "alumentum", "nitor"), false, NodeShape.PLAIN, 3,
                 "infusion_speed_stone", "infusion_cost_stone");
 
+        entry(context, "goggles", ModResearch.ARTIFICE, ModItems.GOGGLES, 5, 2,
+                AspectList.of(ModAspects.SENSES, 3).add(ModAspects.AURA, 3).add(ModAspects.ENERGY, 3),
+                List.of("arcane_workbench"), false, NodeShape.PLAIN, 2, "goggles_of_revealing");
+
         entry(context, "traveller_boots", ModResearch.ARTIFICE, ModItems.TRAVELLER_BOOTS, 7, 4,
                 AspectList.of(ModAspects.MOTION, 3).add(ModAspects.EARTH, 3).add(ModAspects.FLIGHT, 3)
                         .add(ModAspects.WATER, 3),

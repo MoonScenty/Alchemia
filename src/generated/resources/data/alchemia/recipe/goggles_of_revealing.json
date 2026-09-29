@@ -1,0 +1,32 @@
+{
+  "type": "alchemia:arcane_shaped",
+  "key": {
+    "G": {
+      "tag": "c:ingots/brass"
+    },
+    "L": {
+      "item": "minecraft:leather"
+    },
+    "T": {
+      "item": "alchemia:alchemometer"
+    }
+  },
+  "pattern": [
+    "LGL",
+    "L L",
+    "TGT"
+  ],
+  "research": "alchemia:goggles",
+  "result": {
+    "count": 1,
+    "id": "alchemia:goggles_of_revealing"
+  },
+  "vis": {
+    "alchemia:aer": 25,
+    "alchemia:aqua": 25,
+    "alchemia:ignis": 25,
+    "alchemia:ordo": 25,
+    "alchemia:perditio": 25,
+    "alchemia:terra": 25
+  }
+}
