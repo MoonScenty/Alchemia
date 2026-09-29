@@ -10,11 +10,16 @@
     },
     {
       "type": "recipe",
+      "recipe": "alchemia:wand_cap_alchemium_inert"
+    },
+    {
+      "type": "recipe",
       "recipe": "alchemia:wand_cap_alchemium"
     }
   ],
   "parents": [
-    "alchemia:wand_cap_brass"
+    "alchemia:wand_cap_brass",
+    "alchemia:infusion"
   ],
   "requirements": {
     "alchemia:auram": 3,

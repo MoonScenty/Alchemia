@@ -253,7 +253,8 @@ public class ModRecipeProvider extends RecipeProvider {
                 AspectList.of(ModAspects.ORDER, 24).add(ModAspects.FIRE, 24).add(ModAspects.AIR, 24),
                 Map.of('N', Ingredient.of(ModTags.Items.NUGGETS_BRASS)), "NNN", "N N");
 
-        arcane(output, "wand_cap_alchemium", new ItemStack(ModItems.WAND_CAPS.get("alchemium").get()),
+        // what the workbench makes of these two is a casting, not a cap; the altar finishes them
+        arcane(output, "wand_cap_alchemium_inert", new ItemStack(ModItems.INERT_CAPS.get("alchemium").get()),
                 AspectList.of(ModAspects.ORDER, 48).add(ModAspects.FIRE, 48).add(ModAspects.AIR, 48),
                 Map.of('N', Ingredient.of(ModTags.Items.NUGGETS_ALCHEMIUM)), "NNN", "N N");
 
@@ -451,6 +452,20 @@ public class ModRecipeProvider extends RecipeProvider {
         }
         infusion(output, "wand_rod_silverwood", Ingredient.of(ModBlocks.SILVERWOOD.log()), around,
                 new ItemStack(ModItems.WAND_RODS.get("silverwood").get()), evenly, 5, "wand_rods");
+
+        // the two caps a workbench can only cast. Salis mundus round them, and the altar does the rest
+        infusion(output, "wand_cap_alchemium", Ingredient.of(ModItems.INERT_CAPS.get("alchemium")),
+                salis(3), new ItemStack(ModItems.WAND_CAPS.get("alchemium").get()),
+                AspectList.of(ModAspects.ENERGY, 12).add(ModAspects.AURA, 6), 5, "wand_cap_alchemium");
+        infusion(output, "wand_cap_void", Ingredient.of(ModItems.INERT_CAPS.get("void")),
+                salis(4), new ItemStack(ModItems.WAND_CAPS.get("void").get()),
+                AspectList.of(ModAspects.ENERGY, 18).add(ModAspects.VOID, 18)
+                        .add(ModAspects.ELDRITCH, 18).add(ModAspects.AURA, 18), 8, "void_metal");
+    }
+
+    /** A ring of salis mundus, which is what every finishing of a cast thing is laid out with. */
+    private static List<Ingredient> salis(int many) {
+        return java.util.Collections.nCopies(many, Ingredient.of(ModItems.SALIS_MUNDUS));
     }
 
     /** One wand rod: the stuff it is cut from, with a balanced shard and a shard of its own element beside it. */
@@ -530,7 +545,8 @@ public class ModRecipeProvider extends RecipeProvider {
                 ModItems.VOID_INGOT, ModTags.Items.INGOTS_VOID);
 
         // the last of the caps, and the dearest: nine times what an iron one costs, across all four of the primals
-        arcane(output, "wand_cap_void", "void_metal", new ItemStack(ModItems.WAND_CAPS.get("void").get()),
+        arcane(output, "wand_cap_void_inert", "void_metal",
+                new ItemStack(ModItems.INERT_CAPS.get("void").get()),
                 AspectList.of(ModAspects.ENTROPY, 72).add(ModAspects.ORDER, 72)
                         .add(ModAspects.FIRE, 72).add(ModAspects.AIR, 72),
                 Map.of('N', Ingredient.of(ModTags.Items.NUGGETS_VOID)), "NNN", "N N");

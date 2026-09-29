@@ -1,21 +1,27 @@
 {
-  "type": "alchemia:arcane_shaped",
-  "key": {
-    "N": {
-      "tag": "c:nuggets/alchemium"
-    }
+  "type": "alchemia:infusion",
+  "central": {
+    "item": "alchemia:wand_cap_alchemium_inert"
   },
-  "pattern": [
-    "NNN",
-    "N N"
-  ],
+  "essentia": {
+    "alchemia:auram": 6,
+    "alchemia:potentia": 12
+  },
+  "instability": 5,
+  "research": "alchemia:wand_cap_alchemium",
   "result": {
     "count": 1,
     "id": "alchemia:wand_cap_alchemium"
   },
-  "vis": {
-    "alchemia:aer": 48,
-    "alchemia:ignis": 48,
-    "alchemia:ordo": 48
-  }
+  "ring": [
+    {
+      "item": "alchemia:salis_mundus"
+    },
+    {
+      "item": "alchemia:salis_mundus"
+    },
+    {
+      "item": "alchemia:salis_mundus"
+    }
+  ]
 }

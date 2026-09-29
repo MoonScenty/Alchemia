@@ -18,6 +18,10 @@
     },
     {
       "type": "recipe",
+      "recipe": "alchemia:wand_cap_void_inert"
+    },
+    {
+      "type": "recipe",
       "recipe": "alchemia:wand_cap_void"
     }
   ],

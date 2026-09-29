@@ -10,6 +10,7 @@ import me.moonscenty.alchemia.player.PlayerKnowledge;
 import me.moonscenty.alchemia.registry.ModAspects;
 import me.moonscenty.alchemia.registry.ModBlocks;
 import me.moonscenty.alchemia.registry.ModItems;
+import me.moonscenty.alchemia.registry.ModWandParts;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.gametest.framework.GameTest;
@@ -339,6 +340,45 @@ public class InfusionTests {
         helper.assertValueEqual(thrifty.cost(), 92, "and take eight parts in a hundred off the bill");
         helper.assertTrue(thrifty.owed().total() <= full.total(),
                 "which is less essentia to find, not more: " + thrifty.owed().total() + " of " + full.total());
+        helper.succeed();
+    }
+
+    /**
+     * The last two caps are cast at a workbench and finished on an altar.
+     * <p>
+     * The casting is not a cap: it cannot be put on a wand, and nothing else in the mod will take it. That is the
+     * whole point of doing it in two goes -- the altar is not an optional shortcut to a better cap, it is the only
+     * way there is one.
+     */
+    @GameTest(template = TEMPLATE)
+    public static void theLastTwoCapsAreFinishedOnTheAltar(GameTestHelper helper) {
+        helper.assertTrue(
+                ModWandParts.CAPS.keySet().stream().noneMatch(
+                        at -> at.getPath().endsWith("_inert")),
+                "a casting is not registered as a cap");
+
+        altar(helper);
+        stand(helper, MATRIX.below(2), new ItemStack(ModItems.INERT_CAPS.get("alchemium").get()));
+        stand(helper, MATRIX.offset(2, -2, 0), new ItemStack(ModItems.SALIS_MUNDUS.get()));
+        stand(helper, MATRIX.offset(-2, -2, 0), new ItemStack(ModItems.SALIS_MUNDUS.get()));
+        stand(helper, MATRIX.offset(0, -2, 2), new ItemStack(ModItems.SALIS_MUNDUS.get()));
+        jar(helper, MATRIX.offset(0, -2, -3), ModAspects.ENERGY, 32);
+        jar(helper, MATRIX.offset(3, -2, 3), ModAspects.AURA, 32);
+
+        InfusionMatrixBlockEntity matrix =
+                (InfusionMatrixBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(MATRIX));
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        player.setData(ModAttachments.KNOWLEDGE,
+                PlayerKnowledge.of(player).withResearch(Alchemia.id("wand_cap_alchemium")));
+        matrix.wake(player);
+        helper.assertValueEqual(matrix.wake(player), InfusionMatrixBlockEntity.Woken.STARTED,
+                "the altar took the casting and the salis round it");
+
+        run(helper, matrix, 40);
+        ArcanePedestalBlockEntity under =
+                (ArcanePedestalBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(MATRIX.below(2)));
+        helper.assertTrue(under.held().is(ModItems.WAND_CAPS.get("alchemium").get()),
+                "and what is left on the pedestal is the finished cap, not the casting: " + under.held());
         helper.succeed();
     }
 }

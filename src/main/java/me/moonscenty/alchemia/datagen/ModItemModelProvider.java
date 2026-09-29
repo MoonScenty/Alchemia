@@ -120,6 +120,11 @@ public class ModItemModelProvider extends ItemModelProvider {
         for (String cap : CAPS) {
             withExistingParent("wand_cap_" + cap, mcLoc("item/generated"))
                     .texture("layer0", modLoc("item/wand/cap_" + cap + "_mat"));
+            // the same ferrule with the life taken out of it, for the two that are cast before they are finished
+            if (ModItems.INERT_CAPS.containsKey(cap)) {
+                withExistingParent("wand_cap_" + cap + "_inert", mcLoc("item/generated"))
+                        .texture("layer0", modLoc("item/wand/cap_" + cap + "_inert_mat"));
+            }
         }
         // a loose rod has a picture of its own, drawn as one rather than as the strip laid under a wand's caps;
         // only the wooden one has no item, being a plain stick

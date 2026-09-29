@@ -76,7 +76,9 @@ public class ModResearchProvider {
         entry(context, "wand_cap_alchemium", ModResearch.ARCANA, ModItems.WAND_CAPS.get("alchemium"), 6, 5,
                 AspectList.of(ModAspects.METAL, 6).add(ModAspects.ENERGY, 6).add(ModAspects.TOOL, 3)
                         .add(ModAspects.AURA, 3),
-                List.of("wand_cap_brass"), false, NodeShape.SPECIAL, 3, "wand_cap_alchemium");
+                // cast at a workbench and finished on an altar, so the altar has to come first
+                List.of("wand_cap_brass", "infusion"), false, NodeShape.SPECIAL, 3,
+                "wand_cap_alchemium_inert", "wand_cap_alchemium");
 
         entry(context, "wand_rod_greatwood", ModResearch.ARCANA, ModItems.WAND_RODS.get("greatwood"), 2, 3,
                 AspectList.of(ModAspects.TOOL, 3).add(ModAspects.PLANT, 6).add(ModAspects.ENERGY, 3),
@@ -122,7 +124,7 @@ public class ModResearchProvider {
                 AspectList.of(ModAspects.VOID, 6).add(ModAspects.DARKNESS, 6).add(ModAspects.METAL, 4)
                         .add(ModAspects.ELDRITCH, 2),
                 List.of("metallurgy"), false, NodeShape.SPECIAL, 3,
-                "void_seed", "void_ingot", "wand_cap_void");
+                "void_seed", "void_ingot", "wand_cap_void_inert", "wand_cap_void");
 
         // --- the altar, and what can only be made on one --------------------------------------------------
 

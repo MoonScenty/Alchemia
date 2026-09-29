@@ -471,5 +471,10 @@ public abstract class ModLanguageProvider extends LanguageProvider {
     private void addWandCap(String cap, String english, String korean) {
         add("wand_cap.alchemia." + cap, pick(english, korean));
         add("item.alchemia.wand_cap_" + cap, pick(english + " Wand Cap", korean + " 완드 캡"));
+        // the two that are cast before they are finished have a name for the casting as well
+        if (ModItems.INERT_CAPS.containsKey(cap)) {
+            add("item.alchemia.wand_cap_" + cap + "_inert",
+                    pick("Inert " + english + " Wand Cap", "불활성 " + korean + " 완드 캡"));
+        }
     }
 }

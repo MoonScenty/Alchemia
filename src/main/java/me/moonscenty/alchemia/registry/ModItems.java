@@ -51,6 +51,14 @@ public class ModItems {
     /** The metal ends, as they are before they are worked onto a rod. */
     public static final Map<String, DeferredItem<Item>> WAND_CAPS = registerWandCaps();
 
+    /**
+     * The two caps that are cast and then finished, in the state they leave the workbench in.
+     * <p>
+     * These are not caps. They cannot be put on a wand and there is no {@link me.moonscenty.alchemia.wand.WandCap}
+     * for them; they are what goes on the pedestal when the finished cap is infused, and nothing else.
+     */
+    public static final Map<String, DeferredItem<Item>> INERT_CAPS = registerInertCaps();
+
     /** The shafts. A plain wooden one is a vanilla stick, so it is not in here. */
     public static final Map<String, DeferredItem<Item>> WAND_RODS = registerWandRods();
 
@@ -122,6 +130,15 @@ public class ModItems {
         Map<String, DeferredItem<Item>> caps = new java.util.LinkedHashMap<>();
         for (String metal : new String[] {"iron", "gold", "brass", "alchemium", "void"}) {
             caps.put(metal, ITEMS.registerSimpleItem("wand_cap_" + metal));
+        }
+        return caps;
+    }
+
+    /** Alchemium and void alone. Iron, gold and brass are finished when they leave the workbench. */
+    private static Map<String, DeferredItem<Item>> registerInertCaps() {
+        Map<String, DeferredItem<Item>> caps = new java.util.LinkedHashMap<>();
+        for (String metal : new String[] {"alchemium", "void"}) {
+            caps.put(metal, ITEMS.registerSimpleItem("wand_cap_" + metal + "_inert"));
         }
         return caps;
     }
