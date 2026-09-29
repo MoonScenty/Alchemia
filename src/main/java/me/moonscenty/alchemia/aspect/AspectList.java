@@ -1,5 +1,6 @@
 package me.moonscenty.alchemia.aspect;
 
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -35,7 +36,10 @@ public final class AspectList {
     private final Map<Holder<Aspect>, Integer> amounts;
 
     private AspectList(Map<Holder<Aspect>, Integer> amounts) {
-        this.amounts = Map.copyOf(amounts);
+        // a linked copy rather than Map.copyOf: a copied map hands its entries back in an order the running
+        // machine picks for itself, and every operation below is at pains to keep the order it was given.
+        // Thrown away here, the same list would read out differently from one run of the game to the next
+        this.amounts = Collections.unmodifiableMap(new LinkedHashMap<>(amounts));
     }
 
     public static AspectList of(Holder<Aspect> aspect, int amount) {
@@ -160,8 +164,11 @@ public final class AspectList {
     public AspectList cull() {
         AspectList result = this;
         while (result.size() > MAX_ASPECTS) {
+            // ties broken by name, so which aspect goes is settled by the list itself rather than by the
+            // order it happened to be built in
             Holder<Aspect> weakest = result.amounts.keySet().stream()
-                    .min(Comparator.comparingDouble(result::weight))
+                    .min(Comparator.<Holder<Aspect>>comparingDouble(result::weight)
+                            .thenComparing(holder -> holder.value().tag()))
                     .orElseThrow();
             result = result.remove(weakest);
         }
