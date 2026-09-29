@@ -19,16 +19,20 @@ import net.neoforged.neoforge.network.PacketDistributor;
 /**
  * The key that changes what a wand is pointed with.
  * <p>
- * F as the original had it, and sneak with it to take the focus off. The original held the key to open a wheel of
- * every focus the player was carrying and let go over one; here a press moves to the next. The wheel is a way of
- * choosing and this is the choosing itself, so it can be built on top later without any of this changing.
+ * Sneak with it to take the focus off. The original held the key to open a wheel of every focus the player was
+ * carrying and let go over one; here a press moves to the next. The wheel is a way of choosing and this is the
+ * choosing itself, so it can be built on top later without any of this changing.
+ * <p>
+ * The original used F, which was free in its day. It is vanilla's swap-hands key in this one, and two bindings on
+ * one key both fire -- a press would change the focus and swap the hands at once. V is free and falls under the
+ * same hand, so V it is; anyone who wants F back can say so in the controls screen.
  */
 @EventBusSubscriber(modid = Alchemia.MODID, value = Dist.CLIENT)
 public final class WandKeys {
     private static final String CATEGORY = "key.categories.alchemia";
 
     public static final KeyMapping CHANGE_FOCUS = new KeyMapping("key.alchemia.change_focus",
-            KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, InputConstants.KEY_F, CATEGORY);
+            KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, InputConstants.KEY_V, CATEGORY);
 
     private WandKeys() {
     }
