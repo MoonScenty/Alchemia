@@ -145,7 +145,9 @@ public class ModResearchProvider {
                 AspectList.of(ModAspects.AURA, 6).add(ModAspects.TOOL, 6).add(ModAspects.CRAFT, 4)
                         .add(ModAspects.MIND, 4),
                 List.of("infusion"), false, NodeShape.PLAIN, 3,
-                "infusion_enchantment_collector", "infusion_enchantment_destructive");
+                "infusion_enchantment_collector", "infusion_enchantment_destructive",
+                "infusion_enchantment_burrowing", "infusion_enchantment_sounding",
+                "infusion_enchantment_arcing", "infusion_enchantment_essence");
 
         entry(context, "wand_rods", ModResearch.ARCANA, ModItems.WAND_RODS.get("silverwood"), 8, 4,
                 AspectList.of(ModAspects.TOOL, 6).add(ModAspects.AURA, 6).add(ModAspects.ENERGY, 6),

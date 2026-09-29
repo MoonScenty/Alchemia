@@ -88,6 +88,9 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         addItem(ModItems.IRON_PLATE, pick("Iron Plate", "철 판"));
         addItem(ModItems.SALIS_MUNDUS, pick("Salis Mundus", "살리스 문두스"));
         addItem(ModItems.ALUMENTUM, pick("Alumentum", "알루멘툼"));
+        addItem(ModItems.VIS_CRYSTAL, pick("Vis Crystal", "비스 결정"));
+        add("item.alchemia.vis_crystal.of", pick("%s Crystal", "%s 결정"));
+        add("item.alchemia.vis_crystal.holding", pick("One point of %s", "%s 한 점"));
         addInfusionEnchantments();
         addBlock(ModBlocks.INFUSION_SPEED_STONE, pick("Infusion Speed Stone", "주입 속도석"));
         addBlock(ModBlocks.INFUSION_COST_STONE, pick("Infusion Cost Stone", "주입 절약석"));
@@ -320,8 +323,8 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                  "Two stones, laid a course below the altar's corners, and an altar takes whatever is under them without being asked. One hurries a turn along and charges a little more for it; the other waits longer and charges less. Four of a kind is the whole of either -- twelve ticks to a turn, or eight parts in a hundred off the bill -- and nothing takes a working below half price. They can be mixed, which is the only reason there are two of them rather than one with a switch.",
                  "제단 귀퉁이보다 한 켜 아래에 까는 돌 둘이다. 제단은 그 밑에 무엇이 깔렸든 묻지 않고 그대로 받는다. 하나는 한 바퀴를 재촉하는 대신 값을 조금 더 받고, 다른 하나는 더 기다리는 대신 덜 받는다. 넷을 같은 것으로 깔면 그것이 한계다 — 한 바퀴 열두 틱, 또는 값에서 백분의 팔. 무엇을 깔아도 반값 아래로는 내려가지 않는다. 섞어 깔 수도 있으니, 돌이 하나가 아니라 둘인 이유가 그것이다."},
                 {"infusion_enchantment", "Infusion Enchantment", "주입 마법부여",
-                 "An altar will put on a tool what no table will sell. There is no gambling and no book to keep it in: the tool goes under the matrix, the price is paid in essentia, and it comes back with one more thing about it. Collector sends what is broken to the one who broke it. Destructive takes the eight blocks round the one struck, where the tool would have served for them anyway. Crouch and either goes quiet, which is the only control there is over them.",
-                 "작업대가 팔지 않는 것을 제단은 도구에 얹는다. 운에 맡길 것도, 담아 둘 책도 없다. 도구를 결계 아래에 두고 에센시아로 값을 치르면 한 가지를 더 지니고 돌아온다. 수집은 부순 것을 부순 이에게 보낸다. 파괴는 때린 칸 둘레 여덟을 같이 가져가되, 그 도구로 캘 수 있는 것만 가져간다. 웅크리면 둘 다 조용해진다. 이 둘을 다루는 방법은 그것뿐이다."},
+                 "An altar will put on a tool what no table will sell. There is no gambling and no book to keep it in: the tool goes under the matrix, the price is paid in essentia, and it comes back with one more thing about it. Collector sends what is broken to the one who broke it. Destructive takes the eight blocks round the one struck, where the tool would have served for them anyway. Burrowing brings a seam or a trunk apart from its far end. Sounding taps the stone and shows what is behind it for a moment, at five swings' wear. Arcing carries a blow to whatever is standing beside what was struck. Essence makes what is killed give up a little of what it was made of -- the one way to essentia that wants no smelter, and so the meanest of them. Crouch and the digging ones go quiet.",
+                 "작업대가 팔지 않는 것을 제단은 도구에 얹는다. 운에 맡길 것도, 담아 둘 책도 없다. 도구를 결계 아래에 두고 에센시아로 값을 치르면 한 가지를 더 지니고 돌아온다. 수집은 부순 것을 부순 이에게 보낸다. 파괴는 때린 칸 둘레 여덟을 같이 가져가되, 그 도구로 캘 수 있는 것만 가져간다. 굴착은 광맥이나 줄기를 먼 끝에서부터 허문다. 탐지는 돌을 두드려 돌 너머를 잠시 보여 주고, 그 대가로 도구가 다섯 번 닳는다. 전이는 때린 것 옆에 선 것에도 같은 매를 옮긴다. 정수는 죽인 것이 제 만들어진 바를 조금 내놓게 한다 -- 제련로 없이 에센시아를 얻는 유일한 길이고, 그래서 한 번에 주는 것이 적다. 웅크리면 캐는 것들은 조용해진다."},
                 {"warp", "Warp", "뒤틀림",
                  "Look too long into what should not be, and it begins looking back. The damage is not to the world but to the one studying it, and it does not undo itself with rest.",
                  "있어서는 안 될 것을 오래 들여다보면, 그것도 당신을 들여다보기 시작한다. 상하는 것은 세계가 아니라 그것을 연구하는 자이며, 쉰다고 해서 되돌아오지 않는다."},
@@ -477,6 +480,10 @@ public abstract class ModLanguageProvider extends LanguageProvider {
     private void addInfusionEnchantments() {
         add(InfusionEnchantment.COLLECTOR.key(), pick("Collector", "수집"));
         add(InfusionEnchantment.DESTRUCTIVE.key(), pick("Destructive", "파괴"));
+        add(InfusionEnchantment.BURROWING.key(), pick("Burrowing", "굴착"));
+        add(InfusionEnchantment.SOUNDING.key(), pick("Sounding", "탐지"));
+        add(InfusionEnchantment.ARCING.key(), pick("Arcing", "전이"));
+        add(InfusionEnchantment.ESSENCE.key(), pick("Essence", "정수"));
     }
 
     private void addWandCap(String cap, String english, String korean) {

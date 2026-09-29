@@ -1,0 +1,24 @@
+{
+  "type": "alchemia:infusion",
+  "central": {
+    "tag": "minecraft:pickaxes"
+  },
+  "enchants": "sounding",
+  "essentia": {
+    "alchemia:ignis": 12,
+    "alchemia:sensus": 8
+  },
+  "instability": 4,
+  "research": "alchemia:infusion_enchantment",
+  "ring": [
+    {
+      "item": "alchemia:research_notes"
+    },
+    {
+      "item": "minecraft:enchanted_book"
+    },
+    {
+      "item": "minecraft:map"
+    }
+  ]
+}

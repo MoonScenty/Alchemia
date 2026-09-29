@@ -480,6 +480,22 @@ public class ModRecipeProvider extends RecipeProvider {
                 AspectList.of(ModAspects.AVERSION, 48).add(ModAspects.ENTROPY, 64),
                 List.of(Ingredient.of(ModItems.RESEARCH_NOTES),
                         Ingredient.of(Items.ENCHANTED_BOOK), Ingredient.of(Items.TNT)));
+        enchantment(output, InfusionEnchantment.BURROWING,
+                AspectList.of(ModAspects.SENSES, 24).add(ModAspects.EARTH, 32),
+                List.of(Ingredient.of(ModItems.RESEARCH_NOTES),
+                        Ingredient.of(Items.ENCHANTED_BOOK), Ingredient.of(Items.RABBIT_FOOT)));
+        enchantment(output, InfusionEnchantment.SOUNDING,
+                AspectList.of(ModAspects.SENSES, 8).add(ModAspects.FIRE, 12),
+                List.of(Ingredient.of(ModItems.RESEARCH_NOTES),
+                        Ingredient.of(Items.ENCHANTED_BOOK), Ingredient.of(Items.MAP)));
+        enchantment(output, InfusionEnchantment.ARCING,
+                AspectList.of(ModAspects.ENERGY, 8).add(ModAspects.AIR, 12),
+                List.of(Ingredient.of(ModItems.RESEARCH_NOTES),
+                        Ingredient.of(Items.ENCHANTED_BOOK), Ingredient.of(Items.REDSTONE_BLOCK)));
+        enchantment(output, InfusionEnchantment.ESSENCE,
+                AspectList.of(ModAspects.BEAST, 8).add(ModAspects.FLUX, 12),
+                List.of(Ingredient.of(ModItems.RESEARCH_NOTES),
+                        Ingredient.of(Items.ENCHANTED_BOOK), Ingredient.of(ModItems.VIS_CRYSTAL)));
     }
 
     /** One working that puts something on a tool: the tools it will take, and what is laid round them. */

@@ -35,9 +35,21 @@ public class TaintTests {
     private static final BlockPos HERE = new BlockPos(8, 4, 8);
     private static final int BASE = AuraGeneration.BASE;
 
+    /**
+     * Flux in the air here, and in every chunk a test might reach into.
+     * <p>
+     * One chunk is not enough. Where a structure lands is not up to the test, so a spot a block or two from the
+     * middle can fall in the next chunk along, and the taint asks the chunk it is standing in rather than the
+     * one the test had in mind. Filling the nine leaves nothing to where the structure happened to be put.
+     */
     private static void flux(GameTestHelper helper, int amount) {
-        helper.getLevel().getChunkAt(helper.absolutePos(HERE)).setData(ModAuraAttachment.AURA,
-                new AuraChunk(BASE, AspectList.EMPTY.add(ModAspects.FLUX, amount)));
+        BlockPos middle = helper.absolutePos(HERE);
+        for (int east = -16; east <= 16; east += 16) {
+            for (int south = -16; south <= 16; south += 16) {
+                helper.getLevel().getChunkAt(middle.offset(east, 0, south)).setData(ModAuraAttachment.AURA,
+                        new AuraChunk(BASE, AspectList.EMPTY.add(ModAspects.FLUX, amount)));
+            }
+        }
     }
 
     private static int fluxLeft(GameTestHelper helper) {

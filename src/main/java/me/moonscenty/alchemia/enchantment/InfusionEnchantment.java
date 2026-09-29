@@ -29,7 +29,15 @@ public enum InfusionEnchantment implements StringRepresentable {
     /** What is broken goes to the one who broke it, rather than onto the floor. */
     COLLECTOR("collector", 1, () -> List.of(ItemTags.PICKAXES, ItemTags.AXES, ItemTags.SHOVELS, ItemTags.SWORDS)),
     /** The eight blocks round the one struck go with it, where the tool would have served for them. */
-    DESTRUCTIVE("destructive", 1, () -> List.of(ItemTags.PICKAXES, ItemTags.AXES, ItemTags.SHOVELS));
+    DESTRUCTIVE("destructive", 1, () -> List.of(ItemTags.PICKAXES, ItemTags.AXES, ItemTags.SHOVELS)),
+    /** A vein or a trunk comes apart from its far end rather than from the end being struck. */
+    BURROWING("burrowing", 1, () -> List.of(ItemTags.PICKAXES, ItemTags.AXES)),
+    /** Tapping stone with it shows what is behind the stone, for a moment and at a price. */
+    SOUNDING("sounding", 4, () -> List.of(ItemTags.PICKAXES)),
+    /** A blow lands on what is standing about as well as on what was struck. */
+    ARCING("arcing", 4, () -> List.of(ItemTags.SWORDS, ItemTags.AXES)),
+    /** What is killed gives up a little of what it was made of. */
+    ESSENCE("essence", 5, () -> List.of(ItemTags.SWORDS, ItemTags.AXES));
 
     public static final Codec<InfusionEnchantment> CODEC = StringRepresentable.fromEnum(InfusionEnchantment::values);
     public static final StreamCodec<io.netty.buffer.ByteBuf, InfusionEnchantment> STREAM_CODEC =

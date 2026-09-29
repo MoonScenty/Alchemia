@@ -1,0 +1,29 @@
+{
+  "type": "alchemia:infusion",
+  "central": [
+    {
+      "tag": "minecraft:swords"
+    },
+    {
+      "tag": "minecraft:axes"
+    }
+  ],
+  "enchants": "arcing",
+  "essentia": {
+    "alchemia:aer": 12,
+    "alchemia:potentia": 8
+  },
+  "instability": 4,
+  "research": "alchemia:infusion_enchantment",
+  "ring": [
+    {
+      "item": "alchemia:research_notes"
+    },
+    {
+      "item": "minecraft:enchanted_book"
+    },
+    {
+      "item": "minecraft:redstone_block"
+    }
+  ]
+}

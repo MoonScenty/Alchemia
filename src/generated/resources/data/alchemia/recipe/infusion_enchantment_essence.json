@@ -1,0 +1,29 @@
+{
+  "type": "alchemia:infusion",
+  "central": [
+    {
+      "tag": "minecraft:swords"
+    },
+    {
+      "tag": "minecraft:axes"
+    }
+  ],
+  "enchants": "essence",
+  "essentia": {
+    "alchemia:bestia": 8,
+    "alchemia:vitium": 12
+  },
+  "instability": 4,
+  "research": "alchemia:infusion_enchantment",
+  "ring": [
+    {
+      "item": "alchemia:research_notes"
+    },
+    {
+      "item": "minecraft:enchanted_book"
+    },
+    {
+      "item": "alchemia:vis_crystal"
+    }
+  ]
+}

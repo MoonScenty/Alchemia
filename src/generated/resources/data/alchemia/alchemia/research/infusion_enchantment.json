@@ -15,6 +15,22 @@
     {
       "type": "recipe",
       "recipe": "alchemia:infusion_enchantment_destructive"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:infusion_enchantment_burrowing"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:infusion_enchantment_sounding"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:infusion_enchantment_arcing"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:infusion_enchantment_essence"
     }
   ],
   "parents": [

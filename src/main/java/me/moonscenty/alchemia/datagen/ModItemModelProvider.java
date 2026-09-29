@@ -59,6 +59,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.RAW_CINNABAR.get());
         ModItems.SHARDS.values().forEach(shard -> basicItem(shard.get()));
         basicItem(ModItems.BALANCED_SHARD.get());
+        basicItem(ModItems.VIS_CRYSTAL.get());
         basicItem(ModItems.IRON_CLUSTER.get());
         basicItem(ModItems.GOLD_CLUSTER.get());
         basicItem(ModItems.COPPER_CLUSTER.get());

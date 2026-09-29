@@ -6,6 +6,7 @@ import java.util.Map;
 
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.item.AlumentumItem;
+import me.moonscenty.alchemia.item.VisCrystalItem;
 import me.moonscenty.alchemia.item.JarLabelItem;
 import me.moonscenty.alchemia.item.PhialItem;
 import me.moonscenty.alchemia.item.WandItem;
@@ -64,6 +65,10 @@ public class ModItems {
 
     public static final Map<CrystalType, DeferredItem<Item>> SHARDS = registerShards();
     public static final DeferredItem<Item> BALANCED_SHARD = ITEMS.registerSimpleItem("balanced_shard");
+
+    /** One point of any essentia, set hard enough to carry. Drawn once in grey and painted by what is in it. */
+    public static final DeferredItem<VisCrystalItem> VIS_CRYSTAL =
+            ITEMS.register("vis_crystal", () -> new VisCrystalItem(new Item.Properties()));
 
     // Purified ore clusters, each smelts into two of its metal
     public static final DeferredItem<Item> IRON_CLUSTER = ITEMS.registerSimpleItem("iron_cluster");
