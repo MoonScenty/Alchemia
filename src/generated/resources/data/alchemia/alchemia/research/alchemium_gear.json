@@ -1,0 +1,57 @@
+{
+  "category": "alchemia:artifice",
+  "column": -1,
+  "complexity": 2,
+  "icon": "alchemia:alchemium_pickaxe",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.alchemium_gear.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:alchemium_pickaxe"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:alchemium_axe"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:alchemium_shovel"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:alchemium_sword"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:alchemium_hoe"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:alchemium_helmet"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:alchemium_chestplate"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:alchemium_leggings"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:alchemium_boots"
+    }
+  ],
+  "parents": [
+    "alchemia:metallurgy"
+  ],
+  "requirements": {
+    "alchemia:instrumentum": 6,
+    "alchemia:metallum": 6,
+    "alchemia:praemunio": 4
+  },
+  "row": 5
+}

@@ -77,6 +77,7 @@ public class ModRecipeProvider extends RecipeProvider {
         wand(output);
         arcane(output);
         crucible(output);
+        metalGear(output);
         distillery(output);
         voidMetal(output);
         infusion(output);
@@ -540,6 +541,47 @@ public class ModRecipeProvider extends RecipeProvider {
      * thing thrown in afterwards to finish it. The thing thrown in is used up either way, so an iron ingot dropped
      * into a pot that is not ready simply comes apart into what iron is made of.
      */
+    /**
+     * The tools and armour of our two metals, in the shapes everyone already knows.
+     * <p>
+     * A plain crafting table and the vanilla patterns, exactly as the original had them. Neither metal is worth
+     * making these out of until it has been made at all, and making it is the hard part; asking a player to
+     * relearn where the sticks go on top of that would be a second cost for nothing.
+     */
+    private void metalGear(RecipeOutput output) {
+        forge(output, "alchemium", ModTags.Items.INGOTS_ALCHEMIUM);
+        forge(output, "void", ModTags.Items.INGOTS_VOID);
+    }
+
+    private void forge(RecipeOutput output, String metal, net.minecraft.tags.TagKey<Item> of) {
+        Ingredient bar = Ingredient.of(of);
+        Ingredient haft = Ingredient.of(Items.STICK);
+        shape(output, metal + "_pickaxe", bar, haft, "III", " S ", " S ");
+        shape(output, metal + "_axe", bar, haft, "II", "SI", "S ");
+        shape(output, metal + "_shovel", bar, haft, "I", "S", "S");
+        shape(output, metal + "_sword", bar, haft, "I", "I", "S");
+        shape(output, metal + "_hoe", bar, haft, "II", "S ", "S ");
+        shape(output, metal + "_helmet", bar, haft, "III", "I I");
+        shape(output, metal + "_chestplate", bar, haft, "I I", "III", "III");
+        shape(output, metal + "_leggings", bar, haft, "III", "I I", "I I");
+        shape(output, metal + "_boots", bar, haft, "I I", "I I");
+    }
+
+    private void shape(RecipeOutput output, String name, Ingredient bar, Ingredient haft, String... rows) {
+        Item made = ModItems.METAL_TOOLS.containsKey(name)
+                ? ModItems.METAL_TOOLS.get(name).get() : ModItems.METAL_ARMOUR.get(name).get();
+        var builder = ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, made)
+                .define('I', bar)
+                .unlockedBy("has_ingot", has(bar.getItems()[0].getItem()));
+        if (String.join("", rows).indexOf('S') >= 0) {
+            builder.define('S', haft);
+        }
+        for (String row : rows) {
+            builder.pattern(row);
+        }
+        builder.save(output, Alchemia.id(name));
+    }
+
     private void crucible(RecipeOutput output) {
         crucible(output, "alchemium_ingot_from_iron", Ingredient.of(Tags.Items.INGOTS_IRON),
                 AspectList.of(ModAspects.EARTH, 2).add(ModAspects.ORDER, 2),

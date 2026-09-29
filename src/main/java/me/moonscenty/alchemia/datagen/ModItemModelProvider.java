@@ -60,6 +60,10 @@ public class ModItemModelProvider extends ItemModelProvider {
         ModItems.SHARDS.values().forEach(shard -> basicItem(shard.get()));
         basicItem(ModItems.BALANCED_SHARD.get());
         basicItem(ModItems.CRYSTALLIZED_ESSENCE.get());
+        // a tool is held out in front; a piece of armour lies flat in the slot like any other picture
+        ModItems.METAL_TOOLS.forEach((name, tool) -> withExistingParent(name, mcLoc("item/handheld"))
+                .texture("layer0", modLoc("item/" + name)));
+        ModItems.METAL_ARMOUR.forEach((name, piece) -> basicItem(piece.get()));
         basicItem(ModItems.IRON_CLUSTER.get());
         basicItem(ModItems.GOLD_CLUSTER.get());
         basicItem(ModItems.COPPER_CLUSTER.get());

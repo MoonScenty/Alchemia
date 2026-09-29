@@ -25,6 +25,7 @@ public class ModItemTagsProvider extends ItemTagsProvider {
     @Override
     protected void addTags(HolderLookup.Provider provider) {
         ModBlocks.NITOR.values().forEach(flame -> tag(ModTags.Items.NITOR).add(flame.get().asItem()));
+        metalGear();
 
         copy(ModTags.Blocks.ORES_AMBER, ModTags.Items.ORES_AMBER);
         copy(ModTags.Blocks.ORES_CINNABAR, ModTags.Items.ORES_CINNABAR);
@@ -86,5 +87,49 @@ public class ModItemTagsProvider extends ItemTagsProvider {
         tag(ModTags.Items.SHARDS).add(ModItems.BALANCED_SHARD.get());
         tag(ModTags.Items.CLUSTERS).add(ModItems.IRON_CLUSTER.get(), ModItems.GOLD_CLUSTER.get(),
                 ModItems.COPPER_CLUSTER.get(), ModItems.CINNABAR_CLUSTER.get());
+    }
+
+    /**
+     * The tools and armour of our metals, put where the game and the mod both look for them.
+     * <p>
+     * A pickaxe that is not in the pickaxes tag is not a pickaxe to anything that asks: not to vanilla, and not
+     * to the workings an altar puts on tools. Extending the class is not the same as saying so.
+     */
+    private void metalGear() {
+        java.util.Map<String, net.minecraft.tags.TagKey<net.minecraft.world.item.Item>> shapes =
+                java.util.Map.of(
+                        "pickaxe", net.minecraft.tags.ItemTags.PICKAXES,
+                        "axe", net.minecraft.tags.ItemTags.AXES,
+                        "shovel", net.minecraft.tags.ItemTags.SHOVELS,
+                        "sword", net.minecraft.tags.ItemTags.SWORDS,
+                        "hoe", net.minecraft.tags.ItemTags.HOES,
+                        "helmet", net.minecraft.tags.ItemTags.HEAD_ARMOR,
+                        "chestplate", net.minecraft.tags.ItemTags.CHEST_ARMOR,
+                        "leggings", net.minecraft.tags.ItemTags.LEG_ARMOR,
+                        "boots", net.minecraft.tags.ItemTags.FOOT_ARMOR);
+
+        java.util.stream.Stream.concat(ModItems.METAL_TOOLS.entrySet().stream(),
+                        ModItems.METAL_ARMOUR.entrySet().stream())
+                .forEach(made -> {
+                    String shape = made.getKey().substring(made.getKey().indexOf('_') + 1);
+                    tag(shapes.get(shape)).add(made.getValue().get());
+                });
+
+        // and what may be taken to an enchanting table, which is a separate list from what a thing is
+        ModItems.METAL_TOOLS.forEach((name, tool) -> {
+            tag(net.minecraft.tags.ItemTags.DURABILITY_ENCHANTABLE).add(tool.get());
+            if (name.endsWith("_sword")) {
+                tag(net.minecraft.tags.ItemTags.SWORD_ENCHANTABLE).add(tool.get());
+                tag(net.minecraft.tags.ItemTags.WEAPON_ENCHANTABLE).add(tool.get());
+            } else {
+                tag(net.minecraft.tags.ItemTags.MINING_ENCHANTABLE).add(tool.get());
+                tag(net.minecraft.tags.ItemTags.MINING_LOOT_ENCHANTABLE).add(tool.get());
+            }
+        });
+        ModItems.METAL_ARMOUR.values().forEach(piece -> {
+            tag(net.minecraft.tags.ItemTags.DURABILITY_ENCHANTABLE).add(piece.get());
+            tag(net.minecraft.tags.ItemTags.ARMOR_ENCHANTABLE).add(piece.get());
+            tag(net.minecraft.tags.ItemTags.EQUIPPABLE_ENCHANTABLE).add(piece.get());
+        });
     }
 }

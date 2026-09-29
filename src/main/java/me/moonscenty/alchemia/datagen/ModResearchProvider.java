@@ -126,6 +126,19 @@ public class ModResearchProvider {
                 List.of("metallurgy"), false, NodeShape.SPECIAL, 3,
                 "void_seed", "void_ingot", "wand_cap_void_inert", "wand_cap_void");
 
+        // what either metal is good for once there is enough of it to forge with
+        entry(context, "alchemium_gear", ModResearch.ARTIFICE, ModItems.METAL_TOOLS.get("alchemium_pickaxe"),
+                -1, 5, AspectList.of(ModAspects.METAL, 6).add(ModAspects.TOOL, 6).add(ModAspects.PROTECT, 4),
+                List.of("metallurgy"), false, NodeShape.PLAIN, 2,
+                "alchemium_pickaxe", "alchemium_axe", "alchemium_shovel", "alchemium_sword", "alchemium_hoe",
+                "alchemium_helmet", "alchemium_chestplate", "alchemium_leggings", "alchemium_boots");
+        entry(context, "void_gear", ModResearch.ARTIFICE, ModItems.METAL_TOOLS.get("void_pickaxe"),
+                -3, 5, AspectList.of(ModAspects.VOID, 6).add(ModAspects.TOOL, 6).add(ModAspects.PROTECT, 4)
+                        .add(ModAspects.ELDRITCH, 2),
+                List.of("void_metal", "alchemium_gear"), false, NodeShape.PLAIN, 3,
+                "void_pickaxe", "void_axe", "void_shovel", "void_sword", "void_hoe",
+                "void_helmet", "void_chestplate", "void_leggings", "void_boots");
+
         // --- the altar, and what can only be made on one --------------------------------------------------
 
         entry(context, "infusion", ModResearch.ARCANA, ModBlocks.INFUSION_MATRIX, 7, 2,

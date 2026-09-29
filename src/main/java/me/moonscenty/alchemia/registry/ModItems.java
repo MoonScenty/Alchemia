@@ -2,6 +2,7 @@ package me.moonscenty.alchemia.registry;
 
 import java.util.Collections;
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
 
 import me.moonscenty.alchemia.Alchemia;
@@ -16,6 +17,16 @@ import me.moonscenty.alchemia.item.NodePlacerItem;
 import me.moonscenty.alchemia.item.ResearchNoteItem;
 import me.moonscenty.alchemia.item.AlchemometerItem;
 import net.minecraft.world.item.Item;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.SwordItem;
+import net.minecraft.world.item.ShovelItem;
+import net.minecraft.world.item.PickaxeItem;
+import net.minecraft.world.item.HoeItem;
+import net.minecraft.world.item.AxeItem;
+import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.ArmorItem;
+import me.moonscenty.alchemia.item.ModTiers;
 import net.minecraft.world.item.Rarity;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -65,6 +76,16 @@ public class ModItems {
 
     public static final Map<CrystalType, DeferredItem<Item>> SHARDS = registerShards();
     public static final DeferredItem<Item> BALANCED_SHARD = ITEMS.registerSimpleItem("balanced_shard");
+
+    /**
+     * Tools and armour of our two metals.
+     * <p>
+     * Ten shapes and eight pieces, all of them the vanilla item with another metal behind it. The original did
+     * the same -- a thaumium pickaxe is a pickaxe -- and anything either of them does beyond that is put on by
+     * an altar afterwards rather than built into the item.
+     */
+    public static final Map<String, DeferredItem<Item>> METAL_TOOLS = registerMetalTools();
+    public static final Map<String, DeferredItem<Item>> METAL_ARMOUR = registerMetalArmour();
 
     /** One point of any essentia, set hard enough to carry. Drawn once in grey and painted by what is in it. */
     public static final DeferredItem<CrystallizedEssenceItem> CRYSTALLIZED_ESSENCE =
@@ -137,6 +158,55 @@ public class ModItems {
             caps.put(metal, ITEMS.registerSimpleItem("wand_cap_" + metal));
         }
         return caps;
+    }
+
+    /**
+     * The shapes, forged twice.
+     * <p>
+     * The metals are named here rather than in a field of their own. A field would have to be assigned before
+     * this runs, and what order two static fields of one class are assigned in is the order they are written --
+     * which is not a thing to hang a mod's startup on.
+     */
+    private static Map<String, DeferredItem<Item>> registerMetalTools() {
+        Map<String, DeferredItem<Item>> made = new java.util.LinkedHashMap<>();
+        for (Map.Entry<String, Tier> forging
+                : List.of(Map.entry("alchemium", ModTiers.ALCHEMIUM), Map.entry("void", ModTiers.VOID))) {
+            String metal = forging.getKey();
+            Tier tier = forging.getValue();
+            made.put(metal + "_pickaxe", ITEMS.register(metal + "_pickaxe",
+                    () -> new PickaxeItem(tier, new Item.Properties().attributes(
+                            PickaxeItem.createAttributes(tier, 1.0F, -2.8F)))));
+            made.put(metal + "_axe", ITEMS.register(metal + "_axe",
+                    () -> new AxeItem(tier, new Item.Properties().attributes(
+                            AxeItem.createAttributes(tier, 6.0F, -3.1F)))));
+            made.put(metal + "_shovel", ITEMS.register(metal + "_shovel",
+                    () -> new ShovelItem(tier, new Item.Properties().attributes(
+                            ShovelItem.createAttributes(tier, 1.5F, -3.0F)))));
+            made.put(metal + "_sword", ITEMS.register(metal + "_sword",
+                    () -> new SwordItem(tier, new Item.Properties().attributes(
+                            SwordItem.createAttributes(tier, 3, -2.4F)))));
+            made.put(metal + "_hoe", ITEMS.register(metal + "_hoe",
+                    () -> new HoeItem(tier, new Item.Properties().attributes(
+                            HoeItem.createAttributes(tier, -2.0F, -1.0F)))));
+        }
+        return Map.copyOf(made);
+    }
+
+    private static Map<String, DeferredItem<Item>> registerMetalArmour() {
+        Map<String, DeferredItem<Item>> made = new java.util.LinkedHashMap<>();
+        Map<String, DeferredHolder<ArmorMaterial, ArmorMaterial>> metals =
+                Map.of("alchemium", ModArmorMaterials.ALCHEMIUM, "void", ModArmorMaterials.VOID);
+        Map<String, Integer> lasts =
+                Map.of("alchemium", ModArmorMaterials.ALCHEMIUM_LASTS, "void", ModArmorMaterials.VOID_LASTS);
+        for (String metal : new String[] {"alchemium", "void"}) {
+            for (ArmorItem.Type type : new ArmorItem.Type[] {ArmorItem.Type.HELMET, ArmorItem.Type.CHESTPLATE,
+                    ArmorItem.Type.LEGGINGS, ArmorItem.Type.BOOTS}) {
+                made.put(metal + "_" + type.getName(), ITEMS.register(metal + "_" + type.getName(),
+                        () -> new ArmorItem(metals.get(metal), type,
+                                new Item.Properties().durability(type.getDurability(lasts.get(metal))))));
+            }
+        }
+        return Map.copyOf(made);
     }
 
     /** Alchemium and void alone. Iron, gold and brass are finished when they leave the workbench. */

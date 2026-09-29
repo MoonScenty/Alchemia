@@ -90,6 +90,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         addItem(ModItems.ALUMENTUM, pick("Alumentum", "알루멘툼"));
         // not "Aer Crystal": that is the crystal growing on a node, and two things under one name is one too many
         addItem(ModItems.CRYSTALLIZED_ESSENCE, pick("Crystallized Essence", "결정화된 에센시아"));
+        addMetalGear();
         add("item.alchemia.crystallized_essence.of", pick("Crystallized %s", "결정화된 %s"));
         add("item.alchemia.crystallized_essence.holding", pick("One point of %s", "%s 한 점"));
         addInfusionEnchantments();
@@ -323,6 +324,12 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                 {"infusion_boost", "Infusion Stones", "주입석",
                  "Two stones, laid a course below the altar's corners, and an altar takes whatever is under them without being asked. One hurries a turn along and charges a little more for it; the other waits longer and charges less. Four of a kind is the whole of either -- twelve ticks to a turn, or eight parts in a hundred off the bill -- and nothing takes a working below half price. They can be mixed, which is the only reason there are two of them rather than one with a switch.",
                  "제단 귀퉁이보다 한 켜 아래에 까는 돌 둘이다. 제단은 그 밑에 무엇이 깔렸든 묻지 않고 그대로 받는다. 하나는 한 바퀴를 재촉하는 대신 값을 조금 더 받고, 다른 하나는 더 기다리는 대신 덜 받는다. 넷을 같은 것으로 깔면 그것이 한계다 — 한 바퀴 열두 틱, 또는 값에서 백분의 팔. 무엇을 깔아도 반값 아래로는 내려가지 않는다. 섞어 깔 수도 있으니, 돌이 하나가 아니라 둘인 이유가 그것이다."},
+                {"alchemium_gear", "Alchemium Gear", "알케미움 장비",
+                 "The metal is worth forging with. A tool of it cuts about as fast as diamond, lasts twice what iron does, and takes an enchantment better than anything that can be dug up. A suit of it stops what iron stops and outlasts diamond by half again. Nothing about the shapes is new -- the sticks go where they always went.",
+                 "이 금속은 벼려 볼 값어치가 있다. 도구는 다이아몬드만큼 빠르게 깎고 철의 두 배를 가며, 캐낼 수 있는 어떤 것보다 마법을 잘 받는다. 갑옷은 철이 막는 만큼 막으면서 다이아몬드보다 절반 더 간다. 모양은 새로울 것이 없다 — 막대는 늘 있던 자리에 있다."},
+                {"void_gear", "Void Gear", "공허 장비",
+                 "The other sort of good. It cuts faster and hits harder than anything, reaches what netherite reaches, and wears out in a hundred and fifty swings. A suit of it stops nearly what diamond stops and goes to pieces faster than leather. It is not the better metal; it is the metal for the one job that has to be done now.",
+                 "다른 종류의 좋음이다. 무엇보다 빠르게 깎고 세게 치며 네더라이트가 닿는 데까지 닿는데, 백쉰 번을 휘두르면 닳아 없어진다. 갑옷은 다이아몬드에 가깝게 막으면서 가죽보다 빨리 부서진다. 더 나은 금속이 아니라, 지금 당장 해야 하는 한 가지 일을 위한 금속이다."},
                 {"infusion_enchantment", "Infusion Enchantment", "주입 마법부여",
                  "An altar will put on a tool what no table will sell. There is no gambling and no book to keep it in: the tool goes under the matrix, the price is paid in essentia, and it comes back with one more thing about it. Collector sends what is broken to the one who broke it. Destructive takes the eight blocks round the one struck, where the tool would have served for them anyway. Burrowing brings a seam or a trunk apart from its far end. Sounding taps the stone and shows what is behind it for a moment, at five swings' wear. Arcing carries a blow to whatever is standing beside what was struck. Essence makes what is killed give up a little of what it was made of -- the one way to essentia that wants no smelter, and so the meanest of them. Crouch and the digging ones go quiet.",
                  "작업대가 팔지 않는 것을 제단은 도구에 얹는다. 운에 맡길 것도, 담아 둘 책도 없다. 도구를 결계 아래에 두고 에센시아로 값을 치르면 한 가지를 더 지니고 돌아온다. 수집은 부순 것을 부순 이에게 보낸다. 파괴는 때린 칸 둘레 여덟을 같이 가져가되, 그 도구로 캘 수 있는 것만 가져간다. 굴착은 광맥이나 줄기를 먼 끝에서부터 허문다. 탐지는 돌을 두드려 돌 너머를 잠시 보여 주고, 그 대가로 도구가 다섯 번 닳는다. 전이는 때린 것 옆에 선 것에도 같은 매를 옮긴다. 정수는 죽인 것이 제 만들어진 바를 조금 내놓게 한다 -- 제련로 없이 에센시아를 얻는 유일한 길이고, 그래서 한 번에 주는 것이 적다. 웅크리면 캐는 것들은 조용해진다."},
@@ -474,6 +481,23 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("wand_rod.alchemia." + rod, pick(english, korean));
         if (!rod.equals("wood")) {
             add("item.alchemia.wand_rod_" + rod, pick(english + " Wand Rod", korean + " 완드 막대"));
+        }
+    }
+
+    /** The ten tools and eight pieces our two metals are forged into. */
+    private void addMetalGear() {
+        String[][] metals = {{"alchemium", "Alchemium", "알케미움"}, {"void", "Void", "공허"}};
+        String[][] shapes = {
+                {"pickaxe", "Pickaxe", "곡괭이"}, {"axe", "Axe", "도끼"}, {"shovel", "Shovel", "삽"},
+                {"sword", "Sword", "검"}, {"hoe", "Hoe", "괭이"},
+                {"helmet", "Helmet", "투구"}, {"chestplate", "Chestplate", "흉갑"},
+                {"leggings", "Leggings", "각반"}, {"boots", "Boots", "장화"},
+        };
+        for (String[] metal : metals) {
+            for (String[] shape : shapes) {
+                add("item.alchemia." + metal[0] + "_" + shape[0],
+                        pick(metal[1] + " " + shape[1], metal[2] + " " + shape[2]));
+            }
         }
     }
 

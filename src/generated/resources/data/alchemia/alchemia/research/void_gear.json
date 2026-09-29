@@ -1,0 +1,59 @@
+{
+  "category": "alchemia:artifice",
+  "column": -3,
+  "complexity": 3,
+  "icon": "alchemia:void_pickaxe",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.void_gear.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:void_pickaxe"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:void_axe"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:void_shovel"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:void_sword"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:void_hoe"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:void_helmet"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:void_chestplate"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:void_leggings"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:void_boots"
+    }
+  ],
+  "parents": [
+    "alchemia:void_metal",
+    "alchemia:alchemium_gear"
+  ],
+  "requirements": {
+    "alchemia:alienis": 2,
+    "alchemia:instrumentum": 6,
+    "alchemia:praemunio": 4,
+    "alchemia:vacuos": 6
+  },
+  "row": 5
+}

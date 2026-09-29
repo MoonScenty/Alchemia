@@ -7,6 +7,7 @@ import com.mojang.logging.LogUtils;
 import me.moonscenty.alchemia.aura.ModAuraAttachment;
 import me.moonscenty.alchemia.player.ModAttachments;
 import me.moonscenty.alchemia.player.effect.ModEffects;
+import me.moonscenty.alchemia.registry.ModArmorMaterials;
 import me.moonscenty.alchemia.registry.ModAspects;
 import me.moonscenty.alchemia.registry.ModBlockEntities;
 import me.moonscenty.alchemia.registry.ModBlocks;
@@ -48,6 +49,7 @@ public class Alchemia {
         ModFeatures.FOLIAGE_PLACERS.register(modEventBus);
         ModFeatures.TREE_DECORATORS.register(modEventBus);
         ModAspects.ASPECTS.register(modEventBus);
+        ModArmorMaterials.MATERIALS.register(modEventBus);
         ModWandParts.ROD_ENTRIES.register(modEventBus);
         ModWandParts.CAP_ENTRIES.register(modEventBus);
         ModAttachments.ATTACHMENTS.register(modEventBus);
