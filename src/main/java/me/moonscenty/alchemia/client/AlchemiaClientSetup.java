@@ -14,6 +14,7 @@ import net.minecraft.world.item.ItemStack;
 import me.moonscenty.alchemia.block.entity.JarBlockEntity;
 import me.moonscenty.alchemia.client.armour.TravellerBootsExtensions;
 import me.moonscenty.alchemia.client.armour.TravellerBootsModel;
+import me.moonscenty.alchemia.client.particle.MoteParticle;
 import me.moonscenty.alchemia.registry.ModBlocks;
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.registry.ModWandParts;
@@ -23,6 +24,7 @@ import me.moonscenty.alchemia.item.AlchemonomiconItem;
 import me.moonscenty.alchemia.registry.ModBlockEntities;
 import me.moonscenty.alchemia.registry.ModEntities;
 import me.moonscenty.alchemia.registry.ModMenus;
+import me.moonscenty.alchemia.registry.ModParticles;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -34,6 +36,7 @@ import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
+import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 
 /** Client-side wiring: extra models to bake, and who draws what. */
@@ -167,6 +170,12 @@ public class AlchemiaClientSetup {
                 ModBlocks.CRUCIBLE.get(), ModBlocks.JAR.get(), ModBlocks.TUBE_FILTER.get());
         // boots with a foot on them: a model, not a sheet stretched over the leg
         event.registerItem(TravellerBootsExtensions.INSTANCE, ModItems.TRAVELLER_BOOTS.get());
+    }
+
+    /** What draws a mote of light. */
+    @SubscribeEvent
+    public static void registerParticles(RegisterParticleProvidersEvent event) {
+        event.registerSpriteSet(ModParticles.MOTE.get(), MoteParticle.Maker::new);
     }
 
     /** The shape a worn pair of traveller's boots is built from. */

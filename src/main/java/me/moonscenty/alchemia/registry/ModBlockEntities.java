@@ -13,6 +13,7 @@ import me.moonscenty.alchemia.block.entity.TubeBlockEntity;
 import me.moonscenty.alchemia.block.entity.ValveTubeBlockEntity;
 import me.moonscenty.alchemia.block.entity.EssentiaSmelterBlockEntity;
 import me.moonscenty.alchemia.block.entity.InfusionMatrixBlockEntity;
+import me.moonscenty.alchemia.block.entity.NitorBlockEntity;
 import me.moonscenty.alchemia.block.entity.NodeStabilizerBlockEntity;
 import me.moonscenty.alchemia.block.entity.ResearchTableBlockEntity;
 import net.minecraft.core.registries.Registries;
@@ -27,6 +28,15 @@ public class ModBlockEntities {
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ResearchTableBlockEntity>> RESEARCH_TABLE =
             BLOCK_ENTITIES.register("research_table", () -> BlockEntityType.Builder
                     .of(ResearchTableBlockEntity::new, ModBlocks.RESEARCH_TABLE.get())
+                    .build(null));
+
+    /** All sixteen flames share one, since none of them holds anything: it exists only to tick. */
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<NitorBlockEntity>> NITOR =
+            BLOCK_ENTITIES.register("nitor", () -> BlockEntityType.Builder
+                    .of(NitorBlockEntity::new,
+                            ModBlocks.NITOR.values().stream()
+                                    .map(net.neoforged.neoforge.registries.DeferredBlock::get)
+                                    .toArray(net.minecraft.world.level.block.Block[]::new))
                     .build(null));
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<NodeStabilizerBlockEntity>> NODE_STABILIZER =
