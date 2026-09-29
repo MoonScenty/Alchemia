@@ -1,8 +1,13 @@
 package me.moonscenty.alchemia.registry;
 
+import java.util.Map;
+
+import com.mojang.serialization.Codec;
+
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.aspect.Aspect;
 import me.moonscenty.alchemia.aspect.AspectList;
+import me.moonscenty.alchemia.enchantment.InfusionEnchantment;
 import me.moonscenty.alchemia.research.ResearchNote;
 import me.moonscenty.alchemia.wand.WandCap;
 import me.moonscenty.alchemia.wand.WandRod;
@@ -70,6 +75,20 @@ public class ModDataComponents {
                     .persistent(AspectList.CODEC)
                     .networkSynchronized(AspectList.STREAM_CODEC)
                     .build());
+
+    /**
+     * What an altar has put on a tool, and how far.
+     * <p>
+     * A map rather than a list because a tool may carry several and never two of the same, and because working
+     * the same one again raises what is already there rather than adding beside it.
+     */
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Map<InfusionEnchantment, Integer>>>
+            INFUSION_ENCHANTMENTS = COMPONENTS.register("infusion_enchantments",
+                    () -> DataComponentType.<Map<InfusionEnchantment, Integer>>builder()
+                            .persistent(Codec.unboundedMap(InfusionEnchantment.CODEC, Codec.INT))
+                            .networkSynchronized(ByteBufCodecs.map(java.util.LinkedHashMap::new,
+                                    InfusionEnchantment.STREAM_CODEC, ByteBufCodecs.VAR_INT))
+                            .build());
 
     private ModDataComponents() {
     }

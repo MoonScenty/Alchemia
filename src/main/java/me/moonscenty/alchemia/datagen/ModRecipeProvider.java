@@ -9,6 +9,7 @@ import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.crafting.ArcaneShapedRecipe;
 import me.moonscenty.alchemia.crafting.ArcaneShapelessRecipe;
 import me.moonscenty.alchemia.crafting.InfusionRecipe;
+import me.moonscenty.alchemia.enchantment.InfusionEnchantment;
 import me.moonscenty.alchemia.crafting.LabelRecipe;
 import me.moonscenty.alchemia.crafting.CrucibleRecipe;
 import me.moonscenty.alchemia.aspect.AspectList;
@@ -79,6 +80,7 @@ public class ModRecipeProvider extends RecipeProvider {
         distillery(output);
         voidMetal(output);
         infusion(output);
+        enchantments(output);
 
         // arcane stone itself is shaped on the arcane workbench; these are what it is worked into afterwards
         quadrupleFrom(output, ModBlocks.ARCANE_STONE_BRICKS.block(), ModBlocks.ARCANE_STONE.block());
@@ -462,6 +464,39 @@ public class ModRecipeProvider extends RecipeProvider {
                 AspectList.of(ModAspects.ENERGY, 18).add(ModAspects.VOID, 18)
                         .add(ModAspects.ELDRITCH, 18).add(ModAspects.AURA, 18), 8, "void_metal");
     }
+
+    /**
+     * What an altar can put on a tool somebody already owns.
+     * <p>
+     * The knowledge fragment the original laid on the ring is eldritch loot and there is none yet, so a written
+     * research note stands in its place: the same reading, come by the long way rather than found.
+     */
+    private void enchantments(RecipeOutput output) {
+        enchantment(output, InfusionEnchantment.COLLECTOR,
+                AspectList.of(ModAspects.DESIRE, 16).add(ModAspects.WATER, 24),
+                List.of(Ingredient.of(ModItems.RESEARCH_NOTES),
+                        Ingredient.of(Items.ENCHANTED_BOOK), Ingredient.of(Items.LEAD)));
+        enchantment(output, InfusionEnchantment.DESTRUCTIVE,
+                AspectList.of(ModAspects.AVERSION, 48).add(ModAspects.ENTROPY, 64),
+                List.of(Ingredient.of(ModItems.RESEARCH_NOTES),
+                        Ingredient.of(Items.ENCHANTED_BOOK), Ingredient.of(Items.TNT)));
+    }
+
+    /** One working that puts something on a tool: the tools it will take, and what is laid round them. */
+    private void enchantment(RecipeOutput output, InfusionEnchantment which, AspectList essentia,
+            List<Ingredient> ring) {
+        String name = "infusion_enchantment_" + which.getSerializedName();
+        // named as tags rather than as the items in them: the tags are read when the recipe is used, so a tool
+        // from anywhere else is covered without this having to know it exists
+        Ingredient takes = net.neoforged.neoforge.common.crafting.CompoundIngredient.of(
+                which.goesOn().stream().map(Ingredient::of).toArray(Ingredient[]::new));
+        output.accept(Alchemia.id(name), new InfusionRecipe(takes, ring, ItemStack.EMPTY, essentia,
+                INFUSION_ENCHANTMENT_INSTABILITY, Optional.of(Alchemia.id("infusion_enchantment")),
+                Optional.of(which)), null);
+    }
+
+    /** What any of these costs in steadiness, which the original set once for all of them. */
+    private static final int INFUSION_ENCHANTMENT_INSTABILITY = 4;
 
     /** A ring of salis mundus, which is what every finishing of a cast thing is laid out with. */
     private static List<Ingredient> salis(int many) {

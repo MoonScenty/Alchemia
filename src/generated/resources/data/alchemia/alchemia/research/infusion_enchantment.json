@@ -1,0 +1,30 @@
+{
+  "category": "alchemia:arcana",
+  "column": 9,
+  "complexity": 3,
+  "icon": "minecraft:enchanted_book",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.infusion_enchantment.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:infusion_enchantment_collector"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:infusion_enchantment_destructive"
+    }
+  ],
+  "parents": [
+    "alchemia:infusion"
+  ],
+  "requirements": {
+    "alchemia:auram": 6,
+    "alchemia:cognitio": 4,
+    "alchemia:fabrico": 4,
+    "alchemia:instrumentum": 6
+  },
+  "row": 2
+}

@@ -1,0 +1,32 @@
+{
+  "type": "alchemia:infusion",
+  "central": [
+    {
+      "tag": "minecraft:pickaxes"
+    },
+    {
+      "tag": "minecraft:axes"
+    },
+    {
+      "tag": "minecraft:shovels"
+    }
+  ],
+  "enchants": "destructive",
+  "essentia": {
+    "alchemia:aversio": 48,
+    "alchemia:perditio": 64
+  },
+  "instability": 4,
+  "research": "alchemia:infusion_enchantment",
+  "ring": [
+    {
+      "item": "alchemia:research_notes"
+    },
+    {
+      "item": "minecraft:enchanted_book"
+    },
+    {
+      "item": "minecraft:tnt"
+    }
+  ]
+}

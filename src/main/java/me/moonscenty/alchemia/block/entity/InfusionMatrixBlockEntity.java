@@ -503,7 +503,8 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
 
     /** The work is done: what was on the pedestal becomes what was being made. */
     private void finish(ServerLevel level, BlockPos pos, ArcanePedestalBlockEntity under, InfusionRecipe recipe) {
-        under.hold(recipe.result().copy());
+        // asked rather than read off the recipe: a working that enchants hands back the very thing it was given
+        under.hold(recipe.assemble(new InfusionInput(under.held(), List.of()), level.registryAccess()));
         level.playSound(null, pos, SoundEvents.BEACON_POWER_SELECT, SoundSource.BLOCKS, 1.0F, 1.0F);
         stop();
     }
