@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
+import me.moonscenty.alchemia.item.FocusPouchItem;
 import me.moonscenty.alchemia.item.WandItem;
 import me.moonscenty.alchemia.registry.ModTags;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -22,11 +23,26 @@ import net.minecraft.world.item.ItemStack;
  * <p>Both are one action from the player's side and a swap from the bag's side: whatever was on the wand goes back
  * where the new one came from, so nothing is ever created, destroyed, or left without a home.
  *
+ * <p>Foci in a pouch count as carried, exactly as loose ones do. That is what a pouch is for — a player with one
+ * has every focus on a single key without eighteen squares gone out of their bag.
+ *
  * <p>The cycle runs in alphabetical order of what the foci are called rather than in the order they happen to be
- * sitting in the bag. Tidying a bag should not change which focus comes next.
+ * lying in. Tidying a bag should not change which focus comes next.
  */
 public final class Foci {
     private Foci() {
+    }
+
+    /**
+     * Where a focus is: a square of the bag, and if that square holds a pouch, a square inside it.
+     *
+     * @param slot    the square of the player's bag
+     * @param inPouch the square inside the pouch there, or -1 when the focus is the bag's square itself
+     */
+    private record Spot(int slot, int inPouch) {
+        boolean inBag() {
+            return inPouch < 0;
+        }
     }
 
     /** What is on the wand, or nothing. */
@@ -40,23 +56,23 @@ public final class Foci {
      * @return what is now fitted, or nothing if the player had no focus to fit
      */
     public static ItemStack next(Player player, ItemStack wand) {
-        List<Integer> slots = carried(player);
-        if (slots.isEmpty()) {
+        Inventory bag = player.getInventory();
+        List<Spot> spots = carried(bag);
+        if (spots.isEmpty()) {
             return ItemStack.EMPTY;
         }
-        Inventory bag = player.getInventory();
-        int slot = after(bag, slots, on(wand));
+        Spot spot = after(bag, spots, on(wand));
 
-        ItemStack taken = bag.getItem(slot).copy();
-        // the old focus goes into the slot the new one just left, which is the one place certain to be free
-        bag.setItem(slot, WandItem.focus(wand).copy());
+        ItemStack taken = read(bag, spot).copy();
+        // the old focus goes where the new one just left, which is the one square certain to be free
+        write(bag, spot, WandItem.focus(wand).copy());
         WandItem.setFocus(wand, taken);
         say(player, taken, true);
         return taken;
     }
 
     /**
-     * Takes the focus off the wand and hands it back.
+     * Takes the focus off the wand and hands it back, into a pouch if there is room in one.
      *
      * @return what came off, or nothing if there was nothing on it
      */
@@ -66,43 +82,83 @@ public final class Foci {
             return ItemStack.EMPTY;
         }
         WandItem.setFocus(wand, ItemStack.EMPTY);
-        if (!player.getInventory().add(fitted)) {
+        if (!intoPouch(player.getInventory(), fitted) && !player.getInventory().add(fitted)) {
             player.drop(fitted, false);
         }
         say(player, fitted, false);
         return fitted;
     }
 
-    /** Which slots of the player's bag hold a focus, soonest-named first. */
-    private static List<Integer> carried(Player player) {
-        Inventory bag = player.getInventory();
-        List<Integer> slots = new ArrayList<>();
+    /** Every focus the player is carrying, loose or pouched, soonest-named first. */
+    private static List<Spot> carried(Inventory bag) {
+        List<Spot> spots = new ArrayList<>();
         for (int slot = 0; slot < bag.getContainerSize(); slot++) {
-            if (bag.getItem(slot).is(ModTags.Items.FOCI)) {
-                slots.add(slot);
+            ItemStack held = bag.getItem(slot);
+            if (held.is(ModTags.Items.FOCI)) {
+                spots.add(new Spot(slot, -1));
+            } else if (held.getItem() instanceof FocusPouchItem) {
+                for (int inside = 0; inside < FocusPouchItem.SIZE; inside++) {
+                    if (FocusPouchItem.item(held, inside).is(ModTags.Items.FOCI)) {
+                        spots.add(new Spot(slot, inside));
+                    }
+                }
             }
         }
-        slots.sort(Comparator.comparing(slot -> named(bag.getItem(slot))));
-        return slots;
+        spots.sort(Comparator.comparing(spot -> named(read(bag, spot))));
+        return spots;
     }
 
     /**
-     * The slot holding the focus that comes after the one fitted.
+     * The spot holding the focus that comes after the one fitted.
      * <p>
      * With nothing fitted, or with the last of them fitted, that is the first. A player holding one focus and
      * pressing the key therefore swaps it on and off, which is what one focus ought to do.
      */
-    private static int after(Inventory bag, List<Integer> slots, ItemStack fitted) {
+    private static Spot after(Inventory bag, List<Spot> spots, ItemStack fitted) {
         if (fitted.isEmpty()) {
-            return slots.get(0);
+            return spots.get(0);
         }
         String here = named(fitted);
-        for (int slot : slots) {
-            if (named(bag.getItem(slot)).compareTo(here) > 0) {
-                return slot;
+        for (Spot spot : spots) {
+            if (named(read(bag, spot)).compareTo(here) > 0) {
+                return spot;
             }
         }
-        return slots.get(0);
+        return spots.get(0);
+    }
+
+    private static ItemStack read(Inventory bag, Spot spot) {
+        return spot.inBag() ? bag.getItem(spot.slot()) : FocusPouchItem.item(bag.getItem(spot.slot()), spot.inPouch());
+    }
+
+    private static void write(Inventory bag, Spot spot, ItemStack stack) {
+        if (spot.inBag()) {
+            bag.setItem(spot.slot(), stack);
+            return;
+        }
+        ItemStack pouch = bag.getItem(spot.slot());
+        List<ItemStack> items = new ArrayList<>(FocusPouchItem.SIZE);
+        for (int inside = 0; inside < FocusPouchItem.SIZE; inside++) {
+            items.add(inside == spot.inPouch() ? stack : FocusPouchItem.item(pouch, inside));
+        }
+        FocusPouchItem.setContents(pouch, items);
+    }
+
+    /** Puts a focus in the first pouch with room, and says whether one had room. */
+    private static boolean intoPouch(Inventory bag, ItemStack focus) {
+        for (int slot = 0; slot < bag.getContainerSize(); slot++) {
+            ItemStack pouch = bag.getItem(slot);
+            if (!(pouch.getItem() instanceof FocusPouchItem)) {
+                continue;
+            }
+            for (int inside = 0; inside < FocusPouchItem.SIZE; inside++) {
+                if (FocusPouchItem.item(pouch, inside).isEmpty()) {
+                    write(bag, new Spot(slot, inside), focus);
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private static String named(ItemStack stack) {

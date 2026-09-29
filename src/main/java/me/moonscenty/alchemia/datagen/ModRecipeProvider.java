@@ -270,6 +270,16 @@ public class ModRecipeProvider extends RecipeProvider {
                 Map.of('S', Ingredient.of(Tags.Items.STONES), 'C', Ingredient.of(ModTags.Items.SHARDS)),
                 "SSS", "SCS", "SSS");
 
+        // the pouch: a leather bag with a brass buckle and a gold clasp. The original held a mundane girdle in
+        // the middle, which is leather round a brass ingot; the girdle is a bauble and there are none yet, so what
+        // it is made of goes in instead of the girdle itself
+        arcane(output, "focus_pouch", new ItemStack(ModItems.FOCUS_POUCH.get()),
+                AspectList.of(ModAspects.EARTH, 25).add(ModAspects.ORDER, 25).add(ModAspects.ENTROPY, 25),
+                Map.of('L', Ingredient.of(Items.LEATHER),
+                        'G', Ingredient.of(Items.GOLD_INGOT),
+                        'B', Ingredient.of(ModTags.Items.INGOTS_BRASS)),
+                "LGL", "LBL", "LLL");
+
         // goggles: two alchemometers looking through brass, held on with leather
         arcane(output, "goggles_of_revealing", "goggles",
                 new ItemStack(ModItems.GOGGLES.get()),

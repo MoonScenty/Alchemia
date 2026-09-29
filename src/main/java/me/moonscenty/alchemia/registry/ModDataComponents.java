@@ -62,6 +62,13 @@ public class ModDataComponents {
                     .networkSynchronized(ItemContainerContents.STREAM_CODEC)
                     .build());
 
+    /** The eighteen squares of a focus pouch, kept on the item so that a pouch in a chest is still full. */
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<ItemContainerContents>> POUCH_CONTENTS =
+            COMPONENTS.register("pouch_contents", () -> DataComponentType.<ItemContainerContents>builder()
+                    .persistent(ItemContainerContents.CODEC)
+                    .networkSynchronized(ItemContainerContents.STREAM_CODEC)
+                    .build());
+
     /** What a wand is carrying, in hundredths of a point so that a cap's discount is not rounded away. */
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<AspectList>> VIS =
             COMPONENTS.register("vis", () -> DataComponentType.<AspectList>builder()

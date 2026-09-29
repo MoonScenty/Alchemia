@@ -4,7 +4,11 @@ import me.moonscenty.alchemia.Alchemia;
 import io.netty.buffer.Unpooled;
 import me.moonscenty.alchemia.aspect.AspectList;
 import me.moonscenty.alchemia.aura.AuraHandler;
+import java.util.ArrayList;
+import java.util.List;
+
 import me.moonscenty.alchemia.item.FocusItem;
+import me.moonscenty.alchemia.item.FocusPouchItem;
 import me.moonscenty.alchemia.item.WandItem;
 import me.moonscenty.alchemia.registry.ModItems;
 import me.moonscenty.alchemia.registry.ModTags;
@@ -219,6 +223,67 @@ public class WandTests {
                 .orElseThrow();
         helper.assertTrue(WandItem.focus(read).is(ModItems.FOCI.get("shock").get()),
                 "the focus came back with the wand");
+        helper.succeed();
+    }
+
+    /**
+     * A pouch carries what is put in it, and an emptied one is the same item as a new one.
+     * <p>
+     * If an emptied pouch kept a component full of nothing it would no longer stack with or compare equal to a
+     * fresh one, which is the sort of difference nobody can see and everybody trips over.
+     */
+    @GameTest(template = TEMPLATE)
+    public static void aPouchCarriesWhatIsPutInIt(GameTestHelper helper) {
+        ItemStack pouch = new ItemStack(ModItems.FOCUS_POUCH.get());
+        List<ItemStack> inside = new ArrayList<>();
+        for (int slot = 0; slot < FocusPouchItem.SIZE; slot++) {
+            inside.add(ItemStack.EMPTY);
+        }
+        inside.set(4, new ItemStack(ModItems.FOCI.get("frost").get()));
+        FocusPouchItem.setContents(pouch, inside);
+
+        helper.assertTrue(FocusPouchItem.item(pouch, 4).is(ModItems.FOCI.get("frost").get()),
+                "the frost focus is in the fifth square");
+        helper.assertTrue(FocusPouchItem.item(pouch, 0).isEmpty(), "and the first is empty");
+
+        inside.set(4, ItemStack.EMPTY);
+        FocusPouchItem.setContents(pouch, inside);
+        helper.assertTrue(ItemStack.isSameItemSameComponents(pouch, new ItemStack(ModItems.FOCUS_POUCH.get())),
+                "an emptied pouch is a plain pouch again");
+        helper.succeed();
+    }
+
+    /**
+     * A focus in a pouch is a focus the player is carrying.
+     * <p>
+     * That is the whole of what a pouch is worth: every focus on one key without eighteen squares gone out of the
+     * bag. Taking one off again goes back into the pouch rather than loose, or the bag fills up anyway.
+     */
+    @GameTest(template = TEMPLATE)
+    public static void theWandReachesIntoAPouch(GameTestHelper helper) {
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        ItemStack wand = WandItem.of(ModWandParts.WOOD, ModWandParts.IRON);
+
+        ItemStack pouch = new ItemStack(ModItems.FOCUS_POUCH.get());
+        List<ItemStack> inside = new ArrayList<>();
+        for (int slot = 0; slot < FocusPouchItem.SIZE; slot++) {
+            inside.add(ItemStack.EMPTY);
+        }
+        inside.set(7, new ItemStack(ModItems.FOCI.get("shock").get()));
+        FocusPouchItem.setContents(pouch, inside);
+        player.getInventory().add(pouch);
+
+        helper.assertTrue(Foci.next(player, wand).is(ModItems.FOCI.get("shock").get()),
+                "the focus came out of the pouch");
+        helper.assertTrue(FocusPouchItem.item(player.getInventory().getItem(0), 7).isEmpty(),
+                "and its square in the pouch is empty");
+        helper.assertValueEqual(player.getInventory().countItem(ModItems.FOCI.get("shock").get()),
+                0, "it is not loose in the bag either");
+
+        Foci.remove(player, wand);
+        helper.assertTrue(FocusPouchItem.item(player.getInventory().getItem(0), 0)
+                        .is(ModItems.FOCI.get("shock").get()),
+                "taking it off put it back in the pouch");
         helper.succeed();
     }
 }

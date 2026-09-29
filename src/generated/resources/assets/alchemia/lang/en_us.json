@@ -239,6 +239,8 @@
   "item.alchemia.focus_hellbat": "Wand Focus: Nine Hells",
   "item.alchemia.focus_hole": "Wand Focus: Portable Hole",
   "item.alchemia.focus_pech": "Wand Focus: Pech's Curse",
+  "item.alchemia.focus_pouch": "Focus Pouch",
+  "item.alchemia.focus_pouch.holding": "Holding %s of %s",
   "item.alchemia.focus_primal": "Wand Focus: Primal",
   "item.alchemia.focus_shard": "Wand Focus: Vis Shard",
   "item.alchemia.focus_shock": "Wand Focus: Shock",

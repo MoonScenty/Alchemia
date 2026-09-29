@@ -133,6 +133,8 @@ public class ModItemModelProvider extends ItemModelProvider {
                         .texture("layer0", modLoc("item/wand/cap_" + cap + "_inert_mat"));
             }
         }
+        basicItem(ModItems.FOCUS_POUCH.get());
+
         // one picture apiece, all drawn as one set by tools/gen_foci.py
         ModItems.FOCI.keySet().forEach(name -> withExistingParent("focus_" + name, mcLoc("item/generated"))
                 .texture("layer0", modLoc("item/wand/focus_" + name)));

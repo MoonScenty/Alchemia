@@ -239,6 +239,8 @@
   "item.alchemia.focus_hellbat": "완드 포커스: 아홉 지옥",
   "item.alchemia.focus_hole": "완드 포커스: 이동식 구멍",
   "item.alchemia.focus_pech": "완드 포커스: 펙의 저주",
+  "item.alchemia.focus_pouch": "포커스 주머니",
+  "item.alchemia.focus_pouch.holding": "%s / %s 들었음",
   "item.alchemia.focus_primal": "완드 포커스: 원시",
   "item.alchemia.focus_shard": "완드 포커스: 비스 조각",
   "item.alchemia.focus_shock": "완드 포커스: 충격",

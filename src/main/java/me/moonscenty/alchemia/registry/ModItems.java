@@ -11,6 +11,7 @@ import java.util.function.Supplier;
 import me.moonscenty.alchemia.aspect.AspectList;
 import me.moonscenty.alchemia.item.AlumentumItem;
 import me.moonscenty.alchemia.item.FocusItem;
+import me.moonscenty.alchemia.item.FocusPouchItem;
 import me.moonscenty.alchemia.wand.Focus;
 import me.moonscenty.alchemia.item.GogglesItem;
 import me.moonscenty.alchemia.item.TravellerBootsItem;
@@ -88,6 +89,10 @@ public class ModItems {
      * twelve and that the rest will be built on: the price, the wait, and whether an autocaster will take it.
      */
     public static final Map<String, DeferredItem<FocusItem>> FOCI = registerFoci();
+
+    /** Eighteen squares for foci, carried as one item. A wand changing its focus looks in here too. */
+    public static final DeferredItem<FocusPouchItem> FOCUS_POUCH = ITEMS.register("focus_pouch",
+            () -> new FocusPouchItem(new Item.Properties()));
 
     public static final Map<CrystalType, DeferredItem<Item>> SHARDS = registerShards();
     public static final DeferredItem<Item> BALANCED_SHARD = ITEMS.registerSimpleItem("balanced_shard");

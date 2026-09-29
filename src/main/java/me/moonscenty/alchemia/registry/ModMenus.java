@@ -3,6 +3,7 @@ package me.moonscenty.alchemia.registry;
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.menu.ArcaneWorkbenchMenu;
 import me.moonscenty.alchemia.menu.EssentiaSmelterMenu;
+import me.moonscenty.alchemia.menu.FocusPouchMenu;
 import me.moonscenty.alchemia.menu.ResearchTableMenu;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.flag.FeatureFlags;
@@ -27,6 +28,11 @@ public class ModMenus {
     public static final DeferredHolder<MenuType<?>, MenuType<EssentiaSmelterMenu>> ESSENTIA_SMELTER =
             MENUS.register("essentia_smelter",
                     () -> IMenuTypeExtension.create(EssentiaSmelterMenu::new));
+
+    /** Carries which hand the pouch was opened from, since the pouch is an item and not a place. */
+    public static final DeferredHolder<MenuType<?>, MenuType<FocusPouchMenu>> FOCUS_POUCH =
+            MENUS.register("focus_pouch",
+                    () -> IMenuTypeExtension.create(FocusPouchMenu::new));
 
     private ModMenus() {
     }

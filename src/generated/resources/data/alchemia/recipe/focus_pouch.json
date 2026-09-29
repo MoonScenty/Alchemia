@@ -1,0 +1,28 @@
+{
+  "type": "alchemia:arcane_shaped",
+  "key": {
+    "B": {
+      "tag": "c:ingots/brass"
+    },
+    "G": {
+      "item": "minecraft:gold_ingot"
+    },
+    "L": {
+      "item": "minecraft:leather"
+    }
+  },
+  "pattern": [
+    "LGL",
+    "LBL",
+    "LLL"
+  ],
+  "result": {
+    "count": 1,
+    "id": "alchemia:focus_pouch"
+  },
+  "vis": {
+    "alchemia:ordo": 25,
+    "alchemia:perditio": 25,
+    "alchemia:terra": 25
+  }
+}
