@@ -6,7 +6,10 @@ import me.moonscenty.alchemia.menu.ResearchTableMenu;
 import me.moonscenty.alchemia.registry.ModAspects;
 import me.moonscenty.alchemia.research.NoteRequests;
 import net.minecraft.core.Holder;
+import me.moonscenty.alchemia.item.WandItem;
+import me.moonscenty.alchemia.wand.Foci;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
@@ -30,6 +33,30 @@ public class ModNetwork {
         registrar.playToServer(RequestNote.TYPE, RequestNote.STREAM_CODEC, ModNetwork::onRequestNote);
         registrar.playToServer(PlaceAspect.TYPE, PlaceAspect.STREAM_CODEC, ModNetwork::onPlaceAspect);
         registrar.playToServer(MixAspects.TYPE, MixAspects.STREAM_CODEC, ModNetwork::onMixAspects);
+        registrar.playToServer(ChangeFocus.TYPE, ChangeFocus.STREAM_CODEC, ModNetwork::onChangeFocus);
+    }
+
+    /**
+     * Swapping a focus on a wand.
+     * <p>
+     * The wand is taken from the hand rather than named in the packet, so a client that is a tick behind about
+     * which item is selected cannot put a focus on the wrong thing.
+     */
+    private static void onChangeFocus(ChangeFocus payload, IPayloadContext context) {
+        context.enqueueWork(() -> {
+            if (!(context.player() instanceof ServerPlayer player)) {
+                return;
+            }
+            ItemStack held = player.getMainHandItem();
+            if (!(held.getItem() instanceof WandItem)) {
+                return;
+            }
+            if (payload.remove()) {
+                Foci.remove(player, held);
+            } else {
+                Foci.next(player, held);
+            }
+        });
     }
 
     private static void onPlaceAspect(PlaceAspect payload, IPayloadContext context) {

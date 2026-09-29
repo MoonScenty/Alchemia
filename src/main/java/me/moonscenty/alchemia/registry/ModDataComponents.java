@@ -12,6 +12,7 @@ import me.moonscenty.alchemia.research.ResearchNote;
 import me.moonscenty.alchemia.wand.WandCap;
 import me.moonscenty.alchemia.wand.WandRod;
 import net.minecraft.core.Holder;
+import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
@@ -42,6 +43,23 @@ public class ModDataComponents {
             COMPONENTS.register("wand_cap", () -> DataComponentType.<Holder<WandCap>>builder()
                     .persistent(ModWandParts.CAPS.holderByNameCodec())
                     .networkSynchronized(ByteBufCodecs.holderRegistry(ModWandParts.CAPS_KEY))
+                    .build());
+
+    /**
+     * The focus fitted to a wand, kept as the focus item itself rather than as which kind it is.
+     * <p>
+     * A focus is a thing a player owns: it came out of their bag, it goes back into their bag, and once upgrades
+     * arrive two foci of the same kind will differ. Storing which kind it is would lose all of that, so what is
+     * stored is the item. A wand with nothing fitted simply has no component.
+     * <p>
+     * It is held in a one-slot {@link ItemContainerContents} rather than as a bare {@code ItemStack}, because a
+     * component has to be immutable and compare by what it holds, and an item stack is neither. This is the same
+     * box vanilla puts a shulker box's contents in, with one thing in it.
+     */
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<ItemContainerContents>> WAND_FOCUS =
+            COMPONENTS.register("wand_focus", () -> DataComponentType.<ItemContainerContents>builder()
+                    .persistent(ItemContainerContents.CODEC)
+                    .networkSynchronized(ItemContainerContents.STREAM_CODEC)
                     .build());
 
     /** What a wand is carrying, in hundredths of a point so that a cap's discount is not rounded away. */

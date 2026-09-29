@@ -26,6 +26,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.AbstractCauldronBlock;
@@ -60,6 +61,22 @@ public class WandItem extends Item implements VisHolder {
     public static WandCap cap(ItemStack stack) {
         Holder<WandCap> cap = stack.get(ModDataComponents.WAND_CAP.get());
         return cap == null ? ModWandParts.IRON.get() : cap.value();
+    }
+
+    /** The focus fitted to this wand, or nothing. Always a copy: the component behind it may not be written to. */
+    public static ItemStack focus(ItemStack stack) {
+        ItemContainerContents fitted = stack.get(ModDataComponents.WAND_FOCUS.get());
+        return fitted == null ? ItemStack.EMPTY : fitted.copyOne();
+    }
+
+    /** Fits a focus, or takes one off when handed nothing. */
+    public static void setFocus(ItemStack stack, ItemStack focus) {
+        if (focus.isEmpty()) {
+            stack.remove(ModDataComponents.WAND_FOCUS.get());
+        } else {
+            stack.set(ModDataComponents.WAND_FOCUS.get(),
+                    ItemContainerContents.fromItems(java.util.List.of(focus.copy())));
+        }
     }
 
     public static ItemStack of(Holder<WandRod> rod, Holder<WandCap> cap) {
@@ -259,6 +276,11 @@ public class WandItem extends Item implements VisHolder {
 
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> lines, TooltipFlag flag) {
+        ItemStack fitted = focus(stack);
+        if (!fitted.isEmpty()) {
+            lines.add(Component.translatable("item.alchemia.wand.focus", fitted.getHoverName())
+                    .withStyle(ChatFormatting.LIGHT_PURPLE));
+        }
         int room = capacity(stack);
         for (Holder<Aspect> aspect : ModAspects.primals()) {
             int have = held(stack, aspect);

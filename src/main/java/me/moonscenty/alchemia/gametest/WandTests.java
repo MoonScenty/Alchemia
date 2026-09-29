@@ -8,7 +8,11 @@ import me.moonscenty.alchemia.item.FocusItem;
 import me.moonscenty.alchemia.item.WandItem;
 import me.moonscenty.alchemia.registry.ModItems;
 import me.moonscenty.alchemia.registry.ModTags;
+import me.moonscenty.alchemia.wand.Foci;
 import me.moonscenty.alchemia.wand.Focus;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.GameType;
 import me.moonscenty.alchemia.registry.ModAspects;
 import me.moonscenty.alchemia.registry.ModDataComponents;
 import me.moonscenty.alchemia.registry.ModWandParts;
@@ -147,6 +151,74 @@ public class WandTests {
         Focus primal = ModItems.FOCI.get("primal").get().focus();
         helper.assertValueEqual(primal.cost().size(), 6, "primal asks all six");
         helper.assertValueEqual(primal.cooldown(), 500, "primal waits half a second");
+        helper.succeed();
+    }
+
+    /**
+     * Fitting a focus takes it out of the bag, and taking it off puts it back.
+     * <p>
+     * Nothing may be made or lost on the way. A swap that forgot to put the old focus somewhere would eat it, and
+     * one that forgot to empty the slot it came from would hand out a second copy.
+     */
+    @GameTest(template = TEMPLATE)
+    public static void fittingAFocusMovesItRatherThanCopyingIt(GameTestHelper helper) {
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        ItemStack wand = WandItem.of(ModWandParts.WOOD, ModWandParts.IRON);
+        player.getInventory().add(new ItemStack(ModItems.FOCI.get("fire").get()));
+
+        Foci.next(player, wand);
+        helper.assertTrue(WandItem.focus(wand).is(ModItems.FOCI.get("fire").get()), "the fire focus is on the wand");
+        helper.assertValueEqual(player.getInventory().countItem(ModItems.FOCI.get("fire").get()),
+                0, "and no longer in the bag");
+
+        Foci.remove(player, wand);
+        helper.assertTrue(WandItem.focus(wand).isEmpty(), "the wand is bare again");
+        helper.assertValueEqual(player.getInventory().countItem(ModItems.FOCI.get("fire").get()),
+                1, "and the focus is back in the bag");
+        helper.succeed();
+    }
+
+    /**
+     * The cycle runs by name and comes back round, and never leaves two foci where there was one.
+     * <p>
+     * Sorting by name rather than by where they sit means tidying a bag does not change which comes next. Coming
+     * back round means a player carrying one focus can put it on and take it off with the same key.
+     */
+    @GameTest(template = TEMPLATE)
+    public static void theCycleGoesRoundInOrderAndLosesNothing(GameTestHelper helper) {
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        ItemStack wand = WandItem.of(ModWandParts.WOOD, ModWandParts.IRON);
+        // put in backwards, to prove the order comes from the names and not from the slots
+        player.getInventory().add(new ItemStack(ModItems.FOCI.get("frost").get()));
+        player.getInventory().add(new ItemStack(ModItems.FOCI.get("fire").get()));
+        player.getInventory().add(new ItemStack(ModItems.FOCI.get("builder").get()));
+
+        helper.assertTrue(Foci.next(player, wand).is(ModItems.FOCI.get("builder").get()), "builder comes first");
+        helper.assertTrue(Foci.next(player, wand).is(ModItems.FOCI.get("fire").get()), "then fire");
+        helper.assertTrue(Foci.next(player, wand).is(ModItems.FOCI.get("frost").get()), "then frost");
+        helper.assertTrue(Foci.next(player, wand).is(ModItems.FOCI.get("builder").get()), "and round again");
+
+        int carried = 0;
+        for (var focus : ModItems.FOCI.values()) {
+            carried += player.getInventory().countItem(focus.get());
+        }
+        helper.assertValueEqual(carried, 2, "two in the bag and one on the wand, all the way round");
+        helper.succeed();
+    }
+
+    /** A focus survives being written down and read back, which is what carrying it between sessions is. */
+    @GameTest(template = TEMPLATE)
+    public static void aFittedFocusSurvivesBeingSaved(GameTestHelper helper) {
+        ItemStack wand = WandItem.of(ModWandParts.WOOD, ModWandParts.IRON);
+        WandItem.setFocus(wand, new ItemStack(ModItems.FOCI.get("shock").get()));
+
+        var registries = helper.getLevel().registryAccess();
+        ItemStack read = ItemStack.parse(registries, (net.minecraft.nbt.CompoundTag)
+                        ItemStack.CODEC.encodeStart(registries.createSerializationContext(NbtOps.INSTANCE), wand)
+                                .getOrThrow())
+                .orElseThrow();
+        helper.assertTrue(WandItem.focus(read).is(ModItems.FOCI.get("shock").get()),
+                "the focus came back with the wand");
         helper.succeed();
     }
 }

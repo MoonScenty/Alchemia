@@ -195,6 +195,11 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("item.alchemia.wand.vis", pick("%s %s / %s", "%s %s / %s"));
         add("item.alchemia.wand.charge", pick("Draws %s faster", "%s만큼 빨리 채워짐"));
         add("item.alchemia.wand.discount", pick("Spends %s%% more", "%s%% 더 씀"));
+        add("item.alchemia.wand.focus", pick("Focus: %s", "포커스: %s"));
+        add("item.alchemia.wand.focus_fitted", pick("Fitted %s", "%s 끼움"));
+        add("item.alchemia.wand.focus_removed", pick("Took off %s", "%s 뺌"));
+        add("key.categories.alchemia", "Alchemia");
+        add("key.alchemia.change_focus", pick("Change Wand Focus", "완드 포커스 바꾸기"));
         foci();
         addWandRod("wood", "Wooden", "나무");
         addWandRod("greatwood", "Greatwood", "거대나무");
