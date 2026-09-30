@@ -38,3 +38,10 @@ run/
 **/src/generated/**/.cache/
 repo/
 !**/src/**/repo/
+
+### Bought assets ###
+# The robe's meshes and their sheet were bought. What the tool writes around them is ours and stays;
+# the meshes and the picture do not go into a public repository. tools/gen_robe.py puts them back.
+src/main/resources/assets/alchemia/models/entity/robe/*.obj
+src/main/resources/assets/alchemia/textures/entity/robe.png
+src/main/resources/assets/alchemia/textures/entity/robe_void.png
