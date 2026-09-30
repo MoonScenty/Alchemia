@@ -1,12 +1,9 @@
 package me.moonscenty.alchemia.client.armour;
 
-import java.util.List;
-
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 
 import me.moonscenty.alchemia.item.RobeItem;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -16,8 +13,6 @@ import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.core.Direction;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ArmorItem;
@@ -47,8 +42,6 @@ public class RobeLayer<T extends LivingEntity, M extends HumanoidModel<T>> exten
 
     /** Sixteen of a limb's own units to the block. */
     private static final float TO_BLOCKS = 16.0F;
-
-    private static final RandomSource STEADY = RandomSource.create();
 
     public RobeLayer(RenderLayerParent<T, M> parent) {
         super(parent);
@@ -107,28 +100,20 @@ public class RobeLayer<T extends LivingEntity, M extends HumanoidModel<T>> exten
         limb.translateAndRotate(poseStack);
         poseStack.translate(-limb.x / TO_BLOCKS, HANGS_AT - limb.y / TO_BLOCKS, -limb.z / TO_BLOCKS);
         poseStack.scale(-1.0F, -1.0F, 1.0F);
-        draw(poseStack, into, light, mesh);
+        pour(poseStack, into, light, OverlayTexture.NO_OVERLAY, mesh);
         poseStack.popPose();
     }
 
-    /** Every face of a baked mesh, poured into the brush the body is being drawn with. */
-    private void draw(PoseStack poseStack, VertexConsumer into, int light, BakedModel mesh) {
+    /**
+     * Every face of a baked mesh, poured into whatever brush is being drawn with.
+     * <p>
+     * Shared with the renderer that draws a robe in a slot, because pouring a mesh into a brush is the same job
+     * whether the mesh is on a shoulder or in a bag.
+     */
+    public static void pour(PoseStack poseStack, VertexConsumer into, int light, int overlay, BakedModel mesh) {
         PoseStack.Pose pose = poseStack.last();
-        for (Direction side : Direction.values()) {
-            put(pose, into, light, mesh.getQuads(null, side, STEADY));
+        for (var quad : RobeMeshes.faces(mesh)) {
+            into.putBulkData(pose, quad, 1.0F, 1.0F, 1.0F, 1.0F, light, overlay);
         }
-        put(pose, into, light, mesh.getQuads(null, null, STEADY));
-    }
-
-    private void put(PoseStack.Pose pose, VertexConsumer into, int light,
-            List<net.minecraft.client.renderer.block.model.BakedQuad> quads) {
-        for (var quad : quads) {
-            into.putBulkData(pose, quad, 1.0F, 1.0F, 1.0F, 1.0F, light, OverlayTexture.NO_OVERLAY);
-        }
-    }
-
-    /** Whether the game has anything to draw with yet, so that a reload mid-frame cannot be caught half-done. */
-    public static boolean ready() {
-        return Minecraft.getInstance().getModelManager() != null;
     }
 }

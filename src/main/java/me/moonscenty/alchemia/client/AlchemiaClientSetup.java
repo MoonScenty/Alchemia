@@ -34,6 +34,7 @@ import net.minecraft.client.renderer.entity.NoopRenderer;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
+import me.moonscenty.alchemia.client.armour.RobeItemRenderer;
 import me.moonscenty.alchemia.client.armour.RobeLayer;
 import me.moonscenty.alchemia.client.armour.RobeMeshes;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
@@ -180,6 +181,14 @@ public class AlchemiaClientSetup {
         // a foot on a boot and a lens in front of an eye: models, not sheets stretched over the body
         event.registerItem(ModArmourLayers.BOOTS_DRAWN, ModItems.TRAVELLER_BOOTS.get());
         event.registerItem(ModArmourLayers.GOGGLES_DRAWN, ModItems.GOGGLES.get());
+        // a robe in a bag is the same robe, stood up and looked at from the front
+        var robeInHand = new net.neoforged.neoforge.client.extensions.common.IClientItemExtensions() {
+            @Override
+            public net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer getCustomRenderer() {
+                return RobeItemRenderer.get();
+            }
+        };
+        ModItems.ROBES.values().forEach(robe -> event.registerItem(robeInHand, robe.get()));
     }
 
     /** What draws a mote of light. */
