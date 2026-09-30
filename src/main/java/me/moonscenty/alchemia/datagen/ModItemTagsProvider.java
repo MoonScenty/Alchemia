@@ -26,6 +26,7 @@ public class ModItemTagsProvider extends ItemTagsProvider {
     protected void addTags(HolderLookup.Provider provider) {
         ModBlocks.NITOR.values().forEach(flame -> tag(ModTags.Items.NITOR).add(flame.get().asItem()));
         ModItems.FOCI.values().forEach(focus -> tag(ModTags.Items.FOCI).add(focus.get()));
+        robes();
         metalGear();
         tag(net.minecraft.tags.ItemTags.HEAD_ARMOR).add(ModItems.GOGGLES.get());
         tag(net.minecraft.tags.ItemTags.DURABILITY_ENCHANTABLE).add(ModItems.GOGGLES.get());
@@ -96,6 +97,23 @@ public class ModItemTagsProvider extends ItemTagsProvider {
         tag(ModTags.Items.SHARDS).add(ModItems.BALANCED_SHARD.get());
         tag(ModTags.Items.CLUSTERS).add(ModItems.IRON_CLUSTER.get(), ModItems.GOLD_CLUSTER.get(),
                 ModItems.COPPER_CLUSTER.get(), ModItems.CINNABAR_CLUSTER.get());
+    }
+
+    /** Each robe piece where the game looks for armour of its shape, and where an enchanting table looks. */
+    private void robes() {
+        java.util.Map<net.minecraft.world.item.ArmorItem.Type, net.minecraft.tags.TagKey<net.minecraft.world.item.Item>> shapes =
+                java.util.Map.of(
+                        net.minecraft.world.item.ArmorItem.Type.HELMET, ItemTags.HEAD_ARMOR,
+                        net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, ItemTags.CHEST_ARMOR,
+                        net.minecraft.world.item.ArmorItem.Type.LEGGINGS, ItemTags.LEG_ARMOR,
+                        net.minecraft.world.item.ArmorItem.Type.BOOTS, ItemTags.FOOT_ARMOR);
+        ModItems.ROBES.values().forEach(held -> {
+            me.moonscenty.alchemia.item.RobeItem robe = held.get();
+            tag(shapes.get(robe.getType())).add(robe);
+            tag(ItemTags.DURABILITY_ENCHANTABLE).add(robe);
+            tag(ItemTags.ARMOR_ENCHANTABLE).add(robe);
+            tag(ItemTags.EQUIPPABLE_ENCHANTABLE).add(robe);
+        });
     }
 
     /**

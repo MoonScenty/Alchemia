@@ -1,6 +1,8 @@
 {
   "values": [
-    "alchemia:void_chestplate",
-    "alchemia:alchemium_chestplate"
+    "alchemia:cloth_chest",
+    "alchemia:void_robe_chest",
+    "alchemia:alchemium_chestplate",
+    "alchemia:void_chestplate"
   ]
 }

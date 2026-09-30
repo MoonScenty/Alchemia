@@ -34,6 +34,9 @@ import net.minecraft.client.renderer.entity.NoopRenderer;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
+import me.moonscenty.alchemia.client.armour.RobeLayer;
+import me.moonscenty.alchemia.client.armour.RobeMeshes;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
@@ -53,6 +56,12 @@ public class AlchemiaClientSetup {
         event.register(ValveHandleRenderer.HANDLE);
         for (var arm : NodeStabilizerRenderer.ARMS) {
             event.register(arm);
+        }
+        // a robe is eight carved meshes rather than a sheet, and nothing else names them, so they are asked for
+        // here. Both robes, since they share the meshes and differ only in which sheet is stretched over them
+        for (String part : RobeMeshes.PARTS) {
+            event.register(RobeMeshes.model(part, false));
+            event.register(RobeMeshes.model(part, true));
         }
     }
 

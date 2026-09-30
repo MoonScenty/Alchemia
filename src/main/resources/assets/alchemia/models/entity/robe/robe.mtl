@@ -1,0 +1,3 @@
+# written by tools/gen_robe.py; the meshes it belongs to were bought and are not ours
+newmtl robe
+map_Kd #robe

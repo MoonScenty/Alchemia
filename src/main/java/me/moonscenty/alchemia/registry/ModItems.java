@@ -12,6 +12,7 @@ import me.moonscenty.alchemia.aspect.AspectList;
 import me.moonscenty.alchemia.item.AlumentumItem;
 import me.moonscenty.alchemia.item.FocusItem;
 import me.moonscenty.alchemia.item.FocusPouchItem;
+import me.moonscenty.alchemia.item.RobeItem;
 import me.moonscenty.alchemia.wand.Focus;
 import me.moonscenty.alchemia.item.GogglesItem;
 import me.moonscenty.alchemia.item.TravellerBootsItem;
@@ -106,6 +107,17 @@ public class ModItems {
      */
     public static final Map<String, DeferredItem<Item>> METAL_TOOLS = registerMetalTools();
     public static final Map<String, DeferredItem<Item>> METAL_ARMOUR = registerMetalArmour();
+
+    /**
+     * The two robes.
+     * <p>
+     * Not a suit each: the cloth robe has no hood and the void robe has no boots, exactly as the original had
+     * them. Between them they wear every mesh that was drawn, which is why neither is short of anything.
+     * <p>
+     * What they are worth is the discount. Cloth takes two parts in a hundred off a wand's bill at the chest and
+     * the legs and one at the feet; the void robe takes five at each of its three.
+     */
+    public static final Map<String, DeferredItem<RobeItem>> ROBES = registerRobes();
 
     /** Brass and glass on the face, drawn as a model. Wearing them is what makes an aura node visible. */
     public static final DeferredItem<GogglesItem> GOGGLES = ITEMS.register("goggles_of_revealing",
@@ -237,6 +249,35 @@ public class ModItems {
                 .add(ModAspects.WATER, 10)
                 .add(ModAspects.ORDER, 10)
                 .add(ModAspects.ENTROPY, 10);
+    }
+
+    /**
+     * The six robe pieces, in the shape the original gave each robe.
+     * <p>
+     * The key is the item's own name, so that what is registered and what is asked for cannot drift apart.
+     */
+    private static Map<String, DeferredItem<RobeItem>> registerRobes() {
+        Map<String, DeferredItem<RobeItem>> made = new java.util.LinkedHashMap<>();
+        robe(made, "cloth_chest", ArmorItem.Type.CHESTPLATE, ModArmorMaterials.CLOTH,
+                ModArmorMaterials.CLOTH_LASTS, 2, false);
+        robe(made, "cloth_legs", ArmorItem.Type.LEGGINGS, ModArmorMaterials.CLOTH,
+                ModArmorMaterials.CLOTH_LASTS, 2, false);
+        robe(made, "cloth_boots", ArmorItem.Type.BOOTS, ModArmorMaterials.CLOTH,
+                ModArmorMaterials.CLOTH_LASTS, 1, false);
+        robe(made, "void_robe_helm", ArmorItem.Type.HELMET, ModArmorMaterials.VOID_ROBE,
+                ModArmorMaterials.VOID_ROBE_LASTS, 5, true);
+        robe(made, "void_robe_chest", ArmorItem.Type.CHESTPLATE, ModArmorMaterials.VOID_ROBE,
+                ModArmorMaterials.VOID_ROBE_LASTS, 5, true);
+        robe(made, "void_robe_legs", ArmorItem.Type.LEGGINGS, ModArmorMaterials.VOID_ROBE,
+                ModArmorMaterials.VOID_ROBE_LASTS, 5, true);
+        // unmodifiableMap rather than Map.copyOf, for the reason written above registerMetalTools
+        return Collections.unmodifiableMap(made);
+    }
+
+    private static void robe(Map<String, DeferredItem<RobeItem>> into, String name, ArmorItem.Type type,
+            DeferredHolder<ArmorMaterial, ArmorMaterial> material, int lasts, int discount, boolean drab) {
+        into.put(name, ITEMS.register(name, () -> new RobeItem(material, type, discount, drab,
+                new Item.Properties().durability(type.getDurability(lasts)))));
     }
 
     private static Map<String, DeferredItem<Item>> registerWandCaps() {

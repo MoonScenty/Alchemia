@@ -1,5 +1,11 @@
 {
   "values": [
+    "alchemia:cloth_chest",
+    "alchemia:cloth_legs",
+    "alchemia:cloth_boots",
+    "alchemia:void_robe_helm",
+    "alchemia:void_robe_chest",
+    "alchemia:void_robe_legs",
     "alchemia:alchemium_pickaxe",
     "alchemia:alchemium_axe",
     "alchemia:alchemium_shovel",

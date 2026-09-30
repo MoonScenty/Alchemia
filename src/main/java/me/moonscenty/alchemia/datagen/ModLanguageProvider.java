@@ -54,6 +54,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("item.alchemia.focus.cost_per_tick", pick("Vis Cost (per tick):", "비스 값 (틱당):"));
         add("item.alchemia.focus.cost_line", "  %s x %s");
         addItem(ModItems.FOCUS_POUCH, pick("Focus Pouch", "포커스 주머니"));
+        robes();
         add("item.alchemia.focus_pouch.holding", pick("Holding %s of %s", "%s / %s 들었음"));
 
         String[][] foci = {
@@ -74,6 +75,28 @@ public abstract class ModLanguageProvider extends LanguageProvider {
             add("item.alchemia.focus_" + focus[0],
                     pick("Wand Focus: " + focus[1], "완드 포커스: " + focus[2]));
         }
+    }
+
+    /**
+     * The two robes.
+     * <p>
+     * Neither is a whole suit: the cloth robe has no hood and the void robe has no boots, as the original had
+     * them. The names are the original's too -- "cloth" rather than "robe" for the plain one, because that is
+     * what it is made of and what it is called everywhere the recipes mention it.
+     */
+    private void robes() {
+        String[][] pieces = {
+                {"cloth_chest", "Robe", "로브"},
+                {"cloth_legs", "Robe Leggings", "로브 바지"},
+                {"cloth_boots", "Robe Boots", "로브 신"},
+                {"void_robe_helm", "Void Robe Hood", "공허 로브 두건"},
+                {"void_robe_chest", "Void Robe", "공허 로브"},
+                {"void_robe_legs", "Void Robe Leggings", "공허 로브 바지"},
+        };
+        for (String[] piece : pieces) {
+            add("item.alchemia." + piece[0], pick(piece[1], piece[2]));
+        }
+        add("item.alchemia.robe.discount", pick("Wands spend %s%% less", "완드가 %s%% 덜 씀"));
     }
 
     /** Picks the text for this provider's language. */
