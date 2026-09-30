@@ -1,6 +1,6 @@
 {
   "loader": "neoforge:obj",
-  "model": "alchemia:models/entity/robe/body.obj",
+  "model": "alchemia:alchemia/models/entity/robe/body.obj",
   "automatic_culling": false,
   "shade_quads": false,
   "flip_v": true,
