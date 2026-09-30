@@ -1,0 +1,12 @@
+{
+  "sources": [
+    {
+      "type": "minecraft:single",
+      "resource": "alchemia:entity/robe"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "alchemia:entity/robe_void"
+    }
+  ]
+}
