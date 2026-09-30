@@ -1,5 +1,8 @@
 {
   "parent": "builtin/entity",
+  "textures": {
+    "particle": "alchemia:entity/robe"
+  },
   "display": {
     "gui": {
       "rotation": [
