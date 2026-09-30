@@ -31,13 +31,16 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraft.client.renderer.entity.NoopRenderer;
+import net.minecraft.client.renderer.entity.ArmorStandRenderer;
+import net.minecraft.client.renderer.entity.player.PlayerRenderer;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.client.resources.PlayerSkin;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import me.moonscenty.alchemia.client.armour.RobeItemRenderer;
 import me.moonscenty.alchemia.client.armour.RobeLayer;
 import me.moonscenty.alchemia.client.armour.RobeMeshes;
-import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
@@ -123,6 +126,24 @@ public class AlchemiaClientSetup {
     private static int named(ItemStack stack) {
         Holder<Aspect> aspect = stack.get(ModDataComponents.ESSENTIA.get());
         return aspect == null ? PLAIN : FastColor.ARGB32.opaque(aspect.value().color());
+    }
+
+    /**
+     * Hangs the robe layer on everything shaped like a person.
+     * <p>
+     * A robe is drawn by a layer of our own rather than by the one that draws armour, so it has to be put on each
+     * body that might wear one: both builds of player, and the stand somebody leaves a robe on.
+     */
+    @SubscribeEvent
+    public static void addLayers(EntityRenderersEvent.AddLayers event) {
+        for (PlayerSkin.Model skin : event.getSkins()) {
+            if (event.getSkin(skin) instanceof PlayerRenderer drawn) {
+                drawn.addLayer(new RobeLayer<>(drawn));
+            }
+        }
+        if (event.getRenderer(EntityType.ARMOR_STAND) instanceof ArmorStandRenderer stand) {
+            stand.addLayer(new RobeLayer<>(stand));
+        }
     }
 
     @SubscribeEvent
