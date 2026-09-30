@@ -23,10 +23,6 @@ import net.minecraft.world.phys.AABB;
  * cubes. A model nothing refers to is never baked, so each one has to be asked for by name before the game will
  * read it; {@link me.moonscenty.alchemia.client.AlchemiaClientSetup} does that asking.
  *
- * <p>The left and right in the drawn file names are the wearer's as the drawing saw them, which is the mirror of
- * what this game calls left and right. So {@code left_arm} is hung off the right arm, and so on for the rest. The
- * names are left as they were drawn rather than quietly renamed, because the file on disk is the one the artist
- * will open again.
  */
 public final class RobeMeshes {
     /** Every mesh, by the name it was drawn under. */

@@ -71,18 +71,20 @@ public class RobeLayer<T extends LivingEntity, M extends HumanoidModel<T>> exten
     /**
      * Which limb a mesh rides on.
      * <p>
-     * The drawn left is this game's right. A robe drawn with its left sleeve on the left of the page belongs on
-     * the arm that is on the left of the page, and that arm is the wearer's right.
+     * Straight across: the drawn left arm goes on the left arm. It is tempting to swap them, because the game
+     * puts the right arm at a negative x while the drawn right arm is at a positive one -- but the renderer
+     * turns a body about before any of this runs, and that turn is already undone below. Measured in the world
+     * both arms are where they say they are.
      */
     private ModelPart limb(String part) {
         M body = getParentModel();
         return switch (part) {
             case "head" -> body.head;
             case "body" -> body.body;
-            case "left_arm" -> body.rightArm;
-            case "right_arm" -> body.leftArm;
-            case "left_leg", "left_feet" -> body.rightLeg;
-            case "right_leg", "right_feet" -> body.leftLeg;
+            case "left_arm" -> body.leftArm;
+            case "right_arm" -> body.rightArm;
+            case "left_leg", "left_feet" -> body.leftLeg;
+            case "right_leg", "right_feet" -> body.rightLeg;
             default -> body.body;
         };
     }
