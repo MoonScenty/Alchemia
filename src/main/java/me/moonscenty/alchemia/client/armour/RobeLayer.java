@@ -6,6 +6,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import me.moonscenty.alchemia.item.RobeItem;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
@@ -96,11 +97,16 @@ public class RobeLayer<T extends LivingEntity, M extends HumanoidModel<T>> exten
      * shifted back by where the limb hangs and by how high the body hangs, and flipped in two of three axes.
      * The shift is applied after the turn on purpose -- it is measured from the limb's pivot, which is the point
      * the limb turns about.
+     * <p>
+     * The shift is measured from where the limb <em>rests</em>, not from where it is now. A limb does not only
+     * turn: crouching drops the head and the body outright, and taking away where the limb is now would take
+     * that away with it and leave the hood hanging in the air where the head used to be.
      */
     private void hang(PoseStack poseStack, VertexConsumer into, int light, BakedModel mesh, ModelPart limb) {
+        PartPose rest = limb.getInitialPose();
         poseStack.pushPose();
         limb.translateAndRotate(poseStack);
-        poseStack.translate(-limb.x / TO_BLOCKS, HANGS_AT - limb.y / TO_BLOCKS, -limb.z / TO_BLOCKS);
+        poseStack.translate(-rest.x / TO_BLOCKS, HANGS_AT - rest.y / TO_BLOCKS, -rest.z / TO_BLOCKS);
         poseStack.scale(-1.0F, -1.0F, 1.0F);
         pour(poseStack, into, light, OverlayTexture.NO_OVERLAY, mesh);
         poseStack.popPose();
