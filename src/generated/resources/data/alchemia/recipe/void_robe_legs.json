@@ -1,0 +1,38 @@
+{
+  "type": "alchemia:infusion",
+  "central": {
+    "item": "alchemia:void_leggings"
+  },
+  "essentia": {
+    "alchemia:alienis": 16,
+    "alchemia:metallum": 20,
+    "alchemia:potentia": 16,
+    "alchemia:praemunio": 20,
+    "alchemia:vacuos": 20
+  },
+  "instability": 6,
+  "result": {
+    "count": 1,
+    "id": "alchemia:void_robe_legs"
+  },
+  "ring": [
+    {
+      "item": "alchemia:cloth_legs"
+    },
+    {
+      "item": "alchemia:void_ingot"
+    },
+    {
+      "item": "alchemia:void_ingot"
+    },
+    {
+      "item": "alchemia:salis_mundus"
+    },
+    {
+      "item": "alchemia:enchanted_fabric"
+    },
+    {
+      "item": "minecraft:leather"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "type": "alchemia:arcane_shaped",
+  "key": {
+    "C": {
+      "tag": "minecraft:wool"
+    },
+    "S": {
+      "item": "minecraft:string"
+    }
+  },
+  "pattern": [
+    " S ",
+    "SCS",
+    " S "
+  ],
+  "result": {
+    "count": 1,
+    "id": "alchemia:enchanted_fabric"
+  },
+  "vis": {
+    "alchemia:aer": 5,
+    "alchemia:aqua": 5,
+    "alchemia:ignis": 5,
+    "alchemia:ordo": 5,
+    "alchemia:perditio": 5,
+    "alchemia:terra": 5
+  }
+}

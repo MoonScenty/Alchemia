@@ -54,6 +54,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("item.alchemia.focus.cost_per_tick", pick("Vis Cost (per tick):", "비스 값 (틱당):"));
         add("item.alchemia.focus.cost_line", "  %s x %s");
         addItem(ModItems.FOCUS_POUCH, pick("Focus Pouch", "포커스 주머니"));
+        addItem(ModItems.ENCHANTED_FABRIC, pick("Enchanted Fabric", "마법 천"));
         robes();
         add("item.alchemia.focus_pouch.holding", pick("Holding %s of %s", "%s / %s 들었음"));
 

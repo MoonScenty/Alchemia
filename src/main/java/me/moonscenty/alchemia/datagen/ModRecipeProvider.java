@@ -48,6 +48,8 @@ import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.common.Tags;
 
 public class ModRecipeProvider extends RecipeProvider {
+    /** How badly an altar takes to sewing void metal onto cloth. The original's number for all three. */
+    private static final int VOID_ROBE_UNSTABLE = 6;
     public ModRecipeProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         super(output, registries);
     }
@@ -270,6 +272,24 @@ public class ModRecipeProvider extends RecipeProvider {
                 Map.of('S', Ingredient.of(Tags.Items.STONES), 'C', Ingredient.of(ModTags.Items.SHARDS)),
                 "SSS", "SCS", "SSS");
 
+        // the cloth everything soft is cut from: string round wool, and all six primals to work it
+        arcane(output, "enchanted_fabric", new ItemStack(ModItems.ENCHANTED_FABRIC.get()),
+                AspectList.of(ModAspects.AIR, 5).add(ModAspects.FIRE, 5).add(ModAspects.WATER, 5)
+                        .add(ModAspects.EARTH, 5).add(ModAspects.ORDER, 5).add(ModAspects.ENTROPY, 5),
+                Map.of('S', Ingredient.of(Items.STRING), 'C', Ingredient.of(ItemTags.WOOL)),
+                " S ", "SCS", " S ");
+
+        // the cloth robe. No hood: the original had none, and the void robe is where a hood comes from
+        arcane(output, "cloth_chest", new ItemStack(ModItems.ROBES.get("cloth_chest").get()),
+                AspectList.of(ModAspects.AIR, 30),
+                Map.of('I', Ingredient.of(ModItems.ENCHANTED_FABRIC)), "I I", "III", "III");
+        arcane(output, "cloth_legs", new ItemStack(ModItems.ROBES.get("cloth_legs").get()),
+                AspectList.of(ModAspects.WATER, 25),
+                Map.of('I', Ingredient.of(ModItems.ENCHANTED_FABRIC)), "III", "I I", "I I");
+        arcane(output, "cloth_boots", new ItemStack(ModItems.ROBES.get("cloth_boots").get()),
+                AspectList.of(ModAspects.EARTH, 20),
+                Map.of('I', Ingredient.of(ModItems.ENCHANTED_FABRIC)), "I I", "I I");
+
         // the pouch: a leather bag with a brass buckle and a gold clasp. The original held a mundane girdle in
         // the middle, which is leather round a brass ingot; the girdle is a bauble and there are none yet, so what
         // it is made of goes in instead of the girdle itself
@@ -480,10 +500,32 @@ public class ModRecipeProvider extends RecipeProvider {
         infusion(output, "traveller_boots", Ingredient.of(Items.LEATHER_BOOTS),
                 List.of(Ingredient.of(ModItems.SHARDS.get(CrystalType.AIR)),
                         Ingredient.of(ModItems.SHARDS.get(CrystalType.AIR)),
-                        Ingredient.of(Items.STRING), Ingredient.of(Items.STRING),
+                        Ingredient.of(ModItems.ENCHANTED_FABRIC), Ingredient.of(ModItems.ENCHANTED_FABRIC),
                         Ingredient.of(Items.FEATHER), Ingredient.of(Items.COD)),
                 new ItemStack(ModItems.TRAVELLER_BOOTS.get()),
                 AspectList.of(ModAspects.FLIGHT, 25).add(ModAspects.MOTION, 25), 1, "traveller_boots");
+
+        // the void robes: a suit of void metal taken apart and sewn back together round cloth. The original
+        // asked for void plates, which nothing in this mod makes yet, so the ingots they would be beaten from
+        // go in instead
+        voidRobe(output, "void_robe_helm", "void_helmet",
+                List.of(Ingredient.of(ModItems.GOGGLES), Ingredient.of(ModItems.ENCHANTED_FABRIC),
+                        Ingredient.of(ModItems.ENCHANTED_FABRIC), Ingredient.of(ModItems.SALIS_MUNDUS),
+                        Ingredient.of(ModItems.ENCHANTED_FABRIC), Ingredient.of(ModItems.ENCHANTED_FABRIC)),
+                AspectList.of(ModAspects.METAL, 16).add(ModAspects.SENSES, 16).add(ModAspects.PROTECT, 16)
+                        .add(ModAspects.ENERGY, 16).add(ModAspects.ELDRITCH, 16).add(ModAspects.VOID, 16));
+        voidRobe(output, "void_robe_chest", "void_chestplate",
+                List.of(Ingredient.of(ModItems.ROBES.get("cloth_chest")), Ingredient.of(ModItems.VOID_INGOT),
+                        Ingredient.of(ModItems.VOID_INGOT), Ingredient.of(ModItems.SALIS_MUNDUS),
+                        Ingredient.of(ModItems.ENCHANTED_FABRIC), Ingredient.of(Items.LEATHER)),
+                AspectList.of(ModAspects.METAL, 24).add(ModAspects.PROTECT, 24).add(ModAspects.ENERGY, 16)
+                        .add(ModAspects.ELDRITCH, 16).add(ModAspects.VOID, 24));
+        voidRobe(output, "void_robe_legs", "void_leggings",
+                List.of(Ingredient.of(ModItems.ROBES.get("cloth_legs")), Ingredient.of(ModItems.VOID_INGOT),
+                        Ingredient.of(ModItems.VOID_INGOT), Ingredient.of(ModItems.SALIS_MUNDUS),
+                        Ingredient.of(ModItems.ENCHANTED_FABRIC), Ingredient.of(Items.LEATHER)),
+                AspectList.of(ModAspects.METAL, 20).add(ModAspects.PROTECT, 20).add(ModAspects.ENERGY, 16)
+                        .add(ModAspects.ELDRITCH, 16).add(ModAspects.VOID, 20));
 
         // the two caps a workbench can only cast. Salis mundus round them, and the altar does the rest
         infusion(output, "wand_cap_alchemium", Ingredient.of(ModItems.INERT_CAPS.get("alchemium")),
@@ -561,6 +603,20 @@ public class ModRecipeProvider extends RecipeProvider {
             ItemStack result, AspectList essentia, int instability, String research) {
         output.accept(Alchemia.id(name), new InfusionRecipe(central, ring, result, essentia, instability,
                 Optional.of(Alchemia.id(research))), null);
+    }
+
+    /** One of the three void robes: the matching piece of void armour at the centre, unstable to the same degree. */
+    private void voidRobe(RecipeOutput output, String name, String from, List<Ingredient> ring,
+            AspectList essentia) {
+        infusion(output, name, Ingredient.of(ModItems.METAL_ARMOUR.get(from)), ring,
+                new ItemStack(ModItems.ROBES.get(name).get()), essentia, VOID_ROBE_UNSTABLE);
+    }
+
+    /** The same, for a working nothing has been written up yet. An altar will do it for anybody. */
+    private void infusion(RecipeOutput output, String name, Ingredient central, List<Ingredient> ring,
+            ItemStack result, AspectList essentia, int instability) {
+        output.accept(Alchemia.id(name), new InfusionRecipe(central, ring, result, essentia, instability,
+                Optional.empty()), null);
     }
 
     /**

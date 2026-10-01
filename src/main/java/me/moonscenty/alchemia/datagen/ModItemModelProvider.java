@@ -81,6 +81,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.BRASS_PLATE.get());
         basicItem(ModItems.IRON_PLATE.get());
         basicItem(ModItems.SALIS_MUNDUS.get());
+        basicItem(ModItems.ENCHANTED_FABRIC.get());
         basicItem(ModItems.ALUMENTUM.get());
         basicItem(ModItems.ALCHEMOMETER.get());
         basicItem(ModItems.NODE_PLACER.get());

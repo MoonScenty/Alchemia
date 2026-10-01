@@ -1,0 +1,39 @@
+{
+  "type": "alchemia:infusion",
+  "central": {
+    "item": "alchemia:void_helmet"
+  },
+  "essentia": {
+    "alchemia:alienis": 16,
+    "alchemia:metallum": 16,
+    "alchemia:potentia": 16,
+    "alchemia:praemunio": 16,
+    "alchemia:sensus": 16,
+    "alchemia:vacuos": 16
+  },
+  "instability": 6,
+  "result": {
+    "count": 1,
+    "id": "alchemia:void_robe_helm"
+  },
+  "ring": [
+    {
+      "item": "alchemia:goggles_of_revealing"
+    },
+    {
+      "item": "alchemia:enchanted_fabric"
+    },
+    {
+      "item": "alchemia:enchanted_fabric"
+    },
+    {
+      "item": "alchemia:salis_mundus"
+    },
+    {
+      "item": "alchemia:enchanted_fabric"
+    },
+    {
+      "item": "alchemia:enchanted_fabric"
+    }
+  ]
+}

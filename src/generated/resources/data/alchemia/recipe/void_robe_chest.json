@@ -1,0 +1,38 @@
+{
+  "type": "alchemia:infusion",
+  "central": {
+    "item": "alchemia:void_chestplate"
+  },
+  "essentia": {
+    "alchemia:alienis": 16,
+    "alchemia:metallum": 24,
+    "alchemia:potentia": 16,
+    "alchemia:praemunio": 24,
+    "alchemia:vacuos": 24
+  },
+  "instability": 6,
+  "result": {
+    "count": 1,
+    "id": "alchemia:void_robe_chest"
+  },
+  "ring": [
+    {
+      "item": "alchemia:cloth_chest"
+    },
+    {
+      "item": "alchemia:void_ingot"
+    },
+    {
+      "item": "alchemia:void_ingot"
+    },
+    {
+      "item": "alchemia:salis_mundus"
+    },
+    {
+      "item": "alchemia:enchanted_fabric"
+    },
+    {
+      "item": "minecraft:leather"
+    }
+  ]
+}

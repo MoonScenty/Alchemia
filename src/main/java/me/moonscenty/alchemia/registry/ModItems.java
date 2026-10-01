@@ -148,6 +148,14 @@ public class ModItems {
     public static final DeferredItem<Item> BRASS_PLATE = ITEMS.registerSimpleItem("brass_plate");
     public static final DeferredItem<Item> IRON_PLATE = ITEMS.registerSimpleItem("iron_plate");
     public static final DeferredItem<Item> SALIS_MUNDUS = ITEMS.registerSimpleItem("salis_mundus");
+
+    /**
+     * Cloth that has been through a workbench rather than a loom. Everything soft in this craft is cut from it.
+     * <p>
+     * Registered as {@code enchanted_fabric} where the original said {@code fabric}, which is a word this game's
+     * world has since given to something else entirely. What it is called on the tooltip is the original's.
+     */
+    public static final DeferredItem<Item> ENCHANTED_FABRIC = ITEMS.registerSimpleItem("enchanted_fabric");
     /** Coal that has been through the crucible: four times the fire in it, and it hurries a smelter along. */
     public static final DeferredItem<AlumentumItem> ALUMENTUM =
             ITEMS.register("alumentum", () -> new AlumentumItem(new Item.Properties()));

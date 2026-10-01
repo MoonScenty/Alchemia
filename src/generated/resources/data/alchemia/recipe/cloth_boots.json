@@ -1,0 +1,19 @@
+{
+  "type": "alchemia:arcane_shaped",
+  "key": {
+    "I": {
+      "item": "alchemia:enchanted_fabric"
+    }
+  },
+  "pattern": [
+    "I I",
+    "I I"
+  ],
+  "result": {
+    "count": 1,
+    "id": "alchemia:cloth_boots"
+  },
+  "vis": {
+    "alchemia:terra": 20
+  }
+}
