@@ -101,6 +101,9 @@ public abstract class ModLanguageProvider extends LanguageProvider {
             add("item.alchemia." + piece[0], pick(piece[1], piece[2]));
         }
         add("item.alchemia.vis_discount", pick("Wands spend %s%% less", "완드가 %s%% 덜 씀"));
+        add("item.alchemia.fortress.turns",
+                pick("Each piece turns %s%% of a blow, %s%% of fire and blasts, %s%% of a working",
+                        "한 점마다 타격 %s%%, 불과 폭발 %s%%, 주술 %s%%를 흘림"));
     }
 
     /** Picks the text for this provider's language. */
