@@ -9,7 +9,12 @@ import java.util.List;
 
 import me.moonscenty.alchemia.item.FocusItem;
 import me.moonscenty.alchemia.item.FocusPouchItem;
+import me.moonscenty.alchemia.item.RobeItem;
 import me.moonscenty.alchemia.item.VisDiscount;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.world.item.DyeItem;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.DyedItemColor;
 import me.moonscenty.alchemia.item.WandItem;
 import net.minecraft.world.entity.EquipmentSlot;
 import me.moonscenty.alchemia.registry.ModItems;
@@ -346,5 +351,24 @@ public class WandTests {
         int before = item.held(wand, ModAspects.FIRE);
         item.take(wand, price, player);
         return before - item.held(wand, ModAspects.FIRE);
+    }
+    /**
+     * The plain robe takes dye; the void robe does not.
+     * <p>
+     * The one is cloth and the other is cloth with metal sewn through it. A dye that washed out of the second
+     * would be a dye that never touched what gives it its colour.
+     */
+    @GameTest(template = TEMPLATE)
+    public static void onlyTheClothRobeTakesDye(GameTestHelper helper) {
+        ItemStack cloth = new ItemStack(ModItems.ROBES.get("cloth_chest").get());
+        ItemStack drab = new ItemStack(ModItems.ROBES.get("void_robe_chest").get());
+        helper.assertTrue(cloth.is(ItemTags.DYEABLE), "a plain robe can be dyed");
+        helper.assertFalse(drab.is(ItemTags.DYEABLE), "a void robe cannot");
+
+        helper.assertValueEqual(RobeItem.dyed(cloth), RobeItem.UNDYED, "undyed, it is drawn as it was painted");
+        // the dye is worked into a copy and handed back; the robe that went in is untouched
+        ItemStack red = DyedItemColor.applyDyes(cloth, List.of((DyeItem) Items.RED_DYE));
+        helper.assertTrue(RobeItem.dyed(red) != RobeItem.UNDYED, "dyed, it is drawn in the dye");
+        helper.succeed();
     }
 }

@@ -274,20 +274,20 @@ public class ModRecipeProvider extends RecipeProvider {
                 "SSS", "SCS", "SSS");
 
         // the cloth everything soft is cut from: string round wool, and all six primals to work it
-        arcane(output, "enchanted_fabric", new ItemStack(ModItems.ENCHANTED_FABRIC.get()),
+        arcane(output, "enchanted_fabric", "enchanted_fabric", new ItemStack(ModItems.ENCHANTED_FABRIC.get()),
                 AspectList.of(ModAspects.AIR, 5).add(ModAspects.FIRE, 5).add(ModAspects.WATER, 5)
                         .add(ModAspects.EARTH, 5).add(ModAspects.ORDER, 5).add(ModAspects.ENTROPY, 5),
                 Map.of('S', Ingredient.of(Items.STRING), 'C', Ingredient.of(ItemTags.WOOL)),
                 " S ", "SCS", " S ");
 
         // the cloth robe. No hood: the original had none, and the void robe is where a hood comes from
-        arcane(output, "cloth_chest", new ItemStack(ModItems.ROBES.get("cloth_chest").get()),
+        arcane(output, "cloth_chest", "robes", new ItemStack(ModItems.ROBES.get("cloth_chest").get()),
                 AspectList.of(ModAspects.AIR, 30),
                 Map.of('I', Ingredient.of(ModItems.ENCHANTED_FABRIC)), "I I", "III", "III");
-        arcane(output, "cloth_legs", new ItemStack(ModItems.ROBES.get("cloth_legs").get()),
+        arcane(output, "cloth_legs", "robes", new ItemStack(ModItems.ROBES.get("cloth_legs").get()),
                 AspectList.of(ModAspects.WATER, 25),
                 Map.of('I', Ingredient.of(ModItems.ENCHANTED_FABRIC)), "III", "I I", "I I");
-        arcane(output, "cloth_boots", new ItemStack(ModItems.ROBES.get("cloth_boots").get()),
+        arcane(output, "cloth_boots", "robes", new ItemStack(ModItems.ROBES.get("cloth_boots").get()),
                 AspectList.of(ModAspects.EARTH, 20),
                 Map.of('I', Ingredient.of(ModItems.ENCHANTED_FABRIC)), "I I", "I I");
 
@@ -608,7 +608,7 @@ public class ModRecipeProvider extends RecipeProvider {
     private void voidRobe(RecipeOutput output, String name, String from, List<Ingredient> ring,
             AspectList essentia) {
         infusion(output, name, Ingredient.of(ModItems.METAL_ARMOUR.get(from)), ring,
-                new ItemStack(ModItems.ROBES.get(name).get()), essentia, VOID_ROBE_UNSTABLE);
+                new ItemStack(ModItems.ROBES.get(name).get()), essentia, VOID_ROBE_UNSTABLE, "void_robes");
     }
 
     /** The same, for a working nothing has been written up yet. An altar will do it for anybody. */

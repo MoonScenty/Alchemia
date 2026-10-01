@@ -12,6 +12,7 @@
     "alchemia:vacuos": 16
   },
   "instability": 6,
+  "research": "alchemia:void_robes",
   "result": {
     "count": 1,
     "id": "alchemia:void_robe_helm"

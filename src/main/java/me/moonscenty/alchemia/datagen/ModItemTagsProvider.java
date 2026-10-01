@@ -115,6 +115,11 @@ public class ModItemTagsProvider extends ItemTagsProvider {
             tag(ItemTags.DURABILITY_ENCHANTABLE).add(robe);
             tag(ItemTags.ARMOR_ENCHANTABLE).add(robe);
             tag(ItemTags.EQUIPPABLE_ENCHANTABLE).add(robe);
+            // the plain robe takes dye and washes out in a cauldron, as the original's did. The void robe does
+            // not: what colours it is the metal sewn through it, and that does not come off in water
+            if (!robe.drab()) {
+                tag(ItemTags.DYEABLE).add(robe);
+            }
         });
     }
 

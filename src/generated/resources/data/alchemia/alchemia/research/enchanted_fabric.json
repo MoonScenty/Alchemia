@@ -1,0 +1,25 @@
+{
+  "category": "alchemia:artifice",
+  "column": 6,
+  "complexity": 2,
+  "icon": "alchemia:enchanted_fabric",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.enchanted_fabric.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:enchanted_fabric"
+    }
+  ],
+  "parents": [
+    "alchemia:arcane_workbench"
+  ],
+  "requirements": {
+    "alchemia:auram": 3,
+    "alchemia:bestia": 2,
+    "alchemia:fabrico": 4
+  },
+  "row": 3
+}

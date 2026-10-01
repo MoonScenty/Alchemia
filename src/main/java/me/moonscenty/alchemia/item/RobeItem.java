@@ -11,6 +11,7 @@ import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.DyedItemColor;
 
 /**
  * A robe: cloth over a wand-bearer rather than plate over a soldier.
@@ -53,4 +54,17 @@ public class RobeItem extends ArmorItem implements VisDiscount {
     public boolean drab() {
         return drab;
     }
+
+    /**
+     * What colour to draw a piece in: whatever dye was worked into it, or none.
+     * <p>
+     * None is white rather than a colour of its own, because white is what leaves the sheet as it was drawn. A
+     * robe nobody has dyed should look like the cloth it was cut from.
+     */
+    public static int dyed(ItemStack stack) {
+        return DyedItemColor.getOrDefault(stack, UNDYED);
+    }
+
+    /** White: what a sheet looks like when nothing is done to it. */
+    public static final int UNDYED = 0xFFFFFF;
 }

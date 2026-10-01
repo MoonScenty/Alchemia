@@ -66,8 +66,9 @@ public class RobeItemRenderer extends BlockEntityWithoutLevelRenderer {
         poseStack.translate(-middle.x, -middle.y, -middle.z);
 
         VertexConsumer into = buffers.getBuffer(RenderType.entityCutoutNoCull(TextureAtlas.LOCATION_BLOCKS));
+        int colour = RobeItem.dyed(stack);
         for (String part : RobeMeshes.covering(robe.getType())) {
-            RobeLayer.pour(poseStack, into, light, overlay, RobeMeshes.baked(part, robe.drab()));
+            RobeLayer.pour(poseStack, into, light, overlay, RobeMeshes.baked(part, robe.drab()), colour);
         }
         poseStack.popPose();
     }

@@ -124,7 +124,7 @@ public class ModResearchProvider {
                 AspectList.of(ModAspects.VOID, 6).add(ModAspects.DARKNESS, 6).add(ModAspects.METAL, 4)
                         .add(ModAspects.ELDRITCH, 2),
                 List.of("metallurgy"), false, NodeShape.SPECIAL, 3,
-                "void_seed", "void_ingot", "wand_cap_void_inert", "wand_cap_void");
+                "void_seed", "void_ingot", "void_plate", "wand_cap_void_inert", "wand_cap_void");
 
         // what either metal is good for once there is enough of it to forge with
         entry(context, "alchemium_gear", ModResearch.ARTIFICE, ModItems.METAL_TOOLS.get("alchemium_pickaxe"),
@@ -156,6 +156,22 @@ public class ModResearchProvider {
         entry(context, "goggles", ModResearch.ARTIFICE, ModItems.GOGGLES, 5, 2,
                 AspectList.of(ModAspects.SENSES, 3).add(ModAspects.AURA, 3).add(ModAspects.ENERGY, 3),
                 List.of("arcane_workbench"), false, NodeShape.PLAIN, 2, "goggles_of_revealing");
+
+        // cloth with the six primals worked into it, and what is cut from it. A robe is not armour: what it is
+        // worth is that a wand spends less while it is on
+        entry(context, "enchanted_fabric", ModResearch.ARTIFICE, ModItems.ENCHANTED_FABRIC, 6, 3,
+                AspectList.of(ModAspects.CRAFT, 4).add(ModAspects.AURA, 3).add(ModAspects.BEAST, 2),
+                List.of("arcane_workbench"), false, NodeShape.PLAIN, 2, "enchanted_fabric");
+        entry(context, "robes", ModResearch.ARTIFICE, ModItems.ROBES.get("cloth_chest"), 7, 2,
+                AspectList.of(ModAspects.AURA, 4).add(ModAspects.PROTECT, 4).add(ModAspects.CRAFT, 3)
+                        .add(ModAspects.ENERGY, 2),
+                List.of("enchanted_fabric"), false, NodeShape.PLAIN, 2,
+                "cloth_chest", "cloth_legs", "cloth_boots");
+        entry(context, "void_robes", ModResearch.ARTIFICE, ModItems.ROBES.get("void_robe_chest"), 8, 3,
+                AspectList.of(ModAspects.VOID, 6).add(ModAspects.AURA, 4).add(ModAspects.PROTECT, 4)
+                        .add(ModAspects.ELDRITCH, 3),
+                List.of("robes", "void_gear", "infusion"), false, NodeShape.SPECIAL, 3,
+                "void_robe_helm", "void_robe_chest", "void_robe_legs");
 
         entry(context, "traveller_boots", ModResearch.ARTIFICE, ModItems.TRAVELLER_BOOTS, 7, 4,
                 AspectList.of(ModAspects.MOTION, 3).add(ModAspects.EARTH, 3).add(ModAspects.FLIGHT, 3)

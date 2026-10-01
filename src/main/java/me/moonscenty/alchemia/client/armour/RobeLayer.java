@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.util.FastColor;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -55,17 +56,18 @@ public class RobeLayer<T extends LivingEntity, M extends HumanoidModel<T>> exten
                 EquipmentSlot.LEGS, EquipmentSlot.FEET}) {
             ItemStack piece = worn.getItemBySlot(slot);
             if (piece.getItem() instanceof RobeItem robe) {
-                wear(poseStack, buffers, light, robe, robe.getType());
+                wear(poseStack, buffers, light, piece, robe, robe.getType());
             }
         }
     }
 
-    private void wear(PoseStack poseStack, MultiBufferSource buffers, int light, RobeItem robe,
+    private void wear(PoseStack poseStack, MultiBufferSource buffers, int light, ItemStack piece, RobeItem robe,
             ArmorItem.Type type) {
         // the meshes live on the block sheet, so the brush has to be dipped in that rather than in a robe's own
         VertexConsumer into = buffers.getBuffer(RenderType.entityCutoutNoCull(TextureAtlas.LOCATION_BLOCKS));
+        int colour = RobeItem.dyed(piece);
         for (String part : RobeMeshes.covering(type)) {
-            hang(poseStack, into, light, RobeMeshes.baked(part, robe.drab()), limb(part));
+            hang(poseStack, into, light, RobeMeshes.baked(part, robe.drab()), limb(part), colour);
         }
     }
 
@@ -102,13 +104,14 @@ public class RobeLayer<T extends LivingEntity, M extends HumanoidModel<T>> exten
      * turn: crouching drops the head and the body outright, and taking away where the limb is now would take
      * that away with it and leave the hood hanging in the air where the head used to be.
      */
-    private void hang(PoseStack poseStack, VertexConsumer into, int light, BakedModel mesh, ModelPart limb) {
+    private void hang(PoseStack poseStack, VertexConsumer into, int light, BakedModel mesh, ModelPart limb,
+            int colour) {
         PartPose rest = limb.getInitialPose();
         poseStack.pushPose();
         limb.translateAndRotate(poseStack);
         poseStack.translate(-rest.x / TO_BLOCKS, HANGS_AT - rest.y / TO_BLOCKS, -rest.z / TO_BLOCKS);
         poseStack.scale(-1.0F, -1.0F, 1.0F);
-        pour(poseStack, into, light, OverlayTexture.NO_OVERLAY, mesh);
+        pour(poseStack, into, light, OverlayTexture.NO_OVERLAY, mesh, colour);
         poseStack.popPose();
     }
 
@@ -118,10 +121,14 @@ public class RobeLayer<T extends LivingEntity, M extends HumanoidModel<T>> exten
      * Shared with the renderer that draws a robe in a slot, because pouring a mesh into a brush is the same job
      * whether the mesh is on a shoulder or in a bag.
      */
-    public static void pour(PoseStack poseStack, VertexConsumer into, int light, int overlay, BakedModel mesh) {
+    public static void pour(PoseStack poseStack, VertexConsumer into, int light, int overlay, BakedModel mesh,
+            int colour) {
         PoseStack.Pose pose = poseStack.last();
+        float red = FastColor.ARGB32.red(colour) / 255.0F;
+        float green = FastColor.ARGB32.green(colour) / 255.0F;
+        float blue = FastColor.ARGB32.blue(colour) / 255.0F;
         for (var quad : RobeMeshes.faces(mesh)) {
-            into.putBulkData(pose, quad, 1.0F, 1.0F, 1.0F, 1.0F, light, overlay);
+            into.putBulkData(pose, quad, red, green, blue, 1.0F, light, overlay);
         }
     }
 }

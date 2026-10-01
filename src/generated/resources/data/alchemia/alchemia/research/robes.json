@@ -1,0 +1,34 @@
+{
+  "category": "alchemia:artifice",
+  "column": 7,
+  "complexity": 2,
+  "icon": "alchemia:cloth_chest",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.robes.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:cloth_chest"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:cloth_legs"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:cloth_boots"
+    }
+  ],
+  "parents": [
+    "alchemia:enchanted_fabric"
+  ],
+  "requirements": {
+    "alchemia:auram": 4,
+    "alchemia:fabrico": 3,
+    "alchemia:potentia": 2,
+    "alchemia:praemunio": 4
+  },
+  "row": 2
+}

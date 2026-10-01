@@ -1,0 +1,37 @@
+{
+  "category": "alchemia:artifice",
+  "column": 8,
+  "complexity": 3,
+  "icon": "alchemia:void_robe_chest",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.void_robes.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:void_robe_helm"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:void_robe_chest"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:void_robe_legs"
+    }
+  ],
+  "parents": [
+    "alchemia:robes",
+    "alchemia:void_gear",
+    "alchemia:infusion"
+  ],
+  "requirements": {
+    "alchemia:alienis": 3,
+    "alchemia:auram": 4,
+    "alchemia:praemunio": 4,
+    "alchemia:vacuos": 6
+  },
+  "row": 3,
+  "shape": "special"
+}
