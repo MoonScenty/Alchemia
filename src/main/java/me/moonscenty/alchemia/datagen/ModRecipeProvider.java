@@ -69,6 +69,7 @@ public class ModRecipeProvider extends RecipeProvider {
         plate(output, ModItems.ALCHEMIUM_PLATE, ModTags.Items.INGOTS_ALCHEMIUM);
         plate(output, ModItems.BRASS_PLATE, ModTags.Items.INGOTS_BRASS);
         plate(output, ModItems.IRON_PLATE, Tags.Items.INGOTS_IRON);
+        plate(output, ModItems.VOID_PLATE, ModTags.Items.INGOTS_VOID);
         gear(output, ModItems.ALCHEMIUM_GEAR, ModTags.Items.NUGGETS_ALCHEMIUM);
         gear(output, ModItems.BRASS_GEAR, ModTags.Items.NUGGETS_BRASS);
 
@@ -505,9 +506,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 new ItemStack(ModItems.TRAVELLER_BOOTS.get()),
                 AspectList.of(ModAspects.FLIGHT, 25).add(ModAspects.MOTION, 25), 1, "traveller_boots");
 
-        // the void robes: a suit of void metal taken apart and sewn back together round cloth. The original
-        // asked for void plates, which nothing in this mod makes yet, so the ingots they would be beaten from
-        // go in instead
+        // the void robes: a suit of void metal taken apart and sewn back together round cloth
         voidRobe(output, "void_robe_helm", "void_helmet",
                 List.of(Ingredient.of(ModItems.GOGGLES), Ingredient.of(ModItems.ENCHANTED_FABRIC),
                         Ingredient.of(ModItems.ENCHANTED_FABRIC), Ingredient.of(ModItems.SALIS_MUNDUS),
@@ -515,14 +514,14 @@ public class ModRecipeProvider extends RecipeProvider {
                 AspectList.of(ModAspects.METAL, 16).add(ModAspects.SENSES, 16).add(ModAspects.PROTECT, 16)
                         .add(ModAspects.ENERGY, 16).add(ModAspects.ELDRITCH, 16).add(ModAspects.VOID, 16));
         voidRobe(output, "void_robe_chest", "void_chestplate",
-                List.of(Ingredient.of(ModItems.ROBES.get("cloth_chest")), Ingredient.of(ModItems.VOID_INGOT),
-                        Ingredient.of(ModItems.VOID_INGOT), Ingredient.of(ModItems.SALIS_MUNDUS),
+                List.of(Ingredient.of(ModItems.ROBES.get("cloth_chest")), Ingredient.of(ModItems.VOID_PLATE),
+                        Ingredient.of(ModItems.VOID_PLATE), Ingredient.of(ModItems.SALIS_MUNDUS),
                         Ingredient.of(ModItems.ENCHANTED_FABRIC), Ingredient.of(Items.LEATHER)),
                 AspectList.of(ModAspects.METAL, 24).add(ModAspects.PROTECT, 24).add(ModAspects.ENERGY, 16)
                         .add(ModAspects.ELDRITCH, 16).add(ModAspects.VOID, 24));
         voidRobe(output, "void_robe_legs", "void_leggings",
-                List.of(Ingredient.of(ModItems.ROBES.get("cloth_legs")), Ingredient.of(ModItems.VOID_INGOT),
-                        Ingredient.of(ModItems.VOID_INGOT), Ingredient.of(ModItems.SALIS_MUNDUS),
+                List.of(Ingredient.of(ModItems.ROBES.get("cloth_legs")), Ingredient.of(ModItems.VOID_PLATE),
+                        Ingredient.of(ModItems.VOID_PLATE), Ingredient.of(ModItems.SALIS_MUNDUS),
                         Ingredient.of(ModItems.ENCHANTED_FABRIC), Ingredient.of(Items.LEATHER)),
                 AspectList.of(ModAspects.METAL, 20).add(ModAspects.PROTECT, 20).add(ModAspects.ENERGY, 16)
                         .add(ModAspects.ELDRITCH, 16).add(ModAspects.VOID, 20));

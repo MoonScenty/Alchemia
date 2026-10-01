@@ -186,6 +186,9 @@ public class ModItems {
 
     public static final DeferredItem<Item> VOID_NUGGET = ITEMS.registerSimpleItem("void_nugget");
 
+    /** Void metal beaten flat. What the void robes are sewn onto. */
+    public static final DeferredItem<Item> VOID_PLATE = ITEMS.registerSimpleItem("void_plate");
+
     /**
      * One item to a rod, wearing the same picture the wand wears. The rod sprites were drawn to serve as both, so
      * a rod in the hand looks like the rod on the wand rather than like a swatch of what it is made of.

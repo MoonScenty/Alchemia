@@ -109,6 +109,7 @@ public class ModTags {
         public static final TagKey<Item> PLATES_ALCHEMIUM = common("plates/alchemium");
         public static final TagKey<Item> PLATES_BRASS = common("plates/brass");
         public static final TagKey<Item> PLATES_IRON = common("plates/iron");
+        public static final TagKey<Item> PLATES_VOID = common("plates/void");
 
         private static TagKey<Item> mod(String path) {
             return TagKey.create(Registries.ITEM, Alchemia.id(path));

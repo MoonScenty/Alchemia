@@ -75,7 +75,9 @@ public class ModItemTagsProvider extends ItemTagsProvider {
         tag(ModTags.Items.PLATES_ALCHEMIUM).add(ModItems.ALCHEMIUM_PLATE.get());
         tag(ModTags.Items.PLATES_BRASS).add(ModItems.BRASS_PLATE.get());
         tag(ModTags.Items.PLATES_IRON).add(ModItems.IRON_PLATE.get());
-        tag(ModTags.Items.PLATES).addTag(ModTags.Items.PLATES_ALCHEMIUM).addTag(ModTags.Items.PLATES_BRASS).addTag(ModTags.Items.PLATES_IRON);
+        tag(ModTags.Items.PLATES_VOID).add(ModItems.VOID_PLATE.get());
+        tag(ModTags.Items.PLATES).addTag(ModTags.Items.PLATES_ALCHEMIUM).addTag(ModTags.Items.PLATES_BRASS)
+                .addTag(ModTags.Items.PLATES_IRON).addTag(ModTags.Items.PLATES_VOID);
         tag(ItemTags.BEACON_PAYMENT_ITEMS).add(ModItems.ALCHEMIUM_INGOT.get(), ModItems.BRASS_INGOT.get());
 
         for (WoodSet wood : ModBlocks.WOODS) {

@@ -163,6 +163,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         addItem(ModItems.VOID_SEED, pick("Void Seed", "공허 씨앗"));
         addItem(ModItems.VOID_INGOT, pick("Void Ingot", "공허 주괴"));
         addItem(ModItems.VOID_NUGGET, pick("Void Nugget", "공허 조각"));
+        addItem(ModItems.VOID_PLATE, pick("Void Plate", "공허 판"));
 
 
 
