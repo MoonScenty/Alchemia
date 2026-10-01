@@ -121,11 +121,11 @@ public class ModItems {
     public static final Map<String, DeferredItem<RobeItem>> ROBES = registerRobes();
 
     /**
-     * Fortress armour: three pieces and no boots, as the original had it.
+     * Fortress armour: four pieces, where the original had three.
      * <p>
-     * Its set bonus counts three slots rather than four, so a fourth piece was never drawn. The meshes for a
-     * pair of sabatons exist all the same, and are sitting in the assets waiting for somebody to decide there
-     * ought to be some.
+     * It had no boots and its set bonus counted three slots because there was never a fourth to count. The
+     * meshes were drawn with feet, and plate worn with somebody else's shoes is not a suit of plate, so there
+     * are boots here and the set is four.
      */
     public static final Map<String, DeferredItem<FortressArmorItem>> FORTRESS = registerFortress();
 
@@ -307,6 +307,7 @@ public class ModItems {
         pieces.put("fortress_helm", ArmorItem.Type.HELMET);
         pieces.put("fortress_chest", ArmorItem.Type.CHESTPLATE);
         pieces.put("fortress_legs", ArmorItem.Type.LEGGINGS);
+        pieces.put("fortress_boots", ArmorItem.Type.BOOTS);
         pieces.forEach((name, type) -> made.put(name, ITEMS.register(name,
                 () -> new FortressArmorItem(ModArmorMaterials.FORTRESS, type,
                         ModArmorMaterials.FORTRESS_LASTS, new Item.Properties()))));
