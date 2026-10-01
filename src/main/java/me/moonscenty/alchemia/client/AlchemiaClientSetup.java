@@ -64,8 +64,9 @@ public class AlchemiaClientSetup {
         // a robe is eight carved meshes rather than a sheet, and nothing else names them, so they are asked for
         // here. Both robes, since they share the meshes and differ only in which sheet is stretched over them
         for (String part : RobeMeshes.PARTS) {
-            event.register(RobeMeshes.model(part, false));
-            event.register(RobeMeshes.model(part, true));
+            for (RobeMeshes.Sheet sheet : RobeMeshes.Sheet.values()) {
+                event.register(RobeMeshes.model(part, sheet));
+            }
         }
     }
 

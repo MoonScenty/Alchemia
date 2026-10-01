@@ -6,6 +6,10 @@
     },
     {
       "type": "minecraft:single",
+      "resource": "alchemia:entity/robe_dyed"
+    },
+    {
+      "type": "minecraft:single",
       "resource": "alchemia:entity/robe_void"
     }
   ]

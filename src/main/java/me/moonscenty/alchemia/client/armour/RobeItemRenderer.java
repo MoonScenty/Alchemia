@@ -55,7 +55,8 @@ public class RobeItemRenderer extends BlockEntityWithoutLevelRenderer {
         if (!(stack.getItem() instanceof RobeItem robe)) {
             return;
         }
-        AABB extent = RobeMeshes.extent(robe.getType(), robe.drab());
+        RobeMeshes.Sheet sheet = RobeMeshes.sheetOf(robe, stack);
+        AABB extent = RobeMeshes.extent(robe.getType(), sheet);
         float fits = FILLS / (float) Math.max(extent.getXsize(), Math.max(extent.getYsize(), extent.getZsize()));
         Vec3 middle = extent.getCenter();
 
@@ -68,7 +69,7 @@ public class RobeItemRenderer extends BlockEntityWithoutLevelRenderer {
         VertexConsumer into = buffers.getBuffer(RenderType.entityCutoutNoCull(TextureAtlas.LOCATION_BLOCKS));
         int colour = RobeItem.dyed(stack);
         for (String part : RobeMeshes.covering(robe.getType())) {
-            RobeLayer.pour(poseStack, into, light, overlay, RobeMeshes.baked(part, robe.drab()), colour);
+            RobeLayer.pour(poseStack, into, light, overlay, RobeMeshes.baked(part, sheet), colour);
         }
         poseStack.popPose();
     }

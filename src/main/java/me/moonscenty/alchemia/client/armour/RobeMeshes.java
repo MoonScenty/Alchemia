@@ -11,9 +11,10 @@ import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
+import me.moonscenty.alchemia.item.RobeItem;
 import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
 
 /**
@@ -29,13 +30,43 @@ public final class RobeMeshes {
     public static final List<String> PARTS =
             List.of("head", "body", "left_arm", "right_arm", "left_leg", "right_leg", "left_feet", "right_feet");
 
+    /**
+     * The three sheets the same eight meshes can be drawn off.
+     * <p>
+     * A dye is a multiplication: whatever the cloth already is stays underneath it, and the cloth as painted is a
+     * deep violet. Violet times red is a darker violet, not red. So a robe somebody has dyed is drawn off a sheet
+     * with the colour taken out of it, where a dye lands the way it lands on leather -- and a robe nobody has
+     * touched is drawn off the sheet exactly as it was painted.
+     */
+    public enum Sheet {
+        /** The cloth as it was painted. */
+        DRAWN(""),
+        /** The same cloth with its colour taken out, for a robe that has been dyed. */
+        DYED("dyed/"),
+        /** The void robe, which is not dyed and never was. */
+        DRAB("void/");
+
+        private final String folder;
+
+        Sheet(String folder) {
+            this.folder = folder;
+        }
+    }
+
     private RobeMeshes() {
     }
 
-    /** Where a mesh's model lives, for one robe or the other. */
-    public static ModelResourceLocation model(String part, boolean drab) {
-        ResourceLocation path = Alchemia.id("entity/robe/" + (drab ? "void/" : "") + part);
-        return ModelResourceLocation.standalone(path);
+    /** Which sheet a piece should be drawn off, given what it is and what has been done to it. */
+    public static Sheet sheetOf(RobeItem robe, ItemStack stack) {
+        if (robe.drab()) {
+            return Sheet.DRAB;
+        }
+        return RobeItem.dyed(stack) == RobeItem.UNDYED ? Sheet.DRAWN : Sheet.DYED;
+    }
+
+    /** Where a mesh's model lives, for one sheet or another. */
+    public static ModelResourceLocation model(String part, Sheet sheet) {
+        return ModelResourceLocation.standalone(Alchemia.id("entity/robe/" + sheet.folder + part));
     }
 
     /** The meshes a piece of a robe covers, drawn-file names. */
@@ -49,8 +80,8 @@ public final class RobeMeshes {
         };
     }
 
-    public static BakedModel baked(String part, boolean drab) {
-        return Minecraft.getInstance().getModelManager().getModel(model(part, drab));
+    public static BakedModel baked(String part, Sheet sheet) {
+        return Minecraft.getInstance().getModelManager().getModel(model(part, sheet));
     }
 
     /**
@@ -59,8 +90,8 @@ public final class RobeMeshes {
      * Read off the baked meshes rather than written down, so that a redrawn robe fits its slot without anybody
      * remembering to change a number. Worked out once for each piece and kept, since a mesh never moves.
      */
-    public static AABB extent(ArmorItem.Type type, boolean drab) {
-        return MEASURED.computeIfAbsent(type.name() + (drab ? ":void" : ""), key -> measure(type, drab));
+    public static AABB extent(ArmorItem.Type type, Sheet sheet) {
+        return MEASURED.computeIfAbsent(type.name() + ":" + sheet.name(), key -> measure(type, sheet));
     }
 
     private static final Map<String, AABB> MEASURED = new HashMap<>();
@@ -68,11 +99,11 @@ public final class RobeMeshes {
     /** A baked face carries eight numbers a corner, and the first three of them are where that corner is. */
     private static final int PER_CORNER = 8;
 
-    private static AABB measure(ArmorItem.Type type, boolean drab) {
+    private static AABB measure(ArmorItem.Type type, Sheet sheet) {
         float[] low = {Float.MAX_VALUE, Float.MAX_VALUE, Float.MAX_VALUE};
         float[] high = {-Float.MAX_VALUE, -Float.MAX_VALUE, -Float.MAX_VALUE};
         for (String part : covering(type)) {
-            for (BakedQuad quad : faces(baked(part, drab))) {
+            for (BakedQuad quad : faces(baked(part, sheet))) {
                 int[] numbers = quad.getVertices();
                 for (int corner = 0; corner + PER_CORNER <= numbers.length; corner += PER_CORNER) {
                     for (int axis = 0; axis < 3; axis++) {

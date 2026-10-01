@@ -66,8 +66,9 @@ public class RobeLayer<T extends LivingEntity, M extends HumanoidModel<T>> exten
         // the meshes live on the block sheet, so the brush has to be dipped in that rather than in a robe's own
         VertexConsumer into = buffers.getBuffer(RenderType.entityCutoutNoCull(TextureAtlas.LOCATION_BLOCKS));
         int colour = RobeItem.dyed(piece);
+        RobeMeshes.Sheet sheet = RobeMeshes.sheetOf(robe, piece);
         for (String part : RobeMeshes.covering(type)) {
-            hang(poseStack, into, light, RobeMeshes.baked(part, robe.drab()), limb(part), colour);
+            hang(poseStack, into, light, RobeMeshes.baked(part, sheet), limb(part), colour);
         }
     }
 
