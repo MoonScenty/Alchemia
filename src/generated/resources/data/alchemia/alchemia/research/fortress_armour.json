@@ -1,0 +1,40 @@
+{
+  "category": "alchemia:artifice",
+  "column": 6,
+  "complexity": 3,
+  "icon": "alchemia:fortress_chest",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.fortress_armour.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:fortress_helm"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:fortress_chest"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:fortress_legs"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:fortress_boots"
+    }
+  ],
+  "parents": [
+    "alchemia:alchemium_gear",
+    "alchemia:infusion"
+  ],
+  "requirements": {
+    "alchemia:instrumentum": 4,
+    "alchemia:metallum": 6,
+    "alchemia:potentia": 4,
+    "alchemia:praemunio": 6
+  },
+  "row": 5,
+  "shape": "special"
+}

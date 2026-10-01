@@ -1,0 +1,31 @@
+{
+  "type": "alchemia:infusion",
+  "central": {
+    "item": "alchemia:alchemium_boots"
+  },
+  "essentia": {
+    "alchemia:metallum": 24,
+    "alchemia:potentia": 16,
+    "alchemia:praemunio": 16
+  },
+  "instability": 3,
+  "research": "alchemia:fortress_armour",
+  "result": {
+    "count": 1,
+    "id": "alchemia:fortress_boots"
+  },
+  "ring": [
+    {
+      "item": "alchemia:alchemium_plate"
+    },
+    {
+      "item": "alchemia:alchemium_plate"
+    },
+    {
+      "item": "minecraft:gold_ingot"
+    },
+    {
+      "item": "minecraft:leather"
+    }
+  ]
+}

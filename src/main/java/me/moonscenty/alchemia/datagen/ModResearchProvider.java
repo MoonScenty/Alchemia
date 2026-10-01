@@ -173,6 +173,14 @@ public class ModResearchProvider {
                 List.of("robes", "void_gear", "infusion"), false, NodeShape.SPECIAL, 3,
                 "void_robe_helm", "void_robe_chest", "void_robe_legs");
 
+        // a finished suit of alchemium taken apart again and built up into plate. The most an altar will do
+        // for armour, and the only armour in the mod that is better than the metal it is made of
+        entry(context, "fortress_armour", ModResearch.ARTIFICE, ModItems.FORTRESS.get("fortress_chest"), 6, 5,
+                AspectList.of(ModAspects.METAL, 6).add(ModAspects.PROTECT, 6).add(ModAspects.TOOL, 4)
+                        .add(ModAspects.ENERGY, 4),
+                List.of("alchemium_gear", "infusion"), false, NodeShape.SPECIAL, 3,
+                "fortress_helm", "fortress_chest", "fortress_legs", "fortress_boots");
+
         entry(context, "traveller_boots", ModResearch.ARTIFICE, ModItems.TRAVELLER_BOOTS, 7, 4,
                 AspectList.of(ModAspects.MOTION, 3).add(ModAspects.EARTH, 3).add(ModAspects.FLIGHT, 3)
                         .add(ModAspects.WATER, 3),

@@ -1,0 +1,34 @@
+{
+  "type": "alchemia:infusion",
+  "central": {
+    "item": "alchemia:alchemium_helmet"
+  },
+  "essentia": {
+    "alchemia:metallum": 24,
+    "alchemia:potentia": 16,
+    "alchemia:praemunio": 16
+  },
+  "instability": 3,
+  "research": "alchemia:fortress_armour",
+  "result": {
+    "count": 1,
+    "id": "alchemia:fortress_helm"
+  },
+  "ring": [
+    {
+      "item": "alchemia:alchemium_plate"
+    },
+    {
+      "item": "alchemia:alchemium_plate"
+    },
+    {
+      "item": "minecraft:gold_ingot"
+    },
+    {
+      "item": "minecraft:gold_ingot"
+    },
+    {
+      "item": "minecraft:emerald"
+    }
+  ]
+}

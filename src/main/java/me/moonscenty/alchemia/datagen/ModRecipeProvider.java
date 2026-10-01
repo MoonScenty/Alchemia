@@ -50,6 +50,8 @@ import net.neoforged.neoforge.common.Tags;
 public class ModRecipeProvider extends RecipeProvider {
     /** How badly an altar takes to sewing void metal onto cloth. The original's number for all three. */
     private static final int VOID_ROBE_UNSTABLE = 6;
+    /** How badly an altar takes to rebuilding a finished suit into plate. The original's number. */
+    private static final int FORTRESS_UNSTABLE = 3;
     public ModRecipeProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         super(output, registries);
     }
@@ -526,6 +528,22 @@ public class ModRecipeProvider extends RecipeProvider {
                 AspectList.of(ModAspects.METAL, 20).add(ModAspects.PROTECT, 20).add(ModAspects.ENERGY, 16)
                         .add(ModAspects.ELDRITCH, 16).add(ModAspects.VOID, 20));
 
+        // fortress armour: a finished suit of alchemium pulled apart on the altar and built up into plate.
+        // The original's numbers, piece for piece; the boots are ours and are cut to the same cloth as the helm
+        fortress(output, "fortress_helm", "alchemium_helmet", 2,
+                List.of(Ingredient.of(Items.GOLD_INGOT), Ingredient.of(Items.GOLD_INGOT),
+                        Ingredient.of(Items.EMERALD)),
+                AspectList.of(ModAspects.METAL, 24).add(ModAspects.PROTECT, 16).add(ModAspects.ENERGY, 16));
+        fortress(output, "fortress_chest", "alchemium_chestplate", 4,
+                List.of(Ingredient.of(Items.GOLD_INGOT), Ingredient.of(Items.LEATHER)),
+                AspectList.of(ModAspects.METAL, 24).add(ModAspects.PROTECT, 24).add(ModAspects.ENERGY, 16));
+        fortress(output, "fortress_legs", "alchemium_leggings", 3,
+                List.of(Ingredient.of(Items.GOLD_INGOT), Ingredient.of(Items.LEATHER)),
+                AspectList.of(ModAspects.METAL, 24).add(ModAspects.PROTECT, 20).add(ModAspects.ENERGY, 16));
+        fortress(output, "fortress_boots", "alchemium_boots", 2,
+                List.of(Ingredient.of(Items.GOLD_INGOT), Ingredient.of(Items.LEATHER)),
+                AspectList.of(ModAspects.METAL, 24).add(ModAspects.PROTECT, 16).add(ModAspects.ENERGY, 16));
+
         // the two caps a workbench can only cast. Salis mundus round them, and the altar does the rest
         infusion(output, "wand_cap_alchemium", Ingredient.of(ModItems.INERT_CAPS.get("alchemium")),
                 salis(3), new ItemStack(ModItems.WAND_CAPS.get("alchemium").get()),
@@ -602,6 +620,23 @@ public class ModRecipeProvider extends RecipeProvider {
             ItemStack result, AspectList essentia, int instability, String research) {
         output.accept(Alchemia.id(name), new InfusionRecipe(central, ring, result, essentia, instability,
                 Optional.of(Alchemia.id(research))), null);
+    }
+
+    /**
+     * One piece of fortress armour: the matching piece of alchemium at the centre, so many plates of the same
+     * metal round it, and whatever else that piece wants.
+     *
+     * @param plates how many plates of alchemium go round it, which is how much of the piece is being rebuilt
+     */
+    private void fortress(RecipeOutput output, String name, String from, int plates, List<Ingredient> rest,
+            AspectList essentia) {
+        List<Ingredient> ring = new java.util.ArrayList<>();
+        for (int beaten = 0; beaten < plates; beaten++) {
+            ring.add(Ingredient.of(ModItems.ALCHEMIUM_PLATE));
+        }
+        ring.addAll(rest);
+        infusion(output, name, Ingredient.of(ModItems.METAL_ARMOUR.get(from)), ring,
+                new ItemStack(ModItems.FORTRESS.get(name).get()), essentia, FORTRESS_UNSTABLE, "fortress_armour");
     }
 
     /** One of the three void robes: the matching piece of void armour at the centre, unstable to the same degree. */
