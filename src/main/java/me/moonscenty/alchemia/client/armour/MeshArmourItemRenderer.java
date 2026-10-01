@@ -2,6 +2,7 @@ package me.moonscenty.alchemia.client.armour;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
 
 import me.moonscenty.alchemia.item.MeshArmour;
 import net.minecraft.client.Minecraft;
@@ -30,6 +31,9 @@ import net.minecraft.world.phys.Vec3;
 public class MeshArmourItemRenderer extends BlockEntityWithoutLevelRenderer {
     /** How much of the box a piece fills, leaving a little air at the edges. */
     private static final float FILLS = 0.94F;
+
+    /** Half a turn, which is what stands between the way a body faces and the way an item is looked at. */
+    private static final float TURNED_ROUND = 180.0F;
 
     private static MeshArmourItemRenderer only;
 
@@ -67,6 +71,9 @@ public class MeshArmourItemRenderer extends BlockEntityWithoutLevelRenderer {
         // the item's box runs from nothing to one, so its middle is a half along every side
         poseStack.translate(0.5F, 0.5F, 0.5F);
         poseStack.scale(fits, fits, fits);
+        // turned to face the way every other item faces. A body is drawn looking north and an item is looked at
+        // from the south, so a piece left as it was drawn is a piece seen from behind
+        poseStack.mulPose(Axis.YP.rotationDegrees(TURNED_ROUND));
         poseStack.translate(-middle.x, -middle.y, -middle.z);
 
         VertexConsumer into = buffers.getBuffer(RenderType.entityCutoutNoCull(TextureAtlas.LOCATION_BLOCKS));
