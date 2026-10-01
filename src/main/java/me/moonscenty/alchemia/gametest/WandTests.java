@@ -9,7 +9,9 @@ import java.util.List;
 
 import me.moonscenty.alchemia.item.FocusItem;
 import me.moonscenty.alchemia.item.FocusPouchItem;
+import me.moonscenty.alchemia.item.VisDiscount;
 import me.moonscenty.alchemia.item.WandItem;
+import net.minecraft.world.entity.EquipmentSlot;
 import me.moonscenty.alchemia.registry.ModItems;
 import me.moonscenty.alchemia.registry.ModTags;
 import me.moonscenty.alchemia.wand.Foci;
@@ -69,9 +71,9 @@ public class WandTests {
         ItemStack iron = wand(ModWandParts.WOOD, ModWandParts.IRON, 100);
         ItemStack alchemium = wand(ModWandParts.WOOD, ModWandParts.ALCHEMIUM, 100);
 
-        helper.assertFalse(iron.getItem() instanceof WandItem item && item.holds(iron, price),
+        helper.assertFalse(iron.getItem() instanceof WandItem item && item.holds(iron, price, null),
                 "an iron cap asks for more than a full stick holds");
-        helper.assertTrue(alchemium.getItem() instanceof WandItem item && item.holds(alchemium, price),
+        helper.assertTrue(alchemium.getItem() instanceof WandItem item && item.holds(alchemium, price, null),
                 "an alchemium cap asks for less");
 
         ((WandItem) alchemium.getItem()).take(alchemium, price, null);
@@ -285,5 +287,64 @@ public class WandTests {
                         .is(ModItems.FOCI.get("shock").get()),
                 "taking it off put it back in the pouch");
         helper.succeed();
+    }
+
+    /**
+     * What a wand bearer has on comes off the bill.
+     * <p>
+     * The original gave this to robes and to the goggles, and it is the whole of what a robe is worth. A piece
+     * worn in the wrong slot counts for nothing, so each is asked for where it actually goes.
+     */
+    @GameTest(template = TEMPLATE)
+    public static void wornGearTakesSomethingOffThePrice(GameTestHelper helper) {
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        helper.assertValueEqual(VisDiscount.worn(player), 0, "nothing worn, nothing off");
+
+        player.setItemSlot(EquipmentSlot.CHEST, new ItemStack(ModItems.ROBES.get("cloth_chest").get()));
+        player.setItemSlot(EquipmentSlot.LEGS, new ItemStack(ModItems.ROBES.get("cloth_legs").get()));
+        player.setItemSlot(EquipmentSlot.FEET, new ItemStack(ModItems.ROBES.get("cloth_boots").get()));
+        helper.assertValueEqual(VisDiscount.worn(player), 5, "a cloth robe is five parts in a hundred");
+
+        player.setItemSlot(EquipmentSlot.HEAD, new ItemStack(ModItems.GOGGLES.get()));
+        helper.assertValueEqual(VisDiscount.worn(player), 10, "and the goggles another five");
+
+        player.setItemSlot(EquipmentSlot.HEAD, new ItemStack(ModItems.ROBES.get("void_robe_helm").get()));
+        player.setItemSlot(EquipmentSlot.CHEST, new ItemStack(ModItems.ROBES.get("void_robe_chest").get()));
+        player.setItemSlot(EquipmentSlot.LEGS, new ItemStack(ModItems.ROBES.get("void_robe_legs").get()));
+        helper.assertValueEqual(VisDiscount.worn(player), 16, "a void robe is five a piece, over the robe boots");
+        helper.succeed();
+    }
+
+    /**
+     * The discount reaches the wand, and the floor under it holds.
+     * <p>
+     * Nothing may make a working free. Enough worn discount to wipe out a price has to stop at a tenth of it, or
+     * a craft with prices becomes a craft without.
+     */
+    @GameTest(template = TEMPLATE)
+    public static void aWandNeverSpendsLessThanATenth(GameTestHelper helper) {
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        AspectList price = AspectList.of(ModAspects.FIRE, 10);
+
+        helper.assertValueEqual(spent(wand(ModWandParts.WOOD, ModWandParts.GOLD, 100), price, player),
+                10, "bare, a gold cap pays the asking price");
+
+        player.setItemSlot(EquipmentSlot.HEAD, new ItemStack(ModItems.ROBES.get("void_robe_helm").get()));
+        player.setItemSlot(EquipmentSlot.CHEST, new ItemStack(ModItems.ROBES.get("void_robe_chest").get()));
+        player.setItemSlot(EquipmentSlot.LEGS, new ItemStack(ModItems.ROBES.get("void_robe_legs").get()));
+        helper.assertValueEqual(spent(wand(ModWandParts.WOOD, ModWandParts.GOLD, 100), price, player),
+                9, "in a void robe it pays fifteen parts less");
+
+        helper.assertValueEqual(Math.round(VisDiscount.rate(1.0F, player) * 100), 85, "fifteen off, as worn");
+        helper.assertValueEqual(Math.round(VisDiscount.rate(0.0F, null) * 100), 10, "and never below a tenth");
+        helper.succeed();
+    }
+
+    /** What a wand actually lost paying a price, in whole vis. */
+    private static int spent(ItemStack wand, AspectList price, Player player) {
+        WandItem item = (WandItem) wand.getItem();
+        int before = item.held(wand, ModAspects.FIRE);
+        item.take(wand, price, player);
+        return before - item.held(wand, ModAspects.FIRE);
     }
 }

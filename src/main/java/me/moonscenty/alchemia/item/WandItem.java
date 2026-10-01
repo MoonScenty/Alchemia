@@ -112,7 +112,7 @@ public class WandItem extends Item implements VisHolder {
      */
     @Override
     public void take(ItemStack stack, AspectList cost, Player player) {
-        float rate = cap(stack).discount();
+        float rate = VisDiscount.rate(cap(stack).discount(), player);
         AspectList left = fine(stack);
         for (Holder<Aspect> aspect : cost.sortedByName()) {
             int asked = Math.round(cost.get(aspect) * FINE * rate);
@@ -122,12 +122,13 @@ public class WandItem extends Item implements VisHolder {
     }
 
     /**
-     * Whether the whole price could be paid. The cap is counted in, so an iron cap can leave a wand a point short
-     * of work a brass one would manage with the same vis in it.
+     * Whether the whole price could be paid. The cap and whatever the bearer has on are both counted in, so an
+     * iron cap can leave a wand a point short of work a brass one would manage with the same vis in it, and a
+     * robe can close that gap again.
      */
     @Override
-    public boolean holds(ItemStack stack, AspectList cost) {
-        float rate = cap(stack).discount();
+    public boolean holds(ItemStack stack, AspectList cost, Player player) {
+        float rate = VisDiscount.rate(cap(stack).discount(), player);
         AspectList have = fine(stack);
         for (Holder<Aspect> aspect : cost.sortedByName()) {
             if (have.get(aspect) < Math.round(cost.get(aspect) * FINE * rate)) {

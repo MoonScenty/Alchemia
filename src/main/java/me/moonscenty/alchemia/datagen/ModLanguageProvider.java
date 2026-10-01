@@ -97,7 +97,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         for (String[] piece : pieces) {
             add("item.alchemia." + piece[0], pick(piece[1], piece[2]));
         }
-        add("item.alchemia.robe.discount", pick("Wands spend %s%% less", "완드가 %s%% 덜 씀"));
+        add("item.alchemia.vis_discount", pick("Wands spend %s%% less", "완드가 %s%% 덜 씀"));
     }
 
     /** Picks the text for this provider's language. */

@@ -133,7 +133,7 @@ public class ArcaneWorkbenchMenu extends AbstractContainerMenu {
 
     /** Whether the wand on the bench can pay for what is on the grid. */
     public boolean affordable() {
-        return VisHolder.canPay(wand(), cost());
+        return VisHolder.canPay(wand(), cost(), player);
     }
 
     /**
@@ -148,7 +148,7 @@ public class ArcaneWorkbenchMenu extends AbstractContainerMenu {
         }
         ItemStack made = matching()
                 .filter(found -> known(found.value()))
-                .filter(found -> VisHolder.canPay(wand(), found.value().cost()))
+                .filter(found -> VisHolder.canPay(wand(), found.value().cost(), player))
                 .map(found -> found.value().assemble(grid(), player.level().registryAccess()))
                 .orElse(ItemStack.EMPTY);
         result.setItem(0, made);
