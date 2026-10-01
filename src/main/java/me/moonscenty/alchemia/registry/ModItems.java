@@ -12,6 +12,7 @@ import me.moonscenty.alchemia.aspect.AspectList;
 import me.moonscenty.alchemia.item.AlumentumItem;
 import me.moonscenty.alchemia.item.FocusItem;
 import me.moonscenty.alchemia.item.FocusPouchItem;
+import me.moonscenty.alchemia.item.FortressArmorItem;
 import me.moonscenty.alchemia.item.RobeItem;
 import me.moonscenty.alchemia.wand.Focus;
 import me.moonscenty.alchemia.item.GogglesItem;
@@ -118,6 +119,15 @@ public class ModItems {
      * the legs and one at the feet; the void robe takes five at each of its three.
      */
     public static final Map<String, DeferredItem<RobeItem>> ROBES = registerRobes();
+
+    /**
+     * Fortress armour: three pieces and no boots, as the original had it.
+     * <p>
+     * Its set bonus counts three slots rather than four, so a fourth piece was never drawn. The meshes for a
+     * pair of sabatons exist all the same, and are sitting in the assets waiting for somebody to decide there
+     * ought to be some.
+     */
+    public static final Map<String, DeferredItem<FortressArmorItem>> FORTRESS = registerFortress();
 
     /** Brass and glass on the face, drawn as a model. Wearing them is what makes an aura node visible. */
     public static final DeferredItem<GogglesItem> GOGGLES = ITEMS.register("goggles_of_revealing",
@@ -289,6 +299,19 @@ public class ModItems {
             DeferredHolder<ArmorMaterial, ArmorMaterial> material, int lasts, int discount, boolean drab) {
         into.put(name, ITEMS.register(name, () -> new RobeItem(material, type, discount, drab,
                 new Item.Properties().durability(type.getDurability(lasts)))));
+    }
+
+    private static Map<String, DeferredItem<FortressArmorItem>> registerFortress() {
+        Map<String, DeferredItem<FortressArmorItem>> made = new java.util.LinkedHashMap<>();
+        Map<String, ArmorItem.Type> pieces = new java.util.LinkedHashMap<>();
+        pieces.put("fortress_helm", ArmorItem.Type.HELMET);
+        pieces.put("fortress_chest", ArmorItem.Type.CHESTPLATE);
+        pieces.put("fortress_legs", ArmorItem.Type.LEGGINGS);
+        pieces.forEach((name, type) -> made.put(name, ITEMS.register(name,
+                () -> new FortressArmorItem(ModArmorMaterials.FORTRESS, type,
+                        ModArmorMaterials.FORTRESS_LASTS, new Item.Properties()))));
+        // unmodifiableMap rather than Map.copyOf, for the reason written above registerMetalTools
+        return Collections.unmodifiableMap(made);
     }
 
     private static Map<String, DeferredItem<Item>> registerWandCaps() {

@@ -109,6 +109,13 @@ public class ModItemTagsProvider extends ItemTagsProvider {
                         net.minecraft.world.item.ArmorItem.Type.CHESTPLATE, ItemTags.CHEST_ARMOR,
                         net.minecraft.world.item.ArmorItem.Type.LEGGINGS, ItemTags.LEG_ARMOR,
                         net.minecraft.world.item.ArmorItem.Type.BOOTS, ItemTags.FOOT_ARMOR);
+        ModItems.FORTRESS.values().forEach(held -> {
+            me.moonscenty.alchemia.item.FortressArmorItem piece = held.get();
+            tag(shapes.get(piece.getType())).add(piece);
+            tag(ItemTags.DURABILITY_ENCHANTABLE).add(piece);
+            tag(ItemTags.ARMOR_ENCHANTABLE).add(piece);
+            tag(ItemTags.EQUIPPABLE_ENCHANTABLE).add(piece);
+        });
         ModItems.ROBES.values().forEach(held -> {
             me.moonscenty.alchemia.item.RobeItem robe = held.get();
             tag(shapes.get(robe.getType())).add(robe);

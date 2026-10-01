@@ -3,7 +3,7 @@ package me.moonscenty.alchemia.client.armour;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 
-import me.moonscenty.alchemia.item.RobeItem;
+import me.moonscenty.alchemia.item.MeshArmour;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -13,18 +13,18 @@ import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlas;
-import net.minecraft.util.FastColor;
 import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.util.FastColor;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 
 /**
- * Draws a robe on whoever is wearing one.
+ * Draws worn armour that is a carved mesh rather than two flat pictures.
  *
- * <p>Armour is normally two flat sheets pulled over a copy of the body, and the layer that does it will not draw
- * a carved mesh. So the robe's material carries no sheet at all and nothing is drawn there; this runs instead,
+ * <p>Armour is normally two sheets pulled over a copy of the body, and the layer that does it will not draw a
+ * mesh. So such a piece carries no sheet at all on its material and nothing is drawn there; this runs instead,
  * hangs each mesh off the limb it belongs to, and lets the limb carry it about.
  *
  * <h3>Two spaces</h3>
@@ -33,11 +33,11 @@ import net.minecraft.world.item.ItemStack;
  * blocks above the feet, and left and right are swapped. Getting from one to the other is a flip and a shift, and
  * both have to happen <em>inside</em> the limb's own turn so that a raised arm carries its sleeve up with it.
  */
-public class RobeLayer<T extends LivingEntity, M extends HumanoidModel<T>> extends RenderLayer<T, M> {
+public class MeshArmourLayer<T extends LivingEntity, M extends HumanoidModel<T>> extends RenderLayer<T, M> {
     /**
      * How far above the feet the body hangs from.
      * <p>
-     * Not a round number, and not ours: the renderer that sets a body up shifts it by exactly this, and a robe
+     * Not a round number, and not ours: the renderer that sets a body up shifts it by exactly this, and a piece
      * that used one and a half would float a thousandth of a block off everything else.
      */
     public static final float HANGS_AT = 1.501F;
@@ -45,30 +45,34 @@ public class RobeLayer<T extends LivingEntity, M extends HumanoidModel<T>> exten
     /** Sixteen of a limb's own units to the block. */
     private static final float TO_BLOCKS = 16.0F;
 
-    public RobeLayer(RenderLayerParent<T, M> parent) {
+    private static final EquipmentSlot[] WORN = {EquipmentSlot.HEAD, EquipmentSlot.CHEST,
+            EquipmentSlot.LEGS, EquipmentSlot.FEET};
+
+    public MeshArmourLayer(RenderLayerParent<T, M> parent) {
         super(parent);
     }
 
     @Override
     public void render(PoseStack poseStack, MultiBufferSource buffers, int light, T worn,
             float limbSwing, float limbSwingAmount, float partial, float age, float yaw, float pitch) {
-        for (EquipmentSlot slot : new EquipmentSlot[] {EquipmentSlot.HEAD, EquipmentSlot.CHEST,
-                EquipmentSlot.LEGS, EquipmentSlot.FEET}) {
+        for (EquipmentSlot slot : WORN) {
             ItemStack piece = worn.getItemBySlot(slot);
-            if (piece.getItem() instanceof RobeItem robe) {
-                wear(poseStack, buffers, light, piece, robe, robe.getType());
+            if (piece.getItem() instanceof MeshArmour mesh && piece.getItem() instanceof ArmorItem armour) {
+                wear(poseStack, buffers, light, piece, mesh, armour.getType());
             }
         }
     }
 
-    private void wear(PoseStack poseStack, MultiBufferSource buffers, int light, ItemStack piece, RobeItem robe,
-            ArmorItem.Type type) {
-        // the meshes live on the block sheet, so the brush has to be dipped in that rather than in a robe's own
+    private void wear(PoseStack poseStack, MultiBufferSource buffers, int light, ItemStack piece,
+            MeshArmour mesh, ArmorItem.Type type) {
+        // the meshes live on the block sheet, so the brush is dipped in that rather than in a sheet of the
+        // piece's own
         VertexConsumer into = buffers.getBuffer(RenderType.entityCutoutNoCull(TextureAtlas.LOCATION_BLOCKS));
-        int colour = RobeItem.dyed(piece);
-        RobeMeshes.Sheet sheet = RobeMeshes.sheetOf(robe, piece);
-        for (String part : RobeMeshes.covering(type)) {
-            hang(poseStack, into, light, RobeMeshes.baked(part, sheet), limb(part), colour);
+        String set = mesh.meshSet();
+        String variant = mesh.meshVariant(piece);
+        int colour = mesh.meshTint(piece);
+        for (String part : ArmourMeshes.covering(type)) {
+            hang(poseStack, into, light, ArmourMeshes.baked(set, variant, part), limb(part), colour);
         }
     }
 
@@ -119,7 +123,7 @@ public class RobeLayer<T extends LivingEntity, M extends HumanoidModel<T>> exten
     /**
      * Every face of a baked mesh, poured into whatever brush is being drawn with.
      * <p>
-     * Shared with the renderer that draws a robe in a slot, because pouring a mesh into a brush is the same job
+     * Shared with the renderer that draws a piece in a slot, because pouring a mesh into a brush is the same job
      * whether the mesh is on a shoulder or in a bag.
      */
     public static void pour(PoseStack poseStack, VertexConsumer into, int light, int overlay, BakedModel mesh,
@@ -128,7 +132,7 @@ public class RobeLayer<T extends LivingEntity, M extends HumanoidModel<T>> exten
         float red = FastColor.ARGB32.red(colour) / 255.0F;
         float green = FastColor.ARGB32.green(colour) / 255.0F;
         float blue = FastColor.ARGB32.blue(colour) / 255.0F;
-        for (var quad : RobeMeshes.faces(mesh)) {
+        for (var quad : ArmourMeshes.faces(mesh)) {
             into.putBulkData(pose, quad, red, green, blue, 1.0F, light, overlay);
         }
     }

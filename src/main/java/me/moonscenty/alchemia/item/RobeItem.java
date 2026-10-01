@@ -24,7 +24,7 @@ import net.minecraft.world.item.component.DyedItemColor;
  *
  * @param discount how much less a wand spends while this piece is worn, in whole parts of a hundred
  */
-public class RobeItem extends ArmorItem implements VisDiscount {
+public class RobeItem extends ArmorItem implements VisDiscount, MeshArmour {
     private final int discount;
     private final boolean drab;
 
@@ -50,9 +50,34 @@ public class RobeItem extends ArmorItem implements VisDiscount {
                 .withStyle(ChatFormatting.AQUA));
     }
 
-    /** Whether this piece wears the dark sheet. The two robes share one set of meshes and differ only in this. */
+    /** Whether this piece is a void robe. The two robes share one set of meshes and differ only in the sheet. */
     public boolean drab() {
         return drab;
+    }
+
+    @Override
+    public String meshSet() {
+        return "robe";
+    }
+
+    /**
+     * Which sheet to draw this robe off.
+     * <p>
+     * A dye is a multiplication: whatever the cloth already is stays underneath it, and the cloth as painted is a
+     * deep violet. Violet times red is a darker violet, not red. So a robe somebody has dyed is drawn off a sheet
+     * with the colour taken out of it, and a robe nobody has touched off the sheet exactly as it was painted.
+     */
+    @Override
+    public String meshVariant(ItemStack stack) {
+        if (drab) {
+            return "void";
+        }
+        return dyed(stack) == UNDYED ? "" : "dyed";
+    }
+
+    @Override
+    public int meshTint(ItemStack stack) {
+        return dyed(stack);
     }
 
     /**

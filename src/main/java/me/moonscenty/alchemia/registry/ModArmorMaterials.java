@@ -84,6 +84,20 @@ public final class ModArmorMaterials {
                     SoundEvents.ARMOR_EQUIP_LEATHER, () -> Ingredient.of(ModItems.VOID_INGOT),
                     List.of(), 0.0F, 0.0F));
 
+    /**
+     * Fortress armour: as much stopped as void metal, as long-lasting as alchemium, and better at taking an
+     * enchantment than anything else in the mod. Nothing in a single metal manages all three, which is the point
+     * of building it on an altar out of a suit that was already finished.
+     * <p>
+     * No layers, for the same reason the robes have none: it is worn as a mesh and drawn by a layer of ours.
+     */
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> FORTRESS =
+            MATERIALS.register("fortress", () -> new ArmorMaterial(stops(3, 7, 6, 3), 40,
+                    SoundEvents.ARMOR_EQUIP_IRON, () -> Ingredient.of(ModItems.ALCHEMIUM_INGOT),
+                    List.of(), 0.0F, 0.0F));
+
+    public static final int FORTRESS_LASTS = 25;
+
     /** How many times over the base each robe lasts. */
     public static final int CLOTH_LASTS = 25;
     public static final int VOID_ROBE_LASTS = 10;

@@ -38,9 +38,9 @@ import net.minecraft.client.resources.PlayerSkin;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
-import me.moonscenty.alchemia.client.armour.RobeItemRenderer;
-import me.moonscenty.alchemia.client.armour.RobeLayer;
-import me.moonscenty.alchemia.client.armour.RobeMeshes;
+import me.moonscenty.alchemia.client.armour.ArmourMeshes;
+import me.moonscenty.alchemia.client.armour.MeshArmourItemRenderer;
+import me.moonscenty.alchemia.client.armour.MeshArmourLayer;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
@@ -61,13 +61,15 @@ public class AlchemiaClientSetup {
         for (var arm : NodeStabilizerRenderer.ARMS) {
             event.register(arm);
         }
-        // a robe is eight carved meshes rather than a sheet, and nothing else names them, so they are asked for
-        // here. Both robes, since they share the meshes and differ only in which sheet is stretched over them
-        for (String part : RobeMeshes.PARTS) {
-            for (RobeMeshes.Sheet sheet : RobeMeshes.Sheet.values()) {
-                event.register(RobeMeshes.model(part, sheet));
+        // worn armour that is eight carved meshes rather than a sheet. Nothing else names them, so every set is
+        // asked for here, and every sheet of every set: the meshes are shared and only the sheet differs
+        ArmourMeshes.SETS.forEach((set, sheets) -> {
+            for (String part : ArmourMeshes.PARTS) {
+                for (String sheet : sheets) {
+                    event.register(ArmourMeshes.model(set, sheet, part));
+                }
             }
-        }
+        });
     }
 
     /** Tells the book how to open itself, which only the client knows how to do. */
@@ -130,20 +132,20 @@ public class AlchemiaClientSetup {
     }
 
     /**
-     * Hangs the robe layer on everything shaped like a person.
+     * Hangs the mesh armour layer on everything shaped like a person.
      * <p>
-     * A robe is drawn by a layer of our own rather than by the one that draws armour, so it has to be put on each
-     * body that might wear one: both builds of player, and the stand somebody leaves a robe on.
+     * Mesh armour is drawn by a layer of our own rather than by the one that draws armour, so it has to be put on
+     * each body that might wear some: both builds of player, and the stand somebody leaves a robe on.
      */
     @SubscribeEvent
     public static void addLayers(EntityRenderersEvent.AddLayers event) {
         for (PlayerSkin.Model skin : event.getSkins()) {
             if (event.getSkin(skin) instanceof PlayerRenderer drawn) {
-                drawn.addLayer(new RobeLayer<>(drawn));
+                drawn.addLayer(new MeshArmourLayer<>(drawn));
             }
         }
         if (event.getRenderer(EntityType.ARMOR_STAND) instanceof ArmorStandRenderer stand) {
-            stand.addLayer(new RobeLayer<>(stand));
+            stand.addLayer(new MeshArmourLayer<>(stand));
         }
     }
 
@@ -203,14 +205,15 @@ public class AlchemiaClientSetup {
         // a foot on a boot and a lens in front of an eye: models, not sheets stretched over the body
         event.registerItem(ModArmourLayers.BOOTS_DRAWN, ModItems.TRAVELLER_BOOTS.get());
         event.registerItem(ModArmourLayers.GOGGLES_DRAWN, ModItems.GOGGLES.get());
-        // a robe in a bag is the same robe, stood up and looked at from the front
-        var robeInHand = new net.neoforged.neoforge.client.extensions.common.IClientItemExtensions() {
+        // a piece of mesh armour in a bag is the same piece, stood up and looked at from the front
+        var meshInHand = new net.neoforged.neoforge.client.extensions.common.IClientItemExtensions() {
             @Override
             public net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer getCustomRenderer() {
-                return RobeItemRenderer.get();
+                return MeshArmourItemRenderer.get();
             }
         };
-        ModItems.ROBES.values().forEach(robe -> event.registerItem(robeInHand, robe.get()));
+        ModItems.ROBES.values().forEach(robe -> event.registerItem(meshInHand, robe.get()));
+        ModItems.FORTRESS.values().forEach(piece -> event.registerItem(meshInHand, piece.get()));
     }
 
     /** What draws a mote of light. */

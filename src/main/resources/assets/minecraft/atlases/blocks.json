@@ -1,16 +1,9 @@
 {
   "sources": [
     {
-      "type": "minecraft:single",
-      "resource": "alchemia:entity/robe"
-    },
-    {
-      "type": "minecraft:single",
-      "resource": "alchemia:entity/robe_dyed"
-    },
-    {
-      "type": "minecraft:single",
-      "resource": "alchemia:entity/robe_void"
+      "type": "minecraft:directory",
+      "source": "entity",
+      "prefix": "entity/"
     }
   ]
 }
