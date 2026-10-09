@@ -228,6 +228,8 @@ public final class LegacyAssets {
         }
         all.add(wandPart("focus_hole", "focus_portablehole"));
 
+        // the bench's screen is laid out as the original's was, so its panel goes straight in
+        all.add(LegacyAsset.of("textures/gui/arcane_workbench.png").five("textures/gui/gui_arcaneworkbench.png"));
         all.add(block("arcane_workbench_side", "arcane_workbench_side", null));
         all.add(block("arcane_workbench_top", "arcane_workbench_top", null));
     }

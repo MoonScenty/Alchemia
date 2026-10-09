@@ -41,16 +41,17 @@ public class ArcaneWorkbenchMenu extends AbstractContainerMenu {
     private static final int BENCH_SLOTS = SLOT_WAND + 1;
 
     // Where each piece sits on the drawn panel.
-    private static final int GRID_X = 35;
-    private static final int GRID_Y = 45;
-    private static final int GRID_STEP = 18;
-    private static final int WAND_X = 134;
-    private static final int WAND_Y = 36;
-    private static final int RESULT_X = 134;
-    private static final int RESULT_Y = 90;
-    private static final int PACK_X = 8;
-    private static final int PACK_Y = 140;
-    private static final int BELT_Y = 198;
+    // the original's places, so its panel and ours both fit: the grid is spread out on the cloth, a slot every 24
+    private static final int GRID_X = 40;
+    private static final int GRID_Y = 40;
+    private static final int GRID_STEP = 24;
+    private static final int WAND_X = 160;
+    private static final int WAND_Y = 24;
+    public static final int RESULT_X = 160;
+    public static final int RESULT_Y = 64;
+    private static final int PACK_X = 16;
+    private static final int PACK_Y = 151;
+    private static final int BELT_Y = 209;
     private static final int PITCH = 18;
 
     private final Container bench;
