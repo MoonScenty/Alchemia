@@ -19,10 +19,6 @@
     {
       "type": "recipe",
       "recipe": "alchemia:fortress_legs"
-    },
-    {
-      "type": "recipe",
-      "recipe": "alchemia:fortress_boots"
     }
   ],
   "parents": [

@@ -2,6 +2,7 @@ package me.moonscenty.alchemia.client.legacy;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
 
 import me.moonscenty.alchemia.aspect.Aspect;
@@ -22,7 +23,24 @@ public final class LegacyAssets {
      */
     private static final int FOLIAGE = 0x48B518;
 
+    /** The fortress armour, which the original wrote as code rather than as a model file. */
+    public static final String FORTRESS_ARMOUR = "fortress_armour";
+
     public static final List<LegacyAsset> ALL = build();
+
+    /**
+     * Models the original wrote as code. Each is read out of a constructor by
+     * {@link me.moonscenty.alchemia.client.legacy.model.LegacyModelReader}; the first release that has the class
+     * wins, as with files.
+     */
+    public static final Map<String, List<LegacyModelSource>> MODELS = Map.of(
+            FORTRESS_ARMOUR, List.of(
+                    // the original made it at 1.0 for the helm and cuirass and at 0.5 for the greaves; that only
+                    // grows a biped's own boxes, and this model clears every one of them
+                    new LegacyModelSource(LegacyEdition.FIVE,
+                            "thaumcraft/client/renderers/models/gear/ModelFortressArmor", "(F)V", 1.0F),
+                    new LegacyModelSource(LegacyEdition.FOUR,
+                            "thaumcraft/client/renderers/models/gear/ModelFortressArmor", "(F)V", 1.0F)));
 
     private LegacyAssets() {
     }
@@ -30,7 +48,22 @@ public final class LegacyAssets {
     private static List<LegacyAsset> build() {
         List<LegacyAsset> all = new ArrayList<>();
         baseResources(all);
+        gear(all);
         return List.copyOf(all);
+    }
+
+    /** Step 9: armour and its sheets. */
+    private static void gear(List<LegacyAsset> all) {
+        // fortress armour is one sheet for every piece; the game asks for it twice, as the outer and inner layer
+        for (String layer : List.of("fortress_layer_1", "fortress_layer_2")) {
+            all.add(LegacyAsset.of("textures/models/armor/" + layer + ".png")
+                    .five("textures/models/armor/fortress_armor.png")
+                    .four("textures/models/fortress_armor.png")
+                    .forModel(FORTRESS_ARMOUR));
+        }
+        all.add(item("fortress_helm", "fortress_helm", "thaumiumfortresshelm"));
+        all.add(item("fortress_chest", "fortress_chest", "thaumiumfortresschest"));
+        all.add(item("fortress_legs", "fortress_legs", "thaumiumfortresslegs"));
     }
 
     /** Step 1: ores, metals, the two woods, the three plants, stone. */

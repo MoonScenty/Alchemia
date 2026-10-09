@@ -32,7 +32,7 @@ public final class ArmourMeshes {
 
     /** Every set, and every sheet each is drawn off, so that all of them can be asked for at load. */
     public static final Map<String, List<String>> SETS =
-            Map.of("robe", List.of("", "dyed", "void"), "fortress", List.of(""));
+            Map.of("robe", List.of("", "dyed", "void"));
 
     private static final Map<String, AABB> MEASURED = new HashMap<>();
     private static final RandomSource STEADY = RandomSource.create();

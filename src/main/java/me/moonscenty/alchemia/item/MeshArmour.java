@@ -14,7 +14,7 @@ import net.minecraft.world.item.ItemStack;
  * answers the same thing every time.
  */
 public interface MeshArmour {
-    /** The set the meshes belong to, as the folder they were put in: {@code robe}, {@code fortress}. */
+    /** The set the meshes belong to, as the folder they were put in: {@code robe}. */
     String meshSet();
 
     /** Which sheet of that set to draw off. The empty name is the set as it was painted. */

@@ -40,10 +40,9 @@ repo/
 !**/src/**/repo/
 
 ### Bought assets ###
-# The meshes of the robes and of the fortress armour, and their sheets, were bought. What the tools write
+# The meshes of the robes, and their sheets, were bought. What the tools write
 # around them is ours and stays; the meshes and the pictures do not go into a public repository.
-# tools/gen_robe.py and tools/gen_fortress.py put them back.
+# tools/gen_robe.py puts them back.
 src/main/resources/assets/alchemia/models/entity/*/*.obj
 # every sheet here is a bought one or made out of one, so the pattern rather than a list
 src/main/resources/assets/alchemia/textures/entity/robe*.png
-src/main/resources/assets/alchemia/textures/entity/fortress*.png

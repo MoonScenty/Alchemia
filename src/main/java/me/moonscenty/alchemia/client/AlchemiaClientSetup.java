@@ -39,6 +39,7 @@ import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import me.moonscenty.alchemia.client.armour.ArmourMeshes;
+import me.moonscenty.alchemia.client.armour.FortressExtensions;
 import me.moonscenty.alchemia.client.armour.MeshArmourItemRenderer;
 import me.moonscenty.alchemia.client.armour.MeshArmourLayer;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
@@ -213,7 +214,8 @@ public class AlchemiaClientSetup {
             }
         };
         ModItems.ROBES.values().forEach(robe -> event.registerItem(meshInHand, robe.get()));
-        ModItems.FORTRESS.values().forEach(piece -> event.registerItem(meshInHand, piece.get()));
+        // fortress armour on the original's own model when its jar is there, plain armour when not
+        ModItems.FORTRESS.values().forEach(piece -> event.registerItem(FortressExtensions.INSTANCE, piece.get()));
     }
 
     /** What draws a mote of light. */

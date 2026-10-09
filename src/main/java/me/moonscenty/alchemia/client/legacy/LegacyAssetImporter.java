@@ -13,6 +13,8 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import me.moonscenty.alchemia.Alchemia;
+import me.moonscenty.alchemia.client.legacy.model.LegacyModel;
+import me.moonscenty.alchemia.client.legacy.model.LegacyModelReader;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.packs.PackLocationInfo;
 import net.minecraft.server.packs.PackResources;
@@ -84,6 +86,8 @@ public final class LegacyAssetImporter {
     /** Our files by their path under {@code assets/alchemia/}; empty when there is nothing to import. */
     static Map<String, byte[]> importAll(Path folder) {
         Map<String, byte[]> files = new HashMap<>();
+        // whatever happens below, last time's models are not this time's
+        LegacyModels.replace(Map.of());
         if (!Files.isDirectory(folder)) {
             try {
                 // made so a player can see where the jars go
@@ -100,9 +104,15 @@ public final class LegacyAssetImporter {
                 Alchemia.LOGGER.info("No jar of the original in {}; using our own pictures", folder);
                 return files;
             }
+            Map<String, LegacyModel> models = importModels(jars);
+            LegacyModels.replace(models);
             Map<LegacyEdition, Integer> taken = new EnumMap<>(LegacyEdition.class);
             List<String> missing = new ArrayList<>();
             for (LegacyAsset asset : LegacyAssets.ALL) {
+                if (asset.model() != null && !models.containsKey(asset.model())) {
+                    missing.add(asset.target());
+                    continue;
+                }
                 Optional<LegacyEdition> from = importOne(asset, jars, files);
                 if (from.isPresent()) {
                     taken.merge(from.get(), 1, Integer::sum);
@@ -125,6 +135,32 @@ public final class LegacyAssetImporter {
             }
         }
         return files;
+    }
+
+    /** Reads every model the original wrote as code; the first release whose jar has the class wins. */
+    private static Map<String, LegacyModel> importModels(Map<LegacyEdition, LegacyJar> jars) {
+        Map<String, LegacyModel> models = new HashMap<>();
+        LegacyAssets.MODELS.forEach((key, sources) -> {
+            for (LegacyModelSource source : sources) {
+                LegacyJar jar = jars.get(source.edition());
+                if (jar == null) {
+                    continue;
+                }
+                try {
+                    LegacyModelReader.Result read = LegacyModelReader.read(jar::readClass, source.className(),
+                            source.descriptor(), source.arguments());
+                    if (!read.notes().isEmpty()) {
+                        Alchemia.LOGGER.warn("Read {} from {} with guesses: {}", key, source.edition(), read.notes());
+                    }
+                    models.put(key, read.model());
+                    Alchemia.LOGGER.info("Read the {} model out of the original's {} code", key, source.edition());
+                    return;
+                } catch (IOException | RuntimeException e) {
+                    Alchemia.LOGGER.warn("Could not read the {} model from {}", key, source.edition(), e);
+                }
+            }
+        });
+        return models;
     }
 
     private static void openJars(Path folder, Map<LegacyEdition, LegacyJar> jars) {

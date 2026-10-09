@@ -96,7 +96,6 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                 {"fortress_helm", "Fortress Helm", "요새 투구"},
                 {"fortress_chest", "Fortress Cuirass", "요새 흉갑"},
                 {"fortress_legs", "Fortress Greaves", "요새 각반"},
-                {"fortress_boots", "Fortress Sabatons", "요새 철신"},
         };
         for (String[] piece : pieces) {
             add("item.alchemia." + piece[0], pick(piece[1], piece[2]));

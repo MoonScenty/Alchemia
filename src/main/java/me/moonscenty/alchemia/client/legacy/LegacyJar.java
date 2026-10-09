@@ -65,6 +65,17 @@ final class LegacyJar implements AutoCloseable {
         }
     }
 
+    /** One of the original's classes, by internal name, for reading a model that was written as code. */
+    Optional<byte[]> readClass(String internalName) throws IOException {
+        ZipEntry entry = zip.getEntry(internalName + ".class");
+        if (entry == null) {
+            return Optional.empty();
+        }
+        try (InputStream in = zip.getInputStream(entry)) {
+            return Optional.of(in.readAllBytes());
+        }
+    }
+
     @Override
     public void close() throws IOException {
         zip.close();

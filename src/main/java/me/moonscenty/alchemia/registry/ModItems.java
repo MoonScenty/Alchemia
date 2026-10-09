@@ -307,7 +307,6 @@ public class ModItems {
         pieces.put("fortress_helm", ArmorItem.Type.HELMET);
         pieces.put("fortress_chest", ArmorItem.Type.CHESTPLATE);
         pieces.put("fortress_legs", ArmorItem.Type.LEGGINGS);
-        pieces.put("fortress_boots", ArmorItem.Type.BOOTS);
         pieces.forEach((name, type) -> made.put(name, ITEMS.register(name,
                 () -> new FortressArmorItem(ModArmorMaterials.FORTRESS, type,
                         ModArmorMaterials.FORTRESS_LASTS, new Item.Properties()))));

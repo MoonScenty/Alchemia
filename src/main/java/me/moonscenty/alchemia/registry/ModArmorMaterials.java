@@ -89,12 +89,13 @@ public final class ModArmorMaterials {
      * enchantment than anything else in the mod. Nothing in a single metal manages all three, which is the point
      * of building it on an altar out of a suit that was already finished.
      * <p>
-     * No layers, for the same reason the robes have none: it is worn as a mesh and drawn by a layer of ours.
+     * One layer, drawn as usual. With the original's jar its sheet is the original's and the model it is drawn on
+     * is read out of the original's code; without, both are plain armour.
      */
     public static final DeferredHolder<ArmorMaterial, ArmorMaterial> FORTRESS =
             MATERIALS.register("fortress", () -> new ArmorMaterial(stops(3, 7, 6, 3), 40,
                     SoundEvents.ARMOR_EQUIP_IRON, () -> Ingredient.of(ModItems.ALCHEMIUM_INGOT),
-                    List.of(), 0.0F, 0.0F));
+                    List.of(new ArmorMaterial.Layer(Alchemia.id("fortress"))), 0.0F, 0.0F));
 
     public static final int FORTRESS_LASTS = 25;
 

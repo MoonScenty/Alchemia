@@ -529,7 +529,7 @@ public class ModRecipeProvider extends RecipeProvider {
                         .add(ModAspects.ELDRITCH, 16).add(ModAspects.VOID, 20));
 
         // fortress armour: a finished suit of alchemium pulled apart on the altar and built up into plate.
-        // The original's numbers, piece for piece; the boots are ours and are cut to the same cloth as the helm
+        // The original's numbers, piece for piece
         fortress(output, "fortress_helm", "alchemium_helmet", 2,
                 List.of(Ingredient.of(Items.GOLD_INGOT), Ingredient.of(Items.GOLD_INGOT),
                         Ingredient.of(Items.EMERALD)),
@@ -540,9 +540,6 @@ public class ModRecipeProvider extends RecipeProvider {
         fortress(output, "fortress_legs", "alchemium_leggings", 3,
                 List.of(Ingredient.of(Items.GOLD_INGOT), Ingredient.of(Items.LEATHER)),
                 AspectList.of(ModAspects.METAL, 24).add(ModAspects.PROTECT, 20).add(ModAspects.ENERGY, 16));
-        fortress(output, "fortress_boots", "alchemium_boots", 2,
-                List.of(Ingredient.of(Items.GOLD_INGOT), Ingredient.of(Items.LEATHER)),
-                AspectList.of(ModAspects.METAL, 24).add(ModAspects.PROTECT, 16).add(ModAspects.ENERGY, 16));
 
         // the two caps a workbench can only cast. Salis mundus round them, and the altar does the rest
         infusion(output, "wand_cap_alchemium", Ingredient.of(ModItems.INERT_CAPS.get("alchemium")),

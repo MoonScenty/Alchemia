@@ -179,7 +179,7 @@ public class ModResearchProvider {
                 AspectList.of(ModAspects.METAL, 6).add(ModAspects.PROTECT, 6).add(ModAspects.TOOL, 4)
                         .add(ModAspects.ENERGY, 4),
                 List.of("alchemium_gear", "infusion"), false, NodeShape.SPECIAL, 3,
-                "fortress_helm", "fortress_chest", "fortress_legs", "fortress_boots");
+                "fortress_helm", "fortress_chest", "fortress_legs");
 
         entry(context, "traveller_boots", ModResearch.ARTIFICE, ModItems.TRAVELLER_BOOTS, 7, 4,
                 AspectList.of(ModAspects.MOTION, 3).add(ModAspects.EARTH, 3).add(ModAspects.FLIGHT, 3)
