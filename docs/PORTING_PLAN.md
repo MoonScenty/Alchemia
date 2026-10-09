@@ -97,6 +97,7 @@ python tools/remap_srg.py MCP-919/conf decompiled/thaumcraft src/thaumcraft
     - 결과 사다리 22칸을 원본 구간(`roll <= 4`, `<= 8`, …) 그대로 옮겼다. 바닐라 효과 3종(채광 피로·야간 투시·실명)도 포함한다.
     - 미구현: 안개·수호자·포탈·거미 소환(11·13단계), 장비 워프와 요새 투구 경감(9단계). 지금은 그 칸에서 경고 메시지만 나온다.
   - [x] E. 상태 효과 8종. 아이콘은 MoonScenty 제작 18×18.
+    - **원본 jar가 있으면 원본 아이콘을 쓴다**(2026-10-09). 원본은 효과 아이콘을 `textures/misc/potions.png` 한 장에 바닐라 인벤토리와 같은 배치(칸 18×18, y 198부터)로 모아 두고 효과마다 칸을 골랐다. 그 칸을 잘라 우리 파일 하나씩에 넣는다. 대응: 플럭스 감기=flux taint(3,1), 플럭스 역병=infectious vis exhaust(6,1), 허기(7,1), 햇빛 거부(6,2), 흐릿한 시야(5,2), 죽음의 응시(4,2), 알케설사=thaumarhia(7,2), 워프 결계(3,2). MoonScenty 제작 아이콘은 jar가 없을 때의 대체 그림으로 남는다.
     - 동작: 부자연스러운 허기(허기 가속), 햇빛 거부(햇빛에 발화), 플럭스 역병(주변 전염)
     - 표식만 있고 동작은 나중: 플럭스 감기·흐릿한 시야·죽음의 응시(5·14단계), 알케설사(플럭스 고체가 생기는 11단계)
   - [x] F. `/alchemia aspects list|discover|forget`, `/alchemia warp get|check|permanent|sticky|temporary <양>`

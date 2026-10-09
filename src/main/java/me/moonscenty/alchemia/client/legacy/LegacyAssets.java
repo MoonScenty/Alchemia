@@ -22,6 +22,9 @@ public final class LegacyAssets {
      * In the world it took the biome's foliage colour; ours is baked, so every greatwood is the plains green.
      */
     private static final int FOLIAGE = 0x48B518;
+    /** A cell of the original's effect sheet, and where its cells start: the game's own inventory layout. */
+    private static final int EFFECT_CELL = 18;
+    private static final int EFFECT_TOP = 198;
 
     /** The fortress armour, which the original wrote as code rather than as a model file. */
     public static final String FORTRESS_ARMOUR = "fortress_armour";
@@ -67,6 +70,7 @@ public final class LegacyAssets {
         List<LegacyAsset> all = new ArrayList<>();
         baseResources(all);
         aspects(all);
+        effects(all);
         gear(all);
         return List.copyOf(all);
     }
@@ -87,6 +91,28 @@ public final class LegacyAssets {
                 .five("textures/aspects/_back.png").four("textures/aspects/_back.png"));
         all.add(LegacyAsset.of("textures/aspect/unknown.png")
                 .five("textures/aspects/_unknown.png").four("textures/aspects/_unknown.png"));
+    }
+
+    /**
+     * Step 3: the ailments warp brings on. The original kept every icon in one sheet laid out as the game's own
+     * inventory was, eighteen pixels a cell from y 198, and each effect named its cell. Ours are one file each, so
+     * each cell is cut out. The cells are the original's; which of our effects is which of its is in the name.
+     */
+    private static void effects(List<LegacyAsset> all) {
+        effect(all, "flux_flu", 3, 1); // flux taint
+        effect(all, "flux_phage", 6, 1); // infectious vis exhaust
+        effect(all, "unnatural_hunger", 7, 1);
+        effect(all, "sun_scorned", 6, 2);
+        effect(all, "blurred_vision", 5, 2);
+        effect(all, "deadly_gaze", 4, 2); // death gaze
+        effect(all, "alchediarrhea", 7, 2); // thaumarhia
+        effect(all, "warp_ward", 3, 2);
+    }
+
+    private static void effect(List<LegacyAsset> all, String name, int column, int row) {
+        all.add(LegacyAsset.of("textures/mob_effect/" + name + ".png")
+                .five("textures/misc/potions.png")
+                .cropped(column * EFFECT_CELL, EFFECT_TOP + row * EFFECT_CELL, EFFECT_CELL, EFFECT_CELL));
     }
 
     /** Step 9: armour and its sheets. */

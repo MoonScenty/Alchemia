@@ -60,6 +60,23 @@ public record LegacyAsset(String target, List<Source> sources, Transform transfo
         return tinted(() -> rgb);
     }
 
+    /** Cuts one picture out of a sheet the original kept many in, after whatever else was done to it. */
+    public LegacyAsset cropped(int x, int y, int width, int height) {
+        Transform before = transform;
+        return new LegacyAsset(target, sources, bytes -> crop(before.apply(bytes), x, y, width, height), model);
+    }
+
+    private static byte[] crop(byte[] png, int x, int y, int width, int height) throws IOException {
+        try (NativeImage sheet = NativeImage.read(png); NativeImage cut = new NativeImage(width, height, true)) {
+            if (x + width > sheet.getWidth() || y + height > sheet.getHeight()) {
+                throw new IOException("The sheet is " + sheet.getWidth() + "x" + sheet.getHeight()
+                        + ", too small to cut " + width + "x" + height + " at " + x + "," + y);
+            }
+            sheet.copyRect(cut, x, y, 0, 0, width, height, false, false);
+            return cut.asByteArray();
+        }
+    }
+
     /**
      * Only taken when the model of that key was read too. A sheet laid out for the original's model is nonsense on
      * the shape our own fallback draws, so the two come in together or not at all.
