@@ -44,8 +44,14 @@ public class AlchemonomiconScreen extends Screen {
     private static final ResourceLocation OVERLAY = Alchemia.id("textures/gui/research_overlay.png");
     private static final int SHEET_SIZE = 256;
 
-    /** The page leaves this much of the window to its frame on every side. */
+    /** The page leaves this much of its box to the frame on every side. */
     private static final int MARGIN = 16;
+    /**
+     * The largest the framed box is drawn. The original stretched it over the whole window, which on a big screen
+     * is a wall of sky; past this size it stays this size, in the middle of the window.
+     */
+    private static final int BOX_MAX_W = 352;
+    private static final int BOX_MAX_H = 240;
     /** One step of the research grid, and the size of the plate a node sits on. */
     private static final int GRID = 24;
     private static final int PLATE = 32;
@@ -115,20 +121,37 @@ public class AlchemonomiconScreen extends Screen {
 
     // --- the page in window coordinates
 
+    /** The framed box: the whole window while it is small, never larger than its cap, always in the middle. */
+    private int boxWidth() {
+        return Math.min(width, BOX_MAX_W);
+    }
+
+    private int boxHeight() {
+        return Math.min(height, BOX_MAX_H);
+    }
+
+    private int boxLeft() {
+        return (width - boxWidth()) / 2;
+    }
+
+    private int boxTop() {
+        return (height - boxHeight()) / 2;
+    }
+
     private int pageLeft() {
-        return MARGIN;
+        return boxLeft() + MARGIN;
     }
 
     private int pageTop() {
-        return MARGIN;
+        return boxTop() + MARGIN;
     }
 
     private int pageWidth() {
-        return width - 2 * MARGIN;
+        return boxWidth() - 2 * MARGIN;
     }
 
     private int pageHeight() {
-        return height - 2 * MARGIN;
+        return boxHeight() - 2 * MARGIN;
     }
 
     /** Where a point of the tree lands in the window. */
@@ -146,6 +169,12 @@ public class AlchemonomiconScreen extends Screen {
 
     private double toTreeY(double windowY) {
         return viewY + (windowY - pageTop() - pageHeight() / 2.0) * zoom;
+    }
+
+    /** Vanilla blurs the world behind a screen; past the box it is only dimmed, the way an open book shades it. */
+    @Override
+    public void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+        graphics.fillGradient(0, 0, width, height, 0xB0101018, 0xC0101018);
     }
 
     @Override
@@ -355,34 +384,42 @@ public class AlchemonomiconScreen extends Screen {
 
     // --- the frame and the tabs
 
-    /** The frame around the whole window: a corner at each corner and the runs between them a piece at a time. */
+    /** The frame around the box: a corner at each corner and the runs between them a piece at a time. */
     private void drawFrame(GuiGraphics graphics) {
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
-        for (int x = 16; x < width - 16; x += FRAME_RUN) {
-            int run = Math.min(FRAME_RUN, width - 16 - x);
-            graphics.blit(SHEET, x, -2, FRAME_RUN_FROM, FRAME_FROM, run, FRAME_CORNER, SHEET_SIZE, SHEET_SIZE);
-            graphics.blit(SHEET, x, height - 20, FRAME_RUN_FROM, FRAME_FROM, run, FRAME_CORNER,
+        int left = boxLeft();
+        int top = boxTop();
+        int right = left + boxWidth();
+        int bottom = top + boxHeight();
+        for (int x = left + 16; x < right - 16; x += FRAME_RUN) {
+            int run = Math.min(FRAME_RUN, right - 16 - x);
+            graphics.blit(SHEET, x, top - 2, FRAME_RUN_FROM, FRAME_FROM, run, FRAME_CORNER, SHEET_SIZE, SHEET_SIZE);
+            graphics.blit(SHEET, x, bottom - 20, FRAME_RUN_FROM, FRAME_FROM, run, FRAME_CORNER,
                     SHEET_SIZE, SHEET_SIZE);
         }
-        for (int y = 16; y < height - 16; y += FRAME_RUN) {
-            int run = Math.min(FRAME_RUN, height - 16 - y);
-            graphics.blit(SHEET, -2, y, FRAME_FROM, FRAME_RUN_FROM, FRAME_CORNER, run, SHEET_SIZE, SHEET_SIZE);
-            graphics.blit(SHEET, width - 20, y, FRAME_FROM, FRAME_RUN_FROM, FRAME_CORNER, run,
+        for (int y = top + 16; y < bottom - 16; y += FRAME_RUN) {
+            int run = Math.min(FRAME_RUN, bottom - 16 - y);
+            graphics.blit(SHEET, left - 2, y, FRAME_FROM, FRAME_RUN_FROM, FRAME_CORNER, run, SHEET_SIZE, SHEET_SIZE);
+            graphics.blit(SHEET, right - 20, y, FRAME_FROM, FRAME_RUN_FROM, FRAME_CORNER, run,
                     SHEET_SIZE, SHEET_SIZE);
         }
-        corner(graphics, -2, -2);
-        corner(graphics, -2, height - 20);
-        corner(graphics, width - 20, -2);
-        corner(graphics, width - 20, height - 20);
+        corner(graphics, left - 2, top - 2);
+        corner(graphics, left - 2, bottom - 20);
+        corner(graphics, right - 20, top - 2);
+        corner(graphics, right - 20, bottom - 20);
     }
 
     private static void corner(GuiGraphics graphics, int x, int y) {
         graphics.blit(SHEET, x, y, FRAME_FROM, FRAME_FROM, FRAME_CORNER, FRAME_CORNER, SHEET_SIZE, SHEET_SIZE);
     }
 
+    private int tabX() {
+        return boxLeft() + TAB_X;
+    }
+
     private int tabY(int index) {
-        return TAB_Y + index * TAB_STEP;
+        return boxTop() + TAB_Y + index * TAB_STEP;
     }
 
     /** Each tab is a frame corner with the branch's picture on it; the open one is drawn at full strength. */
@@ -392,10 +429,10 @@ public class AlchemonomiconScreen extends Screen {
             int y = tabY(index);
             RenderSystem.enableBlend();
             RenderSystem.defaultBlendFunc();
-            corner(graphics, TAB_X - 3, y - 3);
+            corner(graphics, tabX() - 3, y - 3);
             float strength = key.equals(openCategory) ? 1F : 0.66F;
             graphics.setColor(strength, strength, strength, key.equals(openCategory) ? 1F : 0.8F);
-            graphics.blit(categoryRegistry().get(key).icon(), TAB_X, y, 0, 0, ICON, ICON, ICON, ICON);
+            graphics.blit(categoryRegistry().get(key).icon(), tabX(), y, 0, 0, ICON, ICON, ICON, ICON);
             graphics.setColor(1F, 1F, 1F, 1F);
         }
     }
@@ -411,7 +448,7 @@ public class AlchemonomiconScreen extends Screen {
 
     private boolean overTab(int index, double mouseX, double mouseY) {
         int y = tabY(index);
-        return mouseX >= TAB_X && mouseX < TAB_X + ICON && mouseY >= y && mouseY < y + ICON;
+        return mouseX >= tabX() && mouseX < tabX() + ICON && mouseY >= y && mouseY < y + ICON;
     }
 
     // --- words

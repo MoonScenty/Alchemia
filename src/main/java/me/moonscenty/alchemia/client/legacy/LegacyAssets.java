@@ -148,6 +148,10 @@ public final class LegacyAssets {
         // the alchemonomicon is laid out as the original's was: its frame pieces, plates, arrow heads and line pieces
         // all come off the one sheet, and each branch's tab has the original's picture on it
         all.add(LegacyAsset.of("textures/gui/research_browser.png").five("textures/gui/gui_research_browser.png"));
+        // a research page: the open book, and the second sheet of pictures each kind of recipe is drawn over
+        all.add(LegacyAsset.of("textures/gui/research_book.png").five("textures/gui/gui_researchbook.png"));
+        all.add(LegacyAsset.of("textures/gui/research_book_overlay.png")
+                .five("textures/gui/gui_researchbook_overlay.png"));
         all.add(LegacyAsset.of("textures/gui/research_category/basics.png")
                 .five("textures/items/thaumonomicon_cheat.png").four("textures/items/thaumonomiconcheat.png"));
         String[][] tabs = {{"arcana", "r_thaumaturgy"}, {"alchemy", "r_crucible"}, {"artifice", "r_artifice"},
