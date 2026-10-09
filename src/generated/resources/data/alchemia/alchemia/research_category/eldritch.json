@@ -1,5 +1,5 @@
 {
   "background": "alchemia:textures/gui/research_background/eldritch.png",
-  "icon": "alchemia:flux_shard",
+  "icon": "alchemia:textures/gui/research_category/eldritch.png",
   "sort_order": 5
 }

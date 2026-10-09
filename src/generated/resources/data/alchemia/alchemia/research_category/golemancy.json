@@ -1,5 +1,5 @@
 {
   "background": "alchemia:textures/gui/research_background/golemancy.png",
-  "icon": "alchemia:brass_ingot",
+  "icon": "alchemia:textures/gui/research_category/golemancy.png",
   "sort_order": 4
 }

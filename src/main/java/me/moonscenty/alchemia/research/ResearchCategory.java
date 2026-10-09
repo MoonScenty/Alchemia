@@ -10,7 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 /**
  * One branch of study, shown as a tab in the alchemonomicon.
  *
- * @param icon       the small picture on the tab
+ * @param icon       the small picture on the tab: a texture, drawn sixteen pixels square
  * @param background what the page behind this branch's research is drawn on
  * @param sortOrder  where the tab sits, lowest first
  */

@@ -10,13 +10,15 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.aspect.Aspect;
 import me.moonscenty.alchemia.aspect.AspectList;
-import me.moonscenty.alchemia.player.PlayerKnowledge;
 import me.moonscenty.alchemia.network.RequestNote;
+import me.moonscenty.alchemia.player.PlayerKnowledge;
 import me.moonscenty.alchemia.research.ModResearch;
+import me.moonscenty.alchemia.research.NodeShape;
 import me.moonscenty.alchemia.research.NoteRequests;
 import me.moonscenty.alchemia.research.ResearchCategory;
 import me.moonscenty.alchemia.research.ResearchEntry;
 import net.minecraft.ChatFormatting;
+import net.minecraft.Util;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.Holder;
@@ -25,78 +27,68 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 /**
- * The alchemonomicon: a branch of study per tab, and everything in it laid out as a tree that can be dragged about.
+ * The alchemonomicon, laid out as the original laid it out: the whole window is the page, framed in wood, with a
+ * branch's research spread over its sky on a grid of twenty-four, the tabs down the left edge, and a wheel that
+ * draws the tree back to see more of it.
+ * <p>
+ * The places, the sizes, which plate a node sits on, how bright it is, and how the lines between nodes are pieced
+ * together out of straight runs and turns are all the original's, read out of its screen. The pictures are the
+ * original's when its jar is there and ours, painted to the same sheet layout, when it is not.
  */
 public class AlchemonomiconScreen extends Screen {
-    /** The open book, cut through in the middle so the tree behind it shows. Drawn over the sky, not under it. */
-    private static final ResourceLocation FRAME = Alchemia.id("textures/gui/research_frame.png");
-
-    /** The book takes up the top of its sheet; the rest holds odds and ends. */
-    private static final int BOOK_W = 512;
-    private static final int BOOK_H = 356;
-    // The window cut in the frame, measured off the sheet. It is not centred: the bottom board is the widest.
-    private static final int HOLE_X = 20;
-    private static final int HOLE_Y = 21;
-    private static final int HOLE_W = 472;
-    private static final int HOLE_H = 302;
-    /** Where the run of tabs starts, clear of the ornament worked into the frame's top corner. */
-    private static final int TAB_TOP = 30;
-
-    /** The star field behind every branch, shared by all of them. */
+    /** Frame pieces, node plates, arrow heads and line pieces, all on one sheet. */
+    private static final ResourceLocation SHEET = Alchemia.id("textures/gui/research_browser.png");
     private static final ResourceLocation OVERLAY = Alchemia.id("textures/gui/research_overlay.png");
-    private static final int SKY = 1024;
-    /** How far the tree can be pulled from the middle. */
-    private static final float PAN_LIMIT = 400F;
-    // The two sky layers travel at different speeds, which is what gives the window its depth.
-    private static final float BACK_DRIFT = 0.5F;
-    private static final float OVER_DRIFT = 0.667F;
+    private static final int SHEET_SIZE = 256;
 
-    /** A node plate is a touch wider than the item it frames, which sits in the middle of it. */
-    private static final int PLATE = 26;
-    private static final int ICON_INSET = (PLATE - 16) / 2;
-    /** How far apart two neighbouring entries sit. */
-    private static final int STEP = 42;
-    private static final int TAB = 24;
-    /** Wide enough that the outlines of two tabs do not run into one another and read as a single bar. */
-    private static final int TAB_GAP = 6;
-    /** How far a tab tucks in behind the edge of the page, so it reads as bound into the book. */
-    private static final int TAB_TUCK = 4;
+    /** The page leaves this much of the window to its frame on every side. */
+    private static final int MARGIN = 16;
+    /** One step of the research grid, and the size of the plate a node sits on. */
+    private static final int GRID = 24;
+    private static final int PLATE = 32;
+    private static final int ICON = 16;
+    /** The skies are a quarter of their size per repeat, as the original drew them, and move at their own pace. */
+    private static final int SKY_REPEAT = 256;
+    private static final double BACK_DRIFT = 2.0;
+    private static final double OVER_DRIFT = 1.5;
+    /** How far the tree can be drawn back, and by how much a turn of the wheel does it. */
+    private static final float ZOOM_MIN = 1F;
+    private static final float ZOOM_MAX = 2F;
+    private static final float ZOOM_STEP = 0.25F;
 
-    // Tab plates, alongside the node plates in the GUI atlas. The picture faces away from the book, so the two sides
-    // are mirror images of one another rather than the same plate drawn twice.
-    private static final ResourceLocation TAB_LEFT = Alchemia.id("research/tab_left");
-    private static final ResourceLocation TAB_LEFT_OPEN = Alchemia.id("research/tab_left_open");
-    private static final ResourceLocation TAB_RIGHT = Alchemia.id("research/tab_right");
-    private static final ResourceLocation TAB_RIGHT_OPEN = Alchemia.id("research/tab_right_open");
+    // the frame: a corner, and the runs between corners, which are laid down a piece at a time
+    private static final int FRAME_CORNER = 22;
+    private static final int FRAME_RUN = 64;
+    private static final int FRAME_FROM = 13;
+    private static final int FRAME_RUN_FROM = 48;
 
-    /** How far the world behind the book is taken down. Dark enough to settle, light enough to still be the world. */
-    private static final int DIM_TOP = 0xB0101018;
-    private static final int DIM_BOTTOM = 0xC0101018;
+    // the plates, a row for the outstanding and a row for the hidden
+    private static final int PLATE_SQUARE = 80;
+    private static final int PLATE_HEX = 112;
+    private static final int PLATE_ROUND = 144;
+    private static final int PLATE_BRACKETS = 176;
+    private static final int PLATE_ROW = 48;
+
+    // the tabs, down the left edge, each on a frame corner
+    private static final int TAB_X = 1;
+    private static final int TAB_Y = 10;
+    private static final int TAB_STEP = 24;
 
     private final List<ResourceKey<ResearchCategory>> categories = new ArrayList<>();
     private ResourceKey<ResearchCategory> openCategory;
 
-    private int panelX;
-    private int panelY;
-    private int panelW;
-    private int panelH;
-    // the page within the book's border, which everything in the book is laid out against
-    private int pageX;
-    private int pageY;
-    private int pageW;
-    private int pageH;
-    /** How far the book is from the size its picture is drawn at. */
-    private float scale;
+    /** The middle of the view, in the tree's own pixels, and how far the tree is drawn back. */
+    private double viewX;
+    private double viewY;
+    private float zoom = ZOOM_MIN;
+    private boolean dragging;
+
     /** Whatever the mouse is over this frame, remembered so its note can be drawn after the frame. */
     private ResearchEntry hovered;
     private ResourceLocation hoveredId;
-    private float scrollX;
-    private float scrollY;
-    private boolean dragging;
 
     public AlchemonomiconScreen() {
         super(Component.translatable("item.alchemia.alchemonomicon"));
@@ -104,27 +96,8 @@ public class AlchemonomiconScreen extends Screen {
 
     @Override
     protected void init() {
-        // the book keeps its shape, and takes as much of the window as it can, but never grows past the sheet it is
-        // drawn on: stretched past that the page turns soft and the writing on it stops reading as writing
-        panelW = Math.min(width - 2 * gutter(), BOOK_W);
-        panelH = panelW * BOOK_H / BOOK_W;
-        if (panelH > height - 16) {
-            panelH = height - 16;
-            panelW = panelH * BOOK_W / BOOK_H;
-        }
-        panelX = (width - panelW) / 2;
-        panelY = (height - panelH) / 2;
-
-        // the frame is part of the picture, so the window shrinks with it rather than sitting a fixed few pixels in
-        scale = (float) panelW / BOOK_W;
-        pageX = panelX + Math.round(HOLE_X * scale);
-        pageY = panelY + Math.round(HOLE_Y * scale);
-        pageW = Math.round(HOLE_W * scale);
-        pageH = Math.round(HOLE_H * scale);
-
         categories.clear();
-        Registry<ResearchCategory> registry = categories();
-        registry.entrySet().stream()
+        categoryRegistry().entrySet().stream()
                 .sorted(Comparator.comparingInt(entry -> entry.getValue().sortOrder()))
                 .forEach(entry -> categories.add(entry.getKey()));
         if (openCategory == null && !categories.isEmpty()) {
@@ -132,7 +105,7 @@ public class AlchemonomiconScreen extends Screen {
         }
     }
 
-    private Registry<ResearchCategory> categories() {
+    private Registry<ResearchCategory> categoryRegistry() {
         return minecraft.level.registryAccess().registryOrThrow(ModResearch.CATEGORY_KEY);
     }
 
@@ -140,190 +113,308 @@ public class AlchemonomiconScreen extends Screen {
         return minecraft.level.registryAccess().registryOrThrow(ModResearch.ENTRY_KEY);
     }
 
-    /**
-     * Vanilla puts the world through a blur pass and lays a heavy panel over it before a screen draws. That leaves the
-     * page washed out and hard to read, so the world is only dimmed here, the way an open book shades what is past it.
-     */
-    @Override
-    public void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        graphics.fillGradient(0, 0, width, height, DIM_TOP, DIM_BOTTOM);
+    // --- the page in window coordinates
+
+    private int pageLeft() {
+        return MARGIN;
+    }
+
+    private int pageTop() {
+        return MARGIN;
+    }
+
+    private int pageWidth() {
+        return width - 2 * MARGIN;
+    }
+
+    private int pageHeight() {
+        return height - 2 * MARGIN;
+    }
+
+    /** Where a point of the tree lands in the window. */
+    private double toWindowX(double treeX) {
+        return pageLeft() + pageWidth() / 2.0 + (treeX - viewX) / zoom;
+    }
+
+    private double toWindowY(double treeY) {
+        return pageTop() + pageHeight() / 2.0 + (treeY - viewY) / zoom;
+    }
+
+    private double toTreeX(double windowX) {
+        return viewX + (windowX - pageLeft() - pageWidth() / 2.0) * zoom;
+    }
+
+    private double toTreeY(double windowY) {
+        return viewY + (windowY - pageTop() - pageHeight() / 2.0) * zoom;
     }
 
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        // Screen.render lays the background down itself, so it goes first and everything else piles on top of it.
-        // Calling renderBackground here as well would paint the dimming straight back over the open page.
         super.render(graphics, mouseX, mouseY, partialTick);
-
+        drawPage(graphics, mouseX, mouseY);
+        drawFrame(graphics);
         drawTabs(graphics);
-        drawTree(graphics, mouseX, mouseY);
-        graphics.blit(FRAME, panelX, panelY, panelW, panelH, 0, 0, BOOK_W, BOOK_H, 512, 512);
 
-        // tooltips come last of all, or the frame would be laid over them
-        nodeTooltip(graphics, mouseX, mouseY);
-        tabTooltip(graphics, mouseX, mouseY);
-    }
-
-    /** Room a tab needs beside the book, which the page must leave free. */
-    private static int gutter() {
-        return TAB - TAB_TUCK + 10;
-    }
-
-    /** Tabs are split down the middle: the first half run down the left edge, the rest down the right. */
-    private int leftCount() {
-        return (categories.size() + 1) / 2;
-    }
-
-    private boolean onLeft(int index) {
-        return index < leftCount();
-    }
-
-    /**
-     * The open tab stands a little further out than the rest, the way a bookmark you are holding does.
-     */
-    private int tabX(int index) {
-        boolean open = categories.get(index).equals(openCategory);
-        int out = open ? 2 : 0;
-        return onLeft(index)
-                ? panelX - TAB + TAB_TUCK - out
-                : panelX + panelW - TAB_TUCK + out;
-    }
-
-    private int tabY(int index) {
-        int row = onLeft(index) ? index : index - leftCount();
-        return panelY + Math.round(TAB_TOP * scale) + row * (TAB + TAB_GAP);
-    }
-
-    private void drawTabs(GuiGraphics graphics) {
-        for (int index = 0; index < categories.size(); index++) {
-            ResourceKey<ResearchCategory> key = categories.get(index);
-            int x = tabX(index);
-            int y = tabY(index);
-
-            drawTabPlate(graphics, x, y, onLeft(index), key.equals(openCategory));
-            drawCategoryIcon(graphics, key, x, y);
+        // notes come last of all, or the frame would be laid over them
+        if (hovered != null) {
+            graphics.renderComponentTooltip(font,
+                    describe(hovered, hoveredId, PlayerKnowledge.of(minecraft.player)), mouseX, mouseY);
+        } else {
+            tabTooltip(graphics, mouseX, mouseY);
         }
     }
 
-    /** The plate is a square larger than the icon it carries, drawn a pixel out so the icon lands in the middle. */
-    private void drawTabPlate(GuiGraphics graphics, int x, int y, boolean left, boolean open) {
-        RenderSystem.enableBlend();
-        RenderSystem.defaultBlendFunc();
-        ResourceLocation plate = left
-                ? (open ? TAB_LEFT_OPEN : TAB_LEFT)
-                : (open ? TAB_RIGHT_OPEN : TAB_RIGHT);
-        graphics.blitSprite(plate, x - 1, y - 1, PLATE, PLATE);
-    }
+    // --- the page
 
-    private void tabTooltip(GuiGraphics graphics, int mouseX, int mouseY) {
-        for (int index = 0; index < categories.size(); index++) {
-            if (inside(mouseX, mouseY, tabX(index), tabY(index), TAB, TAB)) {
-                graphics.renderTooltip(font, ResearchCategory.displayName(categories.get(index)), mouseX, mouseY);
-                return;
-            }
-        }
-    }
-
-    /** A category's icon is an item for now; a drawn tab picture can take its place without touching this screen. */
-    private void drawCategoryIcon(GuiGraphics graphics, ResourceKey<ResearchCategory> key, int x, int y) {
-        ResourceLocation icon = categories().get(key).icon();
-        ItemStack stack = new ItemStack(net.minecraft.core.registries.BuiltInRegistries.ITEM.get(icon));
-        graphics.renderItem(stack, x + 4, y + 4);
-    }
-
-    private void drawTree(GuiGraphics graphics, int mouseX, int mouseY) {
-        Registry<ResearchEntry> entries = entries();
-        PlayerKnowledge knowledge = PlayerKnowledge.of(minecraft.player);
-        int centreX = pageX + pageW / 2 + (int) scrollX;
-        int centreY = pageY + pageH / 2 + (int) scrollY;
-
-        graphics.enableScissor(pageX, pageY, pageX + pageW, pageY + pageH);
+    private void drawPage(GuiGraphics graphics, int mouseX, int mouseY) {
+        graphics.enableScissor(pageLeft(), pageTop(), pageLeft() + pageWidth(), pageTop() + pageHeight());
         drawSky(graphics);
 
-        // lines first, so the plates sit on top of them
+        graphics.pose().pushPose();
+        // from here on everything is in the tree's own pixels, drawn back by the zoom
+        graphics.pose().translate(toWindowX(0), toWindowY(0), 0);
+        graphics.pose().scale(1F / zoom, 1F / zoom, 1F);
+
+        Registry<ResearchEntry> entries = entries();
+        PlayerKnowledge knowledge = PlayerKnowledge.of(minecraft.player);
         for (Map.Entry<ResourceKey<ResearchEntry>, ResearchEntry> entry : entries.entrySet()) {
             ResearchEntry research = entry.getValue();
             if (!research.category().equals(openCategory)) {
                 continue;
             }
+            float[] colour = lineColour(research, entry.getKey().location(), knowledge);
             for (ResourceLocation parentId : research.parents()) {
                 ResearchEntry parent = entries.get(parentId);
                 if (parent != null && parent.category().equals(openCategory)) {
-                    drawLink(graphics, centreX, centreY, parent, research);
+                    drawLine(graphics, research.column(), research.row(), parent.column(), parent.row(), colour);
                 }
             }
         }
 
         hovered = null;
         hoveredId = null;
-        boolean overPage = inside(mouseX, mouseY, pageX, pageY, pageW, pageH);
+        boolean overPage = mouseX >= pageLeft() && mouseX < pageLeft() + pageWidth()
+                && mouseY >= pageTop() && mouseY < pageTop() + pageHeight();
+        double treeMouseX = toTreeX(mouseX);
+        double treeMouseY = toTreeY(mouseY);
         for (Map.Entry<ResourceKey<ResearchEntry>, ResearchEntry> entry : entries.entrySet()) {
             ResearchEntry research = entry.getValue();
             if (!research.category().equals(openCategory)) {
                 continue;
             }
-            int x = centreX + research.column() * STEP - PLATE / 2;
-            int y = centreY + research.row() * STEP - PLATE / 2;
-
-            boolean known = knowledge.hasResearch(entry.getKey().location());
-            // the item drawn on the last plate ended its own batch, and that put blending back off
-            RenderSystem.enableBlend();
-            RenderSystem.defaultBlendFunc();
-            graphics.blitSprite(research.shape().sprite(known), x, y, PLATE, PLATE);
-            graphics.renderItem(research.iconStack(), x + ICON_INSET, y + ICON_INSET);
-
-            // a node half under the boards is only half there, so the mouse has to be over the window too
-            if (overPage && inside(mouseX, mouseY, x, y, PLATE, PLATE)) {
+            ResourceLocation id = entry.getKey().location();
+            int x = research.column() * GRID;
+            int y = research.row() * GRID;
+            drawNode(graphics, research, id, knowledge, x, y);
+            if (overPage && treeMouseX >= x - 3 && treeMouseX < x + ICON + 3
+                    && treeMouseY >= y - 3 && treeMouseY < y + ICON + 3) {
                 hovered = research;
-                hoveredId = entry.getKey().location();
+                hoveredId = id;
             }
         }
+        graphics.pose().popPose();
         graphics.disableScissor();
     }
 
-    /** Held back until the frame is down, or the note would be tucked under the boards. */
-    private void nodeTooltip(GuiGraphics graphics, int mouseX, int mouseY) {
-        if (hovered != null) {
-            graphics.renderComponentTooltip(font,
-                    describe(hovered, hoveredId, PlayerKnowledge.of(minecraft.player)), mouseX, mouseY);
-        }
-    }
-
     /**
-     * The page is a window rather than a sheet of paper: a branch's own sky behind, a shared layer of stars in front
-     * of it, and the two moving at different speeds as the tree is dragged about.
+     * A branch's sky behind, and the shared field of stars in front, each repeating every quarter of its picture and
+     * each sliding at its own pace as the tree is dragged, which is what gives the page its depth.
      */
     private void drawSky(GuiGraphics graphics) {
+        ResearchCategory open = openCategory == null ? null : categoryRegistry().get(openCategory);
         RenderSystem.enableBlend();
-        ResearchCategory open = openCategory == null ? null : categories().get(openCategory);
+        RenderSystem.defaultBlendFunc();
         if (open != null) {
-            drawLayer(graphics, open.background(), BACK_DRIFT);
+            drawSkyLayer(graphics, open.background(), BACK_DRIFT);
         }
-        drawLayer(graphics, OVERLAY, OVER_DRIFT);
+        drawSkyLayer(graphics, OVERLAY, OVER_DRIFT);
+    }
+
+    private void drawSkyLayer(GuiGraphics graphics, ResourceLocation texture, double drift) {
+        int w = pageWidth();
+        int h = pageHeight();
+        float u = (float) ((viewX - w * zoom / 2.0) / drift);
+        float v = (float) ((viewY - h * zoom / 2.0) / drift);
+        // the sheet is said to be a quarter of its real size, so it repeats that often and the tree shows through it
+        graphics.blit(texture, pageLeft(), pageTop(), w, h, u, v, Math.round(w * zoom), Math.round(h * zoom),
+                SKY_REPEAT, SKY_REPEAT);
     }
 
     /**
-     * One sky layer, drawn large enough that dragging the tree as far as it will go never pulls an edge into view, so
-     * there is no need for the picture to tile.
+     * How a line into a node is coloured: bright once the node is known, dim while it can be taken up, and nearly
+     * gone while it is still out of reach.
      */
-    private void drawLayer(GuiGraphics graphics, ResourceLocation texture, float drift) {
-        int span = Math.max(pageW, pageH) + Math.round(2 * PAN_LIMIT * drift);
-        int x = pageX + pageW / 2 - span / 2 + Math.round(scrollX * drift);
-        int y = pageY + pageH / 2 - span / 2 + Math.round(scrollY * drift);
-        graphics.blit(texture, x, y, span, span, 0, 0, SKY, SKY, SKY, SKY);
+    private static float[] lineColour(ResearchEntry research, ResourceLocation id, PlayerKnowledge knowledge) {
+        if (knowledge.hasResearch(id)) {
+            return new float[] {0.6F, 0.6F, 0.7F};
+        }
+        if (research.isAvailableTo(knowledge::hasResearch)) {
+            return new float[] {0.25F, 0.25F, 0.3F};
+        }
+        return new float[] {0.1F, 0.1F, 0.15F};
     }
 
-    private void drawLink(GuiGraphics graphics, int centreX, int centreY, ResearchEntry from, ResearchEntry to) {
-        int x1 = centreX + from.column() * STEP;
-        int y1 = centreY + from.row() * STEP;
-        int x2 = centreX + to.column() * STEP;
-        int y2 = centreY + to.row() * STEP;
-        int colour = 0xBBD8C8A8;
-
-        // an elbow rather than a diagonal, which keeps the tree looking drawn rather than plotted
-        graphics.fill(Math.min(x1, x2), y1 - 1, Math.max(x1, x2), y1 + 1, colour);
-        graphics.fill(x2 - 1, Math.min(y1, y2), x2 + 1, Math.max(y1, y2), colour);
+    /**
+     * A node: its plate, chosen by its shape, and the thing it is about on top.
+     * <p>
+     * Known research is drawn at full strength. Research that can be taken up now breathes in and out, so it is the
+     * first thing the eye goes to, and research still out of reach is left dark.
+     */
+    private void drawNode(GuiGraphics graphics, ResearchEntry research, ResourceLocation id,
+            PlayerKnowledge knowledge, int x, int y) {
+        float bright;
+        if (knowledge.hasResearch(id)) {
+            bright = 1F;
+        } else if (research.isAvailableTo(knowledge::hasResearch)) {
+            double phase = (Util.getMillis() % 600L) / 600.0 * Math.PI * 2.0;
+            bright = (float) (Math.sin(phase) * 0.25 + 0.75);
+        } else {
+            bright = 0.3F;
+        }
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        graphics.setColor(bright, bright, bright, 1F);
+        int from = research.shape() == NodeShape.MAJOR ? PLATE_ROUND : PLATE_SQUARE;
+        graphics.blit(SHEET, x - 8, y - 8, from, PLATE_ROW, PLATE, PLATE, SHEET_SIZE, SHEET_SIZE);
+        if (research.shape() == NodeShape.SPECIAL) {
+            graphics.blit(SHEET, x - 8, y - 8, PLATE_BRACKETS, PLATE_ROW, PLATE, PLATE, SHEET_SIZE, SHEET_SIZE);
+        }
+        graphics.setColor(1F, 1F, 1F, 1F);
+        graphics.renderItem(research.iconStack(), x, y);
+        if (bright < 1F) {
+            // an item cannot be tinted, so a node that is not yet known is shaded over instead
+            int shade = Math.round((1F - bright) * 0xC0);
+            graphics.pose().pushPose();
+            graphics.pose().translate(0, 0, 200);
+            graphics.fill(x, y, x + ICON, y + ICON, shade << 24);
+            graphics.pose().popPose();
+        }
     }
+
+    /**
+     * The line from a node back to one it rests on, pieced together the way the original pieced it: a run down or up
+     * from the node, a turn, and a run across to the other; the turn wide when both runs are long and tight when
+     * either is a single step; and an arrow head at the node the line leads into.
+     */
+    private void drawLine(GuiGraphics graphics, int fromColumn, int fromRow, int toColumn, int toRow,
+            float[] colour) {
+        int across = Math.abs(fromColumn - toColumn);
+        int down = Math.abs(fromRow - toRow);
+        int stepX = across == 0 ? 0 : (fromColumn - toColumn > 0 ? -1 : 1);
+        int stepY = down == 0 ? 0 : (fromRow - toRow > 0 ? -1 : 1);
+        boolean wide = across > 1 && down > 1;
+        int x = fromColumn * GRID - 4;
+        int y = fromRow * GRID - 4;
+
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        graphics.setColor(colour[0], colour[1], colour[2], 1F);
+
+        // the head, at the edge of the node the line comes into, pointing in
+        int head = stepY < 0 ? 64 : stepY > 0 ? 96 : stepX > 0 ? 160 : stepX < 0 ? 128 : -1;
+        if (head >= 0) {
+            piece(graphics, x - 4, y - 4, head, 112, 32);
+        }
+
+        int row = 1;
+        int column = 0;
+        for (; row < down - (wide ? 1 : 0); row++) {
+            piece(graphics, x + stepX * GRID * column, y + stepY * GRID * row, 0, 228, GRID);
+        }
+        int atX = x + stepX * GRID * column;
+        int atY = y + stepY * GRID * row;
+        if (wide) {
+            if (stepX < 0 && stepY > 0) {
+                piece(graphics, atX - GRID, atY, 0, 180, 2 * GRID);
+            } else if (stepX > 0 && stepY > 0) {
+                piece(graphics, atX, atY, 48, 180, 2 * GRID);
+            } else if (stepX < 0 && stepY < 0) {
+                piece(graphics, atX - GRID, atY - GRID, 96, 180, 2 * GRID);
+            } else if (stepX > 0 && stepY < 0) {
+                piece(graphics, atX, atY - GRID, 144, 180, 2 * GRID);
+            }
+        } else if (stepX < 0 && stepY > 0) {
+            piece(graphics, atX, atY, 48, 228, GRID);
+        } else if (stepX > 0 && stepY > 0) {
+            piece(graphics, atX, atY, 72, 228, GRID);
+        } else if (stepX < 0 && stepY < 0) {
+            piece(graphics, atX, atY, 96, 228, GRID);
+        } else if (stepX > 0 && stepY < 0) {
+            piece(graphics, atX, atY, 120, 228, GRID);
+        }
+        row += wide ? 1 : 0;
+        for (column += wide ? 2 : 1; column < across; column++) {
+            piece(graphics, x + stepX * GRID * column, y + stepY * GRID * row, 24, 228, GRID);
+        }
+        graphics.setColor(1F, 1F, 1F, 1F);
+    }
+
+    private static void piece(GuiGraphics graphics, int x, int y, int fromX, int fromY, int size) {
+        graphics.blit(SHEET, x, y, fromX, fromY, size, size, SHEET_SIZE, SHEET_SIZE);
+    }
+
+    // --- the frame and the tabs
+
+    /** The frame around the whole window: a corner at each corner and the runs between them a piece at a time. */
+    private void drawFrame(GuiGraphics graphics) {
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        for (int x = 16; x < width - 16; x += FRAME_RUN) {
+            int run = Math.min(FRAME_RUN, width - 16 - x);
+            graphics.blit(SHEET, x, -2, FRAME_RUN_FROM, FRAME_FROM, run, FRAME_CORNER, SHEET_SIZE, SHEET_SIZE);
+            graphics.blit(SHEET, x, height - 20, FRAME_RUN_FROM, FRAME_FROM, run, FRAME_CORNER,
+                    SHEET_SIZE, SHEET_SIZE);
+        }
+        for (int y = 16; y < height - 16; y += FRAME_RUN) {
+            int run = Math.min(FRAME_RUN, height - 16 - y);
+            graphics.blit(SHEET, -2, y, FRAME_FROM, FRAME_RUN_FROM, FRAME_CORNER, run, SHEET_SIZE, SHEET_SIZE);
+            graphics.blit(SHEET, width - 20, y, FRAME_FROM, FRAME_RUN_FROM, FRAME_CORNER, run,
+                    SHEET_SIZE, SHEET_SIZE);
+        }
+        corner(graphics, -2, -2);
+        corner(graphics, -2, height - 20);
+        corner(graphics, width - 20, -2);
+        corner(graphics, width - 20, height - 20);
+    }
+
+    private static void corner(GuiGraphics graphics, int x, int y) {
+        graphics.blit(SHEET, x, y, FRAME_FROM, FRAME_FROM, FRAME_CORNER, FRAME_CORNER, SHEET_SIZE, SHEET_SIZE);
+    }
+
+    private int tabY(int index) {
+        return TAB_Y + index * TAB_STEP;
+    }
+
+    /** Each tab is a frame corner with the branch's picture on it; the open one is drawn at full strength. */
+    private void drawTabs(GuiGraphics graphics) {
+        for (int index = 0; index < categories.size(); index++) {
+            ResourceKey<ResearchCategory> key = categories.get(index);
+            int y = tabY(index);
+            RenderSystem.enableBlend();
+            RenderSystem.defaultBlendFunc();
+            corner(graphics, TAB_X - 3, y - 3);
+            float strength = key.equals(openCategory) ? 1F : 0.66F;
+            graphics.setColor(strength, strength, strength, key.equals(openCategory) ? 1F : 0.8F);
+            graphics.blit(categoryRegistry().get(key).icon(), TAB_X, y, 0, 0, ICON, ICON, ICON, ICON);
+            graphics.setColor(1F, 1F, 1F, 1F);
+        }
+    }
+
+    private void tabTooltip(GuiGraphics graphics, int mouseX, int mouseY) {
+        for (int index = 0; index < categories.size(); index++) {
+            if (overTab(index, mouseX, mouseY)) {
+                graphics.renderTooltip(font, ResearchCategory.displayName(categories.get(index)), mouseX, mouseY);
+                return;
+            }
+        }
+    }
+
+    private boolean overTab(int index, double mouseX, double mouseY) {
+        int y = tabY(index);
+        return mouseX >= TAB_X && mouseX < TAB_X + ICON && mouseY >= y && mouseY < y + ICON;
+    }
+
+    // --- words
 
     private List<Component> describe(ResearchEntry research, ResourceLocation id, PlayerKnowledge knowledge) {
         List<Component> lines = new ArrayList<>();
@@ -340,7 +431,8 @@ public class AlchemonomiconScreen extends Screen {
                             .withStyle(ChatFormatting.DARK_PURPLE)),
                     () -> {
                         lines.add(Component.translatable("research.alchemia.ready").withStyle(ChatFormatting.AQUA));
-                        lines.add(Component.translatable("research.alchemia.take_note").withStyle(ChatFormatting.DARK_GRAY));
+                        lines.add(Component.translatable("research.alchemia.take_note")
+                                .withStyle(ChatFormatting.DARK_GRAY));
                     });
         }
         return lines;
@@ -358,17 +450,15 @@ public class AlchemonomiconScreen extends Screen {
         return joined;
     }
 
-    private static boolean inside(int mouseX, int mouseY, int x, int y, int width, int height) {
-        return mouseX >= x && mouseX < x + width && mouseY >= y && mouseY < y + height;
-    }
+    // --- input
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         for (int index = 0; index < categories.size(); index++) {
-            if (inside((int) mouseX, (int) mouseY, tabX(index), tabY(index), TAB, TAB)) {
+            if (overTab(index, mouseX, mouseY)) {
                 openCategory = categories.get(index);
-                scrollX = 0;
-                scrollY = 0;
+                viewX = 0;
+                viewY = 0;
                 return true;
             }
         }
@@ -384,7 +474,6 @@ public class AlchemonomiconScreen extends Screen {
                 return true;
             }
         }
-
         dragging = true;
         return super.mouseClicked(mouseX, mouseY, button);
     }
@@ -398,12 +487,41 @@ public class AlchemonomiconScreen extends Screen {
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
         if (dragging) {
-            // the tree can be pulled about, but not so far that it leaves the page behind
-            scrollX = Mth.clamp((float) (scrollX + dragX), -PAN_LIMIT, PAN_LIMIT);
-            scrollY = Mth.clamp((float) (scrollY + dragY), -PAN_LIMIT, PAN_LIMIT);
+            viewX -= dragX * zoom;
+            viewY -= dragY * zoom;
+            keepInBounds();
             return true;
         }
         return super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
+    }
+
+    /** The wheel draws the tree back or brings it near, by quarter steps between life size and half of it. */
+    @Override
+    public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
+        if (scrollY != 0) {
+            zoom = Mth.clamp(zoom + (scrollY < 0 ? ZOOM_STEP : -ZOOM_STEP), ZOOM_MIN, ZOOM_MAX);
+            keepInBounds();
+            return true;
+        }
+        return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
+    }
+
+    /** The view cannot be dragged further than the branch's research reaches, so the tree is never lost. */
+    private void keepInBounds() {
+        int left = 0;
+        int right = 0;
+        int top = 0;
+        int bottom = 0;
+        for (ResearchEntry research : entries()) {
+            if (research.category().equals(openCategory)) {
+                left = Math.min(left, research.column() * GRID);
+                right = Math.max(right, research.column() * GRID);
+                top = Math.min(top, research.row() * GRID);
+                bottom = Math.max(bottom, research.row() * GRID);
+            }
+        }
+        viewX = Mth.clamp(viewX, left, right);
+        viewY = Mth.clamp(viewY, top, bottom);
     }
 
     @Override

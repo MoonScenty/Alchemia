@@ -144,6 +144,18 @@ public final class LegacyAssets {
         all.add(LegacyAsset.of("textures/gui/research_parchment.png").five("textures/research/parchment3.png"));
         all.add(LegacyAsset.of("textures/gui/research_hex.png").five("textures/gui/hex1.png"));
         all.add(LegacyAsset.of("textures/gui/research_hex_lit.png").five("textures/gui/hex2.png"));
+
+        // the alchemonomicon is laid out as the original's was: its frame pieces, plates, arrow heads and line pieces
+        // all come off the one sheet, and each branch's tab has the original's picture on it
+        all.add(LegacyAsset.of("textures/gui/research_browser.png").five("textures/gui/gui_research_browser.png"));
+        all.add(LegacyAsset.of("textures/gui/research_category/basics.png")
+                .five("textures/items/thaumonomicon_cheat.png").four("textures/items/thaumonomiconcheat.png"));
+        String[][] tabs = {{"arcana", "r_thaumaturgy"}, {"alchemy", "r_crucible"}, {"artifice", "r_artifice"},
+                {"golemancy", "r_golemancy"}, {"eldritch", "r_eldritch"}};
+        for (String[] tab : tabs) {
+            all.add(LegacyAsset.of("textures/gui/research_category/" + tab[0] + ".png")
+                    .five("textures/research/" + tab[1] + ".png"));
+        }
     }
 
     /** Step 9: armour and its sheets. */

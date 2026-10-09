@@ -30,12 +30,12 @@ import net.minecraft.world.level.ItemLike;
 public class ModResearchProvider {
     public static void categories(BootstrapContext<ResearchCategory> context) {
         // Thaumaturgy is called arcana here, following the rule on names carried over from the original
-        category(context, ModResearch.BASICS, ModItems.ALCHEMOMETER, "basics", 0);
-        category(context, ModResearch.ARCANA, ModItems.BALANCED_SHARD, "arcana", 1);
-        category(context, ModResearch.ALCHEMY, ModItems.QUICKSILVER, "alchemy", 2);
-        category(context, ModResearch.ARTIFICE, ModItems.ALCHEMIUM_GEAR, "artifice", 3);
-        category(context, ModResearch.GOLEMANCY, ModItems.BRASS_INGOT, "golemancy", 4);
-        category(context, ModResearch.ELDRITCH, ModItems.SHARDS.get(CrystalType.FLUX), "eldritch", 5);
+        category(context, ModResearch.BASICS, "basics", 0);
+        category(context, ModResearch.ARCANA, "arcana", 1);
+        category(context, ModResearch.ALCHEMY, "alchemy", 2);
+        category(context, ModResearch.ARTIFICE, "artifice", 3);
+        category(context, ModResearch.GOLEMANCY, "golemancy", 4);
+        category(context, ModResearch.ELDRITCH, "eldritch", 5);
     }
 
     public static void entries(BootstrapContext<ResearchEntry> context) {
@@ -207,11 +207,11 @@ public class ModResearchProvider {
                 "arcane_stone_bricks_from_arcane_stone");
     }
 
+    /** A branch: its tab picture and its sky are both named after it. */
     private static void category(BootstrapContext<ResearchCategory> context, ResourceKey<ResearchCategory> key,
-            ItemLike icon, String sky, int order) {
-        ResourceLocation iconPath = BuiltInRegistries.ITEM.getKey(icon.asItem());
-        context.register(key, new ResearchCategory(iconPath,
-                Alchemia.id("textures/gui/research_background/" + sky + ".png"), order));
+            String name, int order) {
+        context.register(key, new ResearchCategory(Alchemia.id("textures/gui/research_category/" + name + ".png"),
+                Alchemia.id("textures/gui/research_background/" + name + ".png"), order));
     }
 
     /**
