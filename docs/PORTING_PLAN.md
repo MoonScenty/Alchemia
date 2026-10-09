@@ -70,6 +70,7 @@ python tools/remap_srg.py MCP-919/conf decompiled/thaumcraft src/thaumcraft
   - [x] A. 상 레지스트리: 상 35종(원시 6 + 합성 29). 원본처럼 코드에 정의하는 정적 커스텀 레지스트리(`alchemia:aspect`)이므로 부가 모드도 같은 방식으로 등록할 수 있다. ID는 원본의 라틴어(`alchemia:aer`).
     - 색상 35개와 블렌딩은 원본 값 그대로. 조합 역방향 조회(aer+perditio → vacuos)는 레지스트리에서 자동으로 만든다.
     - 아이콘 35장은 game-icons.net(Lorc, CC BY 3.0). 배경·미발견 2장은 자체 제작. [CREDITS.md](../CREDITS.md) 참고.
+      - **원본 jar가 있으면 원본 아이콘을 쓴다**(2026-10-09). 35장과 배경(`_back`)·미발견(`_unknown`)을 `textures/aspects/`에서 그대로 가져온다. 원본도 회색 그림에 코드로 색을 입혔으므로 그리는 코드는 그대로다. 위의 Lorc 아이콘은 jar가 없을 때의 대체 그림으로 남는다.
     - 이름은 모든 언어에서 라틴어로 두고, 뜻은 `.description`에 적는다 (원본과 같은 방식).
   - [x] B. `AspectList`: 불변 상→개수 맵. Codec/StreamCodec, 합산·차감·배율·상한, 이름순·양순 정렬.
     - `cull()`은 6종까지 줄인다. 합성 깊이가 깊을수록 가중치를 올려, 양이 비슷하면 복잡한 상이 남는다.

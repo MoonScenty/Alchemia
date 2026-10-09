@@ -66,8 +66,27 @@ public final class LegacyAssets {
     private static List<LegacyAsset> build() {
         List<LegacyAsset> all = new ArrayList<>();
         baseResources(all);
+        aspects(all);
         gear(all);
         return List.copyOf(all);
+    }
+
+    /**
+     * Step 2: an icon for every aspect, and the plate and question mark drawn under and instead of one. All grey;
+     * the colour is put on in code, ours as the original's. 1.7.10 lacks a few that 1.8.9 added.
+     */
+    private static void aspects(List<LegacyAsset> all) {
+        // the holders know their names before the registry is filled, which is all this needs
+        ModAspects.ASPECTS.getEntries().forEach(aspect -> {
+            String tag = aspect.getId().getPath();
+            all.add(LegacyAsset.of("textures/aspect/" + tag + ".png")
+                    .five("textures/aspects/" + tag + ".png")
+                    .four("textures/aspects/" + tag + ".png"));
+        });
+        all.add(LegacyAsset.of("textures/aspect/background.png")
+                .five("textures/aspects/_back.png").four("textures/aspects/_back.png"));
+        all.add(LegacyAsset.of("textures/aspect/unknown.png")
+                .five("textures/aspects/_unknown.png").four("textures/aspects/_unknown.png"));
     }
 
     /** Step 9: armour and its sheets. */
