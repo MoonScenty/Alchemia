@@ -77,6 +77,7 @@ public final class LegacyAssets {
         aura(all);
         wands(all);
         essentia(all);
+        infusion(all);
         gear(all);
         return List.copyOf(all);
     }
@@ -266,6 +267,17 @@ public final class LegacyAssets {
         all.add(item("void_ingot", "ingot_void", "voidingot"));
         all.add(item("void_nugget", "nugget_void", "nuggetvoid"));
         all.add(item("void_plate", "void_plate", null));
+    }
+
+    /**
+     * Step 8: the altar. The two stones laid under its corners, and the pedestal, whose model now asks for a side and
+     * a top as the original's did. The matrix and the pillars are drawn differently and wait for their models.
+     */
+    private static void infusion(List<LegacyAsset> all) {
+        all.add(block("infusion_cost_stone", "matrix_cost", null));
+        all.add(block("infusion_speed_stone", "matrix_speed", null));
+        all.add(block("pedestal_side", "pedestal_side", null));
+        all.add(block("pedestal_top", "pedestal_top", null));
     }
 
     private static LegacyAsset wandPart(String ours, String original) {
