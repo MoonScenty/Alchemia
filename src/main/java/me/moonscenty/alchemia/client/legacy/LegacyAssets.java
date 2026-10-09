@@ -71,6 +71,7 @@ public final class LegacyAssets {
         baseResources(all);
         aspects(all);
         effects(all);
+        research(all);
         gear(all);
         return List.copyOf(all);
     }
@@ -113,6 +114,29 @@ public final class LegacyAssets {
         all.add(LegacyAsset.of("textures/mob_effect/" + name + ".png")
                 .five("textures/misc/potions.png")
                 .cropped(column * EFFECT_CELL, EFFECT_TOP + row * EFFECT_CELL, EFFECT_CELL, EFFECT_CELL));
+    }
+
+    /**
+     * Step 4: what research is done with, and the sky the alchemonomicon's tree hangs in. Only what fits our screens
+     * as they are: the panels of the book and the table are laid out differently from the original's and are not
+     * taken until the screens are.
+     */
+    private static void research(List<LegacyAsset> all) {
+        // the scanner's lens turns, so its picture is a strip of frames, and the strip's timing comes with it
+        all.add(item("alchemometer", "thaumometer", null));
+        all.add(item("alchemonomicon", "thaumonomicon", "thaumonomicon"));
+        all.add(item("research_notes", "researchnotes", "researchnotes"));
+        all.add(item("scribing_tools", "scribing_tools", null));
+        // the letters that drift onto the research table's leather
+        all.add(LegacyAsset.of("textures/misc/script.png").five("textures/misc/script.png"));
+
+        // each branch's sky, in the original's order of branches, and the field of stars drawn over every one
+        String[] branches = {"basics", "arcana", "alchemy", "artifice", "golemancy", "eldritch"};
+        for (int i = 0; i < branches.length; i++) {
+            all.add(LegacyAsset.of("textures/gui/research_background/" + branches[i] + ".png")
+                    .five("textures/gui/gui_research_back_" + (i + 1) + ".jpg").fromJpeg());
+        }
+        all.add(LegacyAsset.of("textures/gui/research_overlay.png").five("textures/gui/gui_research_back_over.png"));
     }
 
     /** Step 9: armour and its sheets. */

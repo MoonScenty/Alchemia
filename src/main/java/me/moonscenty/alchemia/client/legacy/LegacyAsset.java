@@ -1,11 +1,15 @@
 package me.moonscenty.alchemia.client.legacy;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.IntSupplier;
 
 import javax.annotation.Nullable;
+import javax.imageio.ImageIO;
 
 import com.mojang.blaze3d.platform.NativeImage;
 
@@ -58,6 +62,24 @@ public record LegacyAsset(String target, List<Source> sources, Transform transfo
 
     public LegacyAsset tinted(int rgb) {
         return tinted(() -> rgb);
+    }
+
+    /**
+     * Turns a JPEG into a PNG. The original kept its large backgrounds as JPEGs; this game reads nothing but PNG, and
+     * its own image reader refuses anything else at the first byte, so Java's reader does the decoding.
+     */
+    public LegacyAsset fromJpeg() {
+        return new LegacyAsset(target, sources, LegacyAsset::jpegToPng, model);
+    }
+
+    private static byte[] jpegToPng(byte[] jpeg) throws IOException {
+        BufferedImage image = ImageIO.read(new ByteArrayInputStream(jpeg));
+        if (image == null) {
+            throw new IOException("Not a picture Java can read");
+        }
+        ByteArrayOutputStream png = new ByteArrayOutputStream();
+        ImageIO.write(image, "png", png);
+        return png.toByteArray();
     }
 
     /** Cuts one picture out of a sheet the original kept many in, after whatever else was done to it. */

@@ -104,7 +104,8 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
 
     // The script that settles on the leather. It says nothing: it is there so the page looks written on rather
     // than blank, and so the empty half of a torn board is not simply dead space.
-    private static final int LETTERS = 24;
+    // sixteen, as many as the original's strip has, so its strip and ours read the same
+    private static final int LETTERS = 16;
     private static final int LETTER = 16;
     /** How often another letter is tried for, and how far out one may land. */
     private static final long SETTLES = 250L;
