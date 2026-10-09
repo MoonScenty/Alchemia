@@ -90,6 +90,10 @@ public class FocusPouchMenu extends AbstractContainerMenu {
 
     /** Writes the slots back onto the item. */
     private void save() {
+        // the slots are still being filled from the pouch; writing them back now would be writing half a pouch
+        if (inside == null) {
+            return;
+        }
         ItemStack pouch = pouch();
         if (!(pouch.getItem() instanceof FocusPouchItem)) {
             return;

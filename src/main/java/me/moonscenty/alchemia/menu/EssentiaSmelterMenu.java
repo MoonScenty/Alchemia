@@ -28,9 +28,9 @@ public class EssentiaSmelterMenu extends AbstractContainerMenu {
 
     // Where the pieces sit on the drawn panel.
     private static final int INPUT_X = 80;
-    private static final int INPUT_Y = 17;
+    private static final int INPUT_Y = 8;
     private static final int FUEL_X = 80;
-    private static final int FUEL_Y = 53;
+    private static final int FUEL_Y = 48;
     private static final int PACK_X = 8;
     private static final int PACK_Y = 84;
     private static final int BELT_Y = 142;

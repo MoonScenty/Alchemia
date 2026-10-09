@@ -143,6 +143,9 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
 
     @Override
     protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
+        // the original's panels have soft, half-clear edges, which come out solid without blending
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
         graphics.blit(PANEL, leftPos, topPos, 0, 0, PANEL_W, PANEL_H, SHEET, SHEET);
         graphics.blit(PANEL, leftPos + PLATE_X, topPos + PANEL_H, 0, PLATE_FROM_Y, PLATE_W, PLATE_H, SHEET, SHEET);
     }
@@ -178,6 +181,8 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
         if (note == null) {
             return;
         }
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
         graphics.blit(PARCHMENT, leftPos + BOARD_X, topPos + BOARD_Y, 0, 0, BOARD_SIZE, BOARD_SIZE, SHEET, SHEET);
         // clipped to the sheet, so nothing can ever creep onto the wood around it
         graphics.enableScissor(leftPos + BOARD_X, topPos + BOARD_Y,

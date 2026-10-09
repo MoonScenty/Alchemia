@@ -30,51 +30,66 @@ public class EssentiaSmelterScreen extends AbstractContainerScreen<EssentiaSmelt
     private static final int PANEL_W = 176;
     private static final int PANEL_H = 166;
 
-    // The two gauges, and the fire between the slots. All three fill from the bottom.
-    private static final int GAUGE_W = 12;
-    private static final int GAUGE_H = 40;
-    private static final int HELD_X = 10;
-    private static final int COOKED_X = 154;
-    private static final int GAUGE_Y = 23;
-    private static final int HELD_FROM_X = 204;
-    private static final int COOKED_FROM_X = 218;
+    // Laid out as the original laid it out. Everything fills from the bottom: the fire under the input, what the
+    // smelter holds in the tall gauge to its left under a pane of glass, and how far along the work is to its right.
+    private static final int FIRE_X = 80;
+    private static final int FIRE_Y = 26;
+    private static final int FIRE_W = 16;
+    private static final int FIRE_H = 20;
+    private static final int FIRE_FROM_X = 176;
 
-    private static final int FIRE = 14;
-    private static final int FIRE_X = 81;
-    private static final int FIRE_Y = 37;
-    private static final int FIRE_FROM_X = 185;
+    private static final int HELD_X = 61;
+    private static final int HELD_Y = 12;
+    private static final int HELD_W = 8;
+    private static final int HELD_H = 48;
+    private static final int HELD_FROM_X = 200;
+    private static final int GLASS_X = 60;
+    private static final int GLASS_Y = 8;
+    private static final int GLASS_W = 10;
+    private static final int GLASS_H = 55;
+    private static final int GLASS_FROM_X = 232;
 
-    private static final int ICON = 16;
+    private static final int COOKED_X = 106;
+    private static final int COOKED_Y = 13;
+    private static final int COOKED_W = 9;
+    private static final int COOKED_H = 46;
+    private static final int COOKED_FROM_X = 216;
 
     public EssentiaSmelterScreen(EssentiaSmelterMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);
         imageWidth = PANEL_W;
         imageHeight = PANEL_H;
-        inventoryLabelY = imageHeight - 94;
     }
 
     @Override
     protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
+        // the original's panels have soft, half-clear edges, which come out solid without blending
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
         graphics.blit(PANEL, leftPos, topPos, 0, 0, PANEL_W, PANEL_H, SHEET, SHEET);
-
-        // the fire burns down rather than up, as a fire does
-        int alight = Math.round(menu.burning() * FIRE);
-        if (alight > 0) {
-            graphics.blit(PANEL, leftPos + FIRE_X, topPos + FIRE_Y + FIRE - alight,
-                    FIRE_FROM_X, FIRE - alight, FIRE, alight, SHEET, SHEET);
-        }
-        gauge(graphics, HELD_X, HELD_FROM_X, menu.filled());
-        gauge(graphics, COOKED_X, COOKED_FROM_X, menu.cooked());
+        gauge(graphics, FIRE_X, FIRE_Y, FIRE_W, FIRE_H, FIRE_FROM_X, menu.burning());
+        gauge(graphics, HELD_X, HELD_Y, HELD_W, HELD_H, HELD_FROM_X, menu.filled());
+        gauge(graphics, COOKED_X, COOKED_Y, COOKED_W, COOKED_H, COOKED_FROM_X, menu.cooked());
+        // the glass is a faint sheen, mostly see-through; drawn without blending its faint pixels come out solid and
+        // the pane reads as white streaks over an empty gauge
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        graphics.blit(PANEL, leftPos + GLASS_X, topPos + GLASS_Y, GLASS_FROM_X, 0, GLASS_W, GLASS_H, SHEET, SHEET);
+        RenderSystem.disableBlend();
     }
 
     /** One gauge, filled from the bottom by as much of its picture as the share calls for. */
-    private void gauge(GuiGraphics graphics, int x, int fromX, float share) {
-        int high = Math.round(Math.max(0.0F, Math.min(1.0F, share)) * GAUGE_H);
+    private void gauge(GuiGraphics graphics, int x, int y, int wide, int tall, int fromX, float share) {
+        int high = Math.round(Math.max(0.0F, Math.min(1.0F, share)) * tall);
         if (high <= 0) {
             return;
         }
-        graphics.blit(PANEL, leftPos + x, topPos + GAUGE_Y + GAUGE_H - high,
-                fromX, GAUGE_H - high, GAUGE_W, high, SHEET, SHEET);
+        graphics.blit(PANEL, leftPos + x, topPos + y + tall - high, fromX, tall - high, wide, high, SHEET, SHEET);
+    }
+
+    /** The panel is a picture of the smelter, as the original's was; it carries no words. */
+    @Override
+    protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
     }
 
     @Override
@@ -92,7 +107,7 @@ public class EssentiaSmelterScreen extends AbstractContainerScreen<EssentiaSmelt
      */
     @Override
     protected void renderTooltip(GuiGraphics graphics, int mouseX, int mouseY) {
-        if (!over(mouseX, mouseY, HELD_X, GAUGE_Y, GAUGE_W, GAUGE_H) || minecraft == null) {
+        if (!over(mouseX, mouseY, GLASS_X, GLASS_Y, GLASS_W, GLASS_H) || minecraft == null) {
             super.renderTooltip(graphics, mouseX, mouseY);
             return;
         }

@@ -247,6 +247,8 @@ public final class LegacyAssets {
         all.add(block("smelter_front_on", "smelter_basic_front_on", null));
         all.add(block("smelter_side", "smelter_basic_side", null));
         all.add(block("smelter_top", "smelter_top", null));
+        // the smelter's screen is laid out as the original's was, so its panel goes straight in
+        all.add(LegacyAsset.of("textures/gui/essentia_smelter.png").five("textures/gui/gui_smelter.png"));
         // the flame is grey and dyed in code, the bead is not, as in the original
         all.add(block("nitor", "nitor", null));
         all.add(block("nitor_core", "nitor_core", null));
