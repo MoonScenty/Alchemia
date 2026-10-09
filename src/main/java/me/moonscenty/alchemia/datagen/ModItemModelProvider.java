@@ -66,6 +66,16 @@ public class ModItemModelProvider extends ItemModelProvider {
         ModItems.METAL_ARMOUR.forEach((name, piece) -> basicItem(piece.get()));
         // fortress armour is a picture in the slot, as the original drew it; the original's comes in with its jar
         ModItems.FORTRESS.values().forEach(piece -> basicItem(piece.get()));
+        // a robe is its cloth, which takes the dye, and a trim over it; the hood has no trim
+        ModItems.ROBES.forEach((name, robe) -> {
+            if (name.equals("void_robe_helm")) {
+                basicItem(robe.get());
+            } else {
+                withExistingParent(name, mcLoc("item/generated"))
+                        .texture("layer0", modLoc("item/" + name))
+                        .texture("layer1", modLoc("item/" + name + "_overlay"));
+            }
+        });
         // the traveller's boots have a model of their own, in models/item/, and datagen does not write over it
         basicItem(ModItems.IRON_CLUSTER.get());
         basicItem(ModItems.GOLD_CLUSTER.get());

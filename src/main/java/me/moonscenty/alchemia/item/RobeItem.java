@@ -19,12 +19,15 @@ import net.minecraft.world.item.component.DyedItemColor;
  * <p>It stops almost nothing. What it is worth is that a wand spends less while it is on, which is a thing worn
  * armour has never done in this game and so has to be plumbed in rather than declared.
  *
- * <p>Its worn shape is a bought mesh, not boxes, and is drawn by a layer of our own. The material therefore has
- * no sheet of its own: see {@link me.moonscenty.alchemia.registry.ModArmorMaterials}.
+ * <p>Both robes are dyed the way leather is, and both start out the original's violet. The cloth robe is worn as
+ * plain armour; the void robe is worn on the original's own model when its jar is there.
  *
  * @param discount how much less a wand spends while this piece is worn, in whole parts of a hundred
  */
-public class RobeItem extends ArmorItem implements VisDiscount, MeshArmour {
+public class RobeItem extends ArmorItem implements VisDiscount {
+    /** The colour of a robe nobody has dyed: the original's. */
+    public static final int UNDYED = 0x6A3880;
+
     private final int discount;
     private final boolean drab;
 
@@ -50,46 +53,13 @@ public class RobeItem extends ArmorItem implements VisDiscount, MeshArmour {
                 .withStyle(ChatFormatting.AQUA));
     }
 
-    /** Whether this piece is a void robe. The two robes share one set of meshes and differ only in the sheet. */
+    /** Whether this piece is a void robe. */
     public boolean drab() {
         return drab;
     }
 
-    @Override
-    public String meshSet() {
-        return "robe";
-    }
-
-    /**
-     * Which sheet to draw this robe off.
-     * <p>
-     * A dye is a multiplication: whatever the cloth already is stays underneath it, and the cloth as painted is a
-     * deep violet. Violet times red is a darker violet, not red. So a robe somebody has dyed is drawn off a sheet
-     * with the colour taken out of it, and a robe nobody has touched off the sheet exactly as it was painted.
-     */
-    @Override
-    public String meshVariant(ItemStack stack) {
-        if (drab) {
-            return "void";
-        }
-        return dyed(stack) == UNDYED ? "" : "dyed";
-    }
-
-    @Override
-    public int meshTint(ItemStack stack) {
-        return dyed(stack);
-    }
-
-    /**
-     * What colour to draw a piece in: whatever dye was worked into it, or none.
-     * <p>
-     * None is white rather than a colour of its own, because white is what leaves the sheet as it was drawn. A
-     * robe nobody has dyed should look like the cloth it was cut from.
-     */
+    /** What colour the cloth is: whatever dye was worked into it, or the violet it was woven in. */
     public static int dyed(ItemStack stack) {
         return DyedItemColor.getOrDefault(stack, UNDYED);
     }
-
-    /** White: what a sheet looks like when nothing is done to it. */
-    public static final int UNDYED = 0xFFFFFF;
 }

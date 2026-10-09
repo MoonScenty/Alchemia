@@ -26,6 +26,14 @@ public final class LegacyAssets {
     /** The fortress armour, which the original wrote as code rather than as a model file. */
     public static final String FORTRESS_ARMOUR = "fortress_armour";
 
+    /**
+     * The void robe's model as the original built it for the robe itself, and as it built it for the hood and the
+     * leggings. The constructor hangs different things on the body depending on the size it is given, so the same
+     * class is read twice.
+     */
+    public static final String ROBE = "robe";
+    public static final String ROBE_SKIRT = "robe_skirt";
+
     public static final List<LegacyAsset> ALL = build();
 
     /**
@@ -40,7 +48,17 @@ public final class LegacyAssets {
                     new LegacyModelSource(LegacyEdition.FIVE,
                             "thaumcraft/client/renderers/models/gear/ModelFortressArmor", "(F)V", 1.0F),
                     new LegacyModelSource(LegacyEdition.FOUR,
-                            "thaumcraft/client/renderers/models/gear/ModelFortressArmor", "(F)V", 1.0F)));
+                            "thaumcraft/client/renderers/models/gear/ModelFortressArmor", "(F)V", 1.0F)),
+            ROBE, List.of(
+                    new LegacyModelSource(LegacyEdition.FIVE,
+                            "thaumcraft/client/renderers/models/gear/ModelRobe", "(F)V", 1.0F),
+                    new LegacyModelSource(LegacyEdition.FOUR,
+                            "thaumcraft/client/renderers/models/gear/ModelRobe", "(F)V", 1.0F)),
+            ROBE_SKIRT, List.of(
+                    new LegacyModelSource(LegacyEdition.FIVE,
+                            "thaumcraft/client/renderers/models/gear/ModelRobe", "(F)V", 0.5F),
+                    new LegacyModelSource(LegacyEdition.FOUR,
+                            "thaumcraft/client/renderers/models/gear/ModelRobe", "(F)V", 0.5F)));
 
     private LegacyAssets() {
     }
@@ -64,6 +82,40 @@ public final class LegacyAssets {
         all.add(item("fortress_helm", "fortress_helm", "thaumiumfortresshelm"));
         all.add(item("fortress_chest", "fortress_chest", "thaumiumfortresschest"));
         all.add(item("fortress_legs", "fortress_legs", "thaumiumfortresslegs"));
+
+        // the cloth robe is plain armour: a sheet that takes the dye and a trim over it that does not
+        robeSheets(all, "cloth", 1, "robes_1", "robes_1_overlay", null);
+        robeSheets(all, "cloth", 2, "robes_2", "robes_2_overlay", null);
+        // the void robe's sheet is the same for both layers. The original named its two halves the other way
+        // round: the file called "overlay" is the cloth that takes the dye, and the plain one is the trim
+        robeSheets(all, "void_robe", 1, "void_robe_armor_overlay", "void_robe_armor", ROBE);
+        robeSheets(all, "void_robe", 2, "void_robe_armor_overlay", "void_robe_armor", ROBE);
+
+        all.add(item("cloth_chest", "cloth_chest", "clothchest"));
+        all.add(item("cloth_chest_overlay", "cloth_chest_over", "clothchestover"));
+        all.add(item("cloth_legs", "cloth_legs", "clothlegs"));
+        all.add(item("cloth_legs_overlay", "cloth_legs_over", "clothlegsover"));
+        all.add(item("cloth_boots", "cloth_boots", "clothboots"));
+        all.add(item("cloth_boots_overlay", "cloth_boots_over", "clothbootsover"));
+        all.add(item("void_robe_helm", "void_robe_helm", "voidrobehelm"));
+        all.add(item("void_robe_chest", "void_robe_chest", "voidrobechest"));
+        all.add(item("void_robe_chest_overlay", "void_robe_chest_over", "voidrobechestover"));
+        all.add(item("void_robe_legs", "void_robe_legs", "voidrobelegs"));
+        all.add(item("void_robe_legs_overlay", "void_robe_legs_over", "voidrobelegsover"));
+    }
+
+    /**
+     * One layer of a robe: the dyed cloth and its trim. 1.8.9 kept armour sheets under {@code models/armor/},
+     * 1.7.10 straight under {@code models/}.
+     */
+    private static void robeSheets(List<LegacyAsset> all, String robe, int layer, String cloth, String trim,
+            String model) {
+        LegacyAsset dyed = LegacyAsset.of("textures/models/armor/" + robe + "_layer_" + layer + ".png")
+                .five("textures/models/armor/" + cloth + ".png").four("textures/models/" + cloth + ".png");
+        LegacyAsset over = LegacyAsset.of("textures/models/armor/" + robe + "_layer_" + layer + "_overlay.png")
+                .five("textures/models/armor/" + trim + ".png").four("textures/models/" + trim + ".png");
+        all.add(model == null ? dyed : dyed.forModel(model));
+        all.add(model == null ? over : over.forModel(model));
     }
 
     /** Step 1: ores, metals, the two woods, the three plants, stone. */

@@ -352,20 +352,15 @@ public class WandTests {
         item.take(wand, price, player);
         return before - item.held(wand, ModAspects.FIRE);
     }
-    /**
-     * The plain robe takes dye; the void robe does not.
-     * <p>
-     * The one is cloth and the other is cloth with metal sewn through it. A dye that washed out of the second
-     * would be a dye that never touched what gives it its colour.
-     */
+    /** Both robes take dye, as the original's both did, and start out the original's violet. */
     @GameTest(template = TEMPLATE)
-    public static void onlyTheClothRobeTakesDye(GameTestHelper helper) {
+    public static void bothRobesTakeDye(GameTestHelper helper) {
         ItemStack cloth = new ItemStack(ModItems.ROBES.get("cloth_chest").get());
         ItemStack drab = new ItemStack(ModItems.ROBES.get("void_robe_chest").get());
         helper.assertTrue(cloth.is(ItemTags.DYEABLE), "a plain robe can be dyed");
-        helper.assertFalse(drab.is(ItemTags.DYEABLE), "a void robe cannot");
+        helper.assertTrue(drab.is(ItemTags.DYEABLE), "so can a void robe");
 
-        helper.assertValueEqual(RobeItem.dyed(cloth), RobeItem.UNDYED, "undyed, it is drawn as it was painted");
+        helper.assertValueEqual(RobeItem.dyed(cloth), RobeItem.UNDYED, "undyed, it is the violet it was woven in");
         // the dye is worked into a copy and handed back; the robe that went in is untouched
         ItemStack red = DyedItemColor.applyDyes(cloth, List.of((DyeItem) Items.RED_DYE));
         helper.assertTrue(RobeItem.dyed(red) != RobeItem.UNDYED, "dyed, it is drawn in the dye");

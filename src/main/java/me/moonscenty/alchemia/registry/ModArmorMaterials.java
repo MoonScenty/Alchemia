@@ -65,11 +65,8 @@ public final class ModArmorMaterials {
                     List.of(new ArmorMaterial.Layer(Alchemia.id("goggles"))), 0.0F, 0.0F));
 
     /**
-     * The two robes, which are worn meshes rather than sheets stretched over a body.
-     * <p>
-     * Both are given **no layers at all**. The layer that draws armour walks a material's layers and draws a
-     * sheet for each; with none, it draws nothing, and the robe is left to the layer of our own that knows how
-     * to hang a mesh off a limb. Anything less and every robe would be drawn twice.
+     * The two robes. Each is two sheets, as leather is: the cloth, which takes the dye, and over it the trim, which
+     * does not. The original drew both robes that way.
      * <p>
      * Cloth takes leather's numbers because that is what it is. The void robe takes void metal's, which is what
      * the original gave it -- a robe that stops as much as a breastplate and falls apart as fast.
@@ -77,12 +74,12 @@ public final class ModArmorMaterials {
     public static final DeferredHolder<ArmorMaterial, ArmorMaterial> CLOTH =
             MATERIALS.register("cloth", () -> new ArmorMaterial(stops(1, 3, 2, 1), 25,
                     SoundEvents.ARMOR_EQUIP_LEATHER, () -> Ingredient.of(net.minecraft.world.item.Items.LEATHER),
-                    List.of(), 0.0F, 0.0F));
+                    robeLayers("cloth"), 0.0F, 0.0F));
 
     public static final DeferredHolder<ArmorMaterial, ArmorMaterial> VOID_ROBE =
             MATERIALS.register("void_robe", () -> new ArmorMaterial(stops(3, 7, 6, 3), 10,
                     SoundEvents.ARMOR_EQUIP_LEATHER, () -> Ingredient.of(ModItems.VOID_INGOT),
-                    List.of(), 0.0F, 0.0F));
+                    robeLayers("void_robe"), 0.0F, 0.0F));
 
     /**
      * Fortress armour: as much stopped as void metal, as long-lasting as alchemium, and better at taking an
@@ -104,6 +101,12 @@ public final class ModArmorMaterials {
     public static final int VOID_ROBE_LASTS = 10;
 
     private ModArmorMaterials() {
+    }
+
+    /** The dyed cloth and the undyed trim over it. */
+    private static List<ArmorMaterial.Layer> robeLayers(String name) {
+        return List.of(new ArmorMaterial.Layer(Alchemia.id(name), "", true),
+                new ArmorMaterial.Layer(Alchemia.id(name), "_overlay", false));
     }
 
     /** What each piece takes off a blow, given head first. */

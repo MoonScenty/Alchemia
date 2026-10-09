@@ -31,17 +31,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraft.client.renderer.entity.NoopRenderer;
-import net.minecraft.client.renderer.entity.ArmorStandRenderer;
-import net.minecraft.client.renderer.entity.player.PlayerRenderer;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.client.resources.PlayerSkin;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
-import me.moonscenty.alchemia.client.armour.ArmourMeshes;
 import me.moonscenty.alchemia.client.armour.FortressExtensions;
-import me.moonscenty.alchemia.client.armour.MeshArmourItemRenderer;
-import me.moonscenty.alchemia.client.armour.MeshArmourLayer;
+import me.moonscenty.alchemia.client.armour.RobeExtensions;
+import me.moonscenty.alchemia.item.RobeItem;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
@@ -62,15 +57,6 @@ public class AlchemiaClientSetup {
         for (var arm : NodeStabilizerRenderer.ARMS) {
             event.register(arm);
         }
-        // worn armour that is eight carved meshes rather than a sheet. Nothing else names them, so every set is
-        // asked for here, and every sheet of every set: the meshes are shared and only the sheet differs
-        ArmourMeshes.SETS.forEach((set, sheets) -> {
-            for (String part : ArmourMeshes.PARTS) {
-                for (String sheet : sheets) {
-                    event.register(ArmourMeshes.model(set, sheet, part));
-                }
-            }
-        });
     }
 
     /** Tells the book how to open itself, which only the client knows how to do. */
@@ -107,6 +93,9 @@ public class AlchemiaClientSetup {
         // a dye's colour is already opaque, so unlike the phial and the label it needs no wrapping
         ModBlocks.NITOR.forEach((colour, flame) -> event.register(
                 (stack, tint) -> tint == 0 ? colour.getTextureDiffuseColor() : PLAIN, flame.get().asItem()));
+        // a robe in a slot is its cloth, which takes the dye, and the trim over it, which does not
+        ModItems.ROBES.values().forEach(robe -> event.register(
+                (stack, tint) -> tint == 0 ? FastColor.ARGB32.opaque(RobeItem.dyed(stack)) : PLAIN, robe.get()));
     }
 
     /**
@@ -130,24 +119,6 @@ public class AlchemiaClientSetup {
     private static int named(ItemStack stack) {
         Holder<Aspect> aspect = stack.get(ModDataComponents.ESSENTIA.get());
         return aspect == null ? PLAIN : FastColor.ARGB32.opaque(aspect.value().color());
-    }
-
-    /**
-     * Hangs the mesh armour layer on everything shaped like a person.
-     * <p>
-     * Mesh armour is drawn by a layer of our own rather than by the one that draws armour, so it has to be put on
-     * each body that might wear some: both builds of player, and the stand somebody leaves a robe on.
-     */
-    @SubscribeEvent
-    public static void addLayers(EntityRenderersEvent.AddLayers event) {
-        for (PlayerSkin.Model skin : event.getSkins()) {
-            if (event.getSkin(skin) instanceof PlayerRenderer drawn) {
-                drawn.addLayer(new MeshArmourLayer<>(drawn));
-            }
-        }
-        if (event.getRenderer(EntityType.ARMOR_STAND) instanceof ArmorStandRenderer stand) {
-            stand.addLayer(new MeshArmourLayer<>(stand));
-        }
     }
 
     @SubscribeEvent
@@ -206,14 +177,9 @@ public class AlchemiaClientSetup {
         // a foot on a boot and a lens in front of an eye: models, not sheets stretched over the body
         event.registerItem(ModArmourLayers.BOOTS_DRAWN, ModItems.TRAVELLER_BOOTS.get());
         event.registerItem(ModArmourLayers.GOGGLES_DRAWN, ModItems.GOGGLES.get());
-        // a piece of mesh armour in a bag is the same piece, stood up and looked at from the front
-        var meshInHand = new net.neoforged.neoforge.client.extensions.common.IClientItemExtensions() {
-            @Override
-            public net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer getCustomRenderer() {
-                return MeshArmourItemRenderer.get();
-            }
-        };
-        ModItems.ROBES.values().forEach(robe -> event.registerItem(meshInHand, robe.get()));
+        // robes in the original's violet until dyed; the void robe on the original's model when its jar is there
+        ModItems.ROBES.values().forEach(robe -> event.registerItem(
+                robe.get().drab() ? RobeExtensions.VOID : RobeExtensions.CLOTH, robe.get()));
         // fortress armour on the original's own model when its jar is there, plain armour when not
         ModItems.FORTRESS.values().forEach(piece -> event.registerItem(FortressExtensions.INSTANCE, piece.get()));
     }

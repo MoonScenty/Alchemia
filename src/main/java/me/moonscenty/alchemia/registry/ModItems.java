@@ -121,11 +121,7 @@ public class ModItems {
     public static final Map<String, DeferredItem<RobeItem>> ROBES = registerRobes();
 
     /**
-     * Fortress armour: four pieces, where the original had three.
-     * <p>
-     * It had no boots and its set bonus counted three slots because there was never a fourth to count. The
-     * meshes were drawn with feet, and plate worn with somebody else's shoes is not a suit of plate, so there
-     * are boots here and the set is four.
+     * Fortress armour: a helm, a cuirass and greaves, as the original had. There are no boots.
      */
     public static final Map<String, DeferredItem<FortressArmorItem>> FORTRESS = registerFortress();
 

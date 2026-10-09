@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "alchemia:item/void_robe_legs",
+    "layer1": "alchemia:item/void_robe_legs_overlay"
+  }
+}
