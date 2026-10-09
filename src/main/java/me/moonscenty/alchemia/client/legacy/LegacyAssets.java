@@ -286,6 +286,20 @@ public final class LegacyAssets {
 
     /** Step 9: armour and its sheets. */
     private static void gear(List<LegacyAsset> all) {
+        // the two metals' tools and plain armour: the original called alchemium thaumium
+        metalGear(all, "alchemium", "thaumium");
+        metalGear(all, "void", "void");
+        all.add(item("enchanted_fabric", "fabric", null));
+        all.add(item("focus_pouch", "focus_pouch", "focuspouch"));
+
+        // the boots and the goggles were plain armour in the original, one sheet each; the goggles' is twice the size
+        all.add(item("traveller_boots", "traveller_boots", "bootstraveler"));
+        all.add(item("goggles_of_revealing", "goggles_revealing", "gogglesrevealing"));
+        all.add(LegacyAsset.of("textures/models/armor/traveller_boots_layer_1.png")
+                .five("textures/models/armor/bootstraveler.png").four("textures/models/bootstraveler.png"));
+        all.add(LegacyAsset.of("textures/models/armor/goggles_layer_1.png")
+                .five("textures/models/armor/goggles.png").four("textures/models/goggles.png"));
+
         // fortress armour is one sheet for every piece; the game asks for it twice, as the outer and inner layer
         for (String layer : List.of("fortress_layer_1", "fortress_layer_2")) {
             all.add(LegacyAsset.of("textures/models/armor/" + layer + ".png")
@@ -316,6 +330,24 @@ public final class LegacyAssets {
         all.add(item("void_robe_chest_overlay", "void_robe_chest_over", "voidrobechestover"));
         all.add(item("void_robe_legs", "void_robe_legs", "voidrobelegs"));
         all.add(item("void_robe_legs_overlay", "void_robe_legs_over", "voidrobelegsover"));
+    }
+
+    /**
+     * A metal's five tools, four pieces of armour and the two sheets it is worn with. 1.8.9 wrote the names apart
+     * ({@code thaumium_pick}), 1.7.10 ran them together ({@code thaumiumpick}).
+     */
+    private static void metalGear(List<LegacyAsset> all, String ours, String original) {
+        String[][] pieces = {{"sword", "sword"}, {"pickaxe", "pick"}, {"axe", "axe"}, {"shovel", "shovel"},
+                {"hoe", "hoe"}, {"helmet", "helm"}, {"chestplate", "chest"}, {"leggings", "legs"},
+                {"boots", "boots"}};
+        for (String[] piece : pieces) {
+            all.add(item(ours + "_" + piece[0], original + "_" + piece[1], original + piece[1]));
+        }
+        for (int layer = 1; layer <= 2; layer++) {
+            all.add(LegacyAsset.of("textures/models/armor/" + ours + "_layer_" + layer + ".png")
+                    .five("textures/models/armor/" + original + "_" + layer + ".png")
+                    .four("textures/models/" + original + "_" + layer + ".png"));
+        }
     }
 
     /**

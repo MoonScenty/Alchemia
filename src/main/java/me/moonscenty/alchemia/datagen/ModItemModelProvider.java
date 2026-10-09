@@ -76,7 +76,9 @@ public class ModItemModelProvider extends ItemModelProvider {
                         .texture("layer1", modLoc("item/" + name + "_overlay"));
             }
         });
-        // the traveller's boots have a model of their own, in models/item/, and datagen does not write over it
+        // the boots and the goggles are pictures in the slot too, as the original drew them
+        basicItem(ModItems.TRAVELLER_BOOTS.get());
+        basicItem(ModItems.GOGGLES.get());
         basicItem(ModItems.IRON_CLUSTER.get());
         basicItem(ModItems.GOLD_CLUSTER.get());
         basicItem(ModItems.COPPER_CLUSTER.get());

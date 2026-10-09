@@ -12,7 +12,6 @@ import net.minecraft.util.FastColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import me.moonscenty.alchemia.block.entity.JarBlockEntity;
-import me.moonscenty.alchemia.client.armour.ModArmourLayers;
 import me.moonscenty.alchemia.client.particle.MoteParticle;
 import me.moonscenty.alchemia.registry.ModBlocks;
 import me.moonscenty.alchemia.Alchemia;
@@ -174,9 +173,6 @@ public class AlchemiaClientSetup {
     public static void registerClientExtensions(RegisterClientExtensionsEvent event) {
         event.registerBlock(PlainBreakParticles.INSTANCE,
                 ModBlocks.CRUCIBLE.get(), ModBlocks.JAR.get(), ModBlocks.TUBE_FILTER.get());
-        // a foot on a boot and a lens in front of an eye: models, not sheets stretched over the body
-        event.registerItem(ModArmourLayers.BOOTS_DRAWN, ModItems.TRAVELLER_BOOTS.get());
-        event.registerItem(ModArmourLayers.GOGGLES_DRAWN, ModItems.GOGGLES.get());
         // robes in the original's violet until dyed; the void robe on the original's model when its jar is there
         ModItems.ROBES.values().forEach(robe -> event.registerItem(
                 robe.get().drab() ? RobeExtensions.VOID : RobeExtensions.CLOTH, robe.get()));
@@ -188,13 +184,6 @@ public class AlchemiaClientSetup {
     @SubscribeEvent
     public static void registerParticles(RegisterParticleProvidersEvent event) {
         event.registerSpriteSet(ModParticles.MOTE.get(), MoteParticle.Maker::new);
-    }
-
-    /** The shapes the pieces of armour we draw as models are built from. */
-    @SubscribeEvent
-    public static void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
-        event.registerLayerDefinition(ModArmourLayers.TRAVELLER_BOOTS, ModArmourLayers::boots);
-        event.registerLayerDefinition(ModArmourLayers.GOGGLES, ModArmourLayers::goggles);
     }
 
     @SubscribeEvent
