@@ -76,6 +76,7 @@ public final class LegacyAssets {
         research(all);
         aura(all);
         wands(all);
+        essentia(all);
         gear(all);
         return List.copyOf(all);
     }
@@ -232,6 +233,37 @@ public final class LegacyAssets {
         all.add(LegacyAsset.of("textures/gui/arcane_workbench.png").five("textures/gui/gui_arcaneworkbench.png"));
         all.add(block("arcane_workbench_side", "arcane_workbench_side", null));
         all.add(block("arcane_workbench_top", "arcane_workbench_top", null));
+    }
+
+    /**
+     * Step 7: the crucible, the smelter, nitor, and the odds and ends of essentia work. Only what our models use the
+     * way the original's did: the jar, the alembic and the tubes are built differently and wait for their models.
+     */
+    private static void essentia(List<LegacyAsset> all) {
+        for (String face : List.of("bottom", "inner", "side", "top")) {
+            all.add(block("crucible_" + face, "crucible_" + face, null));
+        }
+        all.add(block("smelter_front", "smelter_basic_front_off", null));
+        all.add(block("smelter_front_on", "smelter_basic_front_on", null));
+        all.add(block("smelter_side", "smelter_basic_side", null));
+        all.add(block("smelter_top", "smelter_top", null));
+        // the flame is grey and dyed in code, the bead is not, as in the original
+        all.add(block("nitor", "nitor", null));
+        all.add(block("nitor_core", "nitor_core", null));
+
+        all.add(item("alumentum", "alumentum", null));
+        // grey, and painted by whatever it holds
+        all.add(item("crystallized_essence", "crystal_essence", null));
+        all.add(item("filter", "filter", null));
+        all.add(item("jar_brace", "jar_brace", null));
+        all.add(item("jar_label", "label", null));
+        all.add(item("jar_label_overlay", "label_overlay", null));
+        all.add(item("phial", "phial", null));
+        all.add(item("phial_contents", "phial_overlay", null));
+        all.add(item("void_seed", "void_seed", null));
+        all.add(item("void_ingot", "ingot_void", "voidingot"));
+        all.add(item("void_nugget", "nugget_void", "nuggetvoid"));
+        all.add(item("void_plate", "void_plate", null));
     }
 
     private static LegacyAsset wandPart(String ours, String original) {
