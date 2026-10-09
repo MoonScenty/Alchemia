@@ -137,6 +137,13 @@ public final class LegacyAssets {
                     .five("textures/gui/gui_research_back_" + (i + 1) + ".jpg").fromJpeg());
         }
         all.add(LegacyAsset.of("textures/gui/research_overlay.png").five("textures/gui/gui_research_back_over.png"));
+
+        // the research table: the screen is laid out as the original's was, so its panel goes straight in, with the
+        // parchment the note is spread on and the two plates its cells are drawn with
+        all.add(LegacyAsset.of("textures/gui/research_table.png").five("textures/gui/gui_research_table.png"));
+        all.add(LegacyAsset.of("textures/gui/research_parchment.png").five("textures/research/parchment3.png"));
+        all.add(LegacyAsset.of("textures/gui/research_hex.png").five("textures/gui/hex1.png"));
+        all.add(LegacyAsset.of("textures/gui/research_hex_lit.png").five("textures/gui/hex2.png"));
     }
 
     /** Step 9: armour and its sheets. */

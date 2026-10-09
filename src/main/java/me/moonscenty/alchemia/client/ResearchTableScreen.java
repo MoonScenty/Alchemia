@@ -2,10 +2,16 @@ package me.moonscenty.alchemia.client;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
+
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.math.Axis;
 
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.aspect.Aspect;
@@ -17,113 +23,110 @@ import me.moonscenty.alchemia.research.NoteSolving;
 import me.moonscenty.alchemia.research.ResearchEntry;
 import me.moonscenty.alchemia.research.ResearchNote;
 import net.minecraft.ChatFormatting;
-import com.mojang.blaze3d.systems.RenderSystem;
-
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Inventory;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 /**
- * The desk as the reader sees it.
+ * The desk as the reader sees it, laid out as the original laid it out.
  * <p>
- * The board is laid out on the leather, what the sheet still holds is racked down the left, and the two dishes at the
- * foot of the panel are where two of those are mixed into the one thing they make between them.
+ * A wooden panel with the scribing tools and the note in the two holders at the top, what the note still holds
+ * racked in a five by five grid down the left, the two dishes and the button that mixes them at its foot, and the
+ * note itself spread on a sheet of parchment over the leather. The places, the sizes and the way the sheet is drawn
+ * are the original's, read out of its screen; the pictures are the original's when its jar is there and ours,
+ * painted to the same layout, when it is not.
  */
 public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMenu> {
     private static final ResourceLocation PANEL = Alchemia.id("textures/gui/research_table.png");
-    /** The letters that settle on the leather while the reader works; see thaumref/tools/gen_script.py. */
+    private static final ResourceLocation PARCHMENT = Alchemia.id("textures/gui/research_parchment.png");
+    private static final ResourceLocation HEX = Alchemia.id("textures/gui/research_hex.png");
+    private static final ResourceLocation HEX_LIT = Alchemia.id("textures/gui/research_hex_lit.png");
+    private static final ResourceLocation ORB = Alchemia.id("textures/particle/mote.png");
     private static final ResourceLocation SCRIPT = Alchemia.id("textures/misc/script.png");
-    /**
-     * Cell plates exist at these widths and are only ever drawn at one of them.
-     * <p>
-     * The screen picks the largest that fits rather than scaling one to taste: a sprite stretched by some fraction is
-     * resampled by nearest neighbour, which leaves its outline a pixel thick in places and two in others.
-     */
-    private static final int[] CELL_SIZES = {32, 24, 20, 16};
-    /**
-     * How far apart cells of each size sit: across, then down.
-     * <p>
-     * Whole numbers rather than the irrational height of a regular hexagon, and the second of each pair even, since
-     * odd columns sit half a pitch down. Cells then land on exactly the pixels their plates were drawn for, and the
-     * edge two neighbours share is the same pixels twice over instead of two lines a hair apart.
-     * <p>
-     * These are measured off MoonScenty's drawing by thaumref/tools/apply_user_hex.py, not worked out from a regular
-     * hexagon, since the drawing is not quite one; redraw the plate and run that again. The measurement has a couple
-     * of pixels of daylight added, so the board reads as separate cells rather than one mesh.
-     */
-    private static final int[][] CELL_PITCH = {{22, 28}, {17, 22}, {14, 18}, {12, 16}};
 
     private static final int SHEET = 256;
-    private static final int PANEL_W = 256;
-    private static final int PANEL_H = 231;
+    /** The panel proper, and under it the narrower plate the inventory sits in. */
+    private static final int PANEL_W = 255;
+    private static final int PANEL_H = 167;
+    private static final int PLATE_X = 40;
+    private static final int PLATE_FROM_Y = 166;
+    private static final int PLATE_W = 184;
+    private static final int PLATE_H = 88;
 
-    /** The leather the board is laid out on. */
-    private static final int BOARD_X = 85;
-    private static final int BOARD_Y = 7;
-    private static final int BOARD_W = 164;
-    private static final int BOARD_H = 138;
-    /** Kept clear of the gilding around the leather, so a cell never sits on the frame. */
-    private static final int BOARD_PAD = 4;
+    /** The parchment the note is spread on, and the middle of it, where the note's centre cell sits. */
+    private static final int BOARD_X = 94;
+    private static final int BOARD_Y = 8;
+    private static final int BOARD_SIZE = 150;
+    private static final int CENTRE_X = BOARD_X + BOARD_SIZE / 2;
+    private static final int CENTRE_Y = BOARD_Y + BOARD_SIZE / 2;
+    /** How big a cell is: the distance from its middle to a corner. */
+    private static final double CELL = 9.0;
+    /** A cell's plate is drawn this wide, overlapping its neighbours a little, as the original's were. */
+    private static final int PLATE = 16;
+    private static final float EMPTY_ALPHA = 0.25F;
+    /** A written aspect that does not yet join up with anything the subject pinned is drawn this faintly. */
+    private static final float LOOSE_ALPHA = 0.66F;
 
-    /** The recess down the left of the panel, where what the sheet holds is racked up, a page at a time. */
-    private static final int POOL_X = 7;
-    private static final int POOL_Y = 31;
-    private static final int POOL_COLUMNS = 4;
-    private static final int POOL_ROWS = 4;
-    private static final int POOL_STEP = 18;
-    private static final int POOL_PAGE = POOL_COLUMNS * POOL_ROWS;
+    /** The rack: five down and five across, filled a column at a time, and turned a column at a time. */
+    private static final int POOL_X = 10;
+    private static final int POOL_Y = 40;
+    private static final int POOL_SIDE = 5;
+    private static final int POOL_STEP = 16;
+    private static final int POOL_PAGE = POOL_SIDE * POOL_SIDE;
+
+    // The page arrows under the rack. They are only drawn while there is a column that way to turn to.
+    private static final int ARROW_W = 24;
+    private static final int ARROW_H = 8;
+    private static final int PREV_X = 27;
+    private static final int NEXT_X = 51;
+    private static final int ARROW_Y = 121;
+    private static final int PREV_FROM_X = 184;
+    private static final int NEXT_FROM_X = 208;
+    private static final int ARROW_FROM_Y = 208;
 
     // The two dishes, and the button between them that mixes what is in them.
-    private static final int DISH_A_X = 7;
-    private static final int DISH_B_X = 61;
-    private static final int DISH_Y = 129;
-    private static final int MIX_X = 32;
-    private static final int MIX_Y = 132;
-    private static final int MIX_W = 20;
-    private static final int MIX_H = 10;
-    private static final int MIX_FROM_X = 48;
-    private static final int MIX_FROM_Y = 246;
-
-    // The two page buttons under the rack. Each is painted faintly into the panel, and the lit sprite goes over it
-    // only while there is a page that way to turn to.
-    private static final int TURN = 20;
-    private static final int PREV_X = 6;
-    private static final int NEXT_X = 58;
-    private static final int TURN_Y = 105;
-    private static final int PREV_FROM_X = 0;
-    private static final int NEXT_FROM_X = 24;
-    private static final int TURN_FROM_Y = 236;
+    private static final int DISH_A_X = 13;
+    private static final int DISH_B_X = 71;
+    private static final int DISH_Y = 139;
+    private static final int MIX_X = 35;
+    private static final int MIX_Y = 139;
+    private static final int MIX_W = 32;
+    private static final int MIX_H = 16;
+    private static final int MIX_FROM_X = 184;
+    private static final int MIX_FROM_Y = 184;
+    private static final int MIX_PRESSED_FROM_Y = 168;
 
     private static final int ICON = 16;
 
-    // The script that settles on the leather. It says nothing: it is there so the page looks written on rather
-    // than blank, and so the empty half of a torn board is not simply dead space.
-    // sixteen, as many as the original's strip has, so its strip and ours read the same
+    // The script that settles on the parchment. It says nothing: it is there so the sheet looks written on rather
+    // than blank. Sixteen letters, as many as the original's strip has, each drawn small and turned on its side.
     private static final int LETTERS = 16;
     private static final int LETTER = 16;
+    private static final int LETTER_DRAWN = 10;
     /** How often another letter is tried for, and how far out one may land. */
     private static final long SETTLES = 250L;
-    private static final int SPAN = 7;
+    private static final int SPAN = 60;
     /** A letter lasts somewhere in here, then is gone. */
     private static final long LASTS = 15_000L;
     private static final long LASTS_UP_TO = 10_000L;
-    /** How dark a letter ever gets. Faint enough to read the board straight through it. */
+    /** How dark a letter ever gets. Faint enough to read the sheet straight through it. */
     private static final float FAINTEST = 0.33F;
 
     /** What the reader has picked up and is about to write down. */
     private Holder<Aspect> held;
     private Holder<Aspect> dishA;
     private Holder<Aspect> dishB;
-    /** Which page of the rack is showing. Clamped every time it is read, since the sheet's stock grows as it mixes. */
+    /** How many columns the rack has been turned. Clamped every time it is read, as the sheet's stock changes. */
     private int page;
 
-    /** A letter on the leather, and when it settled and when it will have gone. */
+    /** A letter on the parchment, and when it settled and when it will have gone. */
     private record Rune(long born, long gone, int letter) {
     }
 
@@ -135,18 +138,19 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
     public ResearchTableScreen(ResearchTableMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);
         imageWidth = PANEL_W;
-        imageHeight = PANEL_H;
+        imageHeight = PANEL_H + PLATE_H;
     }
 
     @Override
     protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
         graphics.blit(PANEL, leftPos, topPos, 0, 0, PANEL_W, PANEL_H, SHEET, SHEET);
+        graphics.blit(PANEL, leftPos + PLATE_X, topPos + PANEL_H, 0, PLATE_FROM_Y, PLATE_W, PLATE_H, SHEET, SHEET);
     }
 
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         super.render(graphics, mouseX, mouseY, partialTick);
-        drawBoard(graphics, mouseX, mouseY);
+        drawBoard(graphics, mouseX, mouseY, partialTick);
         drawPool(graphics);
         drawButtons(graphics, mouseX, mouseY);
         drawDishes(graphics);
@@ -160,111 +164,138 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
 
     // --- the board ---------------------------------------------------------
 
-    /**
-     * Where a board sits and how big its cells are drawn.
-     * <p>
-     * Measured from the cells the note actually has rather than from the ring it was cut out of: a note has pieces
-     * torn out of it, so what is left is rarely centred on the middle of that ring. Sizing and centring on the ring
-     * would push a lopsided board off one edge of the leather and leave a gap at the other.
-     *
-     * @param size how wide one cell is drawn
-     * @param originX where the cell at column zero of the board's own reckoning lands
-     */
-    private record Layout(int size, int across, int down, int originX, int originY) {
-        int x(HexGrid.Hex at) {
-            return originX + across * at.q() - size / 2;
-        }
-
-        int y(HexGrid.Hex at) {
-            // down is even, so a column offset by half a pitch still lands on a whole pixel
-            return originY + (down * (2 * at.r() + at.q())) / 2 - size / 2;
-        }
+    /** Where the middle of a cell lands on the screen, worked out the way the original worked it out. */
+    private double cellX(HexGrid.Hex at) {
+        return leftPos + CENTRE_X + CELL * 1.5 * at.q();
     }
 
-    private Layout layout(ResearchNote note) {
-        int lowQ = Integer.MAX_VALUE;
-        int highQ = Integer.MIN_VALUE;
-        int lowS = Integer.MAX_VALUE;
-        int highS = Integer.MIN_VALUE;
-        for (ResearchNote.Cell cell : note.cells()) {
-            int q = cell.at().q();
-            int s = 2 * cell.at().r() + q;      // twice the row, so half steps stay whole
-            lowQ = Math.min(lowQ, q);
-            highQ = Math.max(highQ, q);
-            lowS = Math.min(lowS, s);
-            highS = Math.max(highS, s);
-        }
-
-        // a cell reaches half its width either side of its middle, and half its height above and below
-        int across = BOARD_W - 2 * BOARD_PAD;
-        int down = BOARD_H - 2 * BOARD_PAD;
-        int chosen = CELL_SIZES.length - 1;
-        for (int index = 0; index < CELL_SIZES.length; index++) {
-            int wide = CELL_PITCH[index][0] * (highQ - lowQ) + CELL_SIZES[index];
-            int tall = CELL_PITCH[index][1] * (highS - lowS) / 2 + CELL_PITCH[index][1];
-            if (wide <= across && tall <= down) {
-                chosen = index;
-                break;
-            }
-        }
-
-        int size = CELL_SIZES[chosen];
-        int pitchX = CELL_PITCH[chosen][0];
-        int pitchY = CELL_PITCH[chosen][1];
-        int middleX = leftPos + BOARD_X + BOARD_W / 2;
-        int middleY = topPos + BOARD_Y + BOARD_H / 2;
-        return new Layout(size, pitchX, pitchY,
-                middleX - pitchX * (lowQ + highQ) / 2,
-                middleY - pitchY * (lowS + highS) / 4);
+    private double cellY(HexGrid.Hex at) {
+        return topPos + CENTRE_Y + CELL * Math.sqrt(3.0) * (at.r() + at.q() / 2.0);
     }
 
-    private void drawBoard(GuiGraphics graphics, int mouseX, int mouseY) {
+    private void drawBoard(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         ResearchNote note = menu.note();
         if (note == null) {
             return;
         }
-        Layout layout = layout(note);
-        HexGrid.Hex over = cellUnder(mouseX, mouseY);
-
-        // clipped to the leather, so nothing can ever creep onto the boards around it
+        graphics.blit(PARCHMENT, leftPos + BOARD_X, topPos + BOARD_Y, 0, 0, BOARD_SIZE, BOARD_SIZE, SHEET, SHEET);
+        // clipped to the sheet, so nothing can ever creep onto the wood around it
         graphics.enableScissor(leftPos + BOARD_X, topPos + BOARD_Y,
-                leftPos + BOARD_X + BOARD_W, topPos + BOARD_Y + BOARD_H);
-        drawScript(graphics, note, layout);
-        for (ResearchNote.Cell cell : note.cells()) {
-            int x = layout.x(cell.at());
-            int y = layout.y(cell.at());
-            int size = layout.size();
+                leftPos + BOARD_X + BOARD_SIZE, topPos + BOARD_Y + BOARD_SIZE);
+        drawScript(graphics, note);
 
-            String kind = cell.pinned() ? "pinned"
-                    : cell.at().equals(over) && !note.complete() ? "lit" : "empty";
-            graphics.blitSprite(Alchemia.id("research/hex_" + kind + "_" + size), x, y, size, size);
-            cell.aspect().ifPresent(aspect ->
-                    drawAspect(graphics, aspect, x + (size - ICON) / 2, y + (size - ICON) / 2));
+        Set<HexGrid.Hex> joined = joinedToPinned(note);
+        float ticks = minecraft != null && minecraft.player != null ? minecraft.player.tickCount + partialTick : 0F;
+        drawLinks(graphics, note, joined, ticks);
+
+        HexGrid.Hex over = cellUnder(mouseX, mouseY);
+        if (!note.complete()) {
+            for (ResearchNote.Cell cell : note.cells()) {
+                if (cell.pinned()) {
+                    drawOrb(graphics, cell.at(), ticks);
+                } else if (cell.at().equals(over)) {
+                    drawPlate(graphics, cell.at(), HEX_LIT, 1F, true);
+                } else {
+                    drawPlate(graphics, cell.at(), HEX, EMPTY_ALPHA, false);
+                }
+            }
+        }
+        for (ResearchNote.Cell cell : note.cells()) {
+            float alpha = cell.pinned() || joined.contains(cell.at()) ? 1F : LOOSE_ALPHA;
+            cell.aspect().ifPresent(aspect -> drawAspect(graphics, aspect,
+                    cellX(cell.at()) - ICON / 2.0, cellY(cell.at()) - ICON / 2.0, alpha));
         }
         graphics.disableScissor();
     }
 
-    // --- the script on the leather -----------------------------------------
+    /** Every cell that hangs off something the subject pinned, by a chain of aspects that hold together. */
+    private static Set<HexGrid.Hex> joinedToPinned(ResearchNote note) {
+        Set<HexGrid.Hex> joined = new HashSet<>();
+        for (ResearchNote.Cell pinned : note.pinnedCells()) {
+            joined.addAll(NoteSolving.reach(note, pinned.at()));
+        }
+        return joined;
+    }
+
+    /** One cell's plate, centred on the cell. A lit one is added on rather than laid over, so it glows. */
+    private void drawPlate(GuiGraphics graphics, HexGrid.Hex at, ResourceLocation plate, float alpha, boolean glow) {
+        RenderSystem.enableBlend();
+        if (glow) {
+            RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
+        } else {
+            RenderSystem.defaultBlendFunc();
+        }
+        graphics.setColor(1F, 1F, 1F, alpha);
+        graphics.pose().pushPose();
+        graphics.pose().translate(cellX(at), cellY(at), 0);
+        graphics.blit(plate, -PLATE / 2, -PLATE / 2, PLATE, PLATE, 0, 0, 1, 1, 1, 1);
+        graphics.pose().popPose();
+        graphics.setColor(1F, 1F, 1F, 1F);
+        RenderSystem.defaultBlendFunc();
+    }
+
+    /** A pinned cell sits on a soft light that breathes, each channel at its own pace. */
+    private void drawOrb(GuiGraphics graphics, HexGrid.Hex at, float ticks) {
+        float red = 0.7F + Mth.sin((float) (ticks / 10.0)) * 0.15F;
+        float green = 0.7F + Mth.sin((float) (ticks / 11.0)) * 0.15F;
+        float blue = 0.7F + Mth.sin((float) (ticks / 12.0)) * 0.15F;
+        RenderSystem.enableBlend();
+        RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
+        graphics.setColor(red, green, blue, 1F);
+        graphics.pose().pushPose();
+        graphics.pose().translate(cellX(at), cellY(at), 0);
+        graphics.blit(ORB, -PLATE, -PLATE, 2 * PLATE, 2 * PLATE, 0, 0, 1, 1, 1, 1);
+        graphics.pose().popPose();
+        graphics.setColor(1F, 1F, 1F, 1F);
+        RenderSystem.defaultBlendFunc();
+    }
+
+    /** A line between every two neighbouring cells of a chain off a pinned aspect, glowing a little in and out. */
+    private void drawLinks(GuiGraphics graphics, ResearchNote note, Set<HexGrid.Hex> joined, float ticks) {
+        float bright = 0.3F + Mth.sin(ticks * 0.3F) * 0.3F + 0.3F;
+        int colour = 0xCC000000 | Math.round(bright * 255) << 16 | Math.round(0.6F * 255) << 8 | Math.round(0.8F * 255);
+        Set<HexGrid.Hex> done = new HashSet<>();
+        for (HexGrid.Hex from : joined) {
+            Holder<Aspect> here = note.cellAt(from).flatMap(ResearchNote.Cell::aspect).orElse(null);
+            if (here == null) {
+                continue;
+            }
+            done.add(from);
+            for (HexGrid.Hex to : from.neighbours()) {
+                Holder<Aspect> there = note.cellAt(to).flatMap(ResearchNote.Cell::aspect).orElse(null);
+                if (there != null && !done.contains(to) && joined.contains(to) && NoteSolving.linked(here, there)) {
+                    line(graphics, cellX(from), cellY(from), cellX(to), cellY(to), colour);
+                }
+            }
+        }
+    }
+
+    private static void line(GuiGraphics graphics, double x1, double y1, double x2, double y2, int colour) {
+        double length = Math.hypot(x2 - x1, y2 - y1);
+        graphics.pose().pushPose();
+        graphics.pose().translate(x1, y1, 0);
+        graphics.pose().mulPose(Axis.ZP.rotation((float) Math.atan2(y2 - y1, x2 - x1)));
+        graphics.fill(0, -1, (int) Math.round(length), 1, colour);
+        graphics.pose().popPose();
+    }
+
+    // --- the script on the parchment ---------------------------------------
 
     /**
-     * Letters settling on the empty parts of the leather and fading off again.
+     * Letters settling on the empty parts of the sheet and fading off again.
      * <p>
-     * They spell nothing and mean nothing. A note is torn out of a ring, so most boards leave a good deal of bare
-     * leather around them, and this is what keeps that from reading as a blank page.
-     * <p>
-     * They land on the board's own grid rather than anywhere at all, which keeps them out from under the cells and
-     * lines them up with what is written.
+     * They spell nothing and mean nothing. They land on the board's own grid, so they stay out from under the cells
+     * and line up with what is written; a place is picked anywhere within reach of the middle, as the original did.
      */
-    private void drawScript(GuiGraphics graphics, ResearchNote note, Layout layout) {
+    private void drawScript(GuiGraphics graphics, ResearchNote note) {
         if (!note.research().equals(written)) {
             // a different note is a different page; what settled on the last one does not carry over
             runes.clear();
             written = note.research();
         }
         long now = System.currentTimeMillis();
-        settle(note, layout, now);
+        settle(note, now);
 
-        // left on afterwards: what is drawn next is the cells and the aspects, which are alpha the whole way through
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         runes.values().removeIf(rune -> rune.gone() <= now);
@@ -275,63 +306,57 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
             float alpha = through < 0.25F ? through * 2F : through > 0.5F ? 1F - through : 0.5F;
 
             graphics.setColor(0F, 0F, 0F, alpha * FAINTEST);
-            graphics.blit(SCRIPT, letterX(layout, entry.getKey()), letterY(layout, entry.getKey()),
+            graphics.pose().pushPose();
+            graphics.pose().translate(cellX(entry.getKey()), cellY(entry.getKey()), 0);
+            graphics.pose().mulPose(Axis.ZN.rotationDegrees(90F));
+            graphics.blit(SCRIPT, -LETTER_DRAWN / 2, -LETTER_DRAWN / 2, LETTER_DRAWN, LETTER_DRAWN,
                     rune.letter() * LETTER, 0, LETTER, LETTER, LETTERS * LETTER, LETTER);
+            graphics.pose().popPose();
         }
         graphics.setColor(1F, 1F, 1F, 1F);
     }
 
     /** Tries to put one more letter down. Nothing happens most of the time, which is what makes them drift in. */
-    private void settle(ResearchNote note, Layout layout, long now) {
+    private void settle(ResearchNote note, long now) {
         if (now < nextRune) {
             return;
         }
         nextRune = now + SETTLES;
-
-        HexGrid.Hex at = new HexGrid.Hex(random.nextInt(2 * SPAN + 1) - SPAN, random.nextInt(2 * SPAN + 1) - SPAN);
+        HexGrid.Hex at = toHex(random.nextInt(2 * SPAN) - SPAN, random.nextInt(2 * SPAN) - SPAN);
         if (runes.containsKey(at) || note.cellAt(at).isPresent()) {
-            return;
-        }
-        int x = letterX(layout, at);
-        int y = letterY(layout, at);
-        // whole letters only: a half one sliced off by the scissor would read as a smudge on the frame
-        if (x < leftPos + BOARD_X || x + LETTER > leftPos + BOARD_X + BOARD_W
-                || y < topPos + BOARD_Y || y + LETTER > topPos + BOARD_Y + BOARD_H) {
             return;
         }
         runes.put(at, new Rune(now, now + LASTS + random.nextInt((int) LASTS_UP_TO), random.nextInt(LETTERS)));
     }
 
-    private int letterX(Layout layout, HexGrid.Hex at) {
-        return layout.x(at) + (layout.size() - LETTER) / 2;
+    /** The cell a point lies in, measured from the middle of the sheet. */
+    private static HexGrid.Hex toHex(double x, double y) {
+        double q = 2.0 / 3.0 * x / CELL;
+        double r = (Math.sqrt(3.0) / 3.0 * y - x / 3.0) / CELL;
+        // round in cube coordinates, so a point near an edge goes to the nearer cell rather than a far one
+        double s = -q - r;
+        long rq = Math.round(q);
+        long rr = Math.round(r);
+        long rs = Math.round(s);
+        double dq = Math.abs(rq - q);
+        double dr = Math.abs(rr - r);
+        double ds = Math.abs(rs - s);
+        if (dq > dr && dq > ds) {
+            rq = -rr - rs;
+        } else if (dr > ds) {
+            rr = -rq - rs;
+        }
+        return new HexGrid.Hex((int) rq, (int) rr);
     }
 
-    private int letterY(Layout layout, HexGrid.Hex at) {
-        return layout.y(at) + (layout.size() - LETTER) / 2;
-    }
-
-    /** The cell the pointer is over, if any. */
+    /** The cell the pointer is over, if the note has one there. */
     private HexGrid.Hex cellUnder(int mouseX, int mouseY) {
         ResearchNote note = menu.note();
-        if (note == null) {
+        if (note == null || !within(mouseX, mouseY, BOARD_X, BOARD_Y, BOARD_SIZE, BOARD_SIZE)) {
             return null;
         }
-        Layout layout = layout(note);
-        int size = layout.size();
-        HexGrid.Hex closest = null;
-        double best = Double.MAX_VALUE;
-
-        for (ResearchNote.Cell cell : note.cells()) {
-            double dx = mouseX - (layout.x(cell.at()) + size / 2.0);
-            double dy = mouseY - (layout.y(cell.at()) + size / 2.0);
-            double away = dx * dx + dy * dy;
-            if (away < best) {
-                best = away;
-                closest = cell.at();
-            }
-        }
-        double reach = layout.down() / 2.0;
-        return best <= reach * reach ? closest : null;
+        HexGrid.Hex at = toHex(mouseX - leftPos - CENTRE_X, mouseY - topPos - CENTRE_Y);
+        return note.cellAt(at).isPresent() ? at : null;
     }
 
     // --- what the sheet still holds ----------------------------------------
@@ -354,36 +379,37 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
         return stock;
     }
 
-    /** How many pages the sheet's stock fills, never fewer than one. */
-    private int pages() {
-        return Math.max(1, (pool().size() + POOL_PAGE - 1) / POOL_PAGE);
+    /** How many columns the rack can be turned by before its last column is in view. */
+    private int lastPage() {
+        int over = pool().size() - POOL_PAGE;
+        return over <= 0 ? 0 : (over + POOL_SIDE - 1) / POOL_SIDE;
     }
 
     /**
-     * The page being shown, brought back within range first.
+     * The turn being shown, brought back within range first.
      * <p>
-     * Mixing takes two aspects off the sheet and puts one back, so the stock can shrink out from under a page that
-     * was turned to, and the last page can stop existing while the reader is standing on it.
+     * Mixing takes two aspects off the sheet and puts one back, so the stock can shrink out from under a turn that
+     * was made, and the last column can stop existing while the reader is looking at it.
      */
     private int page() {
-        page = Math.max(0, Math.min(page, pages() - 1));
+        page = Math.max(0, Math.min(page, lastPage()));
         return page;
     }
 
-    /** What is on the page being shown. */
+    /** What is in view. */
     private List<Holder<Aspect>> shown() {
         List<Holder<Aspect>> stock = pool();
-        int from = page() * POOL_PAGE;
+        int from = page() * POOL_SIDE;
         return stock.subList(Math.min(from, stock.size()), Math.min(from + POOL_PAGE, stock.size()));
     }
 
-    /** Where the nth aspect of the page being shown is drawn. */
+    /** Where the nth aspect in view is drawn: down a column first, then on to the next. */
     private int poolX(int place) {
-        return leftPos + POOL_X + (place % POOL_COLUMNS) * POOL_STEP;
+        return leftPos + POOL_X + (place / POOL_SIDE) * POOL_STEP;
     }
 
     private int poolY(int place) {
-        return topPos + POOL_Y + (place / POOL_COLUMNS) * POOL_STEP;
+        return topPos + POOL_Y + (place % POOL_SIDE) * POOL_STEP;
     }
 
     private void drawPool(GuiGraphics graphics) {
@@ -400,38 +426,35 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
             if (aspect.equals(held)) {
                 graphics.fill(x - 1, y - 1, x + ICON + 1, y + ICON + 1, 0x80FFD37A);
             }
-            drawAspect(graphics, aspect, x, y);
+            drawAspect(graphics, aspect, x, y, 1F);
+            graphics.pose().pushPose();
+            graphics.pose().translate(0, 0, 200);
             graphics.drawString(font, String.valueOf(note.budget().get(aspect)),
                     x + ICON - 6, y + ICON - 6, 0xFFFFE9C0, true);
+            graphics.pose().popPose();
         }
     }
 
     // --- the three buttons -------------------------------------------------
 
-    /**
-     * The buttons that can be pressed, drawn over the faint shapes the panel already carries.
-     * <p>
-     * A button that cannot do anything is simply left as that faint shape rather than being greyed out, which is how
-     * the panel was painted: the recess is the off state and the sprite is the on one.
-     */
+    /** The arrows and the mixing button, drawn only while they would do something. */
     private void drawButtons(GuiGraphics graphics, int mouseX, int mouseY) {
         ResearchNote note = menu.note();
         if (note == null || note.complete()) {
             return;
         }
-        button(graphics, mouseX, mouseY, PREV_X, TURN_Y, TURN, TURN, PREV_FROM_X, TURN_FROM_Y, page() > 0);
-        button(graphics, mouseX, mouseY, NEXT_X, TURN_Y, TURN, TURN, NEXT_FROM_X, TURN_FROM_Y, page() < pages() - 1);
-        button(graphics, mouseX, mouseY, MIX_X, MIX_Y, MIX_W, MIX_H, MIX_FROM_X, MIX_FROM_Y, mixResult().isPresent());
-    }
-
-    private void button(GuiGraphics graphics, int mouseX, int mouseY,
-                        int x, int y, int wide, int tall, int fromX, int fromY, boolean live) {
-        if (!live) {
-            return;
+        if (page() > 0) {
+            graphics.blit(PANEL, leftPos + PREV_X, topPos + ARROW_Y, PREV_FROM_X, ARROW_FROM_Y, ARROW_W, ARROW_H,
+                    SHEET, SHEET);
         }
-        graphics.blit(PANEL, leftPos + x, topPos + y, fromX, fromY, wide, tall, SHEET, SHEET);
-        if (within(mouseX, mouseY, x, y, wide, tall)) {
-            graphics.fill(leftPos + x, topPos + y, leftPos + x + wide, topPos + y + tall, 0x30FFFFFF);
+        if (page() < lastPage()) {
+            graphics.blit(PANEL, leftPos + NEXT_X, topPos + ARROW_Y, NEXT_FROM_X, ARROW_FROM_Y, ARROW_W, ARROW_H,
+                    SHEET, SHEET);
+        }
+        if (mixResult().isPresent()) {
+            boolean pressing = within(mouseX, mouseY, MIX_X, MIX_Y, MIX_W, MIX_H);
+            graphics.blit(PANEL, leftPos + MIX_X, topPos + MIX_Y, MIX_FROM_X,
+                    pressing ? MIX_PRESSED_FROM_Y : MIX_FROM_Y, MIX_W, MIX_H, SHEET, SHEET);
         }
     }
 
@@ -447,10 +470,10 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
             return;
         }
         if (dishA != null) {
-            drawAspect(graphics, dishA, leftPos + DISH_A_X, topPos + DISH_Y);
+            drawAspect(graphics, dishA, leftPos + DISH_A_X, topPos + DISH_Y, 1F);
         }
         if (dishB != null) {
-            drawAspect(graphics, dishB, leftPos + DISH_B_X, topPos + DISH_Y);
+            drawAspect(graphics, dishB, leftPos + DISH_B_X, topPos + DISH_Y, 1F);
         }
     }
 
@@ -469,16 +492,18 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
      * <p>
      * Blending is turned on every single time rather than once for the lot. Drawing a string ends the font's batch,
      * and ending a batch puts back the state that batch wanted, which for text means blending off. So the first
-     * aspect in a row would come out soft and every one after it hard: a mask meant to fade at the edge would be
-     * fully opaque wherever it was not fully clear, and a round icon would read as a solid disc. That is where the
-     * black rim around these icons came from, back when their edges were still dark.
+     * aspect in a row would come out soft and every one after it hard.
      */
-    private void drawAspect(GuiGraphics graphics, Holder<Aspect> aspect, int x, int y) {
+    private void drawAspect(GuiGraphics graphics, Holder<Aspect> aspect, double x, double y, float alpha) {
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         int colour = aspect.value().color();
-        graphics.setColor(((colour >> 16) & 0xFF) / 255F, ((colour >> 8) & 0xFF) / 255F, (colour & 0xFF) / 255F, 1F);
-        graphics.blit(aspect.value().icon(), x, y, 0, 0, ICON, ICON, ICON, ICON);
+        graphics.setColor(((colour >> 16) & 0xFF) / 255F, ((colour >> 8) & 0xFF) / 255F, (colour & 0xFF) / 255F,
+                alpha);
+        graphics.pose().pushPose();
+        graphics.pose().translate(x, y, 0);
+        graphics.blit(aspect.value().icon(), 0, 0, 0, 0, ICON, ICON, ICON, ICON);
+        graphics.pose().popPose();
         graphics.setColor(1F, 1F, 1F, 1F);
     }
 
@@ -495,12 +520,12 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
             return super.mouseClicked(mouseX, mouseY, button);
         }
 
-        if (within(mouseX, mouseY, PREV_X, TURN_Y, TURN, TURN) && page() > 0) {
+        if (within(mouseX, mouseY, PREV_X, ARROW_Y, ARROW_W, ARROW_H) && page() > 0) {
             page--;
             click();
             return true;
         }
-        if (within(mouseX, mouseY, NEXT_X, TURN_Y, TURN, TURN) && page() < pages() - 1) {
+        if (within(mouseX, mouseY, NEXT_X, ARROW_Y, ARROW_W, ARROW_H) && page() < lastPage()) {
             page++;
             click();
             return true;

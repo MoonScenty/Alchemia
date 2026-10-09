@@ -30,13 +30,13 @@ public class ResearchTableMenu extends AbstractContainerMenu {
     public static final int SLOT_NOTES = ResearchTableBlockEntity.SLOT_NOTES;
     private static final int TABLE_SLOTS = 2;
 
-    // Where the slots sit on the drawn panel, measured off the recesses in the panel art.
-    private static final int TOOLS_X = 7;
-    private static final int NOTES_X = 61;
-    private static final int TABLE_Y = 7;
+    // Where the slots sit on the drawn panel: the original's places, so its panel and ours both fit
+    private static final int TOOLS_X = 14;
+    private static final int NOTES_X = 70;
+    private static final int TABLE_Y = 10;
     private static final int PACK_X = 48;
-    private static final int PACK_Y = 150;
-    private static final int BELT_Y = 208;
+    private static final int PACK_Y = 175;
+    private static final int BELT_Y = 233;
     private static final int PITCH = 18;
 
     private final Container table;
