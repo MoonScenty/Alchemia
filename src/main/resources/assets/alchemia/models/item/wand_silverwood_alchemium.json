@@ -1,8 +1,8 @@
 {
   "textures": {
-    "0": "alchemia:block/alchemium_block",
-    "1": "alchemia:block/silverwood_planks",
-    "particle": "alchemia:block/silverwood_planks"
+    "0": "alchemia:item/wand/cap_alchemium",
+    "1": "alchemia:item/wand/rod_silverwood",
+    "particle": "alchemia:item/wand/rod_silverwood"
   },
   "elements": [
     {

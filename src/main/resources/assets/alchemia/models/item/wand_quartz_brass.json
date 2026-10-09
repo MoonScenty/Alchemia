@@ -1,8 +1,8 @@
 {
   "textures": {
-    "0": "alchemia:block/brass_block",
-    "1": "minecraft:block/quartz_block_side",
-    "particle": "minecraft:block/quartz_block_side"
+    "0": "alchemia:item/wand/cap_brass",
+    "1": "alchemia:item/wand/rod_quartz",
+    "particle": "alchemia:item/wand/rod_quartz"
   },
   "elements": [
     {

@@ -75,6 +75,7 @@ public final class LegacyAssets {
         effects(all);
         research(all);
         aura(all);
+        wands(all);
         gear(all);
         return List.copyOf(all);
     }
@@ -194,6 +195,45 @@ public final class LegacyAssets {
         // the original's goo is one strip, still or running; ours asks for two names and gets the same picture
         all.add(block("flux_goo_still", "flux_goo", null));
         all.add(block("flux_goo_flow", "flux_goo", null));
+    }
+
+    /**
+     * Step 6: wands, their parts, the foci, and the arcane workbench.
+     * <p>
+     * The original and ours name a part's two pictures the other way round. Its {@code cap_gold} is the picture of a
+     * loose cap and {@code cap_gold_mat} the stuff a wand's cap is made of; ours are {@code cap_gold_mat} for the
+     * loose cap and {@code cap_gold} for the stuff. So each is taken from the other's name. Our wands keep their own
+     * shape and are now dressed in the original's materials.
+     */
+    private static void wands(List<LegacyAsset> all) {
+        String[][] caps = {{"iron", "iron"}, {"gold", "gold"}, {"brass", "brass"}, {"alchemium", "thaumium"},
+                {"void", "void"}};
+        for (String[] cap : caps) {
+            all.add(wandPart("cap_" + cap[0] + "_mat", "cap_" + cap[1]));
+            all.add(wandPart("cap_" + cap[0], "cap_" + cap[1] + "_mat"));
+        }
+        all.add(wandPart("cap_alchemium_inert_mat", "cap_thaumium_inert"));
+        all.add(wandPart("cap_void_inert_mat", "cap_void_inert"));
+
+        for (String rod : List.of("greatwood", "silverwood", "obsidian", "ice", "quartz", "reed", "blaze", "bone")) {
+            all.add(wandPart("rod_" + rod + "_mat", "rod_" + rod));
+            all.add(wandPart("rod_" + rod, "rod_" + rod + "_mat"));
+        }
+        // the plain wooden rod has no loose picture, only the stuff
+        all.add(wandPart("rod_wood", "rod_wood_mat"));
+
+        for (String focus : List.of("builder", "excavation", "fire", "frost", "grapple", "hellbat", "pech", "primal",
+                "shard", "shock", "trade")) {
+            all.add(wandPart("focus_" + focus, "focus_" + focus));
+        }
+        all.add(wandPart("focus_hole", "focus_portablehole"));
+
+        all.add(block("arcane_workbench_side", "arcane_workbench_side", null));
+        all.add(block("arcane_workbench_top", "arcane_workbench_top", null));
+    }
+
+    private static LegacyAsset wandPart(String ours, String original) {
+        return LegacyAsset.of("textures/item/wand/" + ours + ".png").five("textures/items/wand/" + original + ".png");
     }
 
     /** Step 9: armour and its sheets. */
