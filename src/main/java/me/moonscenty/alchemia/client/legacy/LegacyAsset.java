@@ -89,7 +89,8 @@ public record LegacyAsset(String target, List<Source> sources, Transform transfo
     }
 
     private static byte[] crop(byte[] png, int x, int y, int width, int height) throws IOException {
-        try (NativeImage sheet = NativeImage.read(png); NativeImage cut = new NativeImage(width, height, true)) {
+        try (NativeImage sheet = NativeImage.read(new ByteArrayInputStream(png));
+                NativeImage cut = new NativeImage(width, height, true)) {
             if (x + width > sheet.getWidth() || y + height > sheet.getHeight()) {
                 throw new IOException("The sheet is " + sheet.getWidth() + "x" + sheet.getHeight()
                         + ", too small to cut " + width + "x" + height + " at " + x + "," + y);
@@ -111,7 +112,7 @@ public record LegacyAsset(String target, List<Source> sources, Transform transfo
         int r = rgb >> 16 & 0xFF;
         int g = rgb >> 8 & 0xFF;
         int b = rgb & 0xFF;
-        try (NativeImage image = NativeImage.read(png)) {
+        try (NativeImage image = NativeImage.read(new ByteArrayInputStream(png))) {
             for (int y = 0; y < image.getHeight(); y++) {
                 for (int x = 0; x < image.getWidth(); x++) {
                     // NativeImage keeps its pixels as ABGR

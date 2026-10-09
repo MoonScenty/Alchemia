@@ -210,7 +210,8 @@ public final class LegacyAssetImporter {
                     files.put(asset.target() + ".mcmeta", jar.read(source.path() + ".mcmeta").orElse(NO_META));
                 }
                 return Optional.of(source.edition());
-            } catch (IOException | RuntimeException e) {
+            } catch (IOException | RuntimeException | OutOfMemoryError e) {
+                // a picture too big to take in is left to ours, rather than taking the game down with it
                 Alchemia.LOGGER.warn("Could not import {} from {} for {}", source.path(), source.edition(),
                         asset.target(), e);
             }

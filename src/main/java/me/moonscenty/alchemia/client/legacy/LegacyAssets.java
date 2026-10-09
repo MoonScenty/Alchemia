@@ -25,6 +25,8 @@ public final class LegacyAssets {
     /** A cell of the original's effect sheet, and where its cells start: the game's own inventory layout. */
     private static final int EFFECT_CELL = 18;
     private static final int EFFECT_TOP = 198;
+    /** A cell of the original's sheet of node frames. */
+    private static final int NODE_CELL = 64;
 
     /** The fortress armour, which the original wrote as code rather than as a model file. */
     public static final String FORTRESS_ARMOUR = "fortress_armour";
@@ -72,6 +74,7 @@ public final class LegacyAssets {
         aspects(all);
         effects(all);
         research(all);
+        aura(all);
         gear(all);
         return List.copyOf(all);
     }
@@ -160,6 +163,37 @@ public final class LegacyAssets {
             all.add(LegacyAsset.of("textures/gui/research_category/" + tab[0] + ".png")
                     .five("textures/research/" + tab[1] + ".png"));
         }
+    }
+
+    /**
+     * Step 5: nodes, and the taint and goo that flux leaves behind.
+     * <p>
+     * A node is drawn off the original's one great sheet of frames, sixty-four pixels a cell and thirty-two cells a
+     * row. Ours are two strips cut from it: the aspect-coloured glow is its first row, the beating halo the first
+     * sixteen cells of its twenty-sixth. They were laid out that way to begin with, so the cut is all there is to do.
+     */
+    private static void aura(List<LegacyAsset> all) {
+        all.add(LegacyAsset.of("textures/entity/node_core.png").five("textures/misc/nodes.png")
+                .cropped(0, 0, 32 * NODE_CELL, NODE_CELL));
+        all.add(LegacyAsset.of("textures/entity/node_halo.png").five("textures/misc/nodes.png")
+                .cropped(0, 25 * NODE_CELL, 16 * NODE_CELL, NODE_CELL));
+        all.add(LegacyAsset.of("textures/entity/node_bubble.png").five("textures/misc/node_bubble.png"));
+
+        // taint, each with the original's own variations in the same order
+        for (int variant = 0; variant < 3; variant++) {
+            String ours = variant == 0 ? "" : "_" + variant;
+            all.add(block("taint_crust" + ours, "taint_crust_" + variant, null));
+            all.add(block("taint_soil" + ours, "taint_soil_" + variant, null));
+            all.add(block("taint_log" + ours, "log_taintwood_" + variant, null));
+        }
+        all.add(block("taint_log_top", "log_taintwood_top", null));
+        all.add(block("taint_rock", "taint_rock", null));
+        all.add(block("taint_fibres", "taint_fibres", null));
+        all.add(block("taint_growth_1", "taint_growth_1", null));
+        all.add(block("taint_growth_2", "taint_growth_2", null));
+        // the original's goo is one strip, still or running; ours asks for two names and gets the same picture
+        all.add(block("flux_goo_still", "flux_goo", null));
+        all.add(block("flux_goo_flow", "flux_goo", null));
     }
 
     /** Step 9: armour and its sheets. */
