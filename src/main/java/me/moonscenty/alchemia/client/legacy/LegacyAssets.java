@@ -52,6 +52,12 @@ public final class LegacyAssets {
     /** The pillar the original kept as an OBJ file, served as it is for the matrix to read and draw. */
     public static final String PILLAR_MESH = "models/legacy/pillar.obj";
 
+    /** The eight shards a crystal is grown from, which the original kept as an OBJ file. */
+    public static final String CRYSTAL_MESH = "models/legacy/crystal.obj";
+
+    /** The stabiliser's body and its arms, which the original kept as an OBJ file and drew in its renderer. */
+    public static final String STABILIZER_MESH = "models/legacy/node_stabilizer.obj";
+
     public static final List<LegacyAsset> ALL = build();
 
     /**
@@ -209,6 +215,15 @@ public final class LegacyAssets {
      * sixteen cells of its twenty-sixth. They were laid out that way to begin with, so the cut is all there is to do.
      */
     private static void aura(List<LegacyAsset> all) {
+        // the crystals: the original's mesh of eight shards and the grey it was coloured from
+        all.add(LegacyAsset.of(CRYSTAL_MESH).five("models/obj/crystal.obj"));
+        all.add(LegacyAsset.of("textures/block/legacy/crystal.png").five("textures/blocks/crystal.png"));
+        // the stabiliser: its body and arms, their sheet, and the glow drawn over the arms as they work
+        all.add(LegacyAsset.of(STABILIZER_MESH).five("models/obj/node_stabilizer.obj"));
+        all.add(LegacyAsset.of("textures/entity/node_stabilizer.png").five("textures/models/node_stabilizer.png"));
+        all.add(LegacyAsset.of("textures/entity/node_stabilizer_over.png")
+                .five("textures/models/node_stabilizer_over.png"));
+
         all.add(LegacyAsset.of("textures/entity/node_core.png").five("textures/misc/nodes.png")
                 .cropped(0, 0, 32 * NODE_CELL, NODE_CELL));
         all.add(LegacyAsset.of("textures/entity/node_halo.png").five("textures/misc/nodes.png")

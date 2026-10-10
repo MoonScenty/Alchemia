@@ -27,6 +27,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.block.BlockModelShaper;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraft.client.renderer.entity.NoopRenderer;
@@ -35,6 +36,7 @@ import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import me.moonscenty.alchemia.client.armour.FortressExtensions;
 import me.moonscenty.alchemia.client.armour.RobeExtensions;
+import me.moonscenty.alchemia.client.legacy.LegacyAssets;
 import me.moonscenty.alchemia.item.RobeItem;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
@@ -43,6 +45,23 @@ import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsE
 /** Client-side wiring: extra models to bake, and who draws what. */
 @EventBusSubscriber(modid = Alchemia.MODID, value = Dist.CLIENT)
 public class AlchemiaClientSetup {
+    /**
+     * Every crystal's models are wrapped in one that draws the original's shards when its jar is there, and the
+     * stabiliser's in one that steps aside for the original's renderer.
+     * Whether the jar is there is asked each time, since this runs once per reload and the jar can come or go
+     * between them.
+     */
+    @SubscribeEvent
+    public static void wrapCrystals(ModelEvent.ModifyBakingResult event) {
+        ModBlocks.CRYSTALS.values().forEach(crystal -> crystal.get().getStateDefinition().getPossibleStates()
+                .forEach(state -> event.getModels().computeIfPresent(BlockModelShaper.stateToModelLocation(state),
+                        (location, ours) -> new LegacyCrystalModel(ours, state))));
+        // the original drew the whole stabiliser in its renderer, so with its jar ours steps aside
+        ModBlocks.NODE_STABILIZER.get().getStateDefinition().getPossibleStates().forEach(state -> event.getModels()
+                .computeIfPresent(BlockModelShaper.stateToModelLocation(state),
+                        (location, ours) -> new LegacyHiddenModel(ours, LegacyAssets.STABILIZER_MESH)));
+    }
+
     /** What stands on the research table is drawn by its renderer, so its models have to be asked for by hand. */
     @SubscribeEvent
     public static void registerExtraModels(ModelEvent.RegisterAdditional event) {
@@ -159,6 +178,12 @@ public class AlchemiaClientSetup {
                         ? (tint == 1 ? jar.label().map(aspect -> aspect.value().color()).orElse(0xFFFFFF)
                                      : jar.colour())
                         : 0xFFFFFF, ModBlocks.JAR.get());
+
+        // the original's crystal is grey and takes its aspect's colour; our own crystals are already coloured and
+        // carry no tint, so this only ever touches the original's
+        ModBlocks.CRYSTALS.forEach((type, crystal) -> event.register(
+                (state, level, pos, tint) -> tint == LegacyCrystalModel.TINT ? type.aspect().value().color() : -1,
+                crystal.get()));
 
         // a flame is drawn in grey and painted by the kind of flame it is; its bead is a second layer, undyed
         ModBlocks.NITOR.forEach((colour, flame) -> event.register(

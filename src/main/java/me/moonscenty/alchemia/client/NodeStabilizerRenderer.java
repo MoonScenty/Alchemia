@@ -2,12 +2,17 @@ package me.moonscenty.alchemia.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
 import org.joml.Matrix4f;
 
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.aura.node.AuraNode;
 import me.moonscenty.alchemia.block.entity.NodeStabilizerBlockEntity;
+import me.moonscenty.alchemia.client.legacy.LegacyAssets;
+import me.moonscenty.alchemia.client.legacy.LegacyModels;
+import me.moonscenty.alchemia.client.legacy.model.LegacyMesh;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
@@ -33,6 +38,12 @@ public class NodeStabilizerRenderer implements BlockEntityRenderer<NodeStabilize
             arm("piston1"), arm("piston2"), arm("piston3"), arm("piston4"),
     };
     private static final ResourceLocation BUBBLE = Alchemia.id("textures/entity/node_bubble.png");
+    /** The original's sheet for its body and arms, and the glow over the arms; there only when its jar is. */
+    private static final ResourceLocation LEGACY_TEXTURE = Alchemia.id("textures/entity/node_stabilizer.png");
+    private static final ResourceLocation LEGACY_GLOW = Alchemia.id("textures/entity/node_stabilizer_over.png");
+    /** The block light the original gave the glow when idle, and how much more a full grip added. */
+    private static final int GLOW_DIM = 50;
+    private static final int GLOW_RANGE = 170;
 
     /** Which way each arm points, in the order the models are numbered. */
     private static final Direction[] FACING = {
@@ -59,6 +70,14 @@ public class NodeStabilizerRenderer implements BlockEntityRenderer<NodeStabilize
     public void render(NodeStabilizerBlockEntity stabilizer, float partialTick, PoseStack pose,
             MultiBufferSource buffers, int light, int overlay) {
         float age = stabilizer.getLevel() == null ? 0 : stabilizer.getLevel().getGameTime() + partialTick;
+        LegacyMesh legacy = legacyMesh();
+        if (legacy != null) {
+            renderLegacy(legacy, stabilizer.reachOut(), age, pose, buffers, light, overlay);
+            if (stabilizer.reachOut() > 0.0F) {
+                drawShellAroundHeldNode(stabilizer, pose, buffers, age);
+            }
+            return;
+        }
         // the arms are out only as far as the stabiliser has hold of something, so an idle one sits closed
         float out = stabilizer.reachOut() * THROW;
 
@@ -77,6 +96,61 @@ public class NodeStabilizerRenderer implements BlockEntityRenderer<NodeStabilize
         if (stabilizer.reachOut() > 0.0F) {
             drawShellAroundHeldNode(stabilizer, pose, buffers, age);
         }
+    }
+
+    /** The original's mesh as of the import {@link #meshFrom} names, turned over for the loader that drew it. */
+    private static int meshFrom = -1;
+    private static LegacyMesh mesh;
+
+    /**
+     * The original's mesh, once per import. Its renderer read it with the older loader, which turned the texture
+     * corners over, so it is turned over here too.
+     */
+    private static LegacyMesh legacyMesh() {
+        int generation = LegacyModels.generation();
+        if (generation != meshFrom) {
+            meshFrom = generation;
+            mesh = LegacyModels.mesh(LegacyAssets.STABILIZER_MESH).map(LegacyMesh::flippedV).orElse(null);
+        }
+        return mesh;
+    }
+
+    /**
+     * The stabiliser as the original's renderer drew it, all of it: the mesh is modelled lying down, so it is stood
+     * up first; then its body, and four arms a quarter turn apart, each leant over by forty-five degrees and pushed
+     * out along its own length as the stabiliser takes hold. Each arm is drawn twice, the second time in its glow,
+     * lit brighter the harder it is working and breathing a little out of step with the next.
+     */
+    private static void renderLegacy(LegacyMesh mesh, float reach, float age, PoseStack pose,
+            MultiBufferSource buffers, int light, int overlay) {
+        int body = mesh.group("lock");
+        int arm = mesh.group("piston");
+        if (body < 0 || arm < 0) {
+            return;
+        }
+        // the original counted its grip to thirty-seven, and moved an arm a hundredth of a block for each
+        float count = reach * NodeStabilizerBlockEntity.STROKE;
+        pose.pushPose();
+        pose.translate(0.5F, 0.0F, 0.5F);
+        pose.mulPose(Axis.XP.rotationDegrees(-90.0F));
+        mesh.render(body, pose.last(), buffers.getBuffer(RenderType.entityCutoutNoCull(LEGACY_TEXTURE)), -1, light,
+                overlay);
+        for (int index = 0; index < 4; index++) {
+            pose.pushPose();
+            pose.mulPose(Axis.ZP.rotationDegrees(90.0F * index));
+            pose.mulPose(Axis.YP.rotationDegrees(45.0F));
+            pose.translate(0.0F, 0.0F, count / 100.0F);
+            mesh.render(arm, pose.last(), buffers.getBuffer(RenderType.entityCutoutNoCull(LEGACY_TEXTURE)), -1,
+                    light, overlay);
+            float pulse = Mth.sin((age + index * 5) / 3.0F) * 0.1F + 0.9F;
+            // the original lit the glow by hand, as block light alone, from dim to nearly full
+            int glow = Math.min(LightTexture.FULL_BLOCK,
+                    GLOW_DIM + (int) (GLOW_RANGE * (count / NodeStabilizerBlockEntity.STROKE) * pulse));
+            mesh.render(arm, pose.last(), buffers.getBuffer(RenderType.entityCutoutNoCull(LEGACY_GLOW)), -1, glow,
+                    overlay);
+            pose.popPose();
+        }
+        pose.popPose();
     }
 
     private void drawArm(PoseStack pose, MultiBufferSource buffers, ModelResourceLocation model, int light,
