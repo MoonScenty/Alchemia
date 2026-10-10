@@ -21,7 +21,13 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import me.moonscenty.alchemia.wand.Casting;
+import me.moonscenty.alchemia.wand.Focus;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -48,6 +54,8 @@ public class WandItem extends Item implements VisHolder {
     private static final int DRAWS_EVERY = 5;
     /** A trickling rod fills itself only this far, as a share of what the rod holds. */
     private static final float TRICKLES_TO = 0.5F;
+    /** How long a wand can be held down for. Long enough that nobody reaches the end of it. */
+    private static final int HELD_FOREVER = 72000;
 
     public WandItem(Properties properties) {
         super(properties.stacksTo(1));
@@ -242,6 +250,75 @@ public class WandItem extends Item implements VisHolder {
                 put(stack, aspect, FINE);
             }
         });
+    }
+
+    // --- letting it off -----------------------------------------------------
+
+    /**
+     * Pointing the wand at nothing in particular and using it.
+     * <p>
+     * A focus that is charged by the tick is held down: the wand goes into use and {@link #onUseTick} does the
+     * work for as long as it is held and the wand can pay. One charged by the use goes off once, here and now.
+     */
+    @Override
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        ItemStack wand = player.getItemInHand(hand);
+        Focus focus = fitted(wand);
+        if (focus == null || player.getCooldowns().isOnCooldown(this)) {
+            return InteractionResultHolder.pass(wand);
+        }
+        if (focus.perTick()) {
+            player.startUsingItem(hand);
+            return InteractionResultHolder.consume(wand);
+        }
+        ServerLevel served = Casting.served(level);
+        boolean went = served != null && Casting.cast(served, player, wand, 0);
+        if (went) {
+            player.swing(hand, true);
+        }
+        // consumed either way, so that a wand with nothing in it does not also try to place a block
+        return InteractionResultHolder.sidedSuccess(wand, level.isClientSide);
+    }
+
+    /**
+     * A tick of holding one of the two foci that are charged by the tick.
+     * <p>
+     * The price is asked every tick and the hand comes off the button the moment it cannot be met, rather than
+     * the wand going quietly dry while somebody holds a beam on a wall.
+     */
+    @Override
+    public void onUseTick(Level level, LivingEntity using, ItemStack wand, int remaining) {
+        if (!(using instanceof Player caster)) {
+            return;
+        }
+        ServerLevel served = Casting.served(level);
+        if (served == null) {
+            return;
+        }
+        Focus focus = fitted(wand);
+        if (focus == null || !VisHolder.canPay(wand, focus.cost(), caster)) {
+            caster.stopUsingItem();
+            return;
+        }
+        Casting.cast(served, caster, wand, getUseDuration(wand, using) - remaining);
+    }
+
+    /** Held as long as somebody holds the button. Nothing stops a beam but letting go or running dry. */
+    @Override
+    public int getUseDuration(ItemStack stack, LivingEntity using) {
+        Focus focus = fitted(stack);
+        return focus != null && focus.perTick() ? HELD_FOREVER : 0;
+    }
+
+    @Override
+    public UseAnim getUseAnimation(ItemStack stack) {
+        return UseAnim.NONE;
+    }
+
+    /** What is on the wand, if it is a focus. */
+    private static Focus fitted(ItemStack wand) {
+        FocusItem focus = Casting.fittedTo(wand);
+        return focus == null ? null : focus.focus();
     }
 
     // --- what it can be pointed at ------------------------------------------

@@ -15,6 +15,8 @@ import me.moonscenty.alchemia.item.FocusPouchItem;
 import me.moonscenty.alchemia.item.FortressArmorItem;
 import me.moonscenty.alchemia.item.RobeItem;
 import me.moonscenty.alchemia.wand.Focus;
+import me.moonscenty.alchemia.wand.spell.Excavation;
+import me.moonscenty.alchemia.wand.spell.Shock;
 import me.moonscenty.alchemia.item.GogglesItem;
 import me.moonscenty.alchemia.item.TravellerBootsItem;
 import me.moonscenty.alchemia.item.CrystallizedEssenceItem;
@@ -221,9 +223,11 @@ public class ModItems {
         kinds.put("fire", () -> Focus.of(0xE55104, AspectList.of(ModAspects.FIRE, 2)).heldDown().inTurrets());
         kinds.put("frost", () -> Focus.of(0x4F69CC, AspectList.of(ModAspects.WATER, 2)
                 .add(ModAspects.FIRE, 1).add(ModAspects.ENTROPY, 2)).cooldown(200).inTurrets());
-        kinds.put("shock", () -> Focus.of(0x9FB3BF, AspectList.of(ModAspects.AIR, 8)).cooldown(250).inTurrets());
+        kinds.put("shock", () -> Focus.of(0x9FB3BF, AspectList.of(ModAspects.AIR, 8))
+                .cooldown(250).inTurrets().casts(Shock::cast));
         // a penny a block, for as long as the button is down
-        kinds.put("excavation", () -> Focus.of(0x064006, AspectList.of(ModAspects.EARTH, 1)).heldDown());
+        kinds.put("excavation", () -> Focus.of(0x064006, AspectList.of(ModAspects.EARTH, 1))
+                .heldDown().casts(Excavation::cast));
         kinds.put("grapple", () -> Focus.of(0x1515FF, AspectList.of(ModAspects.WATER, 10)
                 .add(ModAspects.AIR, 10)).cooldown(250));
         kinds.put("hellbat", () -> Focus.of(0xDC3602, AspectList.of(ModAspects.FIRE, 10)

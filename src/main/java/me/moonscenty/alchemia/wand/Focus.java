@@ -16,12 +16,18 @@ import me.moonscenty.alchemia.aspect.AspectList;
  * @param cooldown how long before the wand will do it again, in milliseconds as the original counted it
  * @param turret   whether an autocaster will take it. Seven of the twelve are worth aiming at something; the
  *                 other five only mean anything in a hand that is choosing where to point them
+ * @param spell    what it does when it is let off. {@link Spell#NOTHING} for the ones not yet written
  */
-public record Focus(int colour, AspectList cost, boolean perTick, int cooldown, boolean turret) {
+public record Focus(int colour, AspectList cost, boolean perTick, int cooldown, boolean turret, Spell spell) {
 
-    /** A focus that costs what it costs per use, comes back at once, and is no good to a turret. */
+    /** A focus that costs what it costs per use, comes back at once, is no good to a turret, and does nothing. */
     public static Focus of(int colour, AspectList cost) {
-        return new Focus(colour, cost, false, 0, false);
+        return new Focus(colour, cost, false, 0, false, Spell.NOTHING);
+    }
+
+    /** What it does when it is let off. */
+    public Focus casts(Spell spell) {
+        return new Focus(colour, cost, perTick, cooldown, turret, spell);
     }
 
     /**
@@ -31,15 +37,15 @@ public record Focus(int colour, AspectList cost, boolean perTick, int cooldown, 
      * name mean two things.
      */
     public Focus heldDown() {
-        return new Focus(colour, cost, true, cooldown, turret);
+        return new Focus(colour, cost, true, cooldown, turret, spell);
     }
 
     public Focus cooldown(int milliseconds) {
-        return new Focus(colour, cost, perTick, milliseconds, turret);
+        return new Focus(colour, cost, perTick, milliseconds, turret, spell);
     }
 
     /** An autocaster will take this one. Named around the component for the same reason {@link #heldDown()} is. */
     public Focus inTurrets() {
-        return new Focus(colour, cost, perTick, cooldown, true);
+        return new Focus(colour, cost, perTick, cooldown, true, spell);
     }
 }
