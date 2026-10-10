@@ -30,7 +30,10 @@ public final class LegacyMesh {
         this.names = List.copyOf(names);
     }
 
-    /** Reads an OBJ file. Each face comes out as up to four corners of {@code x, y, z, u, v}. */
+    /**
+     * Reads an OBJ file. Each face comes out as up to four corners of {@code x, y, z, u, v, n}, where {@code n} is
+     * which texture corner of the file it was, counted from nought: the original sometimes moved some of them.
+     */
     public static LegacyMesh parse(String obj) {
         List<float[]> positions = new ArrayList<>();
         List<float[]> corners = new ArrayList<>();
@@ -64,9 +67,9 @@ public final class LegacyMesh {
                     for (int i = 0; i < corners4; i++) {
                         String[] refs = words[i + 1].split("/");
                         float[] at = positions.get(index(refs[0], positions.size()));
-                        float[] uv = refs.length > 1 && !refs[1].isEmpty()
-                                ? corners.get(index(refs[1], corners.size())) : new float[2];
-                        face[i] = new float[] {at[0], at[1], at[2], uv[0], uv[1]};
+                        int corner = refs.length > 1 && !refs[1].isEmpty() ? index(refs[1], corners.size()) : -1;
+                        float[] uv = corner >= 0 ? corners.get(corner) : new float[2];
+                        face[i] = new float[] {at[0], at[1], at[2], uv[0], uv[1], corner};
                     }
                     if (faces == null) {
                         faces = new ArrayList<>();
@@ -103,7 +106,7 @@ public final class LegacyMesh {
         return groups.size();
     }
 
-    /** The faces of one group, each up to four corners of {@code x, y, z, u, v}. */
+    /** The faces of one group, each up to four corners of {@code x, y, z, u, v, n}, as {@link #parse} reads them. */
     public List<float[][]> faces(int group) {
         return groups.get(group);
     }
@@ -120,7 +123,8 @@ public final class LegacyMesh {
             for (float[][] face : group) {
                 float[][] copy = new float[face.length][];
                 for (int i = 0; i < face.length; i++) {
-                    copy[i] = new float[] {face[i][0], face[i][1], face[i][2], face[i][3], 1.0F - face[i][4]};
+                    copy[i] = face[i].clone();
+                    copy[i][4] = 1.0F - face[i][4];
                 }
                 faces.add(copy);
             }

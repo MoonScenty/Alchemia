@@ -4,11 +4,14 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.IntSupplier;
 
 import javax.annotation.Nullable;
@@ -126,6 +129,46 @@ public record LegacyAsset(String target, List<Source> sources, Transform transfo
      */
     public LegacyAsset asModel() {
         return new LegacyAsset(target, sources, LegacyAsset::model, model);
+    }
+
+    /**
+     * One of our model files with part of it swapped for the original's: every element of ours drawn with one of
+     * {@code replaced} goes, the original model's elements come in their place, and its textures with them. What
+     * ours has that the original drew some other way (a liquid, a label) stays as it was. {@code retextured} then
+     * points any of our remaining texture names at another picture.
+     *
+     * @param ours the model under {@code assets/alchemia/} this is built over
+     */
+    public LegacyAsset asModelOver(String ours, Set<String> replaced, Map<String, String> retextured) {
+        return new LegacyAsset(target, sources, original -> over(original, ours, replaced, retextured), model);
+    }
+
+    private static byte[] over(byte[] original, String ours, Set<String> replaced, Map<String, String> retextured)
+            throws IOException {
+        JsonObject theirs = JsonParser.parseString(new String(model(original), StandardCharsets.UTF_8))
+                .getAsJsonObject();
+        JsonObject mine;
+        try (InputStream in = LegacyAsset.class.getResourceAsStream("/assets/alchemia/" + ours)) {
+            if (in == null) {
+                throw new IOException("No model " + ours);
+            }
+            mine = JsonParser.parseString(new String(in.readAllBytes(), StandardCharsets.UTF_8)).getAsJsonObject();
+        }
+        JsonArray elements = new JsonArray();
+        theirs.getAsJsonArray("elements").forEach(elements::add);
+        for (JsonElement element : mine.getAsJsonArray("elements")) {
+            boolean swapped = element.getAsJsonObject().getAsJsonObject("faces").entrySet().stream()
+                    .anyMatch(face -> replaced.contains(face.getValue().getAsJsonObject().get("texture").getAsString()));
+            if (!swapped) {
+                elements.add(element);
+            }
+        }
+        JsonObject textures = mine.getAsJsonObject("textures").deepCopy();
+        theirs.getAsJsonObject("textures").entrySet().forEach(entry -> textures.add(entry.getKey(), entry.getValue()));
+        retextured.forEach(textures::addProperty);
+        mine.add("textures", textures);
+        mine.add("elements", elements);
+        return mine.toString().getBytes(StandardCharsets.UTF_8);
     }
 
     private static byte[] model(byte[] json) throws IOException {

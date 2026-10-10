@@ -3,6 +3,7 @@ package me.moonscenty.alchemia.client.legacy;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Supplier;
 
 import me.moonscenty.alchemia.aspect.Aspect;
@@ -63,6 +64,15 @@ public final class LegacyAssets {
 
     /** The wand: a rod, a cap at either end, and room for a sceptre's crossbar and a focus. */
     public static final String WAND_MESH = "models/legacy/wand.obj";
+
+    /** The alembic, from Thaumcraft 4: its pot, panel, legs and the two tubes it can stand on. */
+    public static final String ALEMBIC_MESH = "models/legacy/alembic.obj";
+
+    /** The tube: a middle box, a pipe to each side and a larger box for a buffer. */
+    public static final String TUBE_MESH = "models/legacy/tube.obj";
+
+    /** The alchemometer as Thaumcraft 4's thaumometer: a six-sided brass frame. */
+    public static final String SCANNER_MESH = "models/legacy/scanner.obj";
 
     public static final List<LegacyAsset> ALL = build();
 
@@ -161,6 +171,10 @@ public final class LegacyAssets {
     private static void research(List<LegacyAsset> all) {
         // the scanner's lens turns, so its picture is a strip of frames, and the strip's timing comes with it
         all.add(item("alchemometer", "thaumometer", null));
+        // and its shape, from Thaumcraft 4: the frame, its sheet, and the glass screen set in it
+        all.add(LegacyAsset.of(SCANNER_MESH).four("textures/models/scanner.obj"));
+        all.add(LegacyAsset.of("textures/item/legacy/scanner.png").four("textures/models/scanner.png"));
+        all.add(LegacyAsset.of("textures/item/legacy/scanscreen.png").four("textures/models/scanscreen.png"));
         all.add(item("alchemonomicon", "thaumonomicon", "thaumonomicon"));
         all.add(item("research_notes", "researchnotes", "researchnotes"));
         all.add(item("scribing_tools", "scribing_tools", null));
@@ -296,10 +310,29 @@ public final class LegacyAssets {
     }
 
     /**
-     * Step 7: the crucible, the smelter, nitor, and the odds and ends of essentia work. Only what our models use the
-     * way the original's did: the jar, the alembic and the tubes are built differently and wait for their models.
+     * Step 7: the crucible, the smelter, nitor, and the odds and ends of essentia work, with the jar, the alembic and
+     * the tubes on the original's own shapes.
      */
     private static void essentia(List<LegacyAsset> all) {
+        // the alembic is Thaumcraft 4's: its mesh and sheet sat with its other models, not under blocks
+        all.add(LegacyAsset.of(ALEMBIC_MESH).four("textures/models/alembic.obj"));
+        all.add(LegacyAsset.of("textures/entity/alembic.png").four("textures/models/alembic.png"));
+
+        // the jar: the original's glass and lid in place of ours, in every one of our jar models. The liquid and the
+        // label stay ours, since the original drew those in its renderer, but the liquid takes its glowing picture
+        for (String fill : List.of("", "_1", "_2", "_3", "_4")) {
+            for (String kind : List.of("jar", "jar_labelled")) {
+                String path = "models/block/jar/" + kind + fill + ".json";
+                all.add(LegacyAsset.of(path).five("models/block/jar_normal.json").asModelOver(path,
+                        Set.of("#0", "#1"), Map.of("liquid", "alchemia:block/legacy/animatedglow")));
+            }
+        }
+        // the tubes: the original's mesh, and the one sheet every kind is cut from
+        all.add(LegacyAsset.of(TUBE_MESH).five("models/obj/tube.obj"));
+        all.add(LegacyAsset.of("textures/block/legacy/tube.png").five("textures/blocks/tube.png"));
+        for (String face : List.of("jar_side", "jar_top", "jar_bottom", "animatedglow")) {
+            all.add(LegacyAsset.of("textures/block/legacy/" + face + ".png").five("textures/blocks/" + face + ".png"));
+        }
         for (String face : List.of("bottom", "inner", "side", "top")) {
             all.add(block("crucible_" + face, "crucible_" + face, null));
         }

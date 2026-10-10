@@ -9,6 +9,8 @@ import javax.annotation.Nullable;
 
 import org.joml.Vector3f;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.client.legacy.LegacyAssets;
 import me.moonscenty.alchemia.client.legacy.LegacyModels;
@@ -27,6 +29,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.model.BakedModelWrapper;
@@ -153,6 +156,19 @@ public class LegacyWandModel extends BakedModelWrapper<BakedModel> {
         @Override
         public ItemOverrides getOverrides() {
             return ItemOverrides.EMPTY;
+        }
+
+        // the wrapper hands both of these to the model it wraps, which would draw our wand instead of this one
+
+        @Override
+        public BakedModel applyTransform(ItemDisplayContext context, PoseStack pose, boolean leftHand) {
+            getTransforms().getTransform(context).apply(leftHand, pose);
+            return this;
+        }
+
+        @Override
+        public List<BakedModel> getRenderPasses(ItemStack stack, boolean fabulous) {
+            return List.of(this);
         }
     }
 }

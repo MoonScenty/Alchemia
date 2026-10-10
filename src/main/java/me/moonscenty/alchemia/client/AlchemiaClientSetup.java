@@ -1,6 +1,7 @@
 package me.moonscenty.alchemia.client;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import me.moonscenty.alchemia.aspect.Aspect;
 import me.moonscenty.alchemia.aspect.AspectList;
@@ -65,9 +66,22 @@ public class AlchemiaClientSetup {
         ModBlocks.ARCANE_WORKBENCH_CHARGER.get().getStateDefinition().getPossibleStates().forEach(state -> event
                 .getModels().computeIfPresent(BlockModelShaper.stateToModelLocation(state),
                         (location, ours) -> new LegacyHiddenModel(ours, LegacyAssets.RELAY_MESH)));
+        // and the alembic, drawn on Thaumcraft 4's mesh
+        ModBlocks.ALEMBIC.get().getStateDefinition().getPossibleStates().forEach(state -> event.getModels()
+                .computeIfPresent(BlockModelShaper.stateToModelLocation(state),
+                        (location, ours) -> new LegacyHiddenModel(ours, LegacyAssets.ALEMBIC_MESH)));
+        // every kind of tube, built on the original's mesh with our handles and arrows kept
+        Stream.of(ModBlocks.TUBE, ModBlocks.TUBE_VALVE, ModBlocks.TUBE_ONEWAY, ModBlocks.TUBE_RESTRICT,
+                ModBlocks.TUBE_FILTER, ModBlocks.TUBE_BUFFER).forEach(tube -> tube.get().getStateDefinition()
+                .getPossibleStates().forEach(state -> event.getModels().computeIfPresent(
+                        BlockModelShaper.stateToModelLocation(state),
+                        (location, ours) -> new LegacyTubeModel(ours, state))));
         // the wand chooses among our forty-five, and with the jar is built on the original's mesh instead
         event.getModels().computeIfPresent(ModelResourceLocation.inventory(ModItems.WAND.getId()),
                 (location, ours) -> new LegacyWandModel(ours));
+        // the alchemometer, as Thaumcraft 4's thaumometer
+        event.getModels().computeIfPresent(ModelResourceLocation.inventory(ModItems.ALCHEMOMETER.getId()),
+                (location, ours) -> new LegacyScannerModel(ours));
     }
 
     /** What stands on the research table is drawn by its renderer, so its models have to be asked for by hand. */
@@ -229,6 +243,7 @@ public class AlchemiaClientSetup {
         event.registerEntityRenderer(ModEntities.TAINT_CLOUD.get(), NoopRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.NODE_STABILIZER.get(), NodeStabilizerRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.ARCANE_WORKBENCH_CHARGER.get(), ChargerRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.ALEMBIC.get(), AlembicRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.ARCANE_PEDESTAL.get(), ArcanePedestalRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.INFUSION_MATRIX.get(), InfusionMatrixRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.TUBE_VALVE.get(), ValveHandleRenderer::new);
