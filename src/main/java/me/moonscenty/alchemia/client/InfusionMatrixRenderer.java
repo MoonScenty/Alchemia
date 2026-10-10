@@ -7,6 +7,7 @@ import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.block.entity.InfusionMatrixBlockEntity;
 import me.moonscenty.alchemia.client.legacy.LegacyAssets;
 import me.moonscenty.alchemia.client.legacy.LegacyModels;
+import me.moonscenty.alchemia.client.legacy.LegacyRenderTypes;
 import me.moonscenty.alchemia.client.legacy.model.LegacyMesh;
 import me.moonscenty.alchemia.client.legacy.model.LegacyModelBaker;
 import net.minecraft.client.Minecraft;
@@ -150,7 +151,7 @@ public class InfusionMatrixRenderer implements BlockEntityRenderer<InfusionMatri
                         legacyStone.render(pose, buffers.getBuffer(RenderType.entityCutoutNoCull(STONE_TEXTURE)),
                                 light, OverlayTexture.NO_OVERLAY);
                         if (legacyGlow != null && matrix.awake()) {
-                            legacyGlow.render(pose, buffers.getBuffer(RenderType.eyes(STONE_TEXTURE)),
+                            legacyGlow.render(pose, buffers.getBuffer(LegacyRenderTypes.glow(STONE_TEXTURE)),
                                     LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY,
                                     glow(ticks, east, up, south, running));
                         }
@@ -183,11 +184,11 @@ public class InfusionMatrixRenderer implements BlockEntityRenderer<InfusionMatri
 
     /**
      * The original's violet glow over one stone of a working matrix, breathing a little out of step with the next
-     * stone. It was drawn adding light rather than covering, so the colour is taken down by its own strength here.
+     * stone. It is light added over the stone by how opaque each pixel of the glow is, as the original blended it.
      */
     private static int glow(float ticks, int east, int up, int south, float running) {
         float strength = (Mth.sin((ticks + east * 2 + up * 3 + south * 4) / 4.0F) * 0.1F + 0.2F) * running;
-        return FastColor.ARGB32.colorFromFloat(1.0F, GLOW_R * strength, GLOW_G * strength, GLOW_B * strength);
+        return FastColor.ARGB32.colorFromFloat(strength, GLOW_R, GLOW_G, GLOW_B);
     }
 
     /**

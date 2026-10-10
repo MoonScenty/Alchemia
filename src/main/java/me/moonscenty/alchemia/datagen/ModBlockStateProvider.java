@@ -361,12 +361,13 @@ public class ModBlockStateProvider extends BlockStateProvider {
         simpleBlock(ModBlocks.NODE_STABILIZER.get(), models().getExistingFile(modLoc("block/node_stabilizer/block")));
     }
 
-    /** The desk, plus an inkwell and a spread note that only show when the state says they are there. */
+    /**
+     * The desk alone. What stands on it is drawn by its renderer, which knows whether to draw the original's inkwell
+     * and scroll or our own.
+     */
     private void researchTable() {
         ResearchTableBlock block = ModBlocks.RESEARCH_TABLE.get();
         ModelFile desk = models().getExistingFile(modLoc("block/research_table"));
-        ModelFile inkwell = models().getExistingFile(modLoc("block/research_table_inkwell"));
-        ModelFile scroll = models().getExistingFile(modLoc("block/research_table_scroll"));
 
         var builder = getMultipartBuilder(block);
         for (Direction facing : Direction.Plane.HORIZONTAL) {
@@ -374,12 +375,6 @@ public class ModBlockStateProvider extends BlockStateProvider {
             int turn = ((int) facing.toYRot() + 180) % 360;
             builder.part().modelFile(desk).rotationY(turn).addModel()
                     .condition(ResearchTableBlock.FACING, facing).end();
-            builder.part().modelFile(inkwell).rotationY(turn).addModel()
-                    .condition(ResearchTableBlock.FACING, facing)
-                    .condition(ResearchTableBlock.HAS_TOOLS, true).end();
-            builder.part().modelFile(scroll).rotationY(turn).addModel()
-                    .condition(ResearchTableBlock.FACING, facing)
-                    .condition(ResearchTableBlock.HAS_NOTES, true).end();
         }
     }
 

@@ -43,10 +43,12 @@ import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsE
 /** Client-side wiring: extra models to bake, and who draws what. */
 @EventBusSubscriber(modid = Alchemia.MODID, value = Dist.CLIENT)
 public class AlchemiaClientSetup {
-    /** The quill is not an item model, so it has to be asked for by hand before it can be drawn. */
+    /** What stands on the research table is drawn by its renderer, so its models have to be asked for by hand. */
     @SubscribeEvent
     public static void registerExtraModels(ModelEvent.RegisterAdditional event) {
         event.register(ResearchTableRenderer.QUILL);
+        event.register(ResearchTableRenderer.INKWELL);
+        event.register(ResearchTableRenderer.SCROLL);
         // the matrix has no block model of its own; its eight stones are asked for here and drawn by hand
         event.register(InfusionMatrixRenderer.CUBE);
         // an altar's pillars are a picture a woken matrix draws, not four blocks somebody placed

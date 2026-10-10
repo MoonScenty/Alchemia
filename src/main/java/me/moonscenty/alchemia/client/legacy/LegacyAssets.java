@@ -46,6 +46,9 @@ public final class LegacyAssets {
     public static final String INFUSER = "infuser";
     public static final String INFUSER_GLOW = "infuser_glow";
 
+    /** The inkwell, scroll and ribbon the original stood on its research table. */
+    public static final String RESEARCH_TABLE = "research_table";
+
     /** The pillar the original kept as an OBJ file, served as it is for the matrix to read and draw. */
     public static final String PILLAR_MESH = "models/legacy/pillar.obj";
 
@@ -74,6 +77,8 @@ public final class LegacyAssets {
                             "thaumcraft/client/renderers/models/gear/ModelRobe", "(F)V", 0.5F),
                     new LegacyModelSource(LegacyEdition.FOUR,
                             "thaumcraft/client/renderers/models/gear/ModelRobe", "(F)V", 0.5F)),
+            RESEARCH_TABLE, List.of(new LegacyModelSource(LegacyEdition.FIVE,
+                    "thaumcraft/client/renderers/models/block/ModelResearchTable", "()V")),
             INFUSER, List.of(new LegacyModelSource(LegacyEdition.FIVE,
                     "thaumcraft/client/renderers/models/ModelCube", "(I)V", 0)),
             INFUSER_GLOW, List.of(new LegacyModelSource(LegacyEdition.FIVE,
@@ -164,6 +169,20 @@ public final class LegacyAssets {
         all.add(LegacyAsset.of("textures/gui/research_parchment.png").five("textures/research/parchment3.png"));
         all.add(LegacyAsset.of("textures/gui/research_hex.png").five("textures/gui/hex1.png"));
         all.add(LegacyAsset.of("textures/gui/research_hex_lit.png").five("textures/gui/hex2.png"));
+
+        // the research table itself: the original's desk is a model file, served as it is with its pictures; the
+        // inkwell and the scroll on it it built in code, and the quill is a flat picture stood in the inkwell
+        all.add(LegacyAsset.of("models/block/research_table.json").five("models/block/research_table.json").asModel()
+                .forModel(RESEARCH_TABLE));
+        all.add(LegacyAsset.of("models/item/research_table.json").five("models/item/research_table.json").asModel()
+                .forModel(RESEARCH_TABLE));
+        for (String face : List.of("research_table_top", "research_table_side", "research_table_front",
+                "base_wood_grain")) {
+            all.add(LegacyAsset.of("textures/block/legacy/" + face + ".png").five("textures/blocks/" + face + ".png"));
+        }
+        all.add(LegacyAsset.of("textures/entity/research_table.png").five("textures/blocks/research_table_model.png")
+                .forModel(RESEARCH_TABLE));
+        all.add(block("research_table_quill", "tablequill", null));
 
         // the alchemonomicon is laid out as the original's was: its frame pieces, plates, arrow heads and line pieces
         // all come off the one sheet, and each branch's tab has the original's picture on it

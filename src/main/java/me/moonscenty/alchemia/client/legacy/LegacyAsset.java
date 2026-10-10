@@ -4,13 +4,22 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.StringReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.function.IntSupplier;
 
 import javax.annotation.Nullable;
 import javax.imageio.ImageIO;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.stream.JsonReader;
 import com.mojang.blaze3d.platform.NativeImage;
 
 /**
@@ -106,6 +115,58 @@ public record LegacyAsset(String target, List<Source> sources, Transform transfo
      */
     public LegacyAsset forModel(String key) {
         return new LegacyAsset(target, sources, transform, key);
+    }
+
+    /**
+     * A model file of the original, made one this game reads. 1.8.9 read its model files loosely, so some have a word
+     * left unquoted; they are read loosely here too and written back out properly. Every texture is pointed at where
+     * {@link LegacyAssets} imports the original's pictures ({@code block/legacy/}), and a model at our own of the same
+     * name. The old display settings meant something else then and are dropped: a block model takes the game's
+     * ordinary block ones instead.
+     */
+    public LegacyAsset asModel() {
+        return new LegacyAsset(target, sources, LegacyAsset::model, model);
+    }
+
+    private static byte[] model(byte[] json) throws IOException {
+        JsonReader reader = new JsonReader(new StringReader(new String(json, StandardCharsets.UTF_8)));
+        reader.setLenient(true);
+        JsonObject root;
+        try {
+            root = JsonParser.parseReader(reader).getAsJsonObject();
+        } catch (RuntimeException e) {
+            throw new IOException("Not a model", e);
+        }
+        root.remove("display");
+        JsonObject out = (JsonObject) retarget(root);
+        if (!out.has("parent") && out.has("elements")) {
+            out.addProperty("parent", "minecraft:block/block");
+        }
+        return out.toString().getBytes(StandardCharsets.UTF_8);
+    }
+
+    private static JsonElement retarget(JsonElement element) {
+        if (element.isJsonObject()) {
+            JsonObject copy = new JsonObject();
+            element.getAsJsonObject().entrySet().forEach(entry -> copy.add(entry.getKey(), retarget(entry.getValue())));
+            return copy;
+        }
+        if (element.isJsonArray()) {
+            JsonArray copy = new JsonArray();
+            element.getAsJsonArray().forEach(item -> copy.add(retarget(item)));
+            return copy;
+        }
+        if (element.isJsonPrimitive() && element.getAsJsonPrimitive().isString()) {
+            String value = element.getAsString();
+            String lower = value.toLowerCase(Locale.ROOT);
+            if (lower.startsWith("thaumcraft:blocks/")) {
+                return new JsonPrimitive("alchemia:block/legacy/" + value.substring("thaumcraft:blocks/".length()));
+            }
+            if (lower.startsWith("thaumcraft:block/")) {
+                return new JsonPrimitive("alchemia:block/" + value.substring("thaumcraft:block/".length()));
+            }
+        }
+        return element;
     }
 
     private static byte[] tint(byte[] png, int rgb) throws IOException {
