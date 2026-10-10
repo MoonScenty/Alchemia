@@ -365,8 +365,11 @@ public final class LegacyAssets {
         for (String face : List.of("jar_side", "jar_top", "jar_bottom", "animatedglow")) {
             all.add(LegacyAsset.of("textures/block/legacy/" + face + ".png").five("textures/blocks/" + face + ".png"));
         }
+        // the crucible is the original's model file, which names its pictures where the original kept them
+        all.add(LegacyAsset.of("models/block/crucible.json").five("models/block/crucible.json").asModel());
         for (String face : List.of("bottom", "inner", "side", "top")) {
-            all.add(block("crucible_" + face, "crucible_" + face, null));
+            all.add(LegacyAsset.of("textures/block/legacy/crucible_" + face + ".png")
+                    .five("textures/blocks/crucible_" + face + ".png"));
         }
         all.add(block("smelter_front", "smelter_basic_front_off", null));
         all.add(block("smelter_front_on", "smelter_basic_front_on", null));
@@ -407,8 +410,11 @@ public final class LegacyAssets {
     private static void infusion(List<LegacyAsset> all) {
         all.add(block("infusion_cost_stone", "matrix_cost", null));
         all.add(block("infusion_speed_stone", "matrix_speed", null));
-        all.add(block("pedestal_side", "pedestal_side", null));
-        all.add(block("pedestal_top", "pedestal_top", null));
+        // the pedestal is the original's model file, which names its pictures where the original kept them
+        all.add(LegacyAsset.of("models/block/pedestal.json").five("models/block/pedestal_normal.json").asModel());
+        for (String face : List.of("pedestal_side", "pedestal_top")) {
+            all.add(LegacyAsset.of("textures/block/legacy/" + face + ".png").five("textures/blocks/" + face + ".png"));
+        }
 
         // the matrix's stones and the pillars, drawn by the matrix on the original's own model and mesh
         all.add(LegacyAsset.of("textures/item/legacy/infuser.png").five("textures/blocks/infuser_normal.png"));
@@ -562,11 +568,13 @@ public final class LegacyAssets {
         all.add(block("cinderpearl", "cinderpearl", "cinderpearl"));
         all.add(block("vishroom", "vishroom", "manashroom"));
 
-        // stone. The original's amber block had a separate top and its arcane stone three faces; ours are one
-        // picture each, so they take the side and the first face until the models are split
+        // stone. The amber block has its own top, and the arcane stone three faces, laid as the original laid them
         all.add(block("amber_block", "amber_side", "amberblock"));
+        all.add(block("amber_block_top", "amber_top", "amberblock"));
         all.add(block("amber_bricks", "amber_brick", "amberbrick"));
         all.add(block("arcane_stone", "arcane_stone_1", null));
+        all.add(block("arcane_stone_2", "arcane_stone_2", null));
+        all.add(block("arcane_stone_3", "arcane_stone_3", null));
         all.add(block("arcane_stone_bricks", "arcane_brick_stone", "arcane_stone"));
     }
 

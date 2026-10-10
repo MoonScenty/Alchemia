@@ -1,7 +1,9 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "minecraft:block/cube_bottom_top",
   "render_type": "minecraft:translucent",
   "textures": {
-    "all": "alchemia:block/amber_block"
+    "bottom": "alchemia:block/amber_block_top",
+    "side": "alchemia:block/amber_block",
+    "top": "alchemia:block/amber_block_top"
   }
 }

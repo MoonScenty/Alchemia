@@ -130,9 +130,9 @@ public class CrucibleTests {
         helper.succeed();
     }
 
-    /** What is dissolved decides the colour of the water, which is how a pot is read across a room. */
+    /** What is dissolved darkens the water, which is how a pot is read across a room. */
     @GameTest(template = TEMPLATE)
-    public static void theWaterTakesTheColourOfWhatIsInIt(GameTestHelper helper) {
+    public static void theWaterDarkensWithWhatIsInIt(GameTestHelper helper) {
         CrucibleBlockEntity crucible = lit(helper);
         int plain = crucible.colour();
         drop(helper, new ItemStack(ModItems.SHARDS.get(me.moonscenty.alchemia.block.CrystalType.FIRE).get()));

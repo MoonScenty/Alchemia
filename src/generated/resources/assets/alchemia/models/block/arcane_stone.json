@@ -1,6 +1,12 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "minecraft:block/cube",
   "textures": {
-    "all": "alchemia:block/arcane_stone"
+    "down": "alchemia:block/arcane_stone",
+    "east": "alchemia:block/arcane_stone_2",
+    "north": "alchemia:block/arcane_stone_3",
+    "particle": "alchemia:block/arcane_stone",
+    "south": "alchemia:block/arcane_stone_3",
+    "up": "alchemia:block/arcane_stone",
+    "west": "alchemia:block/arcane_stone_2"
   }
 }

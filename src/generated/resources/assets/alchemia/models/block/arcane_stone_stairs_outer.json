@@ -2,7 +2,7 @@
   "parent": "minecraft:block/outer_stairs",
   "textures": {
     "bottom": "alchemia:block/arcane_stone",
-    "side": "alchemia:block/arcane_stone",
-    "top": "alchemia:block/arcane_stone"
+    "side": "alchemia:block/arcane_stone_3",
+    "top": "alchemia:block/arcane_stone_2"
   }
 }

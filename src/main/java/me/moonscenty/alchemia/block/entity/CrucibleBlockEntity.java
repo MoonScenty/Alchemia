@@ -246,28 +246,29 @@ public class CrucibleBlockEntity extends BlockEntity {
     // --- what it looks like ------------------------------------------------
 
     /**
-     * What colour the water reads as: whatever is dissolved in it, weighted by how much of each there is.
-     * <p>
-     * Mixed by amount rather than by picking the largest, so a pot slowly filling with one thing drifts towards its
-     * colour instead of snapping to it once that aspect wins.
+     * What colour the water reads as, as the original coloured it: plain water, darkening towards a murky purple as
+     * the pot fills with what is dissolved in it. Anything at all in it takes it halfway there at once.
      */
     public int colour() {
-        if (dissolved.isEmpty()) {
-            return WATER;
+        float murk = (float) dissolved.total() / CAPACITY;
+        if (murk > 0.0F) {
+            murk = 0.5F + murk / 2.0F;
         }
-        long red = 0;
-        long green = 0;
-        long blue = 0;
-        long total = 0;
-        for (Holder<Aspect> aspect : dissolved.sortedByName()) {
-            int amount = dissolved.get(aspect);
-            int colour = aspect.value().color();
-            red += (long) ((colour >> 16) & 0xFF) * amount;
-            green += (long) ((colour >> 8) & 0xFF) * amount;
-            blue += (long) (colour & 0xFF) * amount;
-            total += amount;
-        }
-        return (int) (red / total) << 16 | (int) (green / total) << 8 | (int) (blue / total);
+        float red = ((WATER >> 16) & 0xFF) * (1.0F - murk / 3.0F);
+        float green = ((WATER >> 8) & 0xFF) * (1.0F - murk);
+        float blue = (WATER & 0xFF) * (1.0F - murk / 2.0F);
+        return (int) Math.max(0.0F, red) << 16 | (int) Math.max(0.0F, green) << 8 | (int) Math.max(0.0F, blue);
+    }
+
+    /**
+     * How high the surface stands, as the original worked it out: from 0.3 dry to 0.8 brim-full of water, and what is
+     * dissolved raises it the rest of the way towards the rim.
+     */
+    public float surface() {
+        float water = 0.3F + 0.5F * this.water / FULL;
+        float raised = water + (float) dissolved.total() / CAPACITY * (1.0F - water);
+        // the original kept it off exactly the rim, where it would fight the top of the walls
+        return raised > 1.0F ? 1.001F : raised == 1.0F ? 0.9999F : raised;
     }
 
     /**

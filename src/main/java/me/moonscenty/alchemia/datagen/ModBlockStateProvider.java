@@ -62,7 +62,10 @@ public class ModBlockStateProvider extends BlockStateProvider {
         ModBlocks.STONE_SETS.forEach(this::stoneSet);
         simpleBlockWithItem(ModBlocks.INFUSION_SPEED_STONE);
         simpleBlockWithItem(ModBlocks.INFUSION_COST_STONE);
-        translucentBlock(ModBlocks.AMBER_BLOCK);
+        // the original's amber block wears its own picture on top and bottom
+        simpleBlockWithItem(ModBlocks.AMBER_BLOCK.get(), models().cubeBottomTop("amber_block",
+                modLoc("block/amber_block"), modLoc("block/amber_block_top"), modLoc("block/amber_block_top"))
+                .renderType("translucent"));
         translucentBlock(ModBlocks.AMBER_BRICKS);
     }
 
@@ -177,36 +180,11 @@ public class ModBlockStateProvider extends BlockStateProvider {
     }
 
     /**
-     * The pot, dry and then at each of its three depths.
-     * <p>
-     * Built on vanilla's cauldron models rather than drawn again: they already have the shape and, for the wet
-     * ones, the liquid face with a tint on it. Only the pictures are ours, and the liquid takes its colour from
-     * what is dissolved in the pot rather than from the water texture.
+     * The pot is the original's model file at every depth. Its water is not part of the model: the original drew it
+     * as a surface that rises and darkens with what is in it ({@code CrucibleRenderer}).
      */
     private void crucible() {
-        ModelFile dry = crucibleModel("crucible", "block/cauldron", false);
-        ModelFile[] wet = {
-                crucibleModel("crucible_level1", "block/template_cauldron_level1", true),
-                crucibleModel("crucible_level2", "block/template_cauldron_level2", true),
-                crucibleModel("crucible_full", "block/template_cauldron_full", true),
-        };
-        getVariantBuilder(ModBlocks.CRUCIBLE.get()).forAllStates(state -> {
-            int filled = state.getValue(CrucibleBlock.LEVEL);
-            return ConfiguredModel.builder()
-                    .modelFile(filled == 0 ? dry : wet[filled - 1])
-                    .build();
-        });
-    }
-
-    private ModelFile crucibleModel(String name, String parent, boolean wet) {
-        var model = models().withExistingParent(name, mcLoc(parent))
-                // what flies off when it is broken or stood on: the stone it is set into rather than its own iron
-                .texture("particle", modLoc("block/arcane_stone"))
-                .texture("top", modLoc("block/crucible_top"))
-                .texture("side", modLoc("block/crucible_side"))
-                .texture("bottom", modLoc("block/crucible_bottom"))
-                .texture("inside", modLoc("block/crucible_inner"));
-        return wet ? model.texture("content", mcLoc("block/water_still")) : model;
+        simpleBlock(ModBlocks.CRUCIBLE.get(), models().getExistingFile(modLoc("block/crucible")));
     }
 
     /**
@@ -257,10 +235,11 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
     /** A furnace in every way the blockstate cares about: it faces somewhere, and it is lit or it is not. */
     private void essentiaSmelter() {
-        ModelFile off = models().orientable("essentia_smelter",
-                modLoc("block/smelter_side"), modLoc("block/smelter_front"), modLoc("block/smelter_top"));
-        ModelFile on = models().orientable("essentia_smelter_on",
-                modLoc("block/smelter_side"), modLoc("block/smelter_front_on"), modLoc("block/smelter_top"));
+        // the original's underside is the furnace's top
+        ModelFile off = models().orientableWithBottom("essentia_smelter", modLoc("block/smelter_side"),
+                modLoc("block/smelter_front"), mcLoc("block/furnace_top"), modLoc("block/smelter_top"));
+        ModelFile on = models().orientableWithBottom("essentia_smelter_on", modLoc("block/smelter_side"),
+                modLoc("block/smelter_front_on"), mcLoc("block/furnace_top"), modLoc("block/smelter_top"));
         horizontalBlock(ModBlocks.ESSENTIA_SMELTER.get(),
                 state -> state.getValue(EssentiaSmelterBlock.LIT) ? on : off);
     }
@@ -311,12 +290,33 @@ public class ModBlockStateProvider extends BlockStateProvider {
     }
 
     private void stoneSet(StoneSet set) {
+        if (set == ModBlocks.ARCANE_STONE) {
+            arcaneStone(set);
+            return;
+        }
         simpleBlockWithItem(set.block());
 
         ResourceLocation texture = blockTexture(set.block().get());
         stairsBlock(set.stairs().get(), texture);
         simpleBlockItem(set.stairs().get(), models().getExistingFile(set.stairs().getId().withPrefix("block/")));
         slabBlock(set.slab().get(), texture, texture);
+        simpleBlockItem(set.slab().get(), models().getExistingFile(set.slab().getId().withPrefix("block/")));
+    }
+
+    /**
+     * Arcane stone, as the original laid its three pictures: the first on top and bottom, the second east and west,
+     * the third north and south. Its stairs and slab take the first underneath, the second on top and the third
+     * round the sides.
+     */
+    private void arcaneStone(StoneSet set) {
+        ResourceLocation one = modLoc("block/arcane_stone");
+        ResourceLocation two = modLoc("block/arcane_stone_2");
+        ResourceLocation three = modLoc("block/arcane_stone_3");
+        ModelFile block = models().cube("arcane_stone", one, one, three, three, two, two).texture("particle", one);
+        simpleBlockWithItem(set.block().get(), block);
+        stairsBlock(set.stairs().get(), three, one, two);
+        simpleBlockItem(set.stairs().get(), models().getExistingFile(set.stairs().getId().withPrefix("block/")));
+        slabBlock(set.slab().get(), modLoc("block/arcane_stone"), three, one, two);
         simpleBlockItem(set.slab().get(), models().getExistingFile(set.slab().getId().withPrefix("block/")));
     }
 

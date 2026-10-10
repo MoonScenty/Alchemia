@@ -1,6 +1,7 @@
 {
-  "parent": "minecraft:block/orientable",
+  "parent": "minecraft:block/orientable_with_bottom",
   "textures": {
+    "bottom": "minecraft:block/furnace_top",
     "front": "alchemia:block/smelter_front_on",
     "side": "alchemia:block/smelter_side",
     "top": "alchemia:block/smelter_top"

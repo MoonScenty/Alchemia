@@ -8,7 +8,6 @@ import org.joml.Matrix4f;
 
 import me.moonscenty.alchemia.aspect.Aspect;
 import me.moonscenty.alchemia.aspect.AspectList;
-import me.moonscenty.alchemia.block.entity.CrucibleBlockEntity;
 import me.moonscenty.alchemia.block.entity.FilterTubeBlockEntity;
 import me.moonscenty.alchemia.registry.ModDataComponents;
 import net.minecraft.core.Holder;
@@ -195,14 +194,6 @@ public class AlchemiaClientSetup {
      */
     @SubscribeEvent
     public static void registerBlockColours(RegisterColorHandlersEvent.Block event) {
-        event.register((state, level, pos, tint) -> {
-            if (level != null && pos != null
-                    && level.getBlockEntity(pos) instanceof CrucibleBlockEntity crucible) {
-                return crucible.colour();
-            }
-            return 0x3F76E4;
-        }, ModBlocks.CRUCIBLE.get());
-
         // a filter tube wears the colour of the one thing it lets by, which is the only way to read a run of pipe
         event.register((state, level, pos, tint) ->
                 level != null && pos != null && level.getBlockEntity(pos) instanceof FilterTubeBlockEntity filter
@@ -261,6 +252,7 @@ public class AlchemiaClientSetup {
         event.registerEntityRenderer(ModEntities.TAINT_CLOUD.get(), NoopRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.NODE_STABILIZER.get(), NodeStabilizerRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.ARCANE_WORKBENCH.get(), ArcaneWorkbenchRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.CRUCIBLE.get(), CrucibleRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.ARCANE_WORKBENCH_CHARGER.get(), ChargerRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.ALEMBIC.get(), AlembicRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.ARCANE_PEDESTAL.get(), ArcanePedestalRenderer::new);
