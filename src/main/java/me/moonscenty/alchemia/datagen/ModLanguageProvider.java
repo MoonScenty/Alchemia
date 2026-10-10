@@ -103,6 +103,9 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("item.alchemia.vis_discount", pick("Wands spend %s%% less", "완드가 %s%% 덜 씀"));
         add("item.alchemia.fortress.fitted", pick("Worked in: %s", "박아 넣음: %s"));
         add("helm_fitting.alchemia.goggles", pick("Goggles of Revealing", "계시의 고글"));
+        add("helm_fitting.alchemia.grinning_devil", pick("Mask of the Grinning Devil", "웃는 악귀의 가면"));
+        add("helm_fitting.alchemia.angry_ghost", pick("Mask of the Angry Ghost", "성난 망령의 가면"));
+        add("helm_fitting.alchemia.sipping_fiend", pick("Mask of the Sipping Fiend", "들이켜는 마귀의 가면"));
         add("item.alchemia.fortress.turns",
                 pick("Each piece turns %s%% of a blow, %s%% of fire and blasts, %s%% of a working",
                         "한 점마다 타격 %s%%, 불과 폭발 %s%%, 주술 %s%%를 흘림"));

@@ -117,6 +117,40 @@ public class FortressArmourTests {
                 helper.getLevel()), "a plain helm is taken");
         helper.assertFalse(((InfusionRecipe) found.value()).matches(new InfusionInput(fitted, ring),
                 helper.getLevel()), "one already wearing them is not");
+
+        // and a helm wearing a mask is no more free than one wearing the goggles
+        ItemStack masked = FortressArmorItem.wearing(plain, HelmFitting.GRINNING_DEVIL);
+        helper.assertFalse(((InfusionRecipe) found.value()).matches(new InfusionInput(masked, ring),
+                helper.getLevel()), "nor is one already wearing a mask");
+        helper.succeed();
+    }
+
+    /**
+     * A mask is worth a little in a fight, and the goggles are worth nothing in one.
+     * <p>
+     * The original gave the masks a sliver of the set bonus and the goggles none, and the sliver was small
+     * enough that nobody built a mask for it. Both halves of that are worth keeping: a mask that was worth
+     * nothing would be a lie, and one worth a lot would make the other two faces a mistake.
+     */
+    @GameTest(template = TEMPLATE)
+    public static void aMaskIsWorthASliverAndTheGogglesNothing(GameTestHelper helper) {
+        var types = helper.getLevel().registryAccess()
+                .registryOrThrow(net.minecraft.core.registries.Registries.DAMAGE_TYPE);
+        DamageSource blow = new DamageSource(types.getHolderOrThrow(DamageTypes.GENERIC));
+        Player wearer = helper.makeMockPlayer(GameType.SURVIVAL);
+
+        ItemStack helm = new ItemStack(ModItems.FORTRESS.get("fortress_helm").get());
+        wearer.setItemSlot(EquipmentSlot.HEAD, helm);
+        float bare = FortressArmourEvents.turnedAside(wearer, blow);
+
+        wearer.setItemSlot(EquipmentSlot.HEAD, FortressArmorItem.wearing(helm, HelmFitting.GOGGLES));
+        helper.assertTrue(FortressArmourEvents.turnedAside(wearer, blow) == bare,
+                "the goggles turn nothing aside");
+
+        wearer.setItemSlot(EquipmentSlot.HEAD, FortressArmorItem.wearing(helm, HelmFitting.ANGRY_GHOST));
+        float masked = FortressArmourEvents.turnedAside(wearer, blow);
+        helper.assertTrue(masked > bare, "a mask turns a little more");
+        helper.assertTrue(masked < bare * 1.2F, "but only a little");
         helper.succeed();
     }
 }

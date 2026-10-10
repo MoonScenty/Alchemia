@@ -55,6 +55,8 @@ public class ModRecipeProvider extends RecipeProvider {
     private static final int FORTRESS_UNSTABLE = 3;
     /** How badly an altar takes to setting lenses into a visor. The original's number. */
     private static final int HELM_GOGGLES_UNSTABLE = 5;
+    /** And to beating a face onto one, which it likes a good deal less. The original's number. */
+    private static final int MASK_UNSTABLE = 8;
     public ModRecipeProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         super(output, registries);
     }
@@ -554,6 +556,21 @@ public class ModRecipeProvider extends RecipeProvider {
                 HELM_GOGGLES_UNSTABLE, Optional.of(Alchemia.id("fortress_armour")),
                 Optional.empty(), Optional.of(HelmFitting.GOGGLES)), null);
 
+        // the three masks. Each is a dye, two irons and a hide round the one thing that gives it its face.
+        // The original's numbers. What a zombie's brain was is not in this mod yet, so the flesh stands for it
+        mask(output, "mask_grinning_devil", HelmFitting.GRINNING_DEVIL,
+                List.of(Ingredient.of(Items.INK_SAC), Ingredient.of(ModBlocks.SHIMMERLEAF.get()),
+                        Ingredient.of(Items.ROTTEN_FLESH)),
+                AspectList.of(ModAspects.MIND, 64).add(ModAspects.LIFE, 64).add(ModAspects.PROTECT, 16));
+        mask(output, "mask_angry_ghost", HelmFitting.ANGRY_GHOST,
+                List.of(Ingredient.of(Items.BONE_MEAL), Ingredient.of(Items.POISONOUS_POTATO),
+                        Ingredient.of(Items.WITHER_SKELETON_SKULL)),
+                AspectList.of(ModAspects.ENTROPY, 64).add(ModAspects.DEATH, 64).add(ModAspects.PROTECT, 16));
+        mask(output, "mask_sipping_fiend", HelmFitting.SIPPING_FIEND,
+                List.of(Ingredient.of(Items.RED_DYE), Ingredient.of(Items.GHAST_TEAR),
+                        Ingredient.of(Items.MILK_BUCKET)),
+                AspectList.of(ModAspects.UNDEAD, 64).add(ModAspects.LIFE, 64).add(ModAspects.PROTECT, 16));
+
         // the two caps a workbench can only cast. Salis mundus round them, and the altar does the rest
         infusion(output, "wand_cap_alchemium", Ingredient.of(ModItems.INERT_CAPS.get("alchemium")),
                 salis(3), new ItemStack(ModItems.WAND_CAPS.get("alchemium").get()),
@@ -630,6 +647,24 @@ public class ModRecipeProvider extends RecipeProvider {
             ItemStack result, AspectList essentia, int instability, String research) {
         output.accept(Alchemia.id(name), new InfusionRecipe(central, ring, result, essentia, instability,
                 Optional.of(Alchemia.id(research))), null);
+    }
+
+    /**
+     * One of the three masks, beaten onto a fortress helm.
+     * <p>
+     * Every mask is two irons and a hide; what tells them apart is the dye and the two things that give the face
+     * its character, which is what the caller hands in.
+     */
+    private void mask(RecipeOutput output, String name, HelmFitting face, List<Ingredient> own,
+            AspectList essentia) {
+        List<Ingredient> ring = new java.util.ArrayList<>(own);
+        ring.add(Ingredient.of(Items.IRON_INGOT));
+        ring.add(Ingredient.of(Items.IRON_INGOT));
+        ring.add(Ingredient.of(Items.LEATHER));
+        output.accept(Alchemia.id(name), new InfusionRecipe(
+                Ingredient.of(ModItems.FORTRESS.get("fortress_helm")), ring, ItemStack.EMPTY, essentia,
+                MASK_UNSTABLE, Optional.of(Alchemia.id("fortress_armour")),
+                Optional.empty(), Optional.of(face)), null);
     }
 
     /**

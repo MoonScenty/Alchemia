@@ -46,6 +46,14 @@ public final class FortressArmourEvents {
     public static final float TURNS_BLOWS = 0.0625F;
     public static final float TURNS_WORKINGS = 0.03125F;
 
+    /**
+     * What a mask on the helm is worth, counted as a share of another piece of the suit.
+     * <p>
+     * An eighth, which is next to nothing, and that is the original's number: it added a twentieth to a multiplier
+     * that a whole suit had already carried to one and a quarter. Nobody builds a mask for the arithmetic.
+     */
+    public static final float A_MASK = 0.125F;
+
     /** All four, though only three of them can hold any of this today. A fourth piece would need no change here. */
     private static final EquipmentSlot[] WORN = {EquipmentSlot.HEAD, EquipmentSlot.CHEST,
             EquipmentSlot.LEGS, EquipmentSlot.FEET};
@@ -62,6 +70,20 @@ public final class FortressArmourEvents {
             }
         }
         return pieces;
+    }
+
+    /**
+     * How much of a blow the whole suit turns aside: what is worn, counting a mask as a fraction of a piece,
+     * against what the blow is made of.
+     */
+    public static float turnedAside(LivingEntity wearer, DamageSource source) {
+        float pieces = worn(wearer);
+        for (EquipmentSlot slot : WORN) {
+            if (FortressArmorItem.fitting(wearer.getItemBySlot(slot)).map(HelmFitting::isMask).orElse(false)) {
+                pieces += A_MASK;
+            }
+        }
+        return pieces * turns(source);
     }
 
     /** What one piece is worth against this particular blow. */
@@ -83,11 +105,11 @@ public final class FortressArmourEvents {
         if (event.getSource().is(DamageTypeTags.BYPASSES_ARMOR)) {
             return;
         }
-        int pieces = worn(event.getEntity());
-        if (pieces == 0) {
+        float turned = turnedAside(event.getEntity(), event.getSource());
+        if (turned <= 0.0F) {
             return;
         }
-        event.setNewDamage(event.getNewDamage() * (1.0F - pieces * turns(event.getSource())));
+        event.setNewDamage(event.getNewDamage() * (1.0F - turned));
     }
 
     /** Falling does not wear the plate. Whatever the ground does to the wearer, it does nothing to this. */

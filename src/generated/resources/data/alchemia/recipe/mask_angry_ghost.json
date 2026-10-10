@@ -1,0 +1,34 @@
+{
+  "type": "alchemia:infusion",
+  "central": {
+    "item": "alchemia:fortress_helm"
+  },
+  "essentia": {
+    "alchemia:mortuus": 64,
+    "alchemia:perditio": 64,
+    "alchemia:praemunio": 16
+  },
+  "fits": "angry_ghost",
+  "instability": 8,
+  "research": "alchemia:fortress_armour",
+  "ring": [
+    {
+      "item": "minecraft:bone_meal"
+    },
+    {
+      "item": "minecraft:poisonous_potato"
+    },
+    {
+      "item": "minecraft:wither_skeleton_skull"
+    },
+    {
+      "item": "minecraft:iron_ingot"
+    },
+    {
+      "item": "minecraft:iron_ingot"
+    },
+    {
+      "item": "minecraft:leather"
+    }
+  ]
+}

@@ -23,6 +23,18 @@
     {
       "type": "recipe",
       "recipe": "alchemia:helm_goggles"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:mask_grinning_devil"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:mask_angry_ghost"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:mask_sipping_fiend"
     }
   ],
   "parents": [
