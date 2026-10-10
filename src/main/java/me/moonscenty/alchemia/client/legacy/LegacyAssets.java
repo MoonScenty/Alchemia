@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.function.Supplier;
 
 import me.moonscenty.alchemia.aspect.Aspect;
+import me.moonscenty.alchemia.aura.node.NodeType;
 import me.moonscenty.alchemia.registry.ModAspects;
 
 /**
@@ -248,6 +249,9 @@ public final class LegacyAssets {
                 .cropped(0, 0, 32 * NODE_CELL, NODE_CELL));
         all.add(LegacyAsset.of("textures/entity/node_halo.png").five("textures/misc/nodes.png")
                 .cropped(0, 25 * NODE_CELL, 16 * NODE_CELL, NODE_CELL));
+        // what kind of node it is, as a white knot drawn small over the core: the rows under the first, one a kind
+        all.add(LegacyAsset.of("textures/entity/node_types.png").five("textures/misc/nodes.png")
+                .cropped(0, NODE_CELL, 32 * NODE_CELL, NodeType.values().length * NODE_CELL));
         all.add(LegacyAsset.of("textures/entity/node_bubble.png").five("textures/misc/node_bubble.png"));
 
         // taint, each with the original's own variations in the same order

@@ -8,6 +8,8 @@ import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.aspect.Aspect;
 import me.moonscenty.alchemia.aura.AuraGeneration;
 import me.moonscenty.alchemia.aura.node.AuraNode;
+import me.moonscenty.alchemia.aura.node.NodeType;
+import me.moonscenty.alchemia.client.legacy.LegacyRenderTypes;
 import me.moonscenty.alchemia.player.PlayerKnowledge;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -23,7 +25,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
 /**
- * Draws a node as two flat pictures that always face the camera: the knot itself, and a glow around it.
+ * Draws a node as flat pictures that always face the camera: the knot itself, a glow around it, and a small white
+ * knot over it that tells what kind of node it is.
  * <p>
  * Neither picture has a colour of its own. They are drawn in the colour of whatever the node is made of, which is
  * why one set of frames covers every aspect there is.
@@ -36,8 +39,15 @@ public class AuraNodeRenderer extends EntityRenderer<AuraNode> {
     private static final ResourceLocation HALO = Alchemia.id("textures/entity/node_halo.png");
     private static final ResourceLocation TAG_BACK = Alchemia.id("textures/aspect/background.png");
     private static final ResourceLocation UNKNOWN = Alchemia.id("textures/aspect/unknown.png");
+    /** One row of the original's sheet for each kind of node, under the core's own row. */
+    private static final ResourceLocation TYPES = Alchemia.id("textures/entity/node_types.png");
     private static final int CORE_FRAMES = 32;
     private static final int HALO_FRAMES = 16;
+    /** How opaque each layer is and how big against the node, as the original drew them. */
+    private static final float CORE_ALPHA = 0.75F;
+    private static final float HALO_ALPHA = 0.9F;
+    private static final float HALO_SIZE = 0.7F;
+    private static final float TYPE_SIZE = 1.0F / 3.0F;
 
     /** How big a node of no size at all would be drawn, and how much its size adds. */
     private static final float LEAST = 0.15F;
@@ -90,10 +100,19 @@ public class AuraNodeRenderer extends EntityRenderer<AuraNode> {
         pose.pushPose();
         pose.mulPose(entityRenderDispatcher.cameraOrientation());
 
-        drawFacing(pose, buffers, CORE, node.tickCount % CORE_FRAMES, CORE_FRAMES, size, colour, 0.75F * clarity);
+        int frame = node.tickCount % CORE_FRAMES;
+        drawFacing(pose, buffers, LegacyRenderTypes.glow(CORE), frame, CORE_FRAMES, 0, 1, size, colour,
+                CORE_ALPHA * clarity);
         // the glow swells and shrinks a little out of step with the knot, so the two never look welded together
         float beat = 1.0F - Mth.sin(age / BEAT_LENGTH) * BEAT_DEPTH;
-        drawFacing(pose, buffers, HALO, node.tickCount % HALO_FRAMES, HALO_FRAMES, size * beat, colour, 0.55F * clarity);
+        drawFacing(pose, buffers, LegacyRenderTypes.glow(HALO), node.tickCount % HALO_FRAMES, HALO_FRAMES, 0, 1,
+                size * beat * HALO_SIZE, colour, HALO_ALPHA * clarity);
+        // what kind it is, as a small white knot of its own. A hungry node's is dark, laid over rather than added
+        NodeType type = node.type();
+        RenderType kind = type == NodeType.HUNGRY ? RenderType.entityTranslucent(TYPES)
+                : LegacyRenderTypes.glow(TYPES);
+        drawFacing(pose, buffers, kind, frame, CORE_FRAMES, type.ordinal(), NodeType.values().length,
+                size * TYPE_SIZE, 0xFFFFFF, clarity);
 
         pose.popPose();
 
@@ -183,23 +202,29 @@ public class AuraNodeRenderer extends EntityRenderer<AuraNode> {
                 .setNormal(pose.last(), 0.0F, 0.0F, -1.0F);
     }
 
-    /** One frame out of a strip, drawn as a square centred on the node and tinted. */
-    private static void drawFacing(PoseStack pose, MultiBufferSource buffers, ResourceLocation strip, int frame,
-            int frames, float size, int colour, float alpha) {
+    /**
+     * One frame out of a sheet of rows, drawn as a square centred on the node and tinted.
+     * <p>
+     * The core and the halo are light added to what is behind, by as much as they are opaque, as the original drew
+     * them; that is what makes them read as light, and what lets a node fade as it is seen less clearly.
+     */
+    private static void drawFacing(PoseStack pose, MultiBufferSource buffers, RenderType type, int frame,
+            int frames, int row, int rows, float size, int colour, float alpha) {
         float u0 = frame / (float) frames;
         float u1 = (frame + 1) / (float) frames;
+        float v0 = row / (float) rows;
+        float v1 = (row + 1) / (float) rows;
         int red = (colour >> 16) & 0xFF;
         int green = (colour >> 8) & 0xFF;
         int blue = colour & 0xFF;
-        int opacity = (int) (alpha * 255);
+        int opacity = (int) (Mth.clamp(alpha, 0.0F, 1.0F) * 255);
 
-        // added to what is behind rather than laid over it, which is what makes it read as light
-        VertexConsumer buffer = buffers.getBuffer(RenderType.energySwirl(strip, 0.0F, 0.0F));
+        VertexConsumer buffer = buffers.getBuffer(type);
         Matrix4f matrix = pose.last().pose();
-        quad(buffer, matrix, -size, -size, u0, 1.0F, red, green, blue, opacity);
-        quad(buffer, matrix, size, -size, u1, 1.0F, red, green, blue, opacity);
-        quad(buffer, matrix, size, size, u1, 0.0F, red, green, blue, opacity);
-        quad(buffer, matrix, -size, size, u0, 0.0F, red, green, blue, opacity);
+        quad(buffer, matrix, -size, -size, u0, v1, red, green, blue, opacity);
+        quad(buffer, matrix, size, -size, u1, v1, red, green, blue, opacity);
+        quad(buffer, matrix, size, size, u1, v0, red, green, blue, opacity);
+        quad(buffer, matrix, -size, size, u0, v0, red, green, blue, opacity);
     }
 
     private static void quad(VertexConsumer buffer, Matrix4f matrix, float x, float y, float u, float v,
