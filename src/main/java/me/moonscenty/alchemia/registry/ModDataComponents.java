@@ -16,7 +16,9 @@ import net.minecraft.core.Holder;
 import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -80,6 +82,18 @@ public class ModDataComponents {
             COMPONENTS.register("helm_fitting", () -> DataComponentType.<HelmFitting>builder()
                     .persistent(HelmFitting.CODEC)
                     .networkSynchronized(HelmFitting.STREAM_CODEC)
+                    .build());
+
+    /**
+     * The block a builder's or a trader's focus has been shown and told to copy.
+     * <p>
+     * The block rather than the state it was in: a wall laid by a wand comes out facing whichever way the block
+     * faces by default, which is tidier than every stair in it pointing wherever the one that was copied did.
+     */
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Holder<Block>>> PICKED_BLOCK =
+            COMPONENTS.register("picked_block", () -> DataComponentType.<Holder<Block>>builder()
+                    .persistent(BuiltInRegistries.BLOCK.holderByNameCodec())
+                    .networkSynchronized(ByteBufCodecs.holderRegistry(Registries.BLOCK))
                     .build());
 
     /** What a wand is carrying, in hundredths of a point so that a cap's discount is not rounded away. */

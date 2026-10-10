@@ -236,6 +236,7 @@
   "item.alchemia.filter": "Filter",
   "item.alchemia.fire_shard": "Fire Shard",
   "item.alchemia.flux_shard": "Flux Shard",
+  "item.alchemia.focus.copying": "Copying: %s",
   "item.alchemia.focus.cost": "Vis Cost:",
   "item.alchemia.focus.cost_line": "  %s x %s",
   "item.alchemia.focus.cost_per_tick": "Vis Cost (per tick):",

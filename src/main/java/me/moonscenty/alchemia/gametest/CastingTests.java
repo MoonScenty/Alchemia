@@ -11,6 +11,11 @@ import me.moonscenty.alchemia.wand.Casting;
 import me.moonscenty.alchemia.wand.spell.Grapple;
 import me.moonscenty.alchemia.wand.spell.Ember;
 import me.moonscenty.alchemia.wand.spell.PechBlast;
+import me.moonscenty.alchemia.wand.spell.Swapping;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import me.moonscenty.alchemia.wand.spell.PrimalOrb;
 import me.moonscenty.alchemia.wand.spell.VisShard;
 import net.minecraft.core.BlockPos;
@@ -35,11 +40,20 @@ import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 public class CastingTests {
     private static final String TEMPLATE = "empty_32x40x32";
 
-    /** A wand with a focus on it and as much air in it as asked for. */
-    private static ItemStack wand(String focus, int air) {
+    /**
+     * A wand with a focus on it and as much of every primal in it as asked for.
+     * <p>
+     * Every primal rather than only air: half the foci are priced in things that are not air, and a wand filled
+     * with one of the six is a wand that cannot afford most of what is being tested.
+     */
+    private static ItemStack wand(String focus, int each) {
         ItemStack wand = WandItem.of(ModWandParts.SILVERWOOD, ModWandParts.GOLD);
         WandItem.setFocus(wand, new ItemStack(ModItems.FOCI.get(focus).get()));
-        wand.set(ModDataComponents.VIS.get(), AspectList.of(ModAspects.AIR, air * WandItem.FINE));
+        AspectList filled = AspectList.EMPTY;
+        for (var primal : ModAspects.primals()) {
+            filled = filled.add(primal, each * WandItem.FINE);
+        }
+        wand.set(ModDataComponents.VIS.get(), filled);
         return wand;
     }
 
@@ -214,6 +228,65 @@ public class CastingTests {
                 net.minecraft.core.Direction.UP, helper.absolutePos(stand), false));
 
         helper.assertBlockPresent(net.minecraft.world.level.block.Blocks.AIR, stand);
+        helper.succeed();
+    }
+    /**
+     * A builder lays a row out from the wall it was clicked, as long as the caster is standing back.
+     * <p>
+     * It will not lay anything until it has been shown what to lay, and being shown costs nothing -- that is a
+     * decision rather than a working.
+     */
+    @GameTest(template = TEMPLATE, timeoutTicks = 200)
+    public static void aBuilderLaysARowOnceItHasBeenShownWhatToLay(GameTestHelper helper) {
+        Player caster = helper.makeMockPlayer(GameType.CREATIVE);
+        ItemStack wand = wand("builder", 100);
+        BlockPos wall = new BlockPos(1, 2, 1);
+        helper.setBlock(wall, Blocks.STONE);
+        caster.setPos(helper.absoluteVec(new Vec3(5.5, 2.0, 1.5)));
+
+        BlockHitResult face = new BlockHitResult(Vec3.ZERO, Direction.EAST, helper.absolutePos(wall), false);
+        helper.assertFalse(Swapping.builder(helper.getLevel(), caster, wand, face, 0),
+                "with nothing shown to it, it lays nothing");
+
+        caster.setShiftKeyDown(true);
+        Swapping.builder(helper.getLevel(), caster, wand, face, 0);
+        caster.setShiftKeyDown(false);
+        helper.assertTrue(WandItem.focus(wand).get(ModDataComponents.PICKED_BLOCK.get()) != null,
+                "it remembers what it was shown");
+
+        helper.assertTrue(Swapping.builder(helper.getLevel(), caster, wand, face, 0), "now it lays");
+        helper.assertBlockPresent(Blocks.STONE, wall.east());
+        helper.succeed();
+    }
+
+    /**
+     * A trade turns one kind of block into another and spreads along it.
+     * <p>
+     * It follows the vein rather than filling a box, so what is around the vein is left where it was.
+     */
+    @GameTest(template = TEMPLATE, timeoutTicks = 200)
+    public static void aTradeFollowsTheVein(GameTestHelper helper) {
+        Player caster = helper.makeMockPlayer(GameType.CREATIVE);
+        ItemStack wand = wand("trade", 100);
+        BlockPos first = new BlockPos(2, 2, 2);
+        helper.setBlock(first, Blocks.COAL_ORE);
+        helper.setBlock(first.east(), Blocks.COAL_ORE);
+        helper.setBlock(first.east().east(), Blocks.DIRT);
+
+        // shown a stone, then set on the ore
+        helper.setBlock(new BlockPos(2, 3, 2), Blocks.STONE);
+        caster.setShiftKeyDown(true);
+        Swapping.trade(helper.getLevel(), caster, wand,
+                new BlockHitResult(Vec3.ZERO, Direction.UP, helper.absolutePos(new BlockPos(2, 3, 2)), false), 0);
+        caster.setShiftKeyDown(false);
+
+        helper.assertTrue(Swapping.trade(helper.getLevel(), caster, wand,
+                new BlockHitResult(Vec3.ZERO, Direction.UP, helper.absolutePos(first), false), 0),
+                "the vein was traded");
+        helper.assertBlockPresent(Blocks.STONE, first);
+        helper.assertBlockPresent(Blocks.STONE, first.east());
+        // what was not ore is left alone: the trade follows the vein rather than filling a box
+        helper.assertBlockPresent(Blocks.DIRT, first.east().east());
         helper.succeed();
     }
 }

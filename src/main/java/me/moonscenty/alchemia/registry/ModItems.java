@@ -17,6 +17,7 @@ import me.moonscenty.alchemia.item.RobeItem;
 import me.moonscenty.alchemia.wand.Focus;
 import me.moonscenty.alchemia.wand.spell.Excavation;
 import me.moonscenty.alchemia.wand.spell.Shock;
+import me.moonscenty.alchemia.wand.spell.Swapping;
 import me.moonscenty.alchemia.wand.spell.Thrown;
 import me.moonscenty.alchemia.item.GogglesItem;
 import me.moonscenty.alchemia.item.TravellerBootsItem;
@@ -247,9 +248,9 @@ public class ModItems {
                 .add(ModAspects.ENTROPY, 1).add(ModAspects.AIR, 1))
                 .cooldown(300).inTurrets().casts(Thrown::visShard));
         kinds.put("trade", () -> Focus.of(0x857B93, AspectList.of(ModAspects.ENTROPY, 1)
-                .add(ModAspects.EARTH, 1).add(ModAspects.ORDER, 1)));
+                .add(ModAspects.EARTH, 1).add(ModAspects.ORDER, 1)).casts(Swapping::trade));
         kinds.put("builder", () -> Focus.of(0x85EB93, AspectList.of(ModAspects.AIR, 1)
-                .add(ModAspects.EARTH, 1).add(ModAspects.ORDER, 1)));
+                .add(ModAspects.EARTH, 1).add(ModAspects.ORDER, 1)).casts(Swapping::builder));
 
         Map<String, DeferredItem<FocusItem>> made = new java.util.LinkedHashMap<>();
         kinds.forEach((name, kind) -> made.put(name, ITEMS.register("focus_" + name,

@@ -236,6 +236,7 @@
   "item.alchemia.filter": "여과망",
   "item.alchemia.fire_shard": "불 조각",
   "item.alchemia.flux_shard": "플럭스 조각",
+  "item.alchemia.focus.copying": "복사 중: %s",
   "item.alchemia.focus.cost": "비스 값:",
   "item.alchemia.focus.cost_line": "  %s x %s",
   "item.alchemia.focus.cost_per_tick": "비스 값 (틱당):",
