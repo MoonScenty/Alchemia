@@ -352,6 +352,9 @@ public final class LegacyAssets {
         // the motes rising off a flame: the original's wisp, one cell in the bottom corner of its particle sheet
         all.add(LegacyAsset.of("textures/particle/mote.png").five("textures/misc/particles.png")
                 .cropped(0, 224, 32, 32));
+        // the original's two particle sheets whole, for the effects drawn straight off them as it drew them
+        all.add(LegacyAsset.of("textures/misc/legacy_particles.png").five("textures/misc/particles.png"));
+        all.add(LegacyAsset.of("textures/misc/legacy_particles2.png").five("textures/misc/particles2.png"));
 
         all.add(item("alumentum", "alumentum", null));
         // grey, and painted by whatever it holds

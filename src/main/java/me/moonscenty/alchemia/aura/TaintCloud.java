@@ -1,12 +1,12 @@
 package me.moonscenty.alchemia.aura;
 
 import me.moonscenty.alchemia.block.taint.FluxGooBlock;
+import me.moonscenty.alchemia.client.AuraEffects;
 import me.moonscenty.alchemia.registry.ModAspects;
 import me.moonscenty.alchemia.registry.ModBlocks;
 import me.moonscenty.alchemia.registry.ModEntities;
 import me.moonscenty.alchemia.registry.ModTags;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.Entity;
@@ -16,25 +16,22 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.material.Fluids;
-import org.joml.Vector3f;
 
 /**
  * A cloud of flux hanging over the land, raining goo.
  * <p>
  * It has no body: it is a spot in the air that lasts a minute or so, drops a puddle now and then on the ground
- * beneath, and shows itself only as a haze and a purple drizzle. Each puddle costs the chunk a point of flux, and
- * when the chunk cannot pay the cloud thins out sooner.
+ * beneath, and shows itself as the original's cloud did: great slow purple puffs, and a rain that splashes up slime.
+ * Each puddle costs the chunk a point of flux, and when the chunk cannot pay the cloud thins out sooner.
  */
 public class TaintCloud extends Entity {
-    /** How wide the drizzle falls, and how far a puddle may land from the middle. */
+    /** How far a puddle may land from the middle. */
     private static final int SPREAD = 16;
     /** How often, per tick, it drops a puddle. */
     private static final int POOL_CHANCE = 20;
     /** How much sooner it goes when the land has no flux to give. */
     private static final int THINS_BY = 20;
 
-    private static final DustParticleOptions DRIZZLE = new DustParticleOptions(new Vector3f(0.55F, 0.25F, 0.7F), 0.8F);
-    private static final DustParticleOptions HAZE = new DustParticleOptions(new Vector3f(0.35F, 0.15F, 0.45F), 2.0F);
 
     private int lifespan;
 
@@ -57,7 +54,7 @@ public class TaintCloud extends Entity {
     public void tick() {
         super.tick();
         if (level().isClientSide) {
-            drizzle();
+            AuraEffects.taintCloud(this);
             return;
         }
         if (lifespan-- < 0) {
@@ -98,17 +95,6 @@ public class TaintCloud extends Entity {
         }
         level().setBlock(onto, FluxGooBlock.of(ModBlocks.FLUX_GOO.get(), 0), Block.UPDATE_ALL);
         return true;
-    }
-
-    private void drizzle() {
-        for (int i = 0; i < 3; i++) {
-            double x = getX() + random.nextInt(SPREAD) - random.nextInt(SPREAD) + random.nextDouble();
-            double z = getZ() + random.nextInt(SPREAD) - random.nextInt(SPREAD) + random.nextDouble();
-            level().addParticle(DRIZZLE, x, getY() - random.nextInt(4), z, 0.0, -0.4, 0.0);
-        }
-        double x = getX() + random.nextInt(SPREAD) - random.nextInt(SPREAD) + random.nextDouble();
-        double z = getZ() + random.nextInt(SPREAD) - random.nextInt(SPREAD) + random.nextDouble();
-        level().addParticle(HAZE, x, getY() + random.nextDouble() * 2, z, 0.0, 0.0, 0.0);
     }
 
     @Override

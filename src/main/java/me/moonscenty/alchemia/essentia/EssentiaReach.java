@@ -4,11 +4,12 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import org.joml.Vector3f;
+
 import me.moonscenty.alchemia.aspect.Aspect;
+import me.moonscenty.alchemia.particle.EssenceOptions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
-import net.minecraft.core.particles.ColorParticleOption;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -79,15 +80,20 @@ public final class EssentiaReach {
         return found;
     }
 
-    /** A thread of colour drawn from where the essentia came from to whatever asked for it. */
+    /** How many drops make one run of essentia from one thing to another. */
+    private static final int DROPS = 3;
+
+    /**
+     * A run of drops of the essentia's colour, from where it came from to whatever asked for it. Each drop of a run
+     * wobbles a little differently, so they do not move as one.
+     */
     public static void thread(ServerLevel level, BlockPos source, BlockPos sink, int colour) {
         Vec3 from = Vec3.atCenterOf(source);
-        Vec3 to = Vec3.atCenterOf(sink);
-        int steps = (int) Math.max(3, from.distanceTo(to) * 2);
-        for (int step = 0; step <= steps; step++) {
-            Vec3 at = from.lerp(to, (double) step / steps);
-            level.sendParticles(ColorParticleOption.create(ParticleTypes.ENTITY_EFFECT, colour),
-                    at.x, at.y, at.z, 1, 0.0, 0.0, 0.0, 0.0);
+        Vector3f to = Vec3.atCenterOf(sink).toVector3f();
+        int first = level.random.nextInt(64);
+        for (int drop = 0; drop < DROPS; drop++) {
+            level.sendParticles(new EssenceOptions(colour, to, first + drop),
+                    from.x, from.y, from.z, 1, 0.0, 0.0, 0.0, 0.0);
         }
     }
 }

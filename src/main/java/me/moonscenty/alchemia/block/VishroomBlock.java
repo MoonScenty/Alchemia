@@ -1,12 +1,10 @@
 package me.moonscenty.alchemia.block;
 
-import org.joml.Vector3f;
-
 import com.mojang.serialization.MapCodec;
 
+import me.moonscenty.alchemia.client.AuraEffects;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -26,7 +24,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 public class VishroomBlock extends BushBlock {
     public static final MapCodec<VishroomBlock> CODEC = simpleCodec(VishroomBlock::new);
     private static final VoxelShape SHAPE = Block.box(3, 0, 3, 13, 10, 13);
-    private static final DustParticleOptions HAZE = new DustParticleOptions(new Vector3f(0.5F, 0.3F, 0.8F), 1.0F);
     private static final int CONFUSION_TICKS = 200;
 
     public VishroomBlock(Properties properties) {
@@ -58,13 +55,6 @@ public class VishroomBlock extends BushBlock {
 
     @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
-        if (random.nextInt(3) != 0) {
-            return;
-        }
-
-        double x = pos.getX() + 0.5 + (random.nextDouble() - random.nextDouble()) * 0.4;
-        double y = pos.getY() + 0.3;
-        double z = pos.getZ() + 0.5 + (random.nextDouble() - random.nextDouble()) * 0.4;
-        level.addParticle(HAZE, x, y, z, 0, -0.01, 0);
+        AuraEffects.vishroom(level, pos, random);
     }
 }

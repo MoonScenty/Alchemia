@@ -6,10 +6,12 @@ import java.util.List;
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.aspect.AspectList;
 import me.moonscenty.alchemia.aspect.Aspects;
+import me.moonscenty.alchemia.particle.MarkOptions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -242,9 +244,11 @@ public final class InfusionEnchantmentEvents {
             if (!level.getBlockState(found).is(Tags.Blocks.ORES)) {
                 continue;
             }
-            // shown to the one who tapped and to nobody else: it is their tool that heard it
-            level.sendParticles(listener, net.minecraft.core.particles.ParticleTypes.END_ROD, true,
-                    found.getX() + 0.5, found.getY() + 0.5, found.getZ() + 0.5, 4, 0.2, 0.2, 0.2, 0.0);
+            // shown to the one who tapped and to nobody else: it is their tool that heard it. The marks spread out
+            // from the struck block a block a tick, as the original's did
+            int waits = Mth.floor(Math.sqrt(tapped.distSqr(found)));
+            level.sendParticles(listener, new MarkOptions(waits), true,
+                    found.getX() + 0.5, found.getY() + 0.5, found.getZ() + 0.5, 1, 0.0, 0.0, 0.0, 0.0);
         }
         held.hurtAndBreak(TAP_COSTS, event.getEntity(), EquipmentSlot.MAINHAND);
         level.playSound(null, tapped, net.minecraft.sounds.SoundEvents.AMETHYST_BLOCK_RESONATE,

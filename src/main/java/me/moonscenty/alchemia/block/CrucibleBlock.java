@@ -3,10 +3,10 @@ package me.moonscenty.alchemia.block;
 import com.mojang.serialization.MapCodec;
 
 import me.moonscenty.alchemia.block.entity.CrucibleBlockEntity;
+import me.moonscenty.alchemia.client.CrucibleEffects;
 import me.moonscenty.alchemia.registry.ModBlockEntities;
 import me.moonscenty.alchemia.registry.ModTags;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -169,25 +169,18 @@ public class CrucibleBlock extends BaseEntityBlock {
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state,
             BlockEntityType<T> type) {
-        return level.isClientSide ? null
+        // the client draws the froth and the bubbles every tick, as the original did
+        return level.isClientSide
+                ? createTickerHelper(type, ModBlockEntities.CRUCIBLE.get(), CrucibleEffects::tick)
                 : createTickerHelper(type, ModBlockEntities.CRUCIBLE.get(), CrucibleBlockEntity::tick);
     }
 
     @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
-        if (!boiling(level, pos)) {
-            return;
-        }
-        double top = pos.getY() + 0.3 + state.getValue(LEVEL) * 0.22;
-        if (random.nextInt(3) == 0) {
-            level.addParticle(ParticleTypes.BUBBLE_POP,
-                    pos.getX() + 0.25 + random.nextDouble() * 0.5, top,
-                    pos.getZ() + 0.25 + random.nextDouble() * 0.5, 0.0, 0.0, 0.0);
-        }
-        if (random.nextInt(8) == 0) {
-            level.addParticle(ParticleTypes.SMOKE,
-                    pos.getX() + 0.3 + random.nextDouble() * 0.4, top + 0.1,
-                    pos.getZ() + 0.3 + random.nextDouble() * 0.4, 0.0, 0.02, 0.0);
+        // the bubbles are drawn every tick by CrucibleEffects; here, as in the original, only the odd pop is heard
+        if (random.nextInt(10) == 0 && boiling(level, pos)) {
+            level.playLocalSound(pos.getX(), pos.getY(), pos.getZ(), SoundEvents.LAVA_POP, SoundSource.BLOCKS,
+                    0.1F + random.nextFloat() * 0.1F, 1.2F + random.nextFloat() * 0.2F, false);
         }
     }
 }

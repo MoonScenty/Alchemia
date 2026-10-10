@@ -14,6 +14,9 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import me.moonscenty.alchemia.block.entity.JarBlockEntity;
 import me.moonscenty.alchemia.client.particle.MoteParticle;
+import me.moonscenty.alchemia.client.particle.EssenceParticle;
+import me.moonscenty.alchemia.client.particle.MarkParticle;
+import me.moonscenty.alchemia.client.particle.SparkleParticle;
 import me.moonscenty.alchemia.registry.ModBlocks;
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.registry.ModWandParts;
@@ -233,6 +236,10 @@ public class AlchemiaClientSetup {
     @SubscribeEvent
     public static void registerParticles(RegisterParticleProvidersEvent event) {
         event.registerSpriteSet(ModParticles.MOTE.get(), MoteParticle.Maker::new);
+        // the original's own particles are drawn straight off its sheets, so they have no sprites to register
+        event.registerSpecial(ModParticles.SPARKLE.get(), new SparkleParticle.Maker());
+        event.registerSpecial(ModParticles.ESSENCE.get(), new EssenceParticle.Maker());
+        event.registerSpecial(ModParticles.MARK.get(), new MarkParticle.Maker());
     }
 
     @SubscribeEvent

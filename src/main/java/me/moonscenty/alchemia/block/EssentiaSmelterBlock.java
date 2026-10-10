@@ -107,22 +107,20 @@ public class EssentiaSmelterBlock extends BaseEntityBlock {
             return;
         }
         Direction facing = state.getValue(FACING);
-        double drift = random.nextDouble() * 0.6 - 0.3;
         if (random.nextInt(5) == 0) {
             level.playLocalSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
                     SoundEvents.FURNACE_FIRE_CRACKLE, SoundSource.BLOCKS, 0.6F, 1.0F, false);
         }
-        // fire at the mouth, and what has been boiled off rising out of the hole in the top
-        level.addParticle(ParticleTypes.SMALL_FLAME,
-                pos.getX() + 0.5 + facing.getStepX() * 0.52 + (facing.getAxis().isVertical() ? 0 : drift * facing.getStepZ()),
-                pos.getY() + 0.15,
-                pos.getZ() + 0.5 + facing.getStepZ() * 0.52 + (facing.getAxis().isVertical() ? 0 : drift * facing.getStepX()),
-                0.0, 0.0, 0.0);
-        if (random.nextInt(3) == 0) {
-            level.addParticle(ParticleTypes.CLOUD,
-                    pos.getX() + 0.5 + drift * 0.3, pos.getY() + 1.05, pos.getZ() + 0.5 + drift * 0.3,
-                    0.0, 0.03, 0.0);
+        if (facing.getAxis().isVertical()) {
+            return;
         }
+        // smoke and fire at the mouth, as the original's furnace-like front gave them out every time
+        double across = random.nextDouble() * 0.5 - 0.25;
+        double x = pos.getX() + 0.5 + facing.getStepX() * 0.52 + facing.getStepZ() * across;
+        double y = pos.getY() + 0.2 + random.nextDouble() * 5.0 / 16.0;
+        double z = pos.getZ() + 0.5 + facing.getStepZ() * 0.52 + facing.getStepX() * across;
+        level.addParticle(ParticleTypes.SMOKE, x, y, z, 0.0, 0.0, 0.0);
+        level.addParticle(ParticleTypes.FLAME, x, y, z, 0.0, 0.0, 0.0);
     }
 
     @Override

@@ -2,6 +2,8 @@ package me.moonscenty.alchemia.item;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import me.moonscenty.alchemia.aspect.Aspect;
 import me.moonscenty.alchemia.aspect.AspectList;
 import me.moonscenty.alchemia.aura.AuraHandler;
@@ -196,9 +198,24 @@ public class WandItem extends Item implements VisHolder {
      * under a charger are both worth as much more as the cap on them is.
      */
     public static boolean charge(ItemStack stack, ServerLevel level, BlockPos at, int amount) {
+        return chargeFrom(stack, level, at, amount) != null;
+    }
+
+    /**
+     * What a charge did: the last vis it drew, and whether it drew all it was allowed to.
+     *
+     * @param last the aspect drawn last
+     * @param full whether the whole of the amount asked for, and the cap's bonus, came in
+     */
+    public record Charged(Holder<Aspect> last, boolean full) {
+    }
+
+    /** As {@link #charge}, saying what was drawn; null when nothing was. */
+    @Nullable
+    public static Charged chargeFrom(ItemStack stack, ServerLevel level, BlockPos at, int amount) {
         amount += cap(stack).chargeBonus();
         int room = capacity(stack);
-        boolean any = false;
+        Holder<Aspect> last = null;
 
         for (Holder<Aspect> aspect : ModAspects.primals()) {
             if (amount <= 0) {
@@ -212,10 +229,10 @@ public class WandItem extends Item implements VisHolder {
             if (drawn > 0) {
                 put(stack, aspect, drawn * FINE);
                 amount -= drawn;
-                any = true;
+                last = aspect;
             }
         }
-        return any;
+        return last == null ? null : new Charged(last, amount <= 0);
     }
 
     /** A rod that makes its own vis tops itself up, to halfway and no further. */

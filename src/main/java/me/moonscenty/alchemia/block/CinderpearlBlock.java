@@ -46,9 +46,9 @@ public class CinderpearlBlock extends BushBlock {
             return;
         }
 
-        double x = pos.getX() + 0.5 + (random.nextDouble() - random.nextDouble()) * 0.2;
-        double y = pos.getY() + 0.6 + (random.nextDouble() - random.nextDouble()) * 0.2;
-        double z = pos.getZ() + 0.5 + (random.nextDouble() - random.nextDouble()) * 0.2;
+        double x = pos.getX() + 0.5 + (random.nextDouble() - random.nextDouble()) * 0.1;
+        double y = pos.getY() + 0.6 + (random.nextDouble() - random.nextDouble()) * 0.1;
+        double z = pos.getZ() + 0.5 + (random.nextDouble() - random.nextDouble()) * 0.1;
         level.addParticle(ParticleTypes.SMOKE, x, y, z, 0, 0, 0);
         level.addParticle(ParticleTypes.FLAME, x, y, z, 0, 0, 0);
     }

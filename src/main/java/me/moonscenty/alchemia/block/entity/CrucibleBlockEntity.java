@@ -8,6 +8,7 @@ import me.moonscenty.alchemia.aspect.AspectList;
 import me.moonscenty.alchemia.aspect.Aspects;
 import me.moonscenty.alchemia.aura.AuraHandler;
 import me.moonscenty.alchemia.block.CrucibleBlock;
+import me.moonscenty.alchemia.client.CrucibleEffects;
 import me.moonscenty.alchemia.crafting.CrucibleInput;
 import me.moonscenty.alchemia.crafting.CrucibleRecipe;
 import me.moonscenty.alchemia.crafting.ModRecipes;
@@ -66,6 +67,11 @@ public class CrucibleBlockEntity extends BlockEntity {
     private AspectList dissolved = AspectList.EMPTY;
     private int counter;
 
+    /** The event that tells the client the pot boiled up, with how hard as its data. */
+    private static final int BOIL_UP = 2;
+    /** The event that tells the client a recipe came out, for the puff it goes up in. */
+    private static final int CRAFTED = 99;
+
     public CrucibleBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.CRUCIBLE.get(), pos, state);
     }
@@ -90,9 +96,30 @@ public class CrucibleBlockEntity extends BlockEntity {
 
     /** Empties the pot into a bucket. Whatever was dissolved goes into the air rather than into the bucket. */
     public void drain() {
+        if (level != null && !level.isClientSide && !dissolved.isEmpty()) {
+            // the original boiled up five times as hard when what was in the pot was thrown out
+            level.blockEvent(worldPosition, getBlockState().getBlock(), BOIL_UP, 5);
+        }
         spillAll();
         water = 0;
         changed();
+    }
+
+    @Override
+    public boolean triggerEvent(int id, int data) {
+        if (id == CRAFTED) {
+            if (level != null && level.isClientSide) {
+                CrucibleEffects.crafted(level, worldPosition);
+            }
+            return true;
+        }
+        if (id == BOIL_UP) {
+            if (level != null && level.isClientSide) {
+                CrucibleEffects.boil(level, worldPosition, this, data);
+            }
+            return true;
+        }
+        return super.triggerEvent(id, data);
     }
 
     // --- ticking -----------------------------------------------------------
@@ -166,6 +193,7 @@ public class CrucibleBlockEntity extends BlockEntity {
             eject(level, pos, recipe.assemble(new CrucibleInput(one, dissolved), level.registryAccess()));
             level.playSound(null, pos, SoundEvents.BREWING_STAND_BREW, SoundSource.BLOCKS, 0.6F, 1.2F);
             changed();
+            level.blockEvent(pos, getBlockState().getBlock(), CRAFTED, 0);
             return true;
         }
 
@@ -176,6 +204,7 @@ public class CrucibleBlockEntity extends BlockEntity {
         dissolved = dissolved.add(made);
         level.playSound(null, pos, SoundEvents.GENERIC_SPLASH, SoundSource.BLOCKS, 0.3F, 1.4F);
         changed();
+        level.blockEvent(pos, getBlockState().getBlock(), BOIL_UP, 1);
         return true;
     }
 
