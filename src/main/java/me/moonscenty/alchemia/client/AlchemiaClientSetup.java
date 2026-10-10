@@ -15,7 +15,6 @@ import net.minecraft.util.FastColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import me.moonscenty.alchemia.block.entity.JarBlockEntity;
-import me.moonscenty.alchemia.client.particle.MoteParticle;
 import me.moonscenty.alchemia.client.particle.EssenceParticle;
 import me.moonscenty.alchemia.client.particle.MarkParticle;
 import me.moonscenty.alchemia.client.particle.SparkleParticle;
@@ -146,10 +145,10 @@ public class AlchemiaClientSetup {
         // a vis crystal in the hand is the original's grey cluster, coloured by its aspect
         ModBlocks.CRYSTALS.forEach((type, crystal) -> event.register(
                 (stack, tint) -> tint == 0 ? 0xFF000000 | type.aspect().value().color() : PLAIN, crystal.get().asItem()));
-        // a flame in a slot is two layers: the grey flame, which takes the dye, and its bead, which does not.
-        // a dye's colour is already opaque, so unlike the phial and the label it needs no wrapping
+        // a flame in a slot is two layers: the grey flame, which takes the colour the original gave it (the dye's
+        // colour on a map, not its colour as a dye), and its bead, which takes none
         ModBlocks.NITOR.forEach((colour, flame) -> event.register(
-                (stack, tint) -> tint == 0 ? colour.getTextureDiffuseColor() : PLAIN, flame.get().asItem()));
+                (stack, tint) -> tint == 0 ? 0xFF000000 | colour.getMapColor().col : PLAIN, flame.get().asItem()));
         // a robe in a slot is its cloth, which takes the dye, and the trim over it, which does not
         ModItems.ROBES.values().forEach(robe -> event.register(
                 (stack, tint) -> tint == 0 ? FastColor.ARGB32.opaque(RobeItem.dyed(stack)) : PLAIN, robe.get()));
@@ -215,7 +214,7 @@ public class AlchemiaClientSetup {
 
         // a flame is drawn in grey and painted by the kind of flame it is; its bead is a second layer, undyed
         ModBlocks.NITOR.forEach((colour, flame) -> event.register(
-                (state, level, pos, tint) -> tint == 0 ? colour.getTextureDiffuseColor() : -1, flame.get()));
+                (state, level, pos, tint) -> tint == 0 ? colour.getMapColor().col : -1, flame.get()));
     }
 
     /**
@@ -235,10 +234,9 @@ public class AlchemiaClientSetup {
         ModItems.FORTRESS.values().forEach(piece -> event.registerItem(FortressExtensions.INSTANCE, piece.get()));
     }
 
-    /** What draws a mote of light. */
+    /** What draws the mod's particles. */
     @SubscribeEvent
     public static void registerParticles(RegisterParticleProvidersEvent event) {
-        event.registerSpriteSet(ModParticles.MOTE.get(), MoteParticle.Maker::new);
         // the original's own particles are drawn straight off its sheets, so they have no sprites to register
         event.registerSpecial(ModParticles.SPARKLE.get(), new SparkleParticle.Maker());
         event.registerSpecial(ModParticles.ESSENCE.get(), new EssenceParticle.Maker());

@@ -42,6 +42,14 @@ public class GlowWispParticle extends LegacyParticle {
         this.quadSize = 0.0F;
     }
 
+    /** Sets it drifting so that it would reach the given point at the end of its life, as the original's could. */
+    public GlowWispParticle towards(double x, double y, double z) {
+        this.xd = (x - this.x) / lifetime;
+        this.yd = (y - this.y) / lifetime;
+        this.zd = (z - this.z) / lifetime;
+        return this;
+    }
+
     @Override
     public void tick() {
         xo = x;

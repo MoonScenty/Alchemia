@@ -380,7 +380,7 @@ public final class LegacyAssets {
         // the flame is grey and dyed in code, the bead is not, as in the original
         all.add(block("nitor", "nitor", null));
         all.add(block("nitor_core", "nitor_core", null));
-        // the motes rising off a flame: the original's wisp, one cell in the bottom corner of its particle sheet
+        // the original's wisp, one cell in the bottom corner of its particle sheet, for the research screen's orbs
         all.add(LegacyAsset.of("textures/particle/mote.png").five("textures/misc/particles.png")
                 .cropped(0, 224, 32, 32));
         // the original's two particle sheets whole, for the effects drawn straight off them as it drew them

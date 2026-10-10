@@ -2,8 +2,6 @@ package me.moonscenty.alchemia.block;
 
 import com.mojang.serialization.MapCodec;
 
-import org.joml.Vector3f;
-
 import me.moonscenty.alchemia.block.entity.NitorBlockEntity;
 import me.moonscenty.alchemia.registry.ModBlockEntities;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -11,8 +9,6 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import me.moonscenty.alchemia.particle.MoteOptions;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -21,7 +17,6 @@ import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
@@ -36,9 +31,9 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * colour its own kind gives out; the red bead in the middle is a second picture that no dye touches. Sixteen
  * pictures would have been sixteen chances for one of them to drift away from the others.
  * <p>
- * Placed, it has no model at all. What is there to see is motes rising out of the spot, which is how the
- * original had it -- a flame held still is a picture of a flame, and the one thing this is not is still. The
- * drawn pictures are what it looks like in a slot, where nothing moves and something has to be shown.
+ * Placed, it has no model at all, as the original had none: what is there to see is the original's wisps of light
+ * welling up out of the spot ({@code NitorEffects}). The drawn pictures are what it looks like in a slot, where
+ * nothing moves and something has to be shown.
  */
 public class NitorBlock extends BaseEntityBlock {
     public static final MapCodec<NitorBlock> CODEC =
@@ -46,24 +41,6 @@ public class NitorBlock extends BaseEntityBlock {
 
     /** A small flame in the middle of the block: it is a light, not a thing to walk on. */
     private static final VoxelShape SHAPE = Block.box(5.0, 5.0, 5.0, 11.0, 11.0, 11.0);
-
-    /**
-     * How the flame is made, which is the original's arrangement.
-     * <p>
-     * Every mote starts at the very middle of the block and wanders a little way out over its life. Nothing is
-     * ever spawned away from the middle, so the middle is where they pile up: a dozen of them on top of one
-     * another, each adding its light to the last, and what is seen is a ball that burns white at its heart and
-     * falls off to colour at the rim. The few that get furthest out are what says it is burning rather than
-     * merely lit.
-     */
-    private static final int HEART_ONE_IN = 4;
-    private static final int STRAYS_ONE_IN = 12;
-    /** How far a mote of each sort wanders in a tick. Over a life of two seconds that is a fifth of a block. */
-    private static final double HEART_WANDERS = 0.0045;
-    private static final double STRAYS_WANDERS = 0.012;
-    /** How big each sort is drawn. */
-    private static final float HEART_SIZE = 1.5F;
-    private static final float STRAY_SIZE = 0.75F;
 
     private final DyeColor colour;
 
@@ -87,7 +64,7 @@ public class NitorBlock extends BaseEntityBlock {
         return SHAPE;
     }
 
-    /** Nothing is drawn for it. Everything it looks like is the motes below. */
+    /** Nothing is drawn for it. Everything it looks like is its wisps. */
     @Override
     protected RenderShape getRenderShape(BlockState state) {
         return RenderShape.INVISIBLE;
@@ -112,32 +89,6 @@ public class NitorBlock extends BaseEntityBlock {
                 : null;
     }
 
-    /**
-     * The motes, in the colour of whichever flame this is.
-     * <p>
-     * Two sorts. A heart that sits still at the very middle and is most of what is seen, and strays that wander
-     * out of it. The heart alone would be a lamp; the strays alone would be a light coming from nowhere.
-     */
-    public void burn(Level level, BlockPos pos) {
-        RandomSource random = level.random;
-        Vector3f tint = Vec3.fromRGB24(colour.getTextureDiffuseColor()).toVector3f();
-        if (random.nextInt(HEART_ONE_IN) == 0) {
-            let(level, pos, random, tint, HEART_SIZE, HEART_WANDERS);
-        }
-        if (random.nextInt(STRAYS_ONE_IN) == 0) {
-            let(level, pos, random, tint, STRAY_SIZE, STRAYS_WANDERS);
-        }
-    }
-
-    /** One mote, let go at the very middle of the block and told which way to wander. */
-    private static void let(Level level, BlockPos pos, RandomSource random, Vector3f tint, float size,
-            double wanders) {
-        level.addParticle(new MoteOptions(tint, size),
-                pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
-                (random.nextDouble() - 0.5) * wanders,
-                (random.nextDouble() - 0.5) * wanders,
-                (random.nextDouble() - 0.5) * wanders);
-    }
 
     /** It hangs in the air if that is where it was put. Nothing holds a flame up. */
     @Override

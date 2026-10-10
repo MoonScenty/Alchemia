@@ -1,6 +1,7 @@
 package me.moonscenty.alchemia.block.entity;
 
 import me.moonscenty.alchemia.block.NitorBlock;
+import me.moonscenty.alchemia.client.NitorEffects;
 import me.moonscenty.alchemia.registry.ModBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
@@ -11,7 +12,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
  * A nitor's ticking, which is the whole of what makes one visible.
  * <p>
  * It holds nothing and saves nothing. It exists because the block has no model at all -- what is there to see is
- * motes coming off the spot, and something has to let them off every tick. The hook the game offers for idle
+ * wisps coming off the spot, as the original's own ticking block let them off, and something has to let them off every tick. The hook the game offers for idle
  * scenery is called a few times a minute for any one block, which is fine for a torch that is already drawn and
  * useless for a thing that is nothing but its own sparks.
  * <p>
@@ -24,7 +25,7 @@ public class NitorBlockEntity extends BlockEntity {
 
     public static void tick(Level level, BlockPos pos, BlockState state, NitorBlockEntity nitor) {
         if (state.getBlock() instanceof NitorBlock flame) {
-            flame.burn(level, pos);
+            NitorEffects.burn(level, pos, flame.colour());
         }
     }
 }

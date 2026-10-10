@@ -3,7 +3,6 @@ package me.moonscenty.alchemia.client;
 import java.util.List;
 
 import me.moonscenty.alchemia.aspect.Aspect;
-import me.moonscenty.alchemia.block.CrucibleBlock;
 import me.moonscenty.alchemia.block.entity.CrucibleBlockEntity;
 import me.moonscenty.alchemia.client.particle.BubbleParticle;
 import me.moonscenty.alchemia.client.particle.GenericParticle;
@@ -35,17 +34,12 @@ public final class CrucibleEffects {
     private CrucibleEffects() {
     }
 
-    /** The surface, as high as our model draws it. */
-    private static double surface(BlockState state) {
-        return 0.3 + state.getValue(CrucibleBlock.LEVEL) * 0.22;
-    }
-
     public static void tick(Level level, BlockPos pos, BlockState state, CrucibleBlockEntity crucible) {
         if (!(level instanceof ClientLevel client) || crucible.water() <= 0) {
             return;
         }
         RandomSource random = level.random;
-        double top = pos.getY() + surface(state);
+        double top = pos.getY() + crucible.surface();
         if (crucible.working()) {
             add(new BubbleParticle(client, pos.getX() + 0.2 + random.nextFloat() * 0.6, top,
                     pos.getZ() + 0.2 + random.nextFloat() * 0.6, FROTH, -4, 0.0, BubbleParticle.Kind.FROTH));
@@ -83,7 +77,7 @@ public final class CrucibleEffects {
         }
         RandomSource random = level.random;
         List<Holder<Aspect>> held = crucible.dissolved().sortedByAmount();
-        double top = pos.getY() + 0.1 + surface(crucible.getBlockState());
+        double top = pos.getY() + 0.1 + crucible.surface();
         for (int call = 0; call < 10; call++) {
             for (int i = 0; i < count(1); i++) {
                 int colour = held.isEmpty() ? WHITE : held.get(random.nextInt(held.size())).value().color();
