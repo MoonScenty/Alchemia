@@ -13,6 +13,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import me.moonscenty.alchemia.Alchemia;
+import me.moonscenty.alchemia.client.legacy.model.LegacyMesh;
 import me.moonscenty.alchemia.client.legacy.model.LegacyModel;
 import me.moonscenty.alchemia.client.legacy.model.LegacyModelReader;
 import net.minecraft.network.chat.Component;
@@ -87,7 +88,7 @@ public final class LegacyAssetImporter {
     static Map<String, byte[]> importAll(Path folder) {
         Map<String, byte[]> files = new HashMap<>();
         // whatever happens below, last time's models are not this time's
-        LegacyModels.replace(Map.of());
+        LegacyModels.replace(Map.of(), Map.of());
         if (!Files.isDirectory(folder)) {
             try {
                 // made so a player can see where the jars go
@@ -105,7 +106,6 @@ public final class LegacyAssetImporter {
                 return files;
             }
             Map<String, LegacyModel> models = importModels(jars);
-            LegacyModels.replace(models);
             Map<LegacyEdition, Integer> taken = new EnumMap<>(LegacyEdition.class);
             List<String> missing = new ArrayList<>();
             for (LegacyAsset asset : LegacyAssets.ALL) {
@@ -120,6 +120,7 @@ public final class LegacyAssetImporter {
                     missing.add(asset.target());
                 }
             }
+            LegacyModels.replace(models, readMeshes(files));
             Alchemia.LOGGER.info("Imported {} of {} files from the original {}", LegacyAssets.ALL.size() - missing.size(),
                     LegacyAssets.ALL.size(), taken);
             if (!missing.isEmpty()) {
@@ -135,6 +136,22 @@ public final class LegacyAssetImporter {
             }
         }
         return files;
+    }
+
+    /** Reads the meshes that came over as OBJ files, so what draws them need not go looking for them again. */
+    private static Map<String, LegacyMesh> readMeshes(Map<String, byte[]> files) {
+        Map<String, LegacyMesh> meshes = new HashMap<>();
+        files.forEach((path, bytes) -> {
+            if (!path.endsWith(".obj")) {
+                return;
+            }
+            try {
+                meshes.put(path, LegacyMesh.parse(new String(bytes, StandardCharsets.UTF_8)));
+            } catch (RuntimeException e) {
+                Alchemia.LOGGER.warn("Could not read the mesh {}", path, e);
+            }
+        });
+        return meshes;
     }
 
     /** Reads every model the original wrote as code; the first release whose jar has the class wins. */

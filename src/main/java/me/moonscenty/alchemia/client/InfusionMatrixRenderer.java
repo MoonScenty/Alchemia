@@ -5,7 +5,13 @@ import com.mojang.math.Axis;
 
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.block.entity.InfusionMatrixBlockEntity;
+import me.moonscenty.alchemia.client.legacy.LegacyAssets;
+import me.moonscenty.alchemia.client.legacy.LegacyModels;
+import me.moonscenty.alchemia.client.legacy.model.LegacyMesh;
+import me.moonscenty.alchemia.client.legacy.model.LegacyModelBaker;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
@@ -13,6 +19,8 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.AABB;
 
@@ -59,6 +67,18 @@ public class InfusionMatrixRenderer implements BlockEntityRenderer<InfusionMatri
     private static final float WANDER = 0.09F;
     private static final float[] WANDERS_IN = {15.0F, 14.0F, 13.0F};
 
+    /** The original's pictures for its cube and its pillar, there only when its jar is. */
+    private static final ResourceLocation STONE_TEXTURE = Alchemia.id("textures/entity/infusion_matrix.png");
+    private static final ResourceLocation PILLAR_TEXTURE = Alchemia.id("textures/entity/arcane_pillar.png");
+    /** The colour the original gave the glow. */
+    private static final float GLOW_R = 0.8F, GLOW_G = 0.1F, GLOW_B = 1.0F;
+
+    /** The original's cube, its glow and its pillar, as of the import {@link #bakedFrom} names; null without a jar. */
+    private static int bakedFrom = -1;
+    private static ModelPart legacyStone;
+    private static ModelPart legacyGlow;
+    private static LegacyMesh pillarMesh;
+
     public InfusionMatrixRenderer(BlockEntityRendererProvider.Context context) {
     }
 
@@ -77,6 +97,8 @@ public class InfusionMatrixRenderer implements BlockEntityRenderer<InfusionMatri
         float running = Math.min(1.0F, since / WINDS_UP);
         float shake = matrix.busy() ? matrix.instability() * running : 0.0F;
 
+        refresh();
+
         // the altar itself, drawn by the matrix because it is the matrix that knows it is an altar
         if (matrix.awake()) {
             BakedModel pillar = client.getModelManager().getModel(PILLAR);
@@ -85,9 +107,15 @@ public class InfusionMatrixRenderer implements BlockEntityRenderer<InfusionMatri
                 pose.translate(corner[0] + 0.5, corner[1], corner[2] + 0.5);
                 pose.mulPose(Axis.YP.rotationDegrees(corner[3]));
                 pose.translate(-0.5, 0.0, -0.5);
-                client.getBlockRenderer().getModelRenderer().renderModel(pose.last(),
-                        buffers.getBuffer(RenderType.cutout()), null, pillar,
-                        1.0F, 1.0F, 1.0F, light, OverlayTexture.NO_OVERLAY);
+                if (pillarMesh != null) {
+                    // the original's mesh is modelled from the block's corner, two blocks tall, leaning the same way
+                    pillarMesh.render(pose.last(), buffers.getBuffer(RenderType.entityCutoutNoCull(PILLAR_TEXTURE)),
+                            0xFFFFFFFF, light, OverlayTexture.NO_OVERLAY);
+                } else {
+                    client.getBlockRenderer().getModelRenderer().renderModel(pose.last(),
+                            buffers.getBuffer(RenderType.cutout()), null, pillar,
+                            1.0F, 1.0F, 1.0F, light, OverlayTexture.NO_OVERLAY);
+                }
                 pose.popPose();
             }
         }
@@ -117,15 +145,49 @@ public class InfusionMatrixRenderer implements BlockEntityRenderer<InfusionMatri
                         pose.mulPose(Axis.ZP.rotationDegrees(90.0F));
                     }
                     pose.scale(SMALL, SMALL, SMALL);
-                    pose.translate(-0.5, -0.5, -0.5);
-                    client.getBlockRenderer().getModelRenderer().renderModel(pose.last(),
-                            buffers.getBuffer(RenderType.cutout()), null, stone,
-                            1.0F, 1.0F, 1.0F, light, OverlayTexture.NO_OVERLAY);
+                    if (legacyStone != null) {
+                        // the original's cube is a whole block about its own middle
+                        legacyStone.render(pose, buffers.getBuffer(RenderType.entityCutoutNoCull(STONE_TEXTURE)),
+                                light, OverlayTexture.NO_OVERLAY);
+                        if (legacyGlow != null && matrix.awake()) {
+                            legacyGlow.render(pose, buffers.getBuffer(RenderType.eyes(STONE_TEXTURE)),
+                                    LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY,
+                                    glow(ticks, east, up, south, running));
+                        }
+                    } else {
+                        pose.translate(-0.5, -0.5, -0.5);
+                        client.getBlockRenderer().getModelRenderer().renderModel(pose.last(),
+                                buffers.getBuffer(RenderType.cutout()), null, stone,
+                                1.0F, 1.0F, 1.0F, light, OverlayTexture.NO_OVERLAY);
+                    }
                     pose.popPose();
                 }
             }
         }
         pose.popPose();
+    }
+
+    /** Bakes the original's cube again, and picks up its pillar, whenever the import has changed what there is. */
+    private static void refresh() {
+        int generation = LegacyModels.generation();
+        if (generation == bakedFrom) {
+            return;
+        }
+        bakedFrom = generation;
+        legacyStone = LegacyModels.get(LegacyAssets.INFUSER).map(model -> LegacyModelBaker.field(model, "cube"))
+                .orElse(null);
+        legacyGlow = LegacyModels.get(LegacyAssets.INFUSER_GLOW).map(model -> LegacyModelBaker.field(model, "cube"))
+                .orElse(null);
+        pillarMesh = LegacyModels.mesh(LegacyAssets.PILLAR_MESH).orElse(null);
+    }
+
+    /**
+     * The original's violet glow over one stone of a working matrix, breathing a little out of step with the next
+     * stone. It was drawn adding light rather than covering, so the colour is taken down by its own strength here.
+     */
+    private static int glow(float ticks, int east, int up, int south, float running) {
+        float strength = (Mth.sin((ticks + east * 2 + up * 3 + south * 4) / 4.0F) * 0.1F + 0.2F) * running;
+        return FastColor.ARGB32.colorFromFloat(1.0F, GLOW_R * strength, GLOW_G * strength, GLOW_B * strength);
     }
 
     /**

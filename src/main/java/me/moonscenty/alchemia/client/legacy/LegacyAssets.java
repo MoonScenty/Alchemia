@@ -39,6 +39,16 @@ public final class LegacyAssets {
     public static final String ROBE = "robe";
     public static final String ROBE_SKIRT = "robe_skirt";
 
+    /**
+     * The stone a matrix is eight of, and the glow laid over it while it works: one class, a sixteen-block cube, read
+     * once for each half of its sheet.
+     */
+    public static final String INFUSER = "infuser";
+    public static final String INFUSER_GLOW = "infuser_glow";
+
+    /** The pillar the original kept as an OBJ file, served as it is for the matrix to read and draw. */
+    public static final String PILLAR_MESH = "models/legacy/pillar.obj";
+
     public static final List<LegacyAsset> ALL = build();
 
     /**
@@ -63,7 +73,11 @@ public final class LegacyAssets {
                     new LegacyModelSource(LegacyEdition.FIVE,
                             "thaumcraft/client/renderers/models/gear/ModelRobe", "(F)V", 0.5F),
                     new LegacyModelSource(LegacyEdition.FOUR,
-                            "thaumcraft/client/renderers/models/gear/ModelRobe", "(F)V", 0.5F)));
+                            "thaumcraft/client/renderers/models/gear/ModelRobe", "(F)V", 0.5F)),
+            INFUSER, List.of(new LegacyModelSource(LegacyEdition.FIVE,
+                    "thaumcraft/client/renderers/models/ModelCube", "(I)V", 0)),
+            INFUSER_GLOW, List.of(new LegacyModelSource(LegacyEdition.FIVE,
+                    "thaumcraft/client/renderers/models/ModelCube", "(I)V", 32)));
 
     private LegacyAssets() {
     }
@@ -271,13 +285,20 @@ public final class LegacyAssets {
 
     /**
      * Step 8: the altar. The two stones laid under its corners, and the pedestal, whose model now asks for a side and
-     * a top as the original's did. The matrix and the pillars are drawn differently and wait for their models.
+     * a top as the original's did. The matrix and the pillars come with the original's model and mesh they are drawn
+     * on, since their pictures are laid out for those and not for ours.
      */
     private static void infusion(List<LegacyAsset> all) {
         all.add(block("infusion_cost_stone", "matrix_cost", null));
         all.add(block("infusion_speed_stone", "matrix_speed", null));
         all.add(block("pedestal_side", "pedestal_side", null));
         all.add(block("pedestal_top", "pedestal_top", null));
+
+        // the matrix's stones and the pillars, drawn by the matrix on the original's own model and mesh
+        all.add(LegacyAsset.of("textures/entity/infusion_matrix.png").five("textures/blocks/infuser_normal.png")
+                .forModel(INFUSER));
+        all.add(LegacyAsset.of(PILLAR_MESH).five("models/obj/pillar.obj"));
+        all.add(LegacyAsset.of("textures/entity/arcane_pillar.png").five("textures/blocks/pillar_normal.png"));
     }
 
     private static LegacyAsset wandPart(String ours, String original) {

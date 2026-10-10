@@ -64,6 +64,20 @@ public final class LegacyModelBaker {
         return new Baked(baked, Map.copyOf(parts));
     }
 
+    /** One part the original kept in a field, on its own, with everything hung off it. */
+    public static ModelPart field(LegacyModel model, String name) {
+        LegacyPart part = model.fields().get(name);
+        if (part == null) {
+            throw new IllegalArgumentException("No field " + name);
+        }
+        MeshDefinition mesh = new MeshDefinition();
+        add(mesh.getRoot(), part, name, model);
+        ModelPart baked = LayerDefinition.create(mesh, model.textureWidth(), model.textureHeight()).bakeRoot()
+                .getChild(name);
+        collect(baked, part, new HashMap<>());
+        return baked;
+    }
+
     private static void add(PartDefinition parent, LegacyPart part, String name, LegacyModel model) {
         // a part that kept its own sheet size gets its corners scaled to the model's, which is the only size a layer
         // has here
