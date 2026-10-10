@@ -249,6 +249,7 @@
   "item.alchemia.focus_shard": "완드 포커스: 비스 조각",
   "item.alchemia.focus_shock": "완드 포커스: 충격",
   "item.alchemia.focus_trade": "완드 포커스: 등가교환",
+  "item.alchemia.fortress.turns": "한 점마다 타격 %s%%, 불과 폭발 %s%%, 주술 %s%%를 흘림",
   "item.alchemia.fortress_chest": "요새 흉갑",
   "item.alchemia.fortress_helm": "요새 투구",
   "item.alchemia.fortress_legs": "요새 각반",
