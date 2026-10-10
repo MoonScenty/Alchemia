@@ -221,9 +221,11 @@ public class ModItems {
     private static Map<String, DeferredItem<FocusItem>> registerFoci() {
         Map<String, Supplier<Focus>> kinds = new java.util.LinkedHashMap<>();
         // held down rather than let off, and charged for every tick of it
-        kinds.put("fire", () -> Focus.of(0xE55104, AspectList.of(ModAspects.FIRE, 2)).heldDown().inTurrets());
+        kinds.put("fire", () -> Focus.of(0xE55104, AspectList.of(ModAspects.FIRE, 2))
+                .heldDown().inTurrets().casts(Thrown::fire));
         kinds.put("frost", () -> Focus.of(0x4F69CC, AspectList.of(ModAspects.WATER, 2)
-                .add(ModAspects.FIRE, 1).add(ModAspects.ENTROPY, 2)).cooldown(200).inTurrets());
+                .add(ModAspects.FIRE, 1).add(ModAspects.ENTROPY, 2))
+                .cooldown(200).inTurrets().casts(Thrown::frost));
         kinds.put("shock", () -> Focus.of(0x9FB3BF, AspectList.of(ModAspects.AIR, 8))
                 .cooldown(250).inTurrets().casts(Shock::cast));
         // a penny a block, for as long as the button is down
@@ -239,9 +241,11 @@ public class ModItems {
         // the dearest of them by a long way, and the only one that takes a wall out of the world
         kinds.put("hole", () -> Focus.of(0x091429, AspectList.of(ModAspects.ENTROPY, 25)
                 .add(ModAspects.AIR, 25).add(ModAspects.EARTH, 25)));
-        kinds.put("primal", () -> Focus.of(0xA5A1C1, primalCost()).cooldown(500).inTurrets());
+        kinds.put("primal", () -> Focus.of(0xA5A1C1, primalCost())
+                .cooldown(500).inTurrets().casts(Thrown::primal));
         kinds.put("shard", () -> Focus.of(0x9929BD, AspectList.of(ModAspects.FIRE, 1)
-                .add(ModAspects.ENTROPY, 1).add(ModAspects.AIR, 1)).cooldown(300).inTurrets());
+                .add(ModAspects.ENTROPY, 1).add(ModAspects.AIR, 1))
+                .cooldown(300).inTurrets().casts(Thrown::visShard));
         kinds.put("trade", () -> Focus.of(0x857B93, AspectList.of(ModAspects.ENTROPY, 1)
                 .add(ModAspects.EARTH, 1).add(ModAspects.ORDER, 1)));
         kinds.put("builder", () -> Focus.of(0x85EB93, AspectList.of(ModAspects.AIR, 1)

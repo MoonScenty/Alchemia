@@ -9,7 +9,10 @@ import me.moonscenty.alchemia.registry.ModItems;
 import me.moonscenty.alchemia.registry.ModWandParts;
 import me.moonscenty.alchemia.wand.Casting;
 import me.moonscenty.alchemia.wand.spell.Grapple;
+import me.moonscenty.alchemia.wand.spell.Ember;
 import me.moonscenty.alchemia.wand.spell.PechBlast;
+import me.moonscenty.alchemia.wand.spell.PrimalOrb;
+import me.moonscenty.alchemia.wand.spell.VisShard;
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
@@ -154,6 +157,63 @@ public class CastingTests {
         helper.assertTrue(loose.biting(), "it has bitten");
         loose.tick();
         helper.assertTrue(caster.getDeltaMovement().y > 0.0, "and now it hauls upwards");
+        helper.succeed();
+    }
+    /**
+     * A vis shard will not go off without a mark, and never misses once it has one.
+     * <p>
+     * That is the whole of what makes it the cheapest of the twelve. A focus that cannot miss has to be given
+     * something to not miss; otherwise it is a free hit on an empty room.
+     */
+    @GameTest(template = TEMPLATE, timeoutTicks = 200)
+    public static void aVisShardNeedsAMarkAndThenKeepsIt(GameTestHelper helper) {
+        Player caster = helper.makeMockPlayer(GameType.SURVIVAL);
+        ItemStack wand = wand("shard", 100);
+        helper.assertFalse(Casting.cast(helper.getLevel(), caster, wand, 0),
+                "pointed at nothing, it does not go off");
+
+        LivingEntity mark = helper.spawn(EntityType.PIG, new BlockPos(2, 2, 2));
+        VisShard shard = new VisShard(helper.getLevel(), caster, mark);
+        shard.setPos(caster.getX(), caster.getY() + 1.0, caster.getZ());
+        shard.setDeltaMovement(0.0, 0.0, 0.0);
+        helper.getLevel().addFreshEntity(shard);
+
+        // one tick of steering is enough to tell a shard that chases from one that drifts
+        shard.tick();
+        helper.assertTrue(shard.getDeltaMovement().length() > 0.0, "it set off after its mark");
+        helper.succeed();
+    }
+
+    /** Embers come by the handful and burn out on their own, so a long press leaves nothing behind. */
+    @GameTest(template = TEMPLATE, timeoutTicks = 200)
+    public static void embersGoOutOnTheirOwn(GameTestHelper helper) {
+        Player caster = helper.makeMockPlayer(GameType.SURVIVAL);
+        Ember mote = new Ember(helper.getLevel(), caster);
+        mote.setPos(caster.getX(), caster.getY() + 1.0, caster.getZ());
+        helper.getLevel().addFreshEntity(mote);
+        helper.assertTrue(mote.isAlive(), "it is lit");
+
+        helper.runAfterDelay(40, () -> {
+            helper.assertFalse(mote.isAlive(), "and it has gone out on its own");
+            helper.succeed();
+        });
+    }
+
+    /** A primal orb is a bomb. What it leaves is a hole, which is the original's doing and not a slip here. */
+    @GameTest(template = TEMPLATE, timeoutTicks = 200)
+    public static void aPrimalOrbGoesOff(GameTestHelper helper) {
+        Player caster = helper.makeMockPlayer(GameType.SURVIVAL);
+        BlockPos stand = new BlockPos(3, 2, 3);
+        helper.setBlock(stand, net.minecraft.world.level.block.Blocks.DIRT);
+
+        PrimalOrb orb = new PrimalOrb(helper.getLevel(), caster);
+        orb.setPos(helper.absoluteVec(new net.minecraft.world.phys.Vec3(3.5, 3.0, 3.5)));
+        helper.getLevel().addFreshEntity(orb);
+        orb.hurtMarked = false;
+        orb.lands(new net.minecraft.world.phys.BlockHitResult(orb.position(),
+                net.minecraft.core.Direction.UP, helper.absolutePos(stand), false));
+
+        helper.assertBlockPresent(net.minecraft.world.level.block.Blocks.AIR, stand);
         helper.succeed();
     }
 }

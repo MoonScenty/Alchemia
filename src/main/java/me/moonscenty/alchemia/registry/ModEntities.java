@@ -3,7 +3,11 @@ package me.moonscenty.alchemia.registry;
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.aura.TaintCloud;
 import me.moonscenty.alchemia.aura.node.AuraNode;
+import me.moonscenty.alchemia.wand.spell.Ember;
+import me.moonscenty.alchemia.wand.spell.FrostShard;
 import me.moonscenty.alchemia.wand.spell.Grapple;
+import me.moonscenty.alchemia.wand.spell.PrimalOrb;
+import me.moonscenty.alchemia.wand.spell.VisShard;
 import me.moonscenty.alchemia.wand.spell.PechBlast;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.EntityType;
@@ -60,6 +64,48 @@ public class ModEntities {
                     .updateInterval(2)
                     .noSummon()
                     .build("grapple"));
+
+    /**
+     * The four a wand throws.
+     * <p>
+     * None is drawn: each is its own trail of particles and a burst where it lands, which is most of
+     * what each of them looked like in the first place.
+     */
+    public static final DeferredHolder<EntityType<?>, EntityType<Ember>> EMBER =
+            ENTITIES.register("ember", () -> EntityType.Builder
+                    .<Ember>of(Ember::new, MobCategory.MISC)
+                    .sized(0.25F, 0.25F)
+                    .clientTrackingRange(4)
+                    .updateInterval(10)
+                    .noSummon()
+                    .build("ember"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<FrostShard>> FROST_SHARD =
+            ENTITIES.register("frost_shard", () -> EntityType.Builder
+                    .<FrostShard>of(FrostShard::new, MobCategory.MISC)
+                    .sized(0.25F, 0.25F)
+                    .clientTrackingRange(4)
+                    .updateInterval(10)
+                    .noSummon()
+                    .build("frost_shard"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<VisShard>> VIS_SHARD =
+            ENTITIES.register("vis_shard", () -> EntityType.Builder
+                    .<VisShard>of(VisShard::new, MobCategory.MISC)
+                    .sized(0.25F, 0.25F)
+                    .clientTrackingRange(6)
+                    .updateInterval(2)
+                    .noSummon()
+                    .build("vis_shard"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<PrimalOrb>> PRIMAL_ORB =
+            ENTITIES.register("primal_orb", () -> EntityType.Builder
+                    .<PrimalOrb>of(PrimalOrb::new, MobCategory.MISC)
+                    .sized(0.5F, 0.5F)
+                    .clientTrackingRange(8)
+                    .updateInterval(4)
+                    .noSummon()
+                    .build("primal_orb"));
 
     private ModEntities() {
     }

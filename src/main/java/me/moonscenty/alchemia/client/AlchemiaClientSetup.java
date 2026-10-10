@@ -252,6 +252,10 @@ public class AlchemiaClientSetup {
         // both of these are a trail of particles and nothing else, as the thing they came from was
         event.registerEntityRenderer(ModEntities.PECH_BLAST.get(), NoopRenderer::new);
         event.registerEntityRenderer(ModEntities.GRAPPLE.get(), NoopRenderer::new);
+        event.registerEntityRenderer(ModEntities.EMBER.get(), NoopRenderer::new);
+        event.registerEntityRenderer(ModEntities.FROST_SHARD.get(), NoopRenderer::new);
+        event.registerEntityRenderer(ModEntities.VIS_SHARD.get(), NoopRenderer::new);
+        event.registerEntityRenderer(ModEntities.PRIMAL_ORB.get(), NoopRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.NODE_STABILIZER.get(), NodeStabilizerRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.ARCANE_WORKBENCH.get(), ArcaneWorkbenchRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.CRUCIBLE.get(), CrucibleRenderer::new);
