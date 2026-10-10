@@ -2,6 +2,8 @@ package me.moonscenty.alchemia.client;
 
 import me.moonscenty.alchemia.aura.node.AuraNode;
 import me.moonscenty.alchemia.registry.ModItems;
+import me.moonscenty.alchemia.item.FortressArmorItem;
+import me.moonscenty.alchemia.item.HelmFitting;
 import me.moonscenty.alchemia.registry.ModTags;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -60,7 +62,7 @@ public final class NodeSight {
         return holdingInstrument(player) && lookingAt(player, node) ? INSTRUMENT_RANGE : 0.0;
     }
 
-    /** Anything in the tag shows nodes just by being worn or carried. Nothing is in it until the goggles exist. */
+    /** Anything in the tag shows nodes just by being worn or carried, and so does a helm with goggles in it. */
     private static boolean wearsLenses(Player player) {
         for (EquipmentSlot slot : EquipmentSlot.values()) {
             if (reveals(player.getItemBySlot(slot))) {
@@ -71,7 +73,12 @@ public final class NodeSight {
     }
 
     private static boolean reveals(ItemStack stack) {
-        return !stack.isEmpty() && stack.is(ModTags.Items.REVEALS);
+        if (stack.isEmpty()) {
+            return false;
+        }
+        // a tag cannot answer for the helm: what it is worth depends on what was worked into it, not on what it is
+        return stack.is(ModTags.Items.REVEALS)
+                || FortressArmorItem.fitting(stack).map(HelmFitting::reveals).orElse(false);
     }
 
     private static boolean holdingInstrument(Player player) {

@@ -16,6 +16,7 @@ import me.moonscenty.alchemia.aspect.AspectList;
 import me.moonscenty.alchemia.crafting.ArcaneWandRecipe;
 import me.moonscenty.alchemia.block.CrystalType;
 import me.moonscenty.alchemia.registry.ModBlocks;
+import me.moonscenty.alchemia.item.HelmFitting;
 import me.moonscenty.alchemia.registry.ModAspects;
 import me.moonscenty.alchemia.registry.ModItems;
 import me.moonscenty.alchemia.registry.ModTags;
@@ -52,6 +53,8 @@ public class ModRecipeProvider extends RecipeProvider {
     private static final int VOID_ROBE_UNSTABLE = 6;
     /** How badly an altar takes to rebuilding a finished suit into plate. The original's number. */
     private static final int FORTRESS_UNSTABLE = 3;
+    /** How badly an altar takes to setting lenses into a visor. The original's number. */
+    private static final int HELM_GOGGLES_UNSTABLE = 5;
     public ModRecipeProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         super(output, registries);
     }
@@ -540,6 +543,16 @@ public class ModRecipeProvider extends RecipeProvider {
         fortress(output, "fortress_legs", "alchemium_leggings", 3,
                 List.of(Ingredient.of(Items.GOLD_INGOT), Ingredient.of(Items.LEATHER)),
                 AspectList.of(ModAspects.METAL, 24).add(ModAspects.PROTECT, 20).add(ModAspects.ENERGY, 16));
+
+        // goggles set into a fortress helm. The helm that goes under the matrix is the helm that comes back,
+        // so whatever was enchanted onto it or worn off it stays as it was
+        output.accept(Alchemia.id("helm_goggles"), new InfusionRecipe(
+                Ingredient.of(ModItems.FORTRESS.get("fortress_helm")),
+                List.of(Ingredient.of(Items.SLIME_BALL), Ingredient.of(ModItems.GOGGLES)),
+                ItemStack.EMPTY,
+                AspectList.of(ModAspects.SENSES, 32).add(ModAspects.AURA, 16).add(ModAspects.PROTECT, 16),
+                HELM_GOGGLES_UNSTABLE, Optional.of(Alchemia.id("fortress_armour")),
+                Optional.empty(), Optional.of(HelmFitting.GOGGLES)), null);
 
         // the two caps a workbench can only cast. Salis mundus round them, and the altar does the rest
         infusion(output, "wand_cap_alchemium", Ingredient.of(ModItems.INERT_CAPS.get("alchemium")),

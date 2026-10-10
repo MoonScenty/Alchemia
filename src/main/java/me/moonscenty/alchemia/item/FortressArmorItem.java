@@ -1,7 +1,9 @@
 package me.moonscenty.alchemia.item;
 
 import java.util.List;
+import java.util.Optional;
 
+import me.moonscenty.alchemia.registry.ModDataComponents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
@@ -20,12 +22,26 @@ import net.minecraft.world.item.TooltipFlag;
  * <p>Three pieces, as the original had: a helm, a cuirass and greaves. There are no boots.
  *
  * <p>What it does beyond stopping blows is in {@link FortressArmourEvents}, because a blow is something that
- * happens to a wearer rather than to an item. A helm somebody can have goggles or a mask worked into is not here
- * yet.
+ * happens to a wearer rather than to an item.
+ *
+ * <p>A helm can have one thing worked into it on the altar, which it then wears for good: see
+ * {@link HelmFitting}.
  */
 public class FortressArmorItem extends ArmorItem {
     public FortressArmorItem(Holder<ArmorMaterial> material, Type type, int lasts, Properties properties) {
         super(material, type, properties.durability(type.getDurability(lasts)).rarity(Rarity.RARE));
+    }
+
+    /** What has been worked into this helm, if anything. Anything that is not a helm is wearing nothing. */
+    public static Optional<HelmFitting> fitting(ItemStack stack) {
+        return Optional.ofNullable(stack.get(ModDataComponents.HELM_FITTING.get()));
+    }
+
+    /** The same helm with something worked into it. Everything else about it is left exactly as it was. */
+    public static ItemStack wearing(ItemStack helm, HelmFitting fitting) {
+        ItemStack worked = helm.copy();
+        worked.set(ModDataComponents.HELM_FITTING.get(), fitting);
+        return worked;
     }
 
     /**
@@ -41,6 +57,10 @@ public class FortressArmorItem extends ArmorItem {
                         share(FortressArmourEvents.TURNS_BURNING),
                         share(FortressArmourEvents.TURNS_WORKINGS))
                 .withStyle(ChatFormatting.AQUA));
+        fitting(stack).ifPresent(worked -> lines.add(
+                Component.translatable("item.alchemia.fortress.fitted",
+                                Component.translatable("helm_fitting.alchemia." + worked.getSerializedName()))
+                        .withStyle(ChatFormatting.LIGHT_PURPLE)));
     }
 
     /** A share written the way a tooltip wants it: out of a hundred, with the halves and quarters kept. */

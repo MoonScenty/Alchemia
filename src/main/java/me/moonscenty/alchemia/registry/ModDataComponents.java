@@ -8,6 +8,7 @@ import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.aspect.Aspect;
 import me.moonscenty.alchemia.aspect.AspectList;
 import me.moonscenty.alchemia.enchantment.InfusionEnchantment;
+import me.moonscenty.alchemia.item.HelmFitting;
 import me.moonscenty.alchemia.research.ResearchNote;
 import me.moonscenty.alchemia.wand.WandCap;
 import me.moonscenty.alchemia.wand.WandRod;
@@ -67,6 +68,18 @@ public class ModDataComponents {
             COMPONENTS.register("pouch_contents", () -> DataComponentType.<ItemContainerContents>builder()
                     .persistent(ItemContainerContents.CODEC)
                     .networkSynchronized(ItemContainerContents.STREAM_CODEC)
+                    .build());
+
+    /**
+     * What has been worked into a fortress helm: goggles, or one of the masks when there are any.
+     * <p>
+     * A helm wears one of them or none. The altar refuses a helm that already has something on it, so this is
+     * only ever set once, and nothing takes it off again.
+     */
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<HelmFitting>> HELM_FITTING =
+            COMPONENTS.register("helm_fitting", () -> DataComponentType.<HelmFitting>builder()
+                    .persistent(HelmFitting.CODEC)
+                    .networkSynchronized(HelmFitting.STREAM_CODEC)
                     .build());
 
     /** What a wand is carrying, in hundredths of a point so that a cap's discount is not rounded away. */

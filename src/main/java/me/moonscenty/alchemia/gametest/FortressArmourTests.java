@@ -1,7 +1,14 @@
 package me.moonscenty.alchemia.gametest;
 
 import me.moonscenty.alchemia.Alchemia;
+import java.util.List;
+
+import me.moonscenty.alchemia.crafting.InfusionInput;
+import me.moonscenty.alchemia.crafting.InfusionRecipe;
+import me.moonscenty.alchemia.item.FortressArmorItem;
 import me.moonscenty.alchemia.item.FortressArmourEvents;
+import me.moonscenty.alchemia.item.HelmFitting;
+import net.minecraft.world.item.Items;
 import me.moonscenty.alchemia.registry.ModItems;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
@@ -68,6 +75,48 @@ public class FortressArmourTests {
         // the count is written for four slots and a fourth piece may yet be made
         helper.assertTrue(4 * FortressArmourEvents.turns(burning) < 1.0F,
                 "a whole suit is not immune even to what it turns best");
+        helper.succeed();
+    }
+    /**
+     * Goggles worked into a helm: the helm that went in is the helm that comes back.
+     * <p>
+     * That is the whole reason this is a fitting on the item rather than a new item. A fresh helm handed over
+     * instead would take the wearer's enchantments and their half-worn plate with it.
+     */
+    @GameTest(template = TEMPLATE)
+    public static void gogglesAreWorkedIntoTheHelmThatWentIn(GameTestHelper helper) {
+        ItemStack helm = new ItemStack(ModItems.FORTRESS.get("fortress_helm").get());
+        helm.setDamageValue(120);
+        helper.assertTrue(FortressArmorItem.fitting(helm).isEmpty(), "a plain helm wears nothing");
+
+        ItemStack fitted = FortressArmorItem.wearing(helm, HelmFitting.GOGGLES);
+        helper.assertTrue(FortressArmorItem.fitting(fitted).orElse(null) == HelmFitting.GOGGLES,
+                "and a fitted one wears the goggles");
+        helper.assertValueEqual(fitted.getDamageValue(), 120, "with every dent it came in with");
+        helper.assertTrue(FortressArmorItem.fitting(helm).isEmpty(), "the helm handed in is left alone");
+        helper.succeed();
+    }
+
+    /**
+     * An altar will not sell the same working twice.
+     * <p>
+     * A helm wears one thing. Without this the goggles could be worked in over and over, and when the masks
+     * arrive one could be laid on top of another with only the last of them showing.
+     */
+    @GameTest(template = TEMPLATE)
+    public static void aHelmTakesOnlyOneThing(GameTestHelper helper) {
+        var found = helper.getLevel().getRecipeManager().byKey(Alchemia.id("helm_goggles")).orElse(null);
+        helper.assertTrue(found != null, "the altar knows how to set lenses into a visor");
+
+        ItemStack plain = new ItemStack(ModItems.FORTRESS.get("fortress_helm").get());
+        ItemStack fitted = FortressArmorItem.wearing(plain, HelmFitting.GOGGLES);
+        List<ItemStack> ring = List.of(new ItemStack(Items.SLIME_BALL),
+                new ItemStack(ModItems.GOGGLES.get()));
+
+        helper.assertTrue(((InfusionRecipe) found.value()).matches(new InfusionInput(plain, ring),
+                helper.getLevel()), "a plain helm is taken");
+        helper.assertFalse(((InfusionRecipe) found.value()).matches(new InfusionInput(fitted, ring),
+                helper.getLevel()), "one already wearing them is not");
         helper.succeed();
     }
 }

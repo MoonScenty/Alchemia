@@ -10,6 +10,8 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.moonscenty.alchemia.aspect.AspectList;
 import me.moonscenty.alchemia.enchantment.InfusionEnchantment;
 import me.moonscenty.alchemia.enchantment.InfusionEnchantments;
+import me.moonscenty.alchemia.item.FortressArmorItem;
+import me.moonscenty.alchemia.item.HelmFitting;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -37,15 +39,24 @@ import net.minecraft.world.level.Level;
  * @param instability how badly the work wants to go wrong, before the surroundings have their say
  * @param enchants what this puts on the thing worked, if it makes nothing new at all. A recipe with this set
  *                 hands back the same tool with one more thing on it, so its result is whatever went in
+ * @param fits what this works into a helm, on the same terms: the helm that went in comes back wearing it.
+ *             A helm takes one and the altar will not sell a second
  */
 public record InfusionRecipe(Ingredient central, List<Ingredient> ring, ItemStack result, AspectList essentia,
                              int instability, Optional<ResourceLocation> research,
-                             Optional<InfusionEnchantment> enchants) implements Recipe<InfusionInput> {
+                             Optional<InfusionEnchantment> enchants,
+                             Optional<HelmFitting> fits) implements Recipe<InfusionInput> {
 
     /** The old shape, for the recipes that make a thing rather than work on one. */
     public InfusionRecipe(Ingredient central, List<Ingredient> ring, ItemStack result, AspectList essentia,
             int instability, Optional<ResourceLocation> research) {
-        this(central, ring, result, essentia, instability, research, Optional.empty());
+        this(central, ring, result, essentia, instability, research, Optional.empty(), Optional.empty());
+    }
+
+    /** For the recipes that put a working on a tool. */
+    public InfusionRecipe(Ingredient central, List<Ingredient> ring, ItemStack result, AspectList essentia,
+            int instability, Optional<ResourceLocation> research, Optional<InfusionEnchantment> enchants) {
+        this(central, ring, result, essentia, instability, research, enchants, Optional.empty());
     }
 
     @Override
@@ -55,6 +66,10 @@ public record InfusionRecipe(Ingredient central, List<Ingredient> ring, ItemStac
         }
         // an altar will not sell the same step twice: a tool already worked this far is not a match
         if (enchants.isPresent() && !InfusionEnchantments.roomFor(input.central(), enchants.get())) {
+            return false;
+        }
+        // nor will it work a second thing into a helm that is already wearing one
+        if (fits.isPresent() && FortressArmorItem.fitting(input.central()).isPresent()) {
             return false;
         }
         // every thing on the ring has to answer for exactly one of the ingredients, and none may be left over
@@ -77,6 +92,9 @@ public record InfusionRecipe(Ingredient central, List<Ingredient> ring, ItemStac
 
     @Override
     public ItemStack assemble(InfusionInput input, HolderLookup.Provider registries) {
+        if (fits.isPresent()) {
+            return FortressArmorItem.wearing(input.central(), fits.get());
+        }
         return enchants.map(which -> InfusionEnchantments.raised(input.central(), which))
                 .orElseGet(result::copy);
     }
@@ -126,14 +144,15 @@ public record InfusionRecipe(Ingredient central, List<Ingredient> ring, ItemStac
                         com.mojang.serialization.Codec.INT.optionalFieldOf("instability", 0)
                                 .forGetter(InfusionRecipe::instability),
                         ResourceLocation.CODEC.optionalFieldOf("research").forGetter(InfusionRecipe::research),
-                        InfusionEnchantment.CODEC.optionalFieldOf("enchants").forGetter(InfusionRecipe::enchants))
+                        InfusionEnchantment.CODEC.optionalFieldOf("enchants").forGetter(InfusionRecipe::enchants),
+                        HelmFitting.CODEC.optionalFieldOf("fits").forGetter(InfusionRecipe::fits))
                 .apply(instance, InfusionRecipe::new));
 
         /**
          * Written out by hand rather than composed.
          * <p>
-         * The helper that stitches stream codecs together stops at six pieces and this has seven. Writing the
-         * seven out is duller than one more line of composition would have been and no less plain.
+         * The helper that stitches stream codecs together stops at six pieces and this has eight. Writing the
+         * eight out is duller than one more line of composition would have been and no less plain.
          */
         private static final StreamCodec<RegistryFriendlyByteBuf, InfusionRecipe> STREAM_CODEC =
                 new StreamCodec<>() {
@@ -149,7 +168,10 @@ public record InfusionRecipe(Ingredient central, List<Ingredient> ring, ItemStac
                                 ByteBufCodecs.optional(ResourceLocation.STREAM_CODEC).decode(buffer);
                         Optional<InfusionEnchantment> enchants =
                                 ByteBufCodecs.optional(InfusionEnchantment.STREAM_CODEC).decode(buffer);
-                        return new InfusionRecipe(central, ring, result, essentia, instability, research, enchants);
+                        Optional<HelmFitting> fits =
+                                ByteBufCodecs.optional(HelmFitting.STREAM_CODEC).decode(buffer);
+                        return new InfusionRecipe(central, ring, result, essentia, instability, research,
+                                enchants, fits);
                     }
 
                     @Override
@@ -162,6 +184,7 @@ public record InfusionRecipe(Ingredient central, List<Ingredient> ring, ItemStac
                         ByteBufCodecs.optional(ResourceLocation.STREAM_CODEC).encode(buffer, recipe.research());
                         ByteBufCodecs.optional(InfusionEnchantment.STREAM_CODEC)
                                 .encode(buffer, recipe.enchants());
+                        ByteBufCodecs.optional(HelmFitting.STREAM_CODEC).encode(buffer, recipe.fits());
                     }
                 };
 

@@ -19,6 +19,10 @@
     {
       "type": "recipe",
       "recipe": "alchemia:fortress_legs"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:helm_goggles"
     }
   ],
   "parents": [

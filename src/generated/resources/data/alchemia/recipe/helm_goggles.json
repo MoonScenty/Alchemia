@@ -1,0 +1,22 @@
+{
+  "type": "alchemia:infusion",
+  "central": {
+    "item": "alchemia:fortress_helm"
+  },
+  "essentia": {
+    "alchemia:auram": 16,
+    "alchemia:praemunio": 16,
+    "alchemia:sensus": 32
+  },
+  "fits": "goggles",
+  "instability": 5,
+  "research": "alchemia:fortress_armour",
+  "ring": [
+    {
+      "item": "minecraft:slime_ball"
+    },
+    {
+      "item": "alchemia:goggles_of_revealing"
+    }
+  ]
+}
