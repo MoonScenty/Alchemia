@@ -2,7 +2,7 @@
   "parent": "minecraft:block/cube",
   "textures": {
     "down": "alchemia:block/taint_log_top",
-    "east": "alchemia:block/taint_log",
+    "east": "alchemia:block/taint_log_1",
     "north": "alchemia:block/taint_log",
     "particle": "alchemia:block/taint_log_top",
     "south": "alchemia:block/taint_log",

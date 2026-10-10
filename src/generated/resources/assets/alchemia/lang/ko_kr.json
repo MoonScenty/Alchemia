@@ -77,7 +77,7 @@
   "aspect.alchemia.volatus.description": "비행",
   "block.alchemia.air_crystal": "공기 결정",
   "block.alchemia.alchemium_block": "알케미움 블록",
-  "block.alchemia.alembic": "증류기",
+  "block.alchemia.alembic": "비전 증류기",
   "block.alchemia.alembic.empty": "비어 있다",
   "block.alchemia.alembic.holding": "%s — %s / %s",
   "block.alchemia.amber_block": "호박 블록",

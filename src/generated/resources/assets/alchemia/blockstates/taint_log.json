@@ -2,46 +2,103 @@
   "variants": {
     "axis=x": [
       {
-        "model": "alchemia:block/taint_log",
-        "weight": 4,
+        "model": "alchemia:block/taint_log_1_north",
         "x": 90,
         "y": 90
       },
       {
-        "model": "alchemia:block/taint_log_1",
+        "model": "alchemia:block/taint_log_1_east",
         "x": 90,
         "y": 90
       },
       {
-        "model": "alchemia:block/taint_log_2",
+        "model": "alchemia:block/taint_log_1_south",
+        "x": 90,
+        "y": 90
+      },
+      {
+        "model": "alchemia:block/taint_log_1_west",
+        "x": 90,
+        "y": 90
+      },
+      {
+        "model": "alchemia:block/taint_log_2_north",
+        "x": 90,
+        "y": 90
+      },
+      {
+        "model": "alchemia:block/taint_log_2_east",
+        "x": 90,
+        "y": 90
+      },
+      {
+        "model": "alchemia:block/taint_log_2_south",
+        "x": 90,
+        "y": 90
+      },
+      {
+        "model": "alchemia:block/taint_log_2_west",
         "x": 90,
         "y": 90
       }
     ],
     "axis=y": [
       {
-        "model": "alchemia:block/taint_log",
-        "weight": 4
+        "model": "alchemia:block/taint_log_1_north"
       },
       {
-        "model": "alchemia:block/taint_log_1"
+        "model": "alchemia:block/taint_log_1_east"
       },
       {
-        "model": "alchemia:block/taint_log_2"
+        "model": "alchemia:block/taint_log_1_south"
+      },
+      {
+        "model": "alchemia:block/taint_log_1_west"
+      },
+      {
+        "model": "alchemia:block/taint_log_2_north"
+      },
+      {
+        "model": "alchemia:block/taint_log_2_east"
+      },
+      {
+        "model": "alchemia:block/taint_log_2_south"
+      },
+      {
+        "model": "alchemia:block/taint_log_2_west"
       }
     ],
     "axis=z": [
       {
-        "model": "alchemia:block/taint_log",
-        "weight": 4,
+        "model": "alchemia:block/taint_log_1_north",
         "x": 90
       },
       {
-        "model": "alchemia:block/taint_log_1",
+        "model": "alchemia:block/taint_log_1_east",
         "x": 90
       },
       {
-        "model": "alchemia:block/taint_log_2",
+        "model": "alchemia:block/taint_log_1_south",
+        "x": 90
+      },
+      {
+        "model": "alchemia:block/taint_log_1_west",
+        "x": 90
+      },
+      {
+        "model": "alchemia:block/taint_log_2_north",
+        "x": 90
+      },
+      {
+        "model": "alchemia:block/taint_log_2_east",
+        "x": 90
+      },
+      {
+        "model": "alchemia:block/taint_log_2_south",
+        "x": 90
+      },
+      {
+        "model": "alchemia:block/taint_log_2_west",
         "x": 90
       }
     ]

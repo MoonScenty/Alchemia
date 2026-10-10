@@ -1,7 +1,22 @@
 {
   "variants": {
-    "": {
-      "model": "alchemia:block/taint_rock"
-    }
+    "": [
+      {
+        "model": "alchemia:block/taint_rock"
+      },
+      {
+        "model": "alchemia:block/taint_rock",
+        "x": 90
+      },
+      {
+        "model": "alchemia:block/taint_rock",
+        "y": 90
+      },
+      {
+        "model": "alchemia:block/taint_rock",
+        "x": 90,
+        "y": 90
+      }
+    ]
   }
 }

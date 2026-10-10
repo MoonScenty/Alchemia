@@ -7,6 +7,6 @@
     "particle": "alchemia:block/taint_log_top",
     "south": "alchemia:block/taint_log",
     "up": "alchemia:block/taint_log_top",
-    "west": "alchemia:block/taint_log"
+    "west": "alchemia:block/taint_log_2"
   }
 }

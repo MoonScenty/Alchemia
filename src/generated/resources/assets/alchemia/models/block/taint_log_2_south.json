@@ -5,7 +5,7 @@
     "east": "alchemia:block/taint_log",
     "north": "alchemia:block/taint_log",
     "particle": "alchemia:block/taint_log_top",
-    "south": "alchemia:block/taint_log",
+    "south": "alchemia:block/taint_log_2",
     "up": "alchemia:block/taint_log_top",
     "west": "alchemia:block/taint_log"
   }

@@ -179,7 +179,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         addBlock(ModBlocks.RESEARCH_TABLE, pick("Research Table", "연구 탁자"));
         addBlock(ModBlocks.CRUCIBLE, pick("Crucible", "도가니"));
         addBlock(ModBlocks.ESSENTIA_SMELTER, pick("Essentia Smelter", "에센시아 제련로"));
-        addBlock(ModBlocks.ALEMBIC, pick("Alembic", "증류기"));
+        addBlock(ModBlocks.ALEMBIC, pick("Arcane Alembic", "비전 증류기"));
         addBlock(ModBlocks.TUBE, pick("Essentia Tube", "에센시아 관"));
         addBlock(ModBlocks.TUBE_VALVE, pick("Essentia Valve", "에센시아 밸브"));
         addBlock(ModBlocks.TUBE_ONEWAY, pick("One-way Essentia Tube", "역류방지 에센시아 관"));

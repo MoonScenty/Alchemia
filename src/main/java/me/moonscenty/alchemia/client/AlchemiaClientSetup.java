@@ -79,9 +79,10 @@ public class AlchemiaClientSetup {
         event.getModels().computeIfPresent(ModelResourceLocation.inventory(ModBlocks.NODE_STABILIZER.getId()),
                 (location, ours) -> new LegacyMeshItemModel(ours, LegacyAssets.STABILIZER_MESH, true,
                         Alchemia.id("item/legacy/node_stabilizer"), stabilizer));
-        // the original drew a loose alembic on its legs, set a little lower
+        // a loose alembic on its legs. The original set the whole of it 0.4 lower in the hand, which sinks it out of
+        // the slot here, so it stands where the placed one does
         List<LegacyMeshItemModel.Placed> alembic = List.of(
-                new LegacyMeshItemModel.Placed("Legs", new Matrix4f(standing).translate(0.0F, 0.0F, -0.4F)),
+                new LegacyMeshItemModel.Placed("Legs", standing),
                 new LegacyMeshItemModel.Placed("Pot", standing),
                 new LegacyMeshItemModel.Placed("Panel", standing));
         event.getModels().computeIfPresent(ModelResourceLocation.inventory(ModBlocks.ALEMBIC.getId()),

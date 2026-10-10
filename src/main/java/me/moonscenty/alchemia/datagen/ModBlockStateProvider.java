@@ -1,5 +1,7 @@
 package me.moonscenty.alchemia.datagen;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import me.moonscenty.alchemia.Alchemia;
@@ -74,13 +76,14 @@ public class ModBlockStateProvider extends BlockStateProvider {
     }
 
     /**
-     * The taint. Ground and bark come in three looks each, picked at random by position, so a patch is not a tiled
-     * repeat; most of it is plain, with a boil here and there.
+     * The taint, picked at random by position as the original's blockstates picked it: ground in three looks, mostly
+     * the plain one (crust eight to one, soil sixteen to one), and every look, the rock's too, laid at any of four
+     * turns so a patch is not a tiled repeat.
      */
     private void taint() {
-        spotted(ModBlocks.TAINT_SOIL);
-        spotted(ModBlocks.TAINT_CRUST);
-        simpleBlockWithItem(ModBlocks.TAINT_ROCK.get(), models().cubeAll("taint_rock", modLoc("block/taint_rock")));
+        spotted(ModBlocks.TAINT_CRUST, 8);
+        spotted(ModBlocks.TAINT_SOIL, 16);
+        spotted(ModBlocks.TAINT_ROCK, 0);
         taintLog();
         taintFibre();
         fluxGoo();
@@ -103,35 +106,52 @@ public class ModBlockStateProvider extends BlockStateProvider {
         });
     }
 
-    private static final int[] SPOT_WEIGHTS = {4, 1, 1};
-    private static final String[] SPOT_SUFFIX = {"", "_1", "_2"};
+    /** The four turns the original laid a taint block at. */
+    private static final int[][] TURNS = {{0, 0}, {90, 0}, {0, 90}, {90, 90}};
 
-    private void spotted(DeferredBlock<? extends Block> block) {
+    /**
+     * A block in its plain look and, if {@code plain} is not zero, two spotted ones, each at the four turns; the plain
+     * one {@code plain} times as likely as each spotted one.
+     */
+    private void spotted(DeferredBlock<? extends Block> block, int plain) {
         String name = block.getId().getPath();
-        ConfiguredModel[] looks = new ConfiguredModel[SPOT_SUFFIX.length];
-        for (int i = 0; i < looks.length; i++) {
-            looks[i] = ConfiguredModel.builder()
-                    .modelFile(models().cubeAll(name + SPOT_SUFFIX[i], modLoc("block/" + name + SPOT_SUFFIX[i])))
-                    .weight(SPOT_WEIGHTS[i])
-                    .buildLast();
+        List<ConfiguredModel> looks = new ArrayList<>();
+        String[] suffixes = plain == 0 ? new String[] {""} : new String[] {"", "_1", "_2"};
+        for (String suffix : suffixes) {
+            ModelFile model = models().cubeAll(name + suffix, modLoc("block/" + name + suffix));
+            for (int[] turn : TURNS) {
+                looks.add(ConfiguredModel.builder().modelFile(model).rotationX(turn[0]).rotationY(turn[1])
+                        .weight(suffix.isEmpty() && plain != 0 ? plain : 1).buildLast());
+            }
         }
-        getVariantBuilder(block.get()).partialState().setModels(looks);
+        getVariantBuilder(block.get()).partialState().setModels(looks.toArray(ConfiguredModel[]::new));
         simpleBlockItem(block.get(), models().getExistingFile(modLoc("block/" + name)));
     }
 
+    /**
+     * The tainted log, as the original's: plain bark all round, except that one side, any of the four, wears one of
+     * the two blistered pictures. The item and the plain model are bark all round.
+     */
     private void taintLog() {
         ResourceLocation top = modLoc("block/taint_log_top");
-        for (Direction.Axis axis : Direction.Axis.values()) {
-            ConfiguredModel[] looks = new ConfiguredModel[SPOT_SUFFIX.length];
-            for (int i = 0; i < looks.length; i++) {
-                ModelFile model = models().cubeColumn("taint_log" + SPOT_SUFFIX[i], modLoc("block/taint_log" + SPOT_SUFFIX[i]), top);
-                looks[i] = ConfiguredModel.builder()
-                        .modelFile(model)
-                        .rotationX(axis == Direction.Axis.Y ? 0 : 90)
-                        .rotationY(axis == Direction.Axis.X ? 90 : 0)
-                        .weight(SPOT_WEIGHTS[i])
-                        .buildLast();
+        ResourceLocation bark = modLoc("block/taint_log");
+        models().cube("taint_log", top, top, bark, bark, bark, bark).texture("particle", top);
+        List<ModelFile> blistered = new ArrayList<>();
+        for (String spot : List.of("_1", "_2")) {
+            ResourceLocation sore = modLoc("block/taint_log" + spot);
+            for (Direction side : Direction.Plane.HORIZONTAL) {
+                blistered.add(models().cube("taint_log" + spot + "_" + side.getName(), top, top,
+                        side == Direction.NORTH ? sore : bark, side == Direction.SOUTH ? sore : bark,
+                        side == Direction.EAST ? sore : bark, side == Direction.WEST ? sore : bark)
+                        .texture("particle", top));
             }
+        }
+        for (Direction.Axis axis : Direction.Axis.values()) {
+            ConfiguredModel[] looks = blistered.stream().map(model -> ConfiguredModel.builder()
+                    .modelFile(model)
+                    .rotationX(axis == Direction.Axis.Y ? 0 : 90)
+                    .rotationY(axis == Direction.Axis.X ? 90 : 0)
+                    .buildLast()).toArray(ConfiguredModel[]::new);
             getVariantBuilder(ModBlocks.TAINT_LOG.get()).partialState()
                     .with(TaintLogBlock.AXIS, axis)
                     .setModels(looks);
@@ -305,7 +325,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
     /**
      * Arcane stone, as the original laid its three pictures: the first on top and bottom, the second east and west,
-     * the third north and south. Its stairs and slab take the first underneath, the second on top and the third
+     * the third north and south, the block at any of four turns. Its stairs and slab take the first underneath, the second on top and the third
      * round the sides.
      */
     private void arcaneStone(StoneSet set) {
@@ -313,7 +333,12 @@ public class ModBlockStateProvider extends BlockStateProvider {
         ResourceLocation two = modLoc("block/arcane_stone_2");
         ResourceLocation three = modLoc("block/arcane_stone_3");
         ModelFile block = models().cube("arcane_stone", one, one, three, three, two, two).texture("particle", one);
-        simpleBlockWithItem(set.block().get(), block);
+        // laid at any of four turns, as the original's blockstate laid it
+        getVariantBuilder(set.block().get()).partialState().setModels(Arrays.stream(TURNS)
+                .map(turn -> ConfiguredModel.builder().modelFile(block).rotationX(turn[0]).rotationY(turn[1])
+                        .buildLast())
+                .toArray(ConfiguredModel[]::new));
+        simpleBlockItem(set.block().get(), block);
         stairsBlock(set.stairs().get(), three, one, two);
         simpleBlockItem(set.stairs().get(), models().getExistingFile(set.stairs().getId().withPrefix("block/")));
         slabBlock(set.slab().get(), modLoc("block/arcane_stone"), three, one, two);

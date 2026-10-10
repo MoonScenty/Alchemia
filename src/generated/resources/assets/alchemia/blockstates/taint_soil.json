@@ -3,13 +3,55 @@
     "": [
       {
         "model": "alchemia:block/taint_soil",
-        "weight": 4
+        "weight": 16
+      },
+      {
+        "model": "alchemia:block/taint_soil",
+        "weight": 16,
+        "x": 90
+      },
+      {
+        "model": "alchemia:block/taint_soil",
+        "weight": 16,
+        "y": 90
+      },
+      {
+        "model": "alchemia:block/taint_soil",
+        "weight": 16,
+        "x": 90,
+        "y": 90
       },
       {
         "model": "alchemia:block/taint_soil_1"
       },
       {
+        "model": "alchemia:block/taint_soil_1",
+        "x": 90
+      },
+      {
+        "model": "alchemia:block/taint_soil_1",
+        "y": 90
+      },
+      {
+        "model": "alchemia:block/taint_soil_1",
+        "x": 90,
+        "y": 90
+      },
+      {
         "model": "alchemia:block/taint_soil_2"
+      },
+      {
+        "model": "alchemia:block/taint_soil_2",
+        "x": 90
+      },
+      {
+        "model": "alchemia:block/taint_soil_2",
+        "y": 90
+      },
+      {
+        "model": "alchemia:block/taint_soil_2",
+        "x": 90,
+        "y": 90
       }
     ]
   }
