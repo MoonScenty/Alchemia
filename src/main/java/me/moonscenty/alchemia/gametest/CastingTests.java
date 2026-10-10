@@ -8,6 +8,8 @@ import me.moonscenty.alchemia.registry.ModDataComponents;
 import me.moonscenty.alchemia.registry.ModItems;
 import me.moonscenty.alchemia.registry.ModWandParts;
 import me.moonscenty.alchemia.wand.Casting;
+import me.moonscenty.alchemia.wand.spell.Grapple;
+import me.moonscenty.alchemia.wand.spell.PechBlast;
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
@@ -103,6 +105,55 @@ public class CastingTests {
         WandItem.brimming(bare);
         helper.assertTrue(Casting.fittedTo(bare) == null, "nothing is fitted to it");
         helper.assertFalse(Casting.cast(helper.getLevel(), caster, bare, 0), "so nothing comes of using it");
+        helper.succeed();
+    }
+    /**
+     * A pech's curse bursts where it lands and leaves what was standing there the worse for it.
+     * <p>
+     * It is thrown, not aimed: whatever is within reach of the burst catches it, and whoever threw it does not.
+     */
+    @GameTest(template = TEMPLATE, timeoutTicks = 200)
+    public static void aPechsCurseAfflictsWhatItBurstsOn(GameTestHelper helper) {
+        Player caster = helper.makeMockPlayer(GameType.SURVIVAL);
+        // a pig rather than a zombie: two of the three afflictions are poison and weakness, and the dead feel
+        // neither. A curse tested on something immune to two thirds of it is a curse tested on nothing
+        LivingEntity victim = helper.spawn(EntityType.PIG, new BlockPos(2, 2, 2));
+
+        PechBlast blast = new PechBlast(helper.getLevel(), caster);
+        blast.setPos(victim.getX(), victim.getY() + 0.5, victim.getZ());
+        helper.getLevel().addFreshEntity(blast);
+        blast.burst(new net.minecraft.world.phys.BlockHitResult(blast.position(),
+                net.minecraft.core.Direction.UP, helper.absolutePos(new BlockPos(2, 1, 2)), false));
+
+        helper.assertTrue(!victim.getActiveEffects().isEmpty(), "something settled on it");
+        helper.assertTrue(victim.getHealth() < victim.getMaxHealth(), "and the burst itself hurt");
+        helper.assertTrue(caster.getActiveEffects().isEmpty(), "whoever threw it is spared");
+        helper.succeed();
+    }
+
+    /**
+     * A hook that has bitten hauls whoever threw it towards itself.
+     * <p>
+     * A hook that has not bitten does nothing at all, which is what stops one from towing a climber off the
+     * ground before it has anything to pull against.
+     */
+    @GameTest(template = TEMPLATE, timeoutTicks = 200)
+    public static void aBittenHookHaulsAndALooseOneDoesNot(GameTestHelper helper) {
+        Player caster = helper.makeMockPlayer(GameType.SURVIVAL);
+        caster.setDeltaMovement(net.minecraft.world.phys.Vec3.ZERO);
+
+        Grapple loose = new Grapple(helper.getLevel(), caster);
+        loose.setPos(caster.getX(), caster.getY() + 8.0, caster.getZ());
+        helper.getLevel().addFreshEntity(loose);
+        loose.tick();
+        helper.assertTrue(caster.getDeltaMovement().equals(net.minecraft.world.phys.Vec3.ZERO),
+                "a hook in the air pulls nothing");
+
+        loose.bite(new net.minecraft.world.phys.BlockHitResult(loose.position(),
+                net.minecraft.core.Direction.DOWN, helper.absolutePos(new BlockPos(0, 9, 0)), false));
+        helper.assertTrue(loose.biting(), "it has bitten");
+        loose.tick();
+        helper.assertTrue(caster.getDeltaMovement().y > 0.0, "and now it hauls upwards");
         helper.succeed();
     }
 }

@@ -17,6 +17,7 @@ import me.moonscenty.alchemia.item.RobeItem;
 import me.moonscenty.alchemia.wand.Focus;
 import me.moonscenty.alchemia.wand.spell.Excavation;
 import me.moonscenty.alchemia.wand.spell.Shock;
+import me.moonscenty.alchemia.wand.spell.Thrown;
 import me.moonscenty.alchemia.item.GogglesItem;
 import me.moonscenty.alchemia.item.TravellerBootsItem;
 import me.moonscenty.alchemia.item.CrystallizedEssenceItem;
@@ -229,11 +230,12 @@ public class ModItems {
         kinds.put("excavation", () -> Focus.of(0x064006, AspectList.of(ModAspects.EARTH, 1))
                 .heldDown().casts(Excavation::cast));
         kinds.put("grapple", () -> Focus.of(0x1515FF, AspectList.of(ModAspects.WATER, 10)
-                .add(ModAspects.AIR, 10)).cooldown(250));
+                .add(ModAspects.AIR, 10)).cooldown(250).casts(Thrown::grapple));
         kinds.put("hellbat", () -> Focus.of(0xDC3602, AspectList.of(ModAspects.FIRE, 10)
                 .add(ModAspects.ENTROPY, 5).add(ModAspects.AIR, 5)).cooldown(1000).inTurrets());
         kinds.put("pech", () -> Focus.of(0x229944, AspectList.of(ModAspects.EARTH, 2)
-                .add(ModAspects.ENTROPY, 2).add(ModAspects.WATER, 2)).cooldown(250).inTurrets());
+                .add(ModAspects.ENTROPY, 2).add(ModAspects.WATER, 2))
+                .cooldown(250).inTurrets().casts(Thrown::pech));
         // the dearest of them by a long way, and the only one that takes a wall out of the world
         kinds.put("hole", () -> Focus.of(0x091429, AspectList.of(ModAspects.ENTROPY, 25)
                 .add(ModAspects.AIR, 25).add(ModAspects.EARTH, 25)));

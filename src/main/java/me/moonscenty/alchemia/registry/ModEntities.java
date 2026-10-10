@@ -3,6 +3,8 @@ package me.moonscenty.alchemia.registry;
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.aura.TaintCloud;
 import me.moonscenty.alchemia.aura.node.AuraNode;
+import me.moonscenty.alchemia.wand.spell.Grapple;
+import me.moonscenty.alchemia.wand.spell.PechBlast;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -34,6 +36,30 @@ public class ModEntities {
                     .fireImmune()
                     .noSummon()
                     .build("taint_cloud"));
+
+    /**
+     * A thrown spite that bursts where it lands.
+     * <p>
+     * Small, short-lived and never saved: a curse in the air when the world closes is a curse that never landed.
+     */
+    public static final DeferredHolder<EntityType<?>, EntityType<PechBlast>> PECH_BLAST =
+            ENTITIES.register("pech_blast", () -> EntityType.Builder
+                    .<PechBlast>of(PechBlast::new, MobCategory.MISC)
+                    .sized(0.25F, 0.25F)
+                    .clientTrackingRange(4)
+                    .updateInterval(10)
+                    .noSummon()
+                    .build("pech_blast"));
+
+    /** A hook on no line at all. What holds the climber to it is the pull, not a rope. */
+    public static final DeferredHolder<EntityType<?>, EntityType<Grapple>> GRAPPLE =
+            ENTITIES.register("grapple", () -> EntityType.Builder
+                    .<Grapple>of(Grapple::new, MobCategory.MISC)
+                    .sized(0.25F, 0.25F)
+                    .clientTrackingRange(6)
+                    .updateInterval(2)
+                    .noSummon()
+                    .build("grapple"));
 
     private ModEntities() {
     }
