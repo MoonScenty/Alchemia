@@ -44,7 +44,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         heldAsBlock("alembic", "item/legacy/alembic");
         heldAsBlock("arcane_workbench_charger", "item/legacy/vis_relay");
         heldAsBlock("node_stabilizer", "item/legacy/node_stabilizer");
-        withExistingParent("taint_fibre", mcLoc("item/generated")).texture("layer0", modLoc("block/taint_fibres"));
+        withExistingParent("taint_fibre", mcLoc("item/generated")).texture("layer0", modLoc("block/legacy/taint_fibres"));
         distillery();
         basicItem(ModItems.AMBER.get());
         basicItem(ModItems.QUICKSILVER.get());

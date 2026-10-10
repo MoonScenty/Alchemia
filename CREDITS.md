@@ -11,5 +11,5 @@ Alchemia의 **코드**는 [MIT](LICENSE.md)입니다.
 원본에 없는 것을 위해 이 저장소가 직접 가진 에셋입니다.
 
 - `textures/item/node_placer.png` — 크리에이티브 전용 노드 배치기 아이콘. 이 저장소에서 절차 생성한 것으로 MIT입니다(`thaumref/tools/gen_creative_node.py`).
-- `textures/block/deepslate_amber_ore.png`, `deepslate_cinnabar_ore.png`, `textures/item/raw_cinnabar.png`, `textures/block/arcane_stone_blue.png`, `textures/gui/focus_pouch.png` — MoonScenty가 직접 제작했거나 바닐라 마인크래프트 텍스처를 색조 변환해 만든 것입니다. 바닐라 파생분에는 Mojang의 에셋 라이선스(Minecraft EULA)가 적용됩니다.
-- 모델 일부(`models/block/jar/*`의 액체·라벨, `models/block/tube/*`의 밸브 손잡이·일방통행 화살표, `models/block/arcane_workbench.json`, `models/block/taint/*`) — MoonScenty가 Blockbench로 제작한 것입니다. 입히는 그림은 원본에서 옵니다.
+- `textures/block/deepslate_amber_ore.png`, `deepslate_cinnabar_ore.png`, `textures/item/raw_cinnabar.png` — MoonScenty가 직접 제작했거나 바닐라 마인크래프트 텍스처를 색조 변환해 만든 것입니다. 바닐라 파생분에는 Mojang의 에셋 라이선스(Minecraft EULA)가 적용됩니다.
+- 모델 일부(`models/block/jar/*`의 액체·라벨) — MoonScenty가 Blockbench로 제작한 것입니다. 입히는 그림은 원본에서 옵니다.

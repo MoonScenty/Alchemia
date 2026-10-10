@@ -9,11 +9,9 @@ import me.moonscenty.alchemia.block.taint.FluxGooBlock;
 import me.moonscenty.alchemia.block.taint.TaintFibreBlock;
 import me.moonscenty.alchemia.block.taint.TaintLogBlock;
 import me.moonscenty.alchemia.block.AlembicBlock;
-import me.moonscenty.alchemia.block.OnewayTubeBlock;
 import me.moonscenty.alchemia.block.EssentiaSmelterBlock;
 import me.moonscenty.alchemia.block.CrucibleBlock;
 import me.moonscenty.alchemia.block.JarBlock;
-import me.moonscenty.alchemia.block.TubeBlock;
 import me.moonscenty.alchemia.registry.ModBlocks;
 import me.moonscenty.alchemia.registry.StoneSet;
 import me.moonscenty.alchemia.registry.WoodSet;
@@ -23,7 +21,6 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
 import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
-import net.neoforged.neoforge.client.model.generators.MultiPartBlockStateBuilder;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.registries.DeferredBlock;
@@ -159,24 +156,24 @@ public class ModBlockStateProvider extends BlockStateProvider {
     }
 
     /** Fibres are a vine: a face for each side they cling to, and a sprout on top of that for the growths. */
+    /**
+     * The fibre as the original put it together: its crust, a flat sheet lying on the floor, turned onto each side
+     * the fibre clings to as the original turned it, and over that whichever of its four growths stands there. The
+     * crust and the growths are the original's model files, imported.
+     */
     private void taintFibre() {
-        ModelFile side = models().getExistingFile(modLoc("block/taint/fibre_side"));
-        ModelFile up = models().getExistingFile(modLoc("block/taint/fibre_up"));
-        ModelFile down = models().getExistingFile(modLoc("block/taint/fibre_down"));
-        ModelFile sproutOne = models().cross("taint_growth_1", modLoc("block/taint_growth_1")).renderType("cutout");
-        ModelFile sproutTwo = models().cross("taint_growth_2", modLoc("block/taint_growth_2")).renderType("cutout");
-
+        ModelFile crust = models().getExistingFile(modLoc("block/taint_fibre"));
         var builder = getMultipartBuilder(ModBlocks.TAINT_FIBRE.get());
-        builder.part().modelFile(side).addModel().condition(TaintFibreBlock.NORTH, true).end();
-        builder.part().modelFile(side).rotationY(90).uvLock(true).addModel().condition(TaintFibreBlock.EAST, true).end();
-        builder.part().modelFile(side).rotationY(180).uvLock(true).addModel().condition(TaintFibreBlock.SOUTH, true).end();
-        builder.part().modelFile(side).rotationY(270).uvLock(true).addModel().condition(TaintFibreBlock.WEST, true).end();
-        builder.part().modelFile(up).addModel().condition(TaintFibreBlock.UP, true).end();
-        builder.part().modelFile(down).addModel().condition(TaintFibreBlock.DOWN, true).end();
-        // the three floor growths share two pictures; the hanging one is the second picture upside down
-        builder.part().modelFile(sproutOne).addModel().condition(TaintFibreBlock.GROWTH, 1, 3).end();
-        builder.part().modelFile(sproutTwo).addModel().condition(TaintFibreBlock.GROWTH, 2).end();
-        builder.part().modelFile(sproutTwo).rotationX(180).addModel().condition(TaintFibreBlock.GROWTH, TaintFibreBlock.HANGING).end();
+        builder.part().modelFile(crust).addModel().condition(TaintFibreBlock.DOWN, true).end();
+        builder.part().modelFile(crust).rotationX(180).addModel().condition(TaintFibreBlock.UP, true).end();
+        builder.part().modelFile(crust).rotationX(90).rotationY(180).addModel().condition(TaintFibreBlock.NORTH, true).end();
+        builder.part().modelFile(crust).rotationX(90).addModel().condition(TaintFibreBlock.SOUTH, true).end();
+        builder.part().modelFile(crust).rotationX(270).rotationY(90).addModel().condition(TaintFibreBlock.EAST, true).end();
+        builder.part().modelFile(crust).rotationX(90).rotationY(90).addModel().condition(TaintFibreBlock.WEST, true).end();
+        for (int growth = 1; growth <= TaintFibreBlock.HANGING; growth++) {
+            builder.part().modelFile(models().getExistingFile(modLoc("block/taint_growth_" + growth))).addModel()
+                    .condition(TaintFibreBlock.GROWTH, growth).end();
+        }
     }
 
     /**
@@ -232,43 +229,17 @@ public class ModBlockStateProvider extends BlockStateProvider {
     }
 
     /**
-     * The tubes. Their pipe is the original's mesh, put together a side at a time by LegacyTubeModel; all the
-     * blockstate carries is the one mark the original drew separately and ours still does, the arrow where a one-way
-     * points. The valve's wheel is drawn elsewhere, by ValveHandleRenderer.
+     * The tubes. Their pipe is the original's mesh, put together a side at a time by LegacyTubeModel, and the marks
+     * the original drew separately are drawn separately here too: the valve's wheel by ValveHandleRenderer and the
+     * one-way's stub by OnewayMarkRenderer. The blockstate only gives each a model to build on.
      */
     private void tube() {
-        // a model with nothing in it but the picture a broken tube throws about, for LegacyTubeModel to build on
+        // nothing in it but the picture a broken tube throws about
         ModelFile bare = models().getBuilder("tube").texture("particle", modLoc("block/legacy/tube"));
-        for (var tube : List.of(ModBlocks.TUBE, ModBlocks.TUBE_VALVE, ModBlocks.TUBE_RESTRICT, ModBlocks.TUBE_FILTER,
-                ModBlocks.TUBE_BUFFER)) {
+        for (var tube : List.of(ModBlocks.TUBE, ModBlocks.TUBE_VALVE, ModBlocks.TUBE_ONEWAY, ModBlocks.TUBE_RESTRICT,
+                ModBlocks.TUBE_FILTER, ModBlocks.TUBE_BUFFER)) {
             simpleBlock(tube.get(), bare);
         }
-        getMultipartBuilder(ModBlocks.TUBE_ONEWAY.get()).part().modelFile(bare).addModel().end();
-        // the arrow only where it points, and only if there is a pipe there for it to sit on
-        for (Direction side : Direction.values()) {
-            var part = getMultipartBuilder(ModBlocks.TUBE_ONEWAY.get()).part();
-            reaching(part, "arrow", side).addModel()
-                    .condition(OnewayTubeBlock.FACING, side)
-                    .condition(TubeBlock.SIDES.get(side), TubeBlock.Link.TUBE, TubeBlock.Link.BLOCK)
-                    .end();
-        }
-    }
-
-    /**
-     * One piece pointed at one side.
-     * <p>
-     * The four bearings round the compass are the drawn model turned about the upright; up and down are models of
-     * their own, since a blockstate cannot turn an east-pointing thing to face up.
-     */
-    private ConfiguredModel.Builder<MultiPartBlockStateBuilder.PartBuilder> reaching(
-            ConfiguredModel.Builder<MultiPartBlockStateBuilder.PartBuilder> part, String piece, Direction side) {
-        if (side.getAxis().isVertical()) {
-            return part.modelFile(models().getExistingFile(
-                    modLoc("block/tube/" + piece + (side == Direction.UP ? "_up" : "_down"))));
-        }
-        // the piece is drawn reaching east, so every other bearing is that many quarter turns on
-        return part.modelFile(models().getExistingFile(modLoc("block/tube/" + piece)))
-                .rotationY(((int) side.toYRot() + 90) % 360);
     }
 
     /**
@@ -307,7 +278,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         drawnElsewhere(ModBlocks.ALEMBIC, "item/legacy/alembic");
     }
 
-    /** Drawn from a model made in Blockbench, so the blockstate only has to point at it. */
+    /** The original's own model file, read from its jar. */
     private void arcaneWorkbench() {
         simpleBlock(ModBlocks.ARCANE_WORKBENCH.get(), models().getExistingFile(modLoc("block/arcane_workbench")));
     }

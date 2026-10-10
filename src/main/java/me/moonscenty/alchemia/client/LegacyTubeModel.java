@@ -36,8 +36,8 @@ import net.neoforged.neoforge.client.model.pipeline.QuadBakingVertexConsumer;
  * a length of pipe out to every side it is joined on. The kinds of tube differ only in which part of the original's
  * one sheet they wear, and the original moved the mesh's texture corners to choose it; this moves them the same way.
  * <p>
- * The one-way tube's arrow, which the original drew in its renderer, is ours and comes from the model this wraps, so
- * a one-way still shows which way it goes. The valve's wheel is drawn by ValveHandleRenderer.
+ * The marks the original drew in its renderers are drawn in ours: the valve's wheel by ValveHandleRenderer and
+ * the one-way's stub by OnewayMarkRenderer.
  */
 public class LegacyTubeModel extends BakedModelWrapper<BakedModel> {
     /** The original's sheet. */

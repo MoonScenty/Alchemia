@@ -112,8 +112,6 @@ public class AlchemiaClientSetup {
     public static void registerExtraModels(ModelEvent.RegisterAdditional event) {
         // the quill stood in the research table's inkwell
         event.register(ResearchTableRenderer.QUILL);
-        // a valve's wheel is turned by hand in code
-        event.register(ValveHandleRenderer.HANDLE);
     }
 
     /** Tells the book how to open itself, which only the client knows how to do. */
@@ -262,10 +260,12 @@ public class AlchemiaClientSetup {
         // a cloud is all particles, so there is nothing to draw for the entity itself
         event.registerEntityRenderer(ModEntities.TAINT_CLOUD.get(), NoopRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.NODE_STABILIZER.get(), NodeStabilizerRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.ARCANE_WORKBENCH.get(), ArcaneWorkbenchRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.ARCANE_WORKBENCH_CHARGER.get(), ChargerRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.ALEMBIC.get(), AlembicRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.ARCANE_PEDESTAL.get(), ArcanePedestalRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.INFUSION_MATRIX.get(), InfusionMatrixRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.TUBE_VALVE.get(), ValveHandleRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.TUBE.get(), OnewayMarkRenderer::new);
     }
 }

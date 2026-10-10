@@ -71,6 +71,9 @@ public final class LegacyAssets {
     /** The tube: a middle box, a pipe to each side and a larger box for a buffer. */
     public static final String TUBE_MESH = "models/legacy/tube.obj";
 
+    /** The valve's wheel and stem, which the original built in code and also used for the one-way tube's mark. */
+    public static final String VALVE = "valve";
+
     /** The alchemometer as Thaumcraft 4's thaumometer: a six-sided brass frame. */
     public static final String SCANNER_MESH = "models/legacy/scanner.obj";
 
@@ -99,6 +102,8 @@ public final class LegacyAssets {
                             "thaumcraft/client/renderers/models/gear/ModelRobe", "(F)V", 0.5F),
                     new LegacyModelSource(LegacyEdition.FOUR,
                             "thaumcraft/client/renderers/models/gear/ModelRobe", "(F)V", 0.5F)),
+            VALVE, List.of(new LegacyModelSource(LegacyEdition.FIVE,
+                    "thaumcraft/client/renderers/models/block/ModelTubeValve", "()V")),
             RESEARCH_TABLE, List.of(new LegacyModelSource(LegacyEdition.FIVE,
                     "thaumcraft/client/renderers/models/block/ModelResearchTable", "()V")),
             INFUSER, List.of(new LegacyModelSource(LegacyEdition.FIVE,
@@ -266,9 +271,17 @@ public final class LegacyAssets {
         }
         all.add(block("taint_log_top", "log_taintwood_top", null));
         all.add(block("taint_rock", "taint_rock", null));
-        all.add(block("taint_fibres", "taint_fibres", null));
-        all.add(block("taint_growth_1", "taint_growth_1", null));
-        all.add(block("taint_growth_2", "taint_growth_2", null));
+        // the fibre is the original's model files: a crust turned onto each side it clings to, and four growths
+        for (String part : List.of("taint_fibre", "taint_growth_1", "taint_growth_2", "taint_growth_3",
+                "taint_growth_4")) {
+            all.add(LegacyAsset.of("models/block/" + part + ".json").five("models/block/" + part + ".json")
+                    .asModel("cutout"));
+        }
+        for (String picture : List.of("taint_fibres", "taint_growth_1", "taint_growth_2", "taint_growth_3",
+                "taint_growth_4")) {
+            all.add(LegacyAsset.of("textures/block/legacy/" + picture + ".png")
+                    .five("textures/blocks/" + picture + ".png"));
+        }
         // the original's goo is one strip, still or running; ours asks for two names and gets the same picture
         all.add(block("flux_goo_still", "flux_goo", null));
         all.add(block("flux_goo_flow", "flux_goo", null));
@@ -307,8 +320,12 @@ public final class LegacyAssets {
 
         // the bench's screen is laid out as the original's was, so its panel goes straight in
         all.add(LegacyAsset.of("textures/gui/arcane_workbench.png").five("textures/gui/gui_arcaneworkbench.png"));
-        all.add(block("arcane_workbench_side", "arcane_workbench_side", null));
-        all.add(block("arcane_workbench_top", "arcane_workbench_top", null));
+        // the bench itself is the original's model file, which names its pictures where the original kept them
+        all.add(LegacyAsset.of("models/block/arcane_workbench.json").five("models/block/arcane_workbench.json")
+                .asModel());
+        for (String face : List.of("arcane_workbench_top", "arcane_workbench_side")) {
+            all.add(LegacyAsset.of("textures/block/legacy/" + face + ".png").five("textures/blocks/" + face + ".png"));
+        }
         // the charger above it: the vis relay the original drew it as, and its sheet
         all.add(LegacyAsset.of(RELAY_MESH).five("models/obj/vis_relay.obj"));
         all.add(LegacyAsset.of("textures/entity/vis_relay.png").five("textures/models/vis_relay.png"));
@@ -337,6 +354,8 @@ public final class LegacyAssets {
         }
         // the tubes: the original's mesh, and the one sheet every kind is cut from
         all.add(LegacyAsset.of(TUBE_MESH).five("models/obj/tube.obj"));
+        // the valve's wheel and the one-way's mark are drawn off this sheet
+        all.add(LegacyAsset.of("textures/entity/valve.png").five("textures/models/valve.png").forModel(VALVE));
         all.add(LegacyAsset.of("textures/block/legacy/tube.png").five("textures/blocks/tube.png"));
         // a tube in the hand is the original's flat picture of it, one for each kind; our item models name them
         for (String tube : List.of("tube_normal", "tube_valve", "tube_oneway", "tube_restrict", "tube_filter",
@@ -410,6 +429,9 @@ public final class LegacyAssets {
         metalGear(all, "void", "void");
         all.add(item("enchanted_fabric", "fabric", null));
         all.add(item("focus_pouch", "focus_pouch", "focuspouch"));
+        // the pouch opened is the original's panel; its screen and slots are laid out to match
+        all.add(LegacyAsset.of("textures/gui/focus_pouch.png").five("textures/gui/gui_focuspouch.png")
+                .four("textures/gui/gui_focuspouch.png"));
 
         // the boots and the goggles were plain armour in the original, one sheet each; the goggles' is twice the size
         all.add(item("traveller_boots", "traveller_boots", "bootstraveler"));

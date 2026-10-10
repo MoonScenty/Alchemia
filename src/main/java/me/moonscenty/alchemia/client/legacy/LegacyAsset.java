@@ -130,6 +130,19 @@ public record LegacyAsset(String target, List<Source> sources, Transform transfo
     }
 
     /**
+     * {@link #asModel()}, drawn with the given kind of render. The old game settled that on the block rather than in
+     * the model file, so the original's files do not say it.
+     */
+    public LegacyAsset asModel(String renderType) {
+        return new LegacyAsset(target, sources, original -> {
+            JsonObject read = JsonParser.parseString(new String(model(original), StandardCharsets.UTF_8))
+                    .getAsJsonObject();
+            read.addProperty("render_type", "minecraft:" + renderType);
+            return read.toString().getBytes(StandardCharsets.UTF_8);
+        }, model);
+    }
+
+    /**
      * One of our model files with the original model laid in under it: the original's elements and textures, then
      * ours. Ours holds only what the original drew some other way (a liquid, a label), so the two make one model.
      *

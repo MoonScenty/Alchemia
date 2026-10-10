@@ -28,12 +28,12 @@ import net.minecraft.world.item.ItemStack;
  * no way to shift-click the pouch into itself or to drop it and leave the window looking at nothing.
  */
 public class FocusPouchMenu extends AbstractContainerMenu {
-    // where the slots sit on the drawn panel; tools/gen_pouch_gui.py prints these
-    private static final int FOCI_X = 35;
-    private static final int FOCI_Y = 18;
+    // where the slots sit on the original's panel, as its container placed them
+    private static final int FOCI_X = 37;
+    private static final int FOCI_Y = 51;
     private static final int PACK_X = 8;
-    private static final int PACK_Y = 84;
-    private static final int BELT_Y = 142;
+    private static final int PACK_Y = 151;
+    private static final int BELT_Y = 209;
     private static final int PITCH = 18;
 
     private final Player player;
@@ -67,6 +67,11 @@ public class FocusPouchMenu extends AbstractContainerMenu {
         for (int column = 0; column < 9; column++) {
             addSlot(held(inventory, column, PACK_X + column * PITCH, BELT_Y));
         }
+    }
+
+    /** Which square of the bag the pouch is in, or -1 when it is in the off hand. */
+    public int locked() {
+        return locked;
     }
 
     /** The pouch being edited, taken from the hand it was opened with rather than remembered as a stack. */
