@@ -1,3 +1,0 @@
-# material names made readable; the hash sends the loader to the model file for each picture
-newmtl stone
-map_Kd #stone

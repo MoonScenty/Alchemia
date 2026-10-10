@@ -1,60 +1,15 @@
 # 크레딧
 
-Alchemia의 **코드**는 [MIT](LICENSE.md)입니다. 아래 에셋은 각자의 라이선스를 따릅니다.
+Alchemia의 **코드**는 [MIT](LICENSE.md)입니다.
 
-## 상 아이콘 — CC BY 3.0
+## 원본 Thaumcraft 에셋
 
-`assets/alchemia/textures/aspect/`의 상 아이콘은 [game-icons.net](https://game-icons.net)의 **Lorc**가 만든 아이콘입니다.
+게임에서 보이는 그림·모델·파티클 시트는 원본 Thaumcraft 4·5(Azanor)의 것입니다. **이 저장소에는 들어 있지 않습니다.** 플레이어가 게임 폴더의 `legacy/`에 둔 자기 jar에서 실행할 때 읽어 오고(`client/legacy/`), 디스크에 풀어 놓지도 다시 배포하지도 않습니다. 원본 에셋의 권리는 원작자에게 있습니다.
 
-- 라이선스: [Creative Commons Attribution 3.0 Unported (CC BY 3.0)](https://creativecommons.org/licenses/by/3.0/)
-- 변경 사항: 512×512 원본을 32×32로 단계적으로 축소하고, 밝기를 알파로 옮겨 흰색 마스크로 만들었습니다. 생성기는 `thaumref/tools/gen_aspect_icons.py`.
+## 저장소에 남은 에셋
 
-> Icons made by Lorc. Available on https://game-icons.net
+원본에 없는 것을 위해 이 저장소가 직접 가진 에셋입니다.
 
-어느 아이콘이 어느 상인지는 `thaumref/tools/aspect_icon_matches.tsv`에 적어 두었습니다. 다시 뽑을 때 그 표를 보면 됩니다.
-
-`ignis`·`ordo`·`perditio` 세 종은 그림 자체가 둥글지 않아 **Delapouite**의 `circle` 아이콘을 테두리로 입혔습니다. `vacuos`는 그 `circle` 자체입니다. 같은 CC BY 3.0입니다.
-
-> Icons made by Lorc and Delapouite. Available on https://game-icons.net
-
-35종 전부 game-icons.net 원본에서 만들었습니다. 생성기는 `thaumref/tools/gen_aspect_icons.py`(통째로 쓰는 32종)와 `gen_aspect_glyphs.py`(테두리를 입히는 3종)입니다.
-
-## 연구 노드 판 — 바닐라 마인크래프트
-
-`assets/alchemia/textures/gui/sprites/research/`의 여섯 장은 바닐라 마인크래프트 1.21.1의 업적 프레임 스프라이트를 그대로 추출한 것입니다.
-
-| 파일 | 원본 |
-|---|---|
-| `node_plain.png` / `node_plain_done.png` | `advancements/task_frame_unobtained` / `_obtained` |
-| `node_special.png` / `node_special_done.png` | `advancements/goal_frame_unobtained` / `_obtained` |
-| `node_major.png` / `node_major_done.png` | `advancements/challenge_frame_unobtained` / `_obtained` |
-
-`textures/gui/research_table.png`의 아래쪽 인벤토리 격자(0,166 기준 184×88)도 바닐라 `gui/container/inventory.png`의 (0,76) 영역입니다. 같은 자리에 원작도 바닐라 격자를 썼습니다. 그 위의 본체는 MoonScenty가 직접 그린 것입니다.
-
-Mojang의 에셋이므로 이 저장소의 MIT 라이선스가 적용되지 않습니다. Minecraft EULA를 따릅니다.
-
-## 연구 화면 배경
-
-`textures/gui/research_background/`의 여섯 장은 MoonScenty가 준비한 이미지를 1024×1024로 리사이즈한 것입니다. 분기별 색은 원작이 쓰던 색을 따라갔습니다 — 기초 청록, 아르카나 자홍, 연금술 녹색·호박, 장치 짙은 파랑, 골레마니 진홍, 엘드리치 보라.
-
-`textures/gui/research_overlay.png`는 이 저장소에서 값 노이즈와 별점으로 생성한 것으로 MIT입니다.
-
-## 노드
-
-`textures/entity/node_core.png`(2048×64, 64px 프레임 32장)와 `node_halo.png`(1024×64, 16장)는 이 저장소에서 절차 생성한 것으로 MIT입니다. 생성기는 `thaumref/tools/gen_nodes.py`에 있습니다.
-
-둘 다 회색조이고, 색은 노드가 품은 상의 색으로 코드에서 입힙니다. 그래서 상 35종과 노드 7종에 대해 프레임을 따로 만들 필요가 없습니다.
-
-`textures/entity/node_bubble.png`도 이 저장소에서 절차 생성한 것입니다 — 구면 조명과 비눗막 간섭색을 계산해 그렸습니다.
-
-오염 텍스처 14장(`textures/block/taint_*.png`)과 플럭스 구스 2장(`flux_goo_still/flow.png`, 바닐라 물 애니메이션 스트립의 색조 변환)은 `thaumref/tools/gen_taint.py`로 만들었습니다. 섬유·흙·바위·껍질·원목 옆면·돌기 2종은 바닐라 텍스처(덩굴·흙·조약돌·엔드스톤·어두운 참나무 원목·민들레·양귀비)의 밝기를 보라색 램프에 매핑한 색조 변환이고, 원목 윗면과 종기 변형은 절차 생성입니다. 바닐라 파생분에는 Mojang의 에셋 라이선스가 적용됩니다.
-
-`textures/item/node_placer.png`(크리에이티브 전용 노드 배치기 아이콘)도 절차 생성한 것입니다. 생성기는 `thaumref/tools/gen_creative_node.py`.
-
-노드 안정기의 모델(`models/block/node_stabilizer/*.obj`)과 텍스처(`block/node_stabilizer_top.png`, `block/node_stabilizer_piston.png`)는 MoonScenty가 Blockbench로 제작했습니다.
-
-## 그 밖의 텍스처
-
-나머지 텍스처는 MoonScenty가 직접 제작했거나, 바닐라 마인크래프트 텍스처를 색조 변환해 만든 것입니다. 제작 방식은 [docs/textures/](docs/textures/)에 기록돼 있습니다.
-
-Thaumcraft의 에셋은 이 저장소에 포함되어 있지 않습니다.
+- `textures/item/node_placer.png` — 크리에이티브 전용 노드 배치기 아이콘. 이 저장소에서 절차 생성한 것으로 MIT입니다(`thaumref/tools/gen_creative_node.py`).
+- `textures/block/deepslate_amber_ore.png`, `deepslate_cinnabar_ore.png`, `textures/item/raw_cinnabar.png`, `textures/block/arcane_stone_blue.png`, `textures/gui/focus_pouch.png` — MoonScenty가 직접 제작했거나 바닐라 마인크래프트 텍스처를 색조 변환해 만든 것입니다. 바닐라 파생분에는 Mojang의 에셋 라이선스(Minecraft EULA)가 적용됩니다.
+- 모델 일부(`models/block/jar/*`의 액체·라벨, `models/block/tube/*`의 밸브 손잡이·일방통행 화살표, `models/block/arcane_workbench.json`, `models/block/taint/*`) — MoonScenty가 Blockbench로 제작한 것입니다. 입히는 그림은 원본에서 옵니다.

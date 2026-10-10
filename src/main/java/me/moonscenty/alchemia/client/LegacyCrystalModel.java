@@ -46,7 +46,7 @@ import net.neoforged.neoforge.client.model.pipeline.QuadBakingVertexConsumer;
  * The original could grow shards from every face that had something solid behind it. Ours grow from one, so only
  * that face's shards are drawn.
  * <p>
- * Without the jar, or before its mesh is read, this is our own model and nothing else.
+ * Until its mesh has been read there is nothing to draw, and the model it wraps holds only the crystal's picture.
  */
 public class LegacyCrystalModel extends BakedModelWrapper<BakedModel> {
     /** The seed the original took from the block's place. */

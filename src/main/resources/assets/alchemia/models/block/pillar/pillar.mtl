@@ -1,7 +1,0 @@
-# written by tools/gen_pillar.py
-
-newmtl arcane_stone
-map_Kd #arcane_stone
-
-newmtl arcane_stone_bricks_glyphed
-map_Kd #arcane_stone_bricks_glyphed

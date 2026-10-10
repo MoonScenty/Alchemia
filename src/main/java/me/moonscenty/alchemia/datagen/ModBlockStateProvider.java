@@ -232,56 +232,24 @@ public class ModBlockStateProvider extends BlockStateProvider {
     }
 
     /**
-     * The pipe, put together a side at a time.
-     * <p>
-     * Six kinds out of the same handful of pieces. The arms and the collars are shared; the middle is what tells
-     * one kind from another, and three of them wear a mark besides -- an arrow where a one-way points, a band on
-     * every joined side of a restrict, and, drawn elsewhere, the wheel of a valve.
+     * The tubes. Their pipe is the original's mesh, put together a side at a time by LegacyTubeModel; all the
+     * blockstate carries is the one mark the original drew separately and ours still does, the arrow where a one-way
+     * points. The valve's wheel is drawn elsewhere, by ValveHandleRenderer.
      */
     private void tube() {
-        tube(ModBlocks.TUBE.get(), "plain");
-        tube(ModBlocks.TUBE_VALVE.get(), "plain");
-        tube(ModBlocks.TUBE_ONEWAY.get(), "plain");
-        tube(ModBlocks.TUBE_RESTRICT.get(), "plain");
-        tube(ModBlocks.TUBE_FILTER.get(), "filter");
-        tube(ModBlocks.TUBE_BUFFER.get(), "buffer");
-
-        // the arrow only where it points, and only if there is an arm there for it to sit on
+        // a model with nothing in it but the picture a broken tube throws about, for LegacyTubeModel to build on
+        ModelFile bare = models().getBuilder("tube").texture("particle", modLoc("block/legacy/tube"));
+        for (var tube : List.of(ModBlocks.TUBE, ModBlocks.TUBE_VALVE, ModBlocks.TUBE_RESTRICT, ModBlocks.TUBE_FILTER,
+                ModBlocks.TUBE_BUFFER)) {
+            simpleBlock(tube.get(), bare);
+        }
+        getMultipartBuilder(ModBlocks.TUBE_ONEWAY.get()).part().modelFile(bare).addModel().end();
+        // the arrow only where it points, and only if there is a pipe there for it to sit on
         for (Direction side : Direction.values()) {
             var part = getMultipartBuilder(ModBlocks.TUBE_ONEWAY.get()).part();
             reaching(part, "arrow", side).addModel()
                     .condition(OnewayTubeBlock.FACING, side)
                     .condition(TubeBlock.SIDES.get(side), TubeBlock.Link.TUBE, TubeBlock.Link.BLOCK)
-                    .end();
-        }
-        // the bands on every side that is joined to something
-        for (Direction side : Direction.values()) {
-            var part = getMultipartBuilder(ModBlocks.TUBE_RESTRICT.get()).part();
-            reaching(part, "band", side).addModel()
-                    .condition(TubeBlock.SIDES.get(side), TubeBlock.Link.TUBE, TubeBlock.Link.BLOCK)
-                    .end();
-        }
-        // the valve's wheel is not here: it is pointed and turned by hand, in ValveHandleRenderer
-    }
-
-    /**
-     * The pipe, put together a side at a time.
-     * <p>
-     * The middle is always there; each side that is joined to anything adds an arm, and a side that meets a vessel
-     * rather than a pipe adds a collar on the end of it. Every kind of tube is built the same way out of the same
-     * pieces -- only the middle tells them apart, which is as it was in the original.
-     */
-    private void tube(TubeBlock block, String middle) {
-        var builder = getMultipartBuilder(block);
-        builder.part().modelFile(models().getExistingFile(modLoc("block/tube/middle_" + middle)))
-                .addModel().end();
-
-        for (Direction side : Direction.values()) {
-            reaching(builder.part(), "arm", side).addModel()
-                    .condition(TubeBlock.SIDES.get(side), TubeBlock.Link.TUBE, TubeBlock.Link.BLOCK)
-                    .end();
-            reaching(builder.part(), "collar", side).addModel()
-                    .condition(TubeBlock.SIDES.get(side), TubeBlock.Link.BLOCK)
                     .end();
         }
     }
@@ -327,22 +295,16 @@ public class ModBlockStateProvider extends BlockStateProvider {
     }
 
     /**
-     * The vessel, with and without the stand it would otherwise be standing on.
-     * <p>
-     * MoonScenty drew it facing west, which is where its filter is. A model drawn facing north is turned by the
-     * yaw plus a half turn; this one wants a further quarter on top of that to bring its west round to the front.
+     * A block the original drew wholly in its renderer, as ours does too: a model with nothing in it but the picture
+     * a broken one throws about.
      */
+    private void drawnElsewhere(DeferredBlock<? extends Block> block, String particle) {
+        simpleBlock(block.get(), models().getBuilder(block.getId().getPath()).texture("particle", modLoc(particle)));
+    }
+
+    /** Drawn by AlembicRenderer, on Thaumcraft 4's mesh. */
     private void alembic() {
-        ModelFile body = models().getExistingFile(modLoc("block/alembic/block"));
-        ModelFile legs = models().getExistingFile(modLoc("block/alembic/leg"));
-        var builder = getMultipartBuilder(ModBlocks.ALEMBIC.get());
-        for (Direction facing : Direction.Plane.HORIZONTAL) {
-            int turn = ((int) facing.toYRot() + 270) % 360;
-            builder.part().modelFile(body).rotationY(turn).addModel()
-                    .condition(AlembicBlock.FACING, facing).end();
-            builder.part().modelFile(legs).rotationY(turn).addModel()
-                    .condition(AlembicBlock.FACING, facing).condition(AlembicBlock.LEGS, true).end();
-        }
+        drawnElsewhere(ModBlocks.ALEMBIC, "item/legacy/alembic");
     }
 
     /** Drawn from a model made in Blockbench, so the blockstate only has to point at it. */
@@ -350,15 +312,14 @@ public class ModBlockStateProvider extends BlockStateProvider {
         simpleBlock(ModBlocks.ARCANE_WORKBENCH.get(), models().getExistingFile(modLoc("block/arcane_workbench")));
     }
 
-    /** Four posts and a crystal, built into one obj by thaumref/tools/gen_charger.py. */
+    /** Drawn by ChargerRenderer, as the original's vis relay. */
     private void arcaneWorkbenchCharger() {
-        simpleBlock(ModBlocks.ARCANE_WORKBENCH_CHARGER.get(),
-                models().getExistingFile(modLoc("block/charger/block")));
+        drawnElsewhere(ModBlocks.ARCANE_WORKBENCH_CHARGER, "item/legacy/vis_relay");
     }
 
-    /** Built from an obj rather than a cube, so the blockstate only has to point at it. */
+    /** Drawn by NodeStabilizerRenderer, on the original's mesh. */
     private void nodeStabilizer() {
-        simpleBlock(ModBlocks.NODE_STABILIZER.get(), models().getExistingFile(modLoc("block/node_stabilizer/block")));
+        drawnElsewhere(ModBlocks.NODE_STABILIZER, "item/legacy/node_stabilizer");
     }
 
     /**
@@ -414,20 +375,12 @@ public class ModBlockStateProvider extends BlockStateProvider {
         simpleBlock(wood.sapling().get(), models().cross(wood.sapling().getId().getPath(), blockTexture(wood.sapling().get())).renderType("cutout"));
     }
 
+    /**
+     * One model for every crystal and every state of it, with nothing in it but its picture: the shards themselves
+     * are the original's mesh, chosen and baked by LegacyCrystalModel from the state and the place.
+     */
     private void crystal(DeferredBlock<CrystalBlock> block) {
-        String name = block.getId().getPath();
-        ModelFile[] models = new ModelFile[CrystalBlock.MAX_AGE + 1];
-        for (int age = 0; age <= CrystalBlock.MAX_AGE; age++) {
-            models[age] = models().cross(name + "_stage" + age, modLoc("block/crystal/" + name + "_stage" + age)).renderType("cutout");
-        }
-
-        getVariantBuilder(block.get()).forAllStatesExcept(state -> {
-            Direction facing = state.getValue(CrystalBlock.FACING);
-            return ConfiguredModel.builder()
-                    .modelFile(models[state.getValue(CrystalBlock.AGE)])
-                    .rotationX(facing == Direction.UP ? 0 : facing == Direction.DOWN ? 180 : 90)
-                    .rotationY(facing.getAxis().isVertical() ? 0 : ((int) facing.toYRot() + 180) % 360)
-                    .build();
-        }, CrystalBlock.WATERLOGGED, CrystalBlock.GENERATION);
+        simpleBlock(block.get(), models().getBuilder("crystal")
+                .texture("particle", modLoc("block/legacy/crystal")).renderType("cutout"));
     }
 }

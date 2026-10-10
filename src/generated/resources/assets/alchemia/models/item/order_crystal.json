@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "alchemia:block/crystal/order_crystal_stage3"
+    "layer0": "alchemia:item/legacy/crystal_planter"
   }
 }

@@ -3,7 +3,6 @@ package me.moonscenty.alchemia.client.legacy;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Supplier;
 
 import me.moonscenty.alchemia.aspect.Aspect;
@@ -239,9 +238,13 @@ public final class LegacyAssets {
         // the crystals: the original's mesh of eight shards and the grey it was coloured from
         all.add(LegacyAsset.of(CRYSTAL_MESH).five("models/obj/crystal.obj"));
         all.add(LegacyAsset.of("textures/block/legacy/crystal.png").five("textures/blocks/crystal.png"));
+        // a crystal in the hand is the original's grey cluster, coloured by its aspect
+        all.add(LegacyAsset.of("textures/item/legacy/crystal_planter.png").five("textures/items/crystal_planter.png"));
         // the stabiliser: its body and arms, their sheet, and the glow drawn over the arms as they work
         all.add(LegacyAsset.of(STABILIZER_MESH).five("models/obj/node_stabilizer.obj"));
         all.add(LegacyAsset.of("textures/entity/node_stabilizer.png").five("textures/models/node_stabilizer.png"));
+        all.add(LegacyAsset.of("textures/item/legacy/node_stabilizer.png")
+                .five("textures/models/node_stabilizer.png"));
         all.add(LegacyAsset.of("textures/entity/node_stabilizer_over.png")
                 .five("textures/models/node_stabilizer_over.png"));
 
@@ -309,6 +312,7 @@ public final class LegacyAssets {
         // the charger above it: the vis relay the original drew it as, and its sheet
         all.add(LegacyAsset.of(RELAY_MESH).five("models/obj/vis_relay.obj"));
         all.add(LegacyAsset.of("textures/entity/vis_relay.png").five("textures/models/vis_relay.png"));
+        all.add(LegacyAsset.of("textures/item/legacy/vis_relay.png").five("textures/models/vis_relay.png"));
         // the wand itself, built on the original's mesh from the rod and cap pictures above
         all.add(LegacyAsset.of(WAND_MESH).five("models/obj/wand.obj"));
     }
@@ -321,19 +325,24 @@ public final class LegacyAssets {
         // the alembic is Thaumcraft 4's: its mesh and sheet sat with its other models, not under blocks
         all.add(LegacyAsset.of(ALEMBIC_MESH).four("textures/models/alembic.obj"));
         all.add(LegacyAsset.of("textures/entity/alembic.png").four("textures/models/alembic.png"));
+        all.add(LegacyAsset.of("textures/item/legacy/alembic.png").four("textures/models/alembic.png"));
 
-        // the jar: the original's glass and lid in place of ours, in every one of our jar models. The liquid and the
-        // label stay ours, since the original drew those in its renderer, but the liquid takes its glowing picture
+        // the jar: the original's glass and lid under each of our jar models, which hold only the liquid and the
+        // label the original drew in its renderer
         for (String fill : List.of("", "_1", "_2", "_3", "_4")) {
             for (String kind : List.of("jar", "jar_labelled")) {
                 String path = "models/block/jar/" + kind + fill + ".json";
-                all.add(LegacyAsset.of(path).five("models/block/jar_normal.json").asModelOver(path,
-                        Set.of("#0", "#1"), Map.of("liquid", "alchemia:block/legacy/animatedglow")));
+                all.add(LegacyAsset.of(path).five("models/block/jar_normal.json").asModelOver(path));
             }
         }
         // the tubes: the original's mesh, and the one sheet every kind is cut from
         all.add(LegacyAsset.of(TUBE_MESH).five("models/obj/tube.obj"));
         all.add(LegacyAsset.of("textures/block/legacy/tube.png").five("textures/blocks/tube.png"));
+        // a tube in the hand is the original's flat picture of it, one for each kind; our item models name them
+        for (String tube : List.of("tube_normal", "tube_valve", "tube_oneway", "tube_restrict", "tube_filter",
+                "tube_buffer")) {
+            all.add(LegacyAsset.of("textures/item/legacy/" + tube + ".png").five("textures/items/" + tube + ".png"));
+        }
         for (String face : List.of("jar_side", "jar_top", "jar_bottom", "animatedglow")) {
             all.add(LegacyAsset.of("textures/block/legacy/" + face + ".png").five("textures/blocks/" + face + ".png"));
         }
@@ -383,6 +392,7 @@ public final class LegacyAssets {
         all.add(block("pedestal_top", "pedestal_top", null));
 
         // the matrix's stones and the pillars, drawn by the matrix on the original's own model and mesh
+        all.add(LegacyAsset.of("textures/item/legacy/infuser.png").five("textures/blocks/infuser_normal.png"));
         all.add(LegacyAsset.of("textures/entity/infusion_matrix.png").five("textures/blocks/infuser_normal.png")
                 .forModel(INFUSER));
         all.add(LegacyAsset.of(PILLAR_MESH).five("models/obj/pillar.obj"));

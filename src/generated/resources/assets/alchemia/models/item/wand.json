@@ -1,275 +1,118 @@
 {
-  "parent": "alchemia:item/wand_wood_iron",
-  "overrides": [
-    {
-      "model": "alchemia:item/wand_wood_iron",
-      "predicate": {
-        "alchemia:wand": 0.0
-      }
+  "display": {
+    "firstperson_lefthand": {
+      "rotation": [
+        0,
+        90,
+        20
+      ],
+      "scale": [
+        0.68,
+        0.68,
+        0.68
+      ],
+      "translation": [
+        1.13,
+        3.2,
+        1.13
+      ]
     },
-    {
-      "model": "alchemia:item/wand_wood_gold",
-      "predicate": {
-        "alchemia:wand": 1.0
-      }
+    "firstperson_righthand": {
+      "rotation": [
+        0,
+        -90,
+        -20
+      ],
+      "scale": [
+        0.68,
+        0.68,
+        0.68
+      ],
+      "translation": [
+        1.13,
+        3.2,
+        1.13
+      ]
     },
-    {
-      "model": "alchemia:item/wand_wood_brass",
-      "predicate": {
-        "alchemia:wand": 2.0
-      }
+    "fixed": {
+      "rotation": [
+        0,
+        0,
+        -45
+      ],
+      "scale": [
+        0.8,
+        0.8,
+        0.8
+      ]
     },
-    {
-      "model": "alchemia:item/wand_wood_alchemium",
-      "predicate": {
-        "alchemia:wand": 3.0
-      }
+    "ground": {
+      "scale": [
+        0.5,
+        0.5,
+        0.5
+      ],
+      "translation": [
+        0,
+        2,
+        0
+      ]
     },
-    {
-      "model": "alchemia:item/wand_wood_void",
-      "predicate": {
-        "alchemia:wand": 4.0
-      }
+    "gui": {
+      "rotation": [
+        0,
+        45,
+        -45
+      ],
+      "scale": [
+        0.72,
+        0.72,
+        0.72
+      ]
     },
-    {
-      "model": "alchemia:item/wand_greatwood_iron",
-      "predicate": {
-        "alchemia:wand": 5.0
-      }
+    "head": {
+      "translation": [
+        0,
+        13,
+        7
+      ]
     },
-    {
-      "model": "alchemia:item/wand_greatwood_gold",
-      "predicate": {
-        "alchemia:wand": 6.0
-      }
+    "thirdperson_lefthand": {
+      "rotation": [
+        0,
+        90,
+        -10
+      ],
+      "scale": [
+        0.85,
+        0.85,
+        0.85
+      ],
+      "translation": [
+        0,
+        3.5,
+        1.5
+      ]
     },
-    {
-      "model": "alchemia:item/wand_greatwood_brass",
-      "predicate": {
-        "alchemia:wand": 7.0
-      }
-    },
-    {
-      "model": "alchemia:item/wand_greatwood_alchemium",
-      "predicate": {
-        "alchemia:wand": 8.0
-      }
-    },
-    {
-      "model": "alchemia:item/wand_greatwood_void",
-      "predicate": {
-        "alchemia:wand": 9.0
-      }
-    },
-    {
-      "model": "alchemia:item/wand_silverwood_iron",
-      "predicate": {
-        "alchemia:wand": 10.0
-      }
-    },
-    {
-      "model": "alchemia:item/wand_silverwood_gold",
-      "predicate": {
-        "alchemia:wand": 11.0
-      }
-    },
-    {
-      "model": "alchemia:item/wand_silverwood_brass",
-      "predicate": {
-        "alchemia:wand": 12.0
-      }
-    },
-    {
-      "model": "alchemia:item/wand_silverwood_alchemium",
-      "predicate": {
-        "alchemia:wand": 13.0
-      }
-    },
-    {
-      "model": "alchemia:item/wand_silverwood_void",
-      "predicate": {
-        "alchemia:wand": 14.0
-      }
-    },
-    {
-      "model": "alchemia:item/wand_reed_iron",
-      "predicate": {
-        "alchemia:wand": 15.0
-      }
-    },
-    {
-      "model": "alchemia:item/wand_reed_gold",
-      "predicate": {
-        "alchemia:wand": 16.0
-      }
-    },
-    {
-      "model": "alchemia:item/wand_reed_brass",
-      "predicate": {
-        "alchemia:wand": 17.0
-      }
-    },
-    {
-      "model": "alchemia:item/wand_reed_alchemium",
-      "predicate": {
-        "alchemia:wand": 18.0
-      }
-    },
-    {
-      "model": "alchemia:item/wand_reed_void",
-      "predicate": {
-        "alchemia:wand": 19.0
-      }
-    },
-    {
-      "model": "alchemia:item/wand_obsidian_iron",
-      "predicate": {
-        "alchemia:wand": 20.0
-      }
-    },
-    {
-      "model": "alchemia:item/wand_obsidian_gold",
-      "predicate": {
-        "alchemia:wand": 21.0
-      }
-    },
-    {
-      "model": "alchemia:item/wand_obsidian_brass",
-      "predicate": {
-        "alchemia:wand": 22.0
-      }
-    },
-    {
-      "model": "alchemia:item/wand_obsidian_alchemium",
-      "predicate": {
-        "alchemia:wand": 23.0
-      }
-    },
-    {
-      "model": "alchemia:item/wand_obsidian_void",
-      "predicate": {
-        "alchemia:wand": 24.0
-      }
-    },
-    {
-      "model": "alchemia:item/wand_blaze_iron",
-      "predicate": {
-        "alchemia:wand": 25.0
-      }
-    },
-    {
-      "model": "alchemia:item/wand_blaze_gold",
-      "predicate": {
-        "alchemia:wand": 26.0
-      }
-    },
-    {
-      "model": "alchemia:item/wand_blaze_brass",
-      "predicate": {
-        "alchemia:wand": 27.0
-      }
-    },
-    {
-      "model": "alchemia:item/wand_blaze_alchemium",
-      "predicate": {
-        "alchemia:wand": 28.0
-      }
-    },
-    {
-      "model": "alchemia:item/wand_blaze_void",
-      "predicate": {
-        "alchemia:wand": 29.0
-      }
-    },
-    {
-      "model": "alchemia:item/wand_ice_iron",
-      "predicate": {
-        "alchemia:wand": 30.0
-      }
-    },
-    {
-      "model": "alchemia:item/wand_ice_gold",
-      "predicate": {
-        "alchemia:wand": 31.0
-      }
-    },
-    {
-      "model": "alchemia:item/wand_ice_brass",
-      "predicate": {
-        "alchemia:wand": 32.0
-      }
-    },
-    {
-      "model": "alchemia:item/wand_ice_alchemium",
-      "predicate": {
-        "alchemia:wand": 33.0
-      }
-    },
-    {
-      "model": "alchemia:item/wand_ice_void",
-      "predicate": {
-        "alchemia:wand": 34.0
-      }
-    },
-    {
-      "model": "alchemia:item/wand_quartz_iron",
-      "predicate": {
-        "alchemia:wand": 35.0
-      }
-    },
-    {
-      "model": "alchemia:item/wand_quartz_gold",
-      "predicate": {
-        "alchemia:wand": 36.0
-      }
-    },
-    {
-      "model": "alchemia:item/wand_quartz_brass",
-      "predicate": {
-        "alchemia:wand": 37.0
-      }
-    },
-    {
-      "model": "alchemia:item/wand_quartz_alchemium",
-      "predicate": {
-        "alchemia:wand": 38.0
-      }
-    },
-    {
-      "model": "alchemia:item/wand_quartz_void",
-      "predicate": {
-        "alchemia:wand": 39.0
-      }
-    },
-    {
-      "model": "alchemia:item/wand_bone_iron",
-      "predicate": {
-        "alchemia:wand": 40.0
-      }
-    },
-    {
-      "model": "alchemia:item/wand_bone_gold",
-      "predicate": {
-        "alchemia:wand": 41.0
-      }
-    },
-    {
-      "model": "alchemia:item/wand_bone_brass",
-      "predicate": {
-        "alchemia:wand": 42.0
-      }
-    },
-    {
-      "model": "alchemia:item/wand_bone_alchemium",
-      "predicate": {
-        "alchemia:wand": 43.0
-      }
-    },
-    {
-      "model": "alchemia:item/wand_bone_void",
-      "predicate": {
-        "alchemia:wand": 44.0
-      }
+    "thirdperson_righthand": {
+      "rotation": [
+        0,
+        -90,
+        10
+      ],
+      "scale": [
+        0.85,
+        0.85,
+        0.85
+      ],
+      "translation": [
+        0,
+        3.5,
+        1.5
+      ]
     }
-  ]
+  },
+  "textures": {
+    "particle": "alchemia:item/wand/rod_greatwood"
+  }
 }

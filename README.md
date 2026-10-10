@@ -33,10 +33,15 @@ docs/PORTING_PLAN.md         원본 기능 목록과 포팅 순서
 docs/PORTING_CONVENTIONS.md  포팅 원칙과 코드 규칙
 ```
 
-## 참고 자료
+## 실행에 필요한 것
 
-원본 jar와 디컴파일 결과물은 저작권 문제로 **이 저장소에 포함하지 않습니다.** 준비 방법은 [docs/PORTING_PLAN.md](docs/PORTING_PLAN.md)를 참고하세요.
+그림·모델·파티클은 원본 Thaumcraft의 것을 **플레이어가 가진 jar에서 실행할 때 읽어 옵니다.** 게임 폴더의 `legacy/`(개발 중에는 `run/legacy/`)에 두 jar를 두어야 하며, 하나라도 없으면 게임이 시작 단계에서 멈춥니다. 파일 이름은 상관없습니다.
+
+- Thaumcraft 4 (Minecraft 1.7.10), 예: `Thaumcraft-1.7.10-4.2.3.5.jar`
+- Thaumcraft 5 (Minecraft 1.8.9), 예: `Thaumcraft-1.8.9-5.2.4.jar`
+
+원본 jar와 디컴파일 결과물은 저작권 문제로 **이 저장소에 포함하지 않습니다.**
 
 ## 라이선스
 
-코드는 [MIT](LICENSE.md). 상 아이콘은 [game-icons.net](https://game-icons.net)의 Lorc가 만든 CC BY 3.0 에셋입니다. 자세한 내용은 [CREDITS.md](CREDITS.md)를 보세요.
+코드는 [MIT](LICENSE.md). 에셋에 대해서는 [CREDITS.md](CREDITS.md)를 보세요.

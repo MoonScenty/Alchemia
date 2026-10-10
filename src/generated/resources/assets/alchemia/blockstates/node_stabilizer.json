@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "alchemia:block/node_stabilizer/block"
+      "model": "alchemia:block/node_stabilizer"
     }
   }
 }

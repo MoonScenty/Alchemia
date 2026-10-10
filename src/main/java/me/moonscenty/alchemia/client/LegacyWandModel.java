@@ -25,6 +25,7 @@ import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
@@ -36,19 +37,18 @@ import net.neoforged.neoforge.client.model.BakedModelWrapper;
 import net.neoforged.neoforge.client.model.pipeline.QuadBakingVertexConsumer;
 
 /**
- * The wand on the original's own mesh, when its jar is there: a rod with a cap at either end, each part wearing the
- * picture of what it is made of, as the original put one together.
+ * The wand on the original's own mesh: a rod with a cap at either end, each part wearing the picture of what it is
+ * made of, as the original put one together.
  * <p>
- * Our wand picks one of forty-five models of its own by what it is made of. This stands in front of that choice:
- * with the original's mesh it builds the wand from the mesh instead, and keeps only how our model is held and shown,
- * so the wand sits in the hand where ours did. The mesh is a little longer than ours, caps and all, so it is drawn
- * at four fifths about its middle to come out the same length.
+ * Our wand's model file says only how a wand is held and shown; this builds what it looks like from the mesh, for
+ * whatever the wand in hand is made of. The mesh is drawn at four fifths about its middle, which is the length a
+ * wand is held at.
  * <p>
- * The original's mesh has a crossbar for a sceptre and a place for a focus; neither is drawn, since our wands are
- * never sceptres and do not show their focus yet.
+ * The original's mesh also has a crossbar for a sceptre, which is not drawn since our wands are never sceptres; a
+ * focus fitted to the wand sits on its tip, in the focus's own picture, as the original drew it.
  */
 public class LegacyWandModel extends BakedModelWrapper<BakedModel> {
-    /** How much smaller the mesh is drawn, and about where, to stand where our own wand did. */
+    /** How much smaller the mesh is drawn, and about where. */
     private static final float SCALE = 0.8F;
     private static final float MIDDLE = 0.5F;
 
@@ -60,18 +60,12 @@ public class LegacyWandModel extends BakedModelWrapper<BakedModel> {
 
     public LegacyWandModel(BakedModel ours) {
         super(ours);
-        ItemOverrides theirs = ours.getOverrides();
         this.overrides = new ItemOverrides() {
-            @Nullable
             @Override
             public BakedModel resolve(BakedModel model, ItemStack stack, @Nullable ClientLevel level,
                     @Nullable LivingEntity holder, int seed) {
-                BakedModel picked = theirs.resolve(model, stack, level, holder, seed);
                 LegacyMesh mesh = LegacyModels.mesh(LegacyAssets.WAND_MESH).orElse(null);
-                if (mesh == null || picked == null) {
-                    return picked;
-                }
-                return built(mesh, stack, picked);
+                return mesh == null ? ours : built(mesh, stack, ours);
             }
         };
     }
@@ -92,11 +86,13 @@ public class LegacyWandModel extends BakedModelWrapper<BakedModel> {
         if (rod == null || cap == null) {
             return ours;
         }
-        return BUILT.computeIfAbsent(rod.getPath() + "/" + cap.getPath(),
-                key -> new Built(bake(mesh, rod.getPath(), cap.getPath()), ours));
+        ItemStack focus = WandItem.focus(stack);
+        String tip = focus.isEmpty() ? "" : BuiltInRegistries.ITEM.getKey(focus.getItem()).getPath();
+        return BUILT.computeIfAbsent(rod.getPath() + "/" + cap.getPath() + "/" + tip,
+                key -> new Built(bake(mesh, rod.getPath(), cap.getPath(), tip), ours));
     }
 
-    private static List<BakedQuad> bake(LegacyMesh mesh, String rod, String cap) {
+    private static List<BakedQuad> bake(LegacyMesh mesh, String rod, String cap, String tip) {
         var atlas = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS);
         TextureAtlasSprite rodSprite = atlas.apply(Alchemia.id("item/wand/rod_" + rod));
         TextureAtlasSprite capSprite = atlas.apply(Alchemia.id("item/wand/cap_" + cap));
@@ -104,6 +100,9 @@ public class LegacyWandModel extends BakedModelWrapper<BakedModel> {
         add(quads, mesh, "rod", rodSprite);
         add(quads, mesh, "cap1", capSprite);
         add(quads, mesh, "cap2", capSprite);
+        if (!tip.isEmpty()) {
+            add(quads, mesh, "focus", atlas.apply(Alchemia.id("item/wand/" + tip)));
+        }
         return List.copyOf(quads);
     }
 

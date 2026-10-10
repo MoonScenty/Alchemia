@@ -10,8 +10,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
 import java.util.function.IntSupplier;
 
 import javax.annotation.Nullable;
@@ -123,28 +121,25 @@ public record LegacyAsset(String target, List<Source> sources, Transform transfo
     /**
      * A model file of the original, made one this game reads. 1.8.9 read its model files loosely, so some have a word
      * left unquoted; they are read loosely here too and written back out properly. Every texture is pointed at where
-     * {@link LegacyAssets} imports the original's pictures ({@code block/legacy/}), and a model at our own of the same
-     * name. The old display settings meant something else then and are dropped: a block model takes the game's
-     * ordinary block ones instead.
+     * {@link LegacyAssets} imports the original's pictures ({@code block/legacy/}, {@code item/legacy/}), and a model
+     * at our own of the same name. The old display settings meant something else then and are dropped: a block model
+     * takes the game's ordinary block ones instead, and a flat item the game's flat item ones.
      */
     public LegacyAsset asModel() {
         return new LegacyAsset(target, sources, LegacyAsset::model, model);
     }
 
     /**
-     * One of our model files with part of it swapped for the original's: every element of ours drawn with one of
-     * {@code replaced} goes, the original model's elements come in their place, and its textures with them. What
-     * ours has that the original drew some other way (a liquid, a label) stays as it was. {@code retextured} then
-     * points any of our remaining texture names at another picture.
+     * One of our model files with the original model laid in under it: the original's elements and textures, then
+     * ours. Ours holds only what the original drew some other way (a liquid, a label), so the two make one model.
      *
      * @param ours the model under {@code assets/alchemia/} this is built over
      */
-    public LegacyAsset asModelOver(String ours, Set<String> replaced, Map<String, String> retextured) {
-        return new LegacyAsset(target, sources, original -> over(original, ours, replaced, retextured), model);
+    public LegacyAsset asModelOver(String ours) {
+        return new LegacyAsset(target, sources, original -> over(original, ours), model);
     }
 
-    private static byte[] over(byte[] original, String ours, Set<String> replaced, Map<String, String> retextured)
-            throws IOException {
+    private static byte[] over(byte[] original, String ours) throws IOException {
         JsonObject theirs = JsonParser.parseString(new String(model(original), StandardCharsets.UTF_8))
                 .getAsJsonObject();
         JsonObject mine;
@@ -156,16 +151,9 @@ public record LegacyAsset(String target, List<Source> sources, Transform transfo
         }
         JsonArray elements = new JsonArray();
         theirs.getAsJsonArray("elements").forEach(elements::add);
-        for (JsonElement element : mine.getAsJsonArray("elements")) {
-            boolean swapped = element.getAsJsonObject().getAsJsonObject("faces").entrySet().stream()
-                    .anyMatch(face -> replaced.contains(face.getValue().getAsJsonObject().get("texture").getAsString()));
-            if (!swapped) {
-                elements.add(element);
-            }
-        }
+        mine.getAsJsonArray("elements").forEach(elements::add);
         JsonObject textures = mine.getAsJsonObject("textures").deepCopy();
         theirs.getAsJsonObject("textures").entrySet().forEach(entry -> textures.add(entry.getKey(), entry.getValue()));
-        retextured.forEach(textures::addProperty);
         mine.add("textures", textures);
         mine.add("elements", elements);
         return mine.toString().getBytes(StandardCharsets.UTF_8);
@@ -207,6 +195,13 @@ public record LegacyAsset(String target, List<Source> sources, Transform transfo
             }
             if (lower.startsWith("thaumcraft:block/")) {
                 return new JsonPrimitive("alchemia:block/" + value.substring("thaumcraft:block/".length()));
+            }
+            if (lower.startsWith("thaumcraft:items/")) {
+                return new JsonPrimitive("alchemia:item/legacy/" + value.substring("thaumcraft:items/".length()));
+            }
+            // 1.8.9 named the flat item model without a namespace
+            if (lower.equals("builtin/generated")) {
+                return new JsonPrimitive("minecraft:item/generated");
             }
         }
         return element;

@@ -1,9 +1,0 @@
-# material names made readable; the hash sends the loader to the model file for each picture
-newmtl band
-map_Kd #band
-newmtl filter
-map_Kd #filter
-newmtl stone
-map_Kd #stone
-newmtl tube
-map_Kd #tube

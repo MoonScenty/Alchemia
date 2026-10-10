@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "alchemia:block/charger/block"
+      "model": "alchemia:block/arcane_workbench_charger"
     }
   }
 }

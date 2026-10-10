@@ -1,9 +1,9 @@
 package me.moonscenty.alchemia.datagen;
 
 import me.moonscenty.alchemia.Alchemia;
-import me.moonscenty.alchemia.block.CrystalBlock;
 import me.moonscenty.alchemia.registry.ModBlocks;
 import me.moonscenty.alchemia.registry.ModItems;
+import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.data.PackOutput;
@@ -17,13 +17,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         super(output, Alchemia.MODID, existingFileHelper);
     }
 
-    /**
-     * The rods and caps, in the order the wand model picks them by.
-     * <p>
-     * A wand is one item made of two pieces, so all forty-five pairings are written out and the model chosen by a
-     * single number the item hands the renderer. Changing these lists changes that number, so they are kept in the
-     * order the parts are registered in.
-     */
+    /** The rods and caps, for their loose items. */
     static final String[] RODS = {"wood", "greatwood", "silverwood", "reed", "obsidian", "blaze", "ice", "quartz", "bone"};
     static final String[] CAPS = {"iron", "gold", "brass", "alchemium", "void"};
 
@@ -37,21 +31,19 @@ public class ModItemModelProvider extends ItemModelProvider {
         held("jar", modLoc("block/jar/jar"))
                 .override().predicate(Alchemia.id("filled"), 1).model(fullJar).end();
         held("arcane_pedestal", modLoc("block/pedestal"));
-        // all eight stones, turned the way the renderer turns them. A model cannot turn a box a quarter, so the
-        // turning was done on paper and written out as which glyph lands on which side (tools/gen_matrix_item.py)
-        held("infusion_matrix", modLoc("block/infusion_cluster"));
-        // a straight length of pipe rather than the bare middle, and each kind wearing whatever tells it apart
-        withExistingParent("tube", modLoc("block/tube/item_plain"));
-        withExistingParent("tube_valve", modLoc("block/tube/item_valve"));
-        withExistingParent("tube_oneway", modLoc("block/tube/item_oneway"));
-        withExistingParent("tube_restrict", modLoc("block/tube/item_restrict"));
-        withExistingParent("tube_filter", modLoc("block/tube/item_filter"));
-        withExistingParent("tube_buffer", modLoc("block/tube/item_buffer"));
+        matrix();
+        // a tube in the hand is the original's flat picture of it, one for each kind
+        String[][] tubes = {{"tube", "tube_normal"}, {"tube_valve", "tube_valve"}, {"tube_oneway", "tube_oneway"},
+                {"tube_restrict", "tube_restrict"}, {"tube_filter", "tube_filter"}, {"tube_buffer", "tube_buffer"}};
+        for (String[] tube : tubes) {
+            withExistingParent(tube[0], mcLoc("item/generated")).texture("layer0", modLoc("item/legacy/" + tube[1]));
+        }
         withExistingParent("essentia_smelter", modLoc("block/essentia_smelter"));
-        withExistingParent("alembic", modLoc("block/alembic/item"));
         withExistingParent("arcane_workbench", modLoc("block/arcane_workbench"));
-        withExistingParent("arcane_workbench_charger", modLoc("block/charger/item"));
-        withExistingParent("node_stabilizer", modLoc("block/node_stabilizer/item"));
+        // drawn in the hand on the original's meshes by LegacyMeshItemModel; these only say how they are held
+        heldAsBlock("alembic", "item/legacy/alembic");
+        heldAsBlock("arcane_workbench_charger", "item/legacy/vis_relay");
+        heldAsBlock("node_stabilizer", "item/legacy/node_stabilizer");
         withExistingParent("taint_fibre", mcLoc("item/generated")).texture("layer0", modLoc("block/taint_fibres"));
         distillery();
         basicItem(ModItems.AMBER.get());
@@ -114,31 +106,62 @@ public class ModItemModelProvider extends ItemModelProvider {
             withExistingParent(name, mcLoc("item/generated")).texture("layer0", modLoc("block/" + name));
         });
 
-        // Crystals show their fully grown texture in the inventory
-        ModBlocks.CRYSTALS.values().forEach(crystal -> {
-            String name = crystal.getId().getPath();
-            withExistingParent(name, mcLoc("item/generated"))
-                    .texture("layer0", modLoc("block/crystal/" + name + "_stage" + CrystalBlock.MAX_AGE));
-        });
+        // a crystal in the hand is the original's grey cluster, coloured by its aspect
+        ModBlocks.CRYSTALS.values().forEach(crystal -> withExistingParent(crystal.getId().getPath(),
+                mcLoc("item/generated")).texture("layer0", modLoc("item/legacy/crystal_planter")));
+    }
+
+    private static void held(ItemModelBuilder model, ItemDisplayContext context, float rx, float ry, float rz,
+            float tx, float ty, float tz, float scale) {
+        model.transforms().transform(context).rotation(rx, ry, rz).translation(tx, ty, tz).scale(scale).end().end();
+    }
+
+    /** An item held and shown as a block is, with nothing in its model but a picture to break into. */
+    private void heldAsBlock(String name, String particle) {
+        withExistingParent(name, mcLoc("block/block")).texture("particle", modLoc(particle));
     }
 
     /**
-     * The wand itself, picking between the forty-five that are already written down.
-     * <p>
-     * A built wand is a model, not two pictures stacked: a rod standing between two ferrules, wearing the surface
-     * of whatever it was made of. The forty-five are not built here because they all come from one drawing with
-     * two textures swapped, which {@code tools/gen_wand3d.py} does once rather than this doing it every run.
+     * The matrix in the hand: its eight stones as the original's cube, each wearing the original's sheet folded the
+     * way a sixteen-pixel box folds it, gathered into one block as they hang in the altar before it wakes.
      */
-    private void wands() {
-        var wand = withExistingParent("wand", modLoc("item/wand_" + RODS[0] + "_" + CAPS[0]));
-        for (int rod = 0; rod < RODS.length; rod++) {
-            for (int cap = 0; cap < CAPS.length; cap++) {
-                wand.override()
-                        .predicate(Alchemia.id("wand"), rod * CAPS.length + cap)
-                        .model(getExistingFile(modLoc("item/wand_" + RODS[rod] + "_" + CAPS[cap])))
-                        .end();
+    private void matrix() {
+        var matrix = withExistingParent("infusion_matrix", mcLoc("block/block"))
+                .texture("stone", modLoc("item/legacy/infuser"))
+                .texture("particle", modLoc("item/legacy/infuser"));
+        for (int x = 0; x < 2; x++) {
+            for (int y = 0; y < 2; y++) {
+                for (int z = 0; z < 2; z++) {
+                    var stone = matrix.element()
+                            .from(0.4F + 8 * x, 0.4F + 8 * y, 0.4F + 8 * z)
+                            .to(7.6F + 8 * x, 7.6F + 8 * y, 7.6F + 8 * z);
+                    // the box's six faces on the top half of the sheet, a sixteen-pixel box at the sheet's corner
+                    stone.face(Direction.UP).uvs(4, 0, 8, 4).texture("#stone").end();
+                    stone.face(Direction.DOWN).uvs(8, 0, 12, 4).texture("#stone").end();
+                    stone.face(Direction.WEST).uvs(0, 4, 4, 8).texture("#stone").end();
+                    stone.face(Direction.NORTH).uvs(4, 4, 8, 8).texture("#stone").end();
+                    stone.face(Direction.EAST).uvs(8, 4, 12, 8).texture("#stone").end();
+                    stone.face(Direction.SOUTH).uvs(12, 4, 16, 8).texture("#stone").end();
+                    stone.end();
+                }
             }
         }
+    }
+
+    /**
+     * The wand itself, which says only how a wand is held and shown. What it looks like is built from the
+     * original's mesh by LegacyWandModel, out of whatever the wand in hand is made of.
+     */
+    private void wands() {
+        var wand = getBuilder("wand").texture("particle", modLoc("item/wand/rod_greatwood"));
+        held(wand, ItemDisplayContext.GUI, 0, 45, -45, 0, 0, 0, 0.72F);
+        held(wand, ItemDisplayContext.GROUND, 0, 0, 0, 0, 2, 0, 0.5F);
+        held(wand, ItemDisplayContext.FIXED, 0, 0, -45, 0, 0, 0, 0.8F);
+        held(wand, ItemDisplayContext.THIRD_PERSON_RIGHT_HAND, 0, -90, 10, 0, 3.5F, 1.5F, 0.85F);
+        held(wand, ItemDisplayContext.THIRD_PERSON_LEFT_HAND, 0, 90, -10, 0, 3.5F, 1.5F, 0.85F);
+        held(wand, ItemDisplayContext.FIRST_PERSON_RIGHT_HAND, 0, -90, -20, 1.13F, 3.2F, 1.13F, 0.68F);
+        held(wand, ItemDisplayContext.FIRST_PERSON_LEFT_HAND, 0, 90, 20, 1.13F, 3.2F, 1.13F, 0.68F);
+        held(wand, ItemDisplayContext.HEAD, 0, 0, 0, 0, 13, 7, 1.0F);
 
         for (String cap : CAPS) {
             withExistingParent("wand_cap_" + cap, mcLoc("item/generated"))

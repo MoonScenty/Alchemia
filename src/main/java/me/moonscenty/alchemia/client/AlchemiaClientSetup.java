@@ -1,7 +1,10 @@
 package me.moonscenty.alchemia.client;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
+
+import org.joml.Matrix4f;
 
 import me.moonscenty.alchemia.aspect.Aspect;
 import me.moonscenty.alchemia.aspect.AspectList;
@@ -19,9 +22,7 @@ import me.moonscenty.alchemia.client.particle.MarkParticle;
 import me.moonscenty.alchemia.client.particle.SparkleParticle;
 import me.moonscenty.alchemia.registry.ModBlocks;
 import me.moonscenty.alchemia.Alchemia;
-import me.moonscenty.alchemia.registry.ModWandParts;
 import me.moonscenty.alchemia.registry.ModItems;
-import me.moonscenty.alchemia.item.WandItem;
 import me.moonscenty.alchemia.item.AlchemonomiconItem;
 import me.moonscenty.alchemia.registry.ModBlockEntities;
 import me.moonscenty.alchemia.registry.ModEntities;
@@ -51,64 +52,74 @@ import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsE
 @EventBusSubscriber(modid = Alchemia.MODID, value = Dist.CLIENT)
 public class AlchemiaClientSetup {
     /**
-     * Every crystal's models are wrapped in one that draws the original's shards when its jar is there, and the
-     * stabiliser's in one that steps aside for the original's renderer.
-     * Whether the jar is there is asked each time, since this runs once per reload and the jar can come or go
-     * between them.
+     * The models built on the original's meshes, which a model file cannot describe: they are wrapped around the
+     * models baked from our files, which say only how a thing is held, shown and broken.
      */
     @SubscribeEvent
-    public static void wrapCrystals(ModelEvent.ModifyBakingResult event) {
+    public static void wrapModels(ModelEvent.ModifyBakingResult event) {
         ModBlocks.CRYSTALS.values().forEach(crystal -> crystal.get().getStateDefinition().getPossibleStates()
                 .forEach(state -> event.getModels().computeIfPresent(BlockModelShaper.stateToModelLocation(state),
                         (location, ours) -> new LegacyCrystalModel(ours, state))));
-        // the original drew the whole stabiliser in its renderer, so with its jar ours steps aside
-        ModBlocks.NODE_STABILIZER.get().getStateDefinition().getPossibleStates().forEach(state -> event.getModels()
-                .computeIfPresent(BlockModelShaper.stateToModelLocation(state),
-                        (location, ours) -> new LegacyHiddenModel(ours, LegacyAssets.STABILIZER_MESH)));
-        // and the charger too
-        ModBlocks.ARCANE_WORKBENCH_CHARGER.get().getStateDefinition().getPossibleStates().forEach(state -> event
-                .getModels().computeIfPresent(BlockModelShaper.stateToModelLocation(state),
-                        (location, ours) -> new LegacyHiddenModel(ours, LegacyAssets.RELAY_MESH)));
-        // and the alembic, drawn on Thaumcraft 4's mesh
-        ModBlocks.ALEMBIC.get().getStateDefinition().getPossibleStates().forEach(state -> event.getModels()
-                .computeIfPresent(BlockModelShaper.stateToModelLocation(state),
-                        (location, ours) -> new LegacyHiddenModel(ours, LegacyAssets.ALEMBIC_MESH)));
-        // every kind of tube, built on the original's mesh with our handles and arrows kept
+        // every kind of tube, built on the original's mesh with our valve handles and one-way arrows kept
         Stream.of(ModBlocks.TUBE, ModBlocks.TUBE_VALVE, ModBlocks.TUBE_ONEWAY, ModBlocks.TUBE_RESTRICT,
                 ModBlocks.TUBE_FILTER, ModBlocks.TUBE_BUFFER).forEach(tube -> tube.get().getStateDefinition()
                 .getPossibleStates().forEach(state -> event.getModels().computeIfPresent(
                         BlockModelShaper.stateToModelLocation(state),
                         (location, ours) -> new LegacyTubeModel(ours, state))));
-        // the wand chooses among our forty-five, and with the jar is built on the original's mesh instead
         event.getModels().computeIfPresent(ModelResourceLocation.inventory(ModItems.WAND.getId()),
                 (location, ours) -> new LegacyWandModel(ours));
+        // the stabiliser, the charger and the alembic in the hand, on the original's meshes as its renderers placed
+        // them there: all three are modelled lying down and stood up from the middle of the block
+        Matrix4f standing = new Matrix4f().translate(0.5F, 0.0F, 0.5F).rotateX((float) Math.toRadians(-90.0));
+        List<LegacyMeshItemModel.Placed> stabilizer = new ArrayList<>();
+        stabilizer.add(new LegacyMeshItemModel.Placed("lock", standing));
+        for (int arm = 0; arm < 4; arm++) {
+            stabilizer.add(new LegacyMeshItemModel.Placed("piston", new Matrix4f(standing)
+                    .rotateZ((float) Math.toRadians(90.0 * arm)).rotateY((float) Math.toRadians(45.0))));
+        }
+        event.getModels().computeIfPresent(ModelResourceLocation.inventory(ModBlocks.NODE_STABILIZER.getId()),
+                (location, ours) -> new LegacyMeshItemModel(ours, LegacyAssets.STABILIZER_MESH, true,
+                        Alchemia.id("item/legacy/node_stabilizer"), stabilizer));
+        // the original drew a loose alembic on its legs, set a little lower
+        List<LegacyMeshItemModel.Placed> alembic = List.of(
+                new LegacyMeshItemModel.Placed("Legs", new Matrix4f(standing).translate(0.0F, 0.0F, -0.4F)),
+                new LegacyMeshItemModel.Placed("Pot", standing),
+                new LegacyMeshItemModel.Placed("Panel", standing));
+        event.getModels().computeIfPresent(ModelResourceLocation.inventory(ModBlocks.ALEMBIC.getId()),
+                (location, ours) -> new LegacyMeshItemModel(ours, LegacyAssets.ALEMBIC_MESH, true,
+                        Alchemia.id("item/legacy/alembic"), alembic));
+        // the charger stands its ring, its four supports and its crystal up from the middle, as ChargerRenderer does
+        Matrix4f relay = new Matrix4f().translate(0.5F, 0.5F, 0.5F).rotateX((float) Math.toRadians(90.0))
+                .rotateZ((float) Math.toRadians(45.0));
+        List<LegacyMeshItemModel.Placed> charger = new ArrayList<>();
+        charger.add(new LegacyMeshItemModel.Placed("RingFloat", relay));
+        for (int support = 0; support < 4; support++) {
+            charger.add(new LegacyMeshItemModel.Placed("Support", new Matrix4f(relay)
+                    .rotateX((float) Math.toRadians(180.0)).translate(0.0F, 0.0F, 0.5F)
+                    .rotateZ((float) Math.toRadians(90.0 * support))));
+        }
+        charger.add(new LegacyMeshItemModel.Placed("Crystal", relay));
+        event.getModels().computeIfPresent(ModelResourceLocation.inventory(ModBlocks.ARCANE_WORKBENCH_CHARGER.getId()),
+                (location, ours) -> new LegacyMeshItemModel(ours, LegacyAssets.RELAY_MESH, true,
+                        Alchemia.id("item/legacy/vis_relay"), charger));
         // the alchemometer, as Thaumcraft 4's thaumometer
         event.getModels().computeIfPresent(ModelResourceLocation.inventory(ModItems.ALCHEMOMETER.getId()),
                 (location, ours) -> new LegacyScannerModel(ours));
     }
 
-    /** What stands on the research table is drawn by its renderer, so its models have to be asked for by hand. */
+    /** Models drawn by hand in renderers rather than named by a blockstate have to be asked for. */
     @SubscribeEvent
     public static void registerExtraModels(ModelEvent.RegisterAdditional event) {
+        // the quill stood in the research table's inkwell
         event.register(ResearchTableRenderer.QUILL);
-        event.register(ResearchTableRenderer.INKWELL);
-        event.register(ResearchTableRenderer.SCROLL);
-        // the matrix has no block model of its own; its eight stones are asked for here and drawn by hand
-        event.register(InfusionMatrixRenderer.CUBE);
-        // an altar's pillars are a picture a woken matrix draws, not four blocks somebody placed
-        event.register(InfusionMatrixRenderer.PILLAR);
-        // a valve's wheel is turned by hand in code, so it is asked for rather than named by a blockstate
+        // a valve's wheel is turned by hand in code
         event.register(ValveHandleRenderer.HANDLE);
-        for (var arm : NodeStabilizerRenderer.ARMS) {
-            event.register(arm);
-        }
     }
 
     /** Tells the book how to open itself, which only the client knows how to do. */
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event) {
         AlchemonomiconItem.opener = () -> Minecraft.getInstance().setScreen(new AlchemonomiconScreen());
-        registerWandVariants();
 
         // a phial and a label are each drawn one way empty and another way with something named on them
         for (Item item : List.of(ModItems.PHIAL.get(), ModItems.JAR_LABEL.get())) {
@@ -134,6 +145,9 @@ public class AlchemiaClientSetup {
         event.register((stack, tint) -> tint == 1 ? named(stack) : PLAIN, ModItems.JAR_LABEL.get());
         // the liquid standing in a jar held in the hand, in the colour of whatever it is
         event.register((stack, tint) -> tint == 0 ? inside(stack) : PLAIN, ModBlocks.JAR.get().asItem());
+        // a vis crystal in the hand is the original's grey cluster, coloured by its aspect
+        ModBlocks.CRYSTALS.forEach((type, crystal) -> event.register(
+                (stack, tint) -> tint == 0 ? 0xFF000000 | type.aspect().value().color() : PLAIN, crystal.get().asItem()));
         // a flame in a slot is two layers: the grey flame, which takes the dye, and its bead, which does not.
         // a dye's colour is already opaque, so unlike the phial and the label it needs no wrapping
         ModBlocks.NITOR.forEach((colour, flame) -> event.register(
@@ -204,8 +218,7 @@ public class AlchemiaClientSetup {
                                      : jar.colour())
                         : 0xFFFFFF, ModBlocks.JAR.get());
 
-        // the original's crystal is grey and takes its aspect's colour; our own crystals are already coloured and
-        // carry no tint, so this only ever touches the original's
+        // the original's crystal is grey and takes its aspect's colour
         ModBlocks.CRYSTALS.forEach((type, crystal) -> event.register(
                 (state, level, pos, tint) -> tint == LegacyCrystalModel.TINT ? type.aspect().value().color() : -1,
                 crystal.get()));
@@ -254,19 +267,5 @@ public class AlchemiaClientSetup {
         event.registerBlockEntityRenderer(ModBlockEntities.ARCANE_PEDESTAL.get(), ArcanePedestalRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.INFUSION_MATRIX.get(), InfusionMatrixRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.TUBE_VALVE.get(), ValveHandleRenderer::new);
-    }
-
-    /**
-     * Tells a wand which of its forty-five pictures to wear.
-     * <p>
-     * One number stands for both pieces — the rod's place in the registry times the number of caps, plus the cap's.
-     * Two separate numbers would need the model to test two things at once, which item overrides cannot do.
-     */
-    private static void registerWandVariants() {
-        ItemProperties.register(ModItems.WAND.get(), Alchemia.id("wand"), (stack, level, holder, seed) -> {
-            int rod = ModWandParts.RODS.getId(WandItem.rod(stack));
-            int cap = ModWandParts.CAPS.getId(WandItem.cap(stack));
-            return Math.max(0, rod) * ModWandParts.CAPS.size() + Math.max(0, cap);
-        });
     }
 }

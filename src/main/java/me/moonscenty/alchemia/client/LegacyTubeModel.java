@@ -3,7 +3,6 @@ package me.moonscenty.alchemia.client;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.Nullable;
@@ -33,20 +32,16 @@ import net.neoforged.neoforge.client.model.data.ModelData;
 import net.neoforged.neoforge.client.model.pipeline.QuadBakingVertexConsumer;
 
 /**
- * A tube on the original's mesh, when its jar is there: a small box in the middle, or a large one for a buffer, and
+ * A tube on the original's mesh: a small box in the middle, or a large one for a buffer, and
  * a length of pipe out to every side it is joined on. The kinds of tube differ only in which part of the original's
  * one sheet they wear, and the original moved the mesh's texture corners to choose it; this moves them the same way.
  * <p>
- * The valve's handle and the one-way tube's arrow the original drew in its renderers. Ours are kept as they are,
- * picked out of our own model by the pictures they wear, so that the tubes still show which way they go and whether
- * they are shut.
+ * The one-way tube's arrow, which the original drew in its renderer, is ours and comes from the model this wraps, so
+ * a one-way still shows which way it goes. The valve's wheel is drawn by ValveHandleRenderer.
  */
 public class LegacyTubeModel extends BakedModelWrapper<BakedModel> {
     /** The original's sheet. */
     private static final ResourceLocation TEXTURE = Alchemia.id("block/legacy/tube");
-    /** The pictures our own tube body is drawn with; what ours draws with anything else is kept. */
-    private static final Set<ResourceLocation> OUR_BODY = Set.of(Alchemia.id("block/tube"),
-            Alchemia.id("block/tube_buffer"), Alchemia.id("block/silverwood_planks"));
     /** The parts of the mesh: the middle box, the pipe to each side in the game's order of sides, the buffer box. */
     private static final int MIDDLE = 0;
     private static final int BUFFER_MIDDLE = 7;
@@ -78,15 +73,10 @@ public class LegacyTubeModel extends BakedModelWrapper<BakedModel> {
         if (mesh == null || mesh.groups() <= BUFFER_MIDDLE) {
             return ours;
         }
-        List<BakedQuad> kept = new ArrayList<>();
-        for (BakedQuad quad : ours) {
-            if (!OUR_BODY.contains(quad.getSprite().contents().name())) {
-                kept.add(quad);
-            }
-        }
         if (side != null) {
-            return kept;
+            return ours;
         }
+        List<BakedQuad> kept = new ArrayList<>(ours);
         BlockState drawn = state != null ? state : this.state;
         int generation = LegacyModels.generation();
         if (generation != bakedFrom) {
