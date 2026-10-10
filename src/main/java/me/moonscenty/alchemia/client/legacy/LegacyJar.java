@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-/** One jar of the original that the player put in {@code old_thaumcraft/}. Opened for one import, then closed. */
+/** One jar of the original that the player put in {@code legacy/}. Opened for one import, then closed. */
 final class LegacyJar implements AutoCloseable {
     private static final Pattern MC_VERSION = Pattern.compile("\"mcversion\"\\s*:\\s*\"([^\"]+)\"");
     /** Everything we take sits under the original's own namespace. */

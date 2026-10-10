@@ -117,7 +117,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("alchemia.configuration.section.alchemia.common.toml.title", pick("Alchemia Configs", "Alchemia 설정"));
         add("pack.alchemia.legacy.title", pick("Original Thaumcraft Assets", "원본 Thaumcraft 에셋"));
         add("pack.alchemia.legacy.description",
-                pick("Read from the jars in old_thaumcraft/", "old_thaumcraft/ 안의 jar에서 읽어 옴"));
+                pick("Read from the jars in legacy/", "legacy/ 안의 jar에서 읽어 옴"));
 
         addBlock(ModBlocks.AMBER_ORE, pick("Amber Ore", "호박 광석"));
         addBlock(ModBlocks.DEEPSLATE_AMBER_ORE, pick("Deepslate Amber Ore", "심층암 호박 광석"));

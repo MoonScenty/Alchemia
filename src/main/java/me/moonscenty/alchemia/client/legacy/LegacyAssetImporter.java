@@ -6,10 +6,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import me.moonscenty.alchemia.Alchemia;
@@ -30,17 +32,18 @@ import net.neoforged.fml.loading.FMLPaths;
 import net.neoforged.neoforge.event.AddPackFindersEvent;
 
 /**
- * Reads the original's jars from {@code <game folder>/old_thaumcraft/} and offers what {@link LegacyAssets} asks for
+ * Reads the original's jars from {@code <game folder>/legacy/} and offers what {@link LegacyAssets} asks for
  * as a resource pack sitting above our own files.
  *
  * <p>The original is All Rights Reserved, so its pictures never go into this repository. The player brings the jar;
- * we only know where in it to look. Without a jar nothing happens and our own pictures are used.
+ * we only know where in it to look. Both releases are required: {@link #requireJars()} stops the game at start-up
+ * without them. Our own pictures stay underneath, for anything the jars do not have.
  *
  * <p>The import runs every time the pack list is rebuilt, so dropping a jar in and pressing F3+T is enough.
  */
 @EventBusSubscriber(modid = Alchemia.MODID, value = Dist.CLIENT)
 public final class LegacyAssetImporter {
-    public static final String FOLDER = "old_thaumcraft";
+    public static final String FOLDER = "legacy";
     private static final String PACK_ID = Alchemia.MODID + "/legacy";
     /**
      * Stands in for a missing {@code .mcmeta}. The game looks for a picture's metadata in the pack that served it and
@@ -178,6 +181,48 @@ public final class LegacyAssetImporter {
             }
         });
         return models;
+    }
+
+    /**
+     * Stops the game before it gets going unless both releases of the original are in the folder. The mod draws with
+     * their pictures and models and is not meant to be played without them, so it is better to say so at once, with
+     * where they go, than to start with half of everything missing.
+     *
+     * <p>A jar is told apart by what it says it is inside, not by its name, as for the import itself.
+     */
+    public static void requireJars() {
+        Path folder = FMLPaths.GAMEDIR.get().resolve(FOLDER);
+        Set<LegacyEdition> found = EnumSet.noneOf(LegacyEdition.class);
+        if (Files.isDirectory(folder)) {
+            Map<LegacyEdition, LegacyJar> jars = new EnumMap<>(LegacyEdition.class);
+            openJars(folder, jars);
+            found.addAll(jars.keySet());
+            for (LegacyJar jar : jars.values()) {
+                try {
+                    jar.close();
+                } catch (IOException e) {
+                    Alchemia.LOGGER.debug("Could not close {}", jar.path, e);
+                }
+            }
+        } else {
+            try {
+                // made so a player can see where the jars go
+                Files.createDirectories(folder);
+            } catch (IOException e) {
+                Alchemia.LOGGER.debug("Could not make {}", folder, e);
+            }
+        }
+        Set<LegacyEdition> missing = EnumSet.allOf(LegacyEdition.class);
+        missing.removeAll(found);
+        if (!missing.isEmpty()) {
+            StringBuilder wanted = new StringBuilder();
+            for (LegacyEdition edition : missing) {
+                wanted.append("\n  - ").append(edition.describe());
+            }
+            throw new IllegalStateException("Alchemia needs both jars of the original Thaumcraft in "
+                    + folder.toAbsolutePath() + ". Missing:" + wanted
+                    + "\nPut the jars in that folder (any file name) and start the game again.");
+        }
     }
 
     private static void openJars(Path folder, Map<LegacyEdition, LegacyJar> jars) {

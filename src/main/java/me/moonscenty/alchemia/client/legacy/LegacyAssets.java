@@ -58,6 +58,12 @@ public final class LegacyAssets {
     /** The stabiliser's body and its arms, which the original kept as an OBJ file and drew in its renderer. */
     public static final String STABILIZER_MESH = "models/legacy/node_stabilizer.obj";
 
+    /** The vis relay the original drew as its workbench charger, kept as an OBJ file. */
+    public static final String RELAY_MESH = "models/legacy/vis_relay.obj";
+
+    /** The wand: a rod, a cap at either end, and room for a sceptre's crossbar and a focus. */
+    public static final String WAND_MESH = "models/legacy/wand.obj";
+
     public static final List<LegacyAsset> ALL = build();
 
     /**
@@ -282,6 +288,11 @@ public final class LegacyAssets {
         all.add(LegacyAsset.of("textures/gui/arcane_workbench.png").five("textures/gui/gui_arcaneworkbench.png"));
         all.add(block("arcane_workbench_side", "arcane_workbench_side", null));
         all.add(block("arcane_workbench_top", "arcane_workbench_top", null));
+        // the charger above it: the vis relay the original drew it as, and its sheet
+        all.add(LegacyAsset.of(RELAY_MESH).five("models/obj/vis_relay.obj"));
+        all.add(LegacyAsset.of("textures/entity/vis_relay.png").five("textures/models/vis_relay.png"));
+        // the wand itself, built on the original's mesh from the rod and cap pictures above
+        all.add(LegacyAsset.of(WAND_MESH).five("models/obj/wand.obj"));
     }
 
     /**

@@ -28,6 +28,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.BlockModelShaper;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraft.client.renderer.entity.NoopRenderer;
@@ -60,6 +61,13 @@ public class AlchemiaClientSetup {
         ModBlocks.NODE_STABILIZER.get().getStateDefinition().getPossibleStates().forEach(state -> event.getModels()
                 .computeIfPresent(BlockModelShaper.stateToModelLocation(state),
                         (location, ours) -> new LegacyHiddenModel(ours, LegacyAssets.STABILIZER_MESH)));
+        // and the charger too
+        ModBlocks.ARCANE_WORKBENCH_CHARGER.get().getStateDefinition().getPossibleStates().forEach(state -> event
+                .getModels().computeIfPresent(BlockModelShaper.stateToModelLocation(state),
+                        (location, ours) -> new LegacyHiddenModel(ours, LegacyAssets.RELAY_MESH)));
+        // the wand chooses among our forty-five, and with the jar is built on the original's mesh instead
+        event.getModels().computeIfPresent(ModelResourceLocation.inventory(ModItems.WAND.getId()),
+                (location, ours) -> new LegacyWandModel(ours));
     }
 
     /** What stands on the research table is drawn by its renderer, so its models have to be asked for by hand. */
@@ -220,6 +228,7 @@ public class AlchemiaClientSetup {
         // a cloud is all particles, so there is nothing to draw for the entity itself
         event.registerEntityRenderer(ModEntities.TAINT_CLOUD.get(), NoopRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.NODE_STABILIZER.get(), NodeStabilizerRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.ARCANE_WORKBENCH_CHARGER.get(), ChargerRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.ARCANE_PEDESTAL.get(), ArcanePedestalRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.INFUSION_MATRIX.get(), InfusionMatrixRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.TUBE_VALVE.get(), ValveHandleRenderer::new);
