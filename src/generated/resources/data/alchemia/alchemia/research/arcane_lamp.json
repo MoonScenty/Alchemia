@@ -1,0 +1,25 @@
+{
+  "category": "alchemia:artifice",
+  "column": 0,
+  "icon": "alchemia:arcane_lamp",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.arcane_lamp.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:arcane_lamp"
+    }
+  ],
+  "parents": [
+    "alchemia:primal_charm",
+    "alchemia:nitor"
+  ],
+  "requirements": {
+    "alchemia:aer": 3,
+    "alchemia:ignis": 3,
+    "alchemia:lux": 6
+  },
+  "row": -1
+}

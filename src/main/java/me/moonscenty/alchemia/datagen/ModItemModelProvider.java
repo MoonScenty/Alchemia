@@ -182,6 +182,15 @@ public class ModItemModelProvider extends ItemModelProvider {
                 "biothaumic_mind"}) {
             withExistingParent(part, mcLoc("item/generated")).texture("layer0", modLoc("item/legacy/" + part));
         }
+        // a lamp in the hand is the lit lamp, as the original showed it; the jug is its block
+        withExistingParent("arcane_lamp", modLoc("block/arcane_lamp_on"));
+        withExistingParent("growth_lamp", modLoc("block/growth_lamp_on"));
+        withExistingParent("fertility_lamp", modLoc("block/fertility_lamp_on"));
+        getBuilder("water_jug").parent(new net.neoforged.neoforge.client.model.generators.ModelFile
+                .UncheckedModelFile(modLoc("block/legacy/water_jug")));
+        // the chest is drawn by its own renderer, held the way the game holds its own chest
+        getBuilder("hungry_chest").parent(new net.neoforged.neoforge.client.model.generators.ModelFile
+                .UncheckedModelFile("minecraft:item/chest"));
         // drawn by the block's own renderer, breathing; only how it is held is said here
         getBuilder("bellows").parent(new net.neoforged.neoforge.client.model.generators.ModelFile.UncheckedModelFile(
                         "minecraft:builtin/entity"))

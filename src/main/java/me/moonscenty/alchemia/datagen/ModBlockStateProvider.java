@@ -57,6 +57,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         arcaneWorkbench();
         focalManipulator();
         bellows();
+        smallDevices();
         arcaneWorkbenchCharger();
         nodeStabilizer();
         altar();
@@ -284,6 +285,48 @@ public class ModBlockStateProvider extends BlockStateProvider {
     /** The original's own model file, read from its jar. */
     private void arcaneWorkbench() {
         simpleBlock(ModBlocks.ARCANE_WORKBENCH.get(), models().getExistingFile(modLoc("block/arcane_workbench")));
+    }
+
+    /**
+     * The three lamps: the original's lamp body, lit or dark, and its stand turned to the face it hangs from.
+     * The turns are the original's own.
+     */
+    private void lamps() {
+        lamp(ModBlocks.ARCANE_LAMP, "lamp_on", "lamp_off");
+        lamp(ModBlocks.GROWTH_LAMP, "lamp_grow_on", "lamp_grow_off");
+        lamp(ModBlocks.FERTILITY_LAMP, "lamp_fert_on", "lamp_fert_off");
+    }
+
+    private void lamp(DeferredBlock<me.moonscenty.alchemia.block.LampBlock> block, String lit, String dark) {
+        String name = block.getId().getPath();
+        var body = new net.neoforged.neoforge.client.model.generators.ModelFile.UncheckedModelFile(
+                modLoc("block/legacy/lamp"));
+        var stand = new net.neoforged.neoforge.client.model.generators.ModelFile.UncheckedModelFile(
+                modLoc("block/legacy/lamp_stand"));
+        var on = models().getBuilder(name + "_on").parent(body)
+                .texture("side", modLoc("block/legacy/" + lit)).texture("particle", modLoc("block/legacy/" + lit));
+        var off = models().getBuilder(name + "_off").parent(body)
+                .texture("side", modLoc("block/legacy/" + dark)).texture("particle", modLoc("block/legacy/" + dark));
+        var parts = getMultipartBuilder(block.get());
+        parts.part().modelFile(on).addModel().condition(me.moonscenty.alchemia.block.LampBlock.ENABLED, true).end();
+        parts.part().modelFile(off).addModel().condition(me.moonscenty.alchemia.block.LampBlock.ENABLED, false).end();
+        int[][] turns = {{0, 0}, {180, 0}, {90, 180}, {90, 0}, {90, 90}, {90, 270}};
+        net.minecraft.core.Direction[] faces = {net.minecraft.core.Direction.DOWN, net.minecraft.core.Direction.UP,
+                net.minecraft.core.Direction.NORTH, net.minecraft.core.Direction.SOUTH,
+                net.minecraft.core.Direction.WEST, net.minecraft.core.Direction.EAST};
+        for (int i = 0; i < faces.length; i++) {
+            parts.part().modelFile(stand).rotationX(turns[i][0]).rotationY(turns[i][1]).addModel()
+                    .condition(me.moonscenty.alchemia.block.LampBlock.FACING, faces[i]).end();
+        }
+    }
+
+    /** The jug is the original's own model file; the chest and the lamp's lights are drawn some other way. */
+    private void smallDevices() {
+        lamps();
+        simpleBlock(ModBlocks.WATER_JUG.get(), new net.neoforged.neoforge.client.model.generators.ModelFile
+                .UncheckedModelFile(modLoc("block/legacy/water_jug")));
+        drawnElsewhere(ModBlocks.HUNGRY_CHEST, "block/greatwood_planks");
+        drawnElsewhere(ModBlocks.LAMP_LIGHT, "block/legacy/lamp_on");
     }
 
     /** Drawn by BellowsRenderer; the block itself only has to say what it breaks into. */

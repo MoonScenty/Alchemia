@@ -46,6 +46,38 @@ public class ModBlockEntities {
                     .of(me.moonscenty.alchemia.block.entity.BellowsBlockEntity::new, ModBlocks.BELLOWS.get())
                     .build(null));
 
+    /** The three lamps at work. */
+    public static final DeferredHolder<BlockEntityType<?>,
+            BlockEntityType<me.moonscenty.alchemia.block.entity.ArcaneLampBlockEntity>> ARCANE_LAMP =
+            BLOCK_ENTITIES.register("arcane_lamp", () -> BlockEntityType.Builder
+                    .of(me.moonscenty.alchemia.block.entity.ArcaneLampBlockEntity::new, ModBlocks.ARCANE_LAMP.get())
+                    .build(null));
+    public static final DeferredHolder<BlockEntityType<?>,
+            BlockEntityType<me.moonscenty.alchemia.block.entity.GrowthLampBlockEntity>> GROWTH_LAMP =
+            BLOCK_ENTITIES.register("growth_lamp", () -> BlockEntityType.Builder
+                    .of(me.moonscenty.alchemia.block.entity.GrowthLampBlockEntity::new, ModBlocks.GROWTH_LAMP.get())
+                    .build(null));
+    public static final DeferredHolder<BlockEntityType<?>,
+            BlockEntityType<me.moonscenty.alchemia.block.entity.FertilityLampBlockEntity>> FERTILITY_LAMP =
+            BLOCK_ENTITIES.register("fertility_lamp", () -> BlockEntityType.Builder
+                    .of(me.moonscenty.alchemia.block.entity.FertilityLampBlockEntity::new,
+                            ModBlocks.FERTILITY_LAMP.get())
+                    .build(null));
+
+    /** The inside of a hungry chest, which is a chest's. */
+    public static final DeferredHolder<BlockEntityType<?>,
+            BlockEntityType<me.moonscenty.alchemia.block.entity.HungryChestBlockEntity>> HUNGRY_CHEST =
+            BLOCK_ENTITIES.register("hungry_chest", () -> BlockEntityType.Builder
+                    .of(me.moonscenty.alchemia.block.entity.HungryChestBlockEntity::new, ModBlocks.HUNGRY_CHEST.get())
+                    .build(null));
+
+    /** A water jug filling itself from the air and pouring into what is round it. */
+    public static final DeferredHolder<BlockEntityType<?>,
+            BlockEntityType<me.moonscenty.alchemia.block.entity.WaterJugBlockEntity>> WATER_JUG =
+            BLOCK_ENTITIES.register("water_jug", () -> BlockEntityType.Builder
+                    .of(me.moonscenty.alchemia.block.entity.WaterJugBlockEntity::new, ModBlocks.WATER_JUG.get())
+                    .build(null));
+
     /** One square of a portable hole, which remembers what it is standing in for and counts down to giving it back. */
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<HoleBlockEntity>> HOLE =
             BLOCK_ENTITIES.register("hole", () -> BlockEntityType.Builder

@@ -94,6 +94,23 @@ public class CrucibleBlockEntity extends BlockEntity {
         changed();
     }
 
+    /**
+     * Water poured in a little at a time, by a jug or a pipe of somebody else's.
+     * <p>
+     * Unlike a bucket emptied into it, this does not throw out what is dissolved: it only tops the pot up.
+     *
+     * @return how much it took, which is never more than there was room for
+     */
+    public int pour(int amount, boolean really) {
+        int room = Math.max(0, FULL - water);
+        int taken = Math.min(room, amount);
+        if (really && taken > 0) {
+            water += taken;
+            changed();
+        }
+        return taken;
+    }
+
     /** Empties the pot into a bucket. Whatever was dissolved goes into the air rather than into the bucket. */
     public void drain() {
         if (level != null && !level.isClientSide && !dissolved.isEmpty()) {

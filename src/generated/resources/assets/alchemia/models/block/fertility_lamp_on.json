@@ -1,0 +1,7 @@
+{
+  "parent": "alchemia:block/legacy/lamp",
+  "textures": {
+    "particle": "alchemia:block/legacy/lamp_fert_on",
+    "side": "alchemia:block/legacy/lamp_fert_on"
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "type": "alchemia:infusion",
+  "central": {
+    "item": "alchemia:arcane_lamp"
+  },
+  "essentia": {
+    "alchemia:bestia": 16,
+    "alchemia:desiderium": 8,
+    "alchemia:lux": 8,
+    "alchemia:victus": 8
+  },
+  "instability": 4,
+  "research": "alchemia:fertility_lamp",
+  "result": {
+    "count": 1,
+    "id": "alchemia:fertility_lamp"
+  },
+  "ring": [
+    {
+      "item": "minecraft:gold_ingot"
+    },
+    {
+      "item": "minecraft:wheat"
+    },
+    {
+      "item": "alchemia:fire_shard"
+    },
+    {
+      "item": "minecraft:gold_ingot"
+    },
+    {
+      "item": "minecraft:carrot"
+    },
+    {
+      "item": "alchemia:fire_shard"
+    }
+  ]
+}

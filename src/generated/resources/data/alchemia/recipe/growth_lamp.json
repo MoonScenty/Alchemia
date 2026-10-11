@@ -1,0 +1,38 @@
+{
+  "type": "alchemia:infusion",
+  "central": {
+    "item": "alchemia:arcane_lamp"
+  },
+  "essentia": {
+    "alchemia:herba": 16,
+    "alchemia:instrumentum": 8,
+    "alchemia:lux": 8,
+    "alchemia:victus": 8
+  },
+  "instability": 4,
+  "research": "alchemia:growth_lamp",
+  "result": {
+    "count": 1,
+    "id": "alchemia:growth_lamp"
+  },
+  "ring": [
+    {
+      "item": "minecraft:gold_ingot"
+    },
+    {
+      "item": "minecraft:bone_meal"
+    },
+    {
+      "item": "alchemia:earth_shard"
+    },
+    {
+      "item": "minecraft:gold_ingot"
+    },
+    {
+      "item": "minecraft:bone_meal"
+    },
+    {
+      "item": "alchemia:earth_shard"
+    }
+  ]
+}

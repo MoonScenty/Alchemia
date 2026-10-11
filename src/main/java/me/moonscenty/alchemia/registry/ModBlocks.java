@@ -161,6 +161,47 @@ public class ModBlocks {
                                     .mapColor(MapColor.STONE)
                                     .noOcclusion()));
 
+    // --- the small devices ---------------------------------------------------------------------------------
+
+    /** The three lamps: one lights the dark, one hurries what grows, one brings animals together. */
+    public static final DeferredBlock<me.moonscenty.alchemia.block.LampBlock> ARCANE_LAMP = register("arcane_lamp",
+            () -> lamp(me.moonscenty.alchemia.block.LampBlock.Kind.ARCANE));
+    public static final DeferredBlock<me.moonscenty.alchemia.block.LampBlock> GROWTH_LAMP = register("growth_lamp",
+            () -> lamp(me.moonscenty.alchemia.block.LampBlock.Kind.GROWTH));
+    public static final DeferredBlock<me.moonscenty.alchemia.block.LampBlock> FERTILITY_LAMP =
+            register("fertility_lamp", () -> lamp(me.moonscenty.alchemia.block.LampBlock.Kind.FERTILITY));
+
+    /** A point of light an arcane lamp has set down in the dark. Not an item; nobody places these by hand. */
+    public static final DeferredBlock<me.moonscenty.alchemia.block.LampLightBlock> LAMP_LIGHT =
+            registerBlockOnly("lamp_light", () -> new me.moonscenty.alchemia.block.LampLightBlock(
+                    BlockBehaviour.Properties.of()
+                            .replaceable()
+                            .noCollission()
+                            .noLootTable()
+                            .lightLevel(state -> 15)
+                            .instabreak()
+                            .pushReaction(net.minecraft.world.level.material.PushReaction.DESTROY)));
+
+    /** A chest that eats what is dropped on it. */
+    public static final DeferredBlock<me.moonscenty.alchemia.block.HungryChestBlock> HUNGRY_CHEST =
+            register("hungry_chest", () -> new me.moonscenty.alchemia.block.HungryChestBlock(
+                    BlockBehaviour.Properties.ofFullCopy(Blocks.CHEST).mapColor(MapColor.WOOD)));
+
+    /** A clay jug that is never empty. */
+    public static final DeferredBlock<me.moonscenty.alchemia.block.WaterJugBlock> WATER_JUG = register("water_jug",
+            () -> new me.moonscenty.alchemia.block.WaterJugBlock(
+                    BlockBehaviour.Properties.ofFullCopy(Blocks.TERRACOTTA).mapColor(MapColor.TERRACOTTA_ORANGE)
+                            .noOcclusion()));
+
+    private static me.moonscenty.alchemia.block.LampBlock lamp(me.moonscenty.alchemia.block.LampBlock.Kind kind) {
+        return new me.moonscenty.alchemia.block.LampBlock(kind, BlockBehaviour.Properties.of()
+                .mapColor(MapColor.METAL)
+                .sound(net.minecraft.world.level.block.SoundType.METAL)
+                .strength(1.0F)
+                .noOcclusion()
+                .lightLevel(state -> state.getValue(me.moonscenty.alchemia.block.LampBlock.ENABLED) ? 15 : 0));
+    }
+
     /** Bellows, blowing on a furnace or a smelter to hurry it. */
     public static final DeferredBlock<me.moonscenty.alchemia.block.BellowsBlock> BELLOWS = register("bellows",
             () -> new me.moonscenty.alchemia.block.BellowsBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_PLANKS)

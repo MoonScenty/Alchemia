@@ -496,6 +496,16 @@ public final class LegacyAssets {
             all.add(LegacyAsset.of("textures/item/legacy/" + part[0] + ".png").five("textures/items/" + part[1] + ".png"));
         }
         all.add(LegacyAsset.of("textures/entity/bellows.png").five("textures/models/bellows.png"));
+        // the lamps and the jug are the original's model files; the chest is the original's sheet on the old chest
+        for (String model : List.of("lamp", "lamp_stand", "water_jug")) {
+            all.add(LegacyAsset.of("models/block/legacy/" + model + ".json")
+                    .five("models/block/" + model + ".json").asModel());
+        }
+        for (String face : List.of("lamp_on", "lamp_off", "lamp_grow_on", "lamp_grow_off", "lamp_fert_on",
+                "lamp_fert_off", "base_metal", "water_jug")) {
+            all.add(LegacyAsset.of("textures/block/legacy/" + face + ".png").five("textures/blocks/" + face + ".png"));
+        }
+        all.add(LegacyAsset.of("textures/entity/hungry_chest.png").five("textures/models/chesthungry.png"));
         all.add(item("focus_pouch", "focus_pouch", "focuspouch"));
         // the pouch opened is the original's panel; its screen and slots are laid out to match
         all.add(LegacyAsset.of("textures/gui/focus_pouch.png").five("textures/gui/gui_focuspouch.png")

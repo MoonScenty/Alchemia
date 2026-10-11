@@ -1,0 +1,25 @@
+{
+  "category": "alchemia:alchemy",
+  "column": 1,
+  "icon": "alchemia:water_jug",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.water_jug.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:water_jug"
+    }
+  ],
+  "parents": [
+    "alchemia:crucible",
+    "alchemia:infusion"
+  ],
+  "requirements": {
+    "alchemia:aqua": 6,
+    "alchemia:fabrico": 3,
+    "alchemia:terra": 3
+  },
+  "row": 2
+}

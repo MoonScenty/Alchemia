@@ -1,0 +1,31 @@
+{
+  "type": "alchemia:arcane_shaped",
+  "key": {
+    "A": {
+      "item": "alchemia:amber_block"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "N": {
+      "tag": "alchemia:nitor"
+    },
+    "S": {
+      "item": "minecraft:daylight_detector"
+    }
+  },
+  "pattern": [
+    " S ",
+    "IAI",
+    " N "
+  ],
+  "research": "alchemia:arcane_lamp",
+  "result": {
+    "count": 1,
+    "id": "alchemia:arcane_lamp"
+  },
+  "vis": {
+    "alchemia:aer": 25,
+    "alchemia:ignis": 25
+  }
+}

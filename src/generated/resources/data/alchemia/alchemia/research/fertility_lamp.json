@@ -1,0 +1,26 @@
+{
+  "category": "alchemia:artifice",
+  "column": 1,
+  "complexity": 2,
+  "icon": "alchemia:fertility_lamp",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.fertility_lamp.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:fertility_lamp"
+    }
+  ],
+  "parents": [
+    "alchemia:arcane_lamp",
+    "alchemia:infusion"
+  ],
+  "requirements": {
+    "alchemia:bestia": 6,
+    "alchemia:lux": 3,
+    "alchemia:victus": 3
+  },
+  "row": -2
+}

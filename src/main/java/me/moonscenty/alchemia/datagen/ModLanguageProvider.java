@@ -552,6 +552,21 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                 {"primal_charm", "Primal Charm", "원시 부적",
                  "Where artifice starts: a shard of every primal and the balanced shard that holds them, worked round a ring of gold. Nothing much is done with a charm on its own; a great deal is built round one. Quicksilver laid on the back of a pane of glass makes a mirror, which is the other thing nearly every device needs.",
                  "인공물이 시작되는 자리다. 원시마다 조각 하나와 그것들을 붙드는 균형 조각을 금 고리에 둘러 엮었다. 부적 하나로 하는 일은 별로 없지만, 이것을 둘러싸고 짓는 것은 많다. 판유리 뒤에 수은을 바르면 거울이 되는데, 장치 거의 모두가 필요로 하는 또 하나다."},
+                {"arcane_lamp", "Arcane Lamp", "비전 램프",
+                 "A lamp of brass and amber that lights more than itself. Every quarter of a second it sets a point of light down somewhere dark within fifteen blocks, where it can see, so that over a few minutes the cave or cellar round it fills with light from nowhere in particular. Hang it from any face. A redstone signal puts it out, and every light it set down goes out with it.",
+                 "놋쇠와 호박으로 만든 램프인데 저 자신보다 넓게 밝힌다. 0.25초마다 열다섯 칸 안의 어두운 곳 중 보이는 곳에 빛 한 점을 놓는다. 몇 분이면 둘레의 동굴이나 지하실이 어디서 오는지 모를 빛으로 찬다. 어느 면에나 매달 수 있다. 레드스톤 신호가 들어오면 꺼지고, 놓아 둔 빛도 모두 함께 꺼진다."},
+                {"growth_lamp", "Lamp of Growth", "성장의 램프",
+                 "An arcane lamp worked on with gold and bone meal. It burns herba, piped in through the face it hangs from, and every point is a hundred nudges to whatever is still growing within six blocks -- each nudge one more turn of growing, taken or not as the plant would take it anyway. It goes dark when it runs out.",
+                 "비전 램프에 금과 뼛가루를 먹인 것이다. 매달린 면으로 관을 대어 식물 에센시아를 태우고, 한 점마다 여섯 칸 안에서 아직 자라는 것에 백 번 손을 댄다. 한 번 손댈 때마다 한 번 더 자랄 기회가 생기고, 자라고 말고는 원래 그 식물이 하던 대로다. 다 떨어지면 꺼진다."},
+                {"fertility_lamp", "Lamp of Fertility", "풍요의 램프",
+                 "An arcane lamp worked on with gold, wheat and carrots. It burns victus, piped in through the face it hangs from, and every fifteen seconds it sets two grown animals of the same kind within seven blocks to courting, at two points a pair. It leaves a pen of more than seven of a kind alone.",
+                 "비전 램프에 금과 밀과 당근을 먹인 것이다. 매달린 면으로 관을 대어 생명 에센시아를 태우고, 15초마다 일곱 칸 안의 다 자란 같은 종 동물 둘을 짝짓게 한다. 한 쌍에 두 점이다. 같은 종이 일곱보다 많은 우리는 건드리지 않는다."},
+                {"hungry_chest", "Hungry Chest", "굶주린 상자",
+                 "A chest in every way, except that whatever comes to rest on its lid it eats: whole stacks where there is room, part of one where there is only room for part. What will not fit stays where it fell. It never pairs into a double chest.",
+                 "어느 모로 보나 상자인데, 뚜껑 위에 떨어져 멎은 것을 먹는다. 자리가 있으면 통째로, 일부만 들어가면 일부만 먹는다. 안 들어가는 것은 떨어진 자리에 남는다. 큰 상자로 이어지지 않는다."},
+                {"water_jug", "Everfull Urn", "마르지 않는 항아리",
+                 "A jug of baked clay that is never empty. Dip a bucket or a bottle in it and it comes away full. Left alone it tops up anything round it that holds water -- a crucible, a cauldron -- a quarter of a bucket every quarter of a second, and fills itself again from the aqua in the air.",
+                 "구운 흙 항아리인데 비는 법이 없다. 양동이나 병을 담그면 가득 차서 나온다. 가만 두면 둘레의 물 담는 것 — 도가니, 가마솥 — 에 0.25초마다 양동이 4분의 1씩 물을 붓고, 공기 속 물 에센시아로 제 몸을 다시 채운다."},
                 {"bellows", "Bellows", "풀무",
                  "Two boards and a hide, with a nozzle. Set against a furnace they hurry what is in it by half again. Set against an essentia smelter from the side or the back they cut the time it takes to boil anything down by an eighth apiece, three at most. They pump for as long as nothing stops them, and a redstone signal does. They blow the way you were looking when you put them down; crouch to turn them round.",
                  "판자 둘과 가죽 하나에 주둥이를 달았다. 화로에 대면 굽는 것을 절반만큼 더 빨리 굽는다. 에센시아 제련로 옆이나 뒤에 대면 하나마다 끓여 내는 시간을 팔분의 일씩 줄인다. 셋까지다. 무엇이 막기 전까지 계속 불고, 레드스톤 신호가 막는다. 놓을 때 바라보던 쪽으로 분다. 웅크리고 놓으면 반대로 놓인다."},
@@ -746,6 +761,12 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("item.alchemia.clockwork_mind", pick("Clockwork Mind", "태엽 두뇌"));
         add("item.alchemia.biothaumic_mind", pick("Biothaumic Mind", "생체마법 두뇌"));
         add("block.alchemia.bellows", pick("Bellows", "풀무"));
+        add("block.alchemia.arcane_lamp", pick("Arcane Lamp", "비전 램프"));
+        add("block.alchemia.growth_lamp", pick("Lamp of Growth", "성장의 램프"));
+        add("block.alchemia.fertility_lamp", pick("Lamp of Fertility", "풍요의 램프"));
+        add("block.alchemia.lamp_light", pick("Lamp Light", "램프 빛"));
+        add("block.alchemia.hungry_chest", pick("Hungry Chest", "굶주린 상자"));
+        add("block.alchemia.water_jug", pick("Everfull Urn", "마르지 않는 항아리"));
         add("item.alchemia.elemental_shovel.laying.0", pick("Laying flat against the face", "면에 납작하게 깐다"));
         add("item.alchemia.elemental_shovel.laying.1", pick("Laying upright out of the face", "면에서 세로로 세운다"));
         add("item.alchemia.elemental_shovel.laying.2", pick("Laying across out of the face", "면에서 가로로 뻗는다"));

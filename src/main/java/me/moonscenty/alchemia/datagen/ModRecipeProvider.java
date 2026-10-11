@@ -60,6 +60,9 @@ public class ModRecipeProvider extends RecipeProvider {
     /** How badly an altar takes to binding a primal into a tool, and to beating four tools into one. */
     private static final int ELEMENTAL_UNSTABLE = 1;
     private static final int CRUSHER_UNSTABLE = 6;
+    /** How badly an altar takes to the two working lamps, and to the jug. The original's numbers. */
+    private static final int LAMP_UNSTABLE = 4;
+    private static final int JUG_UNSTABLE = 1;
     /** How badly an altar takes to growing a brain into a clockwork mind. The original's number. */
     private static final int BIOTHAUMIC_UNSTABLE = 4;
     /** How badly an altar takes to giving a focus a mind of its own. The original's number. */
@@ -367,6 +370,20 @@ public class ModRecipeProvider extends RecipeProvider {
                         'B', Ingredient.of(ModItems.BRASS_PLATE),
                         'C', Ingredient.of(Items.COMPARATOR)),
                 "PPP", "PGP", "BCB");
+        // the small devices, all the original's
+        arcane(output, "arcane_lamp", "arcane_lamp", new ItemStack(ModBlocks.ARCANE_LAMP.get()),
+                AspectList.of(ModAspects.FIRE, 25).add(ModAspects.AIR, 25),
+                Map.of('S', Ingredient.of(Items.DAYLIGHT_DETECTOR),
+                        'I', Ingredient.of(Items.IRON_INGOT),
+                        'A', Ingredient.of(ModBlocks.AMBER_BLOCK.get()),
+                        'N', Ingredient.of(ModTags.Items.NITOR)),
+                " S ", "IAI", " N ");
+        arcane(output, "hungry_chest", "hungry_chest", new ItemStack(ModBlocks.HUNGRY_CHEST.get()),
+                AspectList.of(ModAspects.AIR, 15).add(ModAspects.ORDER, 15).add(ModAspects.ENTROPY, 15),
+                Map.of('W', Ingredient.of(ModBlocks.GREATWOOD.planks()),
+                        'T', Ingredient.of(net.minecraft.tags.ItemTags.WOODEN_TRAPDOORS)),
+                "WTW", "W W", "WWW");
+
         // bellows: two boards a side, the hide between them, a shard of air to blow with and an iron nozzle
         arcane(output, "bellows", "bellows", new ItemStack(ModBlocks.BELLOWS.get()),
                 AspectList.of(ModAspects.AIR, 25).add(ModAspects.ORDER, 10),
@@ -637,6 +654,29 @@ public class ModRecipeProvider extends RecipeProvider {
                 new ItemStack(ModItems.BIOTHAUMIC_MIND.get()),
                 AspectList.of(ModAspects.MIND, 16).add(ModAspects.MECHANISM, 16), BIOTHAUMIC_UNSTABLE,
                 "biothaumic_mind");
+
+        // the two lamps that burn essentia: an arcane lamp worked on with gold and what feeds what they tend
+        infusion(output, "growth_lamp", Ingredient.of(ModBlocks.ARCANE_LAMP.get()),
+                List.of(Ingredient.of(Items.GOLD_INGOT), Ingredient.of(Items.BONE_MEAL),
+                        Ingredient.of(ModItems.SHARDS.get(CrystalType.EARTH)), Ingredient.of(Items.GOLD_INGOT),
+                        Ingredient.of(Items.BONE_MEAL), Ingredient.of(ModItems.SHARDS.get(CrystalType.EARTH))),
+                new ItemStack(ModBlocks.GROWTH_LAMP.get()),
+                AspectList.of(ModAspects.PLANT, 16).add(ModAspects.LIGHT, 8).add(ModAspects.LIFE, 8)
+                        .add(ModAspects.TOOL, 8), LAMP_UNSTABLE, "growth_lamp");
+        infusion(output, "fertility_lamp", Ingredient.of(ModBlocks.ARCANE_LAMP.get()),
+                List.of(Ingredient.of(Items.GOLD_INGOT), Ingredient.of(Items.WHEAT),
+                        Ingredient.of(ModItems.SHARDS.get(CrystalType.FIRE)), Ingredient.of(Items.GOLD_INGOT),
+                        Ingredient.of(Items.CARROT), Ingredient.of(ModItems.SHARDS.get(CrystalType.FIRE))),
+                new ItemStack(ModBlocks.FERTILITY_LAMP.get()),
+                AspectList.of(ModAspects.BEAST, 16).add(ModAspects.LIGHT, 8).add(ModAspects.LIFE, 8)
+                        .add(ModAspects.DESIRE, 8), LAMP_UNSTABLE, "fertility_lamp");
+        // a jug of baked clay, two buckets' worth of water and a shard of it worked in
+        infusion(output, "water_jug", Ingredient.of(Items.TERRACOTTA),
+                List.of(Ingredient.of(Items.WATER_BUCKET), Ingredient.of(Items.WATER_BUCKET),
+                        Ingredient.of(ModItems.SHARDS.get(CrystalType.WATER)), Ingredient.of(ModItems.SALIS_MUNDUS)),
+                new ItemStack(ModBlocks.WATER_JUG.get()),
+                AspectList.of(ModAspects.WATER, 16).add(ModAspects.CRAFT, 8).add(ModAspects.EARTH, 8),
+                JUG_UNSTABLE, "water_jug");
 
         // the autocaster: seven things round a made mind, as the original had it
         infusion(output, "autocaster", Ingredient.of(ModItems.BIOTHAUMIC_MIND),

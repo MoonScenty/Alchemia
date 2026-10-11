@@ -1,0 +1,25 @@
+{
+  "category": "alchemia:artifice",
+  "column": 3,
+  "icon": "alchemia:hungry_chest",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.hungry_chest.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:hungry_chest"
+    }
+  ],
+  "parents": [
+    "alchemia:primal_charm",
+    "alchemia:greatwood"
+  ],
+  "requirements": {
+    "alchemia:desiderium": 3,
+    "alchemia:vacuos": 3,
+    "alchemia:vinculum": 3
+  },
+  "row": -1
+}

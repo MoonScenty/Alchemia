@@ -1,0 +1,26 @@
+{
+  "category": "alchemia:artifice",
+  "column": -1,
+  "complexity": 2,
+  "icon": "alchemia:growth_lamp",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.growth_lamp.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:growth_lamp"
+    }
+  ],
+  "parents": [
+    "alchemia:arcane_lamp",
+    "alchemia:infusion"
+  ],
+  "requirements": {
+    "alchemia:herba": 6,
+    "alchemia:lux": 3,
+    "alchemia:victus": 3
+  },
+  "row": -2
+}

@@ -245,6 +245,23 @@ public class ModResearchProvider {
         entry(context, "primal_charm", ModResearch.ARTIFICE, ModItems.PRIMAL_CHARM, 1, 1,
                 AspectList.EMPTY, List.of("vis_crystals"), false, NodeShape.MAJOR, 1,
                 "primal_charm", "mirrored_glass");
+        // the lamps: one that lights the dark, and the two worked from it that tend what grows and what breeds
+        entry(context, "arcane_lamp", ModResearch.ARTIFICE, ModBlocks.ARCANE_LAMP, 0, -1,
+                AspectList.of(ModAspects.LIGHT, 6).add(ModAspects.FIRE, 3).add(ModAspects.AIR, 3),
+                List.of("primal_charm", "nitor"), false, NodeShape.PLAIN, 1, "arcane_lamp");
+        entry(context, "growth_lamp", ModResearch.ARTIFICE, ModBlocks.GROWTH_LAMP, -1, -2,
+                AspectList.of(ModAspects.PLANT, 6).add(ModAspects.LIGHT, 3).add(ModAspects.LIFE, 3),
+                List.of("arcane_lamp", "infusion"), false, NodeShape.PLAIN, 2, "growth_lamp");
+        entry(context, "fertility_lamp", ModResearch.ARTIFICE, ModBlocks.FERTILITY_LAMP, 1, -2,
+                AspectList.of(ModAspects.BEAST, 6).add(ModAspects.LIGHT, 3).add(ModAspects.LIFE, 3),
+                List.of("arcane_lamp", "infusion"), false, NodeShape.PLAIN, 2, "fertility_lamp");
+        entry(context, "hungry_chest", ModResearch.ARTIFICE, ModBlocks.HUNGRY_CHEST, 3, -1,
+                AspectList.of(ModAspects.VOID, 3).add(ModAspects.DESIRE, 3).add(ModAspects.TRAP, 3),
+                List.of("primal_charm", "greatwood"), false, NodeShape.PLAIN, 1, "hungry_chest");
+        entry(context, "water_jug", ModResearch.ALCHEMY, ModBlocks.WATER_JUG, 1, 2,
+                AspectList.of(ModAspects.WATER, 6).add(ModAspects.EARTH, 3).add(ModAspects.CRAFT, 3),
+                List.of("crucible", "infusion"), false, NodeShape.PLAIN, 1, "water_jug");
+
         entry(context, "bellows", ModResearch.ARTIFICE, ModBlocks.BELLOWS, 2, 0,
                 AspectList.of(ModAspects.AIR, 6).add(ModAspects.MECHANISM, 3).add(ModAspects.MOTION, 3),
                 List.of("primal_charm"), false, NodeShape.PLAIN, 1, "bellows");

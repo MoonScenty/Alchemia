@@ -234,6 +234,12 @@ public class AlchemiaClientSetup {
                 return BellowsItemRenderer.INSTANCE;
             }
         }, ModBlocks.BELLOWS.get().asItem());
+        event.registerItem(new net.neoforged.neoforge.client.extensions.common.IClientItemExtensions() {
+            @Override
+            public net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer getCustomRenderer() {
+                return HungryChestItemRenderer.get();
+            }
+        }, ModBlocks.HUNGRY_CHEST.get().asItem());
         event.registerBlock(PlainBreakParticles.INSTANCE,
                 ModBlocks.CRUCIBLE.get(), ModBlocks.JAR.get(), ModBlocks.TUBE_FILTER.get());
         // robes in the original's violet until dyed; the void robe on the original's model when its jar is there
@@ -278,5 +284,6 @@ public class AlchemiaClientSetup {
         event.registerBlockEntityRenderer(ModBlockEntities.TUBE_VALVE.get(), ValveHandleRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.TUBE.get(), OnewayMarkRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.BELLOWS.get(), BellowsRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.HUNGRY_CHEST.get(), HungryChestRenderer::new);
     }
 }

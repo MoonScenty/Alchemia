@@ -1,0 +1,26 @@
+{
+  "type": "alchemia:arcane_shaped",
+  "key": {
+    "T": {
+      "tag": "minecraft:wooden_trapdoors"
+    },
+    "W": {
+      "item": "alchemia:greatwood_planks"
+    }
+  },
+  "pattern": [
+    "WTW",
+    "W W",
+    "WWW"
+  ],
+  "research": "alchemia:hungry_chest",
+  "result": {
+    "count": 1,
+    "id": "alchemia:hungry_chest"
+  },
+  "vis": {
+    "alchemia:aer": 15,
+    "alchemia:ordo": 15,
+    "alchemia:perditio": 15
+  }
+}

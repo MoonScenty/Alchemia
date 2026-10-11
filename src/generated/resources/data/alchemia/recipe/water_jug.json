@@ -1,0 +1,31 @@
+{
+  "type": "alchemia:infusion",
+  "central": {
+    "item": "minecraft:terracotta"
+  },
+  "essentia": {
+    "alchemia:aqua": 16,
+    "alchemia:fabrico": 8,
+    "alchemia:terra": 8
+  },
+  "instability": 1,
+  "research": "alchemia:water_jug",
+  "result": {
+    "count": 1,
+    "id": "alchemia:water_jug"
+  },
+  "ring": [
+    {
+      "item": "minecraft:water_bucket"
+    },
+    {
+      "item": "minecraft:water_bucket"
+    },
+    {
+      "item": "alchemia:water_shard"
+    },
+    {
+      "item": "alchemia:salis_mundus"
+    }
+  ]
+}

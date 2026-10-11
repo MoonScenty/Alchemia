@@ -1,0 +1,76 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "alchemia:block/growth_lamp_on"
+      },
+      "when": {
+        "enabled": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "alchemia:block/growth_lamp_off"
+      },
+      "when": {
+        "enabled": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "alchemia:block/legacy/lamp_stand"
+      },
+      "when": {
+        "facing": "down"
+      }
+    },
+    {
+      "apply": {
+        "model": "alchemia:block/legacy/lamp_stand",
+        "x": 180
+      },
+      "when": {
+        "facing": "up"
+      }
+    },
+    {
+      "apply": {
+        "model": "alchemia:block/legacy/lamp_stand",
+        "x": 90,
+        "y": 180
+      },
+      "when": {
+        "facing": "north"
+      }
+    },
+    {
+      "apply": {
+        "model": "alchemia:block/legacy/lamp_stand",
+        "x": 90
+      },
+      "when": {
+        "facing": "south"
+      }
+    },
+    {
+      "apply": {
+        "model": "alchemia:block/legacy/lamp_stand",
+        "x": 90,
+        "y": 90
+      },
+      "when": {
+        "facing": "west"
+      }
+    },
+    {
+      "apply": {
+        "model": "alchemia:block/legacy/lamp_stand",
+        "x": 90,
+        "y": 270
+      },
+      "when": {
+        "facing": "east"
+      }
+    }
+  ]
+}

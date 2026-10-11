@@ -105,6 +105,146 @@ public class DeviceTests {
         helper.succeed();
     }
 
+    /** An arcane lamp sets lights down in the dark round it, and takes them back when it is put out. */
+    @GameTest(template = TEMPLATE, timeoutTicks = 400)
+    public static void anArcaneLampLightsTheDark(GameTestHelper helper) {
+        BlockPos ceiling = new BlockPos(8, 6, 8);
+        helper.setBlock(ceiling, Blocks.STONE);
+        BlockPos lampAt = ceiling.below();
+        helper.setBlock(lampAt, ModBlocks.ARCANE_LAMP.get().defaultBlockState()
+                .setValue(me.moonscenty.alchemia.block.LampBlock.FACING, Direction.UP)
+                .setValue(me.moonscenty.alchemia.block.LampBlock.ENABLED, true));
+        helper.runAfterDelay(300, () -> {
+            helper.assertTrue(lights(helper, lampAt) > 0, "lights have been set down");
+            helper.setBlock(lampAt.east(), Blocks.REDSTONE_BLOCK);
+            helper.runAfterDelay(2, () -> {
+                helper.assertValueEqual(lights(helper, lampAt), 0, "and a signal takes them all back");
+                helper.succeed();
+            });
+        });
+    }
+
+    private static int lights(GameTestHelper helper, BlockPos lampAt) {
+        int found = 0;
+        BlockPos middle = helper.absolutePos(lampAt);
+        for (BlockPos at : BlockPos.betweenClosed(middle.offset(-15, -15, -15), middle.offset(15, 15, 15))) {
+            if (helper.getLevel().getBlockState(at).is(ModBlocks.LAMP_LIGHT.get())) {
+                found++;
+            }
+        }
+        return found;
+    }
+
+    /** A lamp falls when what it hangs from is taken away. */
+    @GameTest(template = TEMPLATE)
+    public static void aLampFallsWithoutItsSupport(GameTestHelper helper) {
+        BlockPos ceiling = new BlockPos(3, 4, 3);
+        helper.setBlock(ceiling, Blocks.STONE);
+        helper.setBlock(ceiling.below(), ModBlocks.ARCANE_LAMP.get().defaultBlockState()
+                .setValue(me.moonscenty.alchemia.block.LampBlock.FACING, Direction.UP));
+        helper.setBlock(ceiling, Blocks.AIR);
+        helper.assertBlockNotPresent(ModBlocks.ARCANE_LAMP.get(), ceiling.below());
+        helper.succeed();
+    }
+
+    /** The lamp of growth eats only herba, and only through the face it hangs from. */
+    @GameTest(template = TEMPLATE)
+    public static void theGrowthLampIsFedThroughItsBack(GameTestHelper helper) {
+        BlockPos at = new BlockPos(3, 2, 3);
+        helper.setBlock(at.below(), Blocks.STONE);
+        helper.setBlock(at, ModBlocks.GROWTH_LAMP.get().defaultBlockState()
+                .setValue(me.moonscenty.alchemia.block.LampBlock.FACING, Direction.DOWN));
+        var lamp = (me.moonscenty.alchemia.block.entity.GrowthLampBlockEntity) helper.getBlockEntity(at);
+        helper.assertTrue(lamp.reachableFrom(Direction.DOWN), "fed from the face it hangs from");
+        helper.assertFalse(lamp.reachableFrom(Direction.UP), "and from nowhere else");
+        helper.assertFalse(lamp.wants(me.moonscenty.alchemia.registry.ModAspects.FIRE), "and only herba");
+        helper.assertTrue(lamp.accept(me.moonscenty.alchemia.registry.ModAspects.PLANT), "takes a point");
+        helper.assertFalse(lamp.wants(me.moonscenty.alchemia.registry.ModAspects.PLANT), "but only one in hand");
+        helper.succeed();
+    }
+
+    /**
+     * Fed, the lamp of growth reaches every plant round it. It walks the ground a column a tick in a shuffled
+     * order and visits each column once before it starts again, so a full round of thirteen by thirteen is
+     * certain to have found the one crop there is -- whether the crop takes the turn is the crop's business.
+     */
+    @GameTest(template = TEMPLATE)
+    public static void theGrowthLampReachesACrop(GameTestHelper helper) {
+        BlockPos lampAt = new BlockPos(4, 4, 4);
+        helper.setBlock(lampAt.above(), Blocks.STONE);
+        helper.setBlock(lampAt, ModBlocks.GROWTH_LAMP.get().defaultBlockState()
+                .setValue(me.moonscenty.alchemia.block.LampBlock.FACING, Direction.UP));
+        BlockPos crop = new BlockPos(4, 2, 5);
+        helper.setBlock(crop.below(), Blocks.FARMLAND);
+        helper.setBlock(crop, Blocks.WHEAT);
+        var lamp = (me.moonscenty.alchemia.block.entity.GrowthLampBlockEntity) helper.getBlockEntity(lampAt);
+        lamp.accept(me.moonscenty.alchemia.registry.ModAspects.PLANT);
+
+        BlockPos where = helper.absolutePos(lampAt);
+        for (int tick = 0; tick < 13 * 13 + 1; tick++) {
+            me.moonscenty.alchemia.block.entity.GrowthLampBlockEntity.tick(helper.getLevel(), where,
+                    helper.getLevel().getBlockState(where), lamp);
+        }
+        helper.assertTrue(lamp.charges() < 100, "it spent a turn of growing on the wheat");
+        helper.succeed();
+    }
+
+    /** Fed, the lamp of fertility sets two of a kind to courting. */
+    @GameTest(template = TEMPLATE)
+    public static void theFertilityLampMakesAMatch(GameTestHelper helper) {
+        BlockPos at = new BlockPos(4, 4, 4);
+        helper.setBlock(at.above(), Blocks.STONE);
+        helper.setBlock(at, ModBlocks.FERTILITY_LAMP.get().defaultBlockState()
+                .setValue(me.moonscenty.alchemia.block.LampBlock.FACING, Direction.UP));
+        var one = helper.spawn(net.minecraft.world.entity.EntityType.COW, new BlockPos(3, 2, 3));
+        var two = helper.spawn(net.minecraft.world.entity.EntityType.COW, new BlockPos(5, 2, 5));
+        var lamp = (me.moonscenty.alchemia.block.entity.FertilityLampBlockEntity) helper.getBlockEntity(at);
+        lamp.accept(me.moonscenty.alchemia.registry.ModAspects.LIFE);
+        lamp.accept(me.moonscenty.alchemia.registry.ModAspects.LIFE);
+        lamp.matchmake(helper.getLevel());
+        helper.assertTrue(one.isInLove() && two.isInLove(), "both are courting");
+        helper.assertValueEqual(lamp.charges(), 0, "at two points the pair");
+        helper.succeed();
+    }
+
+    /** A hungry chest eats what comes to rest on it. */
+    @GameTest(template = TEMPLATE, timeoutTicks = 100)
+    public static void aHungryChestEatsWhatFallsOnIt(GameTestHelper helper) {
+        BlockPos at = new BlockPos(3, 2, 3);
+        helper.setBlock(at, ModBlocks.HUNGRY_CHEST.get());
+        helper.spawnItem(net.minecraft.world.item.Items.DIAMOND, 3.5F, 3.2F, 3.5F);
+        helper.runAfterDelay(40, () -> {
+            var chest = (me.moonscenty.alchemia.block.entity.HungryChestBlockEntity) helper.getBlockEntity(at);
+            helper.assertTrue(chest.countItem(net.minecraft.world.item.Items.DIAMOND) == 1, "it ate the diamond");
+            helper.succeed();
+        });
+    }
+
+    /** The urn fills a bucket by hand, and tops up a crucible beside it by itself. */
+    @GameTest(template = TEMPLATE, timeoutTicks = 400)
+    public static void theUrnFillsWhatIsRoundIt(GameTestHelper helper) {
+        BlockPos jugAt = new BlockPos(3, 2, 3);
+        helper.setBlock(jugAt, ModBlocks.WATER_JUG.get());
+        BlockPos potAt = jugAt.east();
+        helper.setBlock(potAt, ModBlocks.CRUCIBLE.get());
+        var jug = (me.moonscenty.alchemia.block.entity.WaterJugBlockEntity) helper.getBlockEntity(jugAt);
+
+        var player = helper.makeMockPlayer(net.minecraft.world.level.GameType.SURVIVAL);
+        player.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND,
+                new ItemStack(net.minecraft.world.item.Items.BUCKET));
+        helper.useBlock(jugAt, player);
+        helper.assertTrue(player.getMainHandItem().is(net.minecraft.world.item.Items.WATER_BUCKET),
+                "the bucket came away full");
+
+        // give it water in hand rather than wait on the air over a test plot
+        jug.drawn(-3 * me.moonscenty.alchemia.block.entity.WaterJugBlockEntity.FILL);
+        helper.runAfterDelay(380, () -> {
+            var pot = (me.moonscenty.alchemia.block.entity.CrucibleBlockEntity) helper.getBlockEntity(potAt);
+            helper.assertTrue(pot.water() > 0, "and the crucible has water in it");
+            helper.succeed();
+        });
+    }
+
     /** The autocaster is built round the original's made mind again, with the resonator in its ring. */
     @GameTest(template = TEMPLATE)
     public static void theAutocasterIsBuiltOfItsOwnParts(GameTestHelper helper) {
