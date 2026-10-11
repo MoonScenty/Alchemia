@@ -1,0 +1,28 @@
+{
+  "type": "alchemia:arcane_shaped",
+  "key": {
+    "B": {
+      "item": "alchemia:brass_plate"
+    },
+    "F": {
+      "item": "alchemia:flux_shard"
+    },
+    "G": {
+      "tag": "c:glass_panes"
+    }
+  },
+  "pattern": [
+    " G ",
+    "BFB",
+    " G "
+  ],
+  "research": "alchemia:crucible",
+  "result": {
+    "count": 1,
+    "id": "alchemia:morphic_resonator"
+  },
+  "vis": {
+    "alchemia:ordo": 50,
+    "alchemia:perditio": 50
+  }
+}

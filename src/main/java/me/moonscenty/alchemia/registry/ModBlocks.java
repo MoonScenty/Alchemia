@@ -161,6 +161,13 @@ public class ModBlocks {
                                     .mapColor(MapColor.STONE)
                                     .noOcclusion()));
 
+    /** Bellows, blowing on a furnace or a smelter to hurry it. */
+    public static final DeferredBlock<me.moonscenty.alchemia.block.BellowsBlock> BELLOWS = register("bellows",
+            () -> new me.moonscenty.alchemia.block.BellowsBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_PLANKS)
+                    .mapColor(MapColor.WOOD)
+                    .strength(1.0F)
+                    .noOcclusion()));
+
     /** Stands on top of a workbench and fills the wand left on it. */
     public static final DeferredBlock<ArcaneWorkbenchChargerBlock> ARCANE_WORKBENCH_CHARGER =
             register("arcane_workbench_charger",

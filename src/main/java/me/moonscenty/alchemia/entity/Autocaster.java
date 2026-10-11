@@ -86,8 +86,9 @@ public class Autocaster extends PathfinderMob implements OwnableEntity, Containe
     /** What it is worth hitting, and how hard that is. The original's numbers. */
     private static final double LIVES = 50.0;
     private static final int PLATING = 4;
-    /** How much of a broken one is worth picking up again. The original's share. */
+    /** How much of a broken one is worth picking up again, and how often its mind survives. The original's. */
     private static final float SALVAGED = 0.5F;
+    private static final float MIND_SALVAGED = 0.2F;
     /** How often it looks round for something to shoot, as a one-in-this chance a tick. */
     private static final int LOOKS_ROUND = 5;
     /** The wait after a shot, as a share of what the same focus makes a hand wait. */
@@ -389,19 +390,20 @@ public class Autocaster extends PathfinderMob implements OwnableEntity, Containe
     /**
      * What is left of a broken one.
      * <p>
-     * Half of its brasswork and half of its boards, as the original gave back. The made mind at the heart of it
-     * is not in this mod yet, and what the original gave back of that is given back of nothing.
+     * Half of its brasswork and half of its boards, and now and then the made mind at the heart of it, as the
+     * original gave back.
      */
     @Override
     protected void dropCustomDeathLoot(ServerLevel level, DamageSource cause, boolean recentlyHit) {
         super.dropCustomDeathLoot(level, cause, recentlyHit);
-        salvage(ModItems.BRASS_GEAR.get());
-        salvage(ModBlocks.GREATWOOD.planks().get());
-        salvage(ModBlocks.GREATWOOD.planks().get());
+        salvage(ModItems.BIOTHAUMIC_MIND.get(), MIND_SALVAGED);
+        salvage(ModItems.BRASS_GEAR.get(), SALVAGED);
+        salvage(ModBlocks.GREATWOOD.planks().get(), SALVAGED);
+        salvage(ModBlocks.GREATWOOD.planks().get(), SALVAGED);
     }
 
-    private void salvage(net.minecraft.world.level.ItemLike part) {
-        if (getRandom().nextFloat() < SALVAGED) {
+    private void salvage(net.minecraft.world.level.ItemLike part, float chance) {
+        if (getRandom().nextFloat() < chance) {
             spawnAtLocation(new ItemStack(part), 0.5F);
         }
     }

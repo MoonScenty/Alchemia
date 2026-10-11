@@ -1,6 +1,6 @@
 {
   "category": "alchemia:golemancy",
-  "column": 0,
+  "column": 1,
   "complexity": 2,
   "icon": "alchemia:autocaster",
   "pages": [
@@ -14,6 +14,7 @@
     }
   ],
   "parents": [
+    "alchemia:biothaumic_mind",
     "alchemia:infusion",
     "alchemia:wand"
   ],
@@ -24,6 +25,6 @@
     "alchemia:machina": 3,
     "alchemia:sensus": 3
   },
-  "row": 0,
+  "row": 6,
   "shape": "major"
 }

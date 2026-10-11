@@ -1,0 +1,24 @@
+{
+  "category": "alchemia:artifice",
+  "column": 1,
+  "icon": "alchemia:primal_charm",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.primal_charm.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:primal_charm"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:mirrored_glass"
+    }
+  ],
+  "parents": [
+    "alchemia:vis_crystals"
+  ],
+  "row": 1,
+  "shape": "major"
+}

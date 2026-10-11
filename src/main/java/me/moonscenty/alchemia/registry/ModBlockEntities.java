@@ -39,6 +39,13 @@ public class ModBlockEntities {
                             ModBlocks.FOCAL_MANIPULATOR.get())
                     .build(null));
 
+    /** Bellows pumping, which on the server is a furnace being pushed along. */
+    public static final DeferredHolder<BlockEntityType<?>,
+            BlockEntityType<me.moonscenty.alchemia.block.entity.BellowsBlockEntity>> BELLOWS =
+            BLOCK_ENTITIES.register("bellows", () -> BlockEntityType.Builder
+                    .of(me.moonscenty.alchemia.block.entity.BellowsBlockEntity::new, ModBlocks.BELLOWS.get())
+                    .build(null));
+
     /** One square of a portable hole, which remembers what it is standing in for and counts down to giving it back. */
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<HoleBlockEntity>> HOLE =
             BLOCK_ENTITIES.register("hole", () -> BlockEntityType.Builder

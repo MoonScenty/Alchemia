@@ -1,0 +1,27 @@
+{
+  "category": "alchemia:golemancy",
+  "column": 0,
+  "icon": "alchemia:clockwork_mind",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.clockwork_mind.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:clockwork_mind"
+    }
+  ],
+  "parents": [
+    "alchemia:arcane_workbench",
+    "alchemia:metallurgy"
+  ],
+  "requirements": {
+    "alchemia:cognitio": 3,
+    "alchemia:machina": 3,
+    "alchemia:potentia": 6,
+    "alchemia:sensus": 3,
+    "alchemia:victus": 3
+  },
+  "row": 3
+}

@@ -88,7 +88,7 @@ public class ModResearchProvider {
 
         entry(context, "crucible", ModResearch.ALCHEMY, ModBlocks.CRUCIBLE, 0, 2,
                 AspectList.of(ModAspects.WATER, 4).add(ModAspects.FIRE, 4).add(ModAspects.EXCHANGE, 2),
-                List.of("wand"), false, NodeShape.MAJOR, 2);
+                List.of("wand"), false, NodeShape.MAJOR, 2, "morphic_resonator");
         entry(context, "metallurgy", ModResearch.ALCHEMY, ModItems.ALCHEMIUM_INGOT, -1, 3,
                 AspectList.of(ModAspects.METAL, 6).add(ModAspects.EXCHANGE, 4).add(ModAspects.FIRE, 2),
                 List.of("crucible"), false, NodeShape.PLAIN, 3,
@@ -226,10 +226,28 @@ public class ModResearchProvider {
 
         // a focus with a bracket and just enough mind to aim itself. The original filed it under golemancy,
         // which is where everything that works while nobody is holding it belongs
-        entry(context, "autocaster", ModResearch.GOLEMANCY, ModItems.AUTOCASTER, 0, 0,
+        entry(context, "autocaster", ModResearch.GOLEMANCY, ModItems.AUTOCASTER, 1, 6,
                 AspectList.of(ModAspects.MECHANISM, 3).add(ModAspects.AVERSION, 3).add(ModAspects.SENSES, 3)
                         .add(ModAspects.MIND, 3).add(ModAspects.AURA, 3),
-                List.of("infusion", "wand"), false, NodeShape.MAJOR, 2, "autocaster");
+                List.of("biothaumic_mind", "infusion", "wand"), false, NodeShape.MAJOR, 2, "autocaster");
+
+        // the made minds golemancy is built on: gears under glass, and the same with a brain grown into it
+        entry(context, "clockwork_mind", ModResearch.GOLEMANCY, ModItems.CLOCKWORK_MIND, 0, 3,
+                AspectList.of(ModAspects.MECHANISM, 3).add(ModAspects.MIND, 3).add(ModAspects.SENSES, 3)
+                        .add(ModAspects.ENERGY, 6).add(ModAspects.LIFE, 3),
+                List.of("arcane_workbench", "metallurgy"), false, NodeShape.PLAIN, 1, "clockwork_mind");
+        entry(context, "biothaumic_mind", ModResearch.GOLEMANCY, ModItems.BIOTHAUMIC_MIND, 0, 5,
+                AspectList.of(ModAspects.MECHANISM, 3).add(ModAspects.MIND, 3).add(ModAspects.SENSES, 3)
+                        .add(ModAspects.UNDEAD, 3),
+                List.of("clockwork_mind", "infusion"), false, NodeShape.PLAIN, 2, "biothaumic_mind");
+
+        // where artifice starts: the charm of all six, and glass silvered to make a mirror of
+        entry(context, "primal_charm", ModResearch.ARTIFICE, ModItems.PRIMAL_CHARM, 1, 1,
+                AspectList.EMPTY, List.of("vis_crystals"), false, NodeShape.MAJOR, 1,
+                "primal_charm", "mirrored_glass");
+        entry(context, "bellows", ModResearch.ARTIFICE, ModBlocks.BELLOWS, 2, 0,
+                AspectList.of(ModAspects.AIR, 6).add(ModAspects.MECHANISM, 3).add(ModAspects.MOTION, 3),
+                List.of("primal_charm"), false, NodeShape.PLAIN, 1, "bellows");
 
         entry(context, "arcane_stone", ModResearch.ARTIFICE, ModBlocks.ARCANE_STONE.block(), 3, 2,
                 AspectList.of(ModAspects.EARTH, 4).add(ModAspects.AURA, 2).add(ModAspects.CRYSTAL, 2),

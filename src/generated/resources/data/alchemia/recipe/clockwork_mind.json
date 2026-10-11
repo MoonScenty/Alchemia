@@ -1,0 +1,32 @@
+{
+  "type": "alchemia:arcane_shaped",
+  "key": {
+    "B": {
+      "item": "alchemia:brass_plate"
+    },
+    "C": {
+      "item": "minecraft:comparator"
+    },
+    "G": {
+      "item": "alchemia:brass_gear"
+    },
+    "P": {
+      "tag": "c:glass_panes"
+    }
+  },
+  "pattern": [
+    "PPP",
+    "PGP",
+    "BCB"
+  ],
+  "research": "alchemia:clockwork_mind",
+  "result": {
+    "count": 1,
+    "id": "alchemia:clockwork_mind"
+  },
+  "vis": {
+    "alchemia:aqua": 10,
+    "alchemia:ignis": 10,
+    "alchemia:ordo": 10
+  }
+}

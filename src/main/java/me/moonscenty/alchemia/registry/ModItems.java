@@ -167,6 +167,20 @@ public class ModItems {
     public static final DeferredItem<Item> COPPER_CLUSTER = ITEMS.registerSimpleItem("copper_cluster");
     public static final DeferredItem<Item> CINNABAR_CLUSTER = ITEMS.registerSimpleItem("cinnabar_cluster");
 
+    // --- parts the devices are built from ------------------------------------------------------------------
+
+    /** All six primals and the balance between them, worked round a ring of gold. The root of artifice. */
+    public static final DeferredItem<Item> PRIMAL_CHARM = ITEMS.register("primal_charm",
+            () -> new Item(new Item.Properties().rarity(net.minecraft.world.item.Rarity.UNCOMMON)));
+    /** A pane of glass silvered with quicksilver. */
+    public static final DeferredItem<Item> MIRRORED_GLASS = ITEMS.registerSimpleItem("mirrored_glass");
+    /** Glass and brass round a shard of flux, which takes whatever shape is pressed on it. */
+    public static final DeferredItem<Item> MORPHIC_RESONATOR = ITEMS.registerSimpleItem("morphic_resonator");
+    /** A mind of gears and a comparator under glass. Enough to follow one rule without being told twice. */
+    public static final DeferredItem<Item> CLOCKWORK_MIND = ITEMS.registerSimpleItem("clockwork_mind");
+    /** The clockwork mind with a brain grown into it, which can be told to choose. */
+    public static final DeferredItem<Item> BIOTHAUMIC_MIND = ITEMS.registerSimpleItem("biothaumic_mind");
+
     public static final DeferredItem<Item> ALCHEMIUM_INGOT = ITEMS.registerSimpleItem("alchemium_ingot");
     public static final DeferredItem<Item> BRASS_INGOT = ITEMS.registerSimpleItem("brass_ingot");
     public static final DeferredItem<Item> ALCHEMIUM_NUGGET = ITEMS.registerSimpleItem("alchemium_nugget");

@@ -1,0 +1,31 @@
+{
+  "type": "alchemia:arcane_shaped",
+  "key": {
+    "C": {
+      "item": "alchemia:air_shard"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "L": {
+      "item": "minecraft:leather"
+    },
+    "W": {
+      "tag": "minecraft:planks"
+    }
+  },
+  "pattern": [
+    "WW ",
+    "LCI",
+    "WW "
+  ],
+  "research": "alchemia:bellows",
+  "result": {
+    "count": 1,
+    "id": "alchemia:bellows"
+  },
+  "vis": {
+    "alchemia:aer": 25,
+    "alchemia:ordo": 10
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "category": "alchemia:artifice",
+  "column": 2,
+  "icon": "alchemia:bellows",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.bellows.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:bellows"
+    }
+  ],
+  "parents": [
+    "alchemia:primal_charm"
+  ],
+  "requirements": {
+    "alchemia:aer": 6,
+    "alchemia:machina": 3,
+    "alchemia:motus": 3
+  },
+  "row": 0
+}

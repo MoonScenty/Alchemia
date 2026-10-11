@@ -60,6 +60,8 @@ public class ModRecipeProvider extends RecipeProvider {
     /** How badly an altar takes to binding a primal into a tool, and to beating four tools into one. */
     private static final int ELEMENTAL_UNSTABLE = 1;
     private static final int CRUSHER_UNSTABLE = 6;
+    /** How badly an altar takes to growing a brain into a clockwork mind. The original's number. */
+    private static final int BIOTHAUMIC_UNSTABLE = 4;
     /** How badly an altar takes to giving a focus a mind of its own. The original's number. */
     private static final int AUTOCASTER_UNSTABLE = 5;
 
@@ -324,9 +326,9 @@ public class ModRecipeProvider extends RecipeProvider {
                         'L', Ingredient.of(Items.LEATHER)),
                 "LGL", "L L", "TGT");
 
-        // the bench a focus is worked on. The original's shape and its hundred and fifty of each primal; the
-        // charm of all six at the heart of it is not in this mod yet, so the balanced shard it is grown from
-        // stands there instead, and worked stone stands for the table the original set into the bottom
+        // the bench a focus is worked on. The original's shape and its hundred and fifty of each primal, with
+        // the charm of all six at its heart; worked stone stands for the stone table the original set into the
+        // bottom, which is a piece of furniture this mod does not have
         arcane(output, "focal_manipulator", "focal_manipulator",
                 new ItemStack(ModBlocks.FOCAL_MANIPULATOR.get()),
                 AspectList.of(ModAspects.FIRE, 150).add(ModAspects.AIR, 150).add(ModAspects.ENTROPY, 150)
@@ -336,8 +338,43 @@ public class ModRecipeProvider extends RecipeProvider {
                         'S', Ingredient.of(ModBlocks.ARCANE_STONE.block()),
                         'T', Ingredient.of(ModBlocks.ARCANE_STONE_BRICKS.block()),
                         'G', Ingredient.of(Items.GOLD_INGOT),
-                        'P', Ingredient.of(ModItems.BALANCED_SHARD)),
+                        'P', Ingredient.of(ModItems.PRIMAL_CHARM)),
                 "IQI", "SPS", "GTG");
+
+        // the parts devices are built from. All the original's, recipe for recipe
+        shapeless(output, "primal_charm", "primal_charm", new ItemStack(ModItems.PRIMAL_CHARM.get()),
+                AspectList.of(ModAspects.EARTH, 25).add(ModAspects.FIRE, 25).add(ModAspects.AIR, 25)
+                        .add(ModAspects.WATER, 25).add(ModAspects.ORDER, 25).add(ModAspects.ENTROPY, 25),
+                Ingredient.of(Items.GOLD_INGOT), Ingredient.of(ModItems.BALANCED_SHARD),
+                Ingredient.of(ModItems.SHARDS.get(CrystalType.AIR)), Ingredient.of(ModItems.SHARDS.get(CrystalType.FIRE)),
+                Ingredient.of(ModItems.SHARDS.get(CrystalType.WATER)),
+                Ingredient.of(ModItems.SHARDS.get(CrystalType.EARTH)),
+                Ingredient.of(ModItems.SHARDS.get(CrystalType.ORDER)),
+                Ingredient.of(ModItems.SHARDS.get(CrystalType.ENTROPY)));
+        shapeless(output, "mirrored_glass", "primal_charm", new ItemStack(ModItems.MIRRORED_GLASS.get()),
+                AspectList.of(ModAspects.FIRE, 25).add(ModAspects.EARTH, 25),
+                Ingredient.of(ModItems.QUICKSILVER), Ingredient.of(net.neoforged.neoforge.common.Tags.Items.GLASS_PANES));
+        arcane(output, "morphic_resonator", "crucible", new ItemStack(ModItems.MORPHIC_RESONATOR.get()),
+                AspectList.of(ModAspects.ORDER, 50).add(ModAspects.ENTROPY, 50),
+                Map.of('G', Ingredient.of(net.neoforged.neoforge.common.Tags.Items.GLASS_PANES),
+                        'B', Ingredient.of(ModItems.BRASS_PLATE),
+                        'F', Ingredient.of(ModItems.SHARDS.get(CrystalType.FLUX))),
+                " G ", "BFB", " G ");
+        arcane(output, "clockwork_mind", "clockwork_mind", new ItemStack(ModItems.CLOCKWORK_MIND.get()),
+                AspectList.of(ModAspects.FIRE, 10).add(ModAspects.WATER, 10).add(ModAspects.ORDER, 10),
+                Map.of('P', Ingredient.of(net.neoforged.neoforge.common.Tags.Items.GLASS_PANES),
+                        'G', Ingredient.of(ModItems.BRASS_GEAR),
+                        'B', Ingredient.of(ModItems.BRASS_PLATE),
+                        'C', Ingredient.of(Items.COMPARATOR)),
+                "PPP", "PGP", "BCB");
+        // bellows: two boards a side, the hide between them, a shard of air to blow with and an iron nozzle
+        arcane(output, "bellows", "bellows", new ItemStack(ModBlocks.BELLOWS.get()),
+                AspectList.of(ModAspects.AIR, 25).add(ModAspects.ORDER, 10),
+                Map.of('W', Ingredient.of(net.minecraft.tags.ItemTags.PLANKS),
+                        'L', Ingredient.of(Items.LEATHER),
+                        'C', Ingredient.of(ModItems.SHARDS.get(CrystalType.AIR)),
+                        'I', Ingredient.of(Items.IRON_INGOT)),
+                "WW ", "LCI", "WW ");
 
         // the two altar stones: the same eight stones round a block of gold, with light or with fuel packed in
         arcane(output, "infusion_speed_stone", new ItemStack(ModBlocks.INFUSION_SPEED_STONE.get()),
@@ -592,11 +629,18 @@ public class ModRecipeProvider extends RecipeProvider {
                         Ingredient.of(Items.MILK_BUCKET)),
                 AspectList.of(ModAspects.UNDEAD, 64).add(ModAspects.LIFE, 64).add(ModAspects.PROTECT, 16));
 
-        // the autocaster. The original's ring was seven things round a made mind; two of the seven are
-        // components this mod has not reached yet, so the nearest things stand in for them -- a comparator
-        // for the thinking part of the mechanism, and a pane of glass for the resonator's lens
-        infusion(output, "autocaster", Ingredient.of(Items.COMPARATOR),
-                List.of(Ingredient.of(ModItems.BALANCED_SHARD), Ingredient.of(Items.GLASS_PANE),
+        // the biothaumic mind: the clockwork one with a brain grown into it and a clock to keep it to time. The
+        // original's brain is a zombie's, which this mod does not drop yet, so the flesh stands for it as it
+        // does on the grinning devil's mask
+        infusion(output, "biothaumic_mind", Ingredient.of(ModItems.CLOCKWORK_MIND),
+                List.of(Ingredient.of(Items.ROTTEN_FLESH), Ingredient.of(Items.CLOCK)),
+                new ItemStack(ModItems.BIOTHAUMIC_MIND.get()),
+                AspectList.of(ModAspects.MIND, 16).add(ModAspects.MECHANISM, 16), BIOTHAUMIC_UNSTABLE,
+                "biothaumic_mind");
+
+        // the autocaster: seven things round a made mind, as the original had it
+        infusion(output, "autocaster", Ingredient.of(ModItems.BIOTHAUMIC_MIND),
+                List.of(Ingredient.of(ModItems.BALANCED_SHARD), Ingredient.of(ModItems.MORPHIC_RESONATOR),
                         Ingredient.of(ModBlocks.GREATWOOD.planks()), Ingredient.of(ModBlocks.GREATWOOD.planks()),
                         Ingredient.of(ModItems.BRASS_GEAR), Ingredient.of(ModItems.BRASS_PLATE),
                         Ingredient.of(ModItems.WAND)),
@@ -618,14 +662,14 @@ public class ModRecipeProvider extends RecipeProvider {
         elemental(output, "elemental_hoe", "alchemium_hoe", CrystalType.ORDER, CrystalType.ENTROPY,
                 AspectList.of(ModAspects.ORDER, 8).add(ModAspects.PLANT, 8).add(ModAspects.ENTROPY, 8));
 
-        // the crusher. The original beat the four diggers round a primordial pearl with two primal charms in
-        // the ring; neither is in this mod yet, so a nether star stands for the pearl -- something earned from
-        // the hardest thing there is to kill -- and the balanced shard the charms are made from for the charms
+        // the crusher: the four diggers and two primal charms round a primordial pearl. The pearl is eldritch
+        // and not in this mod yet, so a nether star stands for it -- something earned from the hardest thing
+        // there is to kill
         infusion(output, "primal_crusher", Ingredient.of(Items.NETHER_STAR),
-                List.of(Ingredient.of(ModItems.BALANCED_SHARD),
+                List.of(Ingredient.of(ModItems.PRIMAL_CHARM),
                         Ingredient.of(ModItems.METAL_TOOLS.get("void_pickaxe")),
                         Ingredient.of(ModItems.METAL_TOOLS.get("void_shovel")),
-                        Ingredient.of(ModItems.BALANCED_SHARD),
+                        Ingredient.of(ModItems.PRIMAL_CHARM),
                         Ingredient.of(ModItems.ELEMENTAL_TOOLS.get("elemental_pickaxe")),
                         Ingredient.of(ModItems.ELEMENTAL_TOOLS.get("elemental_shovel"))),
                 new ItemStack(ModItems.PRIMAL_CRUSHER.get()),

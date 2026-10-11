@@ -1,0 +1,24 @@
+{
+  "type": "alchemia:infusion",
+  "central": {
+    "item": "alchemia:clockwork_mind"
+  },
+  "essentia": {
+    "alchemia:cognitio": 16,
+    "alchemia:machina": 16
+  },
+  "instability": 4,
+  "research": "alchemia:biothaumic_mind",
+  "result": {
+    "count": 1,
+    "id": "alchemia:biothaumic_mind"
+  },
+  "ring": [
+    {
+      "item": "minecraft:rotten_flesh"
+    },
+    {
+      "item": "minecraft:clock"
+    }
+  ]
+}

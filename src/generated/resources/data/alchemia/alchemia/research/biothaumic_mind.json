@@ -1,0 +1,27 @@
+{
+  "category": "alchemia:golemancy",
+  "column": 0,
+  "complexity": 2,
+  "icon": "alchemia:biothaumic_mind",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.biothaumic_mind.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:biothaumic_mind"
+    }
+  ],
+  "parents": [
+    "alchemia:clockwork_mind",
+    "alchemia:infusion"
+  ],
+  "requirements": {
+    "alchemia:cognitio": 3,
+    "alchemia:exanimis": 3,
+    "alchemia:machina": 3,
+    "alchemia:sensus": 3
+  },
+  "row": 5
+}

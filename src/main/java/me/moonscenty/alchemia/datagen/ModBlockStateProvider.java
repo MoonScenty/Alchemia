@@ -56,6 +56,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         alembic();
         arcaneWorkbench();
         focalManipulator();
+        bellows();
         arcaneWorkbenchCharger();
         nodeStabilizer();
         altar();
@@ -283,6 +284,11 @@ public class ModBlockStateProvider extends BlockStateProvider {
     /** The original's own model file, read from its jar. */
     private void arcaneWorkbench() {
         simpleBlock(ModBlocks.ARCANE_WORKBENCH.get(), models().getExistingFile(modLoc("block/arcane_workbench")));
+    }
+
+    /** Drawn by BellowsRenderer; the block itself only has to say what it breaks into. */
+    private void bellows() {
+        drawnElsewhere(ModBlocks.BELLOWS, "block/greatwood_planks");
     }
 
     /** The original's own model file again, with the other skin on it. */

@@ -1,0 +1,42 @@
+{
+  "type": "alchemia:arcane_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:gold_ingot"
+    },
+    {
+      "item": "alchemia:balanced_shard"
+    },
+    {
+      "item": "alchemia:air_shard"
+    },
+    {
+      "item": "alchemia:fire_shard"
+    },
+    {
+      "item": "alchemia:water_shard"
+    },
+    {
+      "item": "alchemia:earth_shard"
+    },
+    {
+      "item": "alchemia:order_shard"
+    },
+    {
+      "item": "alchemia:entropy_shard"
+    }
+  ],
+  "research": "alchemia:primal_charm",
+  "result": {
+    "count": 1,
+    "id": "alchemia:primal_charm"
+  },
+  "vis": {
+    "alchemia:aer": 25,
+    "alchemia:aqua": 25,
+    "alchemia:ignis": 25,
+    "alchemia:ordo": 25,
+    "alchemia:perditio": 25,
+    "alchemia:terra": 25
+  }
+}

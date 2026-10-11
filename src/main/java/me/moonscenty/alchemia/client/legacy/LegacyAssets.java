@@ -48,6 +48,9 @@ public final class LegacyAssets {
     public static final String INFUSER = "infuser";
     public static final String INFUSER_GLOW = "infuser_glow";
 
+    /** The two plates, the bag between them and the nozzle: the original's bellows, built in code. */
+    public static final String BELLOWS = "bellows";
+
     /** The inkwell, scroll and ribbon the original stood on its research table. */
     public static final String RESEARCH_TABLE = "research_table";
 
@@ -114,6 +117,8 @@ public final class LegacyAssets {
                             "thaumcraft/client/renderers/models/gear/ModelRobe", "(F)V", 0.5F)),
             VALVE, List.of(new LegacyModelSource(LegacyEdition.FIVE,
                     "thaumcraft/client/renderers/models/block/ModelTubeValve", "()V")),
+            BELLOWS, List.of(new LegacyModelSource(LegacyEdition.FIVE,
+                    "thaumcraft/client/renderers/models/block/ModelBellows", "()V")),
             RESEARCH_TABLE, List.of(new LegacyModelSource(LegacyEdition.FIVE,
                     "thaumcraft/client/renderers/models/block/ModelResearchTable", "()V")),
             INFUSER, List.of(new LegacyModelSource(LegacyEdition.FIVE,
@@ -484,6 +489,13 @@ public final class LegacyAssets {
                     .five("textures/items/" + tool[1] + ".png"));
         }
         all.add(item("enchanted_fabric", "fabric", null));
+        // the parts devices are built from, and the bellows' sheet
+        for (String[] part : new String[][] {{"primal_charm", "primal_charm"}, {"mirrored_glass", "mirrored_glass"},
+                {"morphic_resonator", "morphic_resonator"}, {"clockwork_mind", "mind_clockwork"},
+                {"biothaumic_mind", "mind_biothaumic"}}) {
+            all.add(LegacyAsset.of("textures/item/legacy/" + part[0] + ".png").five("textures/items/" + part[1] + ".png"));
+        }
+        all.add(LegacyAsset.of("textures/entity/bellows.png").five("textures/models/bellows.png"));
         all.add(item("focus_pouch", "focus_pouch", "focuspouch"));
         // the pouch opened is the original's panel; its screen and slots are laid out to match
         all.add(LegacyAsset.of("textures/gui/focus_pouch.png").five("textures/gui/gui_focuspouch.png")

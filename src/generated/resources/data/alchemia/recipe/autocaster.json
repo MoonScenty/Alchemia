@@ -1,7 +1,7 @@
 {
   "type": "alchemia:infusion",
   "central": {
-    "item": "minecraft:comparator"
+    "item": "alchemia:biothaumic_mind"
   },
   "essentia": {
     "alchemia:auram": 16,
@@ -21,7 +21,7 @@
       "item": "alchemia:balanced_shard"
     },
     {
-      "item": "minecraft:glass_pane"
+      "item": "alchemia:morphic_resonator"
     },
     {
       "item": "alchemia:greatwood_planks"

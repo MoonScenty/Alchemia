@@ -549,6 +549,18 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                 {"primal_crusher", "Primal Crusher", "원시 분쇄기",
                  "Both elemental diggers and both of their void-metal counterparts beaten together round something that should not be able to hold all four. What comes out is a pickaxe and a shovel at once that digs three by three and refines ore as it goes. It has lost the building and the sounding; what is left only breaks things. Like void metal it mends itself, a point a second, and unlike anything else it is uneasy in the hand -- it carries two points of warp while it is held.",
                  "원소 굴착 도구 둘과 그 공허 금속 짝 둘을, 넷을 다 품을 수 없어야 마땅한 것 둘레에 두들겨 합친 것이다. 나온 것은 곡괭이이자 삽이고, 3×3으로 파며 파는 대로 광석을 정련한다. 짓는 일과 짚어 보는 일은 잃었고 남은 것은 부수는 일뿐이다. 공허 금속처럼 초마다 한 점씩 스스로 고쳐지고, 다른 무엇과도 달리 손에 들기가 꺼림칙하다 — 들고 있는 동안 뒤틀림 2를 지닌다."},
+                {"primal_charm", "Primal Charm", "원시 부적",
+                 "Where artifice starts: a shard of every primal and the balanced shard that holds them, worked round a ring of gold. Nothing much is done with a charm on its own; a great deal is built round one. Quicksilver laid on the back of a pane of glass makes a mirror, which is the other thing nearly every device needs.",
+                 "인공물이 시작되는 자리다. 원시마다 조각 하나와 그것들을 붙드는 균형 조각을 금 고리에 둘러 엮었다. 부적 하나로 하는 일은 별로 없지만, 이것을 둘러싸고 짓는 것은 많다. 판유리 뒤에 수은을 바르면 거울이 되는데, 장치 거의 모두가 필요로 하는 또 하나다."},
+                {"bellows", "Bellows", "풀무",
+                 "Two boards and a hide, with a nozzle. Set against a furnace they hurry what is in it by half again. Set against an essentia smelter from the side or the back they cut the time it takes to boil anything down by an eighth apiece, three at most. They pump for as long as nothing stops them, and a redstone signal does. They blow the way you were looking when you put them down; crouch to turn them round.",
+                 "판자 둘과 가죽 하나에 주둥이를 달았다. 화로에 대면 굽는 것을 절반만큼 더 빨리 굽는다. 에센시아 제련로 옆이나 뒤에 대면 하나마다 끓여 내는 시간을 팔분의 일씩 줄인다. 셋까지다. 무엇이 막기 전까지 계속 불고, 레드스톤 신호가 막는다. 놓을 때 바라보던 쪽으로 분다. 웅크리고 놓으면 반대로 놓인다."},
+                {"clockwork_mind", "Clockwork Mind", "태엽 두뇌",
+                 "Gears and a comparator under glass, plated in brass. It is not a mind in any way that matters, but it will follow one rule without being told twice, which is all a machine needs.",
+                 "놋쇠를 댄 유리 속의 톱니와 비교기다. 따질 만한 의미의 두뇌는 아니지만 한 가지 규칙을 두 번 말하지 않아도 따른다. 기계에 필요한 것은 그것뿐이다."},
+                {"biothaumic_mind", "Biothaumic Mind", "생체마법 두뇌",
+                 "The clockwork mind with something living grown into it on the altar. What comes out can be told to choose rather than only to follow, and the things that have to decide for themselves -- an autocaster picking its mark -- are built round one.",
+                 "태엽 두뇌에 제단에서 살아 있는 것을 자라 들게 한 것이다. 나온 것은 따르기만 하는 것이 아니라 고르라고 시킬 수 있다. 스스로 정해야 하는 것들 — 노릴 것을 고르는 자동 시전기 같은 — 은 이것을 둘러싸고 짓는다."},
                 {"autocaster", "Autocaster", "자동 시전기",
                  "A focus on a bracket, with enough of a mind in it to pick something and point itself at it. It is not a thaumaturge: it draws its own vis out of the air a drop at a time, holds a hundred of each primal at most, and nothing worn or carried makes a working any cheaper for it. Seven of the twelve foci are worth aiming at a thing, and those are the seven it will take. It goes against any face -- floor, wall or ceiling -- and it is told what to mind: animals, monsters, people, and whatever is already yours. A wand clicked against it takes it back down, focus and all.",
                  "받침대에 얹은 포커스다. 무엇을 고르고 그쪽으로 제 몸을 돌릴 만큼의 생각이 들어 있다. 마법사는 아니다. 제 비스를 공기에서 한 방울씩 길어 올리고, 원시마다 백까지만 담으며, 무엇을 걸쳤든 들었든 값이 싸지는 일은 없다. 열둘 중 일곱만이 무언가를 겨눌 값어치가 있고, 받아 주는 것도 그 일곱이다. 바닥이든 벽이든 천장이든 어느 면에나 붙으며, 무엇을 노릴지 일러 줄 수 있다 — 동물, 몹, 사람, 그리고 이미 제 편인 것. 완드로 치면 포커스째 도로 떼어 낸다."},
@@ -728,6 +740,12 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("item.alchemia.elemental_shovel", pick("Shovel of the Earthmover", "흙꾼의 삽"));
         add("item.alchemia.elemental_hoe", pick("Hoe of Growth", "성장의 괭이"));
         add("item.alchemia.primal_crusher", pick("Primal Crusher", "원시 분쇄기"));
+        add("item.alchemia.primal_charm", pick("Primal Charm", "원시 부적"));
+        add("item.alchemia.mirrored_glass", pick("Mirrored Glass", "거울 유리"));
+        add("item.alchemia.morphic_resonator", pick("Morphic Resonator", "변형 공명기"));
+        add("item.alchemia.clockwork_mind", pick("Clockwork Mind", "태엽 두뇌"));
+        add("item.alchemia.biothaumic_mind", pick("Biothaumic Mind", "생체마법 두뇌"));
+        add("block.alchemia.bellows", pick("Bellows", "풀무"));
         add("item.alchemia.elemental_shovel.laying.0", pick("Laying flat against the face", "면에 납작하게 깐다"));
         add("item.alchemia.elemental_shovel.laying.1", pick("Laying upright out of the face", "면에서 세로로 세운다"));
         add("item.alchemia.elemental_shovel.laying.2", pick("Laying across out of the face", "면에서 가로로 뻗는다"));

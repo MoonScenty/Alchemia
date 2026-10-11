@@ -7,6 +7,10 @@
     {
       "type": "text",
       "key": "research.alchemia.crucible.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:morphic_resonator"
     }
   ],
   "parents": [

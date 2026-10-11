@@ -59,6 +59,9 @@ public class EssentiaSmelterBlockEntity extends BlockEntity implements WorldlyCo
     private static final int PER_ASPECT = 10;
     /** What a point costs while alumentum is in the fire: four fifths of the usual, as the original had it. */
     private static final int PER_ASPECT_HURRIED = PER_ASPECT * AlumentumItem.HURRIES_BY / 5;
+    /** What each pair of bellows blowing on it takes off the time anything takes to boil down. */
+    private static final float BELLOWS_HURRY = 0.125F;
+
     /** How often it lets one point go upwards. */
     private static final int POURS_EVERY = 40;
 
@@ -201,13 +204,27 @@ public class EssentiaSmelterBlockEntity extends BlockEntity implements WorldlyCo
         }
         ItemStack input = contents.get(SLOT_INPUT);
         AspectList made = Aspects.of(input);
-        cooksFor = Math.max(1, made.total() * (hurried ? PER_ASPECT_HURRIED : PER_ASPECT));
+        int perAspect = hurried ? PER_ASPECT_HURRIED : PER_ASPECT;
+        cooksFor = Math.max(1, (int) (made.total() * perAspect * (1.0F - BELLOWS_HURRY * bellows())));
         if (++cooked < cooksFor) {
             return;
         }
         cooked = 0;
         held = held.add(made);
         input.shrink(1);
+    }
+
+    /**
+     * How many bellows are blowing on it: from either side and from behind, never from the front, which is
+     * where the fire is fed. Three at most, as the original counted.
+     */
+    private int bellows() {
+        if (level == null || !getBlockState().hasProperty(me.moonscenty.alchemia.block.EssentiaSmelterBlock.FACING)) {
+            return 0;
+        }
+        net.minecraft.core.Direction front = getBlockState().getValue(me.moonscenty.alchemia.block.EssentiaSmelterBlock.FACING);
+        return me.moonscenty.alchemia.block.BellowsBlock.blowingOn(level, worldPosition,
+                front.getClockWise(), front.getCounterClockWise(), front.getOpposite());
     }
 
     /** Whether there is something worth burning, and room for what would come off it. */
