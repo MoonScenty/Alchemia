@@ -40,6 +40,11 @@ public class ModMenus {
             MENUS.register("autocaster",
                     () -> IMenuTypeExtension.create(AutocasterMenu::new));
 
+    /** Carries which bench was opened, since the focus stays on the bench rather than in a hand. */
+    public static final DeferredHolder<MenuType<?>, MenuType<me.moonscenty.alchemia.menu.FocalManipulatorMenu>>
+            FOCAL_MANIPULATOR = MENUS.register("focal_manipulator",
+                    () -> IMenuTypeExtension.create(me.moonscenty.alchemia.menu.FocalManipulatorMenu::new));
+
     private ModMenus() {
     }
 }

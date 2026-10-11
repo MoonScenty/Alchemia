@@ -321,6 +321,21 @@ public class ModRecipeProvider extends RecipeProvider {
                         'L', Ingredient.of(Items.LEATHER)),
                 "LGL", "L L", "TGT");
 
+        // the bench a focus is worked on. The original's shape and its hundred and fifty of each primal; the
+        // charm of all six at the heart of it is not in this mod yet, so the balanced shard it is grown from
+        // stands there instead, and worked stone stands for the table the original set into the bottom
+        arcane(output, "focal_manipulator", "focal_manipulator",
+                new ItemStack(ModBlocks.FOCAL_MANIPULATOR.get()),
+                AspectList.of(ModAspects.FIRE, 150).add(ModAspects.AIR, 150).add(ModAspects.ENTROPY, 150)
+                        .add(ModAspects.EARTH, 150).add(ModAspects.WATER, 150).add(ModAspects.ORDER, 150),
+                Map.of('I', Ingredient.of(Items.IRON_INGOT),
+                        'Q', Ingredient.of(ModBlocks.ARCANE_STONE.slab()),
+                        'S', Ingredient.of(ModBlocks.ARCANE_STONE.block()),
+                        'T', Ingredient.of(ModBlocks.ARCANE_STONE_BRICKS.block()),
+                        'G', Ingredient.of(Items.GOLD_INGOT),
+                        'P', Ingredient.of(ModItems.BALANCED_SHARD)),
+                "IQI", "SPS", "GTG");
+
         // the two altar stones: the same eight stones round a block of gold, with light or with fuel packed in
         arcane(output, "infusion_speed_stone", new ItemStack(ModBlocks.INFUSION_SPEED_STONE.get()),
                 AspectList.of(ModAspects.AIR, 250).add(ModAspects.ORDER, 250).add(ModAspects.ENTROPY, 250),

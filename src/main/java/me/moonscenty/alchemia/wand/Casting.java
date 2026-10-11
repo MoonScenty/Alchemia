@@ -44,17 +44,27 @@ public final class Casting {
     }
 
     /**
+     * What the wand's focus does and costs, as it actually is.
+     * <p>
+     * Everything that charges for a working or decides what one does asks here rather than asking the item,
+     * because what is worked into a focus can change both.
+     */
+    public static Focus fitted(ItemStack wand) {
+        ItemStack focus = WandItem.focus(wand);
+        return focus.getItem() instanceof FocusItem item ? item.focus(focus) : null;
+    }
+
+    /**
      * Lets the wand off once, if it can be.
      *
      * @return whether anything happened, so that a hand can be swung for it
      */
     public static boolean cast(ServerLevel level, Player caster, ItemStack wand, int heldFor) {
-        FocusItem fitted = fittedTo(wand);
-        if (fitted == null || caster.getCooldowns().isOnCooldown(wand.getItem())) {
+        Focus focus = fitted(wand);
+        if (focus == null || caster.getCooldowns().isOnCooldown(wand.getItem())) {
             return false;
         }
-        Focus focus = fitted.focus();
-        if (!VisHolder.canPay(wand, focus.cost(), caster)) {
+        if (!VisHolder.canPay(wand, focus.cost(), caster, VisHolder.Spending.WORKING)) {
             return false;
         }
         if (!focus.spell().cast(level, caster, wand, aim(caster), heldFor)) {
@@ -63,7 +73,7 @@ public final class Casting {
 
         VisHolder holder = VisHolder.of(wand);
         if (holder != null) {
-            holder.take(wand, focus.cost(), caster);
+            holder.take(wand, focus.cost(), caster, VisHolder.Spending.WORKING);
         }
         waitAfter(caster, wand, focus);
         return true;

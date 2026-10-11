@@ -229,11 +229,10 @@ public class Autocaster extends PathfinderMob implements OwnableEntity, Containe
      */
     private void shoot() {
         LivingEntity mark = getTarget();
-        FocusItem fitted = fitted();
-        if (mark == null || fitted == null || !(level() instanceof ServerLevel served)) {
+        Focus focus = loaded();
+        if (mark == null || focus == null || !(level() instanceof ServerLevel served)) {
             return;
         }
-        Focus focus = fitted.focus();
         Focus.Turret turret = focus.turret();
         float far = distanceTo(mark);
         if (turret == null || far > turret.range() || !getSensing().hasLineOfSight(mark)) {
@@ -495,10 +494,16 @@ public class Autocaster extends PathfinderMob implements OwnableEntity, Containe
         return getMainHandItem().getItem() instanceof FocusItem focus ? focus : null;
     }
 
+    /** What that focus does and costs, with whatever is worked into it counted in. */
+    public Focus loaded() {
+        FocusItem item = fitted();
+        return item == null ? null : item.focus(getMainHandItem());
+    }
+
     /** Whether an autocaster will take this at all: a focus, and one worth aiming at something. */
     public static boolean takes(ItemStack stack) {
         return stack.isEmpty()
-                || stack.getItem() instanceof FocusItem focus && focus.focus().turret() != null;
+                || stack.getItem() instanceof FocusItem focus && focus.focus(stack).turret() != null;
     }
 
     @Override
@@ -548,7 +553,7 @@ public class Autocaster extends PathfinderMob implements OwnableEntity, Containe
      */
     @Override
     public void setChanged() {
-        Focus.Turret turret = fitted() == null ? null : fitted().focus().turret();
+        Focus.Turret turret = loaded() == null ? null : loaded().turret();
         var range = getAttribute(Attributes.FOLLOW_RANGE);
         if (range != null) {
             range.setBaseValue(turret == null ? Focus.Turret.SEES : turret.range());

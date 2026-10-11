@@ -8,6 +8,7 @@ import java.util.function.Supplier;
 import me.moonscenty.alchemia.aspect.Aspect;
 import me.moonscenty.alchemia.aura.node.NodeType;
 import me.moonscenty.alchemia.registry.ModAspects;
+import me.moonscenty.alchemia.wand.FocusUpgrade;
 
 /**
  * What we take from the original, step by step. Each entry is one of our files; a jar that has it replaces our own
@@ -79,6 +80,12 @@ public final class LegacyAssets {
 
     /** The alchemometer as Thaumcraft 4's thaumometer: a six-sided brass frame. */
     public static final String SCANNER_MESH = "models/legacy/scanner.obj";
+
+    /**
+     * What the original called each of the twenty-three: the same word with the underscores taken out, save for
+     * the one it spelled wrong.
+     */
+    private static final Map<FocusUpgrade, String> ORIGINAL_UPGRADE = originalUpgrades();
 
     public static final List<LegacyAsset> ALL = build();
 
@@ -329,6 +336,20 @@ public final class LegacyAssets {
         for (String face : List.of("arcane_workbench_top", "arcane_workbench_side")) {
             all.add(LegacyAsset.of("textures/block/legacy/" + face + ".png").five("textures/blocks/" + face + ".png"));
         }
+        // the bench a focus is worked on: the original drew it as the workbench with another skin on it,
+        // so its model file names ours as a parent once the namespaces are rewritten
+        all.add(LegacyAsset.of("models/block/focal_manipulator.json")
+                .five("models/block/wand_workbench.json").asModel());
+        for (String face : List.of("wand_workbench_top", "wand_workbench_side", "base_stone")) {
+            all.add(LegacyAsset.of("textures/block/legacy/" + face + ".png").five("textures/blocks/" + face + ".png"));
+        }
+        all.add(LegacyAsset.of("textures/gui/focal_manipulator.png").five("textures/gui/gui_wandtable.png"));
+        // one small picture for each of the twenty-three, as the original kept them
+        for (FocusUpgrade upgrade : FocusUpgrade.values()) {
+            all.add(LegacyAsset.of("textures/gui/focus_upgrade/" + upgrade.getSerializedName() + ".png")
+                    .five("textures/foci/" + ORIGINAL_UPGRADE.get(upgrade) + ".png"));
+        }
+
         // the charger above it: the vis relay the original drew it as, and its sheet
         all.add(LegacyAsset.of(RELAY_MESH).five("models/obj/vis_relay.obj"));
         all.add(LegacyAsset.of("textures/entity/vis_relay.png").five("textures/models/vis_relay.png"));
@@ -431,6 +452,15 @@ public final class LegacyAssets {
                 .forModel(INFUSER));
         all.add(LegacyAsset.of(PILLAR_MESH).five("models/obj/pillar.obj"));
         all.add(LegacyAsset.of("textures/entity/arcane_pillar.png").five("textures/blocks/pillar_normal.png"));
+    }
+
+    private static Map<FocusUpgrade, String> originalUpgrades() {
+        Map<FocusUpgrade, String> named = new java.util.EnumMap<>(FocusUpgrade.class);
+        for (FocusUpgrade upgrade : FocusUpgrade.values()) {
+            named.put(upgrade, upgrade.getSerializedName().replace("_", ""));
+        }
+        named.put(FocusUpgrade.PERSISTENT, "persistant");
+        return java.util.Collections.unmodifiableMap(named);
     }
 
     private static LegacyAsset wandPart(String ours, String original) {

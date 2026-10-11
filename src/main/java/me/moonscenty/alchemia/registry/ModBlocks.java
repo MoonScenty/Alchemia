@@ -153,6 +153,14 @@ public class ModBlocks {
                     .mapColor(MapColor.STONE)
                     .noOcclusion()));
 
+    /** The bench a focus is worked on, which is the only way anything is ever screwed into one. */
+    public static final DeferredBlock<me.moonscenty.alchemia.block.FocalManipulatorBlock> FOCAL_MANIPULATOR =
+            register("focal_manipulator",
+                    () -> new me.moonscenty.alchemia.block.FocalManipulatorBlock(
+                            BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS)
+                                    .mapColor(MapColor.STONE)
+                                    .noOcclusion()));
+
     /** Stands on top of a workbench and fills the wand left on it. */
     public static final DeferredBlock<ArcaneWorkbenchChargerBlock> ARCANE_WORKBENCH_CHARGER =
             register("arcane_workbench_charger",

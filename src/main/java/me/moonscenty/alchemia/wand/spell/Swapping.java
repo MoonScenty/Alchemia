@@ -174,11 +174,11 @@ public final class Swapping {
      */
     private static boolean lay(ServerLevel level, Player caster, ItemStack wand, Block laying,
             List<BlockPos> where, boolean breaking) {
-        FocusItem focus = me.moonscenty.alchemia.wand.Casting.fittedTo(wand);
+        var focus = me.moonscenty.alchemia.wand.Casting.fitted(wand);
         if (focus == null || where.isEmpty()) {
             return false;
         }
-        var price = focus.focus().cost();
+        var price = focus.cost();
         VisHolder holder = VisHolder.of(wand);
         boolean any = false;
 
@@ -190,14 +190,14 @@ public final class Swapping {
                 continue;
             }
             // the first square is paid for by whoever called this; every one after it pays its own way
-            if (any && (holder == null || !holder.holds(wand, price, caster))) {
+            if (any && (holder == null || !holder.holds(wand, price, caster, VisHolder.Spending.WORKING))) {
                 break;
             }
             if (!takeOne(caster, laying)) {
                 break;
             }
             if (any && holder != null) {
-                holder.take(wand, price, caster);
+                holder.take(wand, price, caster, VisHolder.Spending.WORKING);
             }
 
             if (breaking) {

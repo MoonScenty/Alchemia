@@ -184,6 +184,7 @@ public class AlchemiaClientSetup {
         event.register(ModMenus.ESSENTIA_SMELTER.get(), EssentiaSmelterScreen::new);
         event.register(ModMenus.FOCUS_POUCH.get(), FocusPouchScreen::new);
         event.register(ModMenus.AUTOCASTER.get(), AutocasterScreen::new);
+        event.register(ModMenus.FOCAL_MANIPULATOR.get(), FocalManipulatorScreen::new);
     }
 
     /**

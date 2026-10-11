@@ -86,8 +86,7 @@ public class AutocasterScreen extends AbstractContainerScreen<AutocasterMenu> {
     @Override
     protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
         Autocaster turret = menu.turret();
-        Focus.Turret reach = turret == null || turret.fitted() == null
-                ? null : turret.fitted().focus().turret();
+        Focus.Turret reach = turret == null || turret.loaded() == null ? null : turret.loaded().turret();
         if (reach == null) {
             return;
         }

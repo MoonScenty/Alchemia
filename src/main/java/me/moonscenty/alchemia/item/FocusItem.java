@@ -5,6 +5,8 @@ import java.util.List;
 import me.moonscenty.alchemia.aspect.Aspect;
 import me.moonscenty.alchemia.aspect.AspectList;
 import me.moonscenty.alchemia.wand.Focus;
+import me.moonscenty.alchemia.wand.FocusUpgrade;
+import me.moonscenty.alchemia.wand.FocusUpgrades;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
@@ -31,7 +33,20 @@ public class FocusItem extends Item {
         this.focus = focus;
     }
 
-    public Focus focus() {
+    /**
+     * What this focus does and costs, once what is worked into it is taken into account.
+     * <p>
+     * This is the one to ask nearly everywhere. A fire focus with a fireball in it is thrown rather than held
+     * down and costs eight times as much, and anything reading the plain values would charge the wrong price
+     * for the wrong working.
+     */
+    public Focus focus(ItemStack stack) {
+        Focus tuned = FocusUpgrades.tuned(stack);
+        return tuned == null ? focus : tuned;
+    }
+
+    /** What it is before anybody has worked on it, which is what the upgrades are applied to. */
+    public Focus base() {
         return focus;
     }
 
@@ -41,19 +56,40 @@ public class FocusItem extends Item {
      */
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> lines, TooltipFlag flag) {
-        AspectList cost = focus.cost();
-        if (cost.isEmpty()) {
-            return;
+        Focus fitted = focus(stack);
+        AspectList cost = fitted.cost();
+        if (!cost.isEmpty()) {
+            lines.add(Component.translatable(fitted.perTick()
+                            ? "item.alchemia.focus.cost_per_tick"
+                            : "item.alchemia.focus.cost")
+                    .withStyle(ChatFormatting.GRAY));
+            for (Holder<Aspect> aspect : cost.sortedByName()) {
+                Aspect named = aspect.value();
+                lines.add(Component.translatable("item.alchemia.focus.cost_line",
+                                named.displayName(), cost.get(aspect))
+                        .withStyle(style -> style.withColor(named.color())));
+            }
         }
-        lines.add(Component.translatable(focus.perTick()
-                        ? "item.alchemia.focus.cost_per_tick"
-                        : "item.alchemia.focus.cost")
-                .withStyle(ChatFormatting.GRAY));
-        for (Holder<Aspect> aspect : cost.sortedByName()) {
-            Aspect named = aspect.value();
-            lines.add(Component.translatable("item.alchemia.focus.cost_line",
-                            named.displayName(), cost.get(aspect))
-                    .withStyle(style -> style.withColor(named.color())));
+        worked(stack, lines);
+    }
+
+    /**
+     * What has been worked into it, one line apiece.
+     * <p>
+     * The same thing twice is written once with a number after it, the way an enchantment is: a focus with two
+     * ranks of frugal in it is frugal II and not frugal, frugal.
+     */
+    private static void worked(ItemStack stack, List<Component> lines) {
+        java.util.Map<FocusUpgrade, Integer> counted = new java.util.LinkedHashMap<>();
+        for (FocusUpgrade upgrade : FocusUpgrades.on(stack)) {
+            counted.merge(upgrade, 1, Integer::sum);
         }
+        counted.forEach((upgrade, level) -> {
+            Component name = Component.translatable(upgrade.translationKey());
+            lines.add((level > 1
+                    ? Component.translatable("item.alchemia.focus.upgrade_level", name,
+                            Component.translatable("enchantment.level." + level))
+                    : name).copy().withStyle(ChatFormatting.DARK_PURPLE));
+        });
     }
 }

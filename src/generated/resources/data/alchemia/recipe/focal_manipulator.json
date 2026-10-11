@@ -1,0 +1,41 @@
+{
+  "type": "alchemia:arcane_shaped",
+  "key": {
+    "G": {
+      "item": "minecraft:gold_ingot"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "P": {
+      "item": "alchemia:balanced_shard"
+    },
+    "Q": {
+      "item": "alchemia:arcane_stone_slab"
+    },
+    "S": {
+      "item": "alchemia:arcane_stone"
+    },
+    "T": {
+      "item": "alchemia:arcane_stone_bricks"
+    }
+  },
+  "pattern": [
+    "IQI",
+    "SPS",
+    "GTG"
+  ],
+  "research": "alchemia:focal_manipulator",
+  "result": {
+    "count": 1,
+    "id": "alchemia:focal_manipulator"
+  },
+  "vis": {
+    "alchemia:aer": 150,
+    "alchemia:aqua": 150,
+    "alchemia:ignis": 150,
+    "alchemia:ordo": 150,
+    "alchemia:perditio": 150,
+    "alchemia:terra": 150
+  }
+}

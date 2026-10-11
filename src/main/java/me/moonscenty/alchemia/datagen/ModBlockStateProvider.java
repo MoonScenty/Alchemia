@@ -55,6 +55,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         essentiaSmelter();
         alembic();
         arcaneWorkbench();
+        focalManipulator();
         arcaneWorkbenchCharger();
         nodeStabilizer();
         altar();
@@ -282,6 +283,11 @@ public class ModBlockStateProvider extends BlockStateProvider {
     /** The original's own model file, read from its jar. */
     private void arcaneWorkbench() {
         simpleBlock(ModBlocks.ARCANE_WORKBENCH.get(), models().getExistingFile(modLoc("block/arcane_workbench")));
+    }
+
+    /** The original's own model file again, with the other skin on it. */
+    private void focalManipulator() {
+        simpleBlock(ModBlocks.FOCAL_MANIPULATOR.get(), models().getExistingFile(modLoc("block/focal_manipulator")));
     }
 
     /** Drawn by ChargerRenderer, as the original's vis relay. */

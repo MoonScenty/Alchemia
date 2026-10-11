@@ -78,6 +78,7 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
         dropSelf(ModBlocks.ESSENTIA_SMELTER.get());
         dropSelf(ModBlocks.ALEMBIC.get());
         dropSelf(ModBlocks.ARCANE_WORKBENCH.get());
+        dropSelf(ModBlocks.FOCAL_MANIPULATOR.get());
         dropSelf(ModBlocks.ARCANE_WORKBENCH_CHARGER.get());
         dropSelf(ModBlocks.NODE_STABILIZER.get());
         dropSelf(ModBlocks.ARCANE_PEDESTAL.get());

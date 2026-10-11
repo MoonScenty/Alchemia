@@ -1,0 +1,28 @@
+{
+  "category": "alchemia:arcana",
+  "column": 2,
+  "complexity": 2,
+  "icon": "alchemia:focal_manipulator",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.focal_manipulator.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:focal_manipulator"
+    }
+  ],
+  "parents": [
+    "alchemia:arcane_workbench",
+    "alchemia:arcane_stone"
+  ],
+  "requirements": {
+    "alchemia:fabrico": 5,
+    "alchemia:instrumentum": 8,
+    "alchemia:potentia": 8,
+    "alchemia:vitreus": 5
+  },
+  "row": 5,
+  "shape": "major"
+}

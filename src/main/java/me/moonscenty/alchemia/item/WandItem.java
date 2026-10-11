@@ -23,6 +23,8 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import me.moonscenty.alchemia.wand.Casting;
 import me.moonscenty.alchemia.wand.Focus;
+import me.moonscenty.alchemia.wand.FocusUpgrade;
+import me.moonscenty.alchemia.wand.FocusUpgrades;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -52,6 +54,9 @@ public class WandItem extends Item implements VisHolder {
     public static final int FINE = 100;
     /** How often a wand pulls at the aura, in ticks. */
     private static final int DRAWS_EVERY = 5;
+    /** What one rank of thrift takes off a working, as a share of the bill. The original's tenth. */
+    private static final float THRIFT = 0.1F;
+
     /** A trickling rod fills itself only this far, as a share of what the rod holds. */
     private static final float TRICKLES_TO = 0.5F;
     /** How long a wand can be held down for. Long enough that nobody reaches the end of it. */
@@ -121,8 +126,8 @@ public class WandItem extends Item implements VisHolder {
      * of the work and what the wand loses is what this particular wand charges for doing it.
      */
     @Override
-    public void take(ItemStack stack, AspectList cost, Player player) {
-        float rate = VisDiscount.rate(cap(stack).discount(), player);
+    public void take(ItemStack stack, AspectList cost, Player player, Spending why) {
+        float rate = rate(stack, player, why);
         AspectList left = fine(stack);
         for (Holder<Aspect> aspect : cost.sortedByName()) {
             int asked = Math.round(cost.get(aspect) * FINE * rate);
@@ -137,8 +142,8 @@ public class WandItem extends Item implements VisHolder {
      * robe can close that gap again.
      */
     @Override
-    public boolean holds(ItemStack stack, AspectList cost, Player player) {
-        float rate = VisDiscount.rate(cap(stack).discount(), player);
+    public boolean holds(ItemStack stack, AspectList cost, Player player, Spending why) {
+        float rate = rate(stack, player, why);
         AspectList have = fine(stack);
         for (Holder<Aspect> aspect : cost.sortedByName()) {
             if (have.get(aspect) < Math.round(cost.get(aspect) * FINE * rate)) {
@@ -146,6 +151,21 @@ public class WandItem extends Item implements VisHolder {
             }
         }
         return true;
+    }
+
+    /**
+     * What share of an asking price this wand actually pays.
+     * <p>
+     * The cap's own rate and whatever the bearer has on, as ever, and on top of that a tenth off per rank of
+     * thrift worked into the focus. A focus pays for its own working only: a wand lying on a bench is holding
+     * vis for somebody else's recipe, and what is screwed into its end has nothing to do with that.
+     */
+    private static float rate(ItemStack stack, Player player, Spending why) {
+        float rate = VisDiscount.rate(cap(stack).discount(), player);
+        if (why == Spending.WORKING) {
+            rate -= FocusUpgrades.level(focus(stack), FocusUpgrade.FRUGAL) * THRIFT;
+        }
+        return Math.max(VisDiscount.LEAST, rate);
     }
 
     /**
@@ -296,7 +316,7 @@ public class WandItem extends Item implements VisHolder {
             return;
         }
         Focus focus = fitted(wand);
-        if (focus == null || !VisHolder.canPay(wand, focus.cost(), caster)) {
+        if (focus == null || !VisHolder.canPay(wand, focus.cost(), caster, Spending.WORKING)) {
             caster.stopUsingItem();
             return;
         }
@@ -315,10 +335,9 @@ public class WandItem extends Item implements VisHolder {
         return UseAnim.NONE;
     }
 
-    /** What is on the wand, if it is a focus. */
+    /** What is on the wand, if it is a focus, and as it is with what is worked into it. */
     private static Focus fitted(ItemStack wand) {
-        FocusItem focus = Casting.fittedTo(wand);
-        return focus == null ? null : focus.focus();
+        return Casting.fitted(wand);
     }
 
     // --- what it can be pointed at ------------------------------------------

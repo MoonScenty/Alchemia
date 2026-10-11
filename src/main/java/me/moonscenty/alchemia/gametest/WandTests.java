@@ -76,12 +76,12 @@ public class WandTests {
         ItemStack iron = wand(ModWandParts.WOOD, ModWandParts.IRON, 100);
         ItemStack alchemium = wand(ModWandParts.WOOD, ModWandParts.ALCHEMIUM, 100);
 
-        helper.assertFalse(iron.getItem() instanceof WandItem item && item.holds(iron, price, null),
+        helper.assertFalse(iron.getItem() instanceof WandItem item && item.holds(iron, price, null, me.moonscenty.alchemia.item.VisHolder.Spending.WORKING),
                 "an iron cap asks for more than a full stick holds");
-        helper.assertTrue(alchemium.getItem() instanceof WandItem item && item.holds(alchemium, price, null),
+        helper.assertTrue(alchemium.getItem() instanceof WandItem item && item.holds(alchemium, price, null, me.moonscenty.alchemia.item.VisHolder.Spending.WORKING),
                 "an alchemium cap asks for less");
 
-        ((WandItem) alchemium.getItem()).take(alchemium, price, null);
+        ((WandItem) alchemium.getItem()).take(alchemium, price, null, me.moonscenty.alchemia.item.VisHolder.Spending.WORKING);
         // ninety paid out of a hundred, so ten left over and none of it rounded away
         helper.assertValueEqual(((WandItem) alchemium.getItem()).held(alchemium, ModAspects.FIRE),
                 10, "the tenth it saved is still in the wand");
@@ -134,7 +134,7 @@ public class WandTests {
         helper.assertValueEqual(ModItems.FOCI.size(), 12, "twelve foci");
         ModItems.FOCI.forEach((name, held) -> {
             FocusItem focus = held.get();
-            helper.assertTrue(!focus.focus().cost().isEmpty(), name + " costs something to use");
+            helper.assertTrue(!focus.base().cost().isEmpty(), name + " costs something to use");
             helper.assertTrue(new ItemStack(focus).is(ModTags.Items.FOCI), name + " is a focus to a slot");
         });
         helper.succeed();
@@ -149,17 +149,17 @@ public class WandTests {
      */
     @GameTest(template = TEMPLATE)
     public static void theFociKeptTheirNumbers(GameTestHelper helper) {
-        Focus fire = ModItems.FOCI.get("fire").get().focus();
+        Focus fire = ModItems.FOCI.get("fire").get().base();
         helper.assertValueEqual(fire.cost().get(ModAspects.FIRE), 2, "fire asks two fire");
         helper.assertTrue(fire.perTick(), "fire is charged by the tick");
         helper.assertTrue(fire.turret() != null, "an autocaster will take fire");
 
-        Focus hole = ModItems.FOCI.get("hole").get().focus();
+        Focus hole = ModItems.FOCI.get("hole").get().base();
         helper.assertValueEqual(hole.cost().get(ModAspects.EARTH), 25, "a hole asks twenty-five earth");
         helper.assertTrue(!hole.perTick(), "a hole is charged once");
         helper.assertTrue(hole.turret() == null, "no autocaster takes a hole");
 
-        Focus primal = ModItems.FOCI.get("primal").get().focus();
+        Focus primal = ModItems.FOCI.get("primal").get().base();
         helper.assertValueEqual(primal.cost().size(), 6, "primal asks all six");
         helper.assertValueEqual(primal.cooldown(), 500, "primal waits half a second");
         helper.succeed();
@@ -349,7 +349,7 @@ public class WandTests {
     private static int spent(ItemStack wand, AspectList price, Player player) {
         WandItem item = (WandItem) wand.getItem();
         int before = item.held(wand, ModAspects.FIRE);
-        item.take(wand, price, player);
+        item.take(wand, price, player, me.moonscenty.alchemia.item.VisHolder.Spending.WORKING);
         return before - item.held(wand, ModAspects.FIRE);
     }
     /** Both robes take dye, as the original's both did, and start out the original's violet. */

@@ -10,6 +10,7 @@ import me.moonscenty.alchemia.aspect.AspectList;
 import me.moonscenty.alchemia.enchantment.InfusionEnchantment;
 import me.moonscenty.alchemia.item.HelmFitting;
 import me.moonscenty.alchemia.research.ResearchNote;
+import me.moonscenty.alchemia.wand.FocusUpgrade;
 import me.moonscenty.alchemia.wand.WandCap;
 import me.moonscenty.alchemia.wand.WandRod;
 import net.minecraft.core.Holder;
@@ -26,6 +27,20 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 public class ModDataComponents {
     public static final DeferredRegister<DataComponentType<?>> COMPONENTS =
             DeferredRegister.create(Registries.DATA_COMPONENT_TYPE, Alchemia.MODID);
+
+    /**
+     * What has been worked into a focus, rank by rank.
+     * <p>
+     * A plain list rather than five slots: ranks are filled in order and never left with a gap, so the length
+     * says how many are spoken for and the position says which rank each one went into.
+     */
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<java.util.List<FocusUpgrade>>>
+            FOCUS_UPGRADES = COMPONENTS.register("focus_upgrades",
+                    () -> DataComponentType.<java.util.List<FocusUpgrade>>builder()
+                            .persistent(FocusUpgrade.CODEC.listOf())
+                            .networkSynchronized(FocusUpgrade.STREAM_CODEC
+                                    .apply(ByteBufCodecs.list()).cast())
+                            .build());
 
     /** The puzzle drawn on a sheet of research notes, and the research it stands for. */
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<ResearchNote>> RESEARCH_NOTE =

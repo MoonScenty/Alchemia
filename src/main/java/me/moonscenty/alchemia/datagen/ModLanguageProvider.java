@@ -59,6 +59,8 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         addItem(ModItems.ENCHANTED_FABRIC, pick("Enchanted Fabric", "마법 천"));
         robes();
         add("item.alchemia.focus_pouch.holding", pick("Holding %s of %s", "%s / %s 들었음"));
+        add("item.alchemia.focus.upgrade_level", "%s %s");
+        upgrades();
         autocaster();
 
         String[][] foci = {
@@ -78,6 +80,92 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         for (String[] focus : foci) {
             add("item.alchemia.focus_" + focus[0],
                     pick("Wand Focus: " + focus[1], "완드 포커스: " + focus[2]));
+        }
+    }
+
+    /**
+     * The bench a focus is worked on, and the twenty-three things it can work in.
+     * <p>
+     * Each gets a name and a line saying what it actually does, since the pictures on the bench are the only
+     * place they are ever seen and a picture of a snowflake says nothing about how much colder it is.
+     */
+    private void upgrades() {
+        addBlock(ModBlocks.FOCAL_MANIPULATOR, pick("Focal Manipulator", "포커스 조작기"));
+
+        String[][] upgrades = {
+                {"potency", "Potency", "강화",
+                 "Harder. About a fifth more per rank, though each focus counts that its own way.",
+                 "더 세진다. 등급마다 대략 오분의 일씩이고, 그것을 어떻게 세는지는 포커스마다 다르다."},
+                {"frugal", "Frugal", "절약",
+                 "A tenth off the bill per rank. It pays for this focus's own working and nothing else.",
+                 "등급마다 값의 십분의 일을 깎는다. 이 포커스가 제 일을 할 때만이고, 작업대에서 쓰는 값은 그대로다."},
+                {"treasure", "Treasure", "보물",
+                 "More out of what is broken, the way fortune and looting give more.",
+                 "부순 것에서 더 많이 나온다. 행운과 약탈이 하는 일과 같다."},
+                {"enlarge", "Enlarge", "확대",
+                 "Wider, or more of them at once, depending on what the focus does to begin with.",
+                 "더 넓게, 또는 한 번에 더 많이. 어느 쪽인지는 그 포커스가 본래 하는 일에 달렸다."},
+                {"extend", "Extend", "연장",
+                 "Whatever the focus leaves behind on what it touches stays longer.",
+                 "포커스가 닿은 것에 남기고 가는 것이 더 오래간다."},
+                {"silk_touch", "Silk Touch", "섬세한 손길",
+                 "The block comes up as it stood rather than as what it breaks into. It is not cheap.",
+                 "블록이 부서진 모습이 아니라 선 모습 그대로 나온다. 싸지 않다."},
+                {"architect", "Architect", "설계",
+                 "The square the focus will work on is shown and can be set, rather than guessed at.",
+                 "포커스가 건드릴 자리를 짐작하는 대신 눈으로 보고 정한다."},
+                {"alchemists_fire", "Alchemist's Fire", "연금술사의 불",
+                 "Whatever it sets alight burns far longer.",
+                 "불이 붙은 것이 훨씬 오래 탄다."},
+                {"alchemists_frost", "Alchemist's Frost", "연금술사의 서리",
+                 "Whatever it touches is chilled as well as hurt, and walks away slowly.",
+                 "닿은 것은 다치는 데 더해 얼어붙어 느리게 걷는다."},
+                {"fireball", "Fireball", "화염구",
+                 "A ball to throw instead of a spray to hold down. It costs eight times as much and waits a second.",
+                 "누르고 있는 분사 대신 던지는 공이 된다. 값은 여덟 배고 한 번 쏘면 일 초를 기다린다."},
+                {"firebeam", "Fire Beam", "화염 광선",
+                 "The spray drawn into a line. Narrower, hotter, and it burns through what stands in it.",
+                 "퍼지던 불이 한 줄로 모인다. 좁고 뜨겁고, 선 것을 뚫고 지나간다."},
+                {"scattershot", "Scattershot", "산탄",
+                 "A volley of splinters instead of one spike. Each is little; together they are not.",
+                 "창 하나 대신 조각 여럿이 날아간다. 하나하나는 약하고 한꺼번에는 그렇지 않다."},
+                {"ice_boulder", "Ice Boulder", "얼음 바위",
+                 "One boulder, which bounces. Where it ends up is partly the thrower's skill.",
+                 "바위 하나가 튀며 굴러간다. 어디까지 가는지는 던진 사람 솜씨에 달렸다."},
+                {"chain_lightning", "Chain Lightning", "연쇄 번개",
+                 "Slower and harder, and the bolt jumps on to whatever is standing near what it struck.",
+                 "느려지고 세지며, 맞은 것 옆에 선 것으로 번개가 옮겨붙는다."},
+                {"earth_shock", "Earth Shock", "대지 충격",
+                 "A ball lobbed at the ground instead of a bolt, which leaves the ground live for a while.",
+                 "번개 대신 땅으로 공을 던진다. 떨어진 자리의 땅이 한동안 감전된 채로 남는다."},
+                {"bat_bombs", "Bat Bombs", "폭탄 박쥐",
+                 "The bats always burst, and burst harder.",
+                 "박쥐가 반드시 터지고, 더 세게 터진다."},
+                {"devil_bats", "Devil Bats", "악마 박쥐",
+                 "Bigger bats that never burst and keep at their mark until one of them is done.",
+                 "더 크고 터지지 않는 박쥐다. 둘 중 하나가 끝날 때까지 물고 늘어진다."},
+                {"vampire_bats", "Vampire Bats", "흡혈 박쥐",
+                 "The bats drink what they bite, and hand some of it back to whoever called them.",
+                 "문 것을 마시고, 그 일부를 부른 사람에게 돌려준다."},
+                {"nightshade", "Nightshade", "가지독",
+                 "All three curses at once rather than whichever one the burst happens to pick.",
+                 "터질 때 하나를 고르는 대신 셋을 한꺼번에 건다."},
+                {"seeker", "Seeker", "추적",
+                 "The orb goes straight at the nearest living thing instead of wandering, and never goes wrong.",
+                 "구슬이 헤매지 않고 가장 가까운 산 것에게 곧장 간다. 잘못되는 일도 없다."},
+                {"persistent", "Persistent", "집요",
+                 "When its mark is gone the splinter finds another of the same kind rather than falling.",
+                 "노리던 것이 사라지면 떨어지는 대신 같은 종류를 하나 더 찾아간다."},
+                {"dowsing", "Dowsing", "탐광",
+                 "Ore sometimes comes up as a cluster, which smelts to twice as much.",
+                 "광석이 이따금 덩이째 나온다. 제련하면 두 배가 된다."},
+                {"sticky", "Sticky", "끈끈함",
+                 "The hook does not let go on arrival. Letting go is the climber's business.",
+                 "다 올라가도 갈고리가 놓지 않는다. 놓는 것은 오르는 사람이 할 일이다."},
+        };
+        for (String[] upgrade : upgrades) {
+            add("focus_upgrade." + Alchemia.MODID + "." + upgrade[0], pick(upgrade[1], upgrade[2]));
+            add("focus_upgrade." + Alchemia.MODID + "." + upgrade[0] + ".note", pick(upgrade[3], upgrade[4]));
         }
     }
 
@@ -449,6 +537,9 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                 {"void_robes", "Void Robes", "공허 로브",
                  "A suit of void metal taken apart on the altar and sewn back onto cloth. It stops what the metal stopped and comes apart as fast as the metal did, and in exchange it takes five parts in a hundred off every price, at each of its three pieces. This one has a hood and no boots -- the metal never made a good shoe, and the robe never made a good helm until there was metal to line it with.",
                  "공허 금속 한 벌을 제단에서 뜯어 천에 다시 꿰맨 것이다. 금속이 막던 만큼 막고 금속이 부서지던 만큼 빨리 부서지며, 그 대신 세 점이 저마다 모든 값에서 백분의 오를 깎는다. 이쪽은 두건이 있고 신이 없다. 그 금속으로는 쓸 만한 신이 나온 적이 없고, 천으로는 안을 댈 금속이 생기기 전까지 쓸 만한 투구가 나온 적이 없다."},
+                {"focal_manipulator", "Focal Manipulator", "포커스 조작기",
+                 "A bench for working one more thing into a focus. Five things will go into any focus, one to a rank, and which are on offer depends on the focus and on how deep the rank is -- the shallow ones give a focus more of what it already does, and the deep ones turn it into something else. The price is levels paid up front and vis drawn out of the air afterwards, a little every few ticks, so the bench wants a thick sky above it and a while to work. Take the focus off the bench part-way and the work is lost.",
+                 "포커스에 한 가지를 더 박아 넣는 자리다. 어느 포커스든 다섯까지 들어가고 등급마다 하나씩이며, 어떤 것이 올라오는지는 포커스와 등급의 깊이에 달렸다. 얕은 등급은 본래 하던 일을 더 하게 해 주고, 깊은 등급은 아예 다른 것으로 바꾼다. 값은 먼저 경험치 레벨로 치르고 그 뒤로 몇 틱마다 조금씩 공기에서 비스를 길어 올린다. 그래서 하늘이 두터운 곳에 놓아야 하고 시간이 걸린다. 도중에 포커스를 들어내면 하던 일은 사라진다."},
                 {"autocaster", "Autocaster", "자동 시전기",
                  "A focus on a bracket, with enough of a mind in it to pick something and point itself at it. It is not a thaumaturge: it draws its own vis out of the air a drop at a time, holds a hundred of each primal at most, and nothing worn or carried makes a working any cheaper for it. Seven of the twelve foci are worth aiming at a thing, and those are the seven it will take. It goes against any face -- floor, wall or ceiling -- and it is told what to mind: animals, monsters, people, and whatever is already yours. A wand clicked against it takes it back down, focus and all.",
                  "받침대에 얹은 포커스다. 무엇을 고르고 그쪽으로 제 몸을 돌릴 만큼의 생각이 들어 있다. 마법사는 아니다. 제 비스를 공기에서 한 방울씩 길어 올리고, 원시마다 백까지만 담으며, 무엇을 걸쳤든 들었든 값이 싸지는 일은 없다. 열둘 중 일곱만이 무언가를 겨눌 값어치가 있고, 받아 주는 것도 그 일곱이다. 바닥이든 벽이든 천장이든 어느 면에나 붙으며, 무엇을 노릴지 일러 줄 수 있다 — 동물, 몹, 사람, 그리고 이미 제 편인 것. 완드로 치면 포커스째 도로 떼어 낸다."},

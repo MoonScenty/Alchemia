@@ -155,6 +155,32 @@ public final class AspectList {
     }
 
     /**
+     * The same list written out in the six primals alone.
+     * <p>
+     * A compound is two aspects mixed, and asking for one is asking for as much of each of the two as was asked
+     * of it: an order of energy is an order of order and an order of fire. Worked all the way down, so what comes
+     * back is only ever primals. Nothing is lost on the way -- the amounts add up rather than being split -- so
+     * what comes out is dearer than what went in, which is the point of quoting a price in compounds.
+     */
+    public AspectList toPrimals() {
+        AspectList out = EMPTY;
+        for (Holder<Aspect> aspect : sortedByName()) {
+            int amount = get(aspect);
+            List<Holder<Aspect>> parts = aspect.value().components().orElse(List.of());
+            if (parts.isEmpty()) {
+                out = out.add(aspect, amount);
+                continue;
+            }
+            AspectList mixed = EMPTY;
+            for (Holder<Aspect> part : parts) {
+                mixed = mixed.add(part, amount);
+            }
+            out = out.add(mixed.toPrimals());
+        }
+        return out;
+    }
+
+    /**
      * Trims the list down to {@link #MAX_ASPECTS}, dropping the least interesting aspect each time.
      * <p>
      * A plain amount would always favour the primals, since compounds break down into them and so are rarer. Each

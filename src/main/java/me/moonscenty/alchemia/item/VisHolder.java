@@ -13,11 +13,25 @@ import net.minecraft.world.item.ItemStack;
  * before there was any wand to lay on it, and so anything else that stores vis can be used at one later.
  */
 public interface VisHolder {
+    /**
+     * What a wand is being made to pay for.
+     * <p>
+     * It matters because thrift worked into a focus pays for that focus's own working and nothing else. A wand
+     * laid on a bench is a tool being used to build something, and what is screwed into the end of it has no
+     * say in what the building costs. The original drew the same line.
+     */
+    enum Spending {
+        /** Letting the focus off. */
+        WORKING,
+        /** Making something at a bench, where the wand is only the thing holding the vis. */
+        CRAFTING
+    }
+
     /** How much of one aspect this is carrying. */
     int held(ItemStack stack, Holder<Aspect> aspect);
 
     /** Pays out a price. Only called once {@link #holds} has said it can be paid. */
-    void take(ItemStack stack, AspectList cost, Player player);
+    void take(ItemStack stack, AspectList cost, Player player, Spending why);
 
     /**
      * Whether the whole price could be paid out of this.
@@ -25,14 +39,7 @@ public interface VisHolder {
      * Who is holding it matters: what they are wearing comes off the bill, so the same wand with the same vis in
      * it can afford a working in a robe and not out of one.
      */
-    default boolean holds(ItemStack stack, AspectList cost, Player player) {
-        for (Holder<Aspect> aspect : cost.sortedByName()) {
-            if (held(stack, aspect) < cost.get(aspect)) {
-                return false;
-            }
-        }
-        return true;
-    }
+    boolean holds(ItemStack stack, AspectList cost, Player player, Spending why);
 
     /** The holder in a stack, if it is one. */
     static VisHolder of(ItemStack stack) {
@@ -40,11 +47,11 @@ public interface VisHolder {
     }
 
     /** Whether a price can be paid out of a stack. A free price needs nothing, not even a wand. */
-    static boolean canPay(ItemStack stack, AspectList cost, Player player) {
+    static boolean canPay(ItemStack stack, AspectList cost, Player player, Spending why) {
         if (cost.isEmpty()) {
             return true;
         }
         VisHolder holder = of(stack);
-        return holder != null && holder.holds(stack, cost, player);
+        return holder != null && holder.holds(stack, cost, player, why);
     }
 }

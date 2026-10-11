@@ -95,8 +95,8 @@ public class AutocasterRenderer extends EntityRenderer<Autocaster> {
                 OverlayTexture.NO_OVERLAY);
 
         int lens = mesh.group("focus");
-        if (lens >= 0 && turret.fitted() != null) {
-            int colour = 0xFF000000 | turret.fitted().focus().colour();
+        if (lens >= 0 && turret.loaded() != null) {
+            int colour = 0xFF000000 | turret.loaded().colour();
             mesh.render(lens, pose.last(), buffers.getBuffer(RenderType.entityTranslucent(SHEET)), colour, light,
                     OverlayTexture.NO_OVERLAY);
         }

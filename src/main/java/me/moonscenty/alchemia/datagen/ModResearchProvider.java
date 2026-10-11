@@ -202,6 +202,13 @@ public class ModResearchProvider {
                 "wand_rod_obsidian", "wand_rod_ice", "wand_rod_quartz", "wand_rod_reed",
                 "wand_rod_blaze", "wand_rod_bone", "wand_rod_silverwood");
 
+        // where a focus is worked on. It wants an altar's worth of study and a wand to have a focus on in the
+        // first place, and from there every one of the twenty-three is reached through this one entry
+        entry(context, "focal_manipulator", ModResearch.ARCANA, ModBlocks.FOCAL_MANIPULATOR, 2, 5,
+                AspectList.of(ModAspects.ENERGY, 8).add(ModAspects.TOOL, 8).add(ModAspects.CRAFT, 5)
+                        .add(ModAspects.CRYSTAL, 5),
+                List.of("arcane_workbench", "arcane_stone"), false, NodeShape.MAJOR, 2, "focal_manipulator");
+
         // a focus with a bracket and just enough mind to aim itself. The original filed it under golemancy,
         // which is where everything that works while nobody is holding it belongs
         entry(context, "autocaster", ModResearch.GOLEMANCY, ModItems.AUTOCASTER, 0, 0,

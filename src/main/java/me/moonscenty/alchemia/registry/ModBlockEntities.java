@@ -31,6 +31,14 @@ public class ModBlockEntities {
                     .of(ResearchTableBlockEntity::new, ModBlocks.RESEARCH_TABLE.get())
                     .build(null));
 
+    /** A focus on the bench, and the one thing being worked into it. */
+    public static final DeferredHolder<BlockEntityType<?>,
+            BlockEntityType<me.moonscenty.alchemia.block.entity.FocalManipulatorBlockEntity>> FOCAL_MANIPULATOR =
+            BLOCK_ENTITIES.register("focal_manipulator", () -> BlockEntityType.Builder
+                    .of(me.moonscenty.alchemia.block.entity.FocalManipulatorBlockEntity::new,
+                            ModBlocks.FOCAL_MANIPULATOR.get())
+                    .build(null));
+
     /** One square of a portable hole, which remembers what it is standing in for and counts down to giving it back. */
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<HoleBlockEntity>> HOLE =
             BLOCK_ENTITIES.register("hole", () -> BlockEntityType.Builder

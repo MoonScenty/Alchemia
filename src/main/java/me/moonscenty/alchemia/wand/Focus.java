@@ -53,6 +53,16 @@ public record Focus(int colour, AspectList cost, boolean perTick, int cooldown, 
         return new Focus(colour, cost, true, cooldown, turret, spell);
     }
 
+    /** A different price, which is what most of the upgrades that change a focus outright come to. */
+    public Focus costing(AspectList cost) {
+        return new Focus(colour, cost, perTick, cooldown, turret, spell);
+    }
+
+    /** Charged once when it goes off after all, which is what becoming a thrown thing does to a held one. */
+    public Focus letGo() {
+        return new Focus(colour, cost, false, cooldown, turret, spell);
+    }
+
     public Focus cooldown(int milliseconds) {
         return new Focus(colour, cost, perTick, milliseconds, turret, spell);
     }

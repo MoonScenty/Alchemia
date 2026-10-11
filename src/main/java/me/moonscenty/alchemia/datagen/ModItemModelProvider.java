@@ -40,6 +40,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         }
         withExistingParent("essentia_smelter", modLoc("block/essentia_smelter"));
         withExistingParent("arcane_workbench", modLoc("block/arcane_workbench"));
+        withExistingParent("focal_manipulator", modLoc("block/focal_manipulator"));
         // drawn in the hand on the original's meshes by LegacyMeshItemModel; these only say how they are held
         heldAsBlock("alembic", "item/legacy/alembic");
         heldAsBlock("arcane_workbench_charger", "item/legacy/vis_relay");
