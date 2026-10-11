@@ -1,0 +1,8 @@
+{
+  "parent": "alchemia:block/legacy/aura_totem_pole",
+  "render_type": "minecraft:cutout_mipped",
+  "textures": {
+    "particle": "alchemia:block/legacy/aura_totem_pole_outer",
+    "side": "alchemia:block/legacy/aura_totem_pole_outer"
+  }
+}

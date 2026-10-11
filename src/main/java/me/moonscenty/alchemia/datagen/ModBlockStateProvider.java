@@ -61,6 +61,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         signalDevices();
         spa();
         auraDevices();
+        totems();
         arcaneWorkbenchCharger();
         nodeStabilizer();
         altar();
@@ -386,6 +387,29 @@ public class ModBlockStateProvider extends BlockStateProvider {
         getVariantBuilder(ModBlocks.DIOPTRA.get()).forAllStates(state -> net.neoforged.neoforge.client.model
                 .generators.ConfiguredModel.builder()
                 .modelFile(state.getValue(me.moonscenty.alchemia.block.DioptraBlock.ENABLED) ? lit : dark).build());
+    }
+
+    /**
+     * The totems and poles: the original's totem and pole models, each kind with its own face as the original's
+     * block states gave it, drawn the way the original drew them.
+     */
+    private void totems() {
+        totem(ModBlocks.AURA_TOTEM_PUSH, "aura_totem", null);
+        totem(ModBlocks.AURA_TOTEM_PULL, "aura_totem", "aura_totem_pull");
+        totem(ModBlocks.AURA_TOTEM_POLE_INNER, "aura_totem_pole", null);
+        totem(ModBlocks.AURA_TOTEM_POLE_OUTER, "aura_totem_pole", "aura_totem_pole_outer");
+        totem(ModBlocks.AURA_TOTEM_POLE_PURE, "aura_totem_pole", "aura_totem_pole_pure");
+    }
+
+    private void totem(DeferredBlock<? extends Block> block, String model, String face) {
+        var built = models().getBuilder(block.getId().getPath())
+                .parent(new net.neoforged.neoforge.client.model.generators.ModelFile.UncheckedModelFile(
+                        modLoc("block/legacy/" + model)))
+                .renderType("cutout_mipped");
+        if (face != null) {
+            built.texture("side", modLoc("block/legacy/" + face)).texture("particle", modLoc("block/legacy/" + face));
+        }
+        simpleBlock(block.get(), built);
     }
 
     private void facingSix(net.minecraft.world.level.block.Block block,

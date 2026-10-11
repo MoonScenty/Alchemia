@@ -1,0 +1,26 @@
+{
+  "category": "alchemia:arcana",
+  "column": 8,
+  "complexity": 3,
+  "icon": "alchemia:aura_totem_pull",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.aura_totem_pull.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:aura_totem_pull"
+    }
+  ],
+  "parents": [
+    "alchemia:aura_totem"
+  ],
+  "requirements": {
+    "alchemia:aqua": 3,
+    "alchemia:auram": 6,
+    "alchemia:desiderium": 3,
+    "alchemia:permutatio": 3
+  },
+  "row": 0
+}

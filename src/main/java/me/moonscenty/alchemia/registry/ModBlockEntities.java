@@ -114,6 +114,14 @@ public class ModBlockEntities {
                     .of(me.moonscenty.alchemia.block.entity.DioptraBlockEntity::new, ModBlocks.DIOPTRA.get())
                     .build(null));
 
+    /** An aura totem moving vis; the poles under it have nothing of their own. */
+    public static final DeferredHolder<BlockEntityType<?>,
+            BlockEntityType<me.moonscenty.alchemia.block.entity.AuraTotemBlockEntity>> AURA_TOTEM =
+            BLOCK_ENTITIES.register("aura_totem", () -> BlockEntityType.Builder
+                    .of(me.moonscenty.alchemia.block.entity.AuraTotemBlockEntity::new,
+                            ModBlocks.AURA_TOTEM_PUSH.get(), ModBlocks.AURA_TOTEM_PULL.get())
+                    .build(null));
+
     /** One square of a portable hole, which remembers what it is standing in for and counts down to giving it back. */
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<HoleBlockEntity>> HOLE =
             BLOCK_ENTITIES.register("hole", () -> BlockEntityType.Builder

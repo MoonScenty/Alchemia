@@ -1,0 +1,29 @@
+{
+  "type": "alchemia:arcane_shaped",
+  "key": {
+    "G": {
+      "item": "alchemia:greatwood_planks"
+    },
+    "N": {
+      "item": "alchemia:air_shard"
+    },
+    "W": {
+      "item": "alchemia:silverwood_planks"
+    }
+  },
+  "pattern": [
+    "WGW",
+    "WNW",
+    "WGW"
+  ],
+  "research": "alchemia:aura_totem",
+  "result": {
+    "count": 1,
+    "id": "alchemia:aura_totem_pole_outer"
+  },
+  "vis": {
+    "alchemia:aer": 125,
+    "alchemia:ordo": 125,
+    "alchemia:terra": 50
+  }
+}

@@ -193,6 +193,7 @@ public class AlchemiaClientSetup {
         event.register(ModMenus.AUTOCASTER.get(), AutocasterScreen::new);
         event.register(ModMenus.FOCAL_MANIPULATOR.get(), FocalManipulatorScreen::new);
         event.register(ModMenus.SPA.get(), SpaScreen::new);
+        event.register(ModMenus.AURA_TOTEM.get(), AuraTotemScreen::new);
     }
 
     /**
@@ -209,6 +210,12 @@ public class AlchemiaClientSetup {
                 level != null && pos != null && level.getBlockEntity(pos) instanceof FilterTubeBlockEntity filter
                         ? filter.only().map(aspect -> aspect.value().color()).orElse(0xFFFFFF)
                         : 0xFFFFFF, ModBlocks.TUBE_FILTER.get());
+
+        // a totem glows in the colour of what it moves, and nearly black when it moves nothing
+        event.register((state, level, pos, tint) ->
+                level != null && pos != null && level.getBlockEntity(pos)
+                        instanceof me.moonscenty.alchemia.block.entity.AuraTotemBlockEntity totem
+                        ? totem.glow() : 0x101010, ModBlocks.AURA_TOTEM_PUSH.get(), ModBlocks.AURA_TOTEM_PULL.get());
 
         // the liquid standing in a jar, in the colour of whatever the jar is holding
         event.register((state, level, pos, tint) ->

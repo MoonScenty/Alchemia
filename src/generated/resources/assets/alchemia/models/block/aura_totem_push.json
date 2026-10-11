@@ -1,0 +1,4 @@
+{
+  "parent": "alchemia:block/legacy/aura_totem",
+  "render_type": "minecraft:cutout_mipped"
+}

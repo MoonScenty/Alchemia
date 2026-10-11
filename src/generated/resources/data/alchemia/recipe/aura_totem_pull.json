@@ -1,0 +1,45 @@
+{
+  "type": "alchemia:infusion",
+  "central": {
+    "item": "alchemia:silverwood_planks"
+  },
+  "essentia": {
+    "alchemia:auram": 25,
+    "alchemia:desiderium": 25,
+    "alchemia:motus": 25,
+    "alchemia:potentia": 25
+  },
+  "instability": 5,
+  "research": "alchemia:aura_totem_pull",
+  "result": {
+    "count": 1,
+    "id": "alchemia:aura_totem_pull"
+  },
+  "ring": [
+    {
+      "item": "alchemia:greatwood_planks"
+    },
+    {
+      "item": "minecraft:chest"
+    },
+    {
+      "item": "alchemia:balanced_shard"
+    },
+    {
+      "item": "alchemia:salis_mundus"
+    },
+    {
+      "item": "alchemia:amber"
+    },
+    {
+      "item": "minecraft:carrot_on_a_stick"
+    },
+    {
+      "type": "neoforge:components",
+      "components": {
+        "alchemia:essentia": "alchemia:auram"
+      },
+      "items": "alchemia:crystallized_essence"
+    }
+  ]
+}

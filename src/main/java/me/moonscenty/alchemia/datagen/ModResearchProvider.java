@@ -262,6 +262,20 @@ public class ModResearchProvider {
                 AspectList.of(ModAspects.WATER, 6).add(ModAspects.EARTH, 3).add(ModAspects.CRAFT, 3),
                 List.of("crucible", "infusion"), false, NodeShape.PLAIN, 1, "water_jug");
 
+        // totems that move the aura about, and the pole that steadies them
+        entry(context, "aura_totem", ModResearch.ARCANA, ModBlocks.AURA_TOTEM_PUSH, 8, 1,
+                AspectList.of(ModAspects.AURA, 6).add(ModAspects.EXCHANGE, 3).add(ModAspects.WATER, 3)
+                        .add(ModAspects.AVERSION, 3),
+                List.of("infusion"), false, NodeShape.SPECIAL, 3,
+                "aura_totem_push", "aura_totem_pole_inner", "aura_totem_pole_outer");
+        entry(context, "aura_totem_pull", ModResearch.ARCANA, ModBlocks.AURA_TOTEM_PULL, 8, 0,
+                AspectList.of(ModAspects.AURA, 6).add(ModAspects.EXCHANGE, 3).add(ModAspects.WATER, 3)
+                        .add(ModAspects.DESIRE, 3),
+                List.of("aura_totem"), false, NodeShape.PLAIN, 3, "aura_totem_pull");
+        entry(context, "aura_totem_pole_pure", ModResearch.ARCANA, ModBlocks.AURA_TOTEM_POLE_PURE, 9, 1,
+                AspectList.of(ModAspects.AURA, 6).add(ModAspects.ORDER, 3).add(ModAspects.MOTION, 3),
+                List.of("aura_totem"), false, NodeShape.PLAIN, 2, "aura_totem_pole_pure");
+
         // a pedestal that fills a wand, and a device that shows the aura
         entry(context, "recharge_pedestal", ModResearch.ARCANA, ModBlocks.RECHARGE_PEDESTAL, 6, 1,
                 AspectList.of(ModAspects.AURA, 6).add(ModAspects.ENERGY, 6).add(ModAspects.EXCHANGE, 3),

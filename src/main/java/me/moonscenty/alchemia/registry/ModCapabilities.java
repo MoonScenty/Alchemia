@@ -29,12 +29,34 @@ public final class ModCapabilities {
         // a wand set on a recharge pedestal, or taken off it, by anyone's pipes as by a hopper
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, ModBlockEntities.RECHARGE_PEDESTAL.get(),
                 (pedestal, side) -> new net.neoforged.neoforge.items.wrapper.InvWrapper(pedestal));
+        // a totem takes shards from anyone's pipes, and so does any pole under it, for the totem
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, ModBlockEntities.AURA_TOTEM.get(),
+                (totem, side) -> new net.neoforged.neoforge.items.wrapper.InvWrapper(totem));
+        event.registerBlock(Capabilities.ItemHandler.BLOCK, (level, pos, state, found, side) -> {
+            net.minecraft.core.BlockPos head = me.moonscenty.alchemia.block.AuraTotemBlock.headOf(level, pos);
+            return head != null && level.getBlockEntity(head)
+                    instanceof me.moonscenty.alchemia.block.entity.AuraTotemBlockEntity totem
+                    ? new IntoTotem(totem) : null;
+        }, ModBlocks.AURA_TOTEM_POLE_INNER.get(), ModBlocks.AURA_TOTEM_POLE_OUTER.get(),
+                ModBlocks.AURA_TOTEM_POLE_PURE.get());
         // the spa's tank, and its pocket of salts, to anyone's pipes as to a bucket and a hopper
         event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, ModBlockEntities.SPA.get(),
                 (spa, side) -> spa.tank(side));
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, ModBlockEntities.SPA.get(),
                 (spa, side) -> side == null ? new net.neoforged.neoforge.items.wrapper.InvWrapper(spa)
                         : new net.neoforged.neoforge.items.wrapper.SidedInvWrapper(spa, side));
+    }
+
+    /** A totem as seen from a pole under it: shards go in, nothing comes out. */
+    private static final class IntoTotem extends net.neoforged.neoforge.items.wrapper.InvWrapper {
+        IntoTotem(net.minecraft.world.Container totem) {
+            super(totem);
+        }
+
+        @Override
+        public net.minecraft.world.item.ItemStack extractItem(int slot, int amount, boolean simulate) {
+            return net.minecraft.world.item.ItemStack.EMPTY;
+        }
     }
 
     /** A crucible as a tank of water that only fills. */

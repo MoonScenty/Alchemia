@@ -91,6 +91,11 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
         dropSelf(ModBlocks.SPA.get());
         dropSelf(ModBlocks.RECHARGE_PEDESTAL.get());
         dropSelf(ModBlocks.DIOPTRA.get());
+        dropSelf(ModBlocks.AURA_TOTEM_PUSH.get());
+        dropSelf(ModBlocks.AURA_TOTEM_PULL.get());
+        dropSelf(ModBlocks.AURA_TOTEM_POLE_INNER.get());
+        dropSelf(ModBlocks.AURA_TOTEM_POLE_OUTER.get());
+        dropSelf(ModBlocks.AURA_TOTEM_POLE_PURE.get());
         dropSelf(ModBlocks.ARCANE_WORKBENCH_CHARGER.get());
         dropSelf(ModBlocks.NODE_STABILIZER.get());
         dropSelf(ModBlocks.ARCANE_PEDESTAL.get());

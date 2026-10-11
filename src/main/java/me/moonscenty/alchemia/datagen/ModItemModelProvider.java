@@ -188,6 +188,11 @@ public class ModItemModelProvider extends ItemModelProvider {
         withExistingParent("fertility_lamp", modLoc("block/fertility_lamp_on"));
         getBuilder("water_jug").parent(new net.neoforged.neoforge.client.model.generators.ModelFile
                 .UncheckedModelFile(modLoc("block/legacy/water_jug")));
+        // the totems and poles in the hand are their blocks
+        for (String totem : new String[] {"aura_totem_push", "aura_totem_pull", "aura_totem_pole_inner",
+                "aura_totem_pole_outer", "aura_totem_pole_pure"}) {
+            withExistingParent(totem, modLoc("block/" + totem));
+        }
         // the recharge pedestal and the dioptra in the hand are their blocks, the dioptra lit
         getBuilder("recharge_pedestal").parent(new net.neoforged.neoforge.client.model.generators.ModelFile
                 .UncheckedModelFile(modLoc("block/legacy/recharge_pedestal")));

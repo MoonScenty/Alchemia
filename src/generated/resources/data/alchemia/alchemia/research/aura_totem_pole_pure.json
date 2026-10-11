@@ -1,0 +1,25 @@
+{
+  "category": "alchemia:arcana",
+  "column": 9,
+  "complexity": 2,
+  "icon": "alchemia:aura_totem_pole_pure",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.aura_totem_pole_pure.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:aura_totem_pole_pure"
+    }
+  ],
+  "parents": [
+    "alchemia:aura_totem"
+  ],
+  "requirements": {
+    "alchemia:auram": 6,
+    "alchemia:motus": 3,
+    "alchemia:ordo": 3
+  },
+  "row": 1
+}

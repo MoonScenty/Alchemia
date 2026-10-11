@@ -26,6 +26,11 @@ public class ModMenus {
                     () -> new MenuType<>(ArcaneWorkbenchMenu::new, FeatureFlags.VANILLA_SET));
 
     /** Carries the block's position across, since the screen reads what is dissolved off the block itself. */
+    /** Reads how long the shard has left off the readings. */
+    public static final DeferredHolder<MenuType<?>, MenuType<me.moonscenty.alchemia.menu.AuraTotemMenu>> AURA_TOTEM =
+            MENUS.register("aura_totem", () -> new MenuType<>(me.moonscenty.alchemia.menu.AuraTotemMenu::new,
+                    FeatureFlags.VANILLA_SET));
+
     /** Reads the tank off the readings, so needs nothing sent when it opens. */
     public static final DeferredHolder<MenuType<?>, MenuType<me.moonscenty.alchemia.menu.SpaMenu>> SPA =
             MENUS.register("spa", () -> new MenuType<>(me.moonscenty.alchemia.menu.SpaMenu::new,

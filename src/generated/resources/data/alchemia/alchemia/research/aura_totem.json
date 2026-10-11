@@ -1,0 +1,35 @@
+{
+  "category": "alchemia:arcana",
+  "column": 8,
+  "complexity": 3,
+  "icon": "alchemia:aura_totem_push",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.aura_totem.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:aura_totem_push"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:aura_totem_pole_inner"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:aura_totem_pole_outer"
+    }
+  ],
+  "parents": [
+    "alchemia:infusion"
+  ],
+  "requirements": {
+    "alchemia:aqua": 3,
+    "alchemia:auram": 6,
+    "alchemia:aversio": 3,
+    "alchemia:permutatio": 3
+  },
+  "row": 1,
+  "shape": "special"
+}

@@ -241,6 +241,31 @@ public class ModBlocks {
                     .mapColor(MapColor.COLOR_BLACK)
                     .noOcclusion()));
 
+    /** The two aura totems, which move vis between rings of chunks, and the three poles they stand on. */
+    public static final DeferredBlock<me.moonscenty.alchemia.block.AuraTotemBlock> AURA_TOTEM_PUSH =
+            register("aura_totem_push", () -> totem(me.moonscenty.alchemia.block.AuraTotemBlock.Kind.PUSH));
+    public static final DeferredBlock<me.moonscenty.alchemia.block.AuraTotemBlock> AURA_TOTEM_PULL =
+            register("aura_totem_pull", () -> totem(me.moonscenty.alchemia.block.AuraTotemBlock.Kind.PULL));
+    public static final DeferredBlock<me.moonscenty.alchemia.block.AuraTotemBlock> AURA_TOTEM_POLE_INNER =
+            register("aura_totem_pole_inner",
+                    () -> totem(me.moonscenty.alchemia.block.AuraTotemBlock.Kind.POLE_INNER));
+    public static final DeferredBlock<me.moonscenty.alchemia.block.AuraTotemBlock> AURA_TOTEM_POLE_OUTER =
+            register("aura_totem_pole_outer",
+                    () -> totem(me.moonscenty.alchemia.block.AuraTotemBlock.Kind.POLE_OUTER));
+    public static final DeferredBlock<me.moonscenty.alchemia.block.AuraTotemBlock> AURA_TOTEM_POLE_PURE =
+            register("aura_totem_pole_pure",
+                    () -> totem(me.moonscenty.alchemia.block.AuraTotemBlock.Kind.POLE_PURE));
+
+    /** Soft wood but hard to blow apart, as the original's. */
+    private static me.moonscenty.alchemia.block.AuraTotemBlock totem(
+            me.moonscenty.alchemia.block.AuraTotemBlock.Kind kind) {
+        return new me.moonscenty.alchemia.block.AuraTotemBlock(kind, BlockBehaviour.Properties.of()
+                .mapColor(MapColor.WOOD)
+                .sound(net.minecraft.world.level.block.SoundType.WOOD)
+                .strength(0.5F, 5.0F)
+                .noOcclusion());
+    }
+
     private static me.moonscenty.alchemia.block.LampBlock lamp(me.moonscenty.alchemia.block.LampBlock.Kind kind) {
         return new me.moonscenty.alchemia.block.LampBlock(kind, BlockBehaviour.Properties.of()
                 .mapColor(MapColor.METAL)

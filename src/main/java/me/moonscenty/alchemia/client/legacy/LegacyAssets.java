@@ -530,6 +530,17 @@ public final class LegacyAssets {
         }
         all.add(LegacyAsset.of("textures/entity/dioptra_grid.png").five("textures/misc/gridblock.png"));
         all.add(LegacyAsset.of("textures/entity/dioptra_side.png").five("textures/models/dioptra_side.png"));
+        // the totem and its pole are the original's model files; each kind is ours, built over them with its own
+        // face, as the original's block states did it
+        for (String model : List.of("aura_totem", "aura_totem_pole")) {
+            all.add(LegacyAsset.of("models/block/legacy/" + model + ".json").five("models/block/" + model + ".json")
+                    .asModel());
+        }
+        for (String face : List.of("aura_totem_push", "aura_totem_pull", "aura_totem_top", "aura_totem_pole_inner",
+                "aura_totem_pole_outer", "aura_totem_pole_pure")) {
+            all.add(LegacyAsset.of("textures/block/legacy/" + face + ".png").five("textures/blocks/" + face + ".png"));
+        }
+        all.add(LegacyAsset.of("textures/gui/aura_totem.png").five("textures/gui/gui_auratotem.png"));
         // the spa's faces and panel; the salts (which shimmer) and the bucket of what they make
         for (String face : List.of("spa_side", "spa_top")) {
             all.add(LegacyAsset.of("textures/block/legacy/" + face + ".png").five("textures/blocks/" + face + ".png"));

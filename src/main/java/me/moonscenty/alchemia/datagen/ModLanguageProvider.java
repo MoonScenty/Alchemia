@@ -567,6 +567,15 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                 {"water_jug", "Everfull Urn", "마르지 않는 항아리",
                  "A jug of baked clay that is never empty. Dip a bucket or a bottle in it and it comes away full. Left alone it tops up anything round it that holds water -- a crucible, a cauldron -- a quarter of a bucket every quarter of a second, and fills itself again from the aqua in the air.",
                  "구운 흙 항아리인데 비는 법이 없다. 양동이나 병을 담그면 가득 차서 나온다. 가만 두면 둘레의 물 담는 것 — 도가니, 가마솥 — 에 0.25초마다 양동이 4분의 1씩 물을 붓고, 공기 속 물 에센시아로 제 몸을 다시 채운다."},
+                {"aura_totem", "Basic Aura Manipulation", "기초 오라 조작",
+                 "It is high time the things you have learned about the aura were put to use. The Totem of Dispersal takes vis from round itself and spreads it over a wider area. Feed it vis shards: each burns for a while, and says what kind of vis it moves -- a balanced shard moves all six primals. Meddling with the aura is not without risk, and now and then what it moves turns to flux instead. A totem works on an inner area, alone its own chunk, and an outer one, alone the eight chunks round that; the totem of dispersal moves vis from the inner out to the outer. Up to five totem poles can stand under it. Each inner pole widens the inner area by a chunk all round, each outer pole the outer, and either makes it work a little faster -- and a little likelier to make flux. A dispersal totem with one inner and two outer poles draws from the three chunks by three about it and spreads into a ring three chunks wide beyond that.",
+                 "오라에 대해 알게 된 것을 쓸 때가 되었다. 흩어 놓는 오라 토템은 제 둘레의 비스를 가져다 더 넓은 곳에 펴 놓는다. 비스 조각을 먹이면 조각 하나가 한동안 타며 어떤 비스를 옮길지 정한다. 균형 잡힌 조각은 원시 여섯을 다 옮긴다. 오라를 건드리는 데는 위험이 따라서, 이따금 옮기던 것이 플럭스로 바뀐다. 토템은 안쪽 구역과 바깥 구역에서 일한다. 혼자일 때 안쪽은 제 청크, 바깥은 그 둘레 여덟 청크다. 흩어 놓는 토템은 안쪽에서 바깥으로 비스를 옮긴다. 토템 밑에는 토템 기둥을 다섯까지 세울 수 있다. 안쪽 기둥 하나마다 안쪽 구역이 사방으로 한 청크씩, 바깥쪽 기둥은 바깥 구역이 넓어지고, 어느 쪽이든 조금 빨라지는 대신 플럭스가 날 가능성도 조금 커진다. 안쪽 기둥 하나와 바깥쪽 기둥 둘을 세운 흩어 놓는 토템은 둘레 3×3 청크에서 끌어다 그 바깥 세 청크 너비의 고리에 편다."},
+                {"aura_totem_pull", "Aura Totem of Attraction", "끌어모으는 오라 토템",
+                 "The Totem of Attraction works much as the Totem of Dispersal does, but the other way: it draws vis in from the outer area and moves it into the inner.",
+                 "끌어모으는 오라 토템은 흩어 놓는 토템과 거의 같이 일하지만 방향이 반대다. 바깥 구역에서 비스를 끌어와 안쪽 구역으로 옮긴다."},
+                {"aura_totem_pole_pure", "Stabilizing Totem Pole", "안정시키는 토템 기둥",
+                 "A totem pole that steadies the totem it holds up, making it less likely to spoil what it moves into flux. It neither widens nor quickens anything.",
+                 "떠받친 토템을 안정시키는 토템 기둥이다. 옮기던 것이 플럭스로 상할 가능성을 줄인다. 구역을 넓히지도 빠르게 하지도 않는다."},
                 {"recharge_pedestal", "Recharge Pedestal", "재충전 받침대",
                  "Travelling the countryside to fill a wand is all very well, but a pedestal that does it for you is better. Set a wand on it and it draws vis from the aura of its chunk to fill it, as much as a wand held in the hand would, twice a second. Like a wand in the hand, it leaves alone any aura run down below a tenth of what it should be. A hopper can set a wand on it and take one off.",
                  "지팡이를 채우러 들판을 돌아다니는 것도 좋지만, 대신 해 주는 받침대가 더 낫다. 지팡이를 올려 두면 제 청크의 오라에서 비스를 끌어 채운다. 손에 든 지팡이만큼씩, 1초에 두 번이다. 손에 든 지팡이처럼, 원래의 10분의 1 밑으로 떨어진 오라는 건드리지 않는다. 깔때기로 지팡이를 올리고 내릴 수도 있다."},
@@ -791,6 +800,11 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("block.alchemia.arcane_ear", pick("Arcane Ear", "비전 귀"));
         add("block.alchemia.spa", pick("Arcane Spa", "비전 스파"));
         add("block.alchemia.recharge_pedestal", pick("Recharge Pedestal", "재충전 받침대"));
+        add("block.alchemia.aura_totem_push", pick("Aura Totem of Dispersal", "흩어 놓는 오라 토템"));
+        add("block.alchemia.aura_totem_pull", pick("Aura Totem of Attraction", "끌어모으는 오라 토템"));
+        add("block.alchemia.aura_totem_pole_inner", pick("Totem Pole Inner", "안쪽 토템 기둥"));
+        add("block.alchemia.aura_totem_pole_outer", pick("Totem Pole Outer", "바깥쪽 토템 기둥"));
+        add("block.alchemia.aura_totem_pole_pure", pick("Stabilizing Totem Pole", "안정시키는 토템 기둥"));
         add("block.alchemia.dioptra", pick("Thaumic Dioptra", "마법 디옵트라"));
         add("block.alchemia.dioptra.showing", pick("Showing %s levels in the aura", "오라의 %s 수준을 보여 준다"));
         add("block.alchemia.dioptra.strongest", pick("Showing highest aura levels", "가장 높은 오라 수준을 보여 준다"));

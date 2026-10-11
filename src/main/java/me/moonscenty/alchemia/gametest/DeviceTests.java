@@ -549,6 +549,84 @@ public class DeviceTests {
         helper.succeed();
     }
 
+    /** A totem counts the poles under it, five at most, and is quickened by the inner and outer ones. */
+    @GameTest(template = TEMPLATE)
+    public static void aTotemCountsItsPoles(GameTestHelper helper) {
+        BlockPos at = new BlockPos(3, 8, 3);
+        helper.setBlock(at.below(1), ModBlocks.AURA_TOTEM_POLE_INNER.get());
+        helper.setBlock(at.below(2), ModBlocks.AURA_TOTEM_POLE_OUTER.get());
+        helper.setBlock(at.below(3), ModBlocks.AURA_TOTEM_POLE_OUTER.get());
+        helper.setBlock(at.below(4), ModBlocks.AURA_TOTEM_POLE_PURE.get());
+        helper.setBlock(at.below(5), ModBlocks.AURA_TOTEM_POLE_INNER.get());
+        helper.setBlock(at.below(6), ModBlocks.AURA_TOTEM_POLE_INNER.get());
+        helper.setBlock(at, ModBlocks.AURA_TOTEM_PUSH.get());
+        var totem = (me.moonscenty.alchemia.block.entity.AuraTotemBlockEntity) helper.getBlockEntity(at);
+        totem.countPoles();
+        helper.assertValueEqual(totem.inner(), 2, "two inner poles in the first five");
+        helper.assertValueEqual(totem.outer(), 2, "two outer");
+        helper.assertValueEqual(totem.pure(), 1, "one stabilising, and the sixth not counted");
+        helper.assertValueEqual(totem.every(), 6, "a step every six ticks");
+        helper.succeed();
+    }
+
+    /** A shard put in through a pole lands in the totem above; nothing comes back out that way. */
+    @GameTest(template = TEMPLATE)
+    public static void aPoleFeedsItsTotem(GameTestHelper helper) {
+        BlockPos at = new BlockPos(3, 3, 3);
+        helper.setBlock(at.below(), ModBlocks.AURA_TOTEM_POLE_INNER.get());
+        helper.setBlock(at, ModBlocks.AURA_TOTEM_PULL.get());
+        var pole = helper.getLevel().getCapability(net.neoforged.neoforge.capabilities.Capabilities.ItemHandler.BLOCK,
+                helper.absolutePos(at.below()), Direction.NORTH);
+        helper.assertTrue(pole != null, "the pole takes things");
+        ItemStack left = pole.insertItem(0, new ItemStack(ModItems.BALANCED_SHARD.get(), 2), false);
+        helper.assertTrue(left.isEmpty(), "both shards went in");
+        var totem = (me.moonscenty.alchemia.block.entity.AuraTotemBlockEntity) helper.getBlockEntity(at);
+        helper.assertValueEqual(totem.getItem(0).getCount(), 2, "into the totem");
+        helper.assertTrue(pole.extractItem(0, 1, false).isEmpty(), "and none come out through the pole");
+        helper.assertTrue(pole.insertItem(0, new ItemStack(net.minecraft.world.item.Items.DIRT), false).getCount()
+                == 1, "and nothing but shards goes in");
+        helper.succeed();
+    }
+
+    /** A dispersal totem burns a shard and moves its aspect out of its own chunk. */
+    @GameTest(template = TEMPLATE)
+    public static void aDispersalTotemMovesVisOut(GameTestHelper helper) {
+        BlockPos at = new BlockPos(3, 2, 3);
+        aura(helper, at, 100, 0);
+        helper.setBlock(at, ModBlocks.AURA_TOTEM_PUSH.get());
+        var totem = (me.moonscenty.alchemia.block.entity.AuraTotemBlockEntity) helper.getBlockEntity(at);
+        totem.setItem(0, new ItemStack(ModItems.SHARDS.get(me.moonscenty.alchemia.block.CrystalType.AIR).get()));
+        BlockPos where = helper.absolutePos(at);
+        BlockState state = helper.getLevel().getBlockState(where);
+        for (int tick = 0; tick < 10 * 21; tick++) {
+            me.moonscenty.alchemia.block.entity.AuraTotemBlockEntity.tick(helper.getLevel(), where, state, totem);
+        }
+        helper.assertTrue(totem.getItem(0).isEmpty(), "the shard was burnt");
+        helper.assertValueEqual(totem.tuning(), 1, "tuned to aer");
+        helper.assertValueEqual(totem.time(), me.moonscenty.alchemia.block.entity.AuraTotemBlockEntity.LASTS - 20,
+                "twenty steps taken of it");
+        int left = me.moonscenty.alchemia.aura.AuraHandler.get(helper.getLevel(), where,
+                me.moonscenty.alchemia.registry.ModAspects.AIR);
+        helper.assertValueEqual(left, 80, "a point of aer gone from its chunk each step");
+        helper.succeed();
+    }
+
+    /** The totems take a crystal of auram where the original took a wisp's essence, and no other crystal. */
+    @GameTest(template = TEMPLATE)
+    public static void totemsTakeACrystalOfAuram(GameTestHelper helper) {
+        for (String name : new String[] {"aura_totem_push", "aura_totem_pull"}) {
+            var recipe = (InfusionRecipe) helper.getLevel().getRecipeManager().byKey(Alchemia.id(name))
+                    .orElseThrow().value();
+            var auram = me.moonscenty.alchemia.item.CrystallizedEssenceItem.of(
+                    me.moonscenty.alchemia.registry.ModAspects.AURA);
+            var aer = me.moonscenty.alchemia.item.CrystallizedEssenceItem.of(
+                    me.moonscenty.alchemia.registry.ModAspects.AIR);
+            helper.assertTrue(recipe.ring().stream().anyMatch(part -> part.test(auram)), name + " takes auram");
+            helper.assertFalse(recipe.ring().stream().anyMatch(part -> part.test(aer)), name + " but not aer");
+        }
+        helper.succeed();
+    }
+
     /** The autocaster is built round the original's made mind again, with the resonator in its ring. */
     @GameTest(template = TEMPLATE)
     public static void theAutocasterIsBuiltOfItsOwnParts(GameTestHelper helper) {

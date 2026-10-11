@@ -60,6 +60,27 @@ public class ModRecipeProvider extends RecipeProvider {
     /** How badly an altar takes to binding a primal into a tool, and to beating four tools into one. */
     private static final int ELEMENTAL_UNSTABLE = 1;
     private static final int CRUSHER_UNSTABLE = 6;
+    /** How badly an altar takes to an aura totem. The original's number. */
+    private static final int TOTEM_UNSTABLE = 5;
+
+    /** A crystal of auram, and only of auram. */
+    private static Ingredient auram() {
+        return net.neoforged.neoforge.common.crafting.DataComponentIngredient.of(false,
+                me.moonscenty.alchemia.registry.ModDataComponents.ESSENTIA,
+                (net.minecraft.core.Holder<me.moonscenty.alchemia.aspect.Aspect>) ModAspects.AURA,
+                ModItems.CRYSTALLIZED_ESSENCE);
+    }
+
+    /** A totem pole: silverwood above and below, greatwood banding it, a shard in the middle. */
+    private void pole(RecipeOutput output, String name, String research,
+            net.neoforged.neoforge.registries.DeferredBlock<?> pole, Ingredient shard, AspectList cost) {
+        arcane(output, name, research, new ItemStack(pole.get()), cost,
+                Map.of('N', shard,
+                        'W', Ingredient.of(ModBlocks.SILVERWOOD.planks()),
+                        'G', Ingredient.of(ModBlocks.GREATWOOD.planks())),
+                "WGW", "WNW", "WGW");
+    }
+
     /** How badly an altar takes to the recharge pedestal. The original's number. */
     private static final int PEDESTAL_UNSTABLE = 3;
     /** How badly an altar takes to the two working lamps, and to the jug. The original's numbers. */
@@ -410,6 +431,18 @@ public class ModRecipeProvider extends RecipeProvider {
                         'R', Ingredient.of(Items.REDSTONE)),
                 "PBP", " P ", "WRW");
 
+        // the totem poles: silverwood banded with greatwood round a shard -- earth for the inner, air for the outer,
+        // and balance for the stabilising one
+        pole(output, "aura_totem_pole_inner", "aura_totem", ModBlocks.AURA_TOTEM_POLE_INNER,
+                Ingredient.of(ModItems.SHARDS.get(CrystalType.EARTH)),
+                AspectList.of(ModAspects.AIR, 50).add(ModAspects.EARTH, 125).add(ModAspects.ORDER, 75));
+        pole(output, "aura_totem_pole_outer", "aura_totem", ModBlocks.AURA_TOTEM_POLE_OUTER,
+                Ingredient.of(ModItems.SHARDS.get(CrystalType.AIR)),
+                AspectList.of(ModAspects.AIR, 125).add(ModAspects.EARTH, 50).add(ModAspects.ORDER, 125));
+        pole(output, "aura_totem_pole_pure", "aura_totem_pole_pure", ModBlocks.AURA_TOTEM_POLE_PURE,
+                Ingredient.of(ModItems.BALANCED_SHARD),
+                AspectList.of(ModAspects.AIR, 125).add(ModAspects.EARTH, 125).add(ModAspects.ORDER, 250));
+
         // the dioptra: a pair of goggles looking up through arcane stone, a slab of it for the crystal to sit in
         arcane(output, "dioptra", "dioptra", new ItemStack(ModBlocks.DIOPTRA.get()),
                 AspectList.of(ModAspects.AIR, 25).add(ModAspects.EARTH, 25).add(ModAspects.ORDER, 25),
@@ -699,6 +732,24 @@ public class ModRecipeProvider extends RecipeProvider {
                 new ItemStack(ModItems.BIOTHAUMIC_MIND.get()),
                 AspectList.of(ModAspects.MIND, 16).add(ModAspects.MECHANISM, 16), BIOTHAUMIC_UNSTABLE,
                 "biothaumic_mind");
+
+        // the totems: a block of silverwood worked on with greatwood, a chest, a balanced shard and salis mundus, and
+        // a crystal of auram where the original had a wisp's essence -- with amber and a lure to draw vis in, or
+        // quicksilver and a piston to push it out
+        infusion(output, "aura_totem_pull", Ingredient.of(ModBlocks.SILVERWOOD.planks()),
+                List.of(Ingredient.of(ModBlocks.GREATWOOD.planks()), Ingredient.of(Items.CHEST),
+                        Ingredient.of(ModItems.BALANCED_SHARD), Ingredient.of(ModItems.SALIS_MUNDUS),
+                        Ingredient.of(ModItems.AMBER), Ingredient.of(Items.CARROT_ON_A_STICK), auram()),
+                new ItemStack(ModBlocks.AURA_TOTEM_PULL.get()),
+                AspectList.of(ModAspects.ENERGY, 25).add(ModAspects.AURA, 25).add(ModAspects.MOTION, 25)
+                        .add(ModAspects.DESIRE, 25), TOTEM_UNSTABLE, "aura_totem_pull");
+        infusion(output, "aura_totem_push", Ingredient.of(ModBlocks.SILVERWOOD.planks()),
+                List.of(Ingredient.of(ModBlocks.GREATWOOD.planks()), Ingredient.of(Items.CHEST),
+                        Ingredient.of(ModItems.BALANCED_SHARD), Ingredient.of(ModItems.SALIS_MUNDUS),
+                        Ingredient.of(ModItems.QUICKSILVER), Ingredient.of(Items.PISTON), auram()),
+                new ItemStack(ModBlocks.AURA_TOTEM_PUSH.get()),
+                AspectList.of(ModAspects.ENERGY, 25).add(ModAspects.AURA, 25).add(ModAspects.MOTION, 25)
+                        .add(ModAspects.AVERSION, 25), TOTEM_UNSTABLE, "aura_totem");
 
         // the recharge pedestal: a pedestal worked on with gold, diamonds and a primal charm
         infusion(output, "recharge_pedestal", Ingredient.of(ModBlocks.ARCANE_PEDESTAL),
