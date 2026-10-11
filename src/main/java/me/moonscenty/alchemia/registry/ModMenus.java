@@ -2,6 +2,7 @@ package me.moonscenty.alchemia.registry;
 
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.menu.ArcaneWorkbenchMenu;
+import me.moonscenty.alchemia.menu.AutocasterMenu;
 import me.moonscenty.alchemia.menu.EssentiaSmelterMenu;
 import me.moonscenty.alchemia.menu.FocusPouchMenu;
 import me.moonscenty.alchemia.menu.ResearchTableMenu;
@@ -33,6 +34,11 @@ public class ModMenus {
     public static final DeferredHolder<MenuType<?>, MenuType<FocusPouchMenu>> FOCUS_POUCH =
             MENUS.register("focus_pouch",
                     () -> IMenuTypeExtension.create(FocusPouchMenu::new));
+
+    /** Carries which turret was opened, since a turret is an entity and not a place. */
+    public static final DeferredHolder<MenuType<?>, MenuType<AutocasterMenu>> AUTOCASTER =
+            MENUS.register("autocaster",
+                    () -> IMenuTypeExtension.create(AutocasterMenu::new));
 
     private ModMenus() {
     }

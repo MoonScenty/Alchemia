@@ -1,0 +1,42 @@
+{
+  "type": "alchemia:infusion",
+  "central": {
+    "item": "minecraft:comparator"
+  },
+  "essentia": {
+    "alchemia:auram": 16,
+    "alchemia:aversio": 16,
+    "alchemia:cognitio": 16,
+    "alchemia:machina": 32,
+    "alchemia:sensus": 16
+  },
+  "instability": 5,
+  "research": "alchemia:autocaster",
+  "result": {
+    "count": 1,
+    "id": "alchemia:autocaster"
+  },
+  "ring": [
+    {
+      "item": "alchemia:balanced_shard"
+    },
+    {
+      "item": "minecraft:glass_pane"
+    },
+    {
+      "item": "alchemia:greatwood_planks"
+    },
+    {
+      "item": "alchemia:greatwood_planks"
+    },
+    {
+      "item": "alchemia:brass_gear"
+    },
+    {
+      "item": "alchemia:brass_plate"
+    },
+    {
+      "item": "alchemia:wand"
+    }
+  ]
+}

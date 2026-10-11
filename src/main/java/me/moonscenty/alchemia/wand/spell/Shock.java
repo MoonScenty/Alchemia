@@ -6,7 +6,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -33,7 +32,7 @@ public final class Shock {
     private Shock() {
     }
 
-    public static boolean cast(ServerLevel level, Player caster, ItemStack wand, HitResult aim, int heldFor) {
+    public static boolean cast(ServerLevel level, LivingEntity caster, ItemStack wand, HitResult aim, int heldFor) {
         if (!(aim instanceof EntityHitResult struck) || !(struck.getEntity() instanceof LivingEntity hit)) {
             return false;
         }

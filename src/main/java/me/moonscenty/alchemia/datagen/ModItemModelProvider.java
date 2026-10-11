@@ -173,6 +173,8 @@ public class ModItemModelProvider extends ItemModelProvider {
             }
         }
         basicItem(ModItems.FOCUS_POUCH.get());
+        withExistingParent("autocaster", mcLoc("item/generated"))
+                .texture("layer0", modLoc("item/legacy/autocaster"));
 
         // one picture apiece, all drawn as one set by tools/gen_foci.py
         ModItems.FOCI.keySet().forEach(name -> withExistingParent("focus_" + name, mcLoc("item/generated"))

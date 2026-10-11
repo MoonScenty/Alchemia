@@ -7,6 +7,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
@@ -33,7 +34,10 @@ public final class Hole {
     private Hole() {
     }
 
-    public static boolean cast(ServerLevel level, Player caster, ItemStack wand, HitResult aim, int heldFor) {
+    public static boolean cast(ServerLevel level, LivingEntity who, ItemStack wand, HitResult aim, int heldFor) {
+        if (!(who instanceof Player caster)) {
+            return false;
+        }
         if (!(aim instanceof BlockHitResult struck) || aim.getType() != HitResult.Type.BLOCK) {
             return false;
         }

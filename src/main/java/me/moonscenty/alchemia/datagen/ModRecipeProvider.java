@@ -57,6 +57,9 @@ public class ModRecipeProvider extends RecipeProvider {
     private static final int HELM_GOGGLES_UNSTABLE = 5;
     /** And to beating a face onto one, which it likes a good deal less. The original's number. */
     private static final int MASK_UNSTABLE = 8;
+    /** How badly an altar takes to giving a focus a mind of its own. The original's number. */
+    private static final int AUTOCASTER_UNSTABLE = 5;
+
     public ModRecipeProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         super(output, registries);
     }
@@ -570,6 +573,19 @@ public class ModRecipeProvider extends RecipeProvider {
                 List.of(Ingredient.of(Items.RED_DYE), Ingredient.of(Items.GHAST_TEAR),
                         Ingredient.of(Items.MILK_BUCKET)),
                 AspectList.of(ModAspects.UNDEAD, 64).add(ModAspects.LIFE, 64).add(ModAspects.PROTECT, 16));
+
+        // the autocaster. The original's ring was seven things round a made mind; two of the seven are
+        // components this mod has not reached yet, so the nearest things stand in for them -- a comparator
+        // for the thinking part of the mechanism, and a pane of glass for the resonator's lens
+        infusion(output, "autocaster", Ingredient.of(Items.COMPARATOR),
+                List.of(Ingredient.of(ModItems.BALANCED_SHARD), Ingredient.of(Items.GLASS_PANE),
+                        Ingredient.of(ModBlocks.GREATWOOD.planks()), Ingredient.of(ModBlocks.GREATWOOD.planks()),
+                        Ingredient.of(ModItems.BRASS_GEAR), Ingredient.of(ModItems.BRASS_PLATE),
+                        Ingredient.of(ModItems.WAND)),
+                new ItemStack(ModItems.AUTOCASTER.get()),
+                AspectList.of(ModAspects.AURA, 16).add(ModAspects.MECHANISM, 32).add(ModAspects.MIND, 16)
+                        .add(ModAspects.SENSES, 16).add(ModAspects.AVERSION, 16),
+                AUTOCASTER_UNSTABLE, "autocaster");
 
         // the two caps a workbench can only cast. Salis mundus round them, and the altar does the rest
         infusion(output, "wand_cap_alchemium", Ingredient.of(ModItems.INERT_CAPS.get("alchemium")),

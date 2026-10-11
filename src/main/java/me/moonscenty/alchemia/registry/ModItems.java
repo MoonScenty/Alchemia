@@ -101,6 +101,10 @@ public class ModItems {
     public static final DeferredItem<FocusPouchItem> FOCUS_POUCH = ITEMS.register("focus_pouch",
             () -> new FocusPouchItem(new Item.Properties()));
 
+    /** A turret folded up: a focus, a bracket and enough mind to point one at something. */
+    public static final DeferredItem<Item> AUTOCASTER = ITEMS.register("autocaster",
+            () -> new me.moonscenty.alchemia.item.AutocasterItem(new Item.Properties().stacksTo(1)));
+
     public static final Map<CrystalType, DeferredItem<Item>> SHARDS = registerShards();
     public static final DeferredItem<Item> BALANCED_SHARD = ITEMS.registerSimpleItem("balanced_shard");
 
@@ -224,12 +228,12 @@ public class ModItems {
         Map<String, Supplier<Focus>> kinds = new java.util.LinkedHashMap<>();
         // held down rather than let off, and charged for every tick of it
         kinds.put("fire", () -> Focus.of(0xE55104, AspectList.of(ModAspects.FIRE, 2))
-                .heldDown().inTurrets().casts(Thrown::fire));
+                .heldDown().inTurrets(12.0F, 0.0F).casts(Thrown::fire));
         kinds.put("frost", () -> Focus.of(0x4F69CC, AspectList.of(ModAspects.WATER, 2)
                 .add(ModAspects.FIRE, 1).add(ModAspects.ENTROPY, 2))
-                .cooldown(200).inTurrets().casts(Thrown::frost));
+                .cooldown(200).inTurrets(32.0F, 15.0F).casts(Thrown::frost));
         kinds.put("shock", () -> Focus.of(0x9FB3BF, AspectList.of(ModAspects.AIR, 8))
-                .cooldown(250).inTurrets().casts(Shock::cast));
+                .cooldown(250).inTurrets(20.0F, 0.0F).casts(Shock::cast));
         // a penny a block, for as long as the button is down
         kinds.put("excavation", () -> Focus.of(0x064006, AspectList.of(ModAspects.EARTH, 1))
                 .heldDown().casts(Excavation::cast));
@@ -239,7 +243,7 @@ public class ModItems {
                 .add(ModAspects.ENTROPY, 5).add(ModAspects.AIR, 5)).cooldown(1000).inTurrets());
         kinds.put("pech", () -> Focus.of(0x229944, AspectList.of(ModAspects.EARTH, 2)
                 .add(ModAspects.ENTROPY, 2).add(ModAspects.WATER, 2))
-                .cooldown(250).inTurrets().casts(Thrown::pech));
+                .cooldown(250).inTurrets(32.0F, 12.0F).casts(Thrown::pech));
         // the dearest of them by a long way, and the only one that takes a wall out of the world
         kinds.put("hole", () -> Focus.of(0x091429, AspectList.of(ModAspects.ENTROPY, 25)
                 .add(ModAspects.AIR, 25).add(ModAspects.EARTH, 25)).casts(Hole::cast));

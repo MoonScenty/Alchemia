@@ -3,6 +3,7 @@ package me.moonscenty.alchemia.registry;
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.aura.TaintCloud;
 import me.moonscenty.alchemia.aura.node.AuraNode;
+import me.moonscenty.alchemia.entity.Autocaster;
 import me.moonscenty.alchemia.wand.spell.Ember;
 import me.moonscenty.alchemia.wand.spell.FrostShard;
 import me.moonscenty.alchemia.wand.spell.Grapple;
@@ -12,6 +13,7 @@ import me.moonscenty.alchemia.wand.spell.PechBlast;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
+import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -106,6 +108,24 @@ public class ModEntities {
                     .updateInterval(4)
                     .noSummon()
                     .build("primal_orb"));
+
+    /**
+     * A focus on a bracket. It is a mob rather than a block because the original let one hang off any face, and a
+     * block that can be put on six faces and still turn its head is a block fighting the game.
+     */
+    public static final DeferredHolder<EntityType<?>, EntityType<Autocaster>> AUTOCASTER =
+            ENTITIES.register("autocaster", () -> EntityType.Builder
+                    .<Autocaster>of(Autocaster::new, MobCategory.MISC)
+                    .sized(0.9F, 0.9F)
+                    .eyeHeight(0.45F)
+                    .clientTrackingRange(10)
+                    .noSummon()
+                    .build("autocaster"));
+
+    /** What anything alive needs before the game will make one. */
+    public static void attributes(EntityAttributeCreationEvent event) {
+        event.put(AUTOCASTER.get(), Autocaster.attributes().build());
+    }
 
     private ModEntities() {
     }

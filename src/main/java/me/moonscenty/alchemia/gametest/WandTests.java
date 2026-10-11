@@ -152,12 +152,12 @@ public class WandTests {
         Focus fire = ModItems.FOCI.get("fire").get().focus();
         helper.assertValueEqual(fire.cost().get(ModAspects.FIRE), 2, "fire asks two fire");
         helper.assertTrue(fire.perTick(), "fire is charged by the tick");
-        helper.assertTrue(fire.turret(), "an autocaster will take fire");
+        helper.assertTrue(fire.turret() != null, "an autocaster will take fire");
 
         Focus hole = ModItems.FOCI.get("hole").get().focus();
         helper.assertValueEqual(hole.cost().get(ModAspects.EARTH), 25, "a hole asks twenty-five earth");
         helper.assertTrue(!hole.perTick(), "a hole is charged once");
-        helper.assertTrue(!hole.turret(), "no autocaster takes a hole");
+        helper.assertTrue(hole.turret() == null, "no autocaster takes a hole");
 
         Focus primal = ModItems.FOCI.get("primal").get().focus();
         helper.assertValueEqual(primal.cost().size(), 6, "primal asks all six");

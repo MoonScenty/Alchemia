@@ -183,6 +183,7 @@ public class AlchemiaClientSetup {
         event.register(ModMenus.ARCANE_WORKBENCH.get(), ArcaneWorkbenchScreen::new);
         event.register(ModMenus.ESSENTIA_SMELTER.get(), EssentiaSmelterScreen::new);
         event.register(ModMenus.FOCUS_POUCH.get(), FocusPouchScreen::new);
+        event.register(ModMenus.AUTOCASTER.get(), AutocasterScreen::new);
     }
 
     /**
@@ -247,6 +248,7 @@ public class AlchemiaClientSetup {
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerBlockEntityRenderer(ModBlockEntities.RESEARCH_TABLE.get(), ResearchTableRenderer::new);
         event.registerEntityRenderer(ModEntities.AURA_NODE.get(), AuraNodeRenderer::new);
+        event.registerEntityRenderer(ModEntities.AUTOCASTER.get(), AutocasterRenderer::new);
         // a cloud is all particles, so there is nothing to draw for the entity itself
         event.registerEntityRenderer(ModEntities.TAINT_CLOUD.get(), NoopRenderer::new);
         // both of these are a trail of particles and nothing else, as the thing they came from was

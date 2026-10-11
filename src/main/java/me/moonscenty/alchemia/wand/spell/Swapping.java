@@ -17,6 +17,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
@@ -52,7 +53,10 @@ public final class Swapping {
      * to a wall lays a stub; standing back lays a bridge. It is the only measure that needs no explaining while
      * somebody is holding the wand.
      */
-    public static boolean builder(ServerLevel level, Player caster, ItemStack wand, HitResult aim, int heldFor) {
+    public static boolean builder(ServerLevel level, LivingEntity who, ItemStack wand, HitResult aim, int heldFor) {
+        if (!(who instanceof Player caster)) {
+            return false;
+        }
         if (!(aim instanceof BlockHitResult struck) || aim.getType() != HitResult.Type.BLOCK) {
             return false;
         }
@@ -81,7 +85,10 @@ public final class Swapping {
      * It spreads rather than filling a box: a vein of ore turns to stone and the stone around it is left alone.
      * Three steps, as the original had it.
      */
-    public static boolean trade(ServerLevel level, Player caster, ItemStack wand, HitResult aim, int heldFor) {
+    public static boolean trade(ServerLevel level, LivingEntity who, ItemStack wand, HitResult aim, int heldFor) {
+        if (!(who instanceof Player caster)) {
+            return false;
+        }
         if (!(aim instanceof BlockHitResult struck) || aim.getType() != HitResult.Type.BLOCK) {
             return false;
         }

@@ -202,6 +202,13 @@ public class ModResearchProvider {
                 "wand_rod_obsidian", "wand_rod_ice", "wand_rod_quartz", "wand_rod_reed",
                 "wand_rod_blaze", "wand_rod_bone", "wand_rod_silverwood");
 
+        // a focus with a bracket and just enough mind to aim itself. The original filed it under golemancy,
+        // which is where everything that works while nobody is holding it belongs
+        entry(context, "autocaster", ModResearch.GOLEMANCY, ModItems.AUTOCASTER, 0, 0,
+                AspectList.of(ModAspects.MECHANISM, 3).add(ModAspects.AVERSION, 3).add(ModAspects.SENSES, 3)
+                        .add(ModAspects.MIND, 3).add(ModAspects.AURA, 3),
+                List.of("infusion", "wand"), false, NodeShape.MAJOR, 2, "autocaster");
+
         entry(context, "arcane_stone", ModResearch.ARTIFICE, ModBlocks.ARCANE_STONE.block(), 3, 2,
                 AspectList.of(ModAspects.EARTH, 4).add(ModAspects.AURA, 2).add(ModAspects.CRYSTAL, 2),
                 List.of("arcane_workbench"), false, NodeShape.PLAIN, 2, "arcane_stone",

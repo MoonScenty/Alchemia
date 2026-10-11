@@ -4,7 +4,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ThrowableProjectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.EntityHitResult;
@@ -37,7 +36,7 @@ public final class Thrown {
      * They go out in a cone rather than a line, which is what makes this a doorway-filler rather than a sniper's
      * focus. Fifteen degrees of scatter, as the original had it.
      */
-    public static boolean fire(ServerLevel level, Player caster, ItemStack wand, HitResult aim, int heldFor) {
+    public static boolean fire(ServerLevel level, LivingEntity caster, ItemStack wand, HitResult aim, int heldFor) {
         for (int mote = 0; mote < MOTES; mote++) {
             Ember ember = new Ember(level, caster);
             ember.shootFromRotation(caster, caster.getXRot(), caster.getYRot(), 0.0F, FLIES, SCATTERS);
@@ -51,7 +50,7 @@ public final class Thrown {
     }
 
     /** One spike of ice, aimed. */
-    public static boolean frost(ServerLevel level, Player caster, ItemStack wand, HitResult aim, int heldFor) {
+    public static boolean frost(ServerLevel level, LivingEntity caster, ItemStack wand, HitResult aim, int heldFor) {
         return let(level, caster, new FrostShard(level, caster), 1.4F);
     }
 
@@ -61,7 +60,7 @@ public final class Thrown {
      * It will not go off at all without a mark. That is the whole of what makes it cheap: a focus that cannot
      * miss is a focus that has to be given something to not miss.
      */
-    public static boolean visShard(ServerLevel level, Player caster, ItemStack wand, HitResult aim, int heldFor) {
+    public static boolean visShard(ServerLevel level, LivingEntity caster, ItemStack wand, HitResult aim, int heldFor) {
         if (!(aim instanceof EntityHitResult struck) || !(struck.getEntity() instanceof LivingEntity mark)) {
             return false;
         }
@@ -69,24 +68,24 @@ public final class Thrown {
     }
 
     /** All six primals wound into a ball, and a hole where it lands. */
-    public static boolean primal(ServerLevel level, Player caster, ItemStack wand, HitResult aim, int heldFor) {
+    public static boolean primal(ServerLevel level, LivingEntity caster, ItemStack wand, HitResult aim, int heldFor) {
         return let(level, caster, new PrimalOrb(level, caster), 0.8F);
     }
 
     /** A pech's curse, thrown at nothing in particular. */
-    public static boolean pech(ServerLevel level, Player caster, ItemStack wand, HitResult aim, int heldFor) {
+    public static boolean pech(ServerLevel level, LivingEntity caster, ItemStack wand, HitResult aim, int heldFor) {
         PechBlast blast = new PechBlast(level, caster);
         return let(level, caster, blast, 1.2F);
     }
 
     /** A hook, thrown at a wall. */
-    public static boolean grapple(ServerLevel level, Player caster, ItemStack wand, HitResult aim, int heldFor) {
+    public static boolean grapple(ServerLevel level, LivingEntity caster, ItemStack wand, HitResult aim, int heldFor) {
         Grapple hook = new Grapple(level, caster);
         return let(level, caster, hook, 0.9F);
     }
 
     /** Sends it off along the line of sight and says that something happened, because it did. */
-    private static boolean let(ServerLevel level, Player caster, ThrowableProjectile thrown, float pitch) {
+    private static boolean let(ServerLevel level, LivingEntity caster, ThrowableProjectile thrown, float pitch) {
         thrown.shootFromRotation(caster, caster.getXRot(), caster.getYRot(), 0.0F, FLIES, TRUE);
         level.addFreshEntity(thrown);
         level.playSound(null, caster.getX(), caster.getY(), caster.getZ(),

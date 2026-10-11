@@ -59,6 +59,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         addItem(ModItems.ENCHANTED_FABRIC, pick("Enchanted Fabric", "마법 천"));
         robes();
         add("item.alchemia.focus_pouch.holding", pick("Holding %s of %s", "%s / %s 들었음"));
+        autocaster();
 
         String[][] foci = {
                 {"fire", "Fire", "불꽃"},
@@ -78,6 +79,20 @@ public abstract class ModLanguageProvider extends LanguageProvider {
             add("item.alchemia.focus_" + focus[0],
                     pick("Wand Focus: " + focus[1], "완드 포커스: " + focus[2]));
         }
+    }
+
+    /** The turret, the four things it may be told to mind, and what it says when it is somebody else's. */
+    private void autocaster() {
+        addItem(ModItems.AUTOCASTER, pick("Autocaster", "자동 시전기"));
+        addEntityType(me.moonscenty.alchemia.registry.ModEntities.AUTOCASTER, pick("Autocaster", "자동 시전기"));
+        add("item.alchemia.autocaster.note",
+                pick("Fires a fitted focus on its own", "끼운 포커스를 혼자 쏜다"));
+        add("entity.alchemia.autocaster.not_yours", pick("Not yours", "남의 것이다"));
+        add("gui.alchemia.autocaster.range", pick("Range %s blocks", "사거리 %s칸"));
+        add("gui.alchemia.autocaster.minds.0", pick("Target Animals", "동물을 노림"));
+        add("gui.alchemia.autocaster.minds.1", pick("Target Mobs", "몹을 노림"));
+        add("gui.alchemia.autocaster.minds.2", pick("Target Players", "플레이어를 노림"));
+        add("gui.alchemia.autocaster.minds.3", pick("Target Friendly", "아군을 노림"));
     }
 
     /**
@@ -434,6 +449,9 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                 {"void_robes", "Void Robes", "공허 로브",
                  "A suit of void metal taken apart on the altar and sewn back onto cloth. It stops what the metal stopped and comes apart as fast as the metal did, and in exchange it takes five parts in a hundred off every price, at each of its three pieces. This one has a hood and no boots -- the metal never made a good shoe, and the robe never made a good helm until there was metal to line it with.",
                  "공허 금속 한 벌을 제단에서 뜯어 천에 다시 꿰맨 것이다. 금속이 막던 만큼 막고 금속이 부서지던 만큼 빨리 부서지며, 그 대신 세 점이 저마다 모든 값에서 백분의 오를 깎는다. 이쪽은 두건이 있고 신이 없다. 그 금속으로는 쓸 만한 신이 나온 적이 없고, 천으로는 안을 댈 금속이 생기기 전까지 쓸 만한 투구가 나온 적이 없다."},
+                {"autocaster", "Autocaster", "자동 시전기",
+                 "A focus on a bracket, with enough of a mind in it to pick something and point itself at it. It is not a thaumaturge: it draws its own vis out of the air a drop at a time, holds a hundred of each primal at most, and nothing worn or carried makes a working any cheaper for it. Seven of the twelve foci are worth aiming at a thing, and those are the seven it will take. It goes against any face -- floor, wall or ceiling -- and it is told what to mind: animals, monsters, people, and whatever is already yours. A wand clicked against it takes it back down, focus and all.",
+                 "받침대에 얹은 포커스다. 무엇을 고르고 그쪽으로 제 몸을 돌릴 만큼의 생각이 들어 있다. 마법사는 아니다. 제 비스를 공기에서 한 방울씩 길어 올리고, 원시마다 백까지만 담으며, 무엇을 걸쳤든 들었든 값이 싸지는 일은 없다. 열둘 중 일곱만이 무언가를 겨눌 값어치가 있고, 받아 주는 것도 그 일곱이다. 바닥이든 벽이든 천장이든 어느 면에나 붙으며, 무엇을 노릴지 일러 줄 수 있다 — 동물, 몹, 사람, 그리고 이미 제 편인 것. 완드로 치면 포커스째 도로 떼어 낸다."},
                 {"warp", "Warp", "뒤틀림",
                  "Look too long into what should not be, and it begins looking back. The damage is not to the world but to the one studying it, and it does not undo itself with rest.",
                  "있어서는 안 될 것을 오래 들여다보면, 그것도 당신을 들여다보기 시작한다. 상하는 것은 세계가 아니라 그것을 연구하는 자이며, 쉰다고 해서 되돌아오지 않는다."},

@@ -65,6 +65,9 @@ public final class LegacyAssets {
     /** The wand: a rod, a cap at either end, and room for a sceptre's crossbar and a focus. */
     public static final String WAND_MESH = "models/legacy/wand.obj";
 
+    /** The autocaster: its bracket, the ball that aims and the focus inside, which the original kept as one OBJ. */
+    public static final String TURRET_MESH = "models/legacy/turret.obj";
+
     /** The alembic, from Thaumcraft 4: its pot, panel, legs and the two tubes it can stand on. */
     public static final String ALEMBIC_MESH = "models/legacy/alembic.obj";
 
@@ -332,6 +335,12 @@ public final class LegacyAssets {
         all.add(LegacyAsset.of("textures/item/legacy/vis_relay.png").five("textures/models/vis_relay.png"));
         // the wand itself, built on the original's mesh from the rod and cap pictures above
         all.add(LegacyAsset.of(WAND_MESH).five("models/obj/wand.obj"));
+
+        // the autocaster: the original's mesh, its sheet, the panel it opens as, and its picture in a hand
+        all.add(LegacyAsset.of(TURRET_MESH).five("models/obj/turret.obj"));
+        all.add(LegacyAsset.of("textures/entity/autocaster.png").five("textures/models/focus_turret.png"));
+        all.add(LegacyAsset.of("textures/gui/autocaster.png").five("textures/gui/gui_turret_focus.png"));
+        all.add(LegacyAsset.of("textures/item/legacy/autocaster.png").five("textures/items/turret_focus.png"));
     }
 
     /**

@@ -1,0 +1,29 @@
+{
+  "category": "alchemia:golemancy",
+  "column": 0,
+  "complexity": 2,
+  "icon": "alchemia:autocaster",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.autocaster.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:autocaster"
+    }
+  ],
+  "parents": [
+    "alchemia:infusion",
+    "alchemia:wand"
+  ],
+  "requirements": {
+    "alchemia:auram": 3,
+    "alchemia:aversio": 3,
+    "alchemia:cognitio": 3,
+    "alchemia:machina": 3,
+    "alchemia:sensus": 3
+  },
+  "row": 0,
+  "shape": "major"
+}

@@ -5,6 +5,7 @@ import me.moonscenty.alchemia.item.VisHolder;
 import me.moonscenty.alchemia.item.WandItem;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.ItemStack;
@@ -90,7 +91,7 @@ public final class Casting {
      * An entity wins over the block behind it, which is what anybody pointing a wand at a zombie standing against
      * a wall means by it.
      */
-    public static HitResult aim(Player caster) {
+    public static HitResult aim(LivingEntity caster) {
         Vec3 eye = caster.getEyePosition();
         Vec3 along = caster.getViewVector(1.0F).scale(REACH);
         Vec3 far = eye.add(along);

@@ -58,6 +58,7 @@ public class Alchemia {
         ModAuraAttachment.ATTACHMENTS.register(modEventBus);
         ModEffects.EFFECTS.register(modEventBus);
         modEventBus.addListener(this::commonSetup);
+        modEventBus.addListener(ModEntities::attributes);
 
         modContainer.registerConfig(ModConfig.Type.COMMON, AlchemiaConfig.COMMON_SPEC);
         modContainer.registerConfig(ModConfig.Type.CLIENT, AlchemiaConfig.CLIENT_SPEC);
