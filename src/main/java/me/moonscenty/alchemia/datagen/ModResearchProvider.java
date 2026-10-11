@@ -262,6 +262,15 @@ public class ModResearchProvider {
                 AspectList.of(ModAspects.WATER, 6).add(ModAspects.EARTH, 3).add(ModAspects.CRAFT, 3),
                 List.of("crucible", "infusion"), false, NodeShape.PLAIN, 1, "water_jug");
 
+        // a pedestal that fills a wand, and a device that shows the aura
+        entry(context, "recharge_pedestal", ModResearch.ARCANA, ModBlocks.RECHARGE_PEDESTAL, 6, 1,
+                AspectList.of(ModAspects.AURA, 6).add(ModAspects.ENERGY, 6).add(ModAspects.EXCHANGE, 3),
+                List.of("infusion", "charger"), false, NodeShape.PLAIN, 2, "recharge_pedestal");
+        entry(context, "dioptra", ModResearch.ARTIFICE, ModBlocks.DIOPTRA, 6, 1,
+                AspectList.of(ModAspects.SENSES, 3).add(ModAspects.AURA, 3).add(ModAspects.ENERGY, 3)
+                        .add(ModAspects.EARTH, 3),
+                List.of("goggles"), false, NodeShape.PLAIN, 2, "dioptra");
+
         // salts against warp, and a machine to make a bath of them
         entry(context, "bath_salts", ModResearch.ALCHEMY, ModItems.BATH_SALTS, -1, 1,
                 AspectList.of(ModAspects.MIND, 3).add(ModAspects.AURA, 3).add(ModAspects.ORDER, 3)

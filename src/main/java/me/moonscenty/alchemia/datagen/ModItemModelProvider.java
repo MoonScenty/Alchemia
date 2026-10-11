@@ -188,6 +188,11 @@ public class ModItemModelProvider extends ItemModelProvider {
         withExistingParent("fertility_lamp", modLoc("block/fertility_lamp_on"));
         getBuilder("water_jug").parent(new net.neoforged.neoforge.client.model.generators.ModelFile
                 .UncheckedModelFile(modLoc("block/legacy/water_jug")));
+        // the recharge pedestal and the dioptra in the hand are their blocks, the dioptra lit
+        getBuilder("recharge_pedestal").parent(new net.neoforged.neoforge.client.model.generators.ModelFile
+                .UncheckedModelFile(modLoc("block/legacy/recharge_pedestal")));
+        getBuilder("dioptra").parent(new net.neoforged.neoforge.client.model.generators.ModelFile
+                .UncheckedModelFile(modLoc("block/dioptra_on")));
         // the salts and the bucket of what they make are the original's pictures; the spa is its block
         withExistingParent("bath_salts", mcLoc("item/generated")).texture("layer0", modLoc("item/legacy/bath_salts"));
         withExistingParent("purifying_fluid_bucket", mcLoc("item/generated"))

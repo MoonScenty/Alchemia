@@ -226,6 +226,21 @@ public class ModBlocks {
                             .lightLevel(state -> 5)
                             .noLootTable()));
 
+    // --- the aura devices --------------------------------------------------------------------------------
+
+    /** A pedestal that fills the wand set on it from the aura. */
+    public static final DeferredBlock<me.moonscenty.alchemia.block.RechargePedestalBlock> RECHARGE_PEDESTAL =
+            register("recharge_pedestal", () -> new me.moonscenty.alchemia.block.RechargePedestalBlock(
+                    BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS).mapColor(MapColor.STONE)
+                            .noOcclusion()));
+
+    /** Arcane stone with a crystal in its top that draws a map of the aura round it. */
+    public static final DeferredBlock<me.moonscenty.alchemia.block.DioptraBlock> DIOPTRA = register("dioptra",
+            () -> new me.moonscenty.alchemia.block.DioptraBlock(
+                    BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS)
+                    .mapColor(MapColor.COLOR_BLACK)
+                    .noOcclusion()));
+
     private static me.moonscenty.alchemia.block.LampBlock lamp(me.moonscenty.alchemia.block.LampBlock.Kind kind) {
         return new me.moonscenty.alchemia.block.LampBlock(kind, BlockBehaviour.Properties.of()
                 .mapColor(MapColor.METAL)

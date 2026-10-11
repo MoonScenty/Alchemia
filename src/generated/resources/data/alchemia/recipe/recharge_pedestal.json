@@ -1,0 +1,31 @@
+{
+  "type": "alchemia:infusion",
+  "central": {
+    "item": "alchemia:arcane_pedestal"
+  },
+  "essentia": {
+    "alchemia:auram": 10,
+    "alchemia:permutatio": 15,
+    "alchemia:potentia": 15
+  },
+  "instability": 3,
+  "research": "alchemia:recharge_pedestal",
+  "result": {
+    "count": 1,
+    "id": "alchemia:recharge_pedestal"
+  },
+  "ring": [
+    {
+      "item": "minecraft:gold_ingot"
+    },
+    {
+      "item": "minecraft:diamond"
+    },
+    {
+      "item": "alchemia:primal_charm"
+    },
+    {
+      "item": "minecraft:diamond"
+    }
+  ]
+}

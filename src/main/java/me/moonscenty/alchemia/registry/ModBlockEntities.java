@@ -99,6 +99,21 @@ public class ModBlockEntities {
                     .of(me.moonscenty.alchemia.block.entity.SpaBlockEntity::new, ModBlocks.SPA.get())
                     .build(null));
 
+    /** A recharge pedestal filling the wand on it. */
+    public static final DeferredHolder<BlockEntityType<?>,
+            BlockEntityType<me.moonscenty.alchemia.block.entity.RechargePedestalBlockEntity>> RECHARGE_PEDESTAL =
+            BLOCK_ENTITIES.register("recharge_pedestal", () -> BlockEntityType.Builder
+                    .of(me.moonscenty.alchemia.block.entity.RechargePedestalBlockEntity::new,
+                            ModBlocks.RECHARGE_PEDESTAL.get())
+                    .build(null));
+
+    /** A dioptra reading the aura round it. */
+    public static final DeferredHolder<BlockEntityType<?>,
+            BlockEntityType<me.moonscenty.alchemia.block.entity.DioptraBlockEntity>> DIOPTRA =
+            BLOCK_ENTITIES.register("dioptra", () -> BlockEntityType.Builder
+                    .of(me.moonscenty.alchemia.block.entity.DioptraBlockEntity::new, ModBlocks.DIOPTRA.get())
+                    .build(null));
+
     /** One square of a portable hole, which remembers what it is standing in for and counts down to giving it back. */
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<HoleBlockEntity>> HOLE =
             BLOCK_ENTITIES.register("hole", () -> BlockEntityType.Builder

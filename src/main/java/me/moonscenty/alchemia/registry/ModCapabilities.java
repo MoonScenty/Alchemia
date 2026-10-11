@@ -26,6 +26,9 @@ public final class ModCapabilities {
     public static void register(RegisterCapabilitiesEvent event) {
         event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, ModBlockEntities.CRUCIBLE.get(),
                 (crucible, side) -> new CrucibleWater(crucible));
+        // a wand set on a recharge pedestal, or taken off it, by anyone's pipes as by a hopper
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, ModBlockEntities.RECHARGE_PEDESTAL.get(),
+                (pedestal, side) -> new net.neoforged.neoforge.items.wrapper.InvWrapper(pedestal));
         // the spa's tank, and its pocket of salts, to anyone's pipes as to a bucket and a hopper
         event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, ModBlockEntities.SPA.get(),
                 (spa, side) -> spa.tank(side));

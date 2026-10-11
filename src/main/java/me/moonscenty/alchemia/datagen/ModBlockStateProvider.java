@@ -60,6 +60,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         smallDevices();
         signalDevices();
         spa();
+        auraDevices();
         arcaneWorkbenchCharger();
         nodeStabilizer();
         altar();
@@ -372,6 +373,19 @@ public class ModBlockStateProvider extends BlockStateProvider {
                 .texture("particle", modLoc("block/legacy/spa_side")));
         simpleBlock(ModBlocks.PURIFYING_FLUID.get(), models().getBuilder("purifying_fluid")
                 .texture("particle", mcLoc("block/water_still")));
+    }
+
+    /** The recharge pedestal and the dioptra, on the original's model files. */
+    private void auraDevices() {
+        simpleBlock(ModBlocks.RECHARGE_PEDESTAL.get(), new net.neoforged.neoforge.client.model.generators.ModelFile
+                .UncheckedModelFile(modLoc("block/legacy/recharge_pedestal")));
+        var lit = new net.neoforged.neoforge.client.model.generators.ModelFile.UncheckedModelFile(
+                modLoc("block/dioptra_on"));
+        var dark = new net.neoforged.neoforge.client.model.generators.ModelFile.UncheckedModelFile(
+                modLoc("block/dioptra_off"));
+        getVariantBuilder(ModBlocks.DIOPTRA.get()).forAllStates(state -> net.neoforged.neoforge.client.model
+                .generators.ConfiguredModel.builder()
+                .modelFile(state.getValue(me.moonscenty.alchemia.block.DioptraBlock.ENABLED) ? lit : dark).build());
     }
 
     private void facingSix(net.minecraft.world.level.block.Block block,

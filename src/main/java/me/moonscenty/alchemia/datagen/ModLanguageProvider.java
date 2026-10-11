@@ -567,6 +567,12 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                 {"water_jug", "Everfull Urn", "마르지 않는 항아리",
                  "A jug of baked clay that is never empty. Dip a bucket or a bottle in it and it comes away full. Left alone it tops up anything round it that holds water -- a crucible, a cauldron -- a quarter of a bucket every quarter of a second, and fills itself again from the aqua in the air.",
                  "구운 흙 항아리인데 비는 법이 없다. 양동이나 병을 담그면 가득 차서 나온다. 가만 두면 둘레의 물 담는 것 — 도가니, 가마솥 — 에 0.25초마다 양동이 4분의 1씩 물을 붓고, 공기 속 물 에센시아로 제 몸을 다시 채운다."},
+                {"recharge_pedestal", "Recharge Pedestal", "재충전 받침대",
+                 "Travelling the countryside to fill a wand is all very well, but a pedestal that does it for you is better. Set a wand on it and it draws vis from the aura of its chunk to fill it, as much as a wand held in the hand would, twice a second. Like a wand in the hand, it leaves alone any aura run down below a tenth of what it should be. A hopper can set a wand on it and take one off.",
+                 "지팡이를 채우러 들판을 돌아다니는 것도 좋지만, 대신 해 주는 받침대가 더 낫다. 지팡이를 올려 두면 제 청크의 오라에서 비스를 끌어 채운다. 손에 든 지팡이만큼씩, 1초에 두 번이다. 손에 든 지팡이처럼, 원래의 10분의 1 밑으로 떨어진 오라는 건드리지 않는다. 깔때기로 지팡이를 올리고 내릴 수도 있다."},
+                {"dioptra", "Thaumic Dioptra", "마법 디옵트라",
+                 "A device that shows the aura round it plainly. Set a vis shard in the crystal on its top and it draws, in the air over itself, a map thirteen chunks across of how strong that aspect is in each; a balanced shard shows whichever primal is strongest in each chunk instead. Chunks with a node in them sparkle now and then -- not precise, but a help in finding them. A comparator reads how strong the aura is in its own chunk, and a redstone signal puts it out.",
+                 "둘레의 오라를 한눈에 보여 주는 장치다. 위쪽 결정에 비스 조각을 끼우면 13청크 너비의 지도를 제 위 공중에 그려, 각 청크에서 그 상이 얼마나 센지 보여 준다. 균형 잡힌 조각을 끼우면 청크마다 가장 센 원시 상을 보여 준다. 노드가 있는 청크는 이따금 반짝인다. 정확하지는 않아도 노드를 찾는 데 도움이 된다. 비교기를 대면 제 청크의 오라 세기를 읽고, 레드스톤 신호가 들어오면 꺼진다."},
                 {"bath_salts", "Purifying Bath Salts", "정화의 목욕 소금",
                  "Warp is a danger to the most careful of thaumaturges, and for those who have dabbled a little too much its effects are more than a nuisance. These salts help. Toss them into still water and when they dissolve the water turns to a silvery purifying fluid. Step into it and it soothes away the day, warding you against warp for a while; it is used up doing so. The deeper warp has set in, the shorter the ward. The salts are fragile, and dissolve within ten seconds of being dropped, wherever they lie.",
                  "뒤틀림은 아무리 조심하는 마법사에게도 위험이고, 조금 지나치게 손댄 이에게는 성가신 정도로 끝나지 않는다. 이 소금이 도움이 된다. 고인 물에 던져 두면 녹으면서 물이 은빛 정화의 액체로 바뀐다. 그 안에 들어가면 하루의 피로가 풀리며 한동안 뒤틀림에서 지켜 준다. 그러고 나면 액체는 다 쓰인다. 뒤틀림이 깊이 박혔을수록 지켜 주는 시간은 짧다. 소금은 약해서, 떨어뜨리면 어디에 있든 10초 안에 녹아 버린다."},
@@ -784,6 +790,10 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("block.alchemia.redstone_relay.out", pick("Out: %s", "내는 세기: %s"));
         add("block.alchemia.arcane_ear", pick("Arcane Ear", "비전 귀"));
         add("block.alchemia.spa", pick("Arcane Spa", "비전 스파"));
+        add("block.alchemia.recharge_pedestal", pick("Recharge Pedestal", "재충전 받침대"));
+        add("block.alchemia.dioptra", pick("Thaumic Dioptra", "마법 디옵트라"));
+        add("block.alchemia.dioptra.showing", pick("Showing %s levels in the aura", "오라의 %s 수준을 보여 준다"));
+        add("block.alchemia.dioptra.strongest", pick("Showing highest aura levels", "가장 높은 오라 수준을 보여 준다"));
         add("block.alchemia.purifying_fluid", pick("Purifying Fluid", "정화의 액체"));
         add("item.alchemia.bath_salts", pick("Purifying Bath Salts", "정화의 목욕 소금"));
         add("item.alchemia.purifying_fluid_bucket", pick("Bucket of Purifying Fluid", "정화의 액체 양동이"));

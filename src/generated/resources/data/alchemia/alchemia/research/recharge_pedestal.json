@@ -1,0 +1,26 @@
+{
+  "category": "alchemia:arcana",
+  "column": 6,
+  "complexity": 2,
+  "icon": "alchemia:recharge_pedestal",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.recharge_pedestal.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:recharge_pedestal"
+    }
+  ],
+  "parents": [
+    "alchemia:infusion",
+    "alchemia:charger"
+  ],
+  "requirements": {
+    "alchemia:auram": 6,
+    "alchemia:permutatio": 3,
+    "alchemia:potentia": 6
+  },
+  "row": 1
+}

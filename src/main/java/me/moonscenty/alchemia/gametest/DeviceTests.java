@@ -486,6 +486,69 @@ public class DeviceTests {
         helper.succeed();
     }
 
+    /** Sets the chunk under a place to hold exactly this much aer and flux, against the usual base. */
+    private static void aura(GameTestHelper helper, BlockPos at, int air, int flux) {
+        helper.getLevel().getChunkAt(helper.absolutePos(at)).setData(
+                me.moonscenty.alchemia.aura.ModAuraAttachment.AURA,
+                new me.moonscenty.alchemia.aura.AuraChunk(me.moonscenty.alchemia.aura.AuraGeneration.BASE,
+                        me.moonscenty.alchemia.aspect.AspectList.EMPTY
+                                .add(me.moonscenty.alchemia.registry.ModAspects.AIR, air)
+                                .add(me.moonscenty.alchemia.registry.ModAspects.FLUX, flux)));
+    }
+
+    /** A wand set on a recharge pedestal is filled from the aura; one taken off it comes back to the hand. */
+    @GameTest(template = TEMPLATE)
+    public static void aRechargePedestalFillsAWand(GameTestHelper helper) {
+        BlockPos at = new BlockPos(3, 2, 3);
+        aura(helper, at, 100, 0);
+        helper.setBlock(at, ModBlocks.RECHARGE_PEDESTAL.get());
+        var player = helper.makeMockPlayer(net.minecraft.world.level.GameType.SURVIVAL);
+        ItemStack wand = me.moonscenty.alchemia.item.WandItem.of(me.moonscenty.alchemia.registry.ModWandParts.SILVERWOOD,
+                me.moonscenty.alchemia.registry.ModWandParts.GOLD);
+        player.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, wand);
+        helper.useBlock(at, player);
+        var pedestal = (me.moonscenty.alchemia.block.entity.RechargePedestalBlockEntity) helper.getBlockEntity(at);
+        helper.assertTrue(player.getMainHandItem().isEmpty(), "the wand went onto the pedestal");
+        BlockPos where = helper.absolutePos(at);
+        me.moonscenty.alchemia.block.entity.RechargePedestalBlockEntity.tick(helper.getLevel(), where,
+                helper.getLevel().getBlockState(where), pedestal);
+        ItemStack held = pedestal.getItem(0);
+        int aer = ((me.moonscenty.alchemia.item.WandItem) held.getItem()).held(held,
+                me.moonscenty.alchemia.registry.ModAspects.AIR);
+        helper.assertTrue(aer > 0, "and drew aer for it, " + aer);
+        helper.useBlock(at, player);
+        helper.assertTrue(player.getMainHandItem().getItem() instanceof me.moonscenty.alchemia.item.WandItem,
+                "and gave it back");
+        helper.succeed();
+    }
+
+    /** A dioptra tuned with an aer shard reads how much aer is in each chunk, and a comparator reads its own. */
+    @GameTest(template = TEMPLATE)
+    public static void aDioptraReadsTheAura(GameTestHelper helper) {
+        BlockPos at = new BlockPos(3, 2, 3);
+        aura(helper, at, 75, 0);
+        helper.setBlock(at, ModBlocks.DIOPTRA.get());
+        var player = helper.makeMockPlayer(net.minecraft.world.level.GameType.SURVIVAL);
+        player.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND,
+                new ItemStack(ModItems.SHARDS.get(me.moonscenty.alchemia.block.CrystalType.AIR).get()));
+        BlockPos where = helper.absolutePos(at);
+        helper.useBlock(at, player, new net.minecraft.world.phys.BlockHitResult(where.getCenter().add(0, 0.5, 0),
+                Direction.UP, where, false));
+        var dioptra = (me.moonscenty.alchemia.block.entity.DioptraBlockEntity) helper.getBlockEntity(at);
+        helper.assertValueEqual(dioptra.tuning(), 1, "tuned to aer");
+        helper.assertTrue(player.getMainHandItem().isEmpty(), "the shard went in");
+        dioptra.read(helper.getLevel());
+        int middle = me.moonscenty.alchemia.block.entity.DioptraBlockEntity.MIDDLE;
+        helper.assertValueEqual(dioptra.amount(middle, middle), 50, "seventy-five is half of half again a hundred");
+        helper.assertValueEqual(dioptra.signal(), 7, "and a comparator reads it as seven");
+        helper.useBlock(at, player, new net.minecraft.world.phys.BlockHitResult(where.getCenter().add(0, 0.5, 0),
+                Direction.UP, where, false));
+        helper.assertValueEqual(dioptra.tuning(), -1, "an empty hand takes the shard out");
+        helper.assertTrue(player.getInventory().countItem(
+                ModItems.SHARDS.get(me.moonscenty.alchemia.block.CrystalType.AIR).get()) == 1, "and gets it back");
+        helper.succeed();
+    }
+
     /** The autocaster is built round the original's made mind again, with the resonator in its ring. */
     @GameTest(template = TEMPLATE)
     public static void theAutocasterIsBuiltOfItsOwnParts(GameTestHelper helper) {

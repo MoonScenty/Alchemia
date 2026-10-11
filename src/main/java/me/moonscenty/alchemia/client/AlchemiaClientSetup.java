@@ -290,6 +290,8 @@ public class AlchemiaClientSetup {
         event.registerBlockEntityRenderer(ModBlockEntities.ARCANE_WORKBENCH_CHARGER.get(), ChargerRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.ALEMBIC.get(), AlembicRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.ARCANE_PEDESTAL.get(), ArcanePedestalRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.RECHARGE_PEDESTAL.get(), RechargePedestalRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.DIOPTRA.get(), DioptraRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.INFUSION_MATRIX.get(), InfusionMatrixRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.TUBE_VALVE.get(), ValveHandleRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.TUBE.get(), OnewayMarkRenderer::new);

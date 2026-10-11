@@ -516,6 +516,20 @@ public final class LegacyAssets {
             all.add(LegacyAsset.of("models/block/legacy/" + model + ".json")
                     .five("models/block/" + model + ".json").asModel("cutout"));
         }
+        // the recharge pedestal and the dioptra are the original's model files, the dark dioptra built over the lit
+        // one, so it keeps the original's name; the dioptra's foot names arcane stone where the original kept it
+        all.add(LegacyAsset.of("models/block/legacy/recharge_pedestal.json")
+                .five("models/block/recharge_pedestal.json").asModel());
+        for (String model : List.of("dioptra_on", "dioptra_off")) {
+            all.add(LegacyAsset.of("models/block/" + model + ".json").five("models/block/" + model + ".json")
+                    .asModel());
+        }
+        for (String face : List.of("recharge_pedestal_side", "recharge_pedestal_top", "recharge_pedestal_gem",
+                "dioptra_side_on", "dioptra_side_off", "dioptra_top", "arcane_stone_1")) {
+            all.add(LegacyAsset.of("textures/block/legacy/" + face + ".png").five("textures/blocks/" + face + ".png"));
+        }
+        all.add(LegacyAsset.of("textures/entity/dioptra_grid.png").five("textures/misc/gridblock.png"));
+        all.add(LegacyAsset.of("textures/entity/dioptra_side.png").five("textures/models/dioptra_side.png"));
         // the spa's faces and panel; the salts (which shimmer) and the bucket of what they make
         for (String face : List.of("spa_side", "spa_top")) {
             all.add(LegacyAsset.of("textures/block/legacy/" + face + ".png").five("textures/blocks/" + face + ".png"));

@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "enabled=false": {
+      "model": "alchemia:block/dioptra_off"
+    },
+    "enabled=true": {
+      "model": "alchemia:block/dioptra_on"
+    }
+  }
+}

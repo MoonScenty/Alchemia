@@ -1,0 +1,32 @@
+{
+  "type": "alchemia:arcane_shaped",
+  "key": {
+    "A": {
+      "item": "alchemia:arcane_stone"
+    },
+    "G": {
+      "item": "alchemia:goggles_of_revealing"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "P": {
+      "item": "alchemia:arcane_stone_slab"
+    }
+  },
+  "pattern": [
+    "APA",
+    "IGI",
+    "AAA"
+  ],
+  "research": "alchemia:dioptra",
+  "result": {
+    "count": 1,
+    "id": "alchemia:dioptra"
+  },
+  "vis": {
+    "alchemia:aer": 25,
+    "alchemia:ordo": 25,
+    "alchemia:terra": 25
+  }
+}

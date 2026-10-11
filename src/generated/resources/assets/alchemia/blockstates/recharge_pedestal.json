@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "alchemia:block/legacy/recharge_pedestal"
+    }
+  }
+}

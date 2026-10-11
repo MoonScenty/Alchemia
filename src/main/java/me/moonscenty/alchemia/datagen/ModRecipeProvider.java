@@ -60,6 +60,8 @@ public class ModRecipeProvider extends RecipeProvider {
     /** How badly an altar takes to binding a primal into a tool, and to beating four tools into one. */
     private static final int ELEMENTAL_UNSTABLE = 1;
     private static final int CRUSHER_UNSTABLE = 6;
+    /** How badly an altar takes to the recharge pedestal. The original's number. */
+    private static final int PEDESTAL_UNSTABLE = 3;
     /** How badly an altar takes to the two working lamps, and to the jug. The original's numbers. */
     private static final int LAMP_UNSTABLE = 4;
     private static final int JUG_UNSTABLE = 1;
@@ -408,6 +410,15 @@ public class ModRecipeProvider extends RecipeProvider {
                         'R', Ingredient.of(Items.REDSTONE)),
                 "PBP", " P ", "WRW");
 
+        // the dioptra: a pair of goggles looking up through arcane stone, a slab of it for the crystal to sit in
+        arcane(output, "dioptra", "dioptra", new ItemStack(ModBlocks.DIOPTRA.get()),
+                AspectList.of(ModAspects.AIR, 25).add(ModAspects.EARTH, 25).add(ModAspects.ORDER, 25),
+                Map.of('A', Ingredient.of(ModBlocks.ARCANE_STONE.block()),
+                        'P', Ingredient.of(ModBlocks.ARCANE_STONE.slab()),
+                        'I', Ingredient.of(Items.IRON_INGOT),
+                        'G', Ingredient.of(ModItems.GOGGLES)),
+                "APA", "IGI", "AAA");
+
         // the spa: a jar and a gear in arcane stone, a quartz rim, and bars over the inlet
         arcane(output, "spa", "spa", new ItemStack(ModBlocks.SPA.get()),
                 AspectList.of(ModAspects.WATER, 25).add(ModAspects.ORDER, 15).add(ModAspects.EARTH, 15),
@@ -688,6 +699,14 @@ public class ModRecipeProvider extends RecipeProvider {
                 new ItemStack(ModItems.BIOTHAUMIC_MIND.get()),
                 AspectList.of(ModAspects.MIND, 16).add(ModAspects.MECHANISM, 16), BIOTHAUMIC_UNSTABLE,
                 "biothaumic_mind");
+
+        // the recharge pedestal: a pedestal worked on with gold, diamonds and a primal charm
+        infusion(output, "recharge_pedestal", Ingredient.of(ModBlocks.ARCANE_PEDESTAL),
+                List.of(Ingredient.of(Items.GOLD_INGOT), Ingredient.of(Items.DIAMOND),
+                        Ingredient.of(ModItems.PRIMAL_CHARM), Ingredient.of(Items.DIAMOND)),
+                new ItemStack(ModBlocks.RECHARGE_PEDESTAL.get()),
+                AspectList.of(ModAspects.AURA, 10).add(ModAspects.ENERGY, 15).add(ModAspects.EXCHANGE, 15),
+                PEDESTAL_UNSTABLE, "recharge_pedestal");
 
         // the two lamps that burn essentia: an arcane lamp worked on with gold and what feeds what they tend
         infusion(output, "growth_lamp", Ingredient.of(ModBlocks.ARCANE_LAMP.get()),

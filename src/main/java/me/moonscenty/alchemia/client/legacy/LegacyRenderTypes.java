@@ -41,6 +41,16 @@ public final class LegacyRenderTypes extends RenderType {
                     .setWriteMaskState(COLOR_WRITE)
                     .createCompositeState(false)));
 
+    private static final Function<ResourceLocation, RenderType> GLOW_BOTH_SIDES = Util.memoize(texture -> create(
+            "alchemia_legacy_glow_both_sides", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 1536, false,
+            true, CompositeState.builder()
+                    .setShaderState(RENDERTYPE_EYES_SHADER)
+                    .setTextureState(new TextureStateShard(texture, false, false))
+                    .setTransparencyState(ADD_BY_ALPHA)
+                    .setCullState(NO_CULL)
+                    .setWriteMaskState(COLOR_WRITE)
+                    .createCompositeState(false)));
+
     private LegacyRenderTypes(String name, VertexFormat format, VertexFormat.Mode mode, int size, boolean crumbling,
             boolean sorted, Runnable setup, Runnable clear) {
         super(name, format, mode, size, crumbling, sorted, setup, clear);
@@ -49,5 +59,10 @@ public final class LegacyRenderTypes extends RenderType {
     /** A glow laid over a model at full brightness, faded by its own picture's alpha and the colour's. */
     public static RenderType glow(ResourceLocation texture) {
         return GLOW.apply(texture);
+    }
+
+    /** {@link #glow}, seen from behind as well as in front, for sheets hung in the air rather than laid on a model. */
+    public static RenderType glowBothSides(ResourceLocation texture) {
+        return GLOW_BOTH_SIDES.apply(texture);
     }
 }

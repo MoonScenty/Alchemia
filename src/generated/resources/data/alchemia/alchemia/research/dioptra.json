@@ -1,0 +1,26 @@
+{
+  "category": "alchemia:artifice",
+  "column": 6,
+  "complexity": 2,
+  "icon": "alchemia:dioptra",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.dioptra.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:dioptra"
+    }
+  ],
+  "parents": [
+    "alchemia:goggles"
+  ],
+  "requirements": {
+    "alchemia:auram": 3,
+    "alchemia:potentia": 3,
+    "alchemia:sensus": 3,
+    "alchemia:terra": 3
+  },
+  "row": 1
+}
