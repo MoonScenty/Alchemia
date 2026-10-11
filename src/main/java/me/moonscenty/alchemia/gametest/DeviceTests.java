@@ -381,6 +381,111 @@ public class DeviceTests {
         });
     }
 
+    /** Bath salts dissolving in still water turn it to purifying fluid; anywhere else they are only gone. */
+    @GameTest(template = TEMPLATE)
+    public static void bathSaltsTurnStillWater(GameTestHelper helper) {
+        BlockPos pool = new BlockPos(3, 2, 3);
+        helper.setBlock(pool, Blocks.WATER);
+        BlockPos dry = new BlockPos(6, 2, 3);
+        for (BlockPos at : new BlockPos[] {pool, dry}) {
+            var salts = new net.minecraft.world.entity.item.ItemEntity(helper.getLevel(),
+                    helper.absolutePos(at).getX() + 0.5, helper.absolutePos(at).getY() + 0.2,
+                    helper.absolutePos(at).getZ() + 0.5, new ItemStack(ModItems.BATH_SALTS.get()));
+            me.moonscenty.alchemia.item.BathSaltsItem.onExpire(
+                    new net.neoforged.neoforge.event.entity.item.ItemExpireEvent(salts));
+        }
+        helper.assertBlockPresent(ModBlocks.PURIFYING_FLUID.get(), pool);
+        helper.assertBlockPresent(Blocks.AIR, dry);
+        helper.assertValueEqual(new ItemStack(ModItems.BATH_SALTS.get()).getEntityLifespan(helper.getLevel()), 200,
+                "and they last ten seconds on the ground");
+        helper.succeed();
+    }
+
+    /** A dip in a still pool wards a player against warp, and uses the pool up; deeper warp, shorter ward. */
+    @GameTest(template = TEMPLATE)
+    public static void purifyingFluidWardsAgainstWarp(GameTestHelper helper) {
+        BlockPos pool = new BlockPos(3, 2, 3);
+        helper.setBlock(pool, ModBlocks.PURIFYING_FLUID.get());
+        var player = helper.makeMockPlayer(net.minecraft.world.level.GameType.SURVIVAL);
+        BlockPos where = helper.absolutePos(pool);
+        helper.getLevel().getBlockState(where).entityInside(helper.getLevel(), where, player);
+        var ward = player.getEffect(me.moonscenty.alchemia.player.effect.ModEffects.WARP_WARD);
+        helper.assertTrue(ward != null && ward.getDuration() == 32000, "warded for the longest there is");
+        helper.assertBlockNotPresent(ModBlocks.PURIFYING_FLUID.get(), pool);
+        helper.assertValueEqual(me.moonscenty.alchemia.block.PurifyingFluidBlock.wardFor(
+                new me.moonscenty.alchemia.player.WarpData(100, 0, 0, 0)), 20000, "a tenth as long at a hundred");
+        helper.succeed();
+    }
+
+    /** The spa takes water from a bucket, as anything that holds liquid takes it. */
+    @GameTest(template = TEMPLATE)
+    public static void aSpaIsFilledFromABucket(GameTestHelper helper) {
+        BlockPos at = new BlockPos(3, 2, 3);
+        helper.setBlock(at, ModBlocks.SPA.get());
+        var player = helper.makeMockPlayer(net.minecraft.world.level.GameType.SURVIVAL);
+        player.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND,
+                new ItemStack(net.minecraft.world.item.Items.WATER_BUCKET));
+        helper.useBlock(at, player);
+        var spa = (me.moonscenty.alchemia.block.entity.SpaBlockEntity) helper.getBlockEntity(at);
+        helper.assertValueEqual(spa.tank().getFluidAmount(), 1000, "a bucket of water in the tank");
+        helper.assertTrue(player.getMainHandItem().is(net.minecraft.world.item.Items.BUCKET), "and the bucket empty");
+        helper.succeed();
+    }
+
+    /** Fed water and salts, the spa pours a pool of purifying fluid above it, spreading out from the middle. */
+    @GameTest(template = TEMPLATE)
+    public static void aSpaPoursAPurifyingPool(GameTestHelper helper) {
+        BlockPos at = new BlockPos(4, 2, 4);
+        for (int x = -2; x <= 2; x++) {
+            for (int z = -2; z <= 2; z++) {
+                helper.setBlock(at.offset(x, 0, z), Blocks.STONE);
+            }
+        }
+        helper.setBlock(at, ModBlocks.SPA.get());
+        var spa = (me.moonscenty.alchemia.block.entity.SpaBlockEntity) helper.getBlockEntity(at);
+        spa.tank().fill(new net.neoforged.neoforge.fluids.FluidStack(
+                net.minecraft.world.level.material.Fluids.WATER, 3000),
+                net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE);
+        spa.setItem(0, new ItemStack(ModItems.BATH_SALTS.get(), 3));
+        BlockPos where = helper.absolutePos(at);
+        for (int tick = 0; tick < 81; tick++) {
+            me.moonscenty.alchemia.block.entity.SpaBlockEntity.tick(helper.getLevel(), where,
+                    helper.getLevel().getBlockState(where), spa);
+        }
+        helper.assertTrue(helper.getLevel().getFluidState(where.above()).is(
+                me.moonscenty.alchemia.registry.ModFluids.PURIFYING.get()), "a pool of it over the spa");
+        int pools = 0;
+        for (int x = -2; x <= 2; x++) {
+            for (int z = -2; z <= 2; z++) {
+                if (helper.getLevel().getFluidState(where.above().offset(x, 0, z)).isSourceOfType(
+                        me.moonscenty.alchemia.registry.ModFluids.PURIFYING.get())) {
+                    pools++;
+                }
+            }
+        }
+        helper.assertValueEqual(pools, 3, "three pours, three still blocks of it");
+        helper.assertValueEqual(spa.tank().getFluidAmount(), 0, "all the water gone");
+        helper.assertTrue(spa.getItem(0).isEmpty(), "and all the salts");
+        helper.succeed();
+    }
+
+    /** Switched off mixing, the spa pours what is in its tank as it is. */
+    @GameTest(template = TEMPLATE)
+    public static void aSpaPoursItsTankUnmixed(GameTestHelper helper) {
+        BlockPos at = new BlockPos(3, 2, 3);
+        helper.setBlock(at, ModBlocks.SPA.get());
+        var spa = (me.moonscenty.alchemia.block.entity.SpaBlockEntity) helper.getBlockEntity(at);
+        spa.toggleMixing();
+        spa.tank().fill(new net.neoforged.neoforge.fluids.FluidStack(
+                net.minecraft.world.level.material.Fluids.WATER, 1000),
+                net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE);
+        BlockPos where = helper.absolutePos(at);
+        me.moonscenty.alchemia.block.entity.SpaBlockEntity.tick(helper.getLevel(), where,
+                helper.getLevel().getBlockState(where), spa);
+        helper.assertBlockPresent(Blocks.WATER, at.above());
+        helper.succeed();
+    }
+
     /** The autocaster is built round the original's made mind again, with the resonator in its ring. */
     @GameTest(template = TEMPLATE)
     public static void theAutocasterIsBuiltOfItsOwnParts(GameTestHelper helper) {

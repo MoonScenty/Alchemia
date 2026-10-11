@@ -13,9 +13,9 @@ import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 /**
  * What our blocks will say yes to when something else asks them in the game's common terms.
  *
- * <p>So far only the crucible, which takes water from anything that pours it: a water jug, or another mod's pipe.
- * It gives nothing back that way -- what is in a crucible is not water any more once something is dissolved in it,
- * and a bucket is still the way to empty one.
+ * <p>The crucible takes water from anything that pours it: a water jug, or another mod's pipe. It gives nothing back
+ * that way -- what is in a crucible is not water any more once something is dissolved in it, and a bucket is still
+ * the way to empty one. The spa is an ordinary tank and an ordinary pocket, shut only at the top.
  */
 @EventBusSubscriber(modid = Alchemia.MODID)
 public final class ModCapabilities {
@@ -26,6 +26,12 @@ public final class ModCapabilities {
     public static void register(RegisterCapabilitiesEvent event) {
         event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, ModBlockEntities.CRUCIBLE.get(),
                 (crucible, side) -> new CrucibleWater(crucible));
+        // the spa's tank, and its pocket of salts, to anyone's pipes as to a bucket and a hopper
+        event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, ModBlockEntities.SPA.get(),
+                (spa, side) -> spa.tank(side));
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, ModBlockEntities.SPA.get(),
+                (spa, side) -> side == null ? new net.neoforged.neoforge.items.wrapper.InvWrapper(spa)
+                        : new net.neoforged.neoforge.items.wrapper.SidedInvWrapper(spa, side));
     }
 
     /** A crucible as a tank of water that only fills. */

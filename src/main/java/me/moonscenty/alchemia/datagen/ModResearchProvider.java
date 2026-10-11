@@ -262,6 +262,15 @@ public class ModResearchProvider {
                 AspectList.of(ModAspects.WATER, 6).add(ModAspects.EARTH, 3).add(ModAspects.CRAFT, 3),
                 List.of("crucible", "infusion"), false, NodeShape.PLAIN, 1, "water_jug");
 
+        // salts against warp, and a machine to make a bath of them
+        entry(context, "bath_salts", ModResearch.ALCHEMY, ModItems.BATH_SALTS, -1, 1,
+                AspectList.of(ModAspects.MIND, 3).add(ModAspects.AURA, 3).add(ModAspects.ORDER, 3)
+                        .add(ModAspects.LIFE, 3),
+                List.of("crucible"), false, NodeShape.PLAIN, 2, "bath_salts");
+        entry(context, "spa", ModResearch.ALCHEMY, ModBlocks.SPA, -2, 0,
+                AspectList.of(ModAspects.WATER, 3).add(ModAspects.MECHANISM, 3).add(ModAspects.ORDER, 3),
+                List.of("bath_salts"), false, NodeShape.PLAIN, 1, "spa");
+
         // things that answer to redstone or move what is in front of them
         entry(context, "levitator", ModResearch.ARTIFICE, ModBlocks.LEVITATOR, -1, 0,
                 AspectList.of(ModAspects.MOTION, 3).add(ModAspects.FLIGHT, 3).add(ModAspects.AIR, 3),

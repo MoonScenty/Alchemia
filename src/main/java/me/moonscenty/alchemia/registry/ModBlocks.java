@@ -213,6 +213,19 @@ public class ModBlocks {
                     .noOcclusion()
                     .pushReaction(net.minecraft.world.level.material.PushReaction.DESTROY)));
 
+    /** A tank that mixes bath salts into water and pumps the purifying fluid it makes into a pool above it. */
+    public static final DeferredBlock<me.moonscenty.alchemia.block.SpaBlock> SPA = register("spa",
+            () -> new me.moonscenty.alchemia.block.SpaBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS)
+                    .mapColor(MapColor.QUARTZ)));
+
+    /** Purifying fluid standing in the world. Not an item; it comes in a bucket. */
+    public static final DeferredBlock<me.moonscenty.alchemia.block.PurifyingFluidBlock> PURIFYING_FLUID =
+            registerBlockOnly("purifying_fluid", () -> new me.moonscenty.alchemia.block.PurifyingFluidBlock(
+                    ModFluids.PURIFYING.get(), BlockBehaviour.Properties.ofFullCopy(Blocks.WATER)
+                            .mapColor(MapColor.COLOR_LIGHT_BLUE)
+                            .lightLevel(state -> 5)
+                            .noLootTable()));
+
     private static me.moonscenty.alchemia.block.LampBlock lamp(me.moonscenty.alchemia.block.LampBlock.Kind kind) {
         return new me.moonscenty.alchemia.block.LampBlock(kind, BlockBehaviour.Properties.of()
                 .mapColor(MapColor.METAL)

@@ -15,6 +15,7 @@ import me.moonscenty.alchemia.registry.ModCreativeTabs;
 import me.moonscenty.alchemia.registry.ModDataComponents;
 import me.moonscenty.alchemia.registry.ModEntities;
 import me.moonscenty.alchemia.registry.ModFeatures;
+import me.moonscenty.alchemia.registry.ModFluids;
 import me.moonscenty.alchemia.registry.ModItems;
 import me.moonscenty.alchemia.crafting.ModRecipes;
 import me.moonscenty.alchemia.registry.ModMenus;
@@ -36,6 +37,8 @@ public class Alchemia {
     public static final Logger LOGGER = LogUtils.getLogger();
 
     public Alchemia(IEventBus modEventBus, ModContainer modContainer) {
+        ModFluids.TYPES.register(modEventBus);
+        ModFluids.FLUIDS.register(modEventBus);
         ModBlocks.BLOCKS.register(modEventBus);
         ModBlockEntities.BLOCK_ENTITIES.register(modEventBus);
         ModEntities.ENTITIES.register(modEventBus);

@@ -1,0 +1,24 @@
+{
+  "category": "alchemia:alchemy",
+  "column": -2,
+  "icon": "alchemia:spa",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.spa.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:spa"
+    }
+  ],
+  "parents": [
+    "alchemia:bath_salts"
+  ],
+  "requirements": {
+    "alchemia:aqua": 3,
+    "alchemia:machina": 3,
+    "alchemia:ordo": 3
+  },
+  "row": 0
+}

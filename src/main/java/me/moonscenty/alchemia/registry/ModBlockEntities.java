@@ -92,6 +92,13 @@ public class ModBlockEntities {
                     .of(me.moonscenty.alchemia.block.entity.ArcaneEarBlockEntity::new, ModBlocks.ARCANE_EAR.get())
                     .build(null));
 
+    /** A spa mixing and pouring. */
+    public static final DeferredHolder<BlockEntityType<?>,
+            BlockEntityType<me.moonscenty.alchemia.block.entity.SpaBlockEntity>> SPA =
+            BLOCK_ENTITIES.register("spa", () -> BlockEntityType.Builder
+                    .of(me.moonscenty.alchemia.block.entity.SpaBlockEntity::new, ModBlocks.SPA.get())
+                    .build(null));
+
     /** One square of a portable hole, which remembers what it is standing in for and counts down to giving it back. */
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<HoleBlockEntity>> HOLE =
             BLOCK_ENTITIES.register("hole", () -> BlockEntityType.Builder

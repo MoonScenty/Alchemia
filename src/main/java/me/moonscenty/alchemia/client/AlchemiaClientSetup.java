@@ -125,6 +125,13 @@ public class AlchemiaClientSetup {
         }
         ItemProperties.register(ModBlocks.JAR.get().asItem(), Alchemia.id("filled"),
                 (stack, level, holder, seed) -> stack.has(ModDataComponents.CONTENTS.get()) ? 1 : 0);
+        // purifying fluid is seen through, as water is
+        net.minecraft.client.renderer.ItemBlockRenderTypes.setRenderLayer(
+                me.moonscenty.alchemia.registry.ModFluids.PURIFYING.get(),
+                net.minecraft.client.renderer.RenderType.translucent());
+        net.minecraft.client.renderer.ItemBlockRenderTypes.setRenderLayer(
+                me.moonscenty.alchemia.registry.ModFluids.FLOWING_PURIFYING.get(),
+                net.minecraft.client.renderer.RenderType.translucent());
     }
 
     /**
@@ -185,6 +192,7 @@ public class AlchemiaClientSetup {
         event.register(ModMenus.FOCUS_POUCH.get(), FocusPouchScreen::new);
         event.register(ModMenus.AUTOCASTER.get(), AutocasterScreen::new);
         event.register(ModMenus.FOCAL_MANIPULATOR.get(), FocalManipulatorScreen::new);
+        event.register(ModMenus.SPA.get(), SpaScreen::new);
     }
 
     /**
@@ -240,6 +248,8 @@ public class AlchemiaClientSetup {
                 return HungryChestItemRenderer.get();
             }
         }, ModBlocks.HUNGRY_CHEST.get().asItem());
+        event.registerFluidType(PurifyingFluidLook.INSTANCE,
+                me.moonscenty.alchemia.registry.ModFluids.PURIFYING_TYPE.get());
         event.registerBlock(PlainBreakParticles.INSTANCE,
                 ModBlocks.CRUCIBLE.get(), ModBlocks.JAR.get(), ModBlocks.TUBE_FILTER.get());
         // robes in the original's violet until dyed; the void robe on the original's model when its jar is there

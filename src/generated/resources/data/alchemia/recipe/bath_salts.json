@@ -1,0 +1,17 @@
+{
+  "type": "alchemia:crucible",
+  "aspects": {
+    "alchemia:aer": 6,
+    "alchemia:cognitio": 6,
+    "alchemia:ordo": 6,
+    "alchemia:victus": 6
+  },
+  "catalyst": {
+    "item": "alchemia:salis_mundus"
+  },
+  "research": "alchemia:bath_salts",
+  "result": {
+    "count": 1,
+    "id": "alchemia:bath_salts"
+  }
+}

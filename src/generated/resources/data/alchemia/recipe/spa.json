@@ -1,0 +1,35 @@
+{
+  "type": "alchemia:arcane_shaped",
+  "key": {
+    "I": {
+      "item": "minecraft:iron_bars"
+    },
+    "J": {
+      "item": "alchemia:jar"
+    },
+    "P": {
+      "item": "alchemia:brass_gear"
+    },
+    "Q": {
+      "item": "minecraft:quartz_block"
+    },
+    "S": {
+      "item": "alchemia:arcane_stone"
+    }
+  },
+  "pattern": [
+    "QIQ",
+    "SJS",
+    "SPS"
+  ],
+  "research": "alchemia:spa",
+  "result": {
+    "count": 1,
+    "id": "alchemia:spa"
+  },
+  "vis": {
+    "alchemia:aqua": 25,
+    "alchemia:ordo": 15,
+    "alchemia:terra": 15
+  }
+}

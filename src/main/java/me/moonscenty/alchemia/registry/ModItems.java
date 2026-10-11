@@ -192,6 +192,13 @@ public class ModItems {
     public static final DeferredItem<Item> BRASS_PLATE = ITEMS.registerSimpleItem("brass_plate");
     public static final DeferredItem<Item> IRON_PLATE = ITEMS.registerSimpleItem("iron_plate");
     public static final DeferredItem<Item> SALIS_MUNDUS = ITEMS.registerSimpleItem("salis_mundus");
+    /** Salts that turn still water they dissolve in to purifying fluid. */
+    public static final DeferredItem<me.moonscenty.alchemia.item.BathSaltsItem> BATH_SALTS = ITEMS.register(
+            "bath_salts", () -> new me.moonscenty.alchemia.item.BathSaltsItem(new Item.Properties()));
+    public static final DeferredItem<net.minecraft.world.item.BucketItem> PURIFYING_FLUID_BUCKET = ITEMS.register(
+            "purifying_fluid_bucket", () -> new net.minecraft.world.item.BucketItem(ModFluids.PURIFYING.get(),
+                    new Item.Properties().craftRemainder(net.minecraft.world.item.Items.BUCKET).stacksTo(1)
+                            .rarity(net.minecraft.world.item.Rarity.RARE)));
 
     /**
      * Cloth that has been through a workbench rather than a loom. Everything soft in this craft is cut from it.

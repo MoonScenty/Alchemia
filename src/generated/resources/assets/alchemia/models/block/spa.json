@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "down": "minecraft:block/furnace_top",
+    "east": "alchemia:block/legacy/spa_side",
+    "north": "alchemia:block/legacy/spa_side",
+    "particle": "alchemia:block/legacy/spa_side",
+    "south": "alchemia:block/legacy/spa_side",
+    "up": "alchemia:block/legacy/spa_top",
+    "west": "alchemia:block/legacy/spa_side"
+  }
+}

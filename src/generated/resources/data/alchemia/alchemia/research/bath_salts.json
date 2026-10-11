@@ -1,0 +1,26 @@
+{
+  "category": "alchemia:alchemy",
+  "column": -1,
+  "complexity": 2,
+  "icon": "alchemia:bath_salts",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.bath_salts.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:bath_salts"
+    }
+  ],
+  "parents": [
+    "alchemia:crucible"
+  ],
+  "requirements": {
+    "alchemia:auram": 3,
+    "alchemia:cognitio": 3,
+    "alchemia:ordo": 3,
+    "alchemia:victus": 3
+  },
+  "row": 1
+}

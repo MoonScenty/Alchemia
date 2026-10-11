@@ -59,6 +59,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         bellows();
         smallDevices();
         signalDevices();
+        spa();
         arcaneWorkbenchCharger();
         nodeStabilizer();
         altar();
@@ -361,6 +362,16 @@ public class ModBlockStateProvider extends BlockStateProvider {
                     .modelFile(state.getValue(me.moonscenty.alchemia.block.RedstoneRelayBlock.POWERED) ? on : off)
                     .rotationY(turn).build();
         }, me.moonscenty.alchemia.block.RedstoneRelayBlock.IN, me.moonscenty.alchemia.block.RedstoneRelayBlock.OUT);
+    }
+
+    /** The spa is a plain block on the original's faces, a furnace's top under it; the fluid is drawn as water is. */
+    private void spa() {
+        simpleBlock(ModBlocks.SPA.get(), models().cube("spa", mcLoc("block/furnace_top"),
+                modLoc("block/legacy/spa_top"), modLoc("block/legacy/spa_side"), modLoc("block/legacy/spa_side"),
+                modLoc("block/legacy/spa_side"), modLoc("block/legacy/spa_side"))
+                .texture("particle", modLoc("block/legacy/spa_side")));
+        simpleBlock(ModBlocks.PURIFYING_FLUID.get(), models().getBuilder("purifying_fluid")
+                .texture("particle", mcLoc("block/water_still")));
     }
 
     private void facingSix(net.minecraft.world.level.block.Block block,

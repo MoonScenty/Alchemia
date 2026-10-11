@@ -567,6 +567,12 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                 {"water_jug", "Everfull Urn", "마르지 않는 항아리",
                  "A jug of baked clay that is never empty. Dip a bucket or a bottle in it and it comes away full. Left alone it tops up anything round it that holds water -- a crucible, a cauldron -- a quarter of a bucket every quarter of a second, and fills itself again from the aqua in the air.",
                  "구운 흙 항아리인데 비는 법이 없다. 양동이나 병을 담그면 가득 차서 나온다. 가만 두면 둘레의 물 담는 것 — 도가니, 가마솥 — 에 0.25초마다 양동이 4분의 1씩 물을 붓고, 공기 속 물 에센시아로 제 몸을 다시 채운다."},
+                {"bath_salts", "Purifying Bath Salts", "정화의 목욕 소금",
+                 "Warp is a danger to the most careful of thaumaturges, and for those who have dabbled a little too much its effects are more than a nuisance. These salts help. Toss them into still water and when they dissolve the water turns to a silvery purifying fluid. Step into it and it soothes away the day, warding you against warp for a while; it is used up doing so. The deeper warp has set in, the shorter the ward. The salts are fragile, and dissolve within ten seconds of being dropped, wherever they lie.",
+                 "뒤틀림은 아무리 조심하는 마법사에게도 위험이고, 조금 지나치게 손댄 이에게는 성가신 정도로 끝나지 않는다. 이 소금이 도움이 된다. 고인 물에 던져 두면 녹으면서 물이 은빛 정화의 액체로 바뀐다. 그 안에 들어가면 하루의 피로가 풀리며 한동안 뒤틀림에서 지켜 준다. 그러고 나면 액체는 다 쓰인다. 뒤틀림이 깊이 박혔을수록 지켜 주는 시간은 짧다. 소금은 약해서, 떨어뜨리면 어디에 있든 10초 안에 녹아 버린다."},
+                {"spa", "Arcane Spa", "비전 스파",
+                 "Throwing salts into water is a chore, easily done away with. The spa takes water, by bucket or by pipe from any side, and bath salts, through its panel or from a hopper on any side but the top, and every two seconds mixes a bucket of the one with a dose of the other and pumps it into the pool above. The pool spreads a block at a time to five by five, wherever there is floor. Switched over on its panel it pumps whatever is in its tank, unmixed -- nearly any liquid that can stand in the world. A redstone signal stops it.",
+                 "소금을 물에 던지는 일은 번거롭고, 쉽게 덜 수 있다. 스파는 물을 양동이로든 관으로든 어느 면으로나 받고, 목욕 소금을 화면으로든 위를 뺀 어느 면의 깔때기로든 받는다. 그리고 2초마다 물 한 양동이에 소금 한 줌을 섞어 위쪽 웅덩이로 퍼 올린다. 웅덩이는 바닥이 있는 곳으로 한 칸씩 퍼져 5×5까지 된다. 화면에서 바꾸면 섞지 않고 통에 담긴 것을 그대로 퍼 올린다. 세상에 놓일 수 있는 액체라면 거의 무엇이든 된다. 레드스톤 신호가 들어오면 멈춘다."},
                 {"levitator", "Arcane Levitator", "비전 부양기",
                  "Not flight, but the next best thing. A levitator lifts whatever is in front of it -- things dropped, animals, you -- up to eight blocks, or as far as the first solid block. Crouch over one and you are let down slowly. Put on its side it pushes along instead, holding up what it pushes; put it down facing whichever way you like, crouching to turn it round. It burns aer from the aura while it is carrying anything, more the further it reaches: an empty hand on it steps its range through four, eight, sixteen and thirty-two blocks. A redstone signal stops it.",
                  "나는 것은 아니지만 그 다음쯤은 된다. 부양기는 앞에 있는 것 — 떨어진 물건, 동물, 당신 — 을 여덟 칸까지, 아니면 처음 막히는 블록까지 들어 올린다. 그 위에서 웅크리면 천천히 내려온다. 옆으로 눕히면 대신 밀어 보내고, 미는 동안 떠받친다. 어느 쪽으로든 놓을 수 있고, 웅크리고 놓으면 반대로 놓인다. 무엇을 나르는 동안 오라에서 공기를 태우고, 멀리 닿을수록 더 태운다. 빈손으로 누르면 범위가 넷, 여덟, 열여섯, 서른둘로 바뀐다. 레드스톤 신호가 들어오면 멈춘다."},
@@ -777,6 +783,13 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("block.alchemia.redstone_relay.in", pick("In: %s", "받는 세기: %s"));
         add("block.alchemia.redstone_relay.out", pick("Out: %s", "내는 세기: %s"));
         add("block.alchemia.arcane_ear", pick("Arcane Ear", "비전 귀"));
+        add("block.alchemia.spa", pick("Arcane Spa", "비전 스파"));
+        add("block.alchemia.purifying_fluid", pick("Purifying Fluid", "정화의 액체"));
+        add("item.alchemia.bath_salts", pick("Purifying Bath Salts", "정화의 목욕 소금"));
+        add("item.alchemia.purifying_fluid_bucket", pick("Bucket of Purifying Fluid", "정화의 액체 양동이"));
+        add("gui.alchemia.spa.mixing", pick("Mix with ingredient", "소금을 섞어 붓는다"));
+        add("gui.alchemia.spa.pouring", pick("Use just the fluid", "담긴 것만 붓는다"));
+        add("gui.alchemia.spa.amount", pick("%s mB", "%s mB"));
         add("block.alchemia.arcane_lamp", pick("Arcane Lamp", "비전 램프"));
         add("block.alchemia.growth_lamp", pick("Lamp of Growth", "성장의 램프"));
         add("block.alchemia.fertility_lamp", pick("Lamp of Fertility", "풍요의 램프"));

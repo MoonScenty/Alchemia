@@ -26,6 +26,11 @@ public class ModMenus {
                     () -> new MenuType<>(ArcaneWorkbenchMenu::new, FeatureFlags.VANILLA_SET));
 
     /** Carries the block's position across, since the screen reads what is dissolved off the block itself. */
+    /** Reads the tank off the readings, so needs nothing sent when it opens. */
+    public static final DeferredHolder<MenuType<?>, MenuType<me.moonscenty.alchemia.menu.SpaMenu>> SPA =
+            MENUS.register("spa", () -> new MenuType<>(me.moonscenty.alchemia.menu.SpaMenu::new,
+                    FeatureFlags.VANILLA_SET));
+
     public static final DeferredHolder<MenuType<?>, MenuType<EssentiaSmelterMenu>> ESSENTIA_SMELTER =
             MENUS.register("essentia_smelter",
                     () -> IMenuTypeExtension.create(EssentiaSmelterMenu::new));

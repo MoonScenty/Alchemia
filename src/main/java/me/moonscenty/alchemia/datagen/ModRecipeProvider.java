@@ -408,6 +408,16 @@ public class ModRecipeProvider extends RecipeProvider {
                         'R', Ingredient.of(Items.REDSTONE)),
                 "PBP", " P ", "WRW");
 
+        // the spa: a jar and a gear in arcane stone, a quartz rim, and bars over the inlet
+        arcane(output, "spa", "spa", new ItemStack(ModBlocks.SPA.get()),
+                AspectList.of(ModAspects.WATER, 25).add(ModAspects.ORDER, 15).add(ModAspects.EARTH, 15),
+                Map.of('Q', Ingredient.of(Items.QUARTZ_BLOCK),
+                        'I', Ingredient.of(Items.IRON_BARS),
+                        'S', Ingredient.of(ModBlocks.ARCANE_STONE.block()),
+                        'J', Ingredient.of(ModBlocks.JAR),
+                        'P', Ingredient.of(ModItems.BRASS_GEAR)),
+                "QIQ", "SJS", "SPS");
+
         // bellows: two boards a side, the hide between them, a shard of air to blow with and an iron nozzle
         arcane(output, "bellows", "bellows", new ItemStack(ModBlocks.BELLOWS.get()),
                 AspectList.of(ModAspects.AIR, 25).add(ModAspects.ORDER, 10),
@@ -940,6 +950,10 @@ public class ModRecipeProvider extends RecipeProvider {
                 new ItemStack(ModItems.BRASS_INGOT.get()), "metallurgy");
 
         // coal boiled until it is four coals, and glowstone boiled until it is light with nothing under it
+        crucible(output, "bath_salts", Ingredient.of(ModItems.SALIS_MUNDUS),
+                AspectList.of(ModAspects.MIND, 6).add(ModAspects.AIR, 6).add(ModAspects.ORDER, 6)
+                        .add(ModAspects.LIFE, 6),
+                new ItemStack(ModItems.BATH_SALTS.get()), "bath_salts");
         crucible(output, "alumentum", Ingredient.of(ItemTags.COALS),
                 AspectList.of(ModAspects.ENERGY, 3).add(ModAspects.FIRE, 3).add(ModAspects.ENTROPY, 3),
                 new ItemStack(ModItems.ALUMENTUM.get()), "alumentum");
