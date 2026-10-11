@@ -251,6 +251,8 @@ public class ModBlockStateProvider extends BlockStateProvider {
         simpleBlock(ModBlocks.INFUSION_MATRIX.get(), models().getExistingFile(modLoc("block/infusion_matrix")));
         // the corner draws nothing either: the pillar standing on it is drawn by the matrix
         simpleBlock(ModBlocks.ARCANE_PILLAR.get(), models().getExistingFile(modLoc("block/infusion_matrix")));
+        // a hole is the absence of a block, so there is nothing to draw and nothing to draw it with
+        simpleBlock(ModBlocks.HOLE.get(), models().getExistingFile(mcLoc("block/air")));
     }
 
     /** A furnace in every way the blockstate cares about: it faces somewhere, and it is lit or it is not. */

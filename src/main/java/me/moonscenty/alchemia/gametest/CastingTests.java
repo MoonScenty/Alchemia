@@ -10,6 +10,8 @@ import me.moonscenty.alchemia.registry.ModWandParts;
 import me.moonscenty.alchemia.wand.Casting;
 import me.moonscenty.alchemia.wand.spell.Grapple;
 import me.moonscenty.alchemia.wand.spell.Ember;
+import me.moonscenty.alchemia.registry.ModBlocks;
+import me.moonscenty.alchemia.wand.spell.Hole;
 import me.moonscenty.alchemia.wand.spell.PechBlast;
 import me.moonscenty.alchemia.wand.spell.Swapping;
 import net.minecraft.core.Direction;
@@ -287,6 +289,44 @@ public class CastingTests {
         helper.assertBlockPresent(Blocks.STONE, first.east());
         // what was not ore is left alone: the trade follows the vein rather than filling a box
         helper.assertBlockPresent(Blocks.DIRT, first.east().east());
+        helper.succeed();
+    }
+    /**
+     * A portable hole bores through a wall and the wall comes back.
+     * <p>
+     * Nothing is broken and nothing drops. The whole worth of it is that the wall is a wall again a few seconds
+     * later, so what is opened is a way through rather than a way of taking the wall.
+     */
+    @GameTest(template = TEMPLATE, timeoutTicks = 400)
+    public static void aHoleBoresThroughAndTheWallComesBack(GameTestHelper helper) {
+        Player caster = helper.makeMockPlayer(GameType.CREATIVE);
+        ItemStack wand = wand("hole", 100);
+        BlockPos face = new BlockPos(2, 2, 2);
+        helper.setBlock(face, Blocks.STONE);
+        helper.setBlock(face.east(), Blocks.STONE);
+
+        BlockHitResult struck = new BlockHitResult(Vec3.ZERO, Direction.WEST, helper.absolutePos(face), false);
+        helper.assertTrue(Hole.cast(helper.getLevel(), caster, wand, struck, 0), "it bored");
+        helper.assertBlockPresent(ModBlocks.HOLE.get(), face);
+
+        // the layer behind it opens a tick later, which is what makes it look bored rather than deleted
+        helper.runAfterDelay(2, () -> helper.assertBlockPresent(ModBlocks.HOLE.get(), face.east()));
+        helper.runAfterDelay(160, () -> {
+            helper.assertBlockPresent(Blocks.STONE, face);
+            helper.assertBlockPresent(Blocks.STONE, face.east());
+            helper.succeed();
+        });
+    }
+
+    /** Nothing to bore through is nothing to pay for. */
+    @GameTest(template = TEMPLATE, timeoutTicks = 200)
+    public static void aHoleInThinAirDoesNothing(GameTestHelper helper) {
+        Player caster = helper.makeMockPlayer(GameType.CREATIVE);
+        ItemStack wand = wand("hole", 100);
+        BlockPos nothing = new BlockPos(4, 3, 4);
+        helper.assertFalse(Hole.cast(helper.getLevel(), caster, wand,
+                        new BlockHitResult(Vec3.ZERO, Direction.WEST, helper.absolutePos(nothing), false), 0),
+                "there was nothing there to bore");
         helper.succeed();
     }
 }

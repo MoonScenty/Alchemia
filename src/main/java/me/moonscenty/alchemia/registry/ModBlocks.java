@@ -27,6 +27,7 @@ import me.moonscenty.alchemia.block.EssentiaSmelterBlock;
 import me.moonscenty.alchemia.block.InfusionMatrixBlock;
 import me.moonscenty.alchemia.block.CrystalBlock;
 import me.moonscenty.alchemia.block.CrystalType;
+import me.moonscenty.alchemia.block.HoleBlock;
 import me.moonscenty.alchemia.block.NodeStabilizerBlock;
 import me.moonscenty.alchemia.block.ResearchTableBlock;
 import me.moonscenty.alchemia.block.ShimmerleafBlock;
@@ -208,6 +209,21 @@ public class ModBlocks {
 
     /** One to a dye, sharing a grey picture that each paints with its own colour. */
     public static final Map<DyeColor, DeferredBlock<NitorBlock>> NITOR = registerNitor();
+
+    /**
+     * A gap in a wall, held open by a working and remembering what it took.
+     * <p>
+     * Not placed and not picked up: it is made by a focus and it closes itself. There is no item and no recipe.
+     */
+    public static final DeferredBlock<HoleBlock> HOLE = registerBlockOnly("hole",
+            () -> new HoleBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.NONE)
+                    .strength(-1.0F, 3600000.0F)
+                    .noCollission()
+                    .noOcclusion()
+                    .noLootTable()
+                    .air()
+                    .pushReaction(net.minecraft.world.level.material.PushReaction.DESTROY)));
 
     public static final DeferredBlock<Block> ALCHEMIUM_BLOCK = register("alchemium_block",
             () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).mapColor(MapColor.COLOR_PURPLE)));

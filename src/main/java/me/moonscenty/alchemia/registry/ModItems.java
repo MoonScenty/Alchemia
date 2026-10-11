@@ -17,6 +17,7 @@ import me.moonscenty.alchemia.item.RobeItem;
 import me.moonscenty.alchemia.wand.Focus;
 import me.moonscenty.alchemia.wand.spell.Excavation;
 import me.moonscenty.alchemia.wand.spell.Shock;
+import me.moonscenty.alchemia.wand.spell.Hole;
 import me.moonscenty.alchemia.wand.spell.Swapping;
 import me.moonscenty.alchemia.wand.spell.Thrown;
 import me.moonscenty.alchemia.item.GogglesItem;
@@ -241,7 +242,7 @@ public class ModItems {
                 .cooldown(250).inTurrets().casts(Thrown::pech));
         // the dearest of them by a long way, and the only one that takes a wall out of the world
         kinds.put("hole", () -> Focus.of(0x091429, AspectList.of(ModAspects.ENTROPY, 25)
-                .add(ModAspects.AIR, 25).add(ModAspects.EARTH, 25)));
+                .add(ModAspects.AIR, 25).add(ModAspects.EARTH, 25)).casts(Hole::cast));
         kinds.put("primal", () -> Focus.of(0xA5A1C1, primalCost())
                 .cooldown(500).inTurrets().casts(Thrown::primal));
         kinds.put("shard", () -> Focus.of(0x9929BD, AspectList.of(ModAspects.FIRE, 1)

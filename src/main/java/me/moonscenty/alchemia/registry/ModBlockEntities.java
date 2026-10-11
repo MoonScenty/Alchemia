@@ -13,6 +13,7 @@ import me.moonscenty.alchemia.block.entity.TubeBlockEntity;
 import me.moonscenty.alchemia.block.entity.ValveTubeBlockEntity;
 import me.moonscenty.alchemia.block.entity.EssentiaSmelterBlockEntity;
 import me.moonscenty.alchemia.block.entity.InfusionMatrixBlockEntity;
+import me.moonscenty.alchemia.block.entity.HoleBlockEntity;
 import me.moonscenty.alchemia.block.entity.NitorBlockEntity;
 import me.moonscenty.alchemia.block.entity.NodeStabilizerBlockEntity;
 import me.moonscenty.alchemia.block.entity.ResearchTableBlockEntity;
@@ -28,6 +29,12 @@ public class ModBlockEntities {
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ResearchTableBlockEntity>> RESEARCH_TABLE =
             BLOCK_ENTITIES.register("research_table", () -> BlockEntityType.Builder
                     .of(ResearchTableBlockEntity::new, ModBlocks.RESEARCH_TABLE.get())
+                    .build(null));
+
+    /** One square of a portable hole, which remembers what it is standing in for and counts down to giving it back. */
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<HoleBlockEntity>> HOLE =
+            BLOCK_ENTITIES.register("hole", () -> BlockEntityType.Builder
+                    .of(HoleBlockEntity::new, ModBlocks.HOLE.get())
                     .build(null));
 
     /** All sixteen flames share one, since none of them holds anything: it exists only to tick. */
