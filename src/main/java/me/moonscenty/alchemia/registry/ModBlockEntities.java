@@ -78,6 +78,20 @@ public class ModBlockEntities {
                     .of(me.moonscenty.alchemia.block.entity.WaterJugBlockEntity::new, ModBlocks.WATER_JUG.get())
                     .build(null));
 
+    /** A levitator lifting what is in front of it. */
+    public static final DeferredHolder<BlockEntityType<?>,
+            BlockEntityType<me.moonscenty.alchemia.block.entity.LevitatorBlockEntity>> LEVITATOR =
+            BLOCK_ENTITIES.register("levitator", () -> BlockEntityType.Builder
+                    .of(me.moonscenty.alchemia.block.entity.LevitatorBlockEntity::new, ModBlocks.LEVITATOR.get())
+                    .build(null));
+
+    /** An arcane ear listening for its note. */
+    public static final DeferredHolder<BlockEntityType<?>,
+            BlockEntityType<me.moonscenty.alchemia.block.entity.ArcaneEarBlockEntity>> ARCANE_EAR =
+            BLOCK_ENTITIES.register("arcane_ear", () -> BlockEntityType.Builder
+                    .of(me.moonscenty.alchemia.block.entity.ArcaneEarBlockEntity::new, ModBlocks.ARCANE_EAR.get())
+                    .build(null));
+
     /** One square of a portable hole, which remembers what it is standing in for and counts down to giving it back. */
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<HoleBlockEntity>> HOLE =
             BLOCK_ENTITIES.register("hole", () -> BlockEntityType.Builder

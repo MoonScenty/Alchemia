@@ -188,6 +188,12 @@ public class ModItemModelProvider extends ItemModelProvider {
         withExistingParent("fertility_lamp", modLoc("block/fertility_lamp_on"));
         getBuilder("water_jug").parent(new net.neoforged.neoforge.client.model.generators.ModelFile
                 .UncheckedModelFile(modLoc("block/legacy/water_jug")));
+        // the levitator and the ear in the hand are lit, as the original showed them; the relay is dark
+        getBuilder("levitator").parent(new net.neoforged.neoforge.client.model.generators.ModelFile
+                .UncheckedModelFile(modLoc("block/levitator_on")));
+        getBuilder("arcane_ear").parent(new net.neoforged.neoforge.client.model.generators.ModelFile
+                .UncheckedModelFile(modLoc("block/arcane_ear_on")));
+        withExistingParent("redstone_relay", modLoc("block/redstone_relay_off"));
         // the chest is drawn by its own renderer, held the way the game holds its own chest
         getBuilder("hungry_chest").parent(new net.neoforged.neoforge.client.model.generators.ModelFile
                 .UncheckedModelFile("minecraft:item/chest"));

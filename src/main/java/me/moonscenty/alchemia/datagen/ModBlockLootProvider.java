@@ -85,6 +85,9 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
         dropSelf(ModBlocks.FERTILITY_LAMP.get());
         dropSelf(ModBlocks.HUNGRY_CHEST.get());
         dropSelf(ModBlocks.WATER_JUG.get());
+        dropSelf(ModBlocks.LEVITATOR.get());
+        dropSelf(ModBlocks.REDSTONE_RELAY.get());
+        dropSelf(ModBlocks.ARCANE_EAR.get());
         dropSelf(ModBlocks.ARCANE_WORKBENCH_CHARGER.get());
         dropSelf(ModBlocks.NODE_STABILIZER.get());
         dropSelf(ModBlocks.ARCANE_PEDESTAL.get());

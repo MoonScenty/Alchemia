@@ -1,0 +1,24 @@
+{
+  "category": "alchemia:artifice",
+  "column": 2,
+  "icon": "alchemia:redstone_relay",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.redstone_relay.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:redstone_relay"
+    }
+  ],
+  "parents": [
+    "alchemia:primal_charm"
+  ],
+  "requirements": {
+    "alchemia:aversio": 3,
+    "alchemia:ordo": 3,
+    "alchemia:potentia": 6
+  },
+  "row": -2
+}

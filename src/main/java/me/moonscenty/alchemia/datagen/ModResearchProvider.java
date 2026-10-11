@@ -262,6 +262,17 @@ public class ModResearchProvider {
                 AspectList.of(ModAspects.WATER, 6).add(ModAspects.EARTH, 3).add(ModAspects.CRAFT, 3),
                 List.of("crucible", "infusion"), false, NodeShape.PLAIN, 1, "water_jug");
 
+        // things that answer to redstone or move what is in front of them
+        entry(context, "levitator", ModResearch.ARTIFICE, ModBlocks.LEVITATOR, -1, 0,
+                AspectList.of(ModAspects.MOTION, 3).add(ModAspects.FLIGHT, 3).add(ModAspects.AIR, 3),
+                List.of("primal_charm", "nitor"), false, NodeShape.PLAIN, 1, "levitator");
+        entry(context, "redstone_relay", ModResearch.ARTIFICE, ModBlocks.REDSTONE_RELAY, 2, -2,
+                AspectList.of(ModAspects.ENERGY, 6).add(ModAspects.AVERSION, 3).add(ModAspects.ORDER, 3),
+                List.of("primal_charm"), false, NodeShape.PLAIN, 1, "redstone_relay");
+        entry(context, "arcane_ear", ModResearch.ARTIFICE, ModBlocks.ARCANE_EAR, 6, 0,
+                AspectList.of(ModAspects.SENSES, 3).add(ModAspects.MECHANISM, 3).add(ModAspects.AIR, 3),
+                List.of("goggles"), false, NodeShape.PLAIN, 1, "arcane_ear");
+
         entry(context, "bellows", ModResearch.ARTIFICE, ModBlocks.BELLOWS, 2, 0,
                 AspectList.of(ModAspects.AIR, 6).add(ModAspects.MECHANISM, 3).add(ModAspects.MOTION, 3),
                 List.of("primal_charm"), false, NodeShape.PLAIN, 1, "bellows");

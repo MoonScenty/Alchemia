@@ -384,6 +384,30 @@ public class ModRecipeProvider extends RecipeProvider {
                         'T', Ingredient.of(net.minecraft.tags.ItemTags.WOODEN_TRAPDOORS)),
                 "WTW", "W W", "WWW");
 
+        // the levitator, the relay and the ear, all the original's; a rotten brain stands in for the zombie's
+        arcane(output, "levitator", "levitator", new ItemStack(ModBlocks.LEVITATOR.get()),
+                AspectList.of(ModAspects.AIR, 20).add(ModAspects.EARTH, 15),
+                Map.of('W', Ingredient.of(net.minecraft.tags.ItemTags.PLANKS),
+                        'E', Ingredient.of(ModItems.SHARDS.get(CrystalType.AIR)),
+                        'B', Ingredient.of(Items.IRON_INGOT),
+                        'N', Ingredient.of(ModTags.Items.NITOR),
+                        'G', Ingredient.of(ModItems.BRASS_GEAR)),
+                "WEW", "BNB", "WGW");
+        arcane(output, "redstone_relay", "redstone_relay", new ItemStack(ModBlocks.REDSTONE_RELAY.get()),
+                AspectList.of(ModAspects.FIRE, 5).add(ModAspects.ORDER, 5),
+                Map.of('T', Ingredient.of(Items.REDSTONE_TORCH),
+                        'G', Ingredient.of(ModItems.BRASS_GEAR),
+                        'C', Ingredient.of(ModItems.SHARDS.get(CrystalType.ORDER)),
+                        'S', Ingredient.of(Items.SMOOTH_STONE_SLAB)),
+                "TGC", "SSS");
+        arcane(output, "arcane_ear", "arcane_ear", new ItemStack(ModBlocks.ARCANE_EAR.get()),
+                AspectList.of(ModAspects.AIR, 10).add(ModAspects.ORDER, 5),
+                Map.of('P', Ingredient.of(ModItems.BRASS_PLATE),
+                        'B', Ingredient.of(Items.ROTTEN_FLESH),
+                        'W', Ingredient.of(net.minecraft.tags.ItemTags.WOODEN_SLABS),
+                        'R', Ingredient.of(Items.REDSTONE)),
+                "PBP", " P ", "WRW");
+
         // bellows: two boards a side, the hide between them, a shard of air to blow with and an iron nozzle
         arcane(output, "bellows", "bellows", new ItemStack(ModBlocks.BELLOWS.get()),
                 AspectList.of(ModAspects.AIR, 25).add(ModAspects.ORDER, 10),

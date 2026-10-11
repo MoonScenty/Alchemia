@@ -193,6 +193,26 @@ public class ModBlocks {
                     BlockBehaviour.Properties.ofFullCopy(Blocks.TERRACOTTA).mapColor(MapColor.TERRACOTTA_ORANGE)
                             .noOcclusion()));
 
+    /** A box of wood and brass that lifts and carries what is in front of it. */
+    public static final DeferredBlock<me.moonscenty.alchemia.block.LevitatorBlock> LEVITATOR = register("levitator",
+            () -> new me.moonscenty.alchemia.block.LevitatorBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_PLANKS)
+                    .mapColor(MapColor.WOOD)
+                    .noOcclusion()));
+
+    /** A repeater with a say in how strong a signal it takes and gives. */
+    public static final DeferredBlock<me.moonscenty.alchemia.block.RedstoneRelayBlock> REDSTONE_RELAY =
+            register("redstone_relay", () -> new me.moonscenty.alchemia.block.RedstoneRelayBlock(
+                    BlockBehaviour.Properties.ofFullCopy(Blocks.REPEATER)));
+
+    /** A wooden ear that gives a signal when it hears its note played. */
+    public static final DeferredBlock<me.moonscenty.alchemia.block.ArcaneEarBlock> ARCANE_EAR = register("arcane_ear",
+            () -> new me.moonscenty.alchemia.block.ArcaneEarBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOD)
+                    .sound(net.minecraft.world.level.block.SoundType.WOOD)
+                    .strength(1.0F)
+                    .noOcclusion()
+                    .pushReaction(net.minecraft.world.level.material.PushReaction.DESTROY)));
+
     private static me.moonscenty.alchemia.block.LampBlock lamp(me.moonscenty.alchemia.block.LampBlock.Kind kind) {
         return new me.moonscenty.alchemia.block.LampBlock(kind, BlockBehaviour.Properties.of()
                 .mapColor(MapColor.METAL)

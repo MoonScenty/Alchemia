@@ -1,0 +1,56 @@
+{
+  "variants": {
+    "enabled=false,facing=down": {
+      "model": "alchemia:block/levitator_off",
+      "x": 180
+    },
+    "enabled=false,facing=east": {
+      "model": "alchemia:block/levitator_off",
+      "x": 90,
+      "y": 90
+    },
+    "enabled=false,facing=north": {
+      "model": "alchemia:block/levitator_off",
+      "x": 90
+    },
+    "enabled=false,facing=south": {
+      "model": "alchemia:block/levitator_off",
+      "x": 90,
+      "y": 180
+    },
+    "enabled=false,facing=up": {
+      "model": "alchemia:block/levitator_off"
+    },
+    "enabled=false,facing=west": {
+      "model": "alchemia:block/levitator_off",
+      "x": 90,
+      "y": 270
+    },
+    "enabled=true,facing=down": {
+      "model": "alchemia:block/levitator_on",
+      "x": 180
+    },
+    "enabled=true,facing=east": {
+      "model": "alchemia:block/levitator_on",
+      "x": 90,
+      "y": 90
+    },
+    "enabled=true,facing=north": {
+      "model": "alchemia:block/levitator_on",
+      "x": 90
+    },
+    "enabled=true,facing=south": {
+      "model": "alchemia:block/levitator_on",
+      "x": 90,
+      "y": 180
+    },
+    "enabled=true,facing=up": {
+      "model": "alchemia:block/levitator_on"
+    },
+    "enabled=true,facing=west": {
+      "model": "alchemia:block/levitator_on",
+      "x": 90,
+      "y": 270
+    }
+  }
+}

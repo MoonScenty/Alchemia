@@ -1,0 +1,56 @@
+{
+  "variants": {
+    "enabled=false,facing=down": {
+      "model": "alchemia:block/arcane_ear_off",
+      "x": 180
+    },
+    "enabled=false,facing=east": {
+      "model": "alchemia:block/arcane_ear_off",
+      "x": 90,
+      "y": 90
+    },
+    "enabled=false,facing=north": {
+      "model": "alchemia:block/arcane_ear_off",
+      "x": 90
+    },
+    "enabled=false,facing=south": {
+      "model": "alchemia:block/arcane_ear_off",
+      "x": 90,
+      "y": 180
+    },
+    "enabled=false,facing=up": {
+      "model": "alchemia:block/arcane_ear_off"
+    },
+    "enabled=false,facing=west": {
+      "model": "alchemia:block/arcane_ear_off",
+      "x": 90,
+      "y": 270
+    },
+    "enabled=true,facing=down": {
+      "model": "alchemia:block/arcane_ear_on",
+      "x": 180
+    },
+    "enabled=true,facing=east": {
+      "model": "alchemia:block/arcane_ear_on",
+      "x": 90,
+      "y": 90
+    },
+    "enabled=true,facing=north": {
+      "model": "alchemia:block/arcane_ear_on",
+      "x": 90
+    },
+    "enabled=true,facing=south": {
+      "model": "alchemia:block/arcane_ear_on",
+      "x": 90,
+      "y": 180
+    },
+    "enabled=true,facing=up": {
+      "model": "alchemia:block/arcane_ear_on"
+    },
+    "enabled=true,facing=west": {
+      "model": "alchemia:block/arcane_ear_on",
+      "x": 90,
+      "y": 270
+    }
+  }
+}

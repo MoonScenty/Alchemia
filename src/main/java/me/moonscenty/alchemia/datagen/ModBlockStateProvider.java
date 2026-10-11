@@ -58,6 +58,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         focalManipulator();
         bellows();
         smallDevices();
+        signalDevices();
         arcaneWorkbenchCharger();
         nodeStabilizer();
         altar();
@@ -327,6 +328,61 @@ public class ModBlockStateProvider extends BlockStateProvider {
                 .UncheckedModelFile(modLoc("block/legacy/water_jug")));
         drawnElsewhere(ModBlocks.HUNGRY_CHEST, "block/greatwood_planks");
         drawnElsewhere(ModBlocks.LAMP_LIGHT, "block/legacy/lamp_on");
+    }
+
+    /**
+     * The levitator and the ear, the original's lit and dark models turned to the way they face, and the relay, the
+     * original's model with today's names for the vanilla pictures it borrows. The turns are the original's own.
+     */
+    private void signalDevices() {
+        facingSix(ModBlocks.LEVITATOR.get(), me.moonscenty.alchemia.block.LevitatorBlock.FACING,
+                me.moonscenty.alchemia.block.LevitatorBlock.ENABLED, "levitator");
+        facingSix(ModBlocks.ARCANE_EAR.get(), me.moonscenty.alchemia.block.ArcaneEarBlock.FACING,
+                me.moonscenty.alchemia.block.ArcaneEarBlock.ENABLED, "arcane_ear");
+        var on = models().getBuilder("redstone_relay_on")
+                .parent(new net.neoforged.neoforge.client.model.generators.ModelFile.UncheckedModelFile(
+                        modLoc("block/legacy/redstone_relay_on")))
+                .texture("torch", mcLoc("block/redstone_torch")).texture("slab", mcLoc("block/smooth_stone"))
+                .renderType("cutout");
+        var off = models().getBuilder("redstone_relay_off")
+                .parent(new net.neoforged.neoforge.client.model.generators.ModelFile.UncheckedModelFile(
+                        modLoc("block/legacy/redstone_relay_off")))
+                .texture("torch", mcLoc("block/redstone_torch_off")).texture("slab", mcLoc("block/smooth_stone"))
+                .renderType("cutout");
+        getVariantBuilder(ModBlocks.REDSTONE_RELAY.get()).forAllStatesExcept(state -> {
+            net.minecraft.core.Direction facing = state.getValue(me.moonscenty.alchemia.block.RedstoneRelayBlock.FACING);
+            int turn = switch (facing) {
+                case EAST -> 270;
+                case WEST -> 90;
+                case NORTH -> 180;
+                default -> 0;
+            };
+            return net.neoforged.neoforge.client.model.generators.ConfiguredModel.builder()
+                    .modelFile(state.getValue(me.moonscenty.alchemia.block.RedstoneRelayBlock.POWERED) ? on : off)
+                    .rotationY(turn).build();
+        }, me.moonscenty.alchemia.block.RedstoneRelayBlock.IN, me.moonscenty.alchemia.block.RedstoneRelayBlock.OUT);
+    }
+
+    private void facingSix(net.minecraft.world.level.block.Block block,
+            net.minecraft.world.level.block.state.properties.DirectionProperty facingProperty,
+            net.minecraft.world.level.block.state.properties.BooleanProperty enabledProperty, String model) {
+        var on = new net.neoforged.neoforge.client.model.generators.ModelFile.UncheckedModelFile(
+                modLoc("block/" + model + "_on"));
+        var off = new net.neoforged.neoforge.client.model.generators.ModelFile.UncheckedModelFile(
+                modLoc("block/" + model + "_off"));
+        getVariantBuilder(block).forAllStates(state -> {
+            int[] turn = switch (state.getValue(facingProperty)) {
+                case DOWN -> new int[] {180, 0};
+                case UP -> new int[] {0, 0};
+                case EAST -> new int[] {90, 90};
+                case WEST -> new int[] {90, 270};
+                case NORTH -> new int[] {90, 0};
+                case SOUTH -> new int[] {90, 180};
+            };
+            return net.neoforged.neoforge.client.model.generators.ConfiguredModel.builder()
+                    .modelFile(state.getValue(enabledProperty) ? on : off)
+                    .rotationX(turn[0]).rotationY(turn[1]).build();
+        });
     }
 
     /** Drawn by BellowsRenderer; the block itself only has to say what it breaks into. */

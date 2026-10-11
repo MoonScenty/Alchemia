@@ -1,0 +1,34 @@
+{
+  "type": "alchemia:arcane_shaped",
+  "key": {
+    "B": {
+      "item": "minecraft:iron_ingot"
+    },
+    "E": {
+      "item": "alchemia:air_shard"
+    },
+    "G": {
+      "item": "alchemia:brass_gear"
+    },
+    "N": {
+      "tag": "alchemia:nitor"
+    },
+    "W": {
+      "tag": "minecraft:planks"
+    }
+  },
+  "pattern": [
+    "WEW",
+    "BNB",
+    "WGW"
+  ],
+  "research": "alchemia:levitator",
+  "result": {
+    "count": 1,
+    "id": "alchemia:levitator"
+  },
+  "vis": {
+    "alchemia:aer": 20,
+    "alchemia:terra": 15
+  }
+}

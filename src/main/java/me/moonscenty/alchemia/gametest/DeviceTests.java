@@ -245,6 +245,142 @@ public class DeviceTests {
         });
     }
 
+    /** A levitator facing up, with aer to burn, lifts what is dropped on it. */
+    @GameTest(template = TEMPLATE, timeoutTicks = 100)
+    public static void aLevitatorLiftsWhatIsOverIt(GameTestHelper helper) {
+        BlockPos at = new BlockPos(3, 2, 3);
+        helper.setBlock(at, ModBlocks.LEVITATOR.get().defaultBlockState()
+                .setValue(me.moonscenty.alchemia.block.LevitatorBlock.FACING, Direction.UP));
+        var levitator = (me.moonscenty.alchemia.block.entity.LevitatorBlockEntity) helper.getBlockEntity(at);
+        // give it aer in hand rather than wait on the air over a test plot
+        levitator.given(12000);
+        var item = helper.spawnItem(net.minecraft.world.item.Items.FEATHER, 3.5F, 3.2F, 3.5F);
+        double from = item.getY();
+        helper.runAfterDelay(30, () -> {
+            helper.assertTrue(item.getY() > from + 1.0, "the feather has risen, to " + (item.getY() - from));
+            helper.assertTrue(levitator.vis() < 12000, "and the lifting cost it aer");
+            helper.succeed();
+        });
+    }
+
+    /** A levitator reaches as far as the first solid block, and its range steps round from eight. */
+    @GameTest(template = TEMPLATE, timeoutTicks = 100)
+    public static void aLevitatorStopsShortOfASolidBlock(GameTestHelper helper) {
+        BlockPos at = new BlockPos(3, 2, 3);
+        helper.setBlock(at, ModBlocks.LEVITATOR.get().defaultBlockState()
+                .setValue(me.moonscenty.alchemia.block.LevitatorBlock.FACING, Direction.UP));
+        helper.setBlock(at.above(3), Blocks.STONE);
+        var levitator = (me.moonscenty.alchemia.block.entity.LevitatorBlockEntity) helper.getBlockEntity(at);
+        helper.assertValueEqual(levitator.range(), 8, "eight blocks to begin with");
+        levitator.stepRange();
+        levitator.stepRange();
+        levitator.stepRange();
+        helper.assertValueEqual(levitator.range(), 4, "and round through sixteen and thirty-two to four");
+        helper.assertValueEqual(levitator.cost(), 8, "costing twice its range");
+        helper.runAfterDelay(20, () -> {
+            helper.assertValueEqual(levitator.reach(), 2, "it reaches the two blocks below the stone");
+            helper.succeed();
+        });
+    }
+
+    private static BlockState relay(Direction facing, int in, int out) {
+        return ModBlocks.REDSTONE_RELAY.get().defaultBlockState()
+                .setValue(me.moonscenty.alchemia.block.RedstoneRelayBlock.FACING, facing)
+                .setValue(me.moonscenty.alchemia.block.RedstoneRelayBlock.IN, in)
+                .setValue(me.moonscenty.alchemia.block.RedstoneRelayBlock.OUT, out);
+    }
+
+    /** A relay answers only to a signal as strong as it asks for, and gives out what it is set to. */
+    @GameTest(template = TEMPLATE, timeoutTicks = 100)
+    public static void aRelayAnswersAtItsThreshold(GameTestHelper helper) {
+        BlockPos asksTooMuch = relayLane(helper, 3, 15);
+        BlockPos asksEnough = relayLane(helper, 6, 14);
+        helper.runAfterDelay(6, () -> {
+            helper.assertBlockProperty(asksTooMuch, me.moonscenty.alchemia.block.RedstoneRelayBlock.POWERED, false);
+            helper.assertBlockProperty(asksTooMuch.south(), net.minecraft.world.level.block.RedStoneWireBlock.POWER, 0);
+            helper.assertBlockProperty(asksEnough, me.moonscenty.alchemia.block.RedstoneRelayBlock.POWERED, true);
+            helper.assertBlockProperty(asksEnough.south(), net.minecraft.world.level.block.RedStoneWireBlock.POWER, 6);
+            helper.succeed();
+        });
+    }
+
+    /**
+     * A relay asking for the given signal and giving six, with a wire out of it, and then fed from a block of redstone
+     * down two lengths of wire, so that what reaches it is fourteen.
+     */
+    private static BlockPos relayLane(GameTestHelper helper, int x, int asks) {
+        for (int z = 0; z <= 4; z++) {
+            helper.setBlock(new BlockPos(x, 1, z), Blocks.STONE);
+        }
+        BlockPos at = new BlockPos(x, 2, 3);
+        helper.setBlock(at, relay(Direction.NORTH, asks, 6));
+        helper.setBlock(at.south(), Blocks.REDSTONE_WIRE);
+        helper.setBlock(new BlockPos(x, 2, 0), Blocks.REDSTONE_BLOCK);
+        helper.setBlock(new BlockPos(x, 2, 1), Blocks.REDSTONE_WIRE);
+        helper.setBlock(new BlockPos(x, 2, 2), Blocks.REDSTONE_WIRE);
+        return at;
+    }
+
+    /** The relay's toggles step under a click: the back one sets what it takes, the front one what it gives. */
+    @GameTest(template = TEMPLATE)
+    public static void aRelaysTogglesStep(GameTestHelper helper) {
+        BlockPos at = new BlockPos(3, 2, 3);
+        helper.setBlock(at.below(), Blocks.STONE);
+        helper.setBlock(at, relay(Direction.SOUTH, 1, 15));
+        BlockPos where = helper.absolutePos(at);
+        var player = helper.makeMockPlayer(net.minecraft.world.level.GameType.CREATIVE);
+        // facing south: the input end is south, its right hand west
+        click(helper, at, player, where.getCenter().add(0.0, -0.3, 0.25));
+        helper.assertBlockProperty(at, me.moonscenty.alchemia.block.RedstoneRelayBlock.IN, 2);
+        click(helper, at, player, where.getCenter().add(-0.25, -0.3, -0.25));
+        helper.assertBlockProperty(at, me.moonscenty.alchemia.block.RedstoneRelayBlock.OUT, 1);
+        click(helper, at, player, where.getCenter().add(0.25, -0.3, 0.0));
+        helper.assertBlockProperty(at, me.moonscenty.alchemia.block.RedstoneRelayBlock.IN, 2);
+        helper.assertBlockProperty(at, me.moonscenty.alchemia.block.RedstoneRelayBlock.OUT, 1);
+        helper.succeed();
+    }
+
+    private static void click(GameTestHelper helper, BlockPos at, net.minecraft.world.entity.player.Player player,
+            net.minecraft.world.phys.Vec3 hit) {
+        helper.useBlock(at, player, new net.minecraft.world.phys.BlockHitResult(hit, Direction.UP,
+                helper.absolutePos(at), false));
+    }
+
+    /** An ear on stone hears a note block on stone play its note, and only its note. */
+    @GameTest(template = TEMPLATE, timeoutTicks = 100)
+    public static void anArcaneEarHearsItsNote(GameTestHelper helper) {
+        BlockPos stone = new BlockPos(3, 2, 3);
+        helper.setBlock(stone, Blocks.STONE);
+        BlockPos earAt = stone.above();
+        helper.setBlock(earAt, ModBlocks.ARCANE_EAR.get().defaultBlockState()
+                .setValue(me.moonscenty.alchemia.block.ArcaneEarBlock.FACING, Direction.UP));
+        var ear = (me.moonscenty.alchemia.block.entity.ArcaneEarBlockEntity) helper.getBlockEntity(earAt);
+        ear.raisePitch();
+        helper.assertTrue(ear.voice() == net.minecraft.world.level.block.state.properties.NoteBlockInstrument.BASEDRUM,
+                "it listens in the voice of stone");
+
+        BlockPos noteAt = new BlockPos(8, 2, 8);
+        helper.setBlock(noteAt.below(), Blocks.STONE);
+        helper.setBlock(noteAt, Blocks.NOTE_BLOCK.defaultBlockState().setValue(
+                net.minecraft.world.level.block.NoteBlock.INSTRUMENT,
+                net.minecraft.world.level.block.state.properties.NoteBlockInstrument.BASEDRUM));
+        helper.getLevel().blockEvent(helper.absolutePos(noteAt), Blocks.NOTE_BLOCK, 0, 0);
+        helper.runAfterDelay(3, () -> {
+            helper.assertBlockProperty(earAt, me.moonscenty.alchemia.block.ArcaneEarBlock.ENABLED, false);
+            helper.setBlock(noteAt, helper.getBlockState(noteAt).setValue(net.minecraft.world.level.block.NoteBlock.NOTE, 1));
+            helper.getLevel().blockEvent(helper.absolutePos(noteAt), Blocks.NOTE_BLOCK, 0, 0);
+            helper.runAfterDelay(3, () -> {
+                helper.assertBlockProperty(earAt, me.moonscenty.alchemia.block.ArcaneEarBlock.ENABLED, true);
+                helper.assertTrue(helper.getLevel().getSignal(helper.absolutePos(stone), Direction.EAST) == 15,
+                        "the stone it is fixed to carries its signal");
+                helper.runAfterDelay(12, () -> {
+                    helper.assertBlockProperty(earAt, me.moonscenty.alchemia.block.ArcaneEarBlock.ENABLED, false);
+                    helper.succeed();
+                });
+            });
+        });
+    }
+
     /** The autocaster is built round the original's made mind again, with the resonator in its ring. */
     @GameTest(template = TEMPLATE)
     public static void theAutocasterIsBuiltOfItsOwnParts(GameTestHelper helper) {

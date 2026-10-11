@@ -1,0 +1,31 @@
+{
+  "type": "alchemia:arcane_shaped",
+  "key": {
+    "B": {
+      "item": "minecraft:rotten_flesh"
+    },
+    "P": {
+      "item": "alchemia:brass_plate"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "W": {
+      "tag": "minecraft:wooden_slabs"
+    }
+  },
+  "pattern": [
+    "PBP",
+    " P ",
+    "WRW"
+  ],
+  "research": "alchemia:arcane_ear",
+  "result": {
+    "count": 1,
+    "id": "alchemia:arcane_ear"
+  },
+  "vis": {
+    "alchemia:aer": 10,
+    "alchemia:ordo": 5
+  }
+}

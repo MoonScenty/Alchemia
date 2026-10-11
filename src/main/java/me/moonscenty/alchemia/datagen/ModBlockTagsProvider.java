@@ -99,7 +99,8 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
             tag(BlockTags.SLABS).add(set.slab().get());
         }
 
-        tag(BlockTags.MINEABLE_WITH_AXE).add(ModBlocks.BELLOWS.get(), ModBlocks.HUNGRY_CHEST.get());
+        tag(BlockTags.MINEABLE_WITH_AXE).add(ModBlocks.BELLOWS.get(), ModBlocks.HUNGRY_CHEST.get(),
+                ModBlocks.LEVITATOR.get(), ModBlocks.ARCANE_EAR.get());
         tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.ARCANE_LAMP.get(), ModBlocks.GROWTH_LAMP.get(),
                 ModBlocks.FERTILITY_LAMP.get(), ModBlocks.WATER_JUG.get());
         tag(BlockTags.MINEABLE_WITH_AXE).add(ModBlocks.RESEARCH_TABLE.get(), ModBlocks.ARCANE_WORKBENCH.get(),

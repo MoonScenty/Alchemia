@@ -1,0 +1,25 @@
+{
+  "category": "alchemia:artifice",
+  "column": -1,
+  "icon": "alchemia:levitator",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.levitator.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:levitator"
+    }
+  ],
+  "parents": [
+    "alchemia:primal_charm",
+    "alchemia:nitor"
+  ],
+  "requirements": {
+    "alchemia:aer": 3,
+    "alchemia:motus": 3,
+    "alchemia:volatus": 3
+  },
+  "row": 0
+}

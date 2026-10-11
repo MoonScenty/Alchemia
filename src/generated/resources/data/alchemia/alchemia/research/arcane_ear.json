@@ -1,0 +1,24 @@
+{
+  "category": "alchemia:artifice",
+  "column": 6,
+  "icon": "alchemia:arcane_ear",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.arcane_ear.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:arcane_ear"
+    }
+  ],
+  "parents": [
+    "alchemia:goggles"
+  ],
+  "requirements": {
+    "alchemia:aer": 3,
+    "alchemia:machina": 3,
+    "alchemia:sensus": 3
+  },
+  "row": 0
+}

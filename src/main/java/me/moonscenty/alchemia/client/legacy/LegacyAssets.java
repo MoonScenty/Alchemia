@@ -506,6 +506,21 @@ public final class LegacyAssets {
             all.add(LegacyAsset.of("textures/block/legacy/" + face + ".png").five("textures/blocks/" + face + ".png"));
         }
         all.add(LegacyAsset.of("textures/entity/hungry_chest.png").five("textures/models/chesthungry.png"));
+        // the levitator and the ear are the original's model files, the dark one built over the lit one, so they keep
+        // the original's names; the relay's names vanilla pictures by their old paths, so ours is built over it
+        for (String model : List.of("levitator_on", "levitator_off", "arcane_ear_on", "arcane_ear_off")) {
+            all.add(LegacyAsset.of("models/block/" + model + ".json")
+                    .five("models/block/" + model + ".json").asModel("cutout"));
+        }
+        for (String model : List.of("redstone_relay_on", "redstone_relay_off")) {
+            all.add(LegacyAsset.of("models/block/legacy/" + model + ".json")
+                    .five("models/block/" + model + ".json").asModel("cutout"));
+        }
+        for (String face : List.of("levitator_bottom", "levitator_side_on", "levitator_side_off", "levitator_top_on",
+                "levitator_top_off", "redstone_relay_on", "redstone_relay_off", "arcane_ear_on", "arcane_ear_off",
+                "base_wood")) {
+            all.add(LegacyAsset.of("textures/block/legacy/" + face + ".png").five("textures/blocks/" + face + ".png"));
+        }
         all.add(item("focus_pouch", "focus_pouch", "focuspouch"));
         // the pouch opened is the original's panel; its screen and slots are laid out to match
         all.add(LegacyAsset.of("textures/gui/focus_pouch.png").five("textures/gui/gui_focuspouch.png")

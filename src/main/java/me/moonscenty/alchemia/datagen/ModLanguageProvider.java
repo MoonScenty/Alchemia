@@ -567,6 +567,15 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                 {"water_jug", "Everfull Urn", "마르지 않는 항아리",
                  "A jug of baked clay that is never empty. Dip a bucket or a bottle in it and it comes away full. Left alone it tops up anything round it that holds water -- a crucible, a cauldron -- a quarter of a bucket every quarter of a second, and fills itself again from the aqua in the air.",
                  "구운 흙 항아리인데 비는 법이 없다. 양동이나 병을 담그면 가득 차서 나온다. 가만 두면 둘레의 물 담는 것 — 도가니, 가마솥 — 에 0.25초마다 양동이 4분의 1씩 물을 붓고, 공기 속 물 에센시아로 제 몸을 다시 채운다."},
+                {"levitator", "Arcane Levitator", "비전 부양기",
+                 "Not flight, but the next best thing. A levitator lifts whatever is in front of it -- things dropped, animals, you -- up to eight blocks, or as far as the first solid block. Crouch over one and you are let down slowly. Put on its side it pushes along instead, holding up what it pushes; put it down facing whichever way you like, crouching to turn it round. It burns aer from the aura while it is carrying anything, more the further it reaches: an empty hand on it steps its range through four, eight, sixteen and thirty-two blocks. A redstone signal stops it.",
+                 "나는 것은 아니지만 그 다음쯤은 된다. 부양기는 앞에 있는 것 — 떨어진 물건, 동물, 당신 — 을 여덟 칸까지, 아니면 처음 막히는 블록까지 들어 올린다. 그 위에서 웅크리면 천천히 내려온다. 옆으로 눕히면 대신 밀어 보내고, 미는 동안 떠받친다. 어느 쪽으로든 놓을 수 있고, 웅크리고 놓으면 반대로 놓인다. 무엇을 나르는 동안 오라에서 공기를 태우고, 멀리 닿을수록 더 태운다. 빈손으로 누르면 범위가 넷, 여덟, 열여섯, 서른둘로 바뀐다. 레드스톤 신호가 들어오면 멈춘다."},
+                {"redstone_relay", "Redstone Relay", "레드스톤 계전기",
+                 "Redstone is known to dull magic; sent through a vis crystal, it can be made to do only as much of that as you like. The relay is put down and wired like a repeater, its output the end with the torch. It has two toggles. The one at the back sets how strong a signal it needs before it answers; the one beside the torch, how strong a signal it gives out when it does. Each steps from one to fifteen.",
+                 "레드스톤이 마법을 무디게 한다는 것은 잘 알려져 있다. 비스 결정을 거쳐 보내면 그 무디게 하는 정도를 원하는 만큼만으로 맞출 수 있다. 계전기는 레드스톤 중계기처럼 놓고 잇는다. 횃불이 달린 쪽이 내보내는 쪽이다. 손잡이가 둘 있다. 뒤쪽 것은 얼마나 센 신호가 들어와야 답할지, 횃불 옆 것은 답할 때 얼마나 센 신호를 낼지를 정한다. 둘 다 1부터 15까지 바뀐다."},
+                {"arcane_ear", "Arcane Ear", "비전 귀",
+                 "An ear that hears note blocks. Tune it as you would a note block, a click a semitone up; it listens in the voice of whatever it is fixed to, the way a note block plays in the voice of what it stands on. When a note block within sixty-four blocks plays its note, it gives a short, full redstone pulse, through what it is fixed to as well. It can be fixed to any face.",
+                 "소리 블록을 듣는 귀다. 소리 블록처럼 누를 때마다 반음씩 올려 맞춘다. 소리 블록이 딛고 선 것의 음색으로 울리듯, 귀는 붙어 있는 것의 음색으로 듣는다. 64칸 안의 소리 블록이 그 음을 울리면 짧고 꽉 찬 레드스톤 신호를 낸다. 붙은 블록을 통해서도 낸다. 어느 면에나 붙일 수 있다."},
                 {"bellows", "Bellows", "풀무",
                  "Two boards and a hide, with a nozzle. Set against a furnace they hurry what is in it by half again. Set against an essentia smelter from the side or the back they cut the time it takes to boil anything down by an eighth apiece, three at most. They pump for as long as nothing stops them, and a redstone signal does. They blow the way you were looking when you put them down; crouch to turn them round.",
                  "판자 둘과 가죽 하나에 주둥이를 달았다. 화로에 대면 굽는 것을 절반만큼 더 빨리 굽는다. 에센시아 제련로 옆이나 뒤에 대면 하나마다 끓여 내는 시간을 팔분의 일씩 줄인다. 셋까지다. 무엇이 막기 전까지 계속 불고, 레드스톤 신호가 막는다. 놓을 때 바라보던 쪽으로 분다. 웅크리고 놓으면 반대로 놓인다."},
@@ -761,6 +770,13 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("item.alchemia.clockwork_mind", pick("Clockwork Mind", "태엽 두뇌"));
         add("item.alchemia.biothaumic_mind", pick("Biothaumic Mind", "생체마법 두뇌"));
         add("block.alchemia.bellows", pick("Bellows", "풀무"));
+        add("block.alchemia.levitator", pick("Arcane Levitator", "비전 부양기"));
+        add("block.alchemia.levitator.range", pick("Range set to %s blocks (%s aer a minute for each thing lifted)",
+                "범위를 %s칸으로 맞췄다 (들어 올리는 것 하나에 분당 공기 %s점)"));
+        add("block.alchemia.redstone_relay", pick("Redstone Relay", "레드스톤 계전기"));
+        add("block.alchemia.redstone_relay.in", pick("In: %s", "받는 세기: %s"));
+        add("block.alchemia.redstone_relay.out", pick("Out: %s", "내는 세기: %s"));
+        add("block.alchemia.arcane_ear", pick("Arcane Ear", "비전 귀"));
         add("block.alchemia.arcane_lamp", pick("Arcane Lamp", "비전 램프"));
         add("block.alchemia.growth_lamp", pick("Lamp of Growth", "성장의 램프"));
         add("block.alchemia.fertility_lamp", pick("Lamp of Fertility", "풍요의 램프"));
