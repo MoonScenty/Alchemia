@@ -7,7 +7,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import me.moonscenty.alchemia.item.FocusItem;
+import me.moonscenty.alchemia.wand.Casting;
+import me.moonscenty.alchemia.wand.FocusUpgrade;
 import me.moonscenty.alchemia.item.VisHolder;
 import me.moonscenty.alchemia.item.WandItem;
 import me.moonscenty.alchemia.registry.ModDataComponents;
@@ -36,12 +37,18 @@ import net.minecraft.world.phys.HitResult;
  *
  * <p>Neither will touch a block with something inside it. A chest swapped for cobble is a chest's worth of
  * somebody's afternoon gone, and no amount of vis puts it back.
+ *
+ * <p>Widening lets a builder lay a longer row and a trader follow a vein further. An architect's eye lets the
+ * reach be set rather than always being the most it can be, which is the difference between squaring off a wall
+ * and emptying the hill behind it.
  */
 public final class Swapping {
-    /** How far a builder will lay a row, however far away the wall is. */
+    /** How far a builder will lay a row, however far away the wall is, and what a rank of widening adds. */
     private static final int LAYS_AT_MOST = 16;
-    /** How far a trade spreads from the block it was aimed at, in steps. */
+    private static final int LAYS_FURTHER = 8;
+    /** How far a trade spreads from the block it was aimed at, in steps, and what a rank of widening adds. */
     private static final int SPREADS = 3;
+    private static final int SPREADS_FURTHER = 2;
 
     private Swapping() {
     }
@@ -70,7 +77,7 @@ public final class Swapping {
 
         BlockPos against = struck.getBlockPos();
         Direction out = struck.getDirection();
-        int reaches = Math.min(LAYS_AT_MOST, far(against, out, caster));
+        int reaches = Math.min(lays(wand), far(against, out, caster));
         List<BlockPos> row = new ArrayList<>();
         for (int along = 1; along < reaches; along++) {
             row.add(against.relative(out, along));
@@ -104,7 +111,7 @@ public final class Swapping {
         if (was == laying) {
             return false;
         }
-        return lay(level, caster, wand, laying, spreadFrom(level, first, was), true);
+        return lay(level, caster, wand, laying, spreadFrom(level, first, was, spreads(wand)), true);
     }
 
     /** Being shown a block. It costs nothing, so it says so by handing back nothing done. */
@@ -136,8 +143,58 @@ public final class Swapping {
         };
     }
 
-    /** Everything of one kind reachable from a starting block within {@value #SPREADS} steps of it. */
-    private static List<BlockPos> spreadFrom(ServerLevel level, BlockPos first, Block kind) {
+    /**
+     * How far a builder lays and how far a trade spreads, once what is worked into the focus is counted.
+     * <p>
+     * An architect's eye turns the most it can do into the most it <em>may</em> do, and the reach set on the
+     * focus is used instead when it is smaller.
+     */
+    private static int lays(ItemStack wand) {
+        int most = LAYS_AT_MOST + Casting.worked(wand, FocusUpgrade.ENLARGE) * LAYS_FURTHER;
+        return set(wand, most);
+    }
+
+    private static int spreads(ItemStack wand) {
+        int most = SPREADS + Casting.worked(wand, FocusUpgrade.ENLARGE) * SPREADS_FURTHER;
+        return set(wand, most);
+    }
+
+    /** What the focus has been turned down to, or the most it can do when it has not been. */
+    private static int set(ItemStack wand, int most) {
+        if (!Casting.has(wand, FocusUpgrade.ARCHITECT)) {
+            return most;
+        }
+        Integer reach = WandItem.focus(wand).get(ModDataComponents.FOCUS_REACH.get());
+        return reach == null ? most : Math.max(1, Math.min(most, reach));
+    }
+
+    /**
+     * Turning the reach down a notch, and round to the most it can do again when it runs out.
+     * <p>
+     * Only a focus with an architect's eye in it listens. The builder and the trader count in different units --
+     * a row of blocks against steps along a vein -- so what is stored is whichever of the two the focus means,
+     * and a focus only ever means one of them.
+     */
+    public static void setReach(Player caster, ItemStack wand) {
+        ItemStack focus = WandItem.focus(wand);
+        if (!Casting.has(wand, FocusUpgrade.ARCHITECT) || focus.isEmpty()) {
+            return;
+        }
+        boolean building = focus.is(me.moonscenty.alchemia.registry.ModItems.FOCI.get("builder").get());
+        int most = building
+                ? LAYS_AT_MOST + Casting.worked(wand, FocusUpgrade.ENLARGE) * LAYS_FURTHER
+                : SPREADS + Casting.worked(wand, FocusUpgrade.ENLARGE) * SPREADS_FURTHER;
+        Integer was = focus.get(ModDataComponents.FOCUS_REACH.get());
+        int now = was == null || was <= 1 ? most : Math.min(most, was) - 1;
+
+        ItemStack set = focus.copy();
+        set.set(ModDataComponents.FOCUS_REACH.get(), now);
+        WandItem.setFocus(wand, set);
+        caster.displayClientMessage(Component.translatable("item.alchemia.focus.reach", now), true);
+    }
+
+    /** Everything of one kind reachable from a starting block within so many steps of it. */
+    private static List<BlockPos> spreadFrom(ServerLevel level, BlockPos first, Block kind, int reach) {
         List<BlockPos> found = new ArrayList<>();
         Set<BlockPos> seen = new HashSet<>();
         Deque<BlockPos> edge = new ArrayDeque<>();
@@ -150,7 +207,7 @@ public final class Swapping {
             BlockPos at = edge.poll();
             int taken = steps.poll();
             found.add(at);
-            if (taken >= SPREADS) {
+            if (taken >= reach) {
                 continue;
             }
             for (Direction side : Direction.values()) {
@@ -201,7 +258,13 @@ public final class Swapping {
             }
 
             if (breaking) {
-                level.destroyBlock(at, true, caster);
+                // whatever the old block gives up is the focus's business too: fortune and silk touch both ride
+                // on a stand-in tool, the same way the excavation focus does it
+                if (!caster.isCreative()) {
+                    net.minecraft.world.level.block.Block.dropResources(there, level, at,
+                            level.getBlockEntity(at), caster, tool(level, wand));
+                }
+                level.destroyBlock(at, false, caster);
             }
             level.setBlock(at, laying.defaultBlockState(), 3);
             any = true;
@@ -212,6 +275,23 @@ public final class Swapping {
                     SoundSource.BLOCKS, 0.6F, 1.0F);
         }
         return any;
+    }
+
+    /** The pick nobody is holding, carrying whatever the focus was given. See {@code Excavation.digging}. */
+    private static ItemStack tool(ServerLevel level, ItemStack wand) {
+        ItemStack pick = new ItemStack(net.minecraft.world.item.Items.DIAMOND_PICKAXE);
+        var enchantments = level.registryAccess()
+                .lookupOrThrow(net.minecraft.core.registries.Registries.ENCHANTMENT);
+        if (Casting.has(wand, FocusUpgrade.SILK_TOUCH)) {
+            pick.enchant(enchantments.getOrThrow(net.minecraft.world.item.enchantment.Enchantments.SILK_TOUCH), 1);
+            return pick;
+        }
+        int treasure = Casting.worked(wand, FocusUpgrade.TREASURE);
+        if (treasure > 0) {
+            pick.enchant(enchantments.getOrThrow(net.minecraft.world.item.enchantment.Enchantments.FORTUNE),
+                    treasure);
+        }
+        return pick;
     }
 
     /**

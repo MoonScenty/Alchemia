@@ -42,6 +42,18 @@ public class ModDataComponents {
                                     .apply(ByteBufCodecs.list()).cast())
                             .build());
 
+    /**
+     * How far a focus with an architect's eye in it has been set to work, in blocks.
+     * <p>
+     * Only meaningful on a focus that has one. Without the component the focus simply works as far as it can,
+     * which is what every other focus does and what this one does until somebody turns it down.
+     */
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> FOCUS_REACH =
+            COMPONENTS.register("focus_reach", () -> DataComponentType.<Integer>builder()
+                    .persistent(Codec.INT)
+                    .networkSynchronized(ByteBufCodecs.VAR_INT)
+                    .build());
+
     /** The puzzle drawn on a sheet of research notes, and the research it stands for. */
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<ResearchNote>> RESEARCH_NOTE =
             COMPONENTS.register("research_note", () -> DataComponentType.<ResearchNote>builder()

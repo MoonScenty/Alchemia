@@ -259,6 +259,8 @@ public class AlchemiaClientSetup {
         event.registerEntityRenderer(ModEntities.FROST_SHARD.get(), NoopRenderer::new);
         event.registerEntityRenderer(ModEntities.VIS_SHARD.get(), NoopRenderer::new);
         event.registerEntityRenderer(ModEntities.PRIMAL_ORB.get(), NoopRenderer::new);
+        event.registerEntityRenderer(ModEntities.FIRE_ORB.get(), NoopRenderer::new);
+        event.registerEntityRenderer(ModEntities.SHOCK_ORB.get(), NoopRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.NODE_STABILIZER.get(), NodeStabilizerRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.ARCANE_WORKBENCH.get(), ArcaneWorkbenchRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.CRUCIBLE.get(), CrucibleRenderer::new);

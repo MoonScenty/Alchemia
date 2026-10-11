@@ -60,6 +60,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         robes();
         add("item.alchemia.focus_pouch.holding", pick("Holding %s of %s", "%s / %s 들었음"));
         add("item.alchemia.focus.upgrade_level", "%s %s");
+        add("item.alchemia.focus.reach", pick("Reaching %s", "범위 %s"));
         upgrades();
         autocaster();
 
@@ -346,6 +347,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("item.alchemia.wand.focus_removed", pick("Took off %s", "%s 뺌"));
         add("key.categories.alchemia", "Alchemia");
         add("key.alchemia.change_focus", pick("Change Wand Focus", "완드 포커스 바꾸기"));
+        add("key.alchemia.set_reach", pick("Set Focus Reach", "포커스 범위 정하기"));
         foci();
         addWandRod("wood", "Wooden", "나무");
         addWandRod("greatwood", "Greatwood", "거대나무");

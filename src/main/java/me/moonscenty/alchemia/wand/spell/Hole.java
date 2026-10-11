@@ -23,13 +23,18 @@ import net.minecraft.world.phys.HitResult;
  *
  * <p>How deep it goes is how thick the wall is. The focus looks straight in before it starts and counts the solid
  * run, so a hole never opens into the far side of a mountain and never stops short of the far side of a door.
- * Thirty-three squares is as far as it will look, which is thicker than anything worth walking through.
+ * Thirty-three squares is as far as it will look, which is thicker than anything worth walking through. A focus
+ * that has been widened looks further in, and one that has been lengthened holds the hole open longer; both are
+ * what the original did with those two, and neither makes the tunnel any wider.
  */
 public final class Hole {
     /** How far in it will look for the far side. */
     private static final int LOOKS_IN = 33;
     /** How long a hole stays open, in ticks. */
     private static final int STAYS_OPEN = 120;
+    /** What a rank of widening adds to how far it looks, and a rank of lengthening to how long it holds. */
+    private static final int DEEPER = 8;
+    private static final int LONGER = 60;
 
     private Hole() {
     }
@@ -47,11 +52,15 @@ public final class Hole {
             return false;
         }
 
-        int thick = thickness(level, face, in);
+        int looks = LOOKS_IN + me.moonscenty.alchemia.wand.Casting.worked(wand,
+                me.moonscenty.alchemia.wand.FocusUpgrade.ENLARGE) * DEEPER;
+        int holds = STAYS_OPEN + me.moonscenty.alchemia.wand.Casting.worked(wand,
+                me.moonscenty.alchemia.wand.FocusUpgrade.EXTEND) * LONGER;
+        int thick = thickness(level, face, in, looks);
         if (thick == 0) {
             return false;
         }
-        if (!HoleBlockEntity.bore(level, face, STAYS_OPEN, thick, in)) {
+        if (!HoleBlockEntity.bore(level, face, holds, thick, in)) {
             return false;
         }
         level.playSound(null, face, SoundEvents.ENDERMAN_TELEPORT, SoundSource.PLAYERS, 1.0F, 0.6F);
@@ -64,10 +73,10 @@ public final class Hole {
      * Counted before a single square is opened, so the whole tunnel is decided on the wall as it stands rather
      * than on a wall that is already full of holes.
      */
-    private static int thickness(ServerLevel level, BlockPos face, Direction in) {
+    private static int thickness(ServerLevel level, BlockPos face, Direction in, int looks) {
         BlockPos at = face;
         int deep = 0;
-        while (deep < LOOKS_IN) {
+        while (deep < looks) {
             BlockState there = level.getBlockState(at);
             if (!HoleBlock.borable(there) || there.getDestroySpeed(level, at) < 0.0F
                     || level.getBlockEntity(at) != null) {

@@ -30,6 +30,11 @@ public class VisShard extends Bolt {
     private static final double FLIES = 0.6;
     private static final int FADES_AFTER = 100;
 
+    /** How far a persistent splinter looks for something else to chase. */
+    private static final double LOOKS = 16.0;
+
+    private float hurts = HURTS;
+    private boolean persistent;
     private int chasing = -1;
 
     public VisShard(EntityType<? extends VisShard> type, Level level) {
@@ -47,6 +52,13 @@ public class VisShard extends Bolt {
         return 0.0;
     }
 
+    /** What one splinter is worth, and whether it will find another mark when this one is gone. */
+    public VisShard chasing(float hurts, boolean persistent) {
+        this.hurts = hurts;
+        this.persistent = persistent;
+        return this;
+    }
+
     @Override
     protected ParticleOptions trail() {
         return ParticleTypes.END_ROD;
@@ -60,6 +72,9 @@ public class VisShard extends Bolt {
     @Override
     public void tick() {
         Entity mark = level().getEntity(chasing);
+        if (persistent && (mark == null || !mark.isAlive())) {
+            mark = somethingElse();
+        }
         if (mark != null && mark.isAlive()) {
             Vec3 towards = mark.position().add(0.0, mark.getBbHeight() / 2.0, 0.0)
                     .subtract(position()).normalize();
@@ -68,11 +83,30 @@ public class VisShard extends Bolt {
         super.tick();
     }
 
+    /**
+     * The nearest other living thing, for a splinter whose mark has gone.
+     * <p>
+     * Whoever threw it is passed over, which is the whole of what keeps a persistent splinter from turning
+     * round on its caster the moment the thing it was aimed at dies.
+     */
+    private Entity somethingElse() {
+        Entity thrower = getOwner();
+        LivingEntity found = level().getNearestEntity(LivingEntity.class,
+                net.minecraft.world.entity.ai.targeting.TargetingConditions.forNonCombat().range(LOOKS),
+                null, getX(), getY(), getZ(),
+                new net.minecraft.world.phys.AABB(position(), position()).inflate(LOOKS));
+        if (found != null && found != thrower) {
+            chasing = found.getId();
+            return found;
+        }
+        return null;
+    }
+
     @Override
     protected void land(ServerLevel level, HitResult where) {
         level.sendParticles(ParticleTypes.END_ROD, getX(), getY(), getZ(), 8, 0.1, 0.1, 0.1, 0.05);
         if (where instanceof EntityHitResult struck) {
-            struck.getEntity().hurt(damageSources().indirectMagic(this, getOwner()), HURTS);
+            struck.getEntity().hurt(damageSources().indirectMagic(this, getOwner()), hurts);
         }
     }
 
@@ -80,11 +114,15 @@ public class VisShard extends Bolt {
     protected void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
         tag.putInt("chasing", chasing);
+        tag.putFloat("hurts", hurts);
+        tag.putBoolean("persistent", persistent);
     }
 
     @Override
     protected void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         chasing = tag.getInt("chasing");
+        hurts = tag.contains("hurts") ? tag.getFloat("hurts") : HURTS;
+        persistent = tag.getBoolean("persistent");
     }
 }

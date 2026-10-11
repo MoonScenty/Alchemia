@@ -55,6 +55,21 @@ public final class Casting {
     }
 
     /**
+     * How many ranks of one upgrade are worked into the focus on this wand.
+     * <p>
+     * Spells are handed the wand rather than the focus, so this is where they ask. Nought for a wand with no
+     * focus on it, which is also what a spell with nothing to read should do nothing about.
+     */
+    public static int worked(ItemStack wand, FocusUpgrade upgrade) {
+        return FocusUpgrades.level(WandItem.focus(wand), upgrade);
+    }
+
+    /** Whether the focus on this wand carries one at all. */
+    public static boolean has(ItemStack wand, FocusUpgrade upgrade) {
+        return worked(wand, upgrade) > 0;
+    }
+
+    /**
      * Lets the wand off once, if it can be.
      *
      * @return whether anything happened, so that a hand can be swung for it

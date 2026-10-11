@@ -5,6 +5,8 @@ import me.moonscenty.alchemia.aura.TaintCloud;
 import me.moonscenty.alchemia.aura.node.AuraNode;
 import me.moonscenty.alchemia.entity.Autocaster;
 import me.moonscenty.alchemia.wand.spell.Ember;
+import me.moonscenty.alchemia.wand.spell.FireOrb;
+import me.moonscenty.alchemia.wand.spell.ShockOrb;
 import me.moonscenty.alchemia.wand.spell.FrostShard;
 import me.moonscenty.alchemia.wand.spell.Grapple;
 import me.moonscenty.alchemia.wand.spell.PrimalOrb;
@@ -108,6 +110,25 @@ public class ModEntities {
                     .updateInterval(4)
                     .noSummon()
                     .build("primal_orb"));
+
+    /** What the fire focus throws once a fireball is worked into it, and what the shock focus lobs. */
+    public static final DeferredHolder<EntityType<?>, EntityType<FireOrb>> FIRE_ORB =
+            ENTITIES.register("fire_orb", () -> EntityType.Builder
+                    .<FireOrb>of(FireOrb::new, MobCategory.MISC)
+                    .sized(0.5F, 0.5F)
+                    .clientTrackingRange(8)
+                    .updateInterval(4)
+                    .noSummon()
+                    .build("fire_orb"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<ShockOrb>> SHOCK_ORB =
+            ENTITIES.register("shock_orb", () -> EntityType.Builder
+                    .<ShockOrb>of(ShockOrb::new, MobCategory.MISC)
+                    .sized(0.5F, 0.5F)
+                    .clientTrackingRange(8)
+                    .updateInterval(4)
+                    .noSummon()
+                    .build("shock_orb"));
 
     /**
      * A focus on a bracket. It is a mob rather than a block because the original let one hang off any face, and a

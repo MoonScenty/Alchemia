@@ -34,6 +34,7 @@ public class ModNetwork {
         registrar.playToServer(PlaceAspect.TYPE, PlaceAspect.STREAM_CODEC, ModNetwork::onPlaceAspect);
         registrar.playToServer(MixAspects.TYPE, MixAspects.STREAM_CODEC, ModNetwork::onMixAspects);
         registrar.playToServer(ChangeFocus.TYPE, ChangeFocus.STREAM_CODEC, ModNetwork::onChangeFocus);
+        registrar.playToServer(SetReach.TYPE, SetReach.STREAM_CODEC, ModNetwork::onSetReach);
     }
 
     /**
@@ -55,6 +56,20 @@ public class ModNetwork {
                 Foci.remove(player, held);
             } else {
                 Foci.next(player, held);
+            }
+        });
+    }
+
+    /**
+     * Turning down how far an architect's focus works.
+     * <p>
+     * It goes round: one less each press, and back to the most it can do when it reaches nothing. The server
+     * settles what the most is, since that depends on what else is worked into the focus.
+     */
+    private static void onSetReach(SetReach payload, IPayloadContext context) {
+        context.enqueueWork(() -> {
+            if (context.player() instanceof ServerPlayer player) {
+                me.moonscenty.alchemia.wand.spell.Swapping.setReach(player, player.getMainHandItem());
             }
         });
     }

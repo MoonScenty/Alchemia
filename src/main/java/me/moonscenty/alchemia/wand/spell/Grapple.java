@@ -46,6 +46,15 @@ public class Grapple extends ThrowableProjectile {
     /** How many ticks of getting no nearer before it gives up. */
     private static final int STUCK_FOR = 20;
 
+    /** How much longer a hook stays in the air per rank of force, which is how much further it reaches. */
+    private static final int FURTHER = 5;
+    /** How close a sticky hook starts hauling harder, and what the hauling is divided by inside that. */
+    private static final double CLOSE = 8.0;
+
+    /** Ranks of force, and whether it holds on after the climber has arrived. */
+    private int potency;
+    private boolean sticky;
+
     private boolean lifted;
     private int sameDistance;
     private int wasDistance = -1;
@@ -56,6 +65,33 @@ public class Grapple extends ThrowableProjectile {
 
     public Grapple(Level level, LivingEntity thrower) {
         super(ModEntities.GRAPPLE.get(), thrower, level);
+    }
+
+    @Override
+    protected void addAdditionalSaveData(net.minecraft.nbt.CompoundTag tag) {
+        super.addAdditionalSaveData(tag);
+        tag.putInt("potency", potency);
+        tag.putBoolean("sticky", sticky);
+    }
+
+    @Override
+    protected void readAdditionalSaveData(net.minecraft.nbt.CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+        potency = tag.getInt("potency");
+        sticky = tag.getBoolean("sticky");
+    }
+
+    /**
+     * What is worked into the focus that threw it.
+     * <p>
+     * Force is reach: a hook that stays in the air longer is a hook that gets further before it falls. Sticky
+     * is the climber's own business -- it will not let go on arrival, and it hauls harder once they are close,
+     * which is what makes it a thing to hang from rather than a thing to climb.
+     */
+    public Grapple hauling(int potency, boolean sticky) {
+        this.potency = potency;
+        this.sticky = sticky;
+        return this;
     }
 
     @Override
@@ -86,7 +122,7 @@ public class Grapple extends ThrowableProjectile {
             return;
         }
         if (!biting()) {
-            if (tickCount > IN_FLIGHT) {
+            if (tickCount > IN_FLIGHT + potency * FURTHER) {
                 discard();
             }
             return;
@@ -103,12 +139,15 @@ public class Grapple extends ThrowableProjectile {
     private void haul(Entity thrower) {
         Vec3 towards = position().subtract(thrower.position());
         double away = towards.length();
-        if (away < ARRIVED || thrower.isShiftKeyDown() || sameDistance > STUCK_FOR) {
+        boolean done = sticky ? false : away < ARRIVED || sameDistance > STUCK_FOR;
+        if (done || thrower.isShiftKeyDown()) {
             discard();
             return;
         }
 
-        Vec3 pull = towards.scale(1.0 / (away * HAULS));
+        // a sticky hook pulls harder the closer it is held, which is what holds somebody against a ceiling
+        double share = sticky && away < CLOSE ? away * (CLOSE - away) : away;
+        Vec3 pull = towards.scale(1.0 / (Math.max(0.01, share) * HAULS));
         if (pull.length() > AT_MOST) {
             pull = pull.normalize().scale(AT_MOST);
         }

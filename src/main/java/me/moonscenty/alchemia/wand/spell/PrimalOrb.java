@@ -31,6 +31,12 @@ public class PrimalOrb extends Bolt {
     private static final int TRIES = 15;
     private static final int SPREADS = 6;
     private static final int BURNS_OUT = 100;
+    /** How far a seeking orb looks for something to go at, and how hard it steers towards it. */
+    private static final double LOOKS = 16.0;
+    private static final double STEERS = 0.2;
+
+    /** Whether it has been settled enough to aim itself, which is also what stops it going wrong. */
+    private boolean seeker;
 
     public PrimalOrb(EntityType<? extends PrimalOrb> type, Level level) {
         super(type, level);
@@ -41,8 +47,48 @@ public class PrimalOrb extends Bolt {
     }
 
     @Override
+    protected void addAdditionalSaveData(net.minecraft.nbt.CompoundTag tag) {
+        super.addAdditionalSaveData(tag);
+        tag.putBoolean("seeker", seeker);
+    }
+
+    @Override
+    protected void readAdditionalSaveData(net.minecraft.nbt.CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+        seeker = tag.getBoolean("seeker");
+    }
+
+    /** Wound tight enough to steer: it goes at the nearest living thing, and nothing unusual befalls it. */
+    public PrimalOrb seeking() {
+        this.seeker = true;
+        return this;
+    }
+
+    @Override
     protected double getDefaultGravity() {
         return 0.0;
+    }
+
+    /**
+     * A seeker leans towards whatever is nearest.
+     * <p>
+     * The original gave the plain orb a small random wander and the seeker this instead. Ours flies straight to
+     * begin with, so only the steering is added.
+     */
+    @Override
+    public void tick() {
+        if (seeker && !level().isClientSide) {
+            LivingEntity mark = level().getNearestEntity(LivingEntity.class,
+                    net.minecraft.world.entity.ai.targeting.TargetingConditions.forNonCombat().range(LOOKS),
+                    null, getX(), getY(), getZ(),
+                    new net.minecraft.world.phys.AABB(position(), position()).inflate(LOOKS));
+            if (mark != null && mark != getOwner()) {
+                net.minecraft.world.phys.Vec3 towards = mark.position()
+                        .add(0.0, mark.getBbHeight() * 0.9, 0.0).subtract(position()).normalize();
+                setDeltaMovement(getDeltaMovement().add(towards.scale(STEERS)));
+            }
+        }
+        super.tick();
     }
 
     @Override
@@ -58,7 +104,8 @@ public class PrimalOrb extends Bolt {
     @Override
     protected void land(ServerLevel level, HitResult where) {
         level.explode(getOwner(), getX(), getY(), getZ(), BLAST, Level.ExplosionInteraction.TNT);
-        if (random.nextInt(WRONG_IN) == 0) {
+        // a seeker is wound tight enough that nothing unusual happens to it, which is half of what it is for
+        if (!seeker && random.nextInt(WRONG_IN) == 0) {
             goesWrong(level);
         }
     }

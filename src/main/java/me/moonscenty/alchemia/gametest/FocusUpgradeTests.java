@@ -22,10 +22,13 @@ import me.moonscenty.alchemia.wand.Focus;
 import me.moonscenty.alchemia.wand.FocusUpgrade;
 import me.moonscenty.alchemia.wand.FocusUpgrades;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
@@ -247,6 +250,121 @@ public class FocusUpgradeTests {
             AuraHandler.add(helper.getLevel(), here, primal, 2000);
         }
         return (FocalManipulatorBlockEntity) helper.getLevel().getBlockEntity(here);
+    }
+
+    /** A wand with an upgraded focus on it: what the spells themselves read when they go off. */
+    private static ItemStack wand(String kind, FocusUpgrade... worked) {
+        ItemStack wand = WandItem.of(ModWandParts.SILVERWOOD, ModWandParts.GOLD);
+        ItemStack focus = focus(kind);
+        for (FocusUpgrade upgrade : worked) {
+            FocusUpgrades.apply(focus, upgrade);
+        }
+        WandItem.setFocus(wand, focus);
+        AspectList filled = AspectList.EMPTY;
+        for (Holder<Aspect> primal : ModAspects.primals()) {
+            filled = filled.add(primal, 100 * WandItem.FINE);
+        }
+        wand.set(ModDataComponents.VIS.get(), filled);
+        return wand;
+    }
+
+    /** Force makes a bolt hurt more, which is the plainest thing any of the twenty-three does. */
+    @GameTest(template = TEMPLATE)
+    public static void forceMakesABoltHurtMore(GameTestHelper helper) {
+        Player caster = helper.makeMockPlayer(GameType.SURVIVAL);
+        LivingEntity plain = helper.spawn(EntityType.PIG, new BlockPos(2, 2, 2));
+        LivingEntity forced = helper.spawn(EntityType.PIG, new BlockPos(4, 2, 2));
+        float whole = plain.getHealth();
+
+        me.moonscenty.alchemia.wand.spell.Shock.cast(helper.getLevel(), caster, wand("shock"),
+                new net.minecraft.world.phys.EntityHitResult(plain), 0);
+        me.moonscenty.alchemia.wand.spell.Shock.cast(helper.getLevel(), caster,
+                wand("shock", FocusUpgrade.POTENCY, FocusUpgrade.POTENCY),
+                new net.minecraft.world.phys.EntityHitResult(forced), 0);
+
+        helper.assertTrue(plain.getHealth() < whole, "the plain bolt landed");
+        helper.assertTrue(forced.getHealth() < plain.getHealth(), "and the forced one landed harder");
+        helper.succeed();
+    }
+
+    /** Chaining carries the bolt on to whatever is standing beside what it struck. */
+    @GameTest(template = TEMPLATE)
+    public static void chainingJumpsToWhatIsStandingNear(GameTestHelper helper) {
+        Player caster = helper.makeMockPlayer(GameType.SURVIVAL);
+        LivingEntity first = helper.spawn(EntityType.PIG, new BlockPos(3, 2, 3));
+        LivingEntity beside = helper.spawn(EntityType.PIG, new BlockPos(4, 2, 3));
+        float whole = beside.getHealth();
+
+        me.moonscenty.alchemia.wand.spell.Shock.cast(helper.getLevel(), caster,
+                wand("shock", FocusUpgrade.CHAIN_LIGHTNING),
+                new net.minecraft.world.phys.EntityHitResult(first), 0);
+
+        helper.assertTrue(beside.getHealth() < whole, "the bolt jumped to the one standing beside it");
+        helper.succeed();
+    }
+
+    /** Earth shock throws a ball at the floor rather than a bolt at a face, so it needs no mark. */
+    @GameTest(template = TEMPLATE)
+    public static void earthShockNeedsNothingToAimAt(GameTestHelper helper) {
+        Player caster = helper.makeMockPlayer(GameType.SURVIVAL);
+        helper.assertFalse(me.moonscenty.alchemia.wand.spell.Shock.cast(helper.getLevel(), caster,
+                        wand("shock"), net.minecraft.world.phys.BlockHitResult.miss(
+                                net.minecraft.world.phys.Vec3.ZERO, Direction.UP, BlockPos.ZERO), 0),
+                "a plain bolt wants something to hit");
+        helper.assertTrue(me.moonscenty.alchemia.wand.spell.Shock.cast(helper.getLevel(), caster,
+                        wand("shock", FocusUpgrade.EARTH_SHOCK), net.minecraft.world.phys.BlockHitResult.miss(
+                                net.minecraft.world.phys.Vec3.ZERO, Direction.UP, BlockPos.ZERO), 0),
+                "a ball only wants a floor");
+        helper.succeed();
+    }
+
+    /** A widened builder lays a longer row, and an architect's eye lets that be turned down again. */
+    @GameTest(template = TEMPLATE)
+    public static void anArchitectSetsHowFarItWorks(GameTestHelper helper) {
+        Player caster = helper.makeMockPlayer(GameType.CREATIVE);
+        ItemStack wand = wand("builder", FocusUpgrade.ARCHITECT);
+        ItemStack focus = WandItem.focus(wand);
+        helper.assertTrue(focus.get(ModDataComponents.FOCUS_REACH.get()) == null, "it starts at its widest");
+
+        me.moonscenty.alchemia.wand.spell.Swapping.setReach(caster, wand);
+        Integer first = WandItem.focus(wand).get(ModDataComponents.FOCUS_REACH.get());
+        helper.assertTrue(first != null && first == 16, "the first press sets it to the most it can do");
+        me.moonscenty.alchemia.wand.spell.Swapping.setReach(caster, wand);
+        helper.assertValueEqual(WandItem.focus(wand).get(ModDataComponents.FOCUS_REACH.get()), 15,
+                "and every press after that turns it down one");
+        helper.succeed();
+    }
+
+    /** A focus with no architect's eye in it does not listen to the key at all. */
+    @GameTest(template = TEMPLATE)
+    public static void withoutAnArchitectTheKeyDoesNothing(GameTestHelper helper) {
+        Player caster = helper.makeMockPlayer(GameType.CREATIVE);
+        ItemStack wand = wand("builder");
+        me.moonscenty.alchemia.wand.spell.Swapping.setReach(caster, wand);
+        helper.assertTrue(WandItem.focus(wand).get(ModDataComponents.FOCUS_REACH.get()) == null,
+                "nothing was set");
+        helper.succeed();
+    }
+
+    /** Silk touch on a digging focus takes the block up as it stood. */
+    @GameTest(template = TEMPLATE, timeoutTicks = 400)
+    public static void silkTouchTakesTheBlockUpWhole(GameTestHelper helper) {
+        Player caster = helper.makeMockPlayer(GameType.SURVIVAL);
+        BlockPos at = new BlockPos(2, 2, 2);
+        helper.setBlock(at, net.minecraft.world.level.block.Blocks.STONE);
+        ItemStack wand = wand("excavation", FocusUpgrade.POTENCY, FocusUpgrade.POTENCY,
+                FocusUpgrade.POTENCY, FocusUpgrade.POTENCY, FocusUpgrade.SILK_TOUCH);
+
+        net.minecraft.world.phys.BlockHitResult struck = new net.minecraft.world.phys.BlockHitResult(
+                net.minecraft.world.phys.Vec3.ZERO, Direction.UP, helper.absolutePos(at), false);
+        for (int tick = 0; tick < 20; tick++) {
+            me.moonscenty.alchemia.wand.spell.Excavation.cast(helper.getLevel(), caster, wand, struck, tick);
+        }
+        helper.runAfterDelay(5, () -> {
+            helper.assertBlockPresent(net.minecraft.world.level.block.Blocks.AIR, at);
+            helper.assertItemEntityPresent(net.minecraft.world.level.block.Blocks.STONE.asItem(), at, 3.0);
+            helper.succeed();
+        });
     }
 
     /** A focus with nothing in it is still the focus it was, which everything else leans on. */

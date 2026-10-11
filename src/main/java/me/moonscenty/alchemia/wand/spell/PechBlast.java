@@ -39,6 +39,13 @@ public class PechBlast extends ThrowableProjectile {
     private static final float FALLS = 0.015F;
     /** Nothing this old was going to hit anything. */
     private static final int GIVES_UP = 100;
+    /** What one rank of lengthening adds to an affliction, in ticks. */
+    private static final int LONGER = 40;
+
+    /** Ranks of force, of lengthening, and whether it lays on all three rather than one. */
+    private int strength;
+    private int longer;
+    private boolean nightshade;
 
     public PechBlast(EntityType<? extends PechBlast> type, Level level) {
         super(type, level);
@@ -46,6 +53,14 @@ public class PechBlast extends ThrowableProjectile {
 
     public PechBlast(Level level, LivingEntity thrower) {
         super(ModEntities.PECH_BLAST.get(), thrower, level);
+    }
+
+    /** What is worked into the focus that threw it. */
+    public PechBlast cursing(int strength, int longer, boolean nightshade) {
+        this.strength = strength;
+        this.longer = longer;
+        this.nightshade = nightshade;
+        return this;
     }
 
     /** Nothing about it is worth telling the client; it is a trail of particles and a burst. */
@@ -92,9 +107,17 @@ public class PechBlast extends ThrowableProjectile {
         Entity thrower = getOwner();
         List<LivingEntity> caught = served.getEntitiesOfClass(LivingEntity.class,
                 new AABB(position(), position()).inflate(REACHES), alive -> alive != thrower);
+        int lasts = LASTS + longer * LONGER;
         for (LivingEntity hit : caught) {
-            hit.hurt(damageSources().indirectMagic(this, thrower), HURTS);
-            hit.addEffect(new MobEffectInstance(oneOf(), LASTS));
+            hit.hurt(damageSources().indirectMagic(this, thrower), HURTS + strength);
+            if (nightshade) {
+                // the original gave the dragging slowness one rank more than the other two
+                hit.addEffect(new MobEffectInstance(MobEffects.POISON, lasts, strength));
+                hit.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, lasts, strength + 1));
+                hit.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, lasts, strength));
+            } else {
+                hit.addEffect(new MobEffectInstance(oneOf(), lasts, strength));
+            }
         }
         discard();
     }
@@ -106,6 +129,22 @@ public class PechBlast extends ThrowableProjectile {
             case 1 -> MobEffects.MOVEMENT_SLOWDOWN;
             default -> MobEffects.WEAKNESS;
         };
+    }
+
+    @Override
+    protected void addAdditionalSaveData(net.minecraft.nbt.CompoundTag tag) {
+        super.addAdditionalSaveData(tag);
+        tag.putInt("strength", strength);
+        tag.putInt("longer", longer);
+        tag.putBoolean("nightshade", nightshade);
+    }
+
+    @Override
+    protected void readAdditionalSaveData(net.minecraft.nbt.CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+        strength = tag.getInt("strength");
+        longer = tag.getInt("longer");
+        nightshade = tag.getBoolean("nightshade");
     }
 
     /** A curse passes through whoever cast it; it is looking for anybody else. */
