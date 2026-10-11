@@ -39,8 +39,25 @@ public final class InfusionEnchantments {
         Map<InfusionEnchantment, Integer> all = new LinkedHashMap<>(on(stack));
         all.put(which, now + 1);
         ItemStack worked = stack.copy();
-        worked.set(ModDataComponents.INFUSION_ENCHANTMENTS.get(), Map.copyOf(all));
+        // unmodifiableMap rather than Map.copyOf, which would hand the workings back in an order of its own
+        worked.set(ModDataComponents.INFUSION_ENCHANTMENTS.get(), java.util.Collections.unmodifiableMap(all));
         return worked;
+    }
+
+    /**
+     * The same tool with at least this much of one of these on it.
+     * <p>
+     * For the tools that come with their workings built in: the original put them back every few seconds if
+     * anything had taken them off, and never lowered one that had been worked higher.
+     */
+    public static ItemStack atLeast(ItemStack stack, InfusionEnchantment which, int level) {
+        if (level(stack, which) >= level) {
+            return stack;
+        }
+        Map<InfusionEnchantment, Integer> all = new LinkedHashMap<>(on(stack));
+        all.put(which, level);
+        stack.set(ModDataComponents.INFUSION_ENCHANTMENTS.get(), java.util.Collections.unmodifiableMap(all));
+        return stack;
     }
 
     /** Whether an altar has anything left to do for this one on that tool. */

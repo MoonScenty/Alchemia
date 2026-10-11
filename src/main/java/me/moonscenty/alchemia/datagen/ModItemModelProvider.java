@@ -173,6 +173,10 @@ public class ModItemModelProvider extends ItemModelProvider {
                         .texture("layer0", modLoc("item/wand/cap_" + cap + "_inert_mat"));
             }
         }
+        // held the way any tool is held, on the original's pictures
+        java.util.stream.Stream.concat(ModItems.ELEMENTAL_TOOLS.keySet().stream(), java.util.stream.Stream.of(
+                "primal_crusher")).forEach(tool -> withExistingParent(tool, mcLoc("item/handheld"))
+                .texture("layer0", modLoc("item/legacy/" + tool)));
         basicItem(ModItems.FOCUS_POUCH.get());
         withExistingParent("autocaster", mcLoc("item/generated"))
                 .texture("layer0", modLoc("item/legacy/autocaster"));

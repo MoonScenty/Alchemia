@@ -51,6 +51,11 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         // what counts as a fire under a crucible. Anything with a lit state is only counted while it is lit,
         // which the block asks about itself, since a tag cannot say it.
         // skulls and candles: what the original counted, and what anybody decorating an altar reaches for anyway
+        // the crusher is a pickaxe and a shovel at once, and goes through the taint as the original's did
+        tag(ModTags.Blocks.MINEABLE_PRIMAL_CRUSHER)
+                .addTag(net.minecraft.tags.BlockTags.MINEABLE_WITH_PICKAXE)
+                .addTag(net.minecraft.tags.BlockTags.MINEABLE_WITH_SHOVEL)
+                .addTag(ModTags.Blocks.TAINT);
         tag(ModTags.Blocks.STABILISES_INFUSION)
                 .addTag(BlockTags.CANDLES)
                 .add(Blocks.SKELETON_SKULL, Blocks.SKELETON_WALL_SKULL,

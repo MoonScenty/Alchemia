@@ -25,6 +25,22 @@ public final class ModTiers {
             BlockTags.INCORRECT_FOR_NETHERITE_TOOL, 150, 8.0F, 3.0F, 10,
             () -> Ingredient.of(ModItems.VOID_INGOT));
 
+    /**
+     * Alchemium with a primal bound into it. It reaches what diamond reaches, cuts faster, and lasts three times
+     * as long as the alchemium it was made from. It is still mended with alchemium.
+     */
+    public static final Tier ELEMENTAL = new SimpleTier(
+            BlockTags.INCORRECT_FOR_DIAMOND_TOOL, 1500, 9.0F, 3.0F, 18,
+            () -> Ingredient.of(ModItems.ALCHEMIUM_INGOT));
+
+    /**
+     * The primal crusher's. Past diamond, as void metal is, and short-lived like it -- though it mends itself, so
+     * the five hundred is a matter of how hard it is worked in a sitting rather than how long it lasts.
+     */
+    public static final Tier PRIMAL = new SimpleTier(
+            BlockTags.INCORRECT_FOR_NETHERITE_TOOL, 500, 8.0F, 4.0F, 20,
+            () -> Ingredient.of(ModItems.VOID_INGOT));
+
     private ModTiers() {
     }
 }

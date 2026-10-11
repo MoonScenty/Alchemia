@@ -34,6 +34,9 @@ public class ModTags {
          */
         public static final TagKey<Block> STABILISES_INFUSION = mod("stabilises_infusion");
 
+        /** What the primal crusher is the right tool for: whatever a pickaxe or a shovel is. */
+        public static final TagKey<Block> MINEABLE_PRIMAL_CRUSHER = mod("mineable/primal_crusher");
+
         public static final TagKey<Block> ORES_AMBER = common("ores/amber");
         public static final TagKey<Block> ORES_CINNABAR = common("ores/cinnabar");
 

@@ -116,6 +116,21 @@ public class ModItems {
      * an altar afterwards rather than built into the item.
      */
     public static final Map<String, DeferredItem<Item>> METAL_TOOLS = registerMetalTools();
+
+    /**
+     * The five elemental tools: alchemium with a primal bound into each, and the workings that element is in a
+     * tool already on them. Water carries, fire refines, air sweeps, earth moves earth; order and entropy
+     * together make things grow.
+     */
+    public static final Map<String, DeferredItem<Item>> ELEMENTAL_TOOLS = registerElementalTools();
+
+    /** Both elemental diggers and both void ones, beaten into one tool that only breaks things. */
+    public static final DeferredItem<Item> PRIMAL_CRUSHER = ITEMS.register("primal_crusher",
+            () -> new me.moonscenty.alchemia.item.tool.PrimalCrusherItem(ModTiers.PRIMAL,
+                    me.moonscenty.alchemia.item.tool.ElementalTools.carrying(new Item.Properties().attributes(
+                                    net.minecraft.world.item.DiggerItem.createAttributes(ModTiers.PRIMAL, 3.5F, -2.8F)),
+                            me.moonscenty.alchemia.enchantment.InfusionEnchantment.DESTRUCTIVE, 1,
+                            me.moonscenty.alchemia.enchantment.InfusionEnchantment.REFINING, 1)));
     public static final Map<String, DeferredItem<Item>> METAL_ARMOUR = registerMetalArmour();
 
     /**
@@ -366,6 +381,39 @@ public class ModItems {
         // unmodifiableMap rather than Map.copyOf: a copied map hands its entries back in an order the
         // running machine picks for itself, and everything written out of this one -- tag files above all
         // -- would come out shuffled from one run to the next
+        return Collections.unmodifiableMap(made);
+    }
+
+    private static Map<String, DeferredItem<Item>> registerElementalTools() {
+        Tier tier = ModTiers.ELEMENTAL;
+        Map<String, DeferredItem<Item>> made = new java.util.LinkedHashMap<>();
+        made.put("elemental_axe", ITEMS.register("elemental_axe",
+                () -> new me.moonscenty.alchemia.item.tool.ElementalAxeItem(tier,
+                        me.moonscenty.alchemia.item.tool.ElementalTools.carrying(new Item.Properties()
+                                        .attributes(AxeItem.createAttributes(tier, 6.0F, -3.1F)),
+                                me.moonscenty.alchemia.enchantment.InfusionEnchantment.BURROWING, 1,
+                                me.moonscenty.alchemia.enchantment.InfusionEnchantment.COLLECTOR, 1))));
+        made.put("elemental_pickaxe", ITEMS.register("elemental_pickaxe",
+                () -> new me.moonscenty.alchemia.item.tool.ElementalPickaxeItem(tier,
+                        me.moonscenty.alchemia.item.tool.ElementalTools.carrying(new Item.Properties()
+                                        .attributes(PickaxeItem.createAttributes(tier, 1.0F, -2.8F)),
+                                me.moonscenty.alchemia.enchantment.InfusionEnchantment.REFINING, 1,
+                                me.moonscenty.alchemia.enchantment.InfusionEnchantment.SOUNDING, 2))));
+        made.put("elemental_sword", ITEMS.register("elemental_sword",
+                () -> new me.moonscenty.alchemia.item.tool.ElementalSwordItem(tier,
+                        me.moonscenty.alchemia.item.tool.ElementalTools.carrying(new Item.Properties()
+                                        .attributes(SwordItem.createAttributes(tier, 3, -2.4F)),
+                                me.moonscenty.alchemia.enchantment.InfusionEnchantment.ARCING, 2))));
+        made.put("elemental_shovel", ITEMS.register("elemental_shovel",
+                () -> new me.moonscenty.alchemia.item.tool.ElementalShovelItem(tier,
+                        me.moonscenty.alchemia.item.tool.ElementalTools.carrying(new Item.Properties()
+                                        .attributes(ShovelItem.createAttributes(tier, 1.5F, -3.0F)),
+                                me.moonscenty.alchemia.enchantment.InfusionEnchantment.DESTRUCTIVE, 1))));
+        made.put("elemental_hoe", ITEMS.register("elemental_hoe",
+                () -> new me.moonscenty.alchemia.item.tool.ElementalHoeItem(tier,
+                        me.moonscenty.alchemia.item.tool.ElementalTools.carrying(new Item.Properties()
+                                .attributes(HoeItem.createAttributes(tier, -2.0F, -1.0F))))));
+        // unmodifiableMap rather than Map.copyOf, for the reason written above registerMetalTools
         return Collections.unmodifiableMap(made);
     }
 

@@ -274,6 +274,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("item.alchemia.crystallized_essence.of", pick("Crystallized %s", "결정화된 %s"));
         add("item.alchemia.crystallized_essence.holding", pick("One point of %s", "%s 한 점"));
         addInfusionEnchantments();
+        elementalTools();
         addBlock(ModBlocks.INFUSION_SPEED_STONE, pick("Infusion Speed Stone", "주입 속도석"));
         addBlock(ModBlocks.INFUSION_COST_STONE, pick("Infusion Cost Stone", "주입 절약석"));
         // one flame to a dye, and the dye's own name in front of it -- white is simply "nitor"
@@ -347,7 +348,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("item.alchemia.wand.focus_removed", pick("Took off %s", "%s 뺌"));
         add("key.categories.alchemia", "Alchemia");
         add("key.alchemia.change_focus", pick("Change Wand Focus", "완드 포커스 바꾸기"));
-        add("key.alchemia.set_reach", pick("Set Focus Reach", "포커스 범위 정하기"));
+        add("key.alchemia.tool_setting", pick("Change Tool Setting", "도구 설정 바꾸기"));
         foci();
         addWandRod("wood", "Wooden", "나무");
         addWandRod("greatwood", "Greatwood", "거대나무");
@@ -525,8 +526,8 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                  "They stop almost nothing. What they are worth is the walking: a step up a whole block without jumping, a push along the ground, a hold on the air that is not quite flying, and a fall that is forgotten as fast as it happens. Somebody who spends the day between a works and a mine will not take them off for a suit that stops arrows.",
                  "막아 주는 것은 거의 없다. 값어치는 걷는 데 있다. 뛰지 않고 한 칸을 오르고, 땅을 밀어 나아가고, 허공에서도 발이 듣고, 떨어지는 동안 떨어진 것이 잊힌다. 하루를 공방과 광산 사이에서 보내는 사람은 화살을 막아 주는 갑옷을 위해 이것을 벗지 않는다."},
                 {"infusion_enchantment", "Infusion Enchantment", "주입 마법부여",
-                 "An altar will put on a tool what no table will sell. There is no gambling and no book to keep it in: the tool goes under the matrix, the price is paid in essentia, and it comes back with one more thing about it. Collector sends what is broken to the one who broke it. Destructive takes the eight blocks round the one struck, where the tool would have served for them anyway. Burrowing brings a seam or a trunk apart from its far end. Sounding taps the stone and shows what is behind it for a moment, at five swings' wear. Arcing carries a blow to whatever is standing beside what was struck. Essence makes what is killed give up a little of what it was made of -- the one way to essentia that wants no smelter, and so the meanest of them. Crouch and the digging ones go quiet.",
-                 "작업대가 팔지 않는 것을 제단은 도구에 얹는다. 운에 맡길 것도, 담아 둘 책도 없다. 도구를 결계 아래에 두고 에센시아로 값을 치르면 한 가지를 더 지니고 돌아온다. 수집은 부순 것을 부순 이에게 보낸다. 파괴는 때린 칸 둘레 여덟을 같이 가져가되, 그 도구로 캘 수 있는 것만 가져간다. 굴착은 광맥이나 줄기를 먼 끝에서부터 허문다. 탐지는 돌을 두드려 돌 너머를 잠시 보여 주고, 그 대가로 도구가 다섯 번 닳는다. 전이는 때린 것 옆에 선 것에도 같은 매를 옮긴다. 정수는 죽인 것이 제 만들어진 바를 조금 내놓게 한다 -- 제련로 없이 에센시아를 얻는 유일한 길이고, 그래서 한 번에 주는 것이 적다. 웅크리면 캐는 것들은 조용해진다."},
+                 "An altar will put on a tool what no table will sell. There is no gambling and no book to keep it in: the tool goes under the matrix, the price is paid in essentia, and it comes back with one more thing about it. Collector sends what is broken to the one who broke it. Destructive takes the eight blocks round the one struck, where the tool would have served for them anyway. Burrowing brings a seam or a trunk apart from its far end. Refining makes ore come up now and then as a cluster, which smelts to twice the metal. Sounding taps the stone and shows what is behind it for a moment, at five swings' wear. Arcing carries a blow to whatever is standing beside what was struck. Essence makes what is killed give up a little of what it was made of -- the one way to essentia that wants no smelter, and so the meanest of them. Crouch and the digging ones go quiet.",
+                 "작업대가 팔지 않는 것을 제단은 도구에 얹는다. 운에 맡길 것도, 담아 둘 책도 없다. 도구를 결계 아래에 두고 에센시아로 값을 치르면 한 가지를 더 지니고 돌아온다. 수집은 부순 것을 부순 이에게 보낸다. 파괴는 때린 칸 둘레 여덟을 같이 가져가되, 그 도구로 캘 수 있는 것만 가져간다. 굴착은 광맥이나 줄기를 먼 끝에서부터 허문다. 정련은 광석이 이따금 군집으로 나오게 한다. 제련하면 두 배다. 탐지는 돌을 두드려 돌 너머를 잠시 보여 주고, 그 대가로 도구가 다섯 번 닳는다. 전이는 때린 것 옆에 선 것에도 같은 매를 옮긴다. 정수는 죽인 것이 제 만들어진 바를 조금 내놓게 한다 -- 제련로 없이 에센시아를 얻는 유일한 길이고, 그래서 한 번에 주는 것이 적다. 웅크리면 캐는 것들은 조용해진다."},
                 {"fortress_armour", "Fortress Armour", "요새 갑옷",
                  "A finished suit of alchemium goes under the matrix and comes back out as plate. It stops what void metal stops and lasts as long as the alchemium it was, which no single metal manages, and no enchanting table will ever be offered better steel. The more of the four is worn the less any one blow gets through, and a blow of fire or a blast is turned worse than a blade is. Falling does not wear it at all -- whatever the ground does to the wearer, it does nothing to the plate.",
                  "완성된 알케미움 한 벌을 결계 아래에 두면 판금이 되어 나온다. 공허 금속이 막는 만큼 막으면서 원래의 알케미움만큼 간다. 어느 금속 하나로도 둘 다 되지 않는다. 마법 탁자가 이보다 나은 쇠를 받아 본 적도 없다. 넷 중 많이 갖춰 입을수록 한 대가 덜 들어오고, 불과 폭발은 칼날보다 더 많이 튕겨 낸다. 떨어지는 것으로는 닳지 않는다. 땅이 입은 사람에게 무슨 짓을 하든 판금에는 아무 짓도 하지 않는다."},
@@ -542,6 +543,12 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                 {"focal_manipulator", "Focal Manipulator", "포커스 조작기",
                  "A bench for working one more thing into a focus. Five things will go into any focus, one to a rank, and which are on offer depends on the focus and on how deep the rank is -- the shallow ones give a focus more of what it already does, and the deep ones turn it into something else. The price is levels paid up front and vis drawn out of the air afterwards, a little every few ticks, so the bench wants a thick sky above it and a while to work. Take the focus off the bench part-way and the work is lost.",
                  "포커스에 한 가지를 더 박아 넣는 자리다. 어느 포커스든 다섯까지 들어가고 등급마다 하나씩이며, 어떤 것이 올라오는지는 포커스와 등급의 깊이에 달렸다. 얕은 등급은 본래 하던 일을 더 하게 해 주고, 깊은 등급은 아예 다른 것으로 바꾼다. 값은 먼저 경험치 레벨로 치르고 그 뒤로 몇 틱마다 조금씩 공기에서 비스를 길어 올린다. 그래서 하늘이 두터운 곳에 놓아야 하고 시간이 걸린다. 도중에 포커스를 들어내면 하던 일은 사라진다."},
+                {"elemental_tools", "Elemental Tools", "원소 도구",
+                 "Alchemium tools with a primal bound into each on the altar, and what that element is in a tool already worked into them. The axe of the stream fells a tree from its top and sends what falls to whoever felled it, and held up it draws every loose thing nearby in. The pickaxe of the core refines ore into clusters now and then, sounds out the stone it is tapped against, and sets alight whatever it strikes. The sword of the zephyr carries a blow on to what is standing about, and held up it raises a whirlwind that lifts its bearer and throws back anything that comes close. The shovel of the earthmover digs three by three, and used against a face it lays three by three of that same block out of the bag; the setting key turns which way the square stands. The hoe of growth tills three by three and makes things grow where there is nothing to till. Crouch with any of them and it is only a tool.",
+                 "제단에서 알케미움 도구에 원시를 하나씩 묶고, 그 원소가 도구에서 하는 일을 미리 새겨 둔 것이다. 흐름의 도끼는 나무를 꼭대기부터 베고 떨어진 것을 벤 사람에게 보내며, 들고 있으면 둘레의 떨어진 것을 모두 끌어온다. 핵의 곡괭이는 광석을 이따금 군집으로 정련하고, 두드린 돌 너머를 짚어 보며, 친 것에 불을 붙인다. 미풍의 검은 맞은 것 옆에 선 것까지 베고, 들고 있으면 회오리를 일으켜 든 사람을 띄우고 다가오는 것을 밀쳐 낸다. 흙꾼의 삽은 3×3으로 파고, 면에 대고 쓰면 그 블록을 가방에서 꺼내 3×3으로 깐다 — 설정 키로 네모가 서는 방향을 바꾼다. 성장의 괭이는 3×3으로 갈고, 갈 것이 없으면 자라게 한다. 무엇이든 웅크리고 쓰면 그냥 도구다."},
+                {"primal_crusher", "Primal Crusher", "원시 분쇄기",
+                 "Both elemental diggers and both of their void-metal counterparts beaten together round something that should not be able to hold all four. What comes out is a pickaxe and a shovel at once that digs three by three and refines ore as it goes. It has lost the building and the sounding; what is left only breaks things. Like void metal it mends itself, a point a second, and unlike anything else it is uneasy in the hand -- it carries two points of warp while it is held.",
+                 "원소 굴착 도구 둘과 그 공허 금속 짝 둘을, 넷을 다 품을 수 없어야 마땅한 것 둘레에 두들겨 합친 것이다. 나온 것은 곡괭이이자 삽이고, 3×3으로 파며 파는 대로 광석을 정련한다. 짓는 일과 짚어 보는 일은 잃었고 남은 것은 부수는 일뿐이다. 공허 금속처럼 초마다 한 점씩 스스로 고쳐지고, 다른 무엇과도 달리 손에 들기가 꺼림칙하다 — 들고 있는 동안 뒤틀림 2를 지닌다."},
                 {"autocaster", "Autocaster", "자동 시전기",
                  "A focus on a bracket, with enough of a mind in it to pick something and point itself at it. It is not a thaumaturge: it draws its own vis out of the air a drop at a time, holds a hundred of each primal at most, and nothing worn or carried makes a working any cheaper for it. Seven of the twelve foci are worth aiming at a thing, and those are the seven it will take. It goes against any face -- floor, wall or ceiling -- and it is told what to mind: animals, monsters, people, and whatever is already yours. A wand clicked against it takes it back down, focus and all.",
                  "받침대에 얹은 포커스다. 무엇을 고르고 그쪽으로 제 몸을 돌릴 만큼의 생각이 들어 있다. 마법사는 아니다. 제 비스를 공기에서 한 방울씩 길어 올리고, 원시마다 백까지만 담으며, 무엇을 걸쳤든 들었든 값이 싸지는 일은 없다. 열둘 중 일곱만이 무언가를 겨눌 값어치가 있고, 받아 주는 것도 그 일곱이다. 바닥이든 벽이든 천장이든 어느 면에나 붙으며, 무엇을 노릴지 일러 줄 수 있다 — 동물, 몹, 사람, 그리고 이미 제 편인 것. 완드로 치면 포커스째 도로 떼어 낸다."},
@@ -713,11 +720,25 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         }
     }
 
+    /** The five elemental tools and the crusher, and the three ways the shovel lays its square. */
+    private void elementalTools() {
+        add("item.alchemia.elemental_axe", pick("Axe of the Stream", "흐름의 도끼"));
+        add("item.alchemia.elemental_pickaxe", pick("Pickaxe of the Core", "핵의 곡괭이"));
+        add("item.alchemia.elemental_sword", pick("Sword of the Zephyr", "미풍의 검"));
+        add("item.alchemia.elemental_shovel", pick("Shovel of the Earthmover", "흙꾼의 삽"));
+        add("item.alchemia.elemental_hoe", pick("Hoe of Growth", "성장의 괭이"));
+        add("item.alchemia.primal_crusher", pick("Primal Crusher", "원시 분쇄기"));
+        add("item.alchemia.elemental_shovel.laying.0", pick("Laying flat against the face", "면에 납작하게 깐다"));
+        add("item.alchemia.elemental_shovel.laying.1", pick("Laying upright out of the face", "면에서 세로로 세운다"));
+        add("item.alchemia.elemental_shovel.laying.2", pick("Laying across out of the face", "면에서 가로로 뻗는다"));
+    }
+
     /** What an altar puts on a tool, written under the tool's name. */
     private void addInfusionEnchantments() {
         add(InfusionEnchantment.COLLECTOR.key(), pick("Collector", "수집"));
         add(InfusionEnchantment.DESTRUCTIVE.key(), pick("Destructive", "파괴"));
         add(InfusionEnchantment.BURROWING.key(), pick("Burrowing", "굴착"));
+        add(InfusionEnchantment.REFINING.key(), pick("Refining", "정련"));
         add(InfusionEnchantment.SOUNDING.key(), pick("Sounding", "탐지"));
         add(InfusionEnchantment.ARCING.key(), pick("Arcing", "전이"));
         add(InfusionEnchantment.ESSENCE.key(), pick("Essence", "정수"));

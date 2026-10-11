@@ -57,6 +57,9 @@ public class ModRecipeProvider extends RecipeProvider {
     private static final int HELM_GOGGLES_UNSTABLE = 5;
     /** And to beating a face onto one, which it likes a good deal less. The original's number. */
     private static final int MASK_UNSTABLE = 8;
+    /** How badly an altar takes to binding a primal into a tool, and to beating four tools into one. */
+    private static final int ELEMENTAL_UNSTABLE = 1;
+    private static final int CRUSHER_UNSTABLE = 6;
     /** How badly an altar takes to giving a focus a mind of its own. The original's number. */
     private static final int AUTOCASTER_UNSTABLE = 5;
 
@@ -602,6 +605,35 @@ public class ModRecipeProvider extends RecipeProvider {
                         .add(ModAspects.SENSES, 16).add(ModAspects.AVERSION, 16),
                 AUTOCASTER_UNSTABLE, "autocaster");
 
+        // the elemental tools: an alchemium tool on the matrix, two shards of its element, a diamond and a
+        // board of greatwood. Instability one and the essentia are the original's, tool by tool
+        elemental(output, "elemental_axe", "alchemium_axe", CrystalType.WATER, CrystalType.WATER,
+                AspectList.of(ModAspects.WATER, 16).add(ModAspects.PLANT, 8));
+        elemental(output, "elemental_pickaxe", "alchemium_pickaxe", CrystalType.FIRE, CrystalType.FIRE,
+                AspectList.of(ModAspects.FIRE, 8).add(ModAspects.METAL, 8).add(ModAspects.SENSES, 8));
+        elemental(output, "elemental_sword", "alchemium_sword", CrystalType.AIR, CrystalType.AIR,
+                AspectList.of(ModAspects.AIR, 8).add(ModAspects.MOTION, 8).add(ModAspects.AVERSION, 8));
+        elemental(output, "elemental_shovel", "alchemium_shovel", CrystalType.EARTH, CrystalType.EARTH,
+                AspectList.of(ModAspects.EARTH, 16).add(ModAspects.CRAFT, 8));
+        elemental(output, "elemental_hoe", "alchemium_hoe", CrystalType.ORDER, CrystalType.ENTROPY,
+                AspectList.of(ModAspects.ORDER, 8).add(ModAspects.PLANT, 8).add(ModAspects.ENTROPY, 8));
+
+        // the crusher. The original beat the four diggers round a primordial pearl with two primal charms in
+        // the ring; neither is in this mod yet, so a nether star stands for the pearl -- something earned from
+        // the hardest thing there is to kill -- and the balanced shard the charms are made from for the charms
+        infusion(output, "primal_crusher", Ingredient.of(Items.NETHER_STAR),
+                List.of(Ingredient.of(ModItems.BALANCED_SHARD),
+                        Ingredient.of(ModItems.METAL_TOOLS.get("void_pickaxe")),
+                        Ingredient.of(ModItems.METAL_TOOLS.get("void_shovel")),
+                        Ingredient.of(ModItems.BALANCED_SHARD),
+                        Ingredient.of(ModItems.ELEMENTAL_TOOLS.get("elemental_pickaxe")),
+                        Ingredient.of(ModItems.ELEMENTAL_TOOLS.get("elemental_shovel"))),
+                new ItemStack(ModItems.PRIMAL_CRUSHER.get()),
+                AspectList.of(ModAspects.EARTH, 24).add(ModAspects.TOOL, 24).add(ModAspects.ENTROPY, 16)
+                        .add(ModAspects.VOID, 16).add(ModAspects.AVERSION, 16).add(ModAspects.ELDRITCH, 16)
+                        .add(ModAspects.DESIRE, 16),
+                CRUSHER_UNSTABLE, "primal_crusher");
+
         // the two caps a workbench can only cast. Salis mundus round them, and the altar does the rest
         infusion(output, "wand_cap_alchemium", Ingredient.of(ModItems.INERT_CAPS.get("alchemium")),
                 salis(3), new ItemStack(ModItems.WAND_CAPS.get("alchemium").get()),
@@ -610,6 +642,16 @@ public class ModRecipeProvider extends RecipeProvider {
                 salis(4), new ItemStack(ModItems.WAND_CAPS.get("void").get()),
                 AspectList.of(ModAspects.ENERGY, 18).add(ModAspects.VOID, 18)
                         .add(ModAspects.ELDRITCH, 18).add(ModAspects.AURA, 18), 8, "void_metal");
+    }
+
+    /** One of the five: the alchemium tool of the same shape, two shards, a diamond and a board of greatwood. */
+    private void elemental(RecipeOutput output, String made, String from, CrystalType one, CrystalType two,
+            AspectList essentia) {
+        infusion(output, made, Ingredient.of(ModItems.METAL_TOOLS.get(from)),
+                List.of(Ingredient.of(ModItems.SHARDS.get(one)), Ingredient.of(ModItems.SHARDS.get(two)),
+                        Ingredient.of(Items.DIAMOND), Ingredient.of(ModBlocks.GREATWOOD.planks())),
+                new ItemStack(ModItems.ELEMENTAL_TOOLS.get(made).get()), essentia, ELEMENTAL_UNSTABLE,
+                "elemental_tools");
     }
 
     /**
@@ -631,6 +673,10 @@ public class ModRecipeProvider extends RecipeProvider {
                 AspectList.of(ModAspects.SENSES, 24).add(ModAspects.EARTH, 32),
                 List.of(Ingredient.of(ModItems.RESEARCH_NOTES),
                         Ingredient.of(Items.ENCHANTED_BOOK), Ingredient.of(Items.RABBIT_FOOT)));
+        enchantment(output, InfusionEnchantment.REFINING,
+                AspectList.of(ModAspects.ORDER, 16).add(ModAspects.EXCHANGE, 12),
+                List.of(Ingredient.of(ModItems.RESEARCH_NOTES),
+                        Ingredient.of(Items.ENCHANTED_BOOK), Ingredient.of(ModItems.SALIS_MUNDUS)));
         enchantment(output, InfusionEnchantment.SOUNDING,
                 AspectList.of(ModAspects.SENSES, 8).add(ModAspects.FIRE, 12),
                 List.of(Ingredient.of(ModItems.RESEARCH_NOTES),

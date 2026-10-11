@@ -193,7 +193,7 @@ public class ModResearchProvider {
                         .add(ModAspects.MIND, 4),
                 List.of("infusion"), false, NodeShape.PLAIN, 3,
                 "infusion_enchantment_collector", "infusion_enchantment_destructive",
-                "infusion_enchantment_burrowing", "infusion_enchantment_sounding",
+                "infusion_enchantment_burrowing", "infusion_enchantment_refining", "infusion_enchantment_sounding",
                 "infusion_enchantment_arcing", "infusion_enchantment_essence");
 
         entry(context, "wand_rods", ModResearch.ARCANA, ModItems.WAND_RODS.get("silverwood"), 8, 4,
@@ -208,6 +208,21 @@ public class ModResearchProvider {
                 AspectList.of(ModAspects.ENERGY, 8).add(ModAspects.TOOL, 8).add(ModAspects.CRAFT, 5)
                         .add(ModAspects.CRYSTAL, 5),
                 List.of("arcane_workbench", "arcane_stone"), false, NodeShape.MAJOR, 2, "focal_manipulator");
+
+        // a primal bound into each of the alchemium tools, with what that element is already worked in
+        entry(context, "elemental_tools", ModResearch.ARTIFICE, ModItems.ELEMENTAL_TOOLS.get("elemental_axe"), 4, 6,
+                AspectList.of(ModAspects.TOOL, 6).add(ModAspects.AVERSION, 6).add(ModAspects.AIR, 3)
+                        .add(ModAspects.FIRE, 3).add(ModAspects.WATER, 3).add(ModAspects.EARTH, 3)
+                        .add(ModAspects.ORDER, 3).add(ModAspects.ENTROPY, 3),
+                List.of("alchemium_gear", "infusion", "vis_crystals"), false, NodeShape.PLAIN, 2,
+                "elemental_axe", "elemental_pickaxe", "elemental_sword", "elemental_shovel", "elemental_hoe");
+        // filed under eldritch, as the original filed it: it is the first thing beaten round something that
+        // should not hold it
+        entry(context, "primal_crusher", ModResearch.ELDRITCH, ModItems.PRIMAL_CRUSHER, 1, 5,
+                AspectList.of(ModAspects.EARTH, 6).add(ModAspects.TOOL, 6).add(ModAspects.ENTROPY, 6)
+                        .add(ModAspects.VOID, 6).add(ModAspects.AVERSION, 6).add(ModAspects.ELDRITCH, 6)
+                        .add(ModAspects.DESIRE, 6),
+                List.of("elemental_tools", "void_gear", "warp"), false, NodeShape.SPECIAL, 2, "primal_crusher");
 
         // a focus with a bracket and just enough mind to aim itself. The original filed it under golemancy,
         // which is where everything that works while nobody is holding it belongs

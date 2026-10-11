@@ -1,0 +1,48 @@
+{
+  "category": "alchemia:artifice",
+  "column": 4,
+  "complexity": 2,
+  "icon": "alchemia:elemental_axe",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.elemental_tools.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:elemental_axe"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:elemental_pickaxe"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:elemental_sword"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:elemental_shovel"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:elemental_hoe"
+    }
+  ],
+  "parents": [
+    "alchemia:alchemium_gear",
+    "alchemia:infusion",
+    "alchemia:vis_crystals"
+  ],
+  "requirements": {
+    "alchemia:aer": 3,
+    "alchemia:aqua": 3,
+    "alchemia:aversio": 6,
+    "alchemia:ignis": 3,
+    "alchemia:instrumentum": 6,
+    "alchemia:ordo": 3,
+    "alchemia:perditio": 3,
+    "alchemia:terra": 3
+  },
+  "row": 6
+}

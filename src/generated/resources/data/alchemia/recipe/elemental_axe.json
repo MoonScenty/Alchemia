@@ -1,0 +1,30 @@
+{
+  "type": "alchemia:infusion",
+  "central": {
+    "item": "alchemia:alchemium_axe"
+  },
+  "essentia": {
+    "alchemia:aqua": 16,
+    "alchemia:herba": 8
+  },
+  "instability": 1,
+  "research": "alchemia:elemental_tools",
+  "result": {
+    "count": 1,
+    "id": "alchemia:elemental_axe"
+  },
+  "ring": [
+    {
+      "item": "alchemia:water_shard"
+    },
+    {
+      "item": "alchemia:water_shard"
+    },
+    {
+      "item": "minecraft:diamond"
+    },
+    {
+      "item": "alchemia:greatwood_planks"
+    }
+  ]
+}

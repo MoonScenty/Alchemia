@@ -54,6 +54,16 @@ public class ModDataComponents {
                     .networkSynchronized(ByteBufCodecs.VAR_INT)
                     .build());
 
+    /**
+     * Which way the shovel of the earthmover lays its three-by-three: flat against the face, or standing out of
+     * it one way or the other. Nought, one or two, turned with the same key an architect's focus is set with.
+     */
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> SHOVEL_LAYING =
+            COMPONENTS.register("shovel_laying", () -> DataComponentType.<Integer>builder()
+                    .persistent(Codec.intRange(0, 2))
+                    .networkSynchronized(ByteBufCodecs.VAR_INT)
+                    .build());
+
     /** The puzzle drawn on a sheet of research notes, and the research it stands for. */
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<ResearchNote>> RESEARCH_NOTE =
             COMPONENTS.register("research_note", () -> DataComponentType.<ResearchNote>builder()

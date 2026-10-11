@@ -164,6 +164,24 @@ public class ModItemTagsProvider extends ItemTagsProvider {
                 tag(net.minecraft.tags.ItemTags.MINING_LOOT_ENCHANTABLE).add(tool.get());
             }
         });
+        // the elemental tools are tools of their shape, and the crusher is two shapes at once
+        ModItems.ELEMENTAL_TOOLS.forEach((name, tool) -> {
+            String shape = name.substring(name.indexOf('_') + 1);
+            tag(shapes.get(shape)).add(tool.get());
+            tag(net.minecraft.tags.ItemTags.DURABILITY_ENCHANTABLE).add(tool.get());
+            if (shape.equals("sword")) {
+                tag(net.minecraft.tags.ItemTags.SWORD_ENCHANTABLE).add(tool.get());
+                tag(net.minecraft.tags.ItemTags.WEAPON_ENCHANTABLE).add(tool.get());
+            } else {
+                tag(net.minecraft.tags.ItemTags.MINING_ENCHANTABLE).add(tool.get());
+                tag(net.minecraft.tags.ItemTags.MINING_LOOT_ENCHANTABLE).add(tool.get());
+            }
+        });
+        tag(net.minecraft.tags.ItemTags.PICKAXES).add(ModItems.PRIMAL_CRUSHER.get());
+        tag(net.minecraft.tags.ItemTags.SHOVELS).add(ModItems.PRIMAL_CRUSHER.get());
+        tag(net.minecraft.tags.ItemTags.DURABILITY_ENCHANTABLE).add(ModItems.PRIMAL_CRUSHER.get());
+        tag(net.minecraft.tags.ItemTags.MINING_ENCHANTABLE).add(ModItems.PRIMAL_CRUSHER.get());
+        tag(net.minecraft.tags.ItemTags.MINING_LOOT_ENCHANTABLE).add(ModItems.PRIMAL_CRUSHER.get());
         ModItems.METAL_ARMOUR.values().forEach(piece -> {
             tag(net.minecraft.tags.ItemTags.DURABILITY_ENCHANTABLE).add(piece.get());
             tag(net.minecraft.tags.ItemTags.ARMOR_ENCHANTABLE).add(piece.get());

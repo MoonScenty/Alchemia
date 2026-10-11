@@ -1,0 +1,32 @@
+{
+  "category": "alchemia:eldritch",
+  "column": 1,
+  "complexity": 2,
+  "icon": "alchemia:primal_crusher",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.primal_crusher.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:primal_crusher"
+    }
+  ],
+  "parents": [
+    "alchemia:elemental_tools",
+    "alchemia:void_gear",
+    "alchemia:warp"
+  ],
+  "requirements": {
+    "alchemia:alienis": 6,
+    "alchemia:aversio": 6,
+    "alchemia:desiderium": 6,
+    "alchemia:instrumentum": 6,
+    "alchemia:perditio": 6,
+    "alchemia:terra": 6,
+    "alchemia:vacuos": 6
+  },
+  "row": 5,
+  "shape": "special"
+}

@@ -139,23 +139,19 @@ public final class Excavation {
     }
 
     /**
-     * What dowsing does to one drop.
+     * What dowsing does to one drop: now and then the ore comes up as a cluster, which smelts to twice the metal.
      * <p>
-     * <b>Different from the original.</b> The original turned the drop into a native cluster, which smelted to
-     * twice the ingots. There is no such item in this mod, so what it does instead is give twice the drop --
-     * the same amount of metal, come by without a second item to explain. The chance is the original's, and
-     * treasure makes it likelier the same way it did.
+     * The chance is the original's, and treasure makes it likelier the same way it did. Anything that is not ore
+     * comes up as it would have.
      */
     private static ItemStack dowsed(ServerLevel level, BlockPos at, BlockState block, ItemStack drop,
             int treasure) {
-        if (!block.is(net.neoforged.neoforge.common.Tags.Blocks.ORES)
-                || level.random.nextFloat() > DOWSES + treasure * DOWSES_BETTER) {
-            return drop;
+        ItemStack found = me.moonscenty.alchemia.item.Clusters.maybe(drop, DOWSES + treasure * DOWSES_BETTER,
+                level.random);
+        if (found != drop) {
+            level.playSound(null, at, SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 0.2F, 0.7F);
         }
-        ItemStack richer = drop.copy();
-        richer.grow(drop.getCount());
-        level.playSound(null, at, SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.PLAYERS, 0.2F, 0.8F);
-        return richer;
+        return found;
     }
 
     /** One more of the same block beside the one just taken, for a beam that has been widened. */

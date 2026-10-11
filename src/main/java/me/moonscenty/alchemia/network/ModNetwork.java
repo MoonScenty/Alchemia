@@ -34,7 +34,7 @@ public class ModNetwork {
         registrar.playToServer(PlaceAspect.TYPE, PlaceAspect.STREAM_CODEC, ModNetwork::onPlaceAspect);
         registrar.playToServer(MixAspects.TYPE, MixAspects.STREAM_CODEC, ModNetwork::onMixAspects);
         registrar.playToServer(ChangeFocus.TYPE, ChangeFocus.STREAM_CODEC, ModNetwork::onChangeFocus);
-        registrar.playToServer(SetReach.TYPE, SetReach.STREAM_CODEC, ModNetwork::onSetReach);
+        registrar.playToServer(ToolSetting.TYPE, ToolSetting.STREAM_CODEC, ModNetwork::onToolSetting);
         registrar.playToServer(ChooseFocus.TYPE, ChooseFocus.STREAM_CODEC, ModNetwork::onChooseFocus);
     }
 
@@ -76,15 +76,21 @@ public class ModNetwork {
     }
 
     /**
-     * Turning down how far an architect's focus works.
+     * Turning the setting of whatever is in hand.
      * <p>
-     * It goes round: one less each press, and back to the most it can do when it reaches nothing. The server
-     * settles what the most is, since that depends on what else is worked into the focus.
+     * A wand: how far an architect's focus works, one less each press and round to the most it can do. The
+     * shovel of the earthmover: which way it lays its square. Anything else does not listen.
      */
-    private static void onSetReach(SetReach payload, IPayloadContext context) {
+    private static void onToolSetting(ToolSetting payload, IPayloadContext context) {
         context.enqueueWork(() -> {
-            if (context.player() instanceof ServerPlayer player) {
-                me.moonscenty.alchemia.wand.spell.Swapping.setReach(player, player.getMainHandItem());
+            if (!(context.player() instanceof ServerPlayer player)) {
+                return;
+            }
+            ItemStack held = player.getMainHandItem();
+            if (held.getItem() instanceof WandItem) {
+                me.moonscenty.alchemia.wand.spell.Swapping.setReach(player, held);
+            } else if (held.getItem() instanceof me.moonscenty.alchemia.item.tool.ElementalShovelItem) {
+                me.moonscenty.alchemia.item.tool.ElementalShovelItem.turn(player, held);
             }
         });
     }

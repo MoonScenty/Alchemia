@@ -7,6 +7,11 @@
     "alchemia:void_pickaxe",
     "alchemia:void_axe",
     "alchemia:void_shovel",
-    "alchemia:void_hoe"
+    "alchemia:void_hoe",
+    "alchemia:elemental_axe",
+    "alchemia:elemental_pickaxe",
+    "alchemia:elemental_shovel",
+    "alchemia:elemental_hoe",
+    "alchemia:primal_crusher"
   ]
 }

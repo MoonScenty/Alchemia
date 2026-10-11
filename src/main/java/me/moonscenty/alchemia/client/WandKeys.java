@@ -29,7 +29,8 @@ import net.neoforged.neoforge.network.PacketDistributor;
  * one key both fire -- a press would change the focus and swap the hands at once. V is free and falls under the
  * same hand, so V it is; anyone who wants F back can say so in the controls screen.
  * <p>
- * The reach key is the original's G, which is still free.
+ * The second key is the original's G, which is still free. It turns whatever setting the thing in hand has: how
+ * far an architect's focus reaches, or which way the shovel of the earthmover lays its square.
  */
 @EventBusSubscriber(modid = Alchemia.MODID, value = Dist.CLIENT)
 public final class WandKeys {
@@ -38,8 +39,8 @@ public final class WandKeys {
     public static final KeyMapping CHANGE_FOCUS = new KeyMapping("key.alchemia.change_focus",
             KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, InputConstants.KEY_V, CATEGORY);
 
-    /** Only a focus with an architect's eye in it answers to this one. */
-    public static final KeyMapping SET_REACH = new KeyMapping("key.alchemia.set_reach",
+    /** A wand whose focus has an architect's eye, and the shovel of the earthmover, answer to this one. */
+    public static final KeyMapping TOOL_SETTING = new KeyMapping("key.alchemia.tool_setting",
             KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, InputConstants.KEY_G, CATEGORY);
 
     /** How long the key has to be held before the ring opens rather than the focus simply moving on. */
@@ -53,7 +54,7 @@ public final class WandKeys {
     @SubscribeEvent
     public static void register(RegisterKeyMappingsEvent event) {
         event.register(CHANGE_FOCUS);
-        event.register(SET_REACH);
+        event.register(TOOL_SETTING);
     }
 
     /**
@@ -71,14 +72,16 @@ public final class WandKeys {
             return;
         }
         drain(CHANGE_FOCUS);
-        drain(SET_REACH);
-        if (!(player.getMainHandItem().getItem() instanceof WandItem) || client.screen != null) {
+        // counted before anything else looks at it: emptying the queue first is what kept this from ever firing
+        boolean setting = drain(TOOL_SETTING);
+        var inHand = player.getMainHandItem().getItem();
+        if (setting && client.screen == null && (inHand instanceof WandItem
+                || inHand instanceof me.moonscenty.alchemia.item.tool.ElementalShovelItem)) {
+            PacketDistributor.sendToServer(new me.moonscenty.alchemia.network.ToolSetting());
+        }
+        if (!(inHand instanceof WandItem) || client.screen != null) {
             held = 0;
             return;
-        }
-
-        if (SET_REACH.isDown() && SET_REACH.consumeClick()) {
-            PacketDistributor.sendToServer(new me.moonscenty.alchemia.network.SetReach());
         }
 
         if (CHANGE_FOCUS.isDown()) {
@@ -107,10 +110,12 @@ public final class WandKeys {
                 WandItem.focus(player.getMainHandItem()), CHANGE_FOCUS.getKey().getValue()));
     }
 
-    /** Empties a key's queue of presses, which are of no use to anything that watches the key itself. */
-    private static void drain(KeyMapping key) {
+    /** Empties a key's queue of presses, and says whether there were any. */
+    private static boolean drain(KeyMapping key) {
+        boolean any = false;
         while (key.consumeClick()) {
-            // nothing: the press queue is read by holding the key down, not by counting clicks
+            any = true;
         }
+        return any;
     }
 }

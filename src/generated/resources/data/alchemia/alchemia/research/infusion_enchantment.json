@@ -22,6 +22,10 @@
     },
     {
       "type": "recipe",
+      "recipe": "alchemia:infusion_enchantment_refining"
+    },
+    {
+      "type": "recipe",
       "recipe": "alchemia:infusion_enchantment_sounding"
     },
     {

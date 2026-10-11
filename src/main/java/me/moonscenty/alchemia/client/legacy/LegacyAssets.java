@@ -475,6 +475,14 @@ public final class LegacyAssets {
         // the two metals' tools and plain armour: the original called alchemium thaumium
         metalGear(all, "alchemium", "thaumium");
         metalGear(all, "void", "void");
+        // the five elemental tools and the crusher, whose picture is animated and brings its timing with it
+        for (String[] tool : new String[][] {{"elemental_axe", "elemental_axe"},
+                {"elemental_pickaxe", "elemental_pick"}, {"elemental_sword", "elemental_sword"},
+                {"elemental_shovel", "elemental_shovel"}, {"elemental_hoe", "elemental_hoe"},
+                {"primal_crusher", "primal_crusher"}}) {
+            all.add(LegacyAsset.of("textures/item/legacy/" + tool[0] + ".png")
+                    .five("textures/items/" + tool[1] + ".png"));
+        }
         all.add(item("enchanted_fabric", "fabric", null));
         all.add(item("focus_pouch", "focus_pouch", "focuspouch"));
         // the pouch opened is the original's panel; its screen and slots are laid out to match

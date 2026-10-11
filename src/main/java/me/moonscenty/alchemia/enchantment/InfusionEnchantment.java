@@ -32,6 +32,8 @@ public enum InfusionEnchantment implements StringRepresentable {
     DESTRUCTIVE("destructive", 1, () -> List.of(ItemTags.PICKAXES, ItemTags.AXES, ItemTags.SHOVELS)),
     /** A vein or a trunk comes apart from its far end rather than from the end being struck. */
     BURROWING("burrowing", 1, () -> List.of(ItemTags.PICKAXES, ItemTags.AXES)),
+    /** Ore sometimes comes up as a cluster, which smelts to twice the metal. */
+    REFINING("refining", 4, () -> List.of(ItemTags.PICKAXES)),
     /** Tapping stone with it shows what is behind the stone, for a moment and at a price. */
     SOUNDING("sounding", 4, () -> List.of(ItemTags.PICKAXES)),
     /** A blow lands on what is standing about as well as on what was struck. */

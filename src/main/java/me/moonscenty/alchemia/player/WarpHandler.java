@@ -42,16 +42,22 @@ public class WarpHandler {
         }
     }
 
-    /** Rolls once against the counter, and sees an event through if it comes up. */
+    /**
+     * Rolls once against the counter, and sees an event through if it comes up.
+     * <p>
+     * What the player is holding and wearing counts as well, while they are holding and wearing it. See
+     * {@link me.moonscenty.alchemia.item.WarpingGear}.
+     */
     public static void check(ServerPlayer player) {
         WarpData warp = WarpData.of(player);
+        int gear = me.moonscenty.alchemia.item.WarpingGear.carried(player);
         RandomSource random = player.getRandom();
-        if (!triggers(warp, random)) {
+        if (!triggers(warp, gear, random)) {
             return;
         }
 
-        player.setData(ModAttachments.WARP, afterEvent(warp));
-        int severity = severityOf(warp);
+        player.setData(ModAttachments.WARP, afterEvent(warp, gear));
+        int severity = severityOf(warp, gear);
         inflict(player, severity, random.nextInt(Math.max(1, severity)));
     }
 
@@ -60,17 +66,34 @@ public class WarpHandler {
      * carrying no warp at all is never troubled.
      */
     public static boolean triggers(WarpData warp, RandomSource random) {
-        return warp.counter() > 0 && warp.total() > 0 && random.nextInt(100) <= Math.sqrt(warp.counter());
+        return triggers(warp, 0, random);
+    }
+
+    /** The same, with warp carried in gear counted on top of the player's own. */
+    public static boolean triggers(WarpData warp, int gear, RandomSource random) {
+        return warp.counter() > 0 && warp.total() + gear > 0 && random.nextInt(100) <= Math.sqrt(warp.counter());
     }
 
     /** How bad an event drawn at this much warp can get. Draws on the warp and the pent-up counter together. */
     public static int severityOf(WarpData warp) {
-        return Math.min(MAX_SEVERITY, (warp.total() * 2 + warp.counter()) / 3);
+        return severityOf(warp, 0);
+    }
+
+    public static int severityOf(WarpData warp, int gear) {
+        return Math.min(MAX_SEVERITY, ((warp.total() + gear) * 2 + warp.counter()) / 3);
     }
 
     /** The counter unwinds as the event plays out, and a little temporary warp works itself off with it. */
     public static WarpData afterEvent(WarpData warp) {
-        int spent = (int) Math.max(5, Math.sqrt(warp.counter()) * 2);
+        return afterEvent(warp, 0);
+    }
+
+    /**
+     * The same, for a player carrying warp in their gear: it bleeds off more slowly, two less for every point
+     * carried, though never less than the five any event takes.
+     */
+    public static WarpData afterEvent(WarpData warp, int gear) {
+        int spent = (int) Math.max(5, Math.sqrt(warp.counter()) * 2 - gear * 2);
         return warp.withCounter(warp.counter() - spent).add(WarpData.Kind.TEMPORARY, -1);
     }
 

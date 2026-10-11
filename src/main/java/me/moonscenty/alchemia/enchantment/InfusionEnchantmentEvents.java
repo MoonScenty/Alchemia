@@ -70,11 +70,42 @@ public final class InfusionEnchantmentEvents {
             return;
         }
         ItemStack held = player.getMainHandItem();
+        // refined first, so that whatever is collected or left lying is already the cluster
+        if (InfusionEnchantments.has(held, InfusionEnchantment.REFINING)
+                && held.isCorrectToolForDrops(event.getState())) {
+            refine(event, InfusionEnchantments.level(held, InfusionEnchantment.REFINING));
+        }
         if (InfusionEnchantments.has(held, InfusionEnchantment.DESTRUCTIVE)) {
             spread(event.getLevel(), event.getPos(), player, held);
         }
         if (InfusionEnchantments.has(held, InfusionEnchantment.COLLECTOR)) {
             collect(event, player);
+        }
+    }
+
+    /** How likely a piece of ore is to come up refined, for each step of the working past the first. */
+    private static final float REFINES = 0.125F;
+
+    /**
+     * Ore comes up as a cluster, now and then.
+     * <p>
+     * An eighth of the time at the first step and an eighth more for each step after, as the original counted
+     * it. Each piece is rolled for on its own, so a block that drops two can come up as one of each.
+     */
+    private static void refine(BlockDropsEvent event, int level) {
+        float chance = (1 + level) * REFINES;
+        boolean any = false;
+        for (ItemEntity dropped : event.getDrops()) {
+            ItemStack was = dropped.getItem();
+            ItemStack now = me.moonscenty.alchemia.item.Clusters.maybe(was, chance, event.getLevel().random);
+            if (now != was) {
+                dropped.setItem(now);
+                any = true;
+            }
+        }
+        if (any) {
+            event.getLevel().playSound(null, event.getPos(), net.minecraft.sounds.SoundEvents.EXPERIENCE_ORB_PICKUP,
+                    net.minecraft.sounds.SoundSource.BLOCKS, 0.2F, 0.7F + event.getLevel().random.nextFloat() * 0.2F);
         }
     }
 

@@ -1,6 +1,8 @@
 {
   "values": [
+    "alchemia:alchemium_pickaxe",
     "alchemia:void_pickaxe",
-    "alchemia:alchemium_pickaxe"
+    "alchemia:elemental_pickaxe",
+    "alchemia:primal_crusher"
   ]
 }

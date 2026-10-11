@@ -1,0 +1,31 @@
+{
+  "type": "alchemia:infusion",
+  "central": {
+    "item": "alchemia:alchemium_pickaxe"
+  },
+  "essentia": {
+    "alchemia:ignis": 8,
+    "alchemia:metallum": 8,
+    "alchemia:sensus": 8
+  },
+  "instability": 1,
+  "research": "alchemia:elemental_tools",
+  "result": {
+    "count": 1,
+    "id": "alchemia:elemental_pickaxe"
+  },
+  "ring": [
+    {
+      "item": "alchemia:fire_shard"
+    },
+    {
+      "item": "alchemia:fire_shard"
+    },
+    {
+      "item": "minecraft:diamond"
+    },
+    {
+      "item": "alchemia:greatwood_planks"
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "type": "alchemia:infusion",
+  "central": {
+    "item": "minecraft:nether_star"
+  },
+  "essentia": {
+    "alchemia:alienis": 16,
+    "alchemia:aversio": 16,
+    "alchemia:desiderium": 16,
+    "alchemia:instrumentum": 24,
+    "alchemia:perditio": 16,
+    "alchemia:terra": 24,
+    "alchemia:vacuos": 16
+  },
+  "instability": 6,
+  "research": "alchemia:primal_crusher",
+  "result": {
+    "count": 1,
+    "id": "alchemia:primal_crusher"
+  },
+  "ring": [
+    {
+      "item": "alchemia:balanced_shard"
+    },
+    {
+      "item": "alchemia:void_pickaxe"
+    },
+    {
+      "item": "alchemia:void_shovel"
+    },
+    {
+      "item": "alchemia:balanced_shard"
+    },
+    {
+      "item": "alchemia:elemental_pickaxe"
+    },
+    {
+      "item": "alchemia:elemental_shovel"
+    }
+  ]
+}

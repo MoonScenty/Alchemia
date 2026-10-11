@@ -1,0 +1,24 @@
+{
+  "type": "alchemia:infusion",
+  "central": {
+    "tag": "minecraft:pickaxes"
+  },
+  "enchants": "refining",
+  "essentia": {
+    "alchemia:ordo": 16,
+    "alchemia:permutatio": 12
+  },
+  "instability": 4,
+  "research": "alchemia:infusion_enchantment",
+  "ring": [
+    {
+      "item": "alchemia:research_notes"
+    },
+    {
+      "item": "minecraft:enchanted_book"
+    },
+    {
+      "item": "alchemia:salis_mundus"
+    }
+  ]
+}
