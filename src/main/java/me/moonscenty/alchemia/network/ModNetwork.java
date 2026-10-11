@@ -35,6 +35,7 @@ public class ModNetwork {
         registrar.playToServer(MixAspects.TYPE, MixAspects.STREAM_CODEC, ModNetwork::onMixAspects);
         registrar.playToServer(ChangeFocus.TYPE, ChangeFocus.STREAM_CODEC, ModNetwork::onChangeFocus);
         registrar.playToServer(SetReach.TYPE, SetReach.STREAM_CODEC, ModNetwork::onSetReach);
+        registrar.playToServer(ChooseFocus.TYPE, ChooseFocus.STREAM_CODEC, ModNetwork::onChooseFocus);
     }
 
     /**
@@ -56,6 +57,20 @@ public class ModNetwork {
                 Foci.remove(player, held);
             } else {
                 Foci.next(player, held);
+            }
+        });
+    }
+
+    /**
+     * Fitting the focus picked off the wheel.
+     * <p>
+     * The wand comes from the hand rather than the packet, for the same reason the cycle takes it from there.
+     */
+    private static void onChooseFocus(ChooseFocus payload, IPayloadContext context) {
+        context.enqueueWork(() -> {
+            if (context.player() instanceof ServerPlayer player
+                    && player.getMainHandItem().getItem() instanceof WandItem) {
+                Foci.fit(player, player.getMainHandItem(), payload.focus());
             }
         });
     }

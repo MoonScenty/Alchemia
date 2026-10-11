@@ -344,6 +344,9 @@ public final class LegacyAssets {
             all.add(LegacyAsset.of("textures/block/legacy/" + face + ".png").five("textures/blocks/" + face + ".png"));
         }
         all.add(LegacyAsset.of("textures/gui/focal_manipulator.png").five("textures/gui/gui_wandtable.png"));
+        // the two rings the wheel turns behind the foci, one each way
+        all.add(LegacyAsset.of("textures/gui/focus_wheel.png").five("textures/misc/radial.png"));
+        all.add(LegacyAsset.of("textures/gui/focus_wheel_back.png").five("textures/misc/radial2.png"));
         // one small picture for each of the twenty-three, as the original kept them
         for (FocusUpgrade upgrade : FocusUpgrade.values()) {
             all.add(LegacyAsset.of("textures/gui/focus_upgrade/" + upgrade.getSerializedName() + ".png")

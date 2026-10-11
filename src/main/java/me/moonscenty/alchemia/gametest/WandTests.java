@@ -195,6 +195,59 @@ public class WandTests {
      * Sorting by name rather than by where they sit means tidying a bag does not change which comes next. Coming
      * back round means a player carrying one focus can put it on and take it off with the same key.
      */
+    /**
+     * Two foci of the same kind are two foci once one of them has been worked on.
+     * <p>
+     * They are told apart by name, and what is worked in is part of the name. Without that the cycle would get
+     * to the first shock focus and never reach the second, and the ring would show two of the same picture with
+     * no way of saying which was which.
+     */
+    @GameTest(template = TEMPLATE)
+    public static void twoOfAKindAreToldApartByWhatIsInThem(GameTestHelper helper) {
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        ItemStack wand = WandItem.of(ModWandParts.WOOD, ModWandParts.IRON);
+        ItemStack plain = new ItemStack(ModItems.FOCI.get("shock").get());
+        ItemStack worked = new ItemStack(ModItems.FOCI.get("shock").get());
+        me.moonscenty.alchemia.wand.FocusUpgrades.apply(worked,
+                me.moonscenty.alchemia.wand.FocusUpgrade.POTENCY);
+        // the names are taken first: putting a stack in a bag empties the stack that was handed over
+        String plainly = Foci.name(plain);
+        String workedly = Foci.name(worked);
+        player.getInventory().add(plain);
+        player.getInventory().add(worked);
+
+        helper.assertTrue(!plainly.equals(workedly), "they are not called the same thing");
+        helper.assertValueEqual(Foci.carried(player).size(), 2, "and the ring would show both");
+
+        Foci.next(player, wand);
+        String first = Foci.name(Foci.on(wand));
+        Foci.next(player, wand);
+        helper.assertTrue(!Foci.name(Foci.on(wand)).equals(first), "the cycle reaches the second one");
+        helper.succeed();
+    }
+
+    /** The ring names what it picked, and the server finds one of that name among what is carried. */
+    @GameTest(template = TEMPLATE)
+    public static void theRingFitsWhatItNames(GameTestHelper helper) {
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        ItemStack wand = WandItem.of(ModWandParts.WOOD, ModWandParts.IRON);
+        player.getInventory().add(new ItemStack(ModItems.FOCI.get("frost").get()));
+        player.getInventory().add(new ItemStack(ModItems.FOCI.get("shock").get()));
+
+        String shock = Foci.name(new ItemStack(ModItems.FOCI.get("shock").get()));
+        helper.assertTrue(Foci.fit(player, wand, shock).is(ModItems.FOCI.get("shock").get()),
+                "the one that was named is the one that went on");
+        helper.assertTrue(Foci.fit(player, wand, shock).isEmpty(), "and asking for it again does nothing");
+        helper.assertTrue(Foci.fit(player, wand, "alchemia:focus_hole").isEmpty(),
+                "nor does asking for one nobody is carrying");
+
+        helper.assertTrue(Foci.fit(player, wand, Foci.name(new ItemStack(ModItems.FOCI.get("frost").get())))
+                .is(ModItems.FOCI.get("frost").get()), "and the other one still swaps in");
+        helper.assertTrue(player.getInventory().countItem(ModItems.FOCI.get("shock").get()) == 1,
+                "with the first one back in the bag");
+        helper.succeed();
+    }
+
     @GameTest(template = TEMPLATE)
     public static void theCycleGoesRoundInOrderAndLosesNothing(GameTestHelper helper) {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);

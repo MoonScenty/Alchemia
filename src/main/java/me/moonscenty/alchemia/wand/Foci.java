@@ -28,6 +28,10 @@ import net.minecraft.world.item.ItemStack;
  *
  * <p>The cycle runs in alphabetical order of what the foci are called rather than in the order they happen to be
  * lying in. Tidying a bag should not change which focus comes next.
+ *
+ * <p>What a focus is called, for that purpose, is its kind <em>and</em> what is worked into it. Two shock foci,
+ * one plain and one upgraded, are two different foci to anybody carrying both, and a cycle that could not tell
+ * them apart would never reach the second.
  */
 public final class Foci {
     private Foci() {
@@ -161,8 +165,26 @@ public final class Foci {
         return false;
     }
 
+    /**
+     * What one focus is called: its kind, and then every rank worked into it in the order they went in.
+     * <p>
+     * This is both how the cycle is sorted and how the wheel says which one was picked. Naming a focus rather
+     * than numbering it means the client and the server need not agree about the order of anybody's bag -- the
+     * client says which focus, and the server finds a focus of that name among the ones actually carried.
+     */
+    public static String name(ItemStack stack) {
+        if (stack.isEmpty()) {
+            return "";
+        }
+        StringBuilder written = new StringBuilder(BuiltInRegistries.ITEM.getKey(stack.getItem()).toString());
+        for (FocusUpgrade upgrade : FocusUpgrades.on(stack)) {
+            written.append('|').append(upgrade.getSerializedName());
+        }
+        return written.toString();
+    }
+
     private static String named(ItemStack stack) {
-        return BuiltInRegistries.ITEM.getKey(stack.getItem()).toString();
+        return name(stack);
     }
 
     /**
@@ -178,6 +200,46 @@ public final class Foci {
         player.level().playSound(null, player.blockPosition(),
                 fitted ? SoundEvents.ITEM_FRAME_ADD_ITEM : SoundEvents.ITEM_FRAME_REMOVE_ITEM,
                 SoundSource.PLAYERS, 0.4F, fitted ? 1.4F : 1.1F);
+    }
+
+    /**
+     * Every focus the player is carrying, in the order the cycle runs in.
+     * <p>
+     * Copies, and only for looking at: the wheel draws these, and whichever is picked is named rather than
+     * handed back. Both sides can work this out for themselves, which is why the wheel can be drawn at all.
+     */
+    public static List<ItemStack> carried(Player player) {
+        Inventory bag = player.getInventory();
+        List<ItemStack> found = new ArrayList<>();
+        for (Spot spot : carried(bag)) {
+            found.add(read(bag, spot).copy());
+        }
+        return found;
+    }
+
+    /**
+     * Fits the focus of this name, if one of that name is being carried.
+     * <p>
+     * The swap is the same as the cycle's: what was on the wand goes into the square the new one came out of.
+     *
+     * @return what is now fitted, or nothing when the player is carrying no such focus
+     */
+    public static ItemStack fit(Player player, ItemStack wand, String name) {
+        Inventory bag = player.getInventory();
+        if (name.isEmpty() || name.equals(name(on(wand)))) {
+            return ItemStack.EMPTY;
+        }
+        for (Spot spot : carried(bag)) {
+            if (!name(read(bag, spot)).equals(name)) {
+                continue;
+            }
+            ItemStack taken = read(bag, spot).copy();
+            write(bag, spot, WandItem.focus(wand).copy());
+            WandItem.setFocus(wand, taken);
+            say(player, taken, true);
+            return taken;
+        }
+        return ItemStack.EMPTY;
     }
 
     /** The name of a focus, for anything that wants to say which one without holding the stack. */
