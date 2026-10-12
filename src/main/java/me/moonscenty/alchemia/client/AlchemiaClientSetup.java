@@ -189,6 +189,7 @@ public class AlchemiaClientSetup {
         event.register(ModMenus.RESEARCH_TABLE.get(), ResearchTableScreen::new);
         event.register(ModMenus.ARCANE_WORKBENCH.get(), ArcaneWorkbenchScreen::new);
         event.register(ModMenus.ESSENTIA_SMELTER.get(), EssentiaSmelterScreen::new);
+        event.register(ModMenus.THAUMATORIUM.get(), ThaumatoriumScreen::new);
         event.register(ModMenus.FOCUS_POUCH.get(), FocusPouchScreen::new);
         event.register(ModMenus.AUTOCASTER.get(), AutocasterScreen::new);
         event.register(ModMenus.FOCAL_MANIPULATOR.get(), FocalManipulatorScreen::new);
@@ -312,6 +313,7 @@ public class AlchemiaClientSetup {
         event.registerBlockEntityRenderer(ModBlockEntities.TUBE.get(), OnewayMarkRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.BELLOWS.get(), BellowsRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.CENTRIFUGE.get(), CentrifugeRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.THAUMATORIUM.get(), ThaumatoriumRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.CRYSTALLIZER.get(), CrystallizerRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.HUNGRY_CHEST.get(), HungryChestRenderer::new);
     }

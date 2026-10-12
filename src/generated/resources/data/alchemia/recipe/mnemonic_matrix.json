@@ -1,0 +1,29 @@
+{
+  "type": "alchemia:arcane_shaped",
+  "key": {
+    "A": {
+      "item": "alchemia:amber"
+    },
+    "B": {
+      "item": "alchemia:clockwork_mind"
+    },
+    "I": {
+      "tag": "c:ingots/iron"
+    }
+  },
+  "pattern": [
+    "IAI",
+    "ABA",
+    "IAI"
+  ],
+  "research": "alchemia:thaumatorium",
+  "result": {
+    "count": 1,
+    "id": "alchemia:mnemonic_matrix"
+  },
+  "vis": {
+    "alchemia:aqua": 50,
+    "alchemia:ignis": 50,
+    "alchemia:ordo": 50
+  }
+}

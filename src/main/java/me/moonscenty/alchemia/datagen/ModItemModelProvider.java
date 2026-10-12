@@ -42,6 +42,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         withExistingParent("alchemium_smelter", modLoc("block/alchemium_smelter"));
         withExistingParent("void_smelter", modLoc("block/void_smelter"));
         withExistingParent("smelter_aux", modLoc("block/smelter_aux"));
+        withExistingParent("mnemonic_matrix", modLoc("block/mnemonic_matrix"));
         withExistingParent("smelter_vent", modLoc("block/smelter_vent"));
         withExistingParent("arcane_workbench", modLoc("block/arcane_workbench"));
         withExistingParent("focal_manipulator", modLoc("block/focal_manipulator"));

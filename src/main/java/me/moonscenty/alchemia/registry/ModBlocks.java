@@ -104,6 +104,16 @@ public class ModBlocks {
             register("centrifuge", () -> new me.moonscenty.alchemia.block.CentrifugeBlock(device()));
     public static final DeferredBlock<me.moonscenty.alchemia.block.CrystallizerBlock> CRYSTALLIZER =
             register("crystallizer", () -> new me.moonscenty.alchemia.block.CrystallizerBlock(device()));
+    /**
+     * A crucible that works on its own, made with a wand out of a crucible and two blocks of brass, and the matrix
+     * that lets it keep more recipes in mind. The thaumatorium has no item: it is made where it stands.
+     */
+    public static final DeferredBlock<me.moonscenty.alchemia.block.ThaumatoriumBlock> THAUMATORIUM =
+            registerBlockOnly("thaumatorium", () -> new me.moonscenty.alchemia.block.ThaumatoriumBlock(
+                    BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).strength(2.0F, 12.0F).noOcclusion()));
+    public static final DeferredBlock<me.moonscenty.alchemia.block.MnemonicMatrixBlock> MNEMONIC_MATRIX =
+            register("mnemonic_matrix", () -> new me.moonscenty.alchemia.block.MnemonicMatrixBlock(
+                    BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).strength(1.0F, 10.0F).noOcclusion()));
     public static final DeferredBlock<me.moonscenty.alchemia.block.SmelterAuxBlock> SMELTER_AUX =
             register("smelter_aux", () -> new me.moonscenty.alchemia.block.SmelterAuxBlock(
                     BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).strength(1.0F, 10.0F).noOcclusion()));

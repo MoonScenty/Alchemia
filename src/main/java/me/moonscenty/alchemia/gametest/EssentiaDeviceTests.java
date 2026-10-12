@@ -79,7 +79,75 @@ public class EssentiaDeviceTests {
         helper.succeed();
     }
 
+    /**
+     * A thaumatorium told to make something, given its catalyst and its essentia, makes it, and puts it in the chest
+     * in front of it.
+     */
+    @GameTest(template = TEMPLATE, timeoutTicks = 400)
+    public static void aThaumatoriumMakesWhatItIsToldInto(GameTestHelper helper) {
+        BlockPos crucible = new BlockPos(2, 2, 2);
+        helper.setBlock(crucible.below(), ModBlocks.NITOR.get(net.minecraft.world.item.DyeColor.WHITE).get());
+        helper.setBlock(crucible, ModBlocks.CRUCIBLE.get());
+        var made = ModBlocks.THAUMATORIUM.get().defaultBlockState()
+                .setValue(me.moonscenty.alchemia.block.ThaumatoriumBlock.FACING, Direction.EAST);
+        helper.setBlock(crucible.above(), made);
+        helper.setBlock(crucible.above(2), made.setValue(me.moonscenty.alchemia.block.ThaumatoriumBlock.TOP, true));
+        helper.setBlock(crucible.above().east(), Blocks.CHEST);
 
+        BlockPos at = helper.absolutePos(crucible.above());
+        var it = (me.moonscenty.alchemia.block.entity.ThaumatoriumBlockEntity) helper.getLevel().getBlockEntity(at);
+        it.toggle(Alchemia.id("alchemium_ingot_from_iron"));
+        it.setItem(0, new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.IRON_INGOT, 2));
 
+        for (int tick = 0; tick < 200; tick++) {
+            me.moonscenty.alchemia.block.entity.ThaumatoriumBlockEntity.serverTick(helper.getLevel(), at,
+                    helper.getLevel().getBlockState(at), it);
+            for (var aspect : java.util.List.of(ModAspects.ORDER, ModAspects.EARTH)) {
+                if (it.wants(aspect)) {
+                    it.accept(aspect);
+                }
+            }
+        }
+        ChestBlockEntity chest =
+                (ChestBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(crucible.above().east()));
+        helper.assertTrue(chest.getItem(0).is(me.moonscenty.alchemia.registry.ModItems.ALCHEMIUM_INGOT.get()),
+                "what it made is in the chest");
+        helper.assertTrue(it.getItem(0).getCount() < 2, "and it used up catalyst to make it");
+        helper.succeed();
+    }
+
+    /** Without heat under its crucible it does nothing at all. */
+    @GameTest(template = TEMPLATE)
+    public static void aColdThaumatoriumDrawsNothing(GameTestHelper helper) {
+        BlockPos crucible = new BlockPos(2, 2, 2);
+        helper.setBlock(crucible, ModBlocks.CRUCIBLE.get());
+        var made = ModBlocks.THAUMATORIUM.get().defaultBlockState();
+        helper.setBlock(crucible.above(), made);
+        helper.setBlock(crucible.above(2), made.setValue(me.moonscenty.alchemia.block.ThaumatoriumBlock.TOP, true));
+        BlockPos at = helper.absolutePos(crucible.above());
+        var it = (me.moonscenty.alchemia.block.entity.ThaumatoriumBlockEntity) helper.getLevel().getBlockEntity(at);
+        it.toggle(Alchemia.id("alchemium_ingot_from_iron"));
+        it.setItem(0, new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.IRON_INGOT));
+        for (int tick = 0; tick < 50; tick++) {
+            me.moonscenty.alchemia.block.entity.ThaumatoriumBlockEntity.serverTick(helper.getLevel(), at,
+                    helper.getLevel().getBlockState(at), it);
+        }
+        helper.assertFalse(it.wants(ModAspects.ORDER) || it.wants(ModAspects.EARTH), "a cold one asks for nothing");
+        helper.succeed();
+    }
+
+    /** Taking the crucible away leaves two blocks of brass. */
+    @GameTest(template = TEMPLATE)
+    public static void aThaumatoriumWithoutItsCrucibleFallsBackToBrass(GameTestHelper helper) {
+        BlockPos crucible = new BlockPos(2, 2, 2);
+        helper.setBlock(crucible, ModBlocks.CRUCIBLE.get());
+        var made = ModBlocks.THAUMATORIUM.get().defaultBlockState();
+        helper.setBlock(crucible.above(), made);
+        helper.setBlock(crucible.above(2), made.setValue(me.moonscenty.alchemia.block.ThaumatoriumBlock.TOP, true));
+        helper.setBlock(crucible, Blocks.AIR);
+        helper.assertBlockPresent(ModBlocks.BRASS_BLOCK.get(), crucible.above());
+        helper.assertBlockPresent(ModBlocks.BRASS_BLOCK.get(), crucible.above(2));
+        helper.succeed();
+    }
 
 }

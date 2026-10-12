@@ -52,6 +52,14 @@ public class ModBlockEntities {
                             ModBlocks.CRYSTALLIZER.get())
                     .build(null));
 
+    /** Both halves of a thaumatorium; the upper hands everything to the lower. */
+    public static final DeferredHolder<BlockEntityType<?>,
+            BlockEntityType<me.moonscenty.alchemia.block.entity.ThaumatoriumBlockEntity>> THAUMATORIUM =
+            BLOCK_ENTITIES.register("thaumatorium", () -> BlockEntityType.Builder
+                    .of(me.moonscenty.alchemia.block.entity.ThaumatoriumBlockEntity::new,
+                            ModBlocks.THAUMATORIUM.get())
+                    .build(null));
+
     /** Bellows pumping, which on the server is a furnace being pushed along. */
     public static final DeferredHolder<BlockEntityType<?>,
             BlockEntityType<me.moonscenty.alchemia.block.entity.BellowsBlockEntity>> BELLOWS =

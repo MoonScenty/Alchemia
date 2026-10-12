@@ -362,6 +362,12 @@ public class WandItem extends Item implements VisHolder {
             return InteractionResult.sidedSuccess(level.isClientSide);
         }
 
+        // a crucible with two blocks of brass on it, made into a thaumatorium if its maker knows how
+        if (context.getPlayer() != null && me.moonscenty.alchemia.block.ThaumatoriumBlock.form(level, pos,
+                context.getClickedFace(), context.getPlayer(), context.getItemInHand())) {
+            return InteractionResult.sidedSuccess(level.isClientSide);
+        }
+
         // any cauldron, full or empty. What was in it is tipped out, as it would be
         if (level.getBlockState(pos).getBlock() instanceof AbstractCauldronBlock) {
             if (!level.isClientSide) {

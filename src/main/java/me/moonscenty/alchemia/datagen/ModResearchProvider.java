@@ -119,6 +119,12 @@ public class ModResearchProvider {
                 List.of("tubes"), false, NodeShape.PLAIN, 3,
                 "tube_filter", "tube_restrict", "tube_oneway", "tube_buffer");
 
+        // a crucible that works on its own, and the matrix that lets it keep more in mind
+        entry(context, "thaumatorium", ModResearch.ALCHEMY, ModBlocks.CRUCIBLE, 6, 8,
+                AspectList.of(ModAspects.WATER, 3).add(ModAspects.ENERGY, 6).add(ModAspects.EXCHANGE, 3)
+                        .add(ModAspects.CRAFT, 3),
+                List.of("improved_distillation"), false, NodeShape.PLAIN, 3, "mnemonic_matrix");
+
         // the two things a run of pipe can be finished with: one that takes essentia apart, one that sets it hard
         entry(context, "centrifuge", ModResearch.ALCHEMY, ModBlocks.CENTRIFUGE, 5, 5,
                 AspectList.of(ModAspects.FLUX, 3).add(ModAspects.ENERGY, 3).add(ModAspects.EXCHANGE, 3)

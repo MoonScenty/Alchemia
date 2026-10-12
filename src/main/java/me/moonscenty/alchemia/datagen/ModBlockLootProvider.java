@@ -85,6 +85,9 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
         dropSelf(ModBlocks.FOCAL_MANIPULATOR.get());
         dropSelf(ModBlocks.BELLOWS.get());
         dropSelf(ModBlocks.CENTRIFUGE.get());
+        // each half of a thaumatorium was a block of brass, and gives it back
+        dropOther(ModBlocks.THAUMATORIUM.get(), ModBlocks.BRASS_BLOCK.get());
+        dropSelf(ModBlocks.MNEMONIC_MATRIX.get());
         dropSelf(ModBlocks.CRYSTALLIZER.get());
         dropSelf(ModBlocks.ARCANE_LAMP.get());
         dropSelf(ModBlocks.GROWTH_LAMP.get());

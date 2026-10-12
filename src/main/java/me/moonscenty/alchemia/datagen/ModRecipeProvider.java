@@ -543,6 +543,12 @@ public class ModRecipeProvider extends RecipeProvider {
                         'G', Ingredient.of(ModItems.PRIMAL_CHARM),
                         'I', Ingredient.of(ModItems.VOID_INGOT)),
                 "BFB", "IGI", "III");
+        arcane(output, "mnemonic_matrix", "thaumatorium", new ItemStack(ModBlocks.MNEMONIC_MATRIX.get()),
+                AspectList.of(ModAspects.FIRE, 50).add(ModAspects.WATER, 50).add(ModAspects.ORDER, 50),
+                Map.of('I', Ingredient.of(Tags.Items.INGOTS_IRON),
+                        'A', Ingredient.of(ModItems.AMBER),
+                        'B', Ingredient.of(ModItems.CLOCKWORK_MIND)),
+                "IAI", "ABA", "IAI");
         arcane(output, "centrifuge", "centrifuge", new ItemStack(ModBlocks.CENTRIFUGE.get()),
                 AspectList.of(ModAspects.WATER, 100).add(ModAspects.ORDER, 100).add(ModAspects.ENTROPY, 100),
                 Map.of('T', Ingredient.of(ModBlocks.TUBE),

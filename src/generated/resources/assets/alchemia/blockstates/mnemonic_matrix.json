@@ -1,0 +1,30 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "alchemia:block/mnemonic_matrix"
+    },
+    "facing=east": {
+      "model": "alchemia:block/mnemonic_matrix",
+      "x": 90,
+      "y": 270
+    },
+    "facing=north": {
+      "model": "alchemia:block/mnemonic_matrix",
+      "x": 90,
+      "y": 180
+    },
+    "facing=south": {
+      "model": "alchemia:block/mnemonic_matrix",
+      "x": 90
+    },
+    "facing=up": {
+      "model": "alchemia:block/mnemonic_matrix",
+      "x": 180
+    },
+    "facing=west": {
+      "model": "alchemia:block/mnemonic_matrix",
+      "x": 90,
+      "y": 90
+    }
+  }
+}

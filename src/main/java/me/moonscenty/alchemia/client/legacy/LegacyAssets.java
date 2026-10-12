@@ -67,6 +67,8 @@ public final class LegacyAssets {
     public static final String RELAY_MESH = "models/legacy/vis_relay.obj";
     /** The crystallizer's body, which the original kept as an OBJ. */
     public static final String CRYSTALLIZER_MESH = "models/legacy/crystallizer.obj";
+    /** The thaumatorium, two blocks tall, which the original kept as an OBJ. */
+    public static final String THAUMATORIUM_MESH = "models/legacy/thaumatorium.obj";
     /** The centrifuge, which the original built in code. */
     public static final String CENTRIFUGE = "centrifuge";
 
@@ -376,6 +378,12 @@ public final class LegacyAssets {
         all.add(LegacyAsset.of("textures/entity/centrifuge.png").five("textures/models/centrifuge.png")
                 .forModel(CENTRIFUGE));
         all.add(LegacyAsset.of(CRYSTALLIZER_MESH).five("models/obj/crystallizer.obj"));
+        // the thaumatorium: its mesh, its sheet and its panel; and the matrix, the original's model file
+        all.add(LegacyAsset.of(THAUMATORIUM_MESH).five("models/obj/thaumatorium.obj"));
+        all.add(LegacyAsset.of("textures/entity/thaumatorium.png").five("textures/models/thaumatorium.png"));
+        all.add(LegacyAsset.of("textures/gui/thaumatorium.png").five("textures/gui/gui_thaumatorium.png"));
+        all.add(LegacyAsset.of("models/block/mnemonic_matrix.json").five("models/block/brain_box.json").asModel());
+        all.add(LegacyAsset.of("textures/block/legacy/brain_box.png").five("textures/blocks/brain_box.png"));
         all.add(LegacyAsset.of("textures/entity/crystallizer.png").five("textures/models/crystallizer.png"));
         // the wand itself, built on the original's mesh from the rod and cap pictures above
         all.add(LegacyAsset.of(WAND_MESH).five("models/obj/wand.obj"));

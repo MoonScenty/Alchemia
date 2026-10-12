@@ -497,6 +497,9 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                 {"distillation", "Distillation", "증류",
                  "Burning a thing is a crude way to ask what it is made of, but it is an honest one. A smelter sends the answer up as smoke, and alembics stacked above it catch that smoke one aspect at a time.",
                  "무엇으로 이루어졌는지 묻는 데에 태우는 것은 거칠지만 정직한 방법이다. 제련로가 그 답을 연기로 올려 보내고, 위에 쌓아 올린 증류기가 연기를 상 하나씩 받아 낸다."},
+                {"thaumatorium", "Automated Alchemy", "자동 연금술",
+                 "A crucible that works on its own. Stand two blocks of brass on a crucible and work them with a wand, from the side you want it to face: what it makes comes out of that side, into a container there if there is one, onto the ground if not. Put a catalyst in it and choose, from the recipes you know that catalyst finishes, what it is to make; it draws the essentia up the pipes itself, an aspect at a time, and as long as there is catalyst it makes the thing perfectly, every time. The crucible under it needs no water, but it does need heat: lava, fire or a nitor directly below. It keeps one recipe in mind; every mnemonic matrix fixed to its sides or top, facing in, lets it keep two more. A redstone signal stops it.",
+                 "스스로 일하는 도가니다. 도가니 위에 황동 블록 둘을 세우고, 앞으로 삼을 쪽에서 완드로 다룬다. 만든 것은 그쪽으로 나온다. 거기에 상자가 있으면 상자로, 없으면 바닥으로. 촉매를 넣고, 그 촉매로 마무리되는 알고 있는 레시피 가운데 무엇을 만들지 고른다. 에센시아는 관으로 상 하나씩 스스로 끌어오고, 촉매가 남아 있는 한 언제나 틀림없이 만든다. 아래의 도가니에 물은 필요 없지만 열은 필요하다. 바로 아래에 용암, 불, 또는 니토르. 레시피는 하나만 기억한다. 옆이나 위에 안쪽을 보게 붙인 기억 행렬 하나마다 둘씩 더 기억한다. 레드스톤 신호가 멈춘다."},
                 {"centrifuge", "Alchemical Centrifuge", "연금술 원심분리기",
                  "Compound essentia piped in from below is spun until it comes apart, and one of the two things it was made of, either one, is drawn off the top. Only one: the other half is lost in the spinning. It holds one point coming in and one going out, takes nothing while either is full, and will not take the six primals, which have nothing to come apart into. It never pushes; something above has to draw on it. A redstone signal stops it.",
                  "아래에서 관으로 들어온 합성 에센시아를 갈라질 때까지 돌리고, 그것을 이루던 둘 가운데 하나를 위로 뽑아낸다. 하나만이다. 나머지 반은 도는 동안 사라진다. 들어오는 것 하나, 나가는 것 하나만 담고, 어느 쪽이든 차 있으면 받지 않는다. 더 쪼갤 것이 없는 여섯 원시는 받지 않는다. 스스로 밀어내지 않으니 위에서 무언가가 뽑아 가야 한다. 레드스톤 신호가 멈춘다."},
@@ -812,6 +815,8 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("item.alchemia.biothaumic_mind", pick("Biothaumic Mind", "생체마법 두뇌"));
         add("block.alchemia.bellows", pick("Bellows", "풀무"));
         add("block.alchemia.centrifuge", pick("Essentia Centrifuge", "에센시아 원심분리기"));
+        add("block.alchemia.thaumatorium", pick("Thaumatorium", "타우마토리움"));
+        add("block.alchemia.mnemonic_matrix", pick("Mnemonic Matrix", "기억 행렬"));
         add("block.alchemia.crystallizer", pick("Essentia Crystallizer", "에센시아 결정화기"));
         add("block.alchemia.levitator", pick("Arcane Levitator", "비전 부양기"));
         add("block.alchemia.levitator.range", pick("Range set to %s blocks (%s aer a minute for each thing lifted)",

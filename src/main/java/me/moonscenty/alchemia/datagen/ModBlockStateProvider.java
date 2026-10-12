@@ -448,6 +448,26 @@ public class ModBlockStateProvider extends BlockStateProvider {
         drawnElsewhere(ModBlocks.BELLOWS, "block/greatwood_planks");
         // the original's two essentia devices threw greatwood about when broken, having no model of their own
         drawnElsewhere(ModBlocks.CENTRIFUGE, "block/greatwood_planks");
+        // the thaumatorium is drawn whole by its renderer; broken, it throws brass about, which is what it was
+        getVariantBuilder(ModBlocks.THAUMATORIUM.get()).partialState().setModels(new ConfiguredModel(
+                models().getBuilder("thaumatorium").texture("particle", modLoc("block/brass_block"))));
+        // the matrix is the original's model file, turned as the original's blockstate turned it
+        ModelFile matrix = models().getExistingFile(modLoc("block/mnemonic_matrix"));
+        getVariantBuilder(ModBlocks.MNEMONIC_MATRIX.get()).forAllStates(state -> {
+            Direction facing = state.getValue(me.moonscenty.alchemia.block.MnemonicMatrixBlock.FACING);
+            int x = switch (facing) {
+                case UP -> 180;
+                case DOWN -> 0;
+                default -> 90;
+            };
+            int y = switch (facing) {
+                case WEST -> 90;
+                case EAST -> 270;
+                case NORTH -> 180;
+                default -> 0;
+            };
+            return ConfiguredModel.builder().modelFile(matrix).rotationX(x).rotationY(y).build();
+        });
         getVariantBuilder(ModBlocks.CRYSTALLIZER.get()).partialState().setModels(new ConfiguredModel(
                 models().getBuilder("crystallizer").texture("particle", modLoc("block/greatwood_planks"))));
     }
