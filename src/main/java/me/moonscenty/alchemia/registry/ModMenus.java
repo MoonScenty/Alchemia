@@ -75,6 +75,10 @@ public class ModMenus {
             GOLEM_PRESS = MENUS.register("golem_press",
                     () -> new MenuType<>(me.moonscenty.alchemia.menu.GolemPressMenu::new, FeatureFlags.VANILLA_SET));
 
+    /** Carries where the seal is, since the panel belongs to it. */
+    public static final DeferredHolder<MenuType<?>, MenuType<me.moonscenty.alchemia.menu.SealMenu>> SEAL =
+            MENUS.register("seal", () -> IMenuTypeExtension.create(me.moonscenty.alchemia.menu.SealMenu::new));
+
     private ModMenus() {
     }
 }

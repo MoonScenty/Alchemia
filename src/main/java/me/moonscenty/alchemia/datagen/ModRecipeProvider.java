@@ -401,11 +401,16 @@ public class ModRecipeProvider extends RecipeProvider {
                         'P', Ingredient.of(ModItems.BRASS_PLATE),
                         'G', Ingredient.of(ModItems.BRASS_GEAR)),
                 "B B", "E E", "PGP");
-        arcane(output, "golem_bell", "golem_direct", new ItemStack(ModItems.GOLEM_BELL.get()),
+        arcane(output, "golem_bell", "control_seals", new ItemStack(ModItems.GOLEM_BELL.get()),
                 AspectList.of(ModAspects.ORDER, 10).add(ModAspects.AIR, 10),
                 Map.of('S', Ingredient.of(Tags.Items.RODS_WOODEN),
                         'Q', Ingredient.of(Tags.Items.GEMS_QUARTZ)),
                 " QQ", " QQ", "S  ");
+        // blank seals, three at a time: clay, tallow, a red dye and a nitor
+        shapeless(output, "seal_blank", "control_seals", new ItemStack(ModItems.SEAL_BLANK.get(), 3),
+                AspectList.of(ModAspects.FIRE, 10).add(ModAspects.ORDER, 10),
+                Ingredient.of(Items.CLAY_BALL), Ingredient.of(ModItems.TALLOW),
+                Ingredient.of(net.neoforged.neoforge.common.Tags.Items.DYES_RED), Ingredient.of(ModTags.Items.NITOR));
         // the small devices, all the original's
         arcane(output, "arcane_lamp", "arcane_lamp", new ItemStack(ModBlocks.ARCANE_LAMP.get()),
                 AspectList.of(ModAspects.FIRE, 25).add(ModAspects.AIR, 25),
@@ -1133,6 +1138,21 @@ public class ModRecipeProvider extends RecipeProvider {
                 AspectList.of(ModAspects.ENERGY, 1).add(ModAspects.WATER, 1),
                 new ItemStack(ModItems.BRASS_INGOT.get()), "metallurgy");
 
+        // flesh rendered down to tallow, and a blank seal steeped into each kind of control seal
+        crucible(output, "tallow", Ingredient.of(Items.ROTTEN_FLESH), AspectList.of(ModAspects.FIRE, 1),
+                new ItemStack(ModItems.TALLOW.get()), "tallow");
+        seal(output, "pickup", ModItems.SEAL_BLANK.get(), AspectList.of(ModAspects.DESIRE, 4), "seal_collect");
+        seal(output, "pickup_advanced", ModItems.SEALS.get("pickup").get(),
+                AspectList.of(ModAspects.SENSES, 4).add(ModAspects.MIND, 4), "seal_collect");
+        seal(output, "fill", ModItems.SEAL_BLANK.get(), AspectList.of(ModAspects.AVERSION, 4), "seal_store");
+        seal(output, "fill_advanced", ModItems.SEALS.get("fill").get(),
+                AspectList.of(ModAspects.SENSES, 4).add(ModAspects.MIND, 4), "seal_store");
+        seal(output, "empty", ModItems.SEAL_BLANK.get(), AspectList.of(ModAspects.VOID, 4), "seal_empty");
+        seal(output, "empty_advanced", ModItems.SEALS.get("empty").get(),
+                AspectList.of(ModAspects.SENSES, 4).add(ModAspects.MIND, 4), "seal_empty");
+        seal(output, "provider", ModItems.SEALS.get("empty_advanced").get(),
+                AspectList.of(ModAspects.EXCHANGE, 4).add(ModAspects.DESIRE, 4), "seal_provide");
+
         // coal boiled until it is four coals, and glowstone boiled until it is light with nothing under it
         crucible(output, "bath_salts", Ingredient.of(ModItems.SALIS_MUNDUS),
                 AspectList.of(ModAspects.MIND, 6).add(ModAspects.AIR, 6).add(ModAspects.ORDER, 6)
@@ -1190,6 +1210,13 @@ public class ModRecipeProvider extends RecipeProvider {
                 AspectList.of(ModAspects.ENTROPY, 72).add(ModAspects.ORDER, 72)
                         .add(ModAspects.FIRE, 72).add(ModAspects.AIR, 72),
                 Map.of('N', Ingredient.of(ModTags.Items.NUGGETS_VOID)), "NNN", "N N");
+    }
+
+    /** A control seal steeped in a crucible out of a blank, or out of a lesser seal of its kind. */
+    private void seal(RecipeOutput output, String kind, net.minecraft.world.level.ItemLike from, AspectList aspects,
+            String research) {
+        crucible(output, "seal_" + kind, Ingredient.of(from), aspects, new ItemStack(ModItems.SEALS.get(kind).get()),
+                research);
     }
 
     private void crucible(RecipeOutput output, String name, Ingredient catalyst, AspectList aspects,

@@ -322,6 +322,14 @@ public class ModItems {
     /** What gives a golem the will to fight. */
     public static final DeferredItem<Item> AGGRESSION_MODULE = ITEMS.registerSimpleItem("aggression_module");
 
+    /** Tallow rendered from flesh in a crucible: what seals are stuck on with. */
+    public static final DeferredItem<Item> TALLOW = ITEMS.registerSimpleItem("tallow");
+    /** A seal not yet made into anything. */
+    public static final DeferredItem<me.moonscenty.alchemia.item.SealItem> SEAL_BLANK = ITEMS.register("seal_blank",
+            () -> new me.moonscenty.alchemia.item.SealItem(null, new Item.Properties()));
+    /** Every kind of control seal, by its name. */
+    public static final Map<String, DeferredItem<me.moonscenty.alchemia.item.SealItem>> SEALS = registerSeals();
+
     /**
      * One item to a rod, wearing the same picture the wand wears. The rod sprites were drawn to serve as both, so
      * a rod in the hand looks like the rod on the wand rather than like a swatch of what it is made of.
@@ -555,5 +563,14 @@ public class ModItems {
             shards.put(type, ITEMS.registerSimpleItem(type.getName() + "_shard"));
         }
         return Collections.unmodifiableMap(shards);
+    }
+
+    private static Map<String, DeferredItem<me.moonscenty.alchemia.item.SealItem>> registerSeals() {
+        Map<String, DeferredItem<me.moonscenty.alchemia.item.SealItem>> seals = new java.util.LinkedHashMap<>();
+        for (String kind : me.moonscenty.alchemia.golem.seal.SealTypes.keys()) {
+            seals.put(kind, ITEMS.register("seal_" + kind,
+                    () -> new me.moonscenty.alchemia.item.SealItem(kind, new Item.Properties())));
+        }
+        return java.util.Collections.unmodifiableMap(seals);
     }
 }

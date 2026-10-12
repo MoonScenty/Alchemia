@@ -208,6 +208,7 @@ public class AlchemiaClientSetup {
         event.register(ModMenus.AURA_TOTEM.get(), AuraTotemScreen::new);
         event.register(ModMenus.PECH.get(), PechScreen::new);
         event.register(ModMenus.GOLEM_PRESS.get(), GolemPressScreen::new);
+        event.register(ModMenus.SEAL.get(), SealScreen::new);
     }
 
     /**

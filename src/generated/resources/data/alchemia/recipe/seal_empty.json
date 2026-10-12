@@ -1,0 +1,14 @@
+{
+  "type": "alchemia:crucible",
+  "aspects": {
+    "alchemia:vacuos": 4
+  },
+  "catalyst": {
+    "item": "alchemia:seal_blank"
+  },
+  "research": "alchemia:seal_empty",
+  "result": {
+    "count": 1,
+    "id": "alchemia:seal_empty"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "category": "alchemia:golemancy",
+  "column": -6,
+  "icon": "alchemia:seal_fill",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.seal_store.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:seal_fill"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:seal_fill_advanced"
+    }
+  ],
+  "parents": [
+    "alchemia:seal_collect"
+  ],
+  "requirements": {
+    "alchemia:cognitio": 3,
+    "alchemia:permutatio": 5,
+    "alchemia:vacuos": 3
+  },
+  "row": 4
+}

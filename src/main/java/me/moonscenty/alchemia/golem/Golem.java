@@ -100,6 +100,9 @@ public class Golem extends PathfinderMob implements OwnableEntity {
     private BlockPos home;
     /** Which way it is set to go about, so that the AI is only rebuilt when that changes. */
     private String built = "";
+    /** What it is doing for a seal just now. */
+    @Nullable
+    private me.moonscenty.alchemia.golem.task.Task task;
 
     public Golem(EntityType<? extends Golem> type, Level level) {
         super(type, level);
@@ -218,6 +221,8 @@ public class Golem extends PathfinderMob implements OwnableEntity {
         if (following()) {
             goalSelector.addGoal(4, new GolemGoals.FollowOwner(this, 1.0, 10.0F, 2.0F));
         } else {
+            goalSelector.addGoal(3, new GolemGoals.GotoEntity(this));
+            goalSelector.addGoal(4, new GolemGoals.GotoBlock(this));
             goalSelector.addGoal(5, new GolemGoals.GoHome(this));
         }
         goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 8.0F));
@@ -350,6 +355,9 @@ public class Golem extends PathfinderMob implements OwnableEntity {
             if (built.isEmpty()) {
                 // one summoned rather than set down has had no design read into it yet
                 refresh();
+            }
+            if (task != null && task.suspended()) {
+                task = null;
             }
             LivingEntity target = getTarget();
             if (target != null && (!target.isAlive() || isAlliedTo(target)
@@ -530,6 +538,7 @@ public class Golem extends PathfinderMob implements OwnableEntity {
         } else if (held.is(ModItems.GOLEM_BELL.get())
                 && PlayerKnowledge.of(player).hasResearch(Alchemia.id("golem_direct"))) {
             playSound(ModSounds.SCAN.get(), 1.0F, 1.0F);
+            giveUpTask();
             setFollowing(!following());
             if (following()) {
                 player.displayClientMessage(Component.translatable("entity.alchemia.golem.follow"), true);
@@ -552,6 +561,7 @@ public class Golem extends PathfinderMob implements OwnableEntity {
 
     /** Back into a golem item, with all it has learned, dropping whatever it was carrying. */
     private void takeUp() {
+        giveUpTask();
         dropCarried();
         spawnAtLocation(item(), 0.5F);
         discard();
@@ -569,6 +579,7 @@ public class Golem extends PathfinderMob implements OwnableEntity {
 
     @Override
     public void die(DamageSource cause) {
+        giveUpTask();
         super.die(cause);
         if (!level().isClientSide) {
             dropCarried();
@@ -591,6 +602,38 @@ public class Golem extends PathfinderMob implements OwnableEntity {
                 spawnAtLocation(left, 0.25F);
             }
         }
+    }
+
+    // --- work ---------------------------------------------------------------------------------------------
+
+    @Nullable
+    public me.moonscenty.alchemia.golem.task.Task task() {
+        return task;
+    }
+
+    public void setTask(@Nullable me.moonscenty.alchemia.golem.task.Task task) {
+        this.task = task;
+    }
+
+    /** Lets go of whatever it had taken on, for another golem to take. */
+    private void giveUpTask() {
+        if (task != null) {
+            task.setReserved(false);
+        }
+    }
+
+    /**
+     * Whether it may work for a seal: not a locked one of somebody else's, and only if it has every trait the seal
+     * wants and none it will not have.
+     */
+    public boolean mayWork(@Nullable me.moonscenty.alchemia.golem.seal.SealEntity seal) {
+        if (seal == null) {
+            return true;
+        }
+        if (seal.locked() && !java.util.Objects.equals(getOwnerUUID(), seal.owner())) {
+            return false;
+        }
+        return traits.containsAll(seal.seal().required()) && seal.seal().forbidden().stream().noneMatch(this::has);
     }
 
     // --- carrying -----------------------------------------------------------------------------------------

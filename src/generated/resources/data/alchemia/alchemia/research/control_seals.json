@@ -1,0 +1,26 @@
+{
+  "category": "alchemia:golemancy",
+  "column": -2,
+  "icon": "alchemia:seal_blank",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.control_seals.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:seal_blank"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:golem_bell"
+    }
+  ],
+  "parents": [
+    "alchemia:distillation",
+    "alchemia:tallow",
+    "alchemia:nitor"
+  ],
+  "row": 5,
+  "shape": "major"
+}

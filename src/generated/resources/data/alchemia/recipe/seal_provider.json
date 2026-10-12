@@ -1,0 +1,15 @@
+{
+  "type": "alchemia:crucible",
+  "aspects": {
+    "alchemia:desiderium": 4,
+    "alchemia:permutatio": 4
+  },
+  "catalyst": {
+    "item": "alchemia:seal_empty_advanced"
+  },
+  "research": "alchemia:seal_provide",
+  "result": {
+    "count": 1,
+    "id": "alchemia:seal_provider"
+  }
+}

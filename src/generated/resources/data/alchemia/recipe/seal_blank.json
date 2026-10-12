@@ -1,0 +1,26 @@
+{
+  "type": "alchemia:arcane_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:clay_ball"
+    },
+    {
+      "item": "alchemia:tallow"
+    },
+    {
+      "tag": "c:dyes/red"
+    },
+    {
+      "tag": "alchemia:nitor"
+    }
+  ],
+  "research": "alchemia:control_seals",
+  "result": {
+    "count": 3,
+    "id": "alchemia:seal_blank"
+  },
+  "vis": {
+    "alchemia:ignis": 10,
+    "alchemia:ordo": 10
+  }
+}
