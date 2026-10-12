@@ -255,6 +255,9 @@
       "alchemia:aqua": 2,
       "alchemia:vitreus": 1
     },
+    "alchemia:wispy_essence": {
+      "alchemia:auram": 1
+    },
     "alchemia:zombie_brain": {
       "alchemia:cognitio": 4,
       "alchemia:exanimis": 2,

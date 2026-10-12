@@ -20,6 +20,7 @@ import me.moonscenty.alchemia.registry.ModItems;
 import me.moonscenty.alchemia.crafting.ModRecipes;
 import me.moonscenty.alchemia.registry.ModMenus;
 import me.moonscenty.alchemia.registry.ModParticles;
+import me.moonscenty.alchemia.registry.ModSounds;
 import me.moonscenty.alchemia.registry.ModWandParts;
 import me.moonscenty.alchemia.registry.WoodSet;
 import net.minecraft.resources.ResourceLocation;
@@ -55,6 +56,7 @@ public class Alchemia {
         ModAspects.ASPECTS.register(modEventBus);
         ModArmorMaterials.MATERIALS.register(modEventBus);
         ModParticles.PARTICLES.register(modEventBus);
+        ModSounds.SOUNDS.register(modEventBus);
         ModWandParts.ROD_ENTRIES.register(modEventBus);
         ModWandParts.CAP_ENTRIES.register(modEventBus);
         ModAttachments.ATTACHMENTS.register(modEventBus);

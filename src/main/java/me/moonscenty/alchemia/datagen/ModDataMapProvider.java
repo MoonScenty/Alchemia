@@ -232,6 +232,8 @@ public class ModDataMapProvider extends DataMapProvider {
         item(ModItems.BRASS_NUGGET, a(ModAspects.METAL, 1));
         item(ModItems.QUICKSILVER_DROP, a(ModAspects.METAL, 1));
         item(ModItems.SALIS_MUNDUS, a(ModAspects.FLUX, 2).add(ModAspects.ENERGY, 2));
+        // a breath of auram, besides the two points of whatever the wisp was
+        item(ModItems.WISPY_ESSENCE, a(ModAspects.AURA, 1));
 
         // our trees are livelier than ordinary ones, and the silverwood hums with aura
         item(ModBlocks.GREATWOOD.log(), a(ModAspects.PLANT, 3).add(ModAspects.LIFE, 1));
@@ -267,6 +269,8 @@ public class ModDataMapProvider extends DataMapProvider {
         mob(EntityType.BLAZE, a(ModAspects.FIRE, 8).add(ModAspects.ENERGY, 4));
         mob(EntityType.VILLAGER, a(ModAspects.MAN, 6).add(ModAspects.EXCHANGE, 2).add(ModAspects.MIND, 2));
         mob(EntityType.WITCH, a(ModAspects.MAN, 4).add(ModAspects.AURA, 4).add(ModAspects.MIND, 2));
+        // any wisp is a little auram and air, and two of its own aspect besides
+        mob(me.moonscenty.alchemia.registry.ModEntities.WISP.get(), a(ModAspects.AURA, 1).add(ModAspects.AIR, 1));
         mob(me.moonscenty.alchemia.registry.ModEntities.ANGRY_ZOMBIE.get(),
                 a(ModAspects.UNDEAD, 3).add(ModAspects.MAN, 1).add(ModAspects.MIND, 1).add(ModAspects.EARTH, 1));
         mob(me.moonscenty.alchemia.registry.ModEntities.FURIOUS_ZOMBIE.get(),

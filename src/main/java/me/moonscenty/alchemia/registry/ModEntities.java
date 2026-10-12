@@ -163,6 +163,17 @@ public class ModEntities {
                     .updateInterval(3)
                     .build("firebat"));
 
+    /** A wisp: a knot of light the size of most of a block, followed far, since it is seen from far off. */
+    public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.entity.Wisp>> WISP =
+            ENTITIES.register("wisp", () -> EntityType.Builder
+                    .<me.moonscenty.alchemia.entity.Wisp>of(me.moonscenty.alchemia.entity.Wisp::new,
+                            MobCategory.MONSTER)
+                    .sized(0.9F, 0.9F)
+                    .fireImmune()
+                    .clientTrackingRange(8)
+                    .updateInterval(3)
+                    .build("wisp"));
+
     /** A zombie's size and a zombie's reach. */
     public static final DeferredHolder<EntityType<?>, EntityType<AngryZombie>> ANGRY_ZOMBIE =
             ENTITIES.register("angry_zombie", () -> EntityType.Builder
@@ -189,6 +200,7 @@ public class ModEntities {
     public static void attributes(EntityAttributeCreationEvent event) {
         event.put(AUTOCASTER.get(), Autocaster.attributes().build());
         event.put(FIRE_BAT.get(), FireBat.attributes().build());
+        event.put(WISP.get(), me.moonscenty.alchemia.entity.Wisp.attributes().build());
         event.put(ANGRY_ZOMBIE.get(), AngryZombie.attributes().build());
         event.put(FURIOUS_ZOMBIE.get(), FuriousZombie.attributes().build());
     }
@@ -204,6 +216,8 @@ public class ModEntities {
                 Monster::checkMonsterSpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
         event.register(FIRE_BAT.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 FireBat::checkSpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
+        event.register(WISP.get(), SpawnPlacementTypes.NO_RESTRICTIONS, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                me.moonscenty.alchemia.entity.Wisp::checkSpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
     }
 
     private ModEntities() {

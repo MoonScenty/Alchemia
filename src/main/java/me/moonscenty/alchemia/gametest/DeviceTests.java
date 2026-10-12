@@ -611,18 +611,14 @@ public class DeviceTests {
         helper.succeed();
     }
 
-    /** The totems take a crystal of auram where the original took a wisp's essence, and no other crystal. */
+    /** The totems take a wisp's essence, of any kind, as the original's did. */
     @GameTest(template = TEMPLATE)
-    public static void totemsTakeACrystalOfAuram(GameTestHelper helper) {
+    public static void totemsTakeAWispsEssence(GameTestHelper helper) {
         for (String name : new String[] {"aura_totem_push", "aura_totem_pull"}) {
             var recipe = (InfusionRecipe) helper.getLevel().getRecipeManager().byKey(Alchemia.id(name))
                     .orElseThrow().value();
-            var auram = me.moonscenty.alchemia.item.CrystallizedEssenceItem.of(
-                    me.moonscenty.alchemia.registry.ModAspects.AURA);
-            var aer = me.moonscenty.alchemia.item.CrystallizedEssenceItem.of(
-                    me.moonscenty.alchemia.registry.ModAspects.AIR);
-            helper.assertTrue(recipe.ring().stream().anyMatch(part -> part.test(auram)), name + " takes auram");
-            helper.assertFalse(recipe.ring().stream().anyMatch(part -> part.test(aer)), name + " but not aer");
+            var fire = me.moonscenty.alchemia.item.WispyEssenceItem.of(me.moonscenty.alchemia.registry.ModAspects.FIRE);
+            helper.assertTrue(recipe.ring().stream().anyMatch(part -> part.test(fire)), name + " takes it");
         }
         helper.succeed();
     }

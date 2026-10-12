@@ -186,6 +186,12 @@ public class ModItems {
     public static final DeferredItem<net.neoforged.neoforge.common.DeferredSpawnEggItem> FIREBAT_SPAWN_EGG =
             ITEMS.register("firebat_spawn_egg", () -> new net.neoforged.neoforge.common.DeferredSpawnEggItem(
                     ModEntities.FIRE_BAT, 0xFFC0FF, 0xF00000, new Item.Properties()));
+    public static final DeferredItem<net.neoforged.neoforge.common.DeferredSpawnEggItem> WISP_SPAWN_EGG =
+            ITEMS.register("wisp_spawn_egg", () -> new net.neoforged.neoforge.common.DeferredSpawnEggItem(
+                    ModEntities.WISP, 0xFFC0FF, 0xFFFFFF, new Item.Properties()));
+    /** What is left of a wisp: two points of its aspect. */
+    public static final DeferredItem<me.moonscenty.alchemia.item.WispyEssenceItem> WISPY_ESSENCE = ITEMS.register(
+            "wispy_essence", () -> new me.moonscenty.alchemia.item.WispyEssenceItem(new Item.Properties()));
     /** A pane of glass silvered with quicksilver. */
     public static final DeferredItem<Item> MIRRORED_GLASS = ITEMS.registerSimpleItem("mirrored_glass");
     /** A mirror on a handle, that sends things through to a magic mirror wherever it is. */

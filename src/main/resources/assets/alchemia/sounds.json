@@ -1,0 +1,77 @@
+{
+  "wisp.live": {
+    "subtitle": "subtitles.alchemia.wisp.ambient",
+    "sounds": [
+      "alchemia:legacy/wisplive1",
+      "alchemia:legacy/wisplive2",
+      "alchemia:legacy/wisplive3"
+    ]
+  },
+  "wisp.dead": {
+    "subtitle": "subtitles.alchemia.wisp.death",
+    "sounds": [
+      "alchemia:legacy/wispdead"
+    ]
+  },
+  "zap": {
+    "subtitle": "subtitles.alchemia.wisp.zap",
+    "sounds": [
+      "alchemia:legacy/zap1",
+      "alchemia:legacy/zap2"
+    ]
+  },
+  "ice": {
+    "subtitle": "subtitles.alchemia.pech.blast",
+    "sounds": [
+      "alchemia:legacy/ice1",
+      "alchemia:legacy/ice2",
+      "alchemia:legacy/ice3"
+    ]
+  },
+  "pech.idle": {
+    "subtitle": "subtitles.alchemia.pech.ambient",
+    "sounds": [
+      "alchemia:legacy/pech_idle1",
+      "alchemia:legacy/pech_idle2",
+      "alchemia:legacy/pech_idle3"
+    ]
+  },
+  "pech.hit": {
+    "subtitle": "subtitles.alchemia.pech.hurt",
+    "sounds": [
+      "alchemia:legacy/pech_hit1",
+      "alchemia:legacy/pech_hit2"
+    ]
+  },
+  "pech.death": {
+    "subtitle": "subtitles.alchemia.pech.death",
+    "sounds": [
+      "alchemia:legacy/pech_death"
+    ]
+  },
+  "pech.charge": {
+    "subtitle": "subtitles.alchemia.pech.charge",
+    "sounds": [
+      "alchemia:legacy/pech_charge1",
+      "alchemia:legacy/pech_charge2"
+    ]
+  },
+  "pech.trade": {
+    "subtitle": "subtitles.alchemia.pech.trade",
+    "sounds": [
+      "alchemia:legacy/pech_trade"
+    ]
+  },
+  "pech.dice": {
+    "subtitle": "subtitles.alchemia.pech.dice",
+    "sounds": [
+      "alchemia:legacy/pech_dice"
+    ]
+  },
+  "coins": {
+    "subtitle": "subtitles.alchemia.coins",
+    "sounds": [
+      "alchemia:legacy/coins"
+    ]
+  }
+}

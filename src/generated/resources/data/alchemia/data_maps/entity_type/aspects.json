@@ -12,6 +12,10 @@
       "alchemia:humanus": 2,
       "alchemia:terra": 2
     },
+    "alchemia:wisp": {
+      "alchemia:aer": 1,
+      "alchemia:auram": 1
+    },
     "minecraft:blaze": {
       "alchemia:ignis": 8,
       "alchemia:potentia": 4

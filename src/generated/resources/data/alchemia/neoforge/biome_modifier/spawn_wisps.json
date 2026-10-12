@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#minecraft:is_nether",
+  "spawners": {
+    "type": "alchemia:wisp",
+    "maxCount": 1,
+    "minCount": 1,
+    "weight": 5
+  }
+}

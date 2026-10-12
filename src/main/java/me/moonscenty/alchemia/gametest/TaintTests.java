@@ -184,7 +184,7 @@ public class TaintTests {
             happened = FluxEvents.strikeAt(helper.getLevel(), at, random);
         }
         helper.assertTrue(happened != null, "a chunk this thick with flux should have let something out");
-        // nobody is here to be warped or sickened, so it has to have been the weather or the node
+        // nobody is here to be warped or sickened, so it has to have been the weather, the node or a wisp
         helper.assertTrue(!happened.name().equals("warp") && !happened.name().equals("sickness"),
                 "with nobody about, neither warp nor sickness should have come of it");
         helper.assertTrue(fluxLeft(helper) == before - happened.cost(), "and the chunk should have paid for it");

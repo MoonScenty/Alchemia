@@ -68,7 +68,8 @@ public final class FluxEvents {
             new Trouble("cloud", 1, 40, FluxEvents::gatherCloud),
             new Trouble("warp", 5, 20, FluxEvents::twistMinds),
             new Trouble("sickness", 5, 15, FluxEvents::sicken),
-            new Trouble("node_shift", 3, 20, FluxEvents::shiftNode)));
+            new Trouble("node_shift", 3, 20, FluxEvents::shiftNode),
+            new Trouble("wisp", 25, 5, me.moonscenty.alchemia.entity.Wisp::fromFlux)));
 
     /** How far a cloud already overhead keeps the weather from piling up. */
     private static final double CLOUD_ELBOW_ROOM = 32.0;

@@ -75,6 +75,7 @@ public class ModWorldgen {
     public static final ResourceKey<BiomeModifier> ADD_SILVERWOOD = biomeModifier("add_silverwood");
     public static final ResourceKey<BiomeModifier> SPAWN_ANGRY_ZOMBIES = biomeModifier("spawn_angry_zombies");
     public static final ResourceKey<BiomeModifier> SPAWN_FIREBATS = biomeModifier("spawn_firebats");
+    public static final ResourceKey<BiomeModifier> SPAWN_WISPS = biomeModifier("spawn_wisps");
 
     static {
         for (CrystalType type : CrystalType.values()) {
@@ -187,6 +188,11 @@ public class ModWorldgen {
                 biomes.getOrThrow(BiomeTags.IS_NETHER),
                 new net.minecraft.world.level.biome.MobSpawnSettings.SpawnerData(
                         me.moonscenty.alchemia.registry.ModEntities.FIRE_BAT.get(), 10, 1, 2)));
+        // and wisps, one at a time, in the Nether too
+        context.register(SPAWN_WISPS, BiomeModifiers.AddSpawnsBiomeModifier.singleSpawn(
+                biomes.getOrThrow(BiomeTags.IS_NETHER),
+                new net.minecraft.world.level.biome.MobSpawnSettings.SpawnerData(
+                        me.moonscenty.alchemia.registry.ModEntities.WISP.get(), 5, 1, 1)));
     }
 
     private static List<PlacementModifier> ore(int count, PlacementModifier height) {

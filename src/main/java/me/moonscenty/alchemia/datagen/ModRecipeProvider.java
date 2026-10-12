@@ -63,14 +63,6 @@ public class ModRecipeProvider extends RecipeProvider {
     /** How badly an altar takes to an aura totem. The original's number. */
     private static final int TOTEM_UNSTABLE = 5;
 
-    /** A crystal of auram, and only of auram. */
-    private static Ingredient auram() {
-        return net.neoforged.neoforge.common.crafting.DataComponentIngredient.of(false,
-                me.moonscenty.alchemia.registry.ModDataComponents.ESSENTIA,
-                (net.minecraft.core.Holder<me.moonscenty.alchemia.aspect.Aspect>) ModAspects.AURA,
-                ModItems.CRYSTALLIZED_ESSENCE);
-    }
-
     /** A totem pole: silverwood above and below, greatwood banding it, a shard in the middle. */
     private void pole(RecipeOutput output, String name, String research,
             net.neoforged.neoforge.registries.DeferredBlock<?> pole, Ingredient shard, AspectList cost) {
@@ -795,20 +787,22 @@ public class ModRecipeProvider extends RecipeProvider {
                 AspectList.of(ModAspects.MIND, 16).add(ModAspects.MECHANISM, 16), BIOTHAUMIC_UNSTABLE,
                 "biothaumic_mind");
 
-        // the totems: a block of silverwood worked on with greatwood, a chest, a balanced shard and salis mundus, and
-        // a crystal of auram where the original had a wisp's essence -- with amber and a lure to draw vis in, or
-        // quicksilver and a piston to push it out
+        // the totems: a block of silverwood worked on with greatwood, a chest, a balanced shard, salis mundus and a
+        // wisp's essence of any kind -- with amber and a lure to draw vis in, or quicksilver and a piston to push it
+        // out
         infusion(output, "aura_totem_pull", Ingredient.of(ModBlocks.SILVERWOOD.planks()),
                 List.of(Ingredient.of(ModBlocks.GREATWOOD.planks()), Ingredient.of(Items.CHEST),
                         Ingredient.of(ModItems.BALANCED_SHARD), Ingredient.of(ModItems.SALIS_MUNDUS),
-                        Ingredient.of(ModItems.AMBER), Ingredient.of(Items.CARROT_ON_A_STICK), auram()),
+                        Ingredient.of(ModItems.AMBER), Ingredient.of(Items.CARROT_ON_A_STICK),
+                        Ingredient.of(ModItems.WISPY_ESSENCE)),
                 new ItemStack(ModBlocks.AURA_TOTEM_PULL.get()),
                 AspectList.of(ModAspects.ENERGY, 25).add(ModAspects.AURA, 25).add(ModAspects.MOTION, 25)
                         .add(ModAspects.DESIRE, 25), TOTEM_UNSTABLE, "aura_totem_pull");
         infusion(output, "aura_totem_push", Ingredient.of(ModBlocks.SILVERWOOD.planks()),
                 List.of(Ingredient.of(ModBlocks.GREATWOOD.planks()), Ingredient.of(Items.CHEST),
                         Ingredient.of(ModItems.BALANCED_SHARD), Ingredient.of(ModItems.SALIS_MUNDUS),
-                        Ingredient.of(ModItems.QUICKSILVER), Ingredient.of(Items.PISTON), auram()),
+                        Ingredient.of(ModItems.QUICKSILVER), Ingredient.of(Items.PISTON),
+                        Ingredient.of(ModItems.WISPY_ESSENCE)),
                 new ItemStack(ModBlocks.AURA_TOTEM_PUSH.get()),
                 AspectList.of(ModAspects.ENERGY, 25).add(ModAspects.AURA, 25).add(ModAspects.MOTION, 25)
                         .add(ModAspects.AVERSION, 25), TOTEM_UNSTABLE, "aura_totem");

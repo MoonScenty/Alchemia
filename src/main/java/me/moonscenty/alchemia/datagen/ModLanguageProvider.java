@@ -175,12 +175,27 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         addItem(ModItems.AUTOCASTER, pick("Autocaster", "자동 시전기"));
         addEntityType(me.moonscenty.alchemia.registry.ModEntities.AUTOCASTER, pick("Autocaster", "자동 시전기"));
         addEntityType(me.moonscenty.alchemia.registry.ModEntities.FIRE_BAT, pick("Firebat", "불박쥐"));
+        addEntityType(me.moonscenty.alchemia.registry.ModEntities.WISP, pick("Wisp", "위습"));
         addEntityType(me.moonscenty.alchemia.registry.ModEntities.ANGRY_ZOMBIE, pick("Angry Zombie", "성난 좀비"));
         addEntityType(me.moonscenty.alchemia.registry.ModEntities.FURIOUS_ZOMBIE, pick("Furious Zombie", "격노한 좀비"));
         addItem(ModItems.ZOMBIE_BRAIN, pick("Zombie Brain", "좀비 뇌"));
         addItem(ModItems.ANGRY_ZOMBIE_SPAWN_EGG, pick("Angry Zombie Spawn Egg", "성난 좀비 생성 알"));
         addItem(ModItems.FURIOUS_ZOMBIE_SPAWN_EGG, pick("Furious Zombie Spawn Egg", "격노한 좀비 생성 알"));
         addItem(ModItems.FIREBAT_SPAWN_EGG, pick("Firebat Spawn Egg", "불박쥐 생성 알"));
+        addItem(ModItems.WISP_SPAWN_EGG, pick("Wisp Spawn Egg", "위습 생성 알"));
+        addItem(ModItems.WISPY_ESSENCE, pick("Wispy Essence", "위습의 정수"));
+        add("item.alchemia.wispy_essence.holding", pick("Two points of %s", "%s 두 점"));
+        add("subtitles.alchemia.wisp.ambient", pick("Wisp hums", "위습이 웅웅거린다"));
+        add("subtitles.alchemia.wisp.death", pick("Wisp goes out", "위습이 꺼진다"));
+        add("subtitles.alchemia.wisp.zap", pick("Wisp zaps", "위습이 불꽃을 튀긴다"));
+        add("subtitles.alchemia.pech.blast", pick("Frost cracks", "서리가 갈라진다"));
+        add("subtitles.alchemia.pech.ambient", pick("Pech mutters", "페크가 중얼거린다"));
+        add("subtitles.alchemia.pech.hurt", pick("Pech hurts", "페크가 다친다"));
+        add("subtitles.alchemia.pech.death", pick("Pech dies", "페크가 죽는다"));
+        add("subtitles.alchemia.pech.charge", pick("Pech growls", "페크가 으르렁댄다"));
+        add("subtitles.alchemia.pech.trade", pick("Pech chatters", "페크가 재잘댄다"));
+        add("subtitles.alchemia.pech.dice", pick("Bones rattle", "뼈 주사위가 구른다"));
+        add("subtitles.alchemia.coins", pick("Coins jingle", "동전이 짤랑거린다"));
         String[][] champions = {{"bold", "Bold", "대담한"}, {"spine", "Spined", "가시 돋친"},
                 {"armor", "Armored", "무장한"}, {"mighty", "Mighty", "강력한"}, {"grim", "Grim", "음산한"},
                 {"warded", "Warded", "보호받는"}, {"warp", "Warped", "뒤틀린"}, {"undying", "Undying", "죽지 않는"},

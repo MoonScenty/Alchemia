@@ -51,7 +51,7 @@ public sealed interface ScanTarget {
     record OfEntity(Entity entity) implements ScanTarget {
         @Override
         public AspectList aspects() {
-            return Aspects.of(entity.getType());
+            return Aspects.of(entity);
         }
 
         @Override

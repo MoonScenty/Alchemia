@@ -151,6 +151,7 @@ public class AlchemiaClientSetup {
         event.register((stack, tint) -> tint == 0 ? named(stack) : PLAIN, ModItems.PHIAL.get());
         // a crystal is drawn in grey and painted by the one point it holds
         event.register((stack, tint) -> tint == 0 ? named(stack) : PLAIN, ModItems.CRYSTALLIZED_ESSENCE.get());
+        event.register((stack, tint) -> tint == 0 ? named(stack) : PLAIN, ModItems.WISPY_ESSENCE.get());
         event.register((stack, tint) -> tint == 1 ? named(stack) : PLAIN, ModItems.JAR_LABEL.get());
         // the liquid standing in a jar held in the hand, in the colour of whatever it is
         event.register((stack, tint) -> tint == 0 ? inside(stack) : PLAIN, ModBlocks.JAR.get().asItem());
@@ -297,6 +298,7 @@ public class AlchemiaClientSetup {
         event.registerEntityRenderer(ModEntities.AURA_NODE.get(), AuraNodeRenderer::new);
         event.registerEntityRenderer(ModEntities.AUTOCASTER.get(), AutocasterRenderer::new);
         event.registerEntityRenderer(ModEntities.FIRE_BAT.get(), FireBatRenderer::new);
+        event.registerEntityRenderer(ModEntities.WISP.get(), WispRenderer::new);
         event.registerEntityRenderer(ModEntities.ANGRY_ZOMBIE.get(), AngryZombieRenderer::new);
         event.registerEntityRenderer(ModEntities.FURIOUS_ZOMBIE.get(), AngryZombieRenderer::new);
         // a cloud is all particles, so there is nothing to draw for the entity itself

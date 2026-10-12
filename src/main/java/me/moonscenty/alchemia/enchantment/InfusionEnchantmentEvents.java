@@ -356,7 +356,7 @@ public final class InfusionEnchantmentEvents {
         if (rank <= 0) {
             return;
         }
-        AspectList made = Aspects.of(event.getEntity().getType());
+        AspectList made = Aspects.of(event.getEntity());
         if (made.isEmpty() || player.level().random.nextInt(ESSENCE_IN_FIVE) >= rank) {
             return;
         }

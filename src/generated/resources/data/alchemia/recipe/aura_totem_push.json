@@ -35,11 +35,7 @@
       "item": "minecraft:piston"
     },
     {
-      "type": "neoforge:components",
-      "components": {
-        "alchemia:essentia": "alchemia:auram"
-      },
-      "items": "alchemia:crystallized_essence"
+      "item": "alchemia:wispy_essence"
     }
   ]
 }

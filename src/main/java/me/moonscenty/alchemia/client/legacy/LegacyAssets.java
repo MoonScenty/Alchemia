@@ -637,6 +637,13 @@ public final class LegacyAssets {
             all.add(LegacyAsset.of("textures/block/legacy/" + face + ".png").five("textures/blocks/" + face + ".png"));
         }
         all.add(LegacyAsset.of("textures/gui/aura_totem.png").five("textures/gui/gui_auratotem.png"));
+        // the wisp's essence, and the original's recordings, which sounds.json names
+        all.add(LegacyAsset.of("textures/item/legacy/wispy_essence.png").five("textures/items/wispy_essence.png"));
+        for (String sound : List.of("wisplive1", "wisplive2", "wisplive3", "wispdead", "zap1", "zap2", "ice1", "ice2",
+                "ice3", "pech_idle1", "pech_idle2", "pech_idle3", "pech_hit1", "pech_hit2", "pech_death",
+                "pech_charge1", "pech_charge2", "pech_trade", "pech_dice", "coins")) {
+            all.add(LegacyAsset.of("sounds/legacy/" + sound + ".ogg").five("sounds/" + sound + ".ogg"));
+        }
         // the spa's faces and panel; the salts (which shimmer) and the bucket of what they make
         for (String face : List.of("spa_side", "spa_top")) {
             all.add(LegacyAsset.of("textures/block/legacy/" + face + ".png").five("textures/blocks/" + face + ".png"));

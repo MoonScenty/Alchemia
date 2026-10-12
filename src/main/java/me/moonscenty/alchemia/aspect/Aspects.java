@@ -58,7 +58,11 @@ public final class Aspects {
         if (stack.isEmpty()) {
             return AspectList.EMPTY;
         }
-        return AspectBonuses.ofStack(stack, of(stack.getItem())).capAt(MAX_PER_ASPECT).cull();
+        AspectList base = of(stack.getItem());
+        if (stack.getItem() instanceof ContainedAspects holder) {
+            base = base.add(holder.contained(stack));
+        }
+        return AspectBonuses.ofStack(stack, base).capAt(MAX_PER_ASPECT).cull();
     }
 
     /** What a plain, unenchanted one of these is made of. */
@@ -86,6 +90,12 @@ public final class Aspects {
     }
 
     /** Mobs are always written down; there is no recipe to trace one back through. */
+    /** What this particular creature is made of: its kind, and anything it carries of its own. */
+    public static AspectList of(net.minecraft.world.entity.Entity entity) {
+        AspectList kind = of(entity.getType());
+        return entity instanceof OwnAspects own ? kind.add(own.ownAspects()) : kind;
+    }
+
     public static AspectList of(EntityType<?> type) {
         AspectList listed = type.builtInRegistryHolder().getData(ModDataMaps.ENTITY_ASPECTS);
         return listed == null ? AspectList.EMPTY : listed;
