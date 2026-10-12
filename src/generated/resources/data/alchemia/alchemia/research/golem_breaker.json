@@ -1,0 +1,22 @@
+{
+  "category": "alchemia:golemancy",
+  "column": -8,
+  "complexity": 2,
+  "icon": "minecraft:piston",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.golem_breaker.page"
+    }
+  ],
+  "parents": [
+    "alchemia:clockwork_mind"
+  ],
+  "requirements": {
+    "alchemia:cognitio": 3,
+    "alchemia:instrumentum": 5,
+    "alchemia:machina": 3,
+    "alchemia:perditio": 3
+  },
+  "row": 2
+}

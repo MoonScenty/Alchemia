@@ -180,6 +180,7 @@ public final class LegacyAssets {
         essentia(all);
         infusion(all);
         gear(all);
+        golems(all);
         return List.copyOf(all);
     }
 
@@ -776,6 +777,66 @@ public final class LegacyAssets {
     }
 
     /** Step 1: ores, metals, the two woods, the three plants, stone. */
+    /**
+     * Golems and their press: the meshes a golem is put together from and the pictures they are drawn in, the press
+     * and its panel, the little pictures of every part and trait on that panel, the items, and the stone table.
+     */
+    private static void golems(List<LegacyAsset> all) {
+        for (String mesh : List.of("golem_base", "golem_head_basic", "golem_head_smart", "golem_head_smart_armor",
+                "golem_head_scout", "golem_head_scout_smart", "golem_arms_basic", "golem_arms_fine",
+                "golem_arms_claws", "golem_arms_breakers", "golem_arms_darter", "golem_legs_walker",
+                "golem_legs_wheel", "golem_legs_climber", "golem_legs_floater", "golem_armor", "golem_hauler")) {
+            all.add(LegacyAsset.of("models/legacy/golem/" + mesh + ".obj").five("models/obj/" + mesh + ".obj"));
+        }
+        all.add(LegacyAsset.of("models/legacy/golem/golem_press.obj").five("models/obj/golembuilder.obj"));
+        // each material's picture; alchemium is the original's thaumium
+        for (String[] material : new String[][] {{"wood", "wood"}, {"iron", "iron"}, {"clay", "clay"},
+                {"brass", "brass"}, {"alchemium", "thaumium"}, {"void", "void"}}) {
+            all.add(LegacyAsset.of("textures/entity/golem/mat_" + material[0] + ".png")
+                    .five("textures/models/golems/mat_" + material[1] + ".png"));
+        }
+        for (String sheet : List.of("golem_head_other", "golem_arms_claws", "golem_arms_breakers",
+                "golem_arms_darter", "golem_hauler", "golem_legs_floater", "golem_legs_wheel")) {
+            all.add(LegacyAsset.of("textures/entity/golem/" + sheet + ".png")
+                    .five("textures/models/golems/" + sheet + ".png"));
+        }
+        all.add(LegacyAsset.of("textures/entity/golem/base_metal.png").five("textures/blocks/base_metal.png"));
+        all.add(LegacyAsset.of("textures/entity/golem/golem_press.png")
+                .five("textures/models/golems/golembuilder.png"));
+        all.add(LegacyAsset.of("textures/gui/golem_press.png").five("textures/gui/gui_golembuilder.png"));
+        all.add(LegacyAsset.of("textures/gui/base.png").five("textures/gui/gui_base.png"));
+        for (me.moonscenty.alchemia.golem.GolemTrait trait : me.moonscenty.alchemia.golem.GolemTrait.values()) {
+            all.add(LegacyAsset.of("textures/gui/golem/tag_" + trait.key() + ".png")
+                    .five("textures/misc/golem/tag_" + trait.key() + ".png"));
+        }
+        for (String[] part : new String[][] {{"head_basic", "head_basic"}, {"head_smart", "head_smart"},
+                {"head_smart_armored", "head_smartarmor"}, {"head_scout", "head_scout"},
+                {"head_smart_scout", "head_smartscout"}, {"arm_basic", "arms_basic"}, {"arm_fine", "arms_fine"},
+                {"arm_claws", "arms_claws"}, {"arm_breakers", "arms_breakers"}, {"arm_darts", "arms_darts"},
+                {"leg_walker", "legs_walker"}, {"leg_roller", "legs_roller"}, {"leg_climber", "legs_climber"},
+                {"leg_flyer", "legs_flyer"}, {"addon_armored", "addon_armored"}, {"addon_fighter", "addon_fighter"},
+                {"addon_hauler", "addon_hauler"}}) {
+            all.add(LegacyAsset.of("textures/gui/golem/" + part[0] + ".png")
+                    .five("textures/misc/golem/" + part[1] + ".png"));
+        }
+        all.add(item("void_gear", "void_gear", null));
+        for (String[] item : new String[][] {{"golem", "golem"}, {"golem_bell", "golem_bell"},
+                {"vision_module", "module_vision"}, {"aggression_module", "module_aggression"}}) {
+            all.add(LegacyAsset.of("textures/item/legacy/" + item[0] + ".png")
+                    .five("textures/items/" + item[1] + ".png"));
+        }
+        // the stone table is the original's wooden table model in stone
+        all.add(LegacyAsset.of("models/block/table_wood.json").five("models/block/table_wood.json").asModel());
+        all.add(LegacyAsset.of("models/block/table_stone.json").five("models/block/table_stone.json").asModel());
+        for (String face : List.of("table_stone_top", "table_stone_side", "table_wood_top", "table_wood_side")) {
+            all.add(LegacyAsset.of("textures/block/legacy/" + face + ".png").five("textures/blocks/" + face + ".png"));
+        }
+        for (String sound : List.of("cameraclack1", "cameraclack2", "cameraclack3", "tool1", "tool2", "scan",
+                "wand1", "wand2", "wand3", "craftstart")) {
+            all.add(LegacyAsset.of("sounds/legacy/" + sound + ".ogg").five("sounds/" + sound + ".ogg"));
+        }
+    }
+
     private static void baseResources(List<LegacyAsset> all) {
         // ores and what comes out of them
         all.add(block("amber_ore", "ore_amber", "amberore"));

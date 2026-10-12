@@ -1,0 +1,30 @@
+{
+  "category": "alchemia:golemancy",
+  "column": -1,
+  "complexity": 2,
+  "icon": "alchemia:brass_plate",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.golem_brass.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:brass_gear"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:brass_plate"
+    }
+  ],
+  "parents": [
+    "alchemia:golem_iron",
+    "alchemia:metallurgy"
+  ],
+  "requirements": {
+    "alchemia:fabrico": 3,
+    "alchemia:metallum": 3,
+    "alchemia:potentia": 5
+  },
+  "row": -5
+}

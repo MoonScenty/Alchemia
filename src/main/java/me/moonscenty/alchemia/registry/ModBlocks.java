@@ -446,6 +446,22 @@ public class ModBlocks {
             () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).mapColor(MapColor.GOLD)));
 
     // Silverwood glows faintly
+    /** A stone table: a slab of stone on four legs, and the anvil's bench in a golem press. */
+    public static final DeferredBlock<Block> STONE_TABLE = register("stone_table",
+            () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).noOcclusion()));
+    /**
+     * A golem press: its heart, where the piston was, and the four blocks round it that stand in for the bars,
+     * the table, the anvil and the cauldron. Neither has an item; both are made where they stand.
+     */
+    public static final DeferredBlock<me.moonscenty.alchemia.block.GolemPressBlock> GOLEM_PRESS =
+            registerBlockOnly("golem_press", () -> new me.moonscenty.alchemia.block.GolemPressBlock(
+                    BlockBehaviour.Properties.of().mapColor(MapColor.STONE).strength(2.5F)
+                            .sound(net.minecraft.world.level.block.SoundType.STONE).noOcclusion()));
+    public static final DeferredBlock<me.moonscenty.alchemia.block.GolemPressPartBlock> GOLEM_PRESS_PART =
+            registerBlockOnly("golem_press_part", () -> new me.moonscenty.alchemia.block.GolemPressPartBlock(
+                    BlockBehaviour.Properties.of().mapColor(MapColor.STONE).strength(2.5F)
+                            .sound(net.minecraft.world.level.block.SoundType.STONE).noOcclusion()));
+
     public static final WoodSet GREATWOOD = registerWood("greatwood", Blocks.DARK_OAK_LOG, MapColor.COLOR_BROWN, 0, ModWorldgen.GREATWOOD_TREE);
     public static final WoodSet SILVERWOOD = registerWood("silverwood", Blocks.BIRCH_LOG, MapColor.SAND, 6, ModWorldgen.SILVERWOOD_TREE);
     public static final List<WoodSet> WOODS = List.of(GREATWOOD, SILVERWOOD);

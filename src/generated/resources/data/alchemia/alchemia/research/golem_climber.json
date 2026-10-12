@@ -1,0 +1,22 @@
+{
+  "category": "alchemia:golemancy",
+  "column": -4,
+  "complexity": 2,
+  "icon": "minecraft:flint",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.golem_climber.page"
+    }
+  ],
+  "parents": [
+    "alchemia:clockwork_mind"
+  ],
+  "requirements": {
+    "alchemia:bestia": 3,
+    "alchemia:cognitio": 3,
+    "alchemia:machina": 3,
+    "alchemia:motus": 5
+  },
+  "row": 2
+}

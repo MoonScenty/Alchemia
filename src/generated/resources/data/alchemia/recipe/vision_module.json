@@ -1,0 +1,31 @@
+{
+  "type": "alchemia:arcane_shaped",
+  "key": {
+    "B": {
+      "item": "minecraft:glass_bottle"
+    },
+    "E": {
+      "item": "minecraft:fermented_spider_eye"
+    },
+    "G": {
+      "item": "alchemia:brass_gear"
+    },
+    "P": {
+      "item": "alchemia:brass_plate"
+    }
+  },
+  "pattern": [
+    "B B",
+    "E E",
+    "PGP"
+  ],
+  "research": "alchemia:golem_vision",
+  "result": {
+    "count": 1,
+    "id": "alchemia:vision_module"
+  },
+  "vis": {
+    "alchemia:aer": 25,
+    "alchemia:aqua": 25
+  }
+}

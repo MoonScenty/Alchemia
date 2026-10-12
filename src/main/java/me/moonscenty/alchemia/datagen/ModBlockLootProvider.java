@@ -106,6 +106,20 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
                                                 .hasProperty(me.moonscenty.alchemia.block.FurnaceShellBlock.OBSIDIAN,
                                                         true)))
                                 .otherwise(LootItem.lootTableItem(Blocks.NETHER_BRICKS))))));
+        // the stone table gives itself; a golem press gives back what each part of it was made from
+        dropSelf(ModBlocks.STONE_TABLE.get());
+        dropOther(ModBlocks.GOLEM_PRESS.get(), Blocks.PISTON);
+        add(ModBlocks.GOLEM_PRESS_PART.get(), block -> {
+            LootPool.Builder pool = LootPool.lootPool().setRolls(ConstantValue.exactly(1));
+            for (me.moonscenty.alchemia.block.GolemPressPartBlock.Part part
+                    : me.moonscenty.alchemia.block.GolemPressPartBlock.Part.values()) {
+                pool.add(LootItem.lootTableItem(part.original().getBlock())
+                        .when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block)
+                                .setProperties(StatePropertiesPredicate.Builder.properties()
+                                        .hasProperty(me.moonscenty.alchemia.block.GolemPressPartBlock.PART, part))));
+            }
+            return LootTable.lootTable().withPool(applyExplosionCondition(block, pool));
+        });
         dropSelf(ModBlocks.ARCANE_BORE.get());
         dropSelf(ModBlocks.ARCANE_BORE_BASE.get());
         // each half of a thaumatorium was a block of brass, and gives it back

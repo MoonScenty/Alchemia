@@ -308,6 +308,19 @@ public class ModItems {
 
     /** Void metal beaten flat. What the void robes are sewn onto. */
     public static final DeferredItem<Item> VOID_PLATE = ITEMS.registerSimpleItem("void_plate");
+    /** The void metal gear, as brass and alchemium have theirs: what a void golem works on. */
+    public static final DeferredItem<Item> VOID_GEAR = ITEMS.registerSimpleItem("void_gear");
+
+    /** A golem off the press, or taken back up with a wand: what it is rides on the item. */
+    public static final DeferredItem<me.moonscenty.alchemia.item.GolemItem> GOLEM = ITEMS.register("golem",
+            () -> new me.moonscenty.alchemia.item.GolemItem(new Item.Properties()));
+    /** The golemancer's bell, for telling golems to follow or to stay. */
+    public static final DeferredItem<me.moonscenty.alchemia.item.GolemBellItem> GOLEM_BELL = ITEMS.register(
+            "golem_bell", () -> new me.moonscenty.alchemia.item.GolemBellItem(new Item.Properties().stacksTo(1)));
+    /** Eyes for a golem's head, that see further. */
+    public static final DeferredItem<Item> VISION_MODULE = ITEMS.registerSimpleItem("vision_module");
+    /** What gives a golem the will to fight. */
+    public static final DeferredItem<Item> AGGRESSION_MODULE = ITEMS.registerSimpleItem("aggression_module");
 
     /**
      * One item to a rod, wearing the same picture the wand wears. The rod sprites were drawn to serve as both, so

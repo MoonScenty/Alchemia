@@ -245,6 +245,189 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("item.alchemia.autocaster.note",
                 pick("Fires a fitted focus on its own", "끼운 포커스를 혼자 쏜다"));
         add("entity.alchemia.autocaster.not_yours", pick("Not yours", "남의 것이다"));
+        // golems: what they are called, what they say, and every trait and part the press shows
+        add("entity.alchemia.golem", pick("Golem", "골렘"));
+        add("entity.alchemia.golem.not_yours", pick("This does not belong to you", "당신의 것이 아니다"));
+        add("entity.alchemia.golem.follow", pick("I am coming, Master", "따라가겠습니다, 주인님"));
+        add("entity.alchemia.golem.stay", pick("I will stay here, Master", "여기 있겠습니다, 주인님"));
+        add("item.alchemia.golem.rank", pick("Rank %s", "랭크 %s"));
+        add("subtitles.alchemia.golem.clack", pick("Golem clacks", "골렘이 딸깍거린다"));
+        add("subtitles.alchemia.golem.death", pick("Golem falls apart", "골렘이 무너진다"));
+        add("subtitles.alchemia.golem.order", pick("Golem takes an order", "골렘이 명령을 받는다"));
+        add("subtitles.alchemia.made", pick("Something is made", "무언가가 만들어진다"));
+        add("subtitles.alchemia.golem_press.start", pick("Golem press starts", "골렘 프레스가 움직인다"));
+        add("golem.alchemia.trait.smart", pick("Smart", "영리함"));
+        add("golem.alchemia.trait.smart.text",
+                pick("Thinks for itself more than a golem ought to, and learns from what it does, coming on a rank at a time.",
+                        "골렘치고는 제 생각이 있어서, 하는 일에서 배우며 랭크가 하나씩 오른다."));
+        add("golem.alchemia.trait.deft", pick("Deft", "손재주"));
+        add("golem.alchemia.trait.deft.text",
+                pick("Fine fingers, for work that wants a light touch. Deft and clumsy cancel each other.",
+                        "섬세한 손가락이 있어 가벼운 손길이 필요한 일을 해낸다. 손재주와 서투름은 서로 지운다."));
+        add("golem.alchemia.trait.clumsy", pick("Clumsy", "서투름"));
+        add("golem.alchemia.trait.clumsy.text",
+                pick("Hands good for little more than the plainest handling. Clumsy and deft cancel each other.",
+                        "가장 단순한 일 말고는 쓸모가 없는 손이다. 서투름과 손재주는 서로 지운다."));
+        add("golem.alchemia.trait.fighter", pick("Fighter", "전투"));
+        add("golem.alchemia.trait.fighter.text",
+                pick("It will turn on things and strike them.",
+                        "무언가에 덤벼들어 칠 줄 안다."));
+        add("golem.alchemia.trait.wheeled", pick("Wheeled", "바퀴"));
+        add("golem.alchemia.trait.wheeled.text",
+                pick("Rolls rather than walks: quicker, but it cannot step up as high.",
+                        "걷지 않고 구른다. 빠르지만 그만큼 높이 올라서지 못한다."));
+        add("golem.alchemia.trait.flyer", pick("Flyer", "비행"));
+        add("golem.alchemia.trait.flyer.text",
+                pick("Floats wherever it goes, and is never hurt by a fall, but goes more slowly than it would walk.",
+                        "어디든 떠서 다니고 떨어져 다치는 일도 없지만, 걷는 것보다 느리다."));
+        add("golem.alchemia.trait.climber", pick("Climber", "등반"));
+        add("golem.alchemia.trait.climber.text",
+                pick("Goes straight up a wall when it has to, and is never hurt by a fall.",
+                        "필요하면 벽을 곧장 타고 오르고, 떨어져 다치는 일이 없다."));
+        add("golem.alchemia.trait.heavy", pick("Heavy Frame", "무거운 몸체"));
+        add("golem.alchemia.trait.heavy.text",
+                pick("Slower for its weight. Heavy and light cancel each other.",
+                        "무게만큼 느리다. 무거운 몸체와 가벼운 몸체는 서로 지운다."));
+        add("golem.alchemia.trait.light", pick("Light Frame", "가벼운 몸체"));
+        add("golem.alchemia.trait.light.text",
+                pick("Quicker for being light. Light and heavy cancel each other.",
+                        "가벼운 만큼 빠르다. 가벼운 몸체와 무거운 몸체는 서로 지운다."));
+        add("golem.alchemia.trait.fragile", pick("Fragile", "연약함"));
+        add("golem.alchemia.trait.fragile.text",
+                pick("A quarter less health and armour. Fragile and armored cancel each other.",
+                        "체력과 방어가 사분의 일 적다. 연약함과 장갑은 서로 지운다."));
+        add("golem.alchemia.trait.repair", pick("Improved Self Repair", "향상된 자가 수리"));
+        add("golem.alchemia.trait.repair.text",
+                pick("Mends itself more than twice as fast as other golems.",
+                        "다른 골렘보다 두 배 넘게 빨리 스스로를 고친다."));
+        add("golem.alchemia.trait.scout", pick("Scout", "정찰"));
+        add("golem.alchemia.trait.scout.text",
+                pick("Sees further, and goes twice as far from home about its work: thirty-two blocks rather than sixteen.",
+                        "더 멀리 보고, 일하러 집에서 두 배 멀리 간다. 열여섯 칸이 아니라 서른두 칸이다."));
+        add("golem.alchemia.trait.armored", pick("Armored", "장갑"));
+        add("golem.alchemia.trait.armored.text",
+                pick("Half as much armour again, or one more at least. Armored and fragile cancel each other.",
+                        "방어가 절반만큼, 적어도 하나는 더 붙는다. 장갑과 연약함은 서로 지운다."));
+        add("golem.alchemia.trait.brutal", pick("Brutal", "잔혹함"));
+        add("golem.alchemia.trait.brutal.text",
+                pick("Hits half as hard again, or one harder at least.",
+                        "절반만큼, 적어도 하나는 더 세게 친다."));
+        add("golem.alchemia.trait.fireproof", pick("Fireproof", "내화"));
+        add("golem.alchemia.trait.fireproof.text",
+                pick("Fire and lava do nothing to it.",
+                        "불도 용암도 아무것도 하지 못한다."));
+        add("golem.alchemia.trait.breaker", pick("Breaker", "파쇄"));
+        add("golem.alchemia.trait.breaker.text",
+                pick("Can break most blocks.",
+                        "대부분의 블록을 부술 수 있다."));
+        add("golem.alchemia.trait.hauler", pick("Hauler", "운반"));
+        add("golem.alchemia.trait.hauler.text",
+                pick("Carries two stacks of things rather than one.",
+                        "물건을 한 묶음이 아니라 두 묶음 나른다."));
+        add("golem.alchemia.trait.ranged", pick("Ranged", "원거리"));
+        add("golem.alchemia.trait.ranged.text",
+                pick("Strikes from a distance.",
+                        "멀리서 공격한다."));
+        add("golem.alchemia.trait.blastproof", pick("Blastproof", "내폭"));
+        add("golem.alchemia.trait.blastproof.text",
+                pick("Takes a third of what an explosion would do to it, and never more than half its health at once.",
+                        "폭발이 주는 피해의 삼분의 일만 받고, 한 번에 체력의 절반 넘게 잃는 일이 없다."));
+        add("golem.alchemia.material.wood", pick("Greatwood", "거대나무"));
+        add("golem.alchemia.material.wood.text",
+                pick("Light and quick, but there is not much to it.",
+                        "가볍고 빠르지만 단단하지는 않다."));
+        add("golem.alchemia.material.iron", pick("Iron", "철"));
+        add("golem.alchemia.material.iron.text",
+                pick("Sturdy, fireproof and hard to blow apart, but heavy.",
+                        "튼튼하고, 불에 타지 않고, 폭발에도 잘 견디지만 무겁다."));
+        add("golem.alchemia.material.clay", pick("Clay", "점토"));
+        add("golem.alchemia.material.clay.text",
+                pick("Baked clay: not strong, but it does not burn, and it is not heavy.",
+                        "구운 점토다. 강하지는 않지만 불에 타지 않고 무겁지도 않다."));
+        add("golem.alchemia.material.brass", pick("Brass", "황동"));
+        add("golem.alchemia.material.brass.text",
+                pick("Not so sturdy as iron, and it burns, but brass lets a frame be built light.",
+                        "철만큼 튼튼하지 않고 불에도 타지만, 황동이면 몸체를 가볍게 지을 수 있다."));
+        add("golem.alchemia.material.alchemium", pick("Alchemium", "알케미움"));
+        add("golem.alchemia.material.alchemium.text",
+                pick("Everything iron is and more: it takes more and is better armoured, and is just as heavy.",
+                        "철이 가진 것에 더해 더 잘 버티고 방어도 좋다. 무겁기는 마찬가지다."));
+        add("golem.alchemia.material.void", pick("Void Metal", "공허 금속"));
+        add("golem.alchemia.material.void.text",
+                pick("A little softer than iron and nowhere near as heavy, and it mends itself.",
+                        "철보다 조금 무르고 훨씬 가벼우며, 스스로를 고친다."));
+        add("golem.alchemia.head.basic", pick("Clockwork Head", "태엽 머리"));
+        add("golem.alchemia.head.basic.text",
+                pick("The plain head, with nothing for or against it.",
+                        "평범한 머리다. 좋은 것도 나쁜 것도 없다."));
+        add("golem.alchemia.head.smart", pick("Smart Head", "영리한 머리"));
+        add("golem.alchemia.head.smart.text",
+                pick("A bioalchemic mind in a head: it thinks and learns, but breaks easily.",
+                        "생체연금 두뇌를 넣은 머리다. 생각하고 배우지만 쉽게 부서진다."));
+        add("golem.alchemia.head.smart_armored", pick("Armored Smart Head", "장갑 두른 영리한 머리"));
+        add("golem.alchemia.head.smart_armored.text",
+                pick("The smart head, plated and padded so that it is no longer fragile.",
+                        "영리한 머리에 판을 대고 속을 채워서 더는 연약하지 않다."));
+        add("golem.alchemia.head.scout", pick("Perceptive Head", "눈 밝은 머리"));
+        add("golem.alchemia.head.scout.text",
+                pick("The clockwork head with a vision module for eyes.",
+                        "태엽 머리에 시야 모듈을 눈으로 단 것이다."));
+        add("golem.alchemia.head.smart_scout", pick("Bioalchemic Head", "생체연금 머리"));
+        add("golem.alchemia.head.smart_scout.text",
+                pick("A bioalchemic mind behind a vision module's eyes: the best a golem's head can be.",
+                        "시야 모듈 눈 뒤에 생체연금 두뇌를 둔 머리다. 골렘 머리로는 이보다 나은 것이 없다."));
+        add("golem.alchemia.arm.basic", pick("Basic Arms", "기본 팔"));
+        add("golem.alchemia.arm.basic.text",
+                pick("Plain arms and hands, with nothing for or against them.",
+                        "평범한 팔과 손이다. 좋은 것도 나쁜 것도 없다."));
+        add("golem.alchemia.arm.fine", pick("Fine Manipulators", "정밀 조작기"));
+        add("golem.alchemia.arm.fine.text",
+                pick("Arms ending in small, careful hands.",
+                        "작고 조심스러운 손이 달린 팔이다."));
+        add("golem.alchemia.arm.claws", pick("Claw Arms", "집게 팔"));
+        add("golem.alchemia.arm.claws.text",
+                pick("Arms ending in a pair of sharp metal pincers, with an aggression module built in.",
+                        "날카로운 쇠 집게가 달린 팔이다. 공격 모듈이 들어 있다."));
+        add("golem.alchemia.arm.breakers", pick("Breaker Arms", "파쇄 팔"));
+        add("golem.alchemia.arm.breakers.text",
+                pick("Arms ending in a pair of diamond-tipped grinders driven by pistons.",
+                        "피스톤으로 돌리는 다이아몬드 끝 분쇄기가 달린 팔이다."));
+        add("golem.alchemia.arm.darts", pick("Dart Launchers", "다트 발사기"));
+        add("golem.alchemia.arm.darts.text",
+                pick("Arms ending in launchers that make their own darts, with an aggression module built in.",
+                        "다트를 스스로 지어 쏘는 발사기가 달린 팔이다. 공격 모듈이 들어 있다."));
+        add("golem.alchemia.leg.walker", pick("Basic Legs", "기본 다리"));
+        add("golem.alchemia.leg.walker.text",
+                pick("Plain legs, with nothing for or against them.",
+                        "평범한 다리다. 좋은 것도 나쁜 것도 없다."));
+        add("golem.alchemia.leg.roller", pick("Uni-wheel", "외바퀴"));
+        add("golem.alchemia.leg.roller.text",
+                pick("One wheel: quick, but it cannot step up as high.",
+                        "바퀴 하나다. 빠르지만 그만큼 높이 올라서지 못한다."));
+        add("golem.alchemia.leg.climber", pick("Climbing Legs", "등반 다리"));
+        add("golem.alchemia.leg.climber.text",
+                pick("Legs fitted with flint grips, for going up walls.",
+                        "부싯돌 손잡이를 달아 벽을 오르는 다리다."));
+        add("golem.alchemia.leg.flyer", pick("Levitation Module", "부양 모듈"));
+        add("golem.alchemia.leg.flyer.text",
+                pick("An arcane levitator to float the golem about, a third more slowly.",
+                        "골렘을 띄워 다니게 하는 비전 부양기다. 삼분의 일만큼 느려진다."));
+        add("golem.alchemia.addon.none", pick("Nothing", "없음"));
+        add("golem.alchemia.addon.none.text",
+                pick("Nothing fitted.",
+                        "아무것도 달지 않았다."));
+        add("golem.alchemia.addon.armored", pick("Armor Plating", "장갑판"));
+        add("golem.alchemia.addon.armored.text",
+                pick("Plates of its own material all over it, as heavy as they are.",
+                        "제 재료로 만든 판을 온몸에 덧댔다. 그만큼 무겁다."));
+        add("golem.alchemia.addon.fighter", pick("Aggression Module", "공격 모듈"));
+        add("golem.alchemia.addon.fighter.text",
+                pick("An aggression module, so that it will fight.",
+                        "싸우도록 공격 모듈을 달았다."));
+        add("golem.alchemia.addon.hauler", pick("Carry Frame", "운반 틀"));
+        add("golem.alchemia.addon.hauler.text",
+                pick("A frame on its back for a second stack of things.",
+                        "등에 둘째 묶음을 얹을 틀을 맸다."));
         add("gui.alchemia.autocaster.range", pick("Range %s blocks", "사거리 %s칸"));
         add("gui.alchemia.autocaster.minds.0", pick("Target Animals", "동물을 노림"));
         add("gui.alchemia.autocaster.minds.1", pick("Target Mobs", "몹을 노림"));
@@ -353,6 +536,14 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         addItem(ModItems.VOID_INGOT, pick("Void Ingot", "공허 주괴"));
         addItem(ModItems.VOID_NUGGET, pick("Void Nugget", "공허 조각"));
         addItem(ModItems.VOID_PLATE, pick("Void Plate", "공허 판"));
+        addItem(ModItems.VOID_GEAR, pick("Void Gear", "공허 톱니바퀴"));
+        addItem(ModItems.GOLEM, pick("Golem", "골렘"));
+        addItem(ModItems.GOLEM_BELL, pick("Golemancer's Bell", "골렘술사의 종"));
+        addItem(ModItems.VISION_MODULE, pick("Vision Module", "시야 모듈"));
+        addItem(ModItems.AGGRESSION_MODULE, pick("Aggression Module", "공격 모듈"));
+        addBlock(ModBlocks.STONE_TABLE, pick("Stone Table", "돌 탁자"));
+        addBlock(ModBlocks.GOLEM_PRESS, pick("Golem Press", "골렘 프레스"));
+        addBlock(ModBlocks.GOLEM_PRESS_PART, pick("Golem Press", "골렘 프레스"));
 
 
 
@@ -695,8 +886,8 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                  "Two boards and a hide, with a nozzle. Set against a furnace they hurry what is in it by half again. Set against an essentia smelter from the side or the back they cut the time it takes to boil anything down by an eighth apiece, three at most. They pump for as long as nothing stops them, and a redstone signal does. They blow the way you were looking when you put them down; crouch to turn them round.",
                  "판자 둘과 가죽 하나에 주둥이를 달았다. 화로에 대면 굽는 것을 절반만큼 더 빨리 굽는다. 에센시아 제련로 옆이나 뒤에 대면 하나마다 끓여 내는 시간을 팔분의 일씩 줄인다. 셋까지다. 무엇이 막기 전까지 계속 불고, 레드스톤 신호가 막는다. 놓을 때 바라보던 쪽으로 분다. 웅크리고 놓으면 반대로 놓인다."},
                 {"clockwork_mind", "Clockwork Mind", "태엽 두뇌",
-                 "Gears and a comparator under glass, plated in brass. It is not a mind in any way that matters, but it will follow one rule without being told twice, which is all a machine needs.",
-                 "놋쇠를 댄 유리 속의 톱니와 비교기다. 따질 만한 의미의 두뇌는 아니지만 한 가지 규칙을 두 번 말하지 않아도 따른다. 기계에 필요한 것은 그것뿐이다."},
+                 "Gears and a comparator under glass, plated in brass. It is not a mind in any way that matters, but it will follow one rule without being told twice, which is all a machine needs -- a golem most of all. Golems are made at a golem press. Stand a piston facing up with iron bars on it, a stone table beside it, an anvil beside the table and a cauldron beside the anvil and the piston, the four making a square, and strike any of it with a wand. Pick at the press what the golem is to be made of and the parts it is to have: it takes what they need from your pack, and presses it a measure of machina at a time, drawn up a tube or straight out of a jar set against it.",
+                 "놋쇠를 댄 유리 속의 톱니와 비교기다. 따질 만한 의미의 두뇌는 아니지만 한 가지 규칙을 두 번 말하지 않아도 따른다. 기계에 필요한 것은 그것뿐이고, 골렘은 더욱 그렇다. 골렘은 골렘 프레스에서 만든다. 위를 보는 피스톤 위에 철창을 얹고, 그 옆에 돌 탁자, 탁자 옆에 모루, 모루와 피스톤 옆에 가마솥을 놓아 넷이 네모를 이루게 한 뒤, 어디든 완드로 친다. 프레스에서 골렘을 무엇으로 만들고 어떤 부품을 달지 고르면, 필요한 것을 가방에서 가져가 마키나를 한 단위씩 들여 찍어 낸다. 마키나는 관으로 끌어 올리거나 옆에 붙인 단지에서 곧장 빨아들인다."},
                 {"bioalchemic_mind", "Bioalchemic Mind", "생체연금 두뇌",
                  "The clockwork mind with something living grown into it on the altar. What comes out can be told to choose rather than only to follow, and the things that have to decide for themselves -- an autocaster picking its mark -- are built round one.",
                  "태엽 두뇌에 제단에서 살아 있는 것을 자라 들게 한 것이다. 나온 것은 따르기만 하는 것이 아니라 고르라고 시킬 수 있다. 스스로 정해야 하는 것들 — 노릴 것을 고르는 자동 시전기 같은 — 은 이것을 둘러싸고 짓는다."},
@@ -718,6 +909,39 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                 {"autocaster", "Autocaster", "자동 시전기",
                  "A focus on a bracket, with enough of a mind in it to pick something and point itself at it. It is not a thaumaturge: it draws its own vis out of the air a drop at a time, holds a hundred of each primal at most, and nothing worn or carried makes a working any cheaper for it. Seven of the twelve foci are worth aiming at a thing, and those are the seven it will take. It goes against any face -- floor, wall or ceiling -- and it is told what to mind: animals, monsters, people, and whatever is already yours. A wand clicked against it takes it back down, focus and all.",
                  "받침대에 얹은 포커스다. 무엇을 고르고 그쪽으로 제 몸을 돌릴 만큼의 생각이 들어 있다. 마법사는 아니다. 제 비스를 공기에서 한 방울씩 길어 올리고, 원시마다 백까지만 담으며, 무엇을 걸쳤든 들었든 값이 싸지는 일은 없다. 열둘 중 일곱만이 무언가를 겨눌 값어치가 있고, 받아 주는 것도 그 일곱이다. 바닥이든 벽이든 천장이든 어느 면에나 붙으며, 무엇을 노릴지 일러 줄 수 있다 — 동물, 몹, 사람, 그리고 이미 제 편인 것. 완드로 치면 포커스째 도로 떼어 낸다."},
+                {"golem_wood", "Wooden Golems", "나무 골렘",
+                 "A golem is a made thing, pressed whole out of a frame and the parts fitted to it, and it belongs to whoever sets it down. Everyone starts with greatwood: light and quick, and not much to it. What a golem is made of decides how much it can take, how hard it hits, and something of what it is like.",
+                 "골렘은 몸체와 거기 끼울 부품을 한꺼번에 찍어 만드는 것이고, 내려놓은 사람의 것이 된다. 누구나 거대나무로 시작한다. 가볍고 빠르지만 단단하지는 않다. 무엇으로 만드느냐가 얼마나 버티는지, 얼마나 세게 치는지, 그리고 어떤 성질인지를 얼마간 정한다."},
+                {"golem_iron", "Iron Golems", "철 골렘",
+                 "Iron plate makes a golem sturdy, fireproof and hard to blow apart, at the cost of being heavy and slow. Three iron ingots in a row make three plates.",
+                 "철 판으로 만든 골렘은 튼튼하고, 불에 타지 않고, 폭발에도 잘 견딘다. 대신 무겁고 느리다. 철 주괴 셋을 한 줄로 놓으면 판 셋이 된다."},
+                {"golem_clay", "Clay Golems", "점토 골렘",
+                 "Terracotta is not strong, but a golem baked of it does not burn, and is no heavier for that.",
+                 "테라코타는 강하지 않지만, 그것으로 구운 골렘은 불에 타지 않고 그렇다고 무겁지도 않다."},
+                {"golem_brass", "Brass Golems", "황동 골렘",
+                 "Brass is not as sturdy as iron and it burns, but it lets a frame be built light, and a brass golem is quick. Knowing brass is also how fine manipulators are made.",
+                 "황동은 철만큼 튼튼하지 않고 불에도 타지만, 몸체를 가볍게 지을 수 있어 황동 골렘은 빠르다. 정밀 조작기도 황동을 알아야 만든다."},
+                {"golem_alchemium", "Alchemium Golems", "알케미움 골렘",
+                 "Everything iron is and more of it: an alchemium golem takes more, is better armoured and hits harder, and is just as heavy.",
+                 "철이 가진 것에 더해, 알케미움 골렘은 더 잘 버티고 방어도 좋고 더 세게 친다. 무겁기는 마찬가지다."},
+                {"golem_void", "Void Metal Golems", "공허 금속 골렘",
+                 "Void metal is a little softer than iron and nowhere near as heavy, and a golem made of it mends itself more than twice as fast as any other. Its gears are made as the others are, of nuggets round an iron ingot.",
+                 "공허 금속은 철보다 조금 무르고 훨씬 가벼우며, 그것으로 만든 골렘은 어느 골렘보다 두 배 넘게 빨리 스스로를 고친다. 톱니바퀴는 다른 것처럼 철 주괴 둘레에 조각을 둘러 만든다."},
+                {"golem_direct", "Directing Golems", "골렘 부리기",
+                 "A golem left to itself keeps within sixteen blocks of where it was set down. Ring a golemancer's bell at one of your own and it follows you instead; ring it again and it stays where it is, and that is its home from then on. A golem answers only to its owner. A wand put to it folds it back into an item, with all it has learned, and a dye colours the little flag on its back.",
+                 "그냥 둔 골렘은 놓인 곳에서 열여섯 칸 안을 지킨다. 제 골렘에게 골렘술사의 종을 울리면 대신 당신을 따라오고, 한 번 더 울리면 그 자리에 머물며 그때부터 그곳이 집이 된다. 골렘은 주인의 말만 듣는다. 완드를 대면 배운 것까지 그대로 다시 아이템으로 접히고, 염료를 대면 등의 작은 깃발이 그 색으로 물든다."},
+                {"golem_vision", "Golem Vision", "골렘의 눈",
+                 "Glass bottles and fermented spider eyes set in brass make a vision module, a pair of eyes for a golem's head. A golem that sees further works further from home, thirty-two blocks rather than sixteen, though a head with such eyes in it is fragile.",
+                 "유리병과 발효된 거미 눈을 황동에 박으면 시야 모듈, 곧 골렘 머리의 눈 한 쌍이 된다. 더 멀리 보는 골렘은 집에서 더 멀리, 열여섯 칸이 아니라 서른두 칸까지 일하러 간다. 다만 그런 눈을 단 머리는 연약하다."},
+                {"golem_climber", "Climbing Golems", "등반 골렘",
+                 "Legs fitted with flint grips go straight up whatever is in the way, and a golem on them is never hurt by a fall.",
+                 "부싯돌 손잡이를 단 다리는 앞을 막는 것을 곧장 타고 오르고, 그 다리를 단 골렘은 떨어져 다치는 일이 없다."},
+                {"golem_flyer", "Flying Golems", "나는 골렘",
+                 "An arcane levitator under a golem floats it wherever it goes. It is a third slower for it, and fragile, but nothing on the ground is in its way and it never comes to harm by falling.",
+                 "골렘 밑에 비전 부양기를 달면 어디든 떠서 다닌다. 그만큼 삼분의 일 느려지고 연약해지지만, 땅 위의 무엇도 길을 막지 못하고 떨어져 다치는 일도 없다."},
+                {"golem_breaker", "Breaker Arms", "파쇄 팔",
+                 "Arms ending in diamond-tipped grinders, driven by pistons. A golem with them is clumsy and hits hard, and can break most blocks.",
+                 "피스톤으로 돌리는 다이아몬드 끝 분쇄기가 달린 팔이다. 이 팔을 단 골렘은 서투르고 세게 치며, 대부분의 블록을 부술 수 있다."},
                 {"warp", "Warp", "뒤틀림",
                  "Look too long into what should not be, and it begins looking back. The damage is not to the world but to the one studying it, and it does not undo itself with rest.",
                  "있어서는 안 될 것을 오래 들여다보면, 그것도 당신을 들여다보기 시작한다. 상하는 것은 세계가 아니라 그것을 연구하는 자이며, 쉰다고 해서 되돌아오지 않는다."},

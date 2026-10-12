@@ -228,6 +228,7 @@ public class ModDataMapProvider extends DataMapProvider {
         item(ModItems.CINNABAR_CLUSTER, a(ModAspects.ORDER, 1).add(ModAspects.METAL, 4).add(ModAspects.EARTH, 1)
                 .add(ModAspects.EXCHANGE, 4).add(ModAspects.DEATH, 1));
 
+        item(ModItems.GOLEM, a(ModAspects.MOTION, 3).add(ModAspects.MAN, 3).add(ModAspects.MECHANISM, 3));
         item(ModItems.ALCHEMIUM_NUGGET, a(ModAspects.METAL, 1));
         item(ModItems.BRASS_NUGGET, a(ModAspects.METAL, 1));
         item(ModItems.QUICKSILVER_DROP, a(ModAspects.METAL, 1));
@@ -275,6 +276,9 @@ public class ModDataMapProvider extends DataMapProvider {
         mob(EntityType.WITCH, a(ModAspects.MAN, 4).add(ModAspects.AURA, 4).add(ModAspects.MIND, 2));
         // any wisp is a little auram and air, and two of its own aspect besides
         mob(me.moonscenty.alchemia.registry.ModEntities.WISP.get(), a(ModAspects.AURA, 1).add(ModAspects.AIR, 1));
+        // a golem, as the original had it
+        mob(me.moonscenty.alchemia.registry.ModEntities.GOLEM.get(),
+                a(ModAspects.AIR, 2).add(ModAspects.EARTH, 2).add(ModAspects.MOTION, 2));
         // the creatures of the taint, as the original had them; it gave the crawler nothing
         mob(me.moonscenty.alchemia.registry.ModEntities.TAINT_SWARM.get(),
                 a(ModAspects.FLUX, 3).add(ModAspects.AIR, 3));

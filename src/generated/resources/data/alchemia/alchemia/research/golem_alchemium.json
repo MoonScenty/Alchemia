@@ -1,0 +1,30 @@
+{
+  "category": "alchemia:golemancy",
+  "column": -1,
+  "complexity": 2,
+  "icon": "alchemia:alchemium_plate",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.golem_alchemium.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:alchemium_gear"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:alchemium_plate"
+    }
+  ],
+  "parents": [
+    "alchemia:golem_brass",
+    "alchemia:metallurgy"
+  ],
+  "requirements": {
+    "alchemia:fabrico": 3,
+    "alchemia:metallum": 3,
+    "alchemia:ordo": 5
+  },
+  "row": -7
+}

@@ -1,0 +1,23 @@
+{
+  "category": "alchemia:golemancy",
+  "column": -2,
+  "icon": "alchemia:iron_plate",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.golem_iron.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:iron_plate"
+    }
+  ],
+  "parents": [
+    "alchemia:golem_wood"
+  ],
+  "requirements": {
+    "alchemia:fabrico": 3,
+    "alchemia:metallum": 5
+  },
+  "row": -4
+}

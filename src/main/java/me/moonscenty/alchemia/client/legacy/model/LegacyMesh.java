@@ -133,6 +133,11 @@ public final class LegacyMesh {
         return new LegacyMesh(flipped, names);
     }
 
+    /** What the file called a group. */
+    public String name(int group) {
+        return names.get(group);
+    }
+
     /** Which group has this name, or -1. */
     public int group(String name) {
         return names.indexOf(name);

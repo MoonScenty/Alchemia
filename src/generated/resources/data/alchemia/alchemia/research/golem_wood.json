@@ -1,0 +1,14 @@
+{
+  "auto_unlock": true,
+  "category": "alchemia:golemancy",
+  "column": -2,
+  "icon": "alchemia:greatwood_planks",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.golem_wood.page"
+    }
+  ],
+  "row": -2,
+  "shape": "major"
+}

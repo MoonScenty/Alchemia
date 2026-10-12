@@ -43,6 +43,17 @@ public final class ModSounds {
     /** A handful of coins. */
     public static final DeferredHolder<SoundEvent, SoundEvent> COINS = sound("coins");
 
+    /** A shutter clacking: a golem going about, or hurt. */
+    public static final DeferredHolder<SoundEvent, SoundEvent> CAMERA_CLACK = sound("cameraclack");
+    /** Tools going down: a golem falling apart. */
+    public static final DeferredHolder<SoundEvent, SoundEvent> TOOL = sound("tool");
+    /** A rising chirp, as a golem takes in what it is told. */
+    public static final DeferredHolder<SoundEvent, SoundEvent> SCAN = sound("scan");
+    /** A wand's flourish, as something is made. */
+    public static final DeferredHolder<SoundEvent, SoundEvent> WAND = sound("wand");
+    /** Something starting to be made. */
+    public static final DeferredHolder<SoundEvent, SoundEvent> CRAFT_START = sound("craftstart");
+
     private static DeferredHolder<SoundEvent, SoundEvent> sound(String name) {
         return SOUNDS.register(name, () -> SoundEvent.createVariableRangeEvent(Alchemia.id(name)));
     }

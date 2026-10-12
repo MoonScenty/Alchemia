@@ -17,6 +17,11 @@
       "alchemia:humanus": 2,
       "alchemia:terra": 2
     },
+    "alchemia:golem": {
+      "alchemia:aer": 2,
+      "alchemia:motus": 2,
+      "alchemia:terra": 2
+    },
     "alchemia:pech": {
       "alchemia:auram": 2,
       "alchemia:humanus": 2,

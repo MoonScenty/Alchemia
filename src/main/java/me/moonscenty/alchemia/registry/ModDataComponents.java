@@ -55,6 +55,22 @@ public class ModDataComponents {
                     .networkSynchronized(net.minecraft.core.GlobalPos.STREAM_CODEC)
                     .build());
 
+    /** What a golem item is: its material, its parts and its rank, packed as the golem itself keeps them. */
+    public static final DeferredHolder<DataComponentType<?>,
+            DataComponentType<me.moonscenty.alchemia.golem.GolemDesign>> GOLEM_DESIGN = COMPONENTS.register(
+                    "golem_design",
+                    () -> DataComponentType.<me.moonscenty.alchemia.golem.GolemDesign>builder()
+                            .persistent(me.moonscenty.alchemia.golem.GolemDesign.CODEC)
+                            .networkSynchronized(me.moonscenty.alchemia.golem.GolemDesign.STREAM_CODEC)
+                            .build());
+
+    /** How far a smart golem taken up with a wand had come on towards its next rank. */
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> GOLEM_XP =
+            COMPONENTS.register("golem_xp", () -> DataComponentType.<Integer>builder()
+                    .persistent(Codec.INT)
+                    .networkSynchronized(ByteBufCodecs.VAR_INT)
+                    .build());
+
     /** What a brain in a jar has eaten, kept on the jar when it is picked up. */
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> STORED_XP =
             COMPONENTS.register("stored_xp", () -> DataComponentType.<Integer>builder()

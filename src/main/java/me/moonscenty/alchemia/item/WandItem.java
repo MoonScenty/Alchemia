@@ -397,6 +397,16 @@ public class WandItem extends Item implements VisHolder {
             return InteractionResult.sidedSuccess(level.isClientSide);
         }
 
+        // a piston with bars on it, a stone table, an anvil and a cauldron, made into a golem press
+        if (context.getPlayer() != null
+                && (clicked.is(Blocks.PISTON) || clicked.is(Blocks.IRON_BARS) || clicked.is(Blocks.ANVIL)
+                        || clicked.is(Blocks.CAULDRON) || clicked.is(me.moonscenty.alchemia.registry.ModBlocks
+                                .STONE_TABLE.get()))
+                && me.moonscenty.alchemia.block.GolemPressBlock.form(level, pos, context.getPlayer(),
+                        context.getItemInHand())) {
+            return InteractionResult.sidedSuccess(level.isClientSide);
+        }
+
         // a crucible with two blocks of brass on it, made into a thaumatorium if its maker knows how
         if (context.getPlayer() != null && me.moonscenty.alchemia.block.ThaumatoriumBlock.form(level, pos,
                 context.getClickedFace(), context.getPlayer(), context.getItemInHand())) {
