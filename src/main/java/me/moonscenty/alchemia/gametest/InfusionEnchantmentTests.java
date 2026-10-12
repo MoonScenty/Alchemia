@@ -151,7 +151,9 @@ public class InfusionEnchantmentTests {
         var struck = helper.spawn(net.minecraft.world.entity.EntityType.ZOMBIE, HERE);
         var beside = helper.spawn(net.minecraft.world.entity.EntityType.ZOMBIE, HERE.east());
         var far = helper.spawn(net.minecraft.world.entity.EntityType.ZOMBIE, HERE.east(8));
+        // each against its own health, since any of them may have come up a champion with more
         float whole = beside.getHealth();
+        float farWhole = far.getHealth();
 
         var player = helper.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND,
@@ -160,7 +162,7 @@ public class InfusionEnchantmentTests {
         net.neoforged.neoforge.common.CommonHooks.onPlayerAttackTarget(player, struck);
 
         helper.assertTrue(beside.getHealth() < whole, "the one standing beside it took the blow too");
-        helper.assertValueEqual(far.getHealth(), whole, "the one across the room did not");
+        helper.assertValueEqual(far.getHealth(), farWhole, "the one across the room did not");
         helper.succeed();
     }
 

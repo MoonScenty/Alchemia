@@ -1,0 +1,69 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "block": "alchemia:golem_press_part",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "part": "bars"
+              }
+            }
+          ],
+          "name": "minecraft:iron_bars"
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "block": "alchemia:golem_press_part",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "part": "anvil"
+              }
+            }
+          ],
+          "name": "minecraft:anvil"
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "block": "alchemia:golem_press_part",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "part": "cauldron"
+              }
+            }
+          ],
+          "name": "minecraft:cauldron"
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "block": "alchemia:golem_press_part",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "part": "table"
+              }
+            }
+          ],
+          "name": "alchemia:stone_table"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "alchemia:blocks/golem_press_part"
+}

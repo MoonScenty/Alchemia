@@ -10,6 +10,10 @@
     {
       "type": "recipe",
       "recipe": "alchemia:clockwork_mind"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:stone_table"
     }
   ],
   "parents": [

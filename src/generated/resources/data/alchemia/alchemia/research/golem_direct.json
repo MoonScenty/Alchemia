@@ -1,0 +1,26 @@
+{
+  "category": "alchemia:golemancy",
+  "column": 1,
+  "complexity": 3,
+  "icon": "alchemia:golem_bell",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.golem_direct.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:golem_bell"
+    }
+  ],
+  "parents": [
+    "alchemia:clockwork_mind"
+  ],
+  "requirements": {
+    "alchemia:cognitio": 5,
+    "alchemia:sensus": 5,
+    "alchemia:spiritus": 8
+  },
+  "row": 4,
+  "shape": "major"
+}

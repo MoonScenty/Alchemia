@@ -36,6 +36,20 @@ public class ModNetwork {
         registrar.playToServer(ChangeFocus.TYPE, ChangeFocus.STREAM_CODEC, ModNetwork::onChangeFocus);
         registrar.playToServer(ToolSetting.TYPE, ToolSetting.STREAM_CODEC, ModNetwork::onToolSetting);
         registrar.playToServer(ChooseFocus.TYPE, ChooseFocus.STREAM_CODEC, ModNetwork::onChooseFocus);
+        registrar.playToServer(StartGolem.TYPE, StartGolem.STREAM_CODEC, ModNetwork::onStartGolem);
+    }
+
+    /**
+     * Pressing a golem. The press is the one whose menu the player has open, and the menu checks they know every
+     * part of what they asked for.
+     */
+    private static void onStartGolem(StartGolem payload, IPayloadContext context) {
+        context.enqueueWork(() -> {
+            if (context.player() instanceof ServerPlayer player
+                    && player.containerMenu instanceof me.moonscenty.alchemia.menu.GolemPressMenu press) {
+                press.start(payload.design(), player);
+            }
+        });
     }
 
     /**

@@ -295,7 +295,47 @@ public class ModResearchProvider {
         entry(context, "clockwork_mind", ModResearch.GOLEMANCY, ModItems.CLOCKWORK_MIND, 0, 3,
                 AspectList.of(ModAspects.MECHANISM, 3).add(ModAspects.MIND, 3).add(ModAspects.SENSES, 3)
                         .add(ModAspects.ENERGY, 6).add(ModAspects.LIFE, 3),
-                List.of("arcane_workbench", "metallurgy"), false, NodeShape.PLAIN, 1, "clockwork_mind");
+                List.of("arcane_workbench", "metallurgy"), false, NodeShape.PLAIN, 1, "clockwork_mind",
+                "stone_table");
+        // golems: what they may be made of, the eldest first and wood known from the start
+        entry(context, "golem_wood", ModResearch.GOLEMANCY, ModBlocks.GREATWOOD.planks().get(), -2, -2,
+                AspectList.EMPTY, List.of(), true, NodeShape.MAJOR, 1);
+        entry(context, "golem_iron", ModResearch.GOLEMANCY, ModItems.IRON_PLATE, -2, -4,
+                AspectList.of(ModAspects.METAL, 5).add(ModAspects.CRAFT, 3),
+                List.of("golem_wood"), false, NodeShape.PLAIN, 1, "iron_plate");
+        entry(context, "golem_clay", ModResearch.GOLEMANCY, net.minecraft.world.level.block.Blocks.TERRACOTTA, -3, -3,
+                AspectList.of(ModAspects.EARTH, 5).add(ModAspects.CRAFT, 3),
+                List.of("golem_iron"), false, NodeShape.PLAIN, 1);
+        entry(context, "golem_brass", ModResearch.GOLEMANCY, ModItems.BRASS_PLATE, -1, -5,
+                AspectList.of(ModAspects.METAL, 3).add(ModAspects.CRAFT, 3).add(ModAspects.ENERGY, 5),
+                List.of("golem_iron", "metallurgy"), false, NodeShape.PLAIN, 2, "brass_gear", "brass_plate");
+        entry(context, "golem_alchemium", ModResearch.GOLEMANCY, ModItems.ALCHEMIUM_PLATE, -1, -7,
+                AspectList.of(ModAspects.METAL, 3).add(ModAspects.CRAFT, 3).add(ModAspects.ORDER, 5),
+                List.of("golem_brass", "metallurgy"), false, NodeShape.PLAIN, 2, "alchemium_gear", "alchemium_plate");
+        entry(context, "golem_void", ModResearch.GOLEMANCY, ModItems.VOID_PLATE, -2, -6,
+                AspectList.of(ModAspects.METAL, 5).add(ModAspects.CRAFT, 5).add(ModAspects.ELDRITCH, 8),
+                List.of("golem_brass", "golem_alchemium", "void_metal"), false, NodeShape.PLAIN, 3, "void_gear",
+                "void_plate");
+        // and what they may be given: a bell to direct them, eyes, climbing legs, flight, grinders
+        entry(context, "golem_direct", ModResearch.GOLEMANCY, ModItems.GOLEM_BELL, 1, 4,
+                AspectList.of(ModAspects.SENSES, 5).add(ModAspects.MIND, 5).add(ModAspects.SOUL, 8),
+                List.of("clockwork_mind"), false, NodeShape.MAJOR, 3, "golem_bell");
+        entry(context, "golem_vision", ModResearch.GOLEMANCY, ModItems.VISION_MODULE, -2, 2,
+                AspectList.of(ModAspects.MECHANISM, 3).add(ModAspects.SENSES, 5).add(ModAspects.CRYSTAL, 3)
+                        .add(ModAspects.MIND, 3),
+                List.of("clockwork_mind"), false, NodeShape.PLAIN, 2, "vision_module");
+        entry(context, "golem_climber", ModResearch.GOLEMANCY, net.minecraft.world.item.Items.FLINT, -4, 2,
+                AspectList.of(ModAspects.MECHANISM, 3).add(ModAspects.BEAST, 3).add(ModAspects.MOTION, 5)
+                        .add(ModAspects.MIND, 3),
+                List.of("clockwork_mind"), false, NodeShape.PLAIN, 2);
+        entry(context, "golem_flyer", ModResearch.GOLEMANCY, ModBlocks.LEVITATOR, -6, 2,
+                AspectList.of(ModAspects.MECHANISM, 3).add(ModAspects.FLIGHT, 5).add(ModAspects.MOTION, 3)
+                        .add(ModAspects.MIND, 3),
+                List.of("golem_climber", "levitator"), false, NodeShape.PLAIN, 3);
+        entry(context, "golem_breaker", ModResearch.GOLEMANCY, net.minecraft.world.level.block.Blocks.PISTON, -8, 2,
+                AspectList.of(ModAspects.MECHANISM, 3).add(ModAspects.ENTROPY, 3).add(ModAspects.TOOL, 5)
+                        .add(ModAspects.MIND, 3),
+                List.of("clockwork_mind"), false, NodeShape.PLAIN, 2);
         entry(context, "bioalchemic_mind", ModResearch.GOLEMANCY, ModItems.BIOALCHEMIC_MIND, 0, 5,
                 AspectList.of(ModAspects.MECHANISM, 3).add(ModAspects.MIND, 3).add(ModAspects.SENSES, 3)
                         .add(ModAspects.UNDEAD, 3),

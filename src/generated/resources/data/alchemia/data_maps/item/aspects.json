@@ -192,6 +192,11 @@
       "alchemia:ordo": 1,
       "alchemia:terra": 1
     },
+    "alchemia:golem": {
+      "alchemia:humanus": 3,
+      "alchemia:machina": 3,
+      "alchemia:motus": 3
+    },
     "alchemia:greatwood_log": {
       "alchemia:herba": 3,
       "alchemia:victus": 1

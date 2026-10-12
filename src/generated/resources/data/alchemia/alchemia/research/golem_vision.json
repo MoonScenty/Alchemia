@@ -1,0 +1,26 @@
+{
+  "category": "alchemia:golemancy",
+  "column": -2,
+  "complexity": 2,
+  "icon": "alchemia:vision_module",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.golem_vision.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:vision_module"
+    }
+  ],
+  "parents": [
+    "alchemia:clockwork_mind"
+  ],
+  "requirements": {
+    "alchemia:cognitio": 3,
+    "alchemia:machina": 3,
+    "alchemia:sensus": 5,
+    "alchemia:vitreus": 3
+  },
+  "row": 2
+}

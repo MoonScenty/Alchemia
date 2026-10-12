@@ -1,0 +1,25 @@
+{
+  "type": "alchemia:arcane_shaped",
+  "key": {
+    "Q": {
+      "tag": "c:gems/quartz"
+    },
+    "S": {
+      "tag": "c:rods/wooden"
+    }
+  },
+  "pattern": [
+    " QQ",
+    " QQ",
+    "S  "
+  ],
+  "research": "alchemia:golem_direct",
+  "result": {
+    "count": 1,
+    "id": "alchemia:golem_bell"
+  },
+  "vis": {
+    "alchemia:aer": 10,
+    "alchemia:ordo": 10
+  }
+}

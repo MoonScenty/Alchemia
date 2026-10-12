@@ -1,0 +1,19 @@
+{
+  "category": "alchemia:golemancy",
+  "column": -3,
+  "icon": "minecraft:terracotta",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.golem_clay.page"
+    }
+  ],
+  "parents": [
+    "alchemia:golem_iron"
+  ],
+  "requirements": {
+    "alchemia:fabrico": 3,
+    "alchemia:terra": 5
+  },
+  "row": -3
+}

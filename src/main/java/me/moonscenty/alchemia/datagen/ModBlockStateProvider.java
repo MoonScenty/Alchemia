@@ -459,6 +459,12 @@ public class ModBlockStateProvider extends BlockStateProvider {
             getVariantBuilder(mirror.get()).partialState().setModels(new ConfiguredModel(
                     models().getBuilder(mirror.getId().getPath()).texture("particle", modLoc(frame))));
         }
+        // the stone table is the original's model; a golem press is drawn by its renderer, all of it
+        simpleBlock(ModBlocks.STONE_TABLE.get(), models().getExistingFile(modLoc("block/table_stone")));
+        getVariantBuilder(ModBlocks.GOLEM_PRESS.get()).partialState().setModels(new ConfiguredModel(
+                models().getBuilder("golem_press").texture("particle", modLoc("block/legacy/base_stone"))));
+        getVariantBuilder(ModBlocks.GOLEM_PRESS_PART.get()).partialState().setModels(new ConfiguredModel(
+                models().getBuilder("golem_press_part").texture("particle", modLoc("block/legacy/base_metal"))));
         // the infernal furnace's heart wears the original's model of the whole furnace; the shell draws nothing
         horizontalBlock(ModBlocks.INFERNAL_FURNACE.get(), models().getExistingFile(modLoc("block/infernal_furnace")));
         ModelFile brick = models().getBuilder("furnace_shell_brick").texture("particle", mcLoc("block/nether_bricks"));

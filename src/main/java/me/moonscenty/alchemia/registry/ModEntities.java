@@ -304,12 +304,23 @@ public class ModEntities {
                     .clientTrackingRange(8)
                     .build("furious_zombie"));
 
+    /** A golem: a small made thing, waist high to a player. */
+    public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.golem.Golem>> GOLEM =
+            ENTITIES.register("golem", () -> EntityType.Builder
+                    .<me.moonscenty.alchemia.golem.Golem>of(me.moonscenty.alchemia.golem.Golem::new,
+                            MobCategory.MISC)
+                    .sized(0.4F, 0.9F)
+                    .eyeHeight(0.7F)
+                    .clientTrackingRange(10)
+                    .build("golem"));
+
     /** What anything alive needs before the game will make one. */
     public static void attributes(EntityAttributeCreationEvent event) {
         event.put(AUTOCASTER.get(), Autocaster.attributes().build());
         event.put(FIRE_BAT.get(), FireBat.attributes().build());
         event.put(WISP.get(), me.moonscenty.alchemia.entity.Wisp.attributes().build());
         event.put(PECH.get(), me.moonscenty.alchemia.entity.Pech.attributes().build());
+        event.put(GOLEM.get(), me.moonscenty.alchemia.golem.Golem.attributes().build());
         event.put(TAINT_CRAWLER.get(), me.moonscenty.alchemia.entity.TaintCrawler.attributes().build());
         event.put(TAINT_SWARM.get(), me.moonscenty.alchemia.entity.TaintSwarm.attributes().build());
         event.put(TAINTACLE.get(), me.moonscenty.alchemia.entity.Taintacle.attributes().build());

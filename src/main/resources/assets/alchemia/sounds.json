@@ -117,5 +117,40 @@
       "alchemia:legacy/gore1",
       "alchemia:legacy/gore2"
     ]
+  },
+  "cameraclack": {
+    "subtitle": "subtitles.alchemia.golem.clack",
+    "sounds": [
+      "alchemia:legacy/cameraclack1",
+      "alchemia:legacy/cameraclack2",
+      "alchemia:legacy/cameraclack3"
+    ]
+  },
+  "tool": {
+    "subtitle": "subtitles.alchemia.golem.death",
+    "sounds": [
+      "alchemia:legacy/tool1",
+      "alchemia:legacy/tool2"
+    ]
+  },
+  "scan": {
+    "subtitle": "subtitles.alchemia.golem.order",
+    "sounds": [
+      "alchemia:legacy/scan"
+    ]
+  },
+  "wand": {
+    "subtitle": "subtitles.alchemia.made",
+    "sounds": [
+      "alchemia:legacy/wand1",
+      "alchemia:legacy/wand2",
+      "alchemia:legacy/wand3"
+    ]
+  },
+  "craftstart": {
+    "subtitle": "subtitles.alchemia.golem_press.start",
+    "sounds": [
+      "alchemia:legacy/craftstart"
+    ]
   }
 }

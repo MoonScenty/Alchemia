@@ -105,6 +105,14 @@ public class ModRecipeProvider extends RecipeProvider {
         plate(output, ModItems.VOID_PLATE, ModTags.Items.INGOTS_VOID);
         gear(output, ModItems.ALCHEMIUM_GEAR, ModTags.Items.NUGGETS_ALCHEMIUM);
         gear(output, ModItems.BRASS_GEAR, ModTags.Items.NUGGETS_BRASS);
+        gear(output, ModItems.VOID_GEAR, ModTags.Items.NUGGETS_VOID);
+        // a stone table, which a golem press is built round
+        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, ModBlocks.STONE_TABLE.get())
+                .pattern("SSS").pattern("W W")
+                .define('S', Items.STONE_SLAB)
+                .define('W', Tags.Items.STONES)
+                .unlockedBy("has_input", has(Items.STONE_SLAB))
+                .save(output);
 
         // a balanced shard put in a furnace comes out as salis mundus, exactly as in the original
         cook(output, "salis_mundus", Ingredient.of(ModItems.BALANCED_SHARD), has(ModItems.BALANCED_SHARD),
@@ -385,6 +393,19 @@ public class ModRecipeProvider extends RecipeProvider {
                         'B', Ingredient.of(ModItems.BRASS_PLATE),
                         'C', Ingredient.of(Items.COMPARATOR)),
                 "PPP", "PGP", "BCB");
+        // golemancy: eyes for a golem, and the bell that tells golems what to do
+        arcane(output, "vision_module", "golem_vision", new ItemStack(ModItems.VISION_MODULE.get()),
+                AspectList.of(ModAspects.WATER, 25).add(ModAspects.AIR, 25),
+                Map.of('B', Ingredient.of(Items.GLASS_BOTTLE),
+                        'E', Ingredient.of(Items.FERMENTED_SPIDER_EYE),
+                        'P', Ingredient.of(ModItems.BRASS_PLATE),
+                        'G', Ingredient.of(ModItems.BRASS_GEAR)),
+                "B B", "E E", "PGP");
+        arcane(output, "golem_bell", "golem_direct", new ItemStack(ModItems.GOLEM_BELL.get()),
+                AspectList.of(ModAspects.ORDER, 10).add(ModAspects.AIR, 10),
+                Map.of('S', Ingredient.of(Tags.Items.RODS_WOODEN),
+                        'Q', Ingredient.of(Tags.Items.GEMS_QUARTZ)),
+                " QQ", " QQ", "S  ");
         // the small devices, all the original's
         arcane(output, "arcane_lamp", "arcane_lamp", new ItemStack(ModBlocks.ARCANE_LAMP.get()),
                 AspectList.of(ModAspects.FIRE, 25).add(ModAspects.AIR, 25),

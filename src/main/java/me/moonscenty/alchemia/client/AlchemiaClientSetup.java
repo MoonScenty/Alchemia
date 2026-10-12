@@ -149,6 +149,9 @@ public class AlchemiaClientSetup {
     @SubscribeEvent
     public static void registerItemColours(RegisterColorHandlersEvent.Item event) {
         event.register((stack, tint) -> tint == 0 ? named(stack) : PLAIN, ModItems.PHIAL.get());
+        // a golem is the colour of what it is made of
+        event.register((stack, tint) -> 0xFF000000
+                | me.moonscenty.alchemia.item.GolemItem.design(stack).material().colour(), ModItems.GOLEM.get());
         // a crystal is drawn in grey and painted by the one point it holds
         event.register((stack, tint) -> tint == 0 ? named(stack) : PLAIN, ModItems.CRYSTALLIZED_ESSENCE.get());
         event.register((stack, tint) -> tint == 0 ? named(stack) : PLAIN, ModItems.WISPY_ESSENCE.get());
@@ -204,6 +207,7 @@ public class AlchemiaClientSetup {
         event.register(ModMenus.SPA.get(), SpaScreen::new);
         event.register(ModMenus.AURA_TOTEM.get(), AuraTotemScreen::new);
         event.register(ModMenus.PECH.get(), PechScreen::new);
+        event.register(ModMenus.GOLEM_PRESS.get(), GolemPressScreen::new);
     }
 
     /**
@@ -310,6 +314,8 @@ public class AlchemiaClientSetup {
         event.registerEntityRenderer(ModEntities.TAINTED_VILLAGER.get(), TaintedAnimalRenderers.Villager::new);
         event.registerEntityRenderer(ModEntities.TAINTED_RABBIT.get(), TaintedAnimalRenderers.TaintedRabbit::new);
         event.registerEntityRenderer(ModEntities.ALCHEMIC_SLIME.get(), TaintedAnimalRenderers.AlchemicSlime::new);
+        event.registerEntityRenderer(ModEntities.GOLEM.get(), GolemRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.GOLEM_PRESS.get(), GolemPressRenderer::new);
         event.registerEntityRenderer(ModEntities.TAINT_SWARM.get(), TaintSwarmRenderer::new);
         event.registerEntityRenderer(ModEntities.TAINTACLE.get(), context -> new TaintacleRenderer<>(context,
                 me.moonscenty.alchemia.client.legacy.LegacyAssets.TAINTACLE, 10, 0.6F));

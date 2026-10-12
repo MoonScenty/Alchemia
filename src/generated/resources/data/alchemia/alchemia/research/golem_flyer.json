@@ -1,0 +1,23 @@
+{
+  "category": "alchemia:golemancy",
+  "column": -6,
+  "complexity": 3,
+  "icon": "alchemia:levitator",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.golem_flyer.page"
+    }
+  ],
+  "parents": [
+    "alchemia:golem_climber",
+    "alchemia:levitator"
+  ],
+  "requirements": {
+    "alchemia:cognitio": 3,
+    "alchemia:machina": 3,
+    "alchemia:motus": 3,
+    "alchemia:volatus": 5
+  },
+  "row": 2
+}

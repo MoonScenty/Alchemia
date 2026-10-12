@@ -273,6 +273,13 @@ public class ModBlockEntities {
                     .of(InfusionMatrixBlockEntity::new, ModBlocks.INFUSION_MATRIX.get())
                     .build(null));
 
+    /** A golem press at work: what it is pressing, and how much more machina that wants. */
+    public static final DeferredHolder<BlockEntityType<?>,
+            BlockEntityType<me.moonscenty.alchemia.block.entity.GolemPressBlockEntity>> GOLEM_PRESS =
+            BLOCK_ENTITIES.register("golem_press", () -> BlockEntityType.Builder
+                    .of(me.moonscenty.alchemia.block.entity.GolemPressBlockEntity::new, ModBlocks.GOLEM_PRESS.get())
+                    .build(null));
+
     private ModBlockEntities() {
     }
 }

@@ -71,6 +71,10 @@ public class ModMenus {
             FOCAL_MANIPULATOR = MENUS.register("focal_manipulator",
                     () -> IMenuTypeExtension.create(me.moonscenty.alchemia.menu.FocalManipulatorMenu::new));
 
+    public static final DeferredHolder<MenuType<?>, MenuType<me.moonscenty.alchemia.menu.GolemPressMenu>>
+            GOLEM_PRESS = MENUS.register("golem_press",
+                    () -> new MenuType<>(me.moonscenty.alchemia.menu.GolemPressMenu::new, FeatureFlags.VANILLA_SET));
+
     private ModMenus() {
     }
 }
