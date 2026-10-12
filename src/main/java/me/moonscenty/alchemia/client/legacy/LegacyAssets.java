@@ -73,6 +73,10 @@ public final class LegacyAssets {
     public static final String CENTRIFUGE = "centrifuge";
     /** The brain in a jar, and the jar whose brine it floats in, both built in code. */
     public static final String BRAIN = "brain";
+    /** The arcane bore, its emitter, and its base, all built in code. */
+    public static final String BORE = "bore";
+    public static final String BORE_EMITTER = "bore_emitter";
+    public static final String BORE_BASE = "bore_base";
     public static final String JAR = "jar";
 
     /** The wand: a rod, a cap at either end, and room for a sceptre's crossbar and a focus. */
@@ -132,6 +136,12 @@ public final class LegacyAssets {
                     "thaumcraft/client/renderers/models/entity/ModelFireBat", "()V"))),
             Map.entry(CENTRIFUGE, List.of(new LegacyModelSource(LegacyEdition.FIVE,
                     "thaumcraft/client/renderers/models/block/ModelCentrifuge", "()V"))),
+            Map.entry(BORE, List.of(new LegacyModelSource(LegacyEdition.FIVE,
+                    "thaumcraft/client/renderers/models/block/ModelBore", "()V"))),
+            Map.entry(BORE_EMITTER, List.of(new LegacyModelSource(LegacyEdition.FIVE,
+                    "thaumcraft/client/renderers/models/block/ModelBoreEmit", "()V"))),
+            Map.entry(BORE_BASE, List.of(new LegacyModelSource(LegacyEdition.FIVE,
+                    "thaumcraft/client/renderers/models/block/ModelBoreBase", "()V"))),
             Map.entry(BRAIN, List.of(new LegacyModelSource(LegacyEdition.FIVE,
                     "thaumcraft/client/renderers/models/block/ModelBrain", "()V"))),
             Map.entry(JAR, List.of(new LegacyModelSource(LegacyEdition.FIVE,
@@ -387,6 +397,12 @@ public final class LegacyAssets {
         all.add(LegacyAsset.of(CRYSTALLIZER_MESH).five("models/obj/crystallizer.obj"));
         // the thaumatorium: its mesh, its sheet and its panel; and the matrix, the original's model file
         all.add(LegacyAsset.of(THAUMATORIUM_MESH).five("models/obj/thaumatorium.obj"));
+        // the arcane bore: its sheet (the base's too), the jar it wears round its middle, its panel, its two beams
+        all.add(LegacyAsset.of("textures/entity/bore.png").five("textures/models/bore.png").forModel(BORE));
+        all.add(LegacyAsset.of("textures/entity/jar.png").five("textures/models/jar.png").forModel(JAR));
+        all.add(LegacyAsset.of("textures/gui/arcane_bore.png").five("textures/gui/gui_arcanebore.png"));
+        all.add(LegacyAsset.of("textures/misc/bore_beam_1.png").five("textures/misc/beam1.png"));
+        all.add(LegacyAsset.of("textures/misc/bore_beam_2.png").five("textures/misc/beam2.png"));
         // the brain in a jar: the brain's sheet and the brine's, and its still picture in a hand
         all.add(LegacyAsset.of("textures/entity/brain.png").five("textures/models/brain2.png").forModel(BRAIN));
         all.add(LegacyAsset.of("textures/entity/jar_brine.png").five("textures/models/jarbrine.png")

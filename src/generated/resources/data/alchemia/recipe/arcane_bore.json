@@ -1,0 +1,45 @@
+{
+  "type": "alchemia:infusion",
+  "central": {
+    "item": "alchemia:clockwork_mind"
+  },
+  "essentia": {
+    "alchemia:machina": 32,
+    "alchemia:motus": 16,
+    "alchemia:potentia": 16,
+    "alchemia:terra": 32,
+    "alchemia:vacuos": 16
+  },
+  "instability": 4,
+  "research": "alchemia:arcane_bore",
+  "result": {
+    "count": 1,
+    "id": "alchemia:arcane_bore"
+  },
+  "ring": [
+    {
+      "item": "alchemia:greatwood_planks"
+    },
+    {
+      "item": "alchemia:greatwood_planks"
+    },
+    {
+      "item": "alchemia:brass_gear"
+    },
+    {
+      "item": "alchemia:brass_plate"
+    },
+    {
+      "item": "minecraft:diamond_pickaxe"
+    },
+    {
+      "item": "minecraft:diamond_shovel"
+    },
+    {
+      "item": "alchemia:air_shard"
+    },
+    {
+      "item": "alchemia:earth_shard"
+    }
+  ]
+}

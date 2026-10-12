@@ -632,6 +632,9 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                 {"biothaumic_mind", "Biothaumic Mind", "생체마법 두뇌",
                  "The clockwork mind with something living grown into it on the altar. What comes out can be told to choose rather than only to follow, and the things that have to decide for themselves -- an autocaster picking its mark -- are built round one.",
                  "태엽 두뇌에 제단에서 살아 있는 것을 자라 들게 한 것이다. 나온 것은 따르기만 하는 것이 아니라 고르라고 시킬 수 있다. 스스로 정해야 하는 것들 — 노릴 것을 고르는 자동 시전기 같은 — 은 이것을 둘러싸고 짓는다."},
+                {"arcane_bore", "Arcane Bore", "비전 굴착기",
+                 "A machine that carries an excavation focus further than any wand, and without anyone standing over it. It goes directly above or below its base; point it with a wand and give it a redstone signal, and it eats a tunnel out the way it faces, sixty-four blocks deep, sweeping a spiral as it goes. It wants an excavation focus in its left slot and any pickaxe in its right: whatever is worked into either -- force, efficiency, widening, treasure, fortune, silk touch, dowsing -- goes into what it mines. The pickaxe wears a point a block, and the bore stops while it has one left. Everything mined comes out of the base's nozzle, into a container there if there is one; a wand on the base turns the nozzle. Entropy piped into the base drives it fast, twenty blocks a point; without it, it draws entropy out of the air, a block a point and far slower.",
+                 "완드로는 닿지 않는 데까지, 지켜보는 사람 없이도 발굴 포커스를 부리는 기계다. 받침 바로 위나 아래에 놓는다. 완드로 방향을 잡고 레드스톤 신호를 주면 바라보는 쪽으로 나선을 그리며 예순네 칸 깊이의 굴을 판다. 왼쪽 칸에 발굴 포커스를, 오른쪽 칸에 아무 곡괭이나 넣는다. 둘에 깃든 것 — 힘, 효율, 넓히기, 보물, 행운, 섬세한 손길, 탐광 — 이 캐는 것에 그대로 들어간다. 곡괭이는 한 칸마다 한 점씩 닳고, 한 점 남으면 굴착기가 멈춘다. 캔 것은 모두 받침의 주둥이로 나온다. 거기 상자가 있으면 상자로. 받침을 완드로 치면 주둥이가 돈다. 받침에 관으로 혼돈을 넣으면 한 점에 스무 칸을 빠르게 판다. 없으면 공기에서 혼돈을 끌어 쓰는데, 한 점에 한 칸이고 훨씬 느리다."},
                 {"autocaster", "Autocaster", "자동 시전기",
                  "A focus on a bracket, with enough of a mind in it to pick something and point itself at it. It is not a thaumaturge: it draws its own vis out of the air a drop at a time, holds a hundred of each primal at most, and nothing worn or carried makes a working any cheaper for it. Seven of the twelve foci are worth aiming at a thing, and those are the seven it will take. It goes against any face -- floor, wall or ceiling -- and it is told what to mind: animals, monsters, people, and whatever is already yours. A wand clicked against it takes it back down, focus and all.",
                  "받침대에 얹은 포커스다. 무엇을 고르고 그쪽으로 제 몸을 돌릴 만큼의 생각이 들어 있다. 마법사는 아니다. 제 비스를 공기에서 한 방울씩 길어 올리고, 원시마다 백까지만 담으며, 무엇을 걸쳤든 들었든 값이 싸지는 일은 없다. 열둘 중 일곱만이 무언가를 겨눌 값어치가 있고, 받아 주는 것도 그 일곱이다. 바닥이든 벽이든 천장이든 어느 면에나 붙으며, 무엇을 노릴지 일러 줄 수 있다 — 동물, 몹, 사람, 그리고 이미 제 편인 것. 완드로 치면 포커스째 도로 떼어 낸다."},
@@ -818,6 +821,14 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("item.alchemia.biothaumic_mind", pick("Biothaumic Mind", "생체마법 두뇌"));
         add("block.alchemia.bellows", pick("Bellows", "풀무"));
         add("block.alchemia.centrifuge", pick("Essentia Centrifuge", "에센시아 원심분리기"));
+        add("block.alchemia.arcane_bore", pick("Arcane Bore", "비전 굴착기"));
+        add("block.alchemia.arcane_bore_base", pick("Arcane Bore Base", "비전 굴착기 받침"));
+        add("gui.alchemia.arcane_bore.width", pick("Width: %s", "너비: %s"));
+        add("gui.alchemia.arcane_bore.speed", pick("Speed: +%s", "속도: +%s"));
+        add("gui.alchemia.arcane_bore.other", pick("Other properties:", "그 밖의 성질:"));
+        add("gui.alchemia.arcane_bore.refining", pick("Refining %s", "정련 %s"));
+        add("gui.alchemia.arcane_bore.fortune", pick("Fortune %s", "행운 %s"));
+        add("gui.alchemia.arcane_bore.silk", pick("Silk Touch", "섬세한 손길"));
         add("block.alchemia.thaumatorium", pick("Thaumatorium", "타우마토리움"));
         add("block.alchemia.brain_jar", pick("Brain in a Jar", "단지 속 두뇌"));
         add("block.alchemia.brain_jar.xp", pick("%s xp", "경험치 %s"));

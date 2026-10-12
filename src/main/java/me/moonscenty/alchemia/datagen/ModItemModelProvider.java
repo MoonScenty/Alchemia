@@ -232,7 +232,7 @@ public class ModItemModelProvider extends ItemModelProvider {
                 .rotation(0, 45, 0).scale(0.4F).end()
                 .end();
         // drawn by the blocks' own renderers; only how they are held is said here, as the bellows
-        for (String device : java.util.List.of("centrifuge", "crystallizer")) {
+        for (String device : java.util.List.of("centrifuge", "crystallizer", "arcane_bore", "arcane_bore_base")) {
             getBuilder(device).parent(new net.neoforged.neoforge.client.model.generators.ModelFile
                             .UncheckedModelFile("minecraft:builtin/entity"))
                     .transforms()

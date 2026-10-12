@@ -1,0 +1,31 @@
+{
+  "category": "alchemia:golemancy",
+  "column": 5,
+  "complexity": 2,
+  "icon": "alchemia:arcane_bore",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.arcane_bore.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:arcane_bore"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:arcane_bore_base"
+    }
+  ],
+  "parents": [
+    "alchemia:infusion",
+    "alchemia:autocaster"
+  ],
+  "requirements": {
+    "alchemia:instrumentum": 3,
+    "alchemia:machina": 3,
+    "alchemia:motus": 3,
+    "alchemia:terra": 6
+  },
+  "row": 5
+}

@@ -40,6 +40,10 @@ public class ModMenus {
             THAUMATORIUM = MENUS.register("thaumatorium",
                     () -> IMenuTypeExtension.create(me.moonscenty.alchemia.menu.ThaumatoriumMenu::new));
 
+    public static final DeferredHolder<MenuType<?>, MenuType<me.moonscenty.alchemia.menu.ArcaneBoreMenu>>
+            ARCANE_BORE = MENUS.register("arcane_bore",
+                    () -> IMenuTypeExtension.create(me.moonscenty.alchemia.menu.ArcaneBoreMenu::new));
+
     public static final DeferredHolder<MenuType<?>, MenuType<EssentiaSmelterMenu>> ESSENTIA_SMELTER =
             MENUS.register("essentia_smelter",
                     () -> IMenuTypeExtension.create(EssentiaSmelterMenu::new));

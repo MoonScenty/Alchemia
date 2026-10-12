@@ -119,6 +119,12 @@ public class ModResearchProvider {
                 List.of("tubes"), false, NodeShape.PLAIN, 3,
                 "tube_filter", "tube_restrict", "tube_oneway", "tube_buffer");
 
+        // a machine that carries an excavation focus where no wand reaches
+        entry(context, "arcane_bore", ModResearch.GOLEMANCY, ModBlocks.ARCANE_BORE, 5, 5,
+                AspectList.of(ModAspects.EARTH, 6).add(ModAspects.MOTION, 3).add(ModAspects.MECHANISM, 3)
+                        .add(ModAspects.TOOL, 3),
+                List.of("infusion", "autocaster"), false, NodeShape.PLAIN, 2, "arcane_bore", "arcane_bore_base");
+
         // a brain kept in brine, that eats what is learned by dying near it
         entry(context, "brain_jar", ModResearch.ARTIFICE, ModBlocks.BRAIN_JAR, -2, 2,
                 AspectList.of(ModAspects.DESIRE, 6).add(ModAspects.MIND, 3).add(ModAspects.UNDEAD, 3),

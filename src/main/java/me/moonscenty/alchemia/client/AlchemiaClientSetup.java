@@ -189,6 +189,7 @@ public class AlchemiaClientSetup {
         event.register(ModMenus.RESEARCH_TABLE.get(), ResearchTableScreen::new);
         event.register(ModMenus.ARCANE_WORKBENCH.get(), ArcaneWorkbenchScreen::new);
         event.register(ModMenus.ESSENTIA_SMELTER.get(), EssentiaSmelterScreen::new);
+        event.register(ModMenus.ARCANE_BORE.get(), ArcaneBoreScreen::new);
         event.register(ModMenus.THAUMATORIUM.get(), ThaumatoriumScreen::new);
         event.register(ModMenus.FOCUS_POUCH.get(), FocusPouchScreen::new);
         event.register(ModMenus.AUTOCASTER.get(), AutocasterScreen::new);
@@ -249,7 +250,8 @@ public class AlchemiaClientSetup {
             public net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer getCustomRenderer() {
                 return DeviceItemRenderer.INSTANCE;
             }
-        }, ModBlocks.CENTRIFUGE.get().asItem(), ModBlocks.CRYSTALLIZER.get().asItem());
+        }, ModBlocks.CENTRIFUGE.get().asItem(), ModBlocks.CRYSTALLIZER.get().asItem(),
+                ModBlocks.ARCANE_BORE.get().asItem(), ModBlocks.ARCANE_BORE_BASE.get().asItem());
         // the bellows in a hand is the block's own model, breathing on a clock of its own
         event.registerItem(new net.neoforged.neoforge.client.extensions.common.IClientItemExtensions() {
             @Override
@@ -313,6 +315,8 @@ public class AlchemiaClientSetup {
         event.registerBlockEntityRenderer(ModBlockEntities.TUBE.get(), OnewayMarkRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.BELLOWS.get(), BellowsRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.CENTRIFUGE.get(), CentrifugeRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.ARCANE_BORE.get(), ArcaneBoreRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.ARCANE_BORE_BASE.get(), ArcaneBoreBaseRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.BRAIN_JAR.get(), BrainJarRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.THAUMATORIUM.get(), ThaumatoriumRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.CRYSTALLIZER.get(), CrystallizerRenderer::new);

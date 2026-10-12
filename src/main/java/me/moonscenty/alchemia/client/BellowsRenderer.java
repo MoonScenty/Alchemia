@@ -49,6 +49,15 @@ public class BellowsRenderer implements BlockEntityRenderer<BellowsBlockEntity> 
                 ? bellows.getBlockState().getValue(BellowsBlock.FACING) : Direction.WEST;
         draw(pose, buffers.getBuffer(RenderType.entityCutoutNoCull(TEXTURE)), facing, bellows.inflation(partial),
                 light, overlay);
+        // blowing into a buffer tube, the original drew a bore's nozzle on the tube, pointing back at the bellows
+        if (bellows.getLevel() != null && bellows.getLevel().getBlockEntity(bellows.getBlockPos().relative(facing))
+                instanceof me.moonscenty.alchemia.block.entity.BufferTubeBlockEntity) {
+            pose.pushPose();
+            pose.translate(facing.getStepX(), facing.getStepY(), facing.getStepZ());
+            ArcaneBoreBaseRenderer.drawNozzle(pose, buffers.getBuffer(RenderType.entityCutoutNoCull(
+                    ArcaneBoreRenderer.TEXTURE)), facing.getOpposite(), light, overlay);
+            pose.popPose();
+        }
     }
 
     /**

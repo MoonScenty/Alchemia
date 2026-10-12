@@ -1,0 +1,31 @@
+{
+  "type": "alchemia:arcane_shaped",
+  "key": {
+    "D": {
+      "item": "minecraft:dispenser"
+    },
+    "G": {
+      "item": "alchemia:brass_gear"
+    },
+    "I": {
+      "tag": "c:ingots/iron"
+    },
+    "W": {
+      "item": "alchemia:greatwood_planks"
+    }
+  },
+  "pattern": [
+    "WIW",
+    "IDI",
+    "WGW"
+  ],
+  "research": "alchemia:arcane_bore",
+  "result": {
+    "count": 1,
+    "id": "alchemia:arcane_bore_base"
+  },
+  "vis": {
+    "alchemia:aer": 100,
+    "alchemia:ordo": 100
+  }
+}

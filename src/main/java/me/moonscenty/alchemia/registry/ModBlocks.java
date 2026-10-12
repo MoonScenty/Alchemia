@@ -99,6 +99,12 @@ public class ModBlocks {
     public static final DeferredBlock<EssentiaSmelterBlock> VOID_SMELTER = register("void_smelter",
             () -> new EssentiaSmelterBlock(smelter(MapColor.COLOR_BLACK), EssentiaSmelterBlock.Tier.VOID));
     /** What goes against a smelter's sides: a pump that pours one more column, and a vent that catches its flux. */
+    /** The arcane bore and the base it stands on or hangs from. Wood, as the original's were. */
+    public static final DeferredBlock<me.moonscenty.alchemia.block.ArcaneBoreBaseBlock> ARCANE_BORE_BASE =
+            register("arcane_bore_base", () -> new me.moonscenty.alchemia.block.ArcaneBoreBaseBlock(device()));
+    public static final DeferredBlock<me.moonscenty.alchemia.block.ArcaneBoreBlock> ARCANE_BORE =
+            register("arcane_bore", () -> new me.moonscenty.alchemia.block.ArcaneBoreBlock(device()));
+
     /** A centrifuge that splits a compound into one of its parts, and a crystallizer that sets essentia hard. */
     public static final DeferredBlock<me.moonscenty.alchemia.block.CentrifugeBlock> CENTRIFUGE =
             register("centrifuge", () -> new me.moonscenty.alchemia.block.CentrifugeBlock(device()));

@@ -362,6 +362,26 @@ public class WandItem extends Item implements VisHolder {
             return InteractionResult.sidedSuccess(level.isClientSide);
         }
 
+        // a bore turns to dig toward the face clicked; a base turns its nozzle to it
+        if (level.getBlockEntity(pos) instanceof me.moonscenty.alchemia.block.entity.ArcaneBoreBlockEntity bore) {
+            if (!level.isClientSide) {
+                bore.aim(context.getClickedFace());
+                level.playSound(null, pos, SoundEvents.LEVER_CLICK, SoundSource.BLOCKS, 0.5F,
+                        0.9F + level.random.nextFloat() * 0.2F);
+            }
+            return InteractionResult.sidedSuccess(level.isClientSide);
+        }
+        if (level.getBlockState(pos).getBlock() instanceof me.moonscenty.alchemia.block.ArcaneBoreBaseBlock
+                && context.getClickedFace().getAxis().isHorizontal()) {
+            if (!level.isClientSide) {
+                level.setBlockAndUpdate(pos, level.getBlockState(pos).setValue(
+                        me.moonscenty.alchemia.block.ArcaneBoreBaseBlock.FACING, context.getClickedFace()));
+                level.playSound(null, pos, SoundEvents.LEVER_CLICK, SoundSource.BLOCKS, 0.3F,
+                        1.9F + level.random.nextFloat() * 0.2F);
+            }
+            return InteractionResult.sidedSuccess(level.isClientSide);
+        }
+
         // a crucible with two blocks of brass on it, made into a thaumatorium if its maker knows how
         if (context.getPlayer() != null && me.moonscenty.alchemia.block.ThaumatoriumBlock.form(level, pos,
                 context.getClickedFace(), context.getPlayer(), context.getItemInHand())) {

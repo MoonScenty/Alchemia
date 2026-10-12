@@ -67,6 +67,19 @@ public class ModBlockEntities {
                     .of(me.moonscenty.alchemia.block.entity.BrainJarBlockEntity::new, ModBlocks.BRAIN_JAR.get())
                     .build(null));
 
+    /** The bore at work, and its base, which takes essentia in for it. */
+    public static final DeferredHolder<BlockEntityType<?>,
+            BlockEntityType<me.moonscenty.alchemia.block.entity.ArcaneBoreBlockEntity>> ARCANE_BORE =
+            BLOCK_ENTITIES.register("arcane_bore", () -> BlockEntityType.Builder
+                    .of(me.moonscenty.alchemia.block.entity.ArcaneBoreBlockEntity::new, ModBlocks.ARCANE_BORE.get())
+                    .build(null));
+    public static final DeferredHolder<BlockEntityType<?>,
+            BlockEntityType<me.moonscenty.alchemia.block.entity.ArcaneBoreBaseBlockEntity>> ARCANE_BORE_BASE =
+            BLOCK_ENTITIES.register("arcane_bore_base", () -> BlockEntityType.Builder
+                    .of(me.moonscenty.alchemia.block.entity.ArcaneBoreBaseBlockEntity::new,
+                            ModBlocks.ARCANE_BORE_BASE.get())
+                    .build(null));
+
     /** Bellows pumping, which on the server is a furnace being pushed along. */
     public static final DeferredHolder<BlockEntityType<?>,
             BlockEntityType<me.moonscenty.alchemia.block.entity.BellowsBlockEntity>> BELLOWS =

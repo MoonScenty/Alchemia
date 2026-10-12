@@ -543,6 +543,13 @@ public class ModRecipeProvider extends RecipeProvider {
                         'G', Ingredient.of(ModItems.PRIMAL_CHARM),
                         'I', Ingredient.of(ModItems.VOID_INGOT)),
                 "BFB", "IGI", "III");
+        arcane(output, "arcane_bore_base", "arcane_bore", new ItemStack(ModBlocks.ARCANE_BORE_BASE.get()),
+                AspectList.of(ModAspects.AIR, 100).add(ModAspects.ORDER, 100),
+                Map.of('W', Ingredient.of(ModBlocks.GREATWOOD.planks()),
+                        'I', Ingredient.of(Tags.Items.INGOTS_IRON),
+                        'D', Ingredient.of(Items.DISPENSER),
+                        'G', Ingredient.of(ModItems.BRASS_GEAR)),
+                "WIW", "IDI", "WGW");
         arcane(output, "mnemonic_matrix", "thaumatorium", new ItemStack(ModBlocks.MNEMONIC_MATRIX.get()),
                 AspectList.of(ModAspects.FIRE, 50).add(ModAspects.WATER, 50).add(ModAspects.ORDER, 50),
                 Map.of('I', Ingredient.of(Tags.Items.INGOTS_IRON),
@@ -809,6 +816,18 @@ public class ModRecipeProvider extends RecipeProvider {
                         .add(ModAspects.AVERSION, 25), TOTEM_UNSTABLE, "aura_totem");
 
         // the recharge pedestal: a pedestal worked on with gold, diamonds and a primal charm
+        // the bore: a clockwork mind given the pick, the shovel and the earth to dig with
+        infusion(output, "arcane_bore", Ingredient.of(ModItems.CLOCKWORK_MIND),
+                List.of(Ingredient.of(ModBlocks.GREATWOOD.planks()), Ingredient.of(ModBlocks.GREATWOOD.planks()),
+                        Ingredient.of(ModItems.BRASS_GEAR), Ingredient.of(ModItems.BRASS_PLATE),
+                        Ingredient.of(Items.DIAMOND_PICKAXE), Ingredient.of(Items.DIAMOND_SHOVEL),
+                        Ingredient.of(ModItems.SHARDS.get(me.moonscenty.alchemia.block.CrystalType.AIR)),
+                        Ingredient.of(ModItems.SHARDS.get(me.moonscenty.alchemia.block.CrystalType.EARTH))),
+                new ItemStack(ModBlocks.ARCANE_BORE.get()),
+                AspectList.of(ModAspects.ENERGY, 16).add(ModAspects.EARTH, 32).add(ModAspects.MECHANISM, 32)
+                        .add(ModAspects.VOID, 16).add(ModAspects.MOTION, 16),
+                4, "arcane_bore");
+
         // a warded jar with a brain in it. The original's brain came out of a zombie, which there are none of yet;
         // rotten flesh stands in for it
         infusion(output, "brain_jar", Ingredient.of(ModBlocks.JAR),

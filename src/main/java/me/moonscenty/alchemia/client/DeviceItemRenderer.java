@@ -28,6 +28,11 @@ public class DeviceItemRenderer extends BlockEntityWithoutLevelRenderer {
         if (stack.is(ModBlocks.CENTRIFUGE.get().asItem())) {
             CentrifugeRenderer.draw(pose, buffers.getBuffer(RenderType.entityCutoutNoCull(CentrifugeRenderer.TEXTURE)),
                     0.0F, light, overlay);
+        } else if (stack.is(ModBlocks.ARCANE_BORE.get().asItem())) {
+            ArcaneBoreRenderer.draw(pose, buffers, Direction.UP, false, false, 0.0F, 0.0F, 0.0F, light, overlay);
+        } else if (stack.is(ModBlocks.ARCANE_BORE_BASE.get().asItem())) {
+            ArcaneBoreBaseRenderer.draw(pose, buffers.getBuffer(RenderType.entityCutoutNoCull(
+                    ArcaneBoreRenderer.TEXTURE)), Direction.NORTH, light, overlay);
         } else if (stack.is(ModBlocks.CRYSTALLIZER.get().asItem())) {
             float partial = Minecraft.getInstance().getTimer().getGameTimeDeltaPartialTick(false);
             CrystallizerRenderer.draw(pose, buffers, Direction.UP, 0.0F, 0xFFFFFFFF,

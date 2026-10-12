@@ -2,6 +2,8 @@
   "values": [
     "alchemia:centrifuge",
     "alchemia:crystallizer",
+    "alchemia:arcane_bore",
+    "alchemia:arcane_bore_base",
     "alchemia:bellows",
     "alchemia:hungry_chest",
     "alchemia:levitator",
