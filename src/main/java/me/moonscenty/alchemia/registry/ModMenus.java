@@ -26,6 +26,10 @@ public class ModMenus {
                     () -> new MenuType<>(ArcaneWorkbenchMenu::new, FeatureFlags.VANILLA_SET));
 
     /** Carries the block's position across, since the screen reads what is dissolved off the block itself. */
+    /** Carries which pech is being traded with. */
+    public static final DeferredHolder<MenuType<?>, MenuType<me.moonscenty.alchemia.menu.PechMenu>> PECH =
+            MENUS.register("pech", () -> IMenuTypeExtension.create(me.moonscenty.alchemia.menu.PechMenu::new));
+
     /** Reads how long the shard has left off the readings. */
     public static final DeferredHolder<MenuType<?>, MenuType<me.moonscenty.alchemia.menu.AuraTotemMenu>> AURA_TOTEM =
             MENUS.register("aura_totem", () -> new MenuType<>(me.moonscenty.alchemia.menu.AuraTotemMenu::new,

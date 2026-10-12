@@ -176,6 +176,9 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         addEntityType(me.moonscenty.alchemia.registry.ModEntities.AUTOCASTER, pick("Autocaster", "자동 시전기"));
         addEntityType(me.moonscenty.alchemia.registry.ModEntities.FIRE_BAT, pick("Firebat", "불박쥐"));
         addEntityType(me.moonscenty.alchemia.registry.ModEntities.WISP, pick("Wisp", "위습"));
+        addEntityType(me.moonscenty.alchemia.registry.ModEntities.PECH, pick("Pech Forager", "페크 채집꾼"));
+        add("entity.alchemia.pech.mage", pick("Pech Mage", "페크 마법사"));
+        add("entity.alchemia.pech.stalker", pick("Pech Stalker", "페크 추적자"));
         addEntityType(me.moonscenty.alchemia.registry.ModEntities.ANGRY_ZOMBIE, pick("Angry Zombie", "성난 좀비"));
         addEntityType(me.moonscenty.alchemia.registry.ModEntities.FURIOUS_ZOMBIE, pick("Furious Zombie", "격노한 좀비"));
         addItem(ModItems.ZOMBIE_BRAIN, pick("Zombie Brain", "좀비 뇌"));
@@ -184,6 +187,10 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         addItem(ModItems.FIREBAT_SPAWN_EGG, pick("Firebat Spawn Egg", "불박쥐 생성 알"));
         addItem(ModItems.WISP_SPAWN_EGG, pick("Wisp Spawn Egg", "위습 생성 알"));
         addItem(ModItems.WISPY_ESSENCE, pick("Wispy Essence", "위습의 정수"));
+        addItem(ModItems.PECH_SPAWN_EGG, pick("Pech Spawn Egg", "페크 생성 알"));
+        addItem(ModItems.COIN, pick("Gold Coin", "금화"));
+        addItem(ModItems.KNOWLEDGE_FRAGMENT, pick("Knowledge Fragment", "지식의 조각"));
+        add("item.alchemia.knowledge_fragment.help", pick("Use to gain experience", "사용하면 경험치를 얻는다"));
         add("item.alchemia.wispy_essence.holding", pick("Two points of %s", "%s 두 점"));
         add("subtitles.alchemia.wisp.ambient", pick("Wisp hums", "위습이 웅웅거린다"));
         add("subtitles.alchemia.wisp.death", pick("Wisp goes out", "위습이 꺼진다"));

@@ -76,6 +76,7 @@ public class ModWorldgen {
     public static final ResourceKey<BiomeModifier> SPAWN_ANGRY_ZOMBIES = biomeModifier("spawn_angry_zombies");
     public static final ResourceKey<BiomeModifier> SPAWN_FIREBATS = biomeModifier("spawn_firebats");
     public static final ResourceKey<BiomeModifier> SPAWN_WISPS = biomeModifier("spawn_wisps");
+    public static final ResourceKey<BiomeModifier> SPAWN_PECHS = biomeModifier("spawn_pechs");
 
     static {
         for (CrystalType type : CrystalType.values()) {
@@ -193,6 +194,11 @@ public class ModWorldgen {
                 biomes.getOrThrow(BiomeTags.IS_NETHER),
                 new net.minecraft.world.level.biome.MobSpawnSettings.SpawnerData(
                         me.moonscenty.alchemia.registry.ModEntities.WISP.get(), 5, 1, 1)));
+        // and pechs in magical places, one at a time
+        context.register(SPAWN_PECHS, BiomeModifiers.AddSpawnsBiomeModifier.singleSpawn(
+                biomes.getOrThrow(net.neoforged.neoforge.common.Tags.Biomes.IS_MAGICAL),
+                new net.minecraft.world.level.biome.MobSpawnSettings.SpawnerData(
+                        me.moonscenty.alchemia.registry.ModEntities.PECH.get(), 10, 1, 1)));
     }
 
     private static List<PlacementModifier> ore(int count, PlacementModifier height) {

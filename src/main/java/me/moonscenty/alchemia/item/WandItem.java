@@ -184,6 +184,11 @@ public class WandItem extends Item implements VisHolder {
         return stack;
     }
 
+    /** Puts whole points of a primal's vis in, as far as there is room. */
+    public static void addVis(ItemStack stack, Holder<Aspect> aspect, int points) {
+        put(stack, aspect, points * FINE);
+    }
+
     /** Puts vis in, in hundredths, and says how much would not fit. */
     private static int put(ItemStack stack, Holder<Aspect> aspect, int amount) {
         if (!aspect.value().isPrimal()) {

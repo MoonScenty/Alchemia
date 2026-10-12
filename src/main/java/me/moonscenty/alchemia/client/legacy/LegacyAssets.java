@@ -95,6 +95,8 @@ public final class LegacyAssets {
     public static final String VALVE = "valve";
     /** The firebat, which the original built in code: the old bat's shape. */
     public static final String FIREBAT = "firebat";
+    /** The pech, which the original built in code on a biped: jaw, pack and all. */
+    public static final String PECH = "pech";
 
     /** The alchemometer as Thaumcraft 4's thaumometer: a six-sided brass frame. */
     public static final String SCANNER_MESH = "models/legacy/scanner.obj";
@@ -134,6 +136,8 @@ public final class LegacyAssets {
                     "thaumcraft/client/renderers/models/block/ModelTubeValve", "()V"))),
             Map.entry(FIREBAT, List.of(new LegacyModelSource(LegacyEdition.FIVE,
                     "thaumcraft/client/renderers/models/entity/ModelFireBat", "()V"))),
+            Map.entry(PECH, List.of(new LegacyModelSource(LegacyEdition.FIVE,
+                    "thaumcraft/client/renderers/models/entity/ModelPech", "()V"))),
             Map.entry(CENTRIFUGE, List.of(new LegacyModelSource(LegacyEdition.FIVE,
                     "thaumcraft/client/renderers/models/block/ModelCentrifuge", "()V"))),
             Map.entry(BORE, List.of(new LegacyModelSource(LegacyEdition.FIVE,
@@ -637,6 +641,15 @@ public final class LegacyAssets {
             all.add(LegacyAsset.of("textures/block/legacy/" + face + ".png").five("textures/blocks/" + face + ".png"));
         }
         all.add(LegacyAsset.of("textures/gui/aura_totem.png").five("textures/gui/gui_auratotem.png"));
+        // the pech's three skins, laid out for the original's model, its trading panel, and what it hoards
+        for (String skin : List.of("pech_forage", "pech_thaum", "pech_stalker")) {
+            all.add(LegacyAsset.of("textures/entity/" + skin + ".png")
+                    .five("textures/models/creature/" + skin + ".png").forModel(PECH));
+        }
+        all.add(LegacyAsset.of("textures/gui/pech.png").five("textures/gui/gui_pech.png"));
+        all.add(LegacyAsset.of("textures/item/legacy/coin.png").five("textures/items/coin.png"));
+        all.add(LegacyAsset.of("textures/item/legacy/knowledge_fragment.png")
+                .five("textures/items/knowledge_fragment.png"));
         // the wisp's essence, and the original's recordings, which sounds.json names
         all.add(LegacyAsset.of("textures/item/legacy/wispy_essence.png").five("textures/items/wispy_essence.png"));
         for (String sound : List.of("wisplive1", "wisplive2", "wisplive3", "wispdead", "zap1", "zap2", "ice1", "ice2",

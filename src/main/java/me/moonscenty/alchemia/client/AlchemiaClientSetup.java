@@ -203,6 +203,7 @@ public class AlchemiaClientSetup {
         event.register(ModMenus.FOCAL_MANIPULATOR.get(), FocalManipulatorScreen::new);
         event.register(ModMenus.SPA.get(), SpaScreen::new);
         event.register(ModMenus.AURA_TOTEM.get(), AuraTotemScreen::new);
+        event.register(ModMenus.PECH.get(), PechScreen::new);
     }
 
     /**
@@ -299,6 +300,7 @@ public class AlchemiaClientSetup {
         event.registerEntityRenderer(ModEntities.AUTOCASTER.get(), AutocasterRenderer::new);
         event.registerEntityRenderer(ModEntities.FIRE_BAT.get(), FireBatRenderer::new);
         event.registerEntityRenderer(ModEntities.WISP.get(), WispRenderer::new);
+        event.registerEntityRenderer(ModEntities.PECH.get(), PechRenderer::new);
         event.registerEntityRenderer(ModEntities.ANGRY_ZOMBIE.get(), AngryZombieRenderer::new);
         event.registerEntityRenderer(ModEntities.FURIOUS_ZOMBIE.get(), AngryZombieRenderer::new);
         // a cloud is all particles, so there is nothing to draw for the entity itself

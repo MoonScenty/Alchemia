@@ -174,6 +174,16 @@ public class ModEntities {
                     .updateInterval(3)
                     .build("wisp"));
 
+    /** A pech: a little hunched thing a player's width and height, its eyes low in its face. */
+    public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.entity.Pech>> PECH =
+            ENTITIES.register("pech", () -> EntityType.Builder
+                    .<me.moonscenty.alchemia.entity.Pech>of(me.moonscenty.alchemia.entity.Pech::new,
+                            MobCategory.MONSTER)
+                    .sized(0.6F, 1.8F)
+                    .eyeHeight(1.188F)
+                    .clientTrackingRange(8)
+                    .build("pech"));
+
     /** A zombie's size and a zombie's reach. */
     public static final DeferredHolder<EntityType<?>, EntityType<AngryZombie>> ANGRY_ZOMBIE =
             ENTITIES.register("angry_zombie", () -> EntityType.Builder
@@ -201,6 +211,7 @@ public class ModEntities {
         event.put(AUTOCASTER.get(), Autocaster.attributes().build());
         event.put(FIRE_BAT.get(), FireBat.attributes().build());
         event.put(WISP.get(), me.moonscenty.alchemia.entity.Wisp.attributes().build());
+        event.put(PECH.get(), me.moonscenty.alchemia.entity.Pech.attributes().build());
         event.put(ANGRY_ZOMBIE.get(), AngryZombie.attributes().build());
         event.put(FURIOUS_ZOMBIE.get(), FuriousZombie.attributes().build());
     }
@@ -218,6 +229,8 @@ public class ModEntities {
                 FireBat::checkSpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
         event.register(WISP.get(), SpawnPlacementTypes.NO_RESTRICTIONS, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 me.moonscenty.alchemia.entity.Wisp::checkSpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
+        event.register(PECH.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                me.moonscenty.alchemia.entity.Pech::checkSpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
     }
 
     private ModEntities() {

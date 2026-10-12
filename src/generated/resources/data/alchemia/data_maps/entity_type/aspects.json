@@ -12,6 +12,11 @@
       "alchemia:humanus": 2,
       "alchemia:terra": 2
     },
+    "alchemia:pech": {
+      "alchemia:auram": 2,
+      "alchemia:humanus": 2,
+      "alchemia:permutatio": 2
+    },
     "alchemia:wisp": {
       "alchemia:aer": 1,
       "alchemia:auram": 1

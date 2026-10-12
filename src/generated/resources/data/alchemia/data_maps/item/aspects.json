@@ -146,6 +146,9 @@
       "alchemia:permutatio": 4,
       "alchemia:terra": 1
     },
+    "alchemia:coin": {
+      "alchemia:desiderium": 1
+    },
     "alchemia:copper_cluster": {
       "alchemia:metallum": 5,
       "alchemia:ordo": 1,
@@ -201,6 +204,9 @@
       "alchemia:metallum": 6,
       "alchemia:ordo": 1,
       "alchemia:terra": 1
+    },
+    "alchemia:knowledge_fragment": {
+      "alchemia:cognitio": 8
     },
     "alchemia:order_crystal": {
       "alchemia:ordo": 4,

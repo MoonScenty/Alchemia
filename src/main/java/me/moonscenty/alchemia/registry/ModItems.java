@@ -189,6 +189,15 @@ public class ModItems {
     public static final DeferredItem<net.neoforged.neoforge.common.DeferredSpawnEggItem> WISP_SPAWN_EGG =
             ITEMS.register("wisp_spawn_egg", () -> new net.neoforged.neoforge.common.DeferredSpawnEggItem(
                     ModEntities.WISP, 0xFFC0FF, 0xFFFFFF, new Item.Properties()));
+    public static final DeferredItem<net.neoforged.neoforge.common.DeferredSpawnEggItem> PECH_SPAWN_EGG =
+            ITEMS.register("pech_spawn_egg", () -> new net.neoforged.neoforge.common.DeferredSpawnEggItem(
+                    ModEntities.PECH, 0xFFC0FF, 0x400040, new Item.Properties()));
+    /** A gold coin, of the kind pechs hoard. */
+    public static final DeferredItem<Item> COIN = ITEMS.registerSimpleItem("coin");
+    /** A scrap of learning, worth a little experience. */
+    public static final DeferredItem<me.moonscenty.alchemia.item.KnowledgeFragmentItem> KNOWLEDGE_FRAGMENT =
+            ITEMS.register("knowledge_fragment",
+                    () -> new me.moonscenty.alchemia.item.KnowledgeFragmentItem(new Item.Properties()));
     /** What is left of a wisp: two points of its aspect. */
     public static final DeferredItem<me.moonscenty.alchemia.item.WispyEssenceItem> WISPY_ESSENCE = ITEMS.register(
             "wispy_essence", () -> new me.moonscenty.alchemia.item.WispyEssenceItem(new Item.Properties()));

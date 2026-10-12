@@ -101,10 +101,13 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.BRASS_NUGGET.get());
         basicItem(ModItems.QUICKSILVER_DROP.get());
         basicItem(ModItems.ZOMBIE_BRAIN.get());
+        for (String hoard : new String[] {"coin", "knowledge_fragment"}) {
+            withExistingParent(hoard, mcLoc("item/generated")).texture("layer0", modLoc("item/legacy/" + hoard));
+        }
         withExistingParent("wispy_essence", mcLoc("item/generated"))
                 .texture("layer0", modLoc("item/legacy/wispy_essence"));
         for (var egg : java.util.List.of(ModItems.ANGRY_ZOMBIE_SPAWN_EGG, ModItems.FURIOUS_ZOMBIE_SPAWN_EGG,
-                ModItems.FIREBAT_SPAWN_EGG, ModItems.WISP_SPAWN_EGG)) {
+                ModItems.FIREBAT_SPAWN_EGG, ModItems.WISP_SPAWN_EGG, ModItems.PECH_SPAWN_EGG)) {
             withExistingParent(egg.getId().getPath(), mcLoc("item/template_spawn_egg"));
         }
         basicItem(ModItems.ALCHEMIUM_GEAR.get());
