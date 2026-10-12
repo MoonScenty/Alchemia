@@ -1,0 +1,31 @@
+{
+  "type": "alchemia:arcane_shaped",
+  "key": {
+    "B": {
+      "item": "alchemia:brass_plate"
+    },
+    "F": {
+      "item": "alchemia:alchemium_smelter"
+    },
+    "G": {
+      "item": "alchemia:primal_charm"
+    },
+    "I": {
+      "item": "alchemia:void_ingot"
+    }
+  },
+  "pattern": [
+    "BFB",
+    "IGI",
+    "III"
+  ],
+  "research": "alchemia:void_smelter",
+  "result": {
+    "count": 1,
+    "id": "alchemia:void_smelter"
+  },
+  "vis": {
+    "alchemia:aqua": 750,
+    "alchemia:ignis": 750
+  }
+}

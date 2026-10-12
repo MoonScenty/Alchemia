@@ -37,20 +37,85 @@ import net.minecraft.world.phys.BlockHitResult;
  * What it burns comes apart into what it is made of, and that goes up through the hole in its top into whatever is
  * stacked there. A smelter with nothing above it fills up and stops, which is the whole reason for stacking.
  * <p>
- * It is worked by hand or by hopper rather than through a screen. A screen would want a panel drawn for it, and
- * there is nothing to show on one that the block does not already say by burning or not burning.
+ * There are three, as in the original. They boil things down at the same pace and hold the same fifty; what a
+ * better one buys is less lost on the way, and for the alchemium one a quicker pour.
  */
 public class EssentiaSmelterBlock extends BaseEntityBlock {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
+    public static final MapCodec<EssentiaSmelterBlock> CODEC =
+            simpleCodec(properties -> new EssentiaSmelterBlock(properties, Tier.BASIC));
 
-    public static final MapCodec<EssentiaSmelterBlock> CODEC = simpleCodec(EssentiaSmelterBlock::new);
+    /**
+     * The original's three, with its numbers: how much of every point boiled out of something is kept rather than
+     * lost as flux, and how many ticks between pours.
+     * <p>
+     * The void one pours no faster than the plain one. Its description says it does; the original's code does not,
+     * and it is the code that people played.
+     */
+    public enum Tier {
+        BASIC(0.80F, 40),
+        ALCHEMIUM(0.85F, 25),
+        VOID(0.95F, 40);
 
-    public EssentiaSmelterBlock(Properties properties) {
+        private final float efficiency;
+        private final int poursEvery;
+
+        Tier(float efficiency, int poursEvery) {
+            this.efficiency = efficiency;
+            this.poursEvery = poursEvery;
+        }
+
+        public float efficiency() {
+            return efficiency;
+        }
+
+        public int poursEvery() {
+            return poursEvery;
+        }
+    }
+
+    private final Tier tier;
+
+    public EssentiaSmelterBlock(Properties properties, Tier tier) {
         super(properties);
+        this.tier = tier;
         registerDefaultState(stateDefinition.any()
                 .setValue(FACING, Direction.NORTH)
                 .setValue(LIT, false));
+    }
+
+    public Tier tier() {
+        return tier;
+    }
+
+    /**
+     * A vent catching a point of flux, on the client: a fizz and four grey puffs blown out of the vent, away from
+     * the smelter. The side it is on comes as the event's number.
+     */
+    @Override
+    protected boolean triggerEvent(BlockState state, Level level, BlockPos pos, int id, int param) {
+        if (id != EssentiaSmelterBlockEntity.VENTED) {
+            return super.triggerEvent(state, level, pos, id, param);
+        }
+        if (level.isClientSide) {
+            Direction out = Direction.from3DDataValue(param);
+            RandomSource random = level.random;
+            double x = pos.getX() + 0.5 + out.getStepX();
+            double y = pos.getY() + 0.5;
+            double z = pos.getZ() + 0.5 + out.getStepZ();
+            level.playLocalSound(x, y, z, SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, 0.25F,
+                    2.6F + (random.nextFloat() - random.nextFloat()) * 0.8F, false);
+            for (int puff = 0; puff < 4; puff++) {
+                level.addParticle(ParticleTypes.SMOKE, x + jitter(random), y + jitter(random), z + jitter(random),
+                        out.getStepX() / 4.0 + jitter(random), jitter(random), out.getStepZ() / 4.0 + jitter(random));
+            }
+        }
+        return true;
+    }
+
+    private static double jitter(RandomSource random) {
+        return 0.1 - random.nextFloat() * 0.2;
     }
 
     @Override

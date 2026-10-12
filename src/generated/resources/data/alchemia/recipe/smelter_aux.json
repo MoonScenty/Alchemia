@@ -1,0 +1,38 @@
+{
+  "type": "alchemia:arcane_shaped",
+  "key": {
+    "B": {
+      "item": "alchemia:bellows"
+    },
+    "G": {
+      "item": "alchemia:brass_block"
+    },
+    "I": {
+      "tag": "c:ingots/iron"
+    },
+    "R": {
+      "item": "alchemia:brass_plate"
+    },
+    "T": {
+      "item": "alchemia:tube_filter"
+    },
+    "W": {
+      "item": "alchemia:greatwood_planks"
+    }
+  },
+  "pattern": [
+    "WTW",
+    "RGR",
+    "IBI"
+  ],
+  "research": "alchemia:improved_distillation",
+  "result": {
+    "count": 1,
+    "id": "alchemia:smelter_aux"
+  },
+  "vis": {
+    "alchemia:aer": 50,
+    "alchemia:aqua": 50,
+    "alchemia:terra": 25
+  }
+}

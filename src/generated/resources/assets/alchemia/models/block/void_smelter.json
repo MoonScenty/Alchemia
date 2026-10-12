@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/orientable_with_bottom",
+  "textures": {
+    "bottom": "alchemia:block/legacy/void_metal",
+    "front": "alchemia:block/void_smelter_front",
+    "side": "alchemia:block/void_smelter_side",
+    "top": "alchemia:block/smelter_top"
+  }
+}

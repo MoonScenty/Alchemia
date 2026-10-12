@@ -295,6 +295,10 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         addBlock(ModBlocks.RESEARCH_TABLE, pick("Research Table", "연구 탁자"));
         addBlock(ModBlocks.CRUCIBLE, pick("Crucible", "도가니"));
         addBlock(ModBlocks.ESSENTIA_SMELTER, pick("Essentia Smelter", "에센시아 제련로"));
+        addBlock(ModBlocks.ALCHEMIUM_SMELTER, pick("Alchemium Essentia Smelter", "알케미움 에센시아 제련로"));
+        addBlock(ModBlocks.VOID_SMELTER, pick("Void Metal Essentia Smelter", "공허 금속 에센시아 제련로"));
+        addBlock(ModBlocks.SMELTER_AUX, pick("Auxiliary Slurry Pump", "보조 슬러리 펌프"));
+        addBlock(ModBlocks.SMELTER_VENT, pick("Auxiliary Venting Port", "보조 배기구"));
         addBlock(ModBlocks.ALEMBIC, pick("Arcane Alembic", "비전 증류기"));
         addBlock(ModBlocks.TUBE, pick("Essentia Tube", "에센시아 관"));
         addBlock(ModBlocks.TUBE_VALVE, pick("Essentia Valve", "에센시아 밸브"));
@@ -493,6 +497,15 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                 {"distillation", "Distillation", "증류",
                  "Burning a thing is a crude way to ask what it is made of, but it is an honest one. A smelter sends the answer up as smoke, and alembics stacked above it catch that smoke one aspect at a time.",
                  "무엇으로 이루어졌는지 묻는 데에 태우는 것은 거칠지만 정직한 방법이다. 제련로가 그 답을 연기로 올려 보내고, 위에 쌓아 올린 증류기가 연기를 상 하나씩 받아 낸다."},
+                {"improved_distillation", "Improved Distillation", "증류 개량",
+                 "Two things to set against a smelter's sides or back. An auxiliary slurry pump draws on what the smelter holds and pours it up into alembics stacked on the pump itself, so one fire fills another column for every pump. An auxiliary venting port catches some of what the smelter loses before it gets into the air: a third with one, more with each one after, though less each time.",
+                 "제련로 옆이나 뒤에 붙이는 것 둘. 보조 슬러리 펌프는 제련로에 든 것을 끌어다 펌프 위에 쌓은 증류기로 올려 보낸다. 펌프 하나마다 불 하나로 채우는 기둥이 하나씩 늘어난다. 보조 배기구는 제련로가 흘리는 것이 공기로 나가기 전에 일부를 붙잡는다. 하나면 셋에 하나, 더 붙일수록 더 많이 잡지만 늘어나는 몫은 점점 줄어든다."},
+                {"alchemium_smelter", "Alchemium Essentia Smelter", "알케미움 에센시아 제련로",
+                 "A smelter plated in alchemium. It boils things down no faster, but it loses less of what comes off them, and it pours what it holds up into the alembics above more quickly.",
+                 "알케미움을 입힌 제련로다. 끓여 내는 속도는 같지만 흘리는 것이 적고, 담은 것을 위의 증류기로 더 빨리 올려 보낸다."},
+                {"void_smelter", "Void Metal Essentia Smelter", "공허 금속 에센시아 제련로",
+                 "A smelter plated in void metal. Almost nothing that comes off what it burns is lost.",
+                 "공허 금속을 입힌 제련로다. 태워서 나오는 것 가운데 잃는 것이 거의 없다."},
                 {"jar_label", "Jars and Labels", "단지와 라벨",
                  "Essentia will not sit in the open. A warded jar holds sixty-four of one kind and refuses the rest; a label tells it which kind before there is any, so a shelf can be laid out empty and filled later. A brace lets a jar be filled and never emptied.",
                  "에센시아는 열린 데에 머물지 않는다. 봉인된 단지는 한 가지를 예순넷까지 담고 나머지는 받지 않는다. 라벨은 아직 아무것도 없을 때 무엇을 담을지 미리 일러 주니, 선반을 빈 채로 먼저 늘어놓고 나중에 채울 수 있다. 고정대를 물리면 채우기만 되고 비울 수는 없다."},

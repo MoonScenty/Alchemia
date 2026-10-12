@@ -1,0 +1,25 @@
+{
+  "category": "alchemia:alchemy",
+  "column": 2,
+  "icon": "alchemia:alchemium_smelter",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.alchemium_smelter.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:alchemium_smelter"
+    }
+  ],
+  "parents": [
+    "alchemia:distillation",
+    "alchemia:improved_distillation"
+  ],
+  "requirements": {
+    "alchemia:aqua": 3,
+    "alchemia:fabrico": 3,
+    "alchemia:ignis": 3
+  },
+  "row": 7
+}

@@ -1,0 +1,25 @@
+{
+  "category": "alchemia:alchemy",
+  "column": 2,
+  "icon": "alchemia:void_smelter",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.void_smelter.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:void_smelter"
+    }
+  ],
+  "parents": [
+    "alchemia:alchemium_smelter",
+    "alchemia:void_metal"
+  ],
+  "requirements": {
+    "alchemia:aqua": 3,
+    "alchemia:fabrico": 3,
+    "alchemia:ignis": 3
+  },
+  "row": 8
+}

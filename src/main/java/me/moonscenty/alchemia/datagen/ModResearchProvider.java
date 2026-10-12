@@ -119,6 +119,18 @@ public class ModResearchProvider {
                 List.of("tubes"), false, NodeShape.PLAIN, 3,
                 "tube_filter", "tube_restrict", "tube_oneway", "tube_buffer");
 
+        // what a smelter can be made better with: pumps and vents against it, and two better smelters
+        entry(context, "improved_distillation", ModResearch.ALCHEMY, ModBlocks.SMELTER_AUX, 4, 7,
+                AspectList.of(ModAspects.FIRE, 5).add(ModAspects.TOOL, 3).add(ModAspects.WATER, 5)
+                        .add(ModAspects.CRAFT, 5),
+                List.of("tube_filter"), false, NodeShape.PLAIN, 2, "smelter_aux", "smelter_vent");
+        entry(context, "alchemium_smelter", ModResearch.ALCHEMY, ModBlocks.ALCHEMIUM_SMELTER, 2, 7,
+                AspectList.of(ModAspects.FIRE, 3).add(ModAspects.WATER, 3).add(ModAspects.CRAFT, 3),
+                List.of("distillation", "improved_distillation"), false, NodeShape.PLAIN, 1, "alchemium_smelter");
+        entry(context, "void_smelter", ModResearch.ALCHEMY, ModBlocks.VOID_SMELTER, 2, 8,
+                AspectList.of(ModAspects.FIRE, 3).add(ModAspects.WATER, 3).add(ModAspects.CRAFT, 3),
+                List.of("alchemium_smelter", "void_metal"), false, NodeShape.PLAIN, 1, "void_smelter");
+
         // the last of the caps hangs off this one, since void metal is the only thing it can be drawn from
         entry(context, "void_metal", ModResearch.ALCHEMY, ModItems.VOID_INGOT, -2, 4,
                 AspectList.of(ModAspects.VOID, 6).add(ModAspects.DARKNESS, 6).add(ModAspects.METAL, 4)

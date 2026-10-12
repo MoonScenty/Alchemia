@@ -99,36 +99,36 @@ public final class LegacyAssets {
      * {@link me.moonscenty.alchemia.client.legacy.model.LegacyModelReader}; the first release that has the class
      * wins, as with files.
      */
-    public static final Map<String, List<LegacyModelSource>> MODELS = Map.of(
-            FORTRESS_ARMOUR, List.of(
+    public static final Map<String, List<LegacyModelSource>> MODELS = Map.ofEntries(
+            Map.entry(FORTRESS_ARMOUR, List.of(
                     // the original made it at 1.0 for the helm and cuirass and at 0.5 for the greaves; that only
                     // grows a biped's own boxes, and this model clears every one of them
                     new LegacyModelSource(LegacyEdition.FIVE,
                             "thaumcraft/client/renderers/models/gear/ModelFortressArmor", "(F)V", 1.0F),
                     new LegacyModelSource(LegacyEdition.FOUR,
-                            "thaumcraft/client/renderers/models/gear/ModelFortressArmor", "(F)V", 1.0F)),
-            ROBE, List.of(
+                            "thaumcraft/client/renderers/models/gear/ModelFortressArmor", "(F)V", 1.0F))),
+            Map.entry(ROBE, List.of(
                     new LegacyModelSource(LegacyEdition.FIVE,
                             "thaumcraft/client/renderers/models/gear/ModelRobe", "(F)V", 1.0F),
                     new LegacyModelSource(LegacyEdition.FOUR,
-                            "thaumcraft/client/renderers/models/gear/ModelRobe", "(F)V", 1.0F)),
-            ROBE_SKIRT, List.of(
+                            "thaumcraft/client/renderers/models/gear/ModelRobe", "(F)V", 1.0F))),
+            Map.entry(ROBE_SKIRT, List.of(
                     new LegacyModelSource(LegacyEdition.FIVE,
                             "thaumcraft/client/renderers/models/gear/ModelRobe", "(F)V", 0.5F),
                     new LegacyModelSource(LegacyEdition.FOUR,
-                            "thaumcraft/client/renderers/models/gear/ModelRobe", "(F)V", 0.5F)),
-            VALVE, List.of(new LegacyModelSource(LegacyEdition.FIVE,
-                    "thaumcraft/client/renderers/models/block/ModelTubeValve", "()V")),
-            FIREBAT, List.of(new LegacyModelSource(LegacyEdition.FIVE,
-                    "thaumcraft/client/renderers/models/entity/ModelFireBat", "()V")),
-            BELLOWS, List.of(new LegacyModelSource(LegacyEdition.FIVE,
-                    "thaumcraft/client/renderers/models/block/ModelBellows", "()V")),
-            RESEARCH_TABLE, List.of(new LegacyModelSource(LegacyEdition.FIVE,
-                    "thaumcraft/client/renderers/models/block/ModelResearchTable", "()V")),
-            INFUSER, List.of(new LegacyModelSource(LegacyEdition.FIVE,
-                    "thaumcraft/client/renderers/models/ModelCube", "(I)V", 0)),
-            INFUSER_GLOW, List.of(new LegacyModelSource(LegacyEdition.FIVE,
-                    "thaumcraft/client/renderers/models/ModelCube", "(I)V", 32)));
+                            "thaumcraft/client/renderers/models/gear/ModelRobe", "(F)V", 0.5F))),
+            Map.entry(VALVE, List.of(new LegacyModelSource(LegacyEdition.FIVE,
+                    "thaumcraft/client/renderers/models/block/ModelTubeValve", "()V"))),
+            Map.entry(FIREBAT, List.of(new LegacyModelSource(LegacyEdition.FIVE,
+                    "thaumcraft/client/renderers/models/entity/ModelFireBat", "()V"))),
+            Map.entry(BELLOWS, List.of(new LegacyModelSource(LegacyEdition.FIVE,
+                    "thaumcraft/client/renderers/models/block/ModelBellows", "()V"))),
+            Map.entry(RESEARCH_TABLE, List.of(new LegacyModelSource(LegacyEdition.FIVE,
+                    "thaumcraft/client/renderers/models/block/ModelResearchTable", "()V"))),
+            Map.entry(INFUSER, List.of(new LegacyModelSource(LegacyEdition.FIVE,
+                    "thaumcraft/client/renderers/models/ModelCube", "(I)V", 0))),
+            Map.entry(INFUSER_GLOW, List.of(new LegacyModelSource(LegacyEdition.FIVE,
+                    "thaumcraft/client/renderers/models/ModelCube", "(I)V", 32))));
 
     private LegacyAssets() {
     }
@@ -423,6 +423,22 @@ public final class LegacyAssets {
         all.add(block("smelter_front_on", "smelter_basic_front_on", null));
         all.add(block("smelter_side", "smelter_basic_side", null));
         all.add(block("smelter_top", "smelter_top", null));
+        // the two better smelters' faces, under our own names; the alchemium one is the original's thaumium one
+        for (String[] tier : new String[][] {{"alchemium_smelter", "thaumium"}, {"void_smelter", "void"}}) {
+            all.add(block(tier[0] + "_front", "smelter_" + tier[1] + "_front_off", null));
+            all.add(block(tier[0] + "_front_on", "smelter_" + tier[1] + "_front_on", null));
+            all.add(block(tier[0] + "_side", "smelter_" + tier[1] + "_side", null));
+        }
+        all.add(LegacyAsset.of("textures/block/legacy/void_metal.png").five("textures/blocks/void_metal.png"));
+        // the pump and the vent are the original's model files, which name their pictures where it kept them
+        for (String part : List.of("smelter_aux", "smelter_vent")) {
+            all.add(LegacyAsset.of("models/block/" + part + ".json").five("models/block/" + part + ".json")
+                    .asModel());
+        }
+        for (String picture : List.of("smelter_aux", "smelter_aux_pump", "smelter_vent")) {
+            all.add(LegacyAsset.of("textures/block/legacy/" + picture + ".png")
+                    .five("textures/blocks/" + picture + ".png"));
+        }
         // the smelter's screen is laid out as the original's was, so its panel goes straight in
         all.add(LegacyAsset.of("textures/gui/essentia_smelter.png").five("textures/gui/gui_smelter.png"));
         // the flame is grey and dyed in code, the bead is not, as in the original

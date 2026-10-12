@@ -264,13 +264,22 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
     /** A furnace in every way the blockstate cares about: it faces somewhere, and it is lit or it is not. */
     private void essentiaSmelter() {
-        // the original's underside is the furnace's top
-        ModelFile off = models().orientableWithBottom("essentia_smelter", modLoc("block/smelter_side"),
-                modLoc("block/smelter_front"), mcLoc("block/furnace_top"), modLoc("block/smelter_top"));
-        ModelFile on = models().orientableWithBottom("essentia_smelter_on", modLoc("block/smelter_side"),
-                modLoc("block/smelter_front_on"), mcLoc("block/furnace_top"), modLoc("block/smelter_top"));
-        horizontalBlock(ModBlocks.ESSENTIA_SMELTER.get(),
-                state -> state.getValue(EssentiaSmelterBlock.LIT) ? on : off);
+        // the original's underside is the furnace's top for the plain one, and its own metal for the other two
+        smelter(ModBlocks.ESSENTIA_SMELTER.get(), "essentia_smelter", "smelter", mcLoc("block/furnace_top"));
+        smelter(ModBlocks.ALCHEMIUM_SMELTER.get(), "alchemium_smelter", "alchemium_smelter",
+                modLoc("block/alchemium_block"));
+        smelter(ModBlocks.VOID_SMELTER.get(), "void_smelter", "void_smelter", modLoc("block/legacy/void_metal"));
+        // the pump and the vent are the original's model files, drawn facing north into the smelter
+        horizontalBlock(ModBlocks.SMELTER_AUX.get(), models().getExistingFile(modLoc("block/smelter_aux")));
+        horizontalBlock(ModBlocks.SMELTER_VENT.get(), models().getExistingFile(modLoc("block/smelter_vent")));
+    }
+
+    private void smelter(EssentiaSmelterBlock block, String name, String faces, ResourceLocation bottom) {
+        ModelFile off = models().orientableWithBottom(name, modLoc("block/" + faces + "_side"),
+                modLoc("block/" + faces + "_front"), bottom, modLoc("block/smelter_top"));
+        ModelFile on = models().orientableWithBottom(name + "_on", modLoc("block/" + faces + "_side"),
+                modLoc("block/" + faces + "_front_on"), bottom, modLoc("block/smelter_top"));
+        horizontalBlock(block, state -> state.getValue(EssentiaSmelterBlock.LIT) ? on : off);
     }
 
     /**

@@ -41,6 +41,8 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
                 .addTag(ModTags.Blocks.ORES_AMBER)
                 .addTag(ModTags.Blocks.ORES_CINNABAR)
                 .addTag(ModTags.Blocks.CRYSTALS)
+                .add(ModBlocks.ALCHEMIUM_SMELTER.get(), ModBlocks.VOID_SMELTER.get(), ModBlocks.SMELTER_AUX.get(),
+                        ModBlocks.SMELTER_VENT.get())
                 .add(ModBlocks.CRUCIBLE.get(), ModBlocks.ESSENTIA_SMELTER.get(), ModBlocks.ALEMBIC.get(),
                         ModBlocks.TUBE.get(), ModBlocks.JAR.get())
                 .add(ModBlocks.TUBE_VALVE.get(), ModBlocks.TUBE_ONEWAY.get(), ModBlocks.TUBE_RESTRICT.get(),

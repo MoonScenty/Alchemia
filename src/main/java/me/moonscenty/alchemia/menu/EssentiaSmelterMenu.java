@@ -142,6 +142,9 @@ public class EssentiaSmelterMenu extends AbstractContainerMenu {
 
     @Override
     public boolean stillValid(Player player) {
-        return stillValid(access, player, ModBlocks.ESSENTIA_SMELTER.get());
+        // any of the three: they share the one screen
+        return access.evaluate((level, pos) -> level.getBlockState(pos).getBlock()
+                instanceof me.moonscenty.alchemia.block.EssentiaSmelterBlock
+                && player.distanceToSqr(pos.getCenter()) <= 64.0, true);
     }
 }

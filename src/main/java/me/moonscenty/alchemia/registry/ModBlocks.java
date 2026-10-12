@@ -92,9 +92,19 @@ public class ModBlocks {
                     .noOcclusion()));
 
     public static final DeferredBlock<EssentiaSmelterBlock> ESSENTIA_SMELTER = register("essentia_smelter",
-            () -> new EssentiaSmelterBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE)
-                    .mapColor(MapColor.STONE)
-                    .lightLevel(state -> state.getValue(EssentiaSmelterBlock.LIT) ? 13 : 0)));
+            () -> new EssentiaSmelterBlock(smelter(MapColor.STONE), EssentiaSmelterBlock.Tier.BASIC));
+    /** The two better smelters: the same fire and the same fifty, less lost on the way. */
+    public static final DeferredBlock<EssentiaSmelterBlock> ALCHEMIUM_SMELTER = register("alchemium_smelter",
+            () -> new EssentiaSmelterBlock(smelter(MapColor.COLOR_PURPLE), EssentiaSmelterBlock.Tier.ALCHEMIUM));
+    public static final DeferredBlock<EssentiaSmelterBlock> VOID_SMELTER = register("void_smelter",
+            () -> new EssentiaSmelterBlock(smelter(MapColor.COLOR_BLACK), EssentiaSmelterBlock.Tier.VOID));
+    /** What goes against a smelter's sides: a pump that pours one more column, and a vent that catches its flux. */
+    public static final DeferredBlock<me.moonscenty.alchemia.block.SmelterAuxBlock> SMELTER_AUX =
+            register("smelter_aux", () -> new me.moonscenty.alchemia.block.SmelterAuxBlock(
+                    BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).strength(1.0F, 10.0F).noOcclusion()));
+    public static final DeferredBlock<me.moonscenty.alchemia.block.SmelterVentBlock> SMELTER_VENT =
+            register("smelter_vent", () -> new me.moonscenty.alchemia.block.SmelterVentBlock(
+                    BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).strength(1.0F, 10.0F).noOcclusion()));
 
     public static final DeferredBlock<AlembicBlock> ALEMBIC = register("alembic",
             () -> new AlembicBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS)
@@ -255,6 +265,13 @@ public class ModBlocks {
     public static final DeferredBlock<me.moonscenty.alchemia.block.AuraTotemBlock> AURA_TOTEM_POLE_PURE =
             register("aura_totem_pole_pure",
                     () -> totem(me.moonscenty.alchemia.block.AuraTotemBlock.Kind.POLE_PURE));
+
+    /** A smelter: a furnace in all but what it makes, lit when it burns. */
+    private static BlockBehaviour.Properties smelter(MapColor colour) {
+        return BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE)
+                .mapColor(colour)
+                .lightLevel(state -> state.getValue(EssentiaSmelterBlock.LIT) ? 13 : 0);
+    }
 
     /** Soft wood but hard to blow apart, as the original's. */
     private static me.moonscenty.alchemia.block.AuraTotemBlock totem(

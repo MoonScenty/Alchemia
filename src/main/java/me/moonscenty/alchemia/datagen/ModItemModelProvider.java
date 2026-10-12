@@ -39,6 +39,10 @@ public class ModItemModelProvider extends ItemModelProvider {
             withExistingParent(tube[0], mcLoc("item/generated")).texture("layer0", modLoc("item/legacy/" + tube[1]));
         }
         withExistingParent("essentia_smelter", modLoc("block/essentia_smelter"));
+        withExistingParent("alchemium_smelter", modLoc("block/alchemium_smelter"));
+        withExistingParent("void_smelter", modLoc("block/void_smelter"));
+        withExistingParent("smelter_aux", modLoc("block/smelter_aux"));
+        withExistingParent("smelter_vent", modLoc("block/smelter_vent"));
         withExistingParent("arcane_workbench", modLoc("block/arcane_workbench"));
         withExistingParent("focal_manipulator", modLoc("block/focal_manipulator"));
         // drawn in the hand on the original's meshes by LegacyMeshItemModel; these only say how they are held

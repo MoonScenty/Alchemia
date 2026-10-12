@@ -5,7 +5,10 @@ import me.moonscenty.alchemia.aspect.AspectList;
 import me.moonscenty.alchemia.aspect.Aspects;
 import me.moonscenty.alchemia.block.EssentiaSmelterBlock;
 import me.moonscenty.alchemia.essentia.EssentiaHolder;
-import me.moonscenty.alchemia.item.AlumentumItem;
+import me.moonscenty.alchemia.aura.AuraHandler;
+import me.moonscenty.alchemia.block.SmelterAuxBlock;
+import me.moonscenty.alchemia.block.SmelterVentBlock;
+import me.moonscenty.alchemia.registry.ModAspects;
 import me.moonscenty.alchemia.menu.EssentiaSmelterMenu;
 import me.moonscenty.alchemia.registry.ModBlockEntities;
 import me.moonscenty.alchemia.registry.ModItems;
@@ -57,13 +60,19 @@ public class EssentiaSmelterBlockEntity extends BlockEntity implements WorldlyCo
     public static final int CAPACITY = 50;
     /** How long a point of essentia takes to boil out of something, in ticks. */
     private static final int PER_ASPECT = 10;
-    /** What a point costs while alumentum is in the fire: four fifths of the usual, as the original had it. */
-    private static final int PER_ASPECT_HURRIED = PER_ASPECT * AlumentumItem.HURRIES_BY / 5;
     /** What each pair of bellows blowing on it takes off the time anything takes to boil down. */
     private static final float BELLOWS_HURRY = 0.125F;
-
-    /** How often it lets one point go upwards. */
-    private static final int POURS_EVERY = 40;
+    /** What alumentum in the fire does to the wait between pours: four fifths of it, as the original had it. */
+    private static final float HURRIED = 0.8F;
+    /**
+     * How much harder flux is to keep than anything else. The original held on to a point of flux only two thirds
+     * as often as a point of anything else, so it is the first thing a smelter loses.
+     */
+    private static final float FLUX_KEPT = 0.66F;
+    /** What a vent catches of each point lost, tried vent by vent until one catches it. */
+    private static final float VENT_CATCHES = 0.333F;
+    /** The block event a vent's puff is sent to the client as. */
+    public static final int VENTED = 1;
 
     private final NonNullList<ItemStack> contents = NonNullList.withSize(2, ItemStack.EMPTY);
     private AspectList held = AspectList.EMPTY;
@@ -161,14 +170,41 @@ public class EssentiaSmelterBlockEntity extends BlockEntity implements WorldlyCo
         smelter.setChanged();
     }
 
-    /** Lets one point go up into the vessels above, now and then. A full smelter is one nobody emptied. */
+    /** What kind of smelter it is, which is settled by the block it is in. */
+    private EssentiaSmelterBlock.Tier tier() {
+        return getBlockState().getBlock() instanceof EssentiaSmelterBlock smelter
+                ? smelter.tier() : EssentiaSmelterBlock.Tier.BASIC;
+    }
+
+    /**
+     * Lets one point go up into the vessels above, now and then, and one more up through every pump beside it.
+     * A full smelter is one nobody emptied.
+     * <p>
+     * It pours whether it is burning or not: what has already boiled off goes on rising after the fire is out.
+     */
     private void pour(Level level, BlockPos pos) {
-        if (counter++ < POURS_EVERY || held.isEmpty()) {
+        int every = tier().poursEvery();
+        if (hurried) {
+            every = (int) (every * HURRIED);
+        }
+        if (++counter < every || held.isEmpty()) {
             return;
         }
         counter = 0;
+        pourUp(level, pos);
+        for (Direction side : SmelterAuxBlock.SIDES) {
+            BlockState beside = level.getBlockState(pos.relative(side));
+            if (beside.getBlock() instanceof SmelterAuxBlock
+                    && beside.getValue(SmelterAuxBlock.FACING) == side.getOpposite()) {
+                pourUp(level, pos.relative(side));
+            }
+        }
+    }
+
+    /** One point into the column of vessels standing on the given block, if any of them will take one. */
+    private void pourUp(Level level, BlockPos from) {
         for (Holder<Aspect> aspect : held.sortedByAmount()) {
-            if (held.get(aspect) > 0 && AlembicBlockEntity.pourInto(level, pos, aspect)) {
+            if (held.get(aspect) > 0 && AlembicBlockEntity.pourInto(level, from, aspect)) {
                 held = held.reduce(aspect, 1);
                 return;
             }
@@ -204,14 +240,59 @@ public class EssentiaSmelterBlockEntity extends BlockEntity implements WorldlyCo
         }
         ItemStack input = contents.get(SLOT_INPUT);
         AspectList made = Aspects.of(input);
-        int perAspect = hurried ? PER_ASPECT_HURRIED : PER_ASPECT;
-        cooksFor = Math.max(1, (int) (made.total() * perAspect * (1.0F - BELLOWS_HURRY * bellows())));
+        cooksFor = Math.max(1, (int) (made.total() * PER_ASPECT * (1.0F - BELLOWS_HURRY * bellows())));
         if (++cooked < cooksFor) {
             return;
         }
         cooked = 0;
-        held = held.add(made);
+        held = held.add(kept(made));
         input.shrink(1);
+    }
+
+    /**
+     * What survives the boiling. Every point is a chance: a smelter keeps four in five of what goes into it, a
+     * better one more. What is lost goes up as flux, unless a vent beside it catches it first.
+     */
+    private AspectList kept(AspectList made) {
+        if (level == null) {
+            return made;
+        }
+        float keeps = tier().efficiency();
+        AspectList kept = made;
+        int lost = 0;
+        for (Holder<Aspect> aspect : made.sortedByName()) {
+            float threshold = aspect.value() == ModAspects.FLUX.value() ? keeps * FLUX_KEPT : keeps;
+            for (int point = 0; point < made.get(aspect); point++) {
+                if (level.random.nextFloat() > threshold) {
+                    kept = kept.reduce(aspect, 1);
+                    lost++;
+                }
+            }
+        }
+        int polluting = 0;
+        for (int point = 0; point < lost; point++) {
+            if (!vented()) {
+                polluting++;
+            }
+        }
+        if (polluting > 0) {
+            AuraHandler.add(level, worldPosition, ModAspects.FLUX, polluting);
+        }
+        return kept;
+    }
+
+    /** Whether a vent beside it caught a point of flux, and if one did, its puff. */
+    private boolean vented() {
+        for (Direction side : SmelterAuxBlock.SIDES) {
+            BlockState beside = level.getBlockState(worldPosition.relative(side));
+            if (beside.getBlock() instanceof SmelterVentBlock
+                    && beside.getValue(SmelterVentBlock.FACING) == side.getOpposite()
+                    && level.random.nextFloat() < VENT_CATCHES) {
+                level.blockEvent(worldPosition, getBlockState().getBlock(), VENTED, side.get3DDataValue());
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -237,14 +318,17 @@ public class EssentiaSmelterBlockEntity extends BlockEntity implements WorldlyCo
         return !made.isEmpty() && made.total() <= CAPACITY - held.total();
     }
 
-    /** What a broken smelter lets go. The essentia in it has nowhere to go but out. */
+    /** What a broken smelter lets go. The essentia in it has nowhere to go but out, as flux, as the original's did. */
     public void spill() {
+        if (level != null && !level.isClientSide && !held.isEmpty()) {
+            AuraHandler.add(level, worldPosition, ModAspects.FLUX, held.total());
+        }
         held = AspectList.EMPTY;
     }
 
     @Override
     public Component getDisplayName() {
-        return Component.translatable("block.alchemia.essentia_smelter");
+        return getBlockState().getBlock().getName();
     }
 
     @Override

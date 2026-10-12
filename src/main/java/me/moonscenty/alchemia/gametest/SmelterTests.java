@@ -1,13 +1,16 @@
 package me.moonscenty.alchemia.gametest;
 
 import me.moonscenty.alchemia.Alchemia;
+import me.moonscenty.alchemia.aura.AuraHandler;
 import me.moonscenty.alchemia.block.AlembicBlock;
+import me.moonscenty.alchemia.block.SmelterAuxBlock;
 import me.moonscenty.alchemia.block.entity.AlembicBlockEntity;
 import me.moonscenty.alchemia.block.entity.EssentiaSmelterBlockEntity;
 import me.moonscenty.alchemia.registry.ModAspects;
 import me.moonscenty.alchemia.registry.ModBlocks;
 import me.moonscenty.alchemia.registry.ModItems;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.item.ItemStack;
@@ -25,8 +28,8 @@ import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 public class SmelterTests {
     private static final String TEMPLATE = "empty_32x40x32";
     private static final BlockPos WHERE = new BlockPos(2, 1, 2);
-    /** Long enough that the difference between ten ticks a point and eight is more than one point. */
-    private static final int WATCHED = 200;
+    /** Long enough that pours every forty ticks and every thirty-two come out more than one apart. */
+    private static final int POURED = 600;
 
     private static EssentiaSmelterBlockEntity smelter(GameTestHelper helper, ItemStack input) {
         return smelter(helper, input, new ItemStack(Items.COAL, 8));
@@ -103,36 +106,70 @@ public class SmelterTests {
     }
 
     /**
-     * Alumentum burns for four coals and hurries the work by a fifth.
+     * Alumentum burns for four coals and hurries the pouring by a fifth.
      * <p>
-     * Both halves matter and only one of them is visible: a fuel that lasted four times as long but worked at the
-     * same speed would be a convenience, and this is meant to be something a player spends to go faster.
+     * The original hurried what rises, not what boils: the same item takes as long to come apart either way, but
+     * what has come apart goes up into the vessels every four fifths of the usual wait.
      */
     @GameTest(template = TEMPLATE, timeoutTicks = 400)
-    public static void alumentumBurnsLongAndHurriesTheWork(GameTestHelper helper) {
+    public static void alumentumBurnsLongAndHurriesThePour(GameTestHelper helper) {
         helper.assertValueEqual(new ItemStack(ModItems.ALUMENTUM.get()).getBurnTime(RecipeType.SMELTING),
                 new ItemStack(Items.COAL).getBurnTime(RecipeType.SMELTING) * 4,
                 "alumentum is worth four coals in anything that takes fuel");
 
-        // the same fire, the same iron, the same number of ticks: the hurried one is further along
+        // the same fire, the same iron, the same number of ticks: more has risen out of the hurried one
         EssentiaSmelterBlockEntity coal = smelter(helper, new ItemStack(Items.IRON_INGOT, 32));
-        run(helper, coal, WATCHED);
+        AlembicBlockEntity caughtFromCoal = alembic(helper, 1);
+        run(helper, coal, POURED);
 
         BlockPos aside = WHERE.east(4);
         helper.setBlock(aside, ModBlocks.ESSENTIA_SMELTER.get());
+        helper.setBlock(aside.above(), ModBlocks.ALEMBIC.get());
+        AlembicBlockEntity caughtFromFired =
+                (AlembicBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(aside.above()));
         EssentiaSmelterBlockEntity fired =
                 (EssentiaSmelterBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(aside));
         fired.setItem(EssentiaSmelterBlockEntity.SLOT_INPUT, new ItemStack(Items.IRON_INGOT, 32));
         fired.setItem(EssentiaSmelterBlockEntity.SLOT_FUEL, new ItemStack(ModItems.ALUMENTUM.get(), 4));
         BlockPos at = helper.absolutePos(aside);
-        for (int tick = 0; tick < WATCHED; tick++) {
+        for (int tick = 0; tick < POURED; tick++) {
             EssentiaSmelterBlockEntity.tick(helper.getLevel(), at, helper.getLevel().getBlockState(at), fired);
         }
 
-        helper.assertTrue(coal.held().total() > 0, "the one on coal got somewhere");
-        helper.assertTrue(fired.held().total() > coal.held().total(),
-                "and the one on alumentum got further in the same time: "
-                        + fired.held().total() + " against " + coal.held().total());
+        helper.assertTrue(caughtFromCoal.amount() > 0, "the one on coal poured something");
+        helper.assertTrue(caughtFromFired.amount() > caughtFromCoal.amount(),
+                "and the one on alumentum poured more in the same time: "
+                        + caughtFromFired.amount() + " against " + caughtFromCoal.amount());
+        helper.succeed();
+    }
+
+    /** A pump against its side pours a second column off the same fire. */
+    @GameTest(template = TEMPLATE, timeoutTicks = 400)
+    public static void aPumpPoursASecondColumn(GameTestHelper helper) {
+        EssentiaSmelterBlockEntity smelter = smelter(helper, new ItemStack(Items.IRON_INGOT, 32));
+        AlembicBlockEntity overSmelter = alembic(helper, 1);
+        BlockPos pump = WHERE.east();
+        helper.setBlock(pump, ModBlocks.SMELTER_AUX.get().defaultBlockState()
+                .setValue(SmelterAuxBlock.FACING, Direction.WEST));
+        helper.setBlock(pump.above(), ModBlocks.ALEMBIC.get());
+        AlembicBlockEntity overPump =
+                (AlembicBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(pump.above()));
+
+        run(helper, smelter, POURED);
+        helper.assertTrue(overSmelter.amount() > 0, "the column over the smelter filled");
+        helper.assertTrue(overPump.amount() > 0, "and so did the one over the pump");
+        helper.succeed();
+    }
+
+    /** What a smelter fails to keep goes into the air as flux. */
+    @GameTest(template = TEMPLATE, timeoutTicks = 400)
+    public static void whatIsLostGoesUpAsFlux(GameTestHelper helper) {
+        BlockPos at = helper.absolutePos(WHERE);
+        int before = AuraHandler.get(helper.getLevel(), at, ModAspects.FLUX);
+        EssentiaSmelterBlockEntity smelter = smelter(helper, new ItemStack(Items.IRON_INGOT, 64));
+        run(helper, smelter, POURED);
+        helper.assertTrue(AuraHandler.get(helper.getLevel(), at, ModAspects.FLUX) > before,
+                "a plain smelter loses a fifth of what it boils, and that fifth is flux");
         helper.succeed();
     }
 }

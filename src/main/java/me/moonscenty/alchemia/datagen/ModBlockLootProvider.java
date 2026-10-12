@@ -76,6 +76,10 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
                         .include(ModDataComponents.CONTENTS.get())
                         .include(ModDataComponents.ESSENTIA.get())));
         dropSelf(ModBlocks.ESSENTIA_SMELTER.get());
+        dropSelf(ModBlocks.ALCHEMIUM_SMELTER.get());
+        dropSelf(ModBlocks.VOID_SMELTER.get());
+        dropSelf(ModBlocks.SMELTER_AUX.get());
+        dropSelf(ModBlocks.SMELTER_VENT.get());
         dropSelf(ModBlocks.ALEMBIC.get());
         dropSelf(ModBlocks.ARCANE_WORKBENCH.get());
         dropSelf(ModBlocks.FOCAL_MANIPULATOR.get());

@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "alchemia:block/smelter_vent",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "alchemia:block/smelter_vent"
+    },
+    "facing=south": {
+      "model": "alchemia:block/smelter_vent",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "alchemia:block/smelter_vent",
+      "y": 270
+    }
+  }
+}

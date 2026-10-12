@@ -526,6 +526,41 @@ public class ModRecipeProvider extends RecipeProvider {
                         'S', Ingredient.of(Tags.Items.COBBLESTONES)),
                 "BCB", "SFS", "SSS");
 
+        // the better smelters, and what goes against a smelter's sides. The original built the first two round an
+        // alchemical construct, which there is none of here; the brass block it was drawn as stands in for it, and
+        // for the advanced construct (a construct worked with a primordial pearl), a primal charm
+        arcane(output, "alchemium_smelter", "alchemium_smelter", new ItemStack(ModBlocks.ALCHEMIUM_SMELTER.get()),
+                AspectList.of(ModAspects.FIRE, 350).add(ModAspects.WATER, 350),
+                Map.of('B', Ingredient.of(ModItems.BRASS_PLATE),
+                        'F', Ingredient.of(ModBlocks.ESSENTIA_SMELTER),
+                        'G', Ingredient.of(ModBlocks.BRASS_BLOCK),
+                        'I', Ingredient.of(ModItems.ALCHEMIUM_INGOT)),
+                "BFB", "IGI", "III");
+        arcane(output, "void_smelter", "void_smelter", new ItemStack(ModBlocks.VOID_SMELTER.get()),
+                AspectList.of(ModAspects.FIRE, 750).add(ModAspects.WATER, 750),
+                Map.of('B', Ingredient.of(ModItems.BRASS_PLATE),
+                        'F', Ingredient.of(ModBlocks.ALCHEMIUM_SMELTER),
+                        'G', Ingredient.of(ModItems.PRIMAL_CHARM),
+                        'I', Ingredient.of(ModItems.VOID_INGOT)),
+                "BFB", "IGI", "III");
+        arcane(output, "smelter_aux", "improved_distillation", new ItemStack(ModBlocks.SMELTER_AUX.get()),
+                AspectList.of(ModAspects.AIR, 50).add(ModAspects.WATER, 50).add(ModAspects.EARTH, 25),
+                Map.of('W', Ingredient.of(ModBlocks.GREATWOOD.planks()),
+                        'T', Ingredient.of(ModBlocks.TUBE_FILTER),
+                        'R', Ingredient.of(ModItems.BRASS_PLATE),
+                        'G', Ingredient.of(ModBlocks.BRASS_BLOCK),
+                        'I', Ingredient.of(Tags.Items.INGOTS_IRON),
+                        'B', Ingredient.of(ModBlocks.BELLOWS)),
+                "WTW", "RGR", "IBI");
+        arcane(output, "smelter_vent", "improved_distillation", new ItemStack(ModBlocks.SMELTER_VENT.get()),
+                AspectList.of(ModAspects.AIR, 125).add(ModAspects.WATER, 125).add(ModAspects.ORDER, 100),
+                Map.of('I', Ingredient.of(Tags.Items.INGOTS_IRON),
+                        'B', Ingredient.of(ModItems.BRASS_INGOT),
+                        'M', Ingredient.of(ModItems.MORPHIC_RESONATOR),
+                        'G', Ingredient.of(ModBlocks.BRASS_BLOCK),
+                        'F', Ingredient.of(ModItems.FILTER)),
+                "IBI", "MGF", "IBI");
+
         arcane(output, "alembic", "distillation", new ItemStack(ModBlocks.ALEMBIC.get()),
                 AspectList.of(ModAspects.AIR, 15).add(ModAspects.WATER, 25),
                 Map.of('W', Ingredient.of(ModBlocks.GREATWOOD.planks()),
