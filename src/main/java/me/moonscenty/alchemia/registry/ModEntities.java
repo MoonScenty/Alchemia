@@ -314,6 +314,16 @@ public class ModEntities {
                     .clientTrackingRange(10)
                     .build("golem"));
 
+    /** A golem's dart: a small arrow. */
+    public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.golem.GolemDart>> GOLEM_DART =
+            ENTITIES.register("golem_dart", () -> EntityType.Builder
+                    .<me.moonscenty.alchemia.golem.GolemDart>of(me.moonscenty.alchemia.golem.GolemDart::new,
+                            MobCategory.MISC)
+                    .sized(0.2F, 0.2F)
+                    .clientTrackingRange(4)
+                    .updateInterval(20)
+                    .build("golem_dart"));
+
     /** What anything alive needs before the game will make one. */
     public static void attributes(EntityAttributeCreationEvent event) {
         event.put(AUTOCASTER.get(), Autocaster.attributes().build());

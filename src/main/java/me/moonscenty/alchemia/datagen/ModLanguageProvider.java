@@ -537,6 +537,24 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         addItem(ModItems.VOID_NUGGET, pick("Void Nugget", "공허 조각"));
         addItem(ModItems.VOID_PLATE, pick("Void Plate", "공허 판"));
         addItem(ModItems.VOID_GEAR, pick("Void Gear", "공허 톱니바퀴"));
+        addItem(ModItems.SEALS.get("guard"), pick("Control Seal: Guard", "제어 봉인: 경비"));
+        addItem(ModItems.SEALS.get("guard_advanced"), pick("Advanced Control Seal: Guard", "상급 제어 봉인: 경비"));
+        addItem(ModItems.SEALS.get("butcher"), pick("Control Seal: Butcher", "제어 봉인: 도축"));
+        addItem(ModItems.SEALS.get("harvest"), pick("Control Seal: Harvest", "제어 봉인: 수확"));
+        addItem(ModItems.SEALS.get("lumber"), pick("Control Seal: Lumberjack", "제어 봉인: 벌목"));
+        addItem(ModItems.SEALS.get("breaker"), pick("Control Seal: Block Breaker", "제어 봉인: 블록 부수기"));
+        addItem(ModItems.SEALS.get("use"), pick("Control Seal: Use", "제어 봉인: 사용"));
+        add("golem.alchemia.prop.mob", pick("Target monsters", "괴물을 노림"));
+        add("golem.alchemia.prop.animal", pick("Target animals", "동물을 노림"));
+        add("golem.alchemia.prop.player", pick("Target players", "플레이어를 노림"));
+        add("golem.alchemia.prop.replant", pick("Replant crops", "작물을 다시 심음"));
+        add("golem.alchemia.prop.provision", pick("Ask for seed", "씨앗을 청함"));
+        add("golem.alchemia.prop.left", pick("Left click", "왼쪽 클릭"));
+        add("golem.alchemia.prop.empty", pick("Click where the block has gone", "블록이 없는 곳을 클릭"));
+        add("golem.alchemia.prop.emptyhand", pick("May use an empty hand", "빈손으로도 씀"));
+        add("golem.alchemia.prop.sneak", pick("Click crouching", "웅크리고 클릭"));
+        add("golem.alchemia.prop.provision.wl", pick("Ask for what is whitelisted", "허용 목록의 것을 청함"));
+        add("entity.alchemia.golem_dart", pick("Golem Dart", "골렘 다트"));
         addItem(ModItems.TALLOW, pick("Magic Tallow", "마법 수지"));
         addItem(ModItems.SEAL_BLANK, pick("Blank Seal", "빈 봉인"));
         addItem(ModItems.SEALS.get("pickup"), pick("Control Seal: Collect", "제어 봉인: 수집"));
@@ -997,6 +1015,27 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                 {"seal_provide", "Control Seal: Provide", "제어 봉인: 공급",
                  "Stuck on a container, it answers other seals within sixty-four blocks that need something to work with: when one asks for something this seal's filter lets by and the container has it, a golem that works for the asking seal fetches it out. It can hand out one at a time and leave one behind. Only smart golems work it.",
                  "통에 붙이면 64칸 안에서 일할 거리가 필요한 다른 봉인에 답한다. 어떤 봉인이 이 봉인의 필터가 들이는 것을 청하고 통에 그것이 있으면, 청한 봉인을 위해 일하는 골렘이 그것을 꺼내 간다. 한 번에 하나씩 내주거나 하나는 남기게 할 수 있다. 영리한 골렘만 일한다."},
+                {"seal_guard", "Control Seal: Guard", "제어 봉인: 경비",
+                 "An aggression module -- blaze powder behind glass, on brass -- gives a golem the will to fight, and a guarding seal tells it what at. Fighting golems go for whatever monster comes into the seal's area. The advanced seal, for smart golems, can be set on animals too, and on players where the server allows it.",
+                 "공격 모듈 — 황동 위에 유리로 가둔 블레이즈 가루 — 은 골렘에게 싸울 마음을 주고, 경비 봉인은 무엇과 싸울지를 일러 준다. 싸우는 골렘은 봉인의 범위에 들어온 괴물에게 덤벼든다. 영리한 골렘을 위한 상급 봉인은 동물에게도, 서버가 허락하면 플레이어에게도 덤비게 할 수 있다."},
+                {"golem_combat", "Golem Combat", "골렘 전투",
+                 "With the aggression module worked out, golems can be built for fighting: claw arms that snap shut and hit hard, dart launchers that make their own darts and shoot from up to sixteen blocks, armour plating of the golem's own material, an armoured smart head that is no longer fragile, and an aggression module fitted to any golem at all.",
+                 "공격 모듈을 알고 나면 골렘을 싸우도록 지을 수 있다. 세게 치며 닫히는 집게 팔, 다트를 스스로 지어 열여섯 칸까지 쏘는 다트 발사기, 제 재료로 덧댄 장갑판, 더는 연약하지 않은 장갑 두른 영리한 머리, 그리고 어느 골렘에든 다는 공격 모듈."},
+                {"seal_butcher", "Control Seal: Butcher", "제어 봉인: 도축",
+                 "Every ten seconds, smart fighting golems take one grown animal from any herd of more than two in the seal's area, leaving the young, the tame and the last two alone. A herd is thinned, never ended.",
+                 "10초마다 영리한 전투 골렘이 봉인 범위 안에 셋 이상 있는 무리에서 다 자란 동물 하나를 잡는다. 새끼와 길든 것과 마지막 둘은 두고 간다. 무리는 줄어들 뿐 사라지지 않는다."},
+                {"seal_use", "Control Seal: Use", "제어 봉인: 사용",
+                 "A deft, smart golem uses what it carries on the block the seal is stuck to, through the face it is on, as a player would with a right click, or a left click if set so. It can use an empty hand, click crouching, work only where the block has gone, and ask providing seals for whatever is on its whitelist. What the click leaves in its hand it keeps.",
+                 "손재주 있고 영리한 골렘이 든 것을, 봉인이 붙은 블록에 그 면으로, 플레이어가 오른쪽 클릭하듯 쓴다. 설정하면 왼쪽 클릭으로 쓴다. 빈손으로도 쓰게, 웅크리고 클릭하게, 블록이 없어진 곳에서만 일하게, 허용 목록의 것을 공급 봉인에 청하게 할 수 있다. 클릭하고 손에 남은 것은 골렘이 지닌다."},
+                {"seal_harvest", "Control Seal: Harvest", "제어 봉인: 수확",
+                 "Deft, smart golems take whatever has ripened in the seal's area: grown crops, melons and pumpkins, the upper parts of sugar cane and cactus, ripe nether wart and cocoa. Berries are picked and left on the bush. Set to replant, the golem plants again whatever it cut, tilling the ground if it has gone back to dirt, and can ask providing seals for the seed.",
+                 "손재주 있고 영리한 골렘이 봉인 범위에서 익은 것을 거둔다. 다 자란 작물, 수박과 호박, 사탕수수와 선인장의 윗동, 익은 네더 사마귀와 코코아. 열매는 따기만 하고 덤불은 둔다. 다시 심기를 켜면 벤 것을 다시 심고, 흙으로 돌아간 땅은 먼저 갈며, 씨앗을 공급 봉인에 청할 수도 있다."},
+                {"seal_break", "Control Seal: Block Breaker", "제어 봉인: 블록 부수기",
+                 "Golems with grinder arms break every block in the seal's area that its one filter entry lets by. Each block takes half a second of grinding for every three points of its hardness, and drops what it would have to the right tool.",
+                 "분쇄기 팔을 단 골렘이 봉인 범위에서 필터 한 칸이 들이는 블록을 모두 부순다. 블록마다 단단함 3당 0.5초씩 갈아야 하고, 알맞은 도구로 캔 것처럼 떨군다."},
+                {"seal_lumber", "Control Seal: Lumberjack", "제어 봉인: 벌목",
+                 "Smart golems with grinder arms take down every tree whose logs reach into the seal's area, a log at a time from the crown down, so that nothing is ever left hanging.",
+                 "분쇄기 팔을 단 영리한 골렘이 통나무가 봉인 범위에 들어온 나무를 모두 쓰러뜨린다. 우듬지부터 통나무 하나씩 내려오므로 허공에 매달려 남는 것이 없다."},
                 {"warp", "Warp", "뒤틀림",
                  "Look too long into what should not be, and it begins looking back. The damage is not to the world but to the one studying it, and it does not undo itself with rest.",
                  "있어서는 안 될 것을 오래 들여다보면, 그것도 당신을 들여다보기 시작한다. 상하는 것은 세계가 아니라 그것을 연구하는 자이며, 쉰다고 해서 되돌아오지 않는다."},

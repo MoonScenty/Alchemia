@@ -1,0 +1,27 @@
+{
+  "category": "alchemia:golemancy",
+  "column": -9,
+  "complexity": 2,
+  "icon": "alchemia:seal_lumber",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.seal_lumber.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:seal_lumber"
+    }
+  ],
+  "parents": [
+    "alchemia:seal_break",
+    "alchemia:bioalchemic_mind"
+  ],
+  "requirements": {
+    "alchemia:cognitio": 3,
+    "alchemia:herba": 5,
+    "alchemia:humanus": 3,
+    "alchemia:instrumentum": 5
+  },
+  "row": 6
+}

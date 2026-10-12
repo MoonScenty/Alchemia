@@ -1,0 +1,28 @@
+{
+  "type": "alchemia:infusion",
+  "central": {
+    "item": "alchemia:seal_blank"
+  },
+  "essentia": {
+    "alchemia:humanus": 4,
+    "alchemia:instrumentum": 4,
+    "alchemia:perditio": 4
+  },
+  "instability": 1,
+  "research": "alchemia:seal_break",
+  "result": {
+    "count": 1,
+    "id": "alchemia:seal_breaker"
+  },
+  "ring": [
+    {
+      "item": "minecraft:golden_pickaxe"
+    },
+    {
+      "item": "minecraft:golden_axe"
+    },
+    {
+      "item": "minecraft:golden_shovel"
+    }
+  ]
+}

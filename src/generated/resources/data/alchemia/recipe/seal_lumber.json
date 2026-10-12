@@ -1,0 +1,15 @@
+{
+  "type": "alchemia:crucible",
+  "aspects": {
+    "alchemia:herba": 16,
+    "alchemia:sensus": 8
+  },
+  "catalyst": {
+    "item": "alchemia:seal_breaker"
+  },
+  "research": "alchemia:seal_lumber",
+  "result": {
+    "count": 1,
+    "id": "alchemia:seal_lumber"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "category": "alchemia:golemancy",
+  "column": -3,
+  "icon": "alchemia:seal_use",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.seal_use.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:seal_use"
+    }
+  ],
+  "parents": [
+    "alchemia:control_seals",
+    "alchemia:bioalchemic_mind",
+    "alchemia:infusion"
+  ],
+  "requirements": {
+    "alchemia:cognitio": 3,
+    "alchemia:fabrico": 5,
+    "alchemia:humanus": 3
+  },
+  "row": 6
+}

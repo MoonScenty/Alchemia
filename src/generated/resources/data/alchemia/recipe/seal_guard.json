@@ -1,0 +1,15 @@
+{
+  "type": "alchemia:crucible",
+  "aspects": {
+    "alchemia:aversio": 8,
+    "alchemia:praemunio": 8
+  },
+  "catalyst": {
+    "item": "alchemia:seal_blank"
+  },
+  "research": "alchemia:seal_guard",
+  "result": {
+    "count": 1,
+    "id": "alchemia:seal_guard"
+  }
+}

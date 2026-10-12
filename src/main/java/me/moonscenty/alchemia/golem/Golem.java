@@ -71,7 +71,7 @@ import net.minecraft.world.phys.Vec3;
  * takes it back up into a golem item, rank and all; a dye colours the little flag on its back. What it carries it
  * carries in its hands, one stack, or two if it has a hauler's basket.
  */
-public class Golem extends PathfinderMob implements OwnableEntity {
+public class Golem extends PathfinderMob implements OwnableEntity, net.minecraft.world.entity.monster.RangedAttackMob {
     private static final EntityDataAccessor<Long> DESIGN =
             SynchedEntityData.defineId(Golem.class, EntityDataSerializers.LONG);
     private static final EntityDataAccessor<Byte> FLAGS =
@@ -231,6 +231,10 @@ public class Golem extends PathfinderMob implements OwnableEntity {
             if (!has(GolemTrait.FLYER)) {
                 goalSelector.addGoal(0, new FloatGoal(this));
             }
+            if (has(GolemTrait.RANGED) && design.arms() == GolemParts.Arms.DARTS) {
+                goalSelector.addGoal(1, new net.minecraft.world.entity.ai.goal.RangedAttackGoal(this, 1.0, 20, 25,
+                        16.0F));
+            }
             goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.15, false));
             if (following()) {
                 targetSelector.addGoal(1, new GolemGoals.DefendOwner(this));
@@ -361,6 +365,7 @@ public class Golem extends PathfinderMob implements OwnableEntity {
             }
             LivingEntity target = getTarget();
             if (target != null && (!target.isAlive() || isAlliedTo(target)
+                    || has(GolemTrait.RANGED) && distanceToSqr(target) > 1024.0
                     || target instanceof Player && !((ServerLevel) level()).getServer().isPvpAllowed())) {
                 setTarget(null);
             }
@@ -458,6 +463,22 @@ public class Golem extends PathfinderMob implements OwnableEntity {
             }
         }
         return hit;
+    }
+
+    /**
+     * A dart from its launchers: a third as hard as it hits by hand, more the further off the target, aimed a little
+     * high the further it has to go.
+     */
+    @Override
+    public void performRangedAttack(LivingEntity target, float range) {
+        GolemDart dart = new GolemDart(level(), this);
+        dart.setBaseDamage(getAttributeValue(Attributes.ATTACK_DAMAGE) / 3.0 + range + random.nextGaussian() * 0.25);
+        double dx = target.getX() - getX();
+        double dy = target.getEyeY() + range * range - dart.getY();
+        double dz = target.getZ() - getZ();
+        dart.shoot(dx, dy, dz, 1.6F, 3.0F);
+        level().addFreshEntity(dart);
+        playSound(SoundEvents.ARROW_SHOOT, 1.0F, 1.0F / (random.nextFloat() * 0.4F + 0.8F));
     }
 
     /** A smart golem learns from what it does, and comes on a rank at a time, up to ten. */

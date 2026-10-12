@@ -1,0 +1,15 @@
+{
+  "type": "alchemia:crucible",
+  "aspects": {
+    "alchemia:cognitio": 8,
+    "alchemia:sensus": 8
+  },
+  "catalyst": {
+    "item": "alchemia:seal_guard"
+  },
+  "research": "alchemia:seal_guard",
+  "result": {
+    "count": 1,
+    "id": "alchemia:seal_guard_advanced"
+  }
+}

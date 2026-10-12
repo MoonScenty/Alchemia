@@ -1,0 +1,22 @@
+{
+  "category": "alchemia:golemancy",
+  "column": -12,
+  "complexity": 2,
+  "icon": "alchemia:aggression_module",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.golem_combat.page"
+    }
+  ],
+  "parents": [
+    "alchemia:seal_guard"
+  ],
+  "requirements": {
+    "alchemia:aversio": 5,
+    "alchemia:cognitio": 5,
+    "alchemia:machina": 5,
+    "alchemia:praemunio": 5
+  },
+  "row": 2
+}

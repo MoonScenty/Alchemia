@@ -834,7 +834,8 @@ public final class LegacyAssets {
         // seals, which shimmer and bring their timing with them, the tallow they are made with, and the ring and
         // corners drawn round one that is stuck up
         for (String seal : List.of("blank", "pickup", "pickup_advanced", "fill", "fill_advanced", "empty",
-                "empty_advanced", "provider")) {
+                "empty_advanced", "provider", "guard", "guard_advanced", "butcher", "harvest", "lumber", "breaker",
+                "use")) {
             all.add(LegacyAsset.of("textures/item/legacy/seal_" + seal + ".png")
                     .five("textures/items/seals/seal_" + seal + ".png"));
         }
