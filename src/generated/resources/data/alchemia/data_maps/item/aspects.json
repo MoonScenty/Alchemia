@@ -247,6 +247,16 @@
       "alchemia:auram": 2,
       "alchemia:herba": 2
     },
+    "alchemia:taint_tendril": {
+      "alchemia:auram": 1,
+      "alchemia:desiderium": 1,
+      "alchemia:vitium": 2
+    },
+    "alchemia:tainted_goo": {
+      "alchemia:aqua": 1,
+      "alchemia:auram": 1,
+      "alchemia:vitium": 2
+    },
     "alchemia:vishroom": {
       "alchemia:auram": 1,
       "alchemia:herba": 2,

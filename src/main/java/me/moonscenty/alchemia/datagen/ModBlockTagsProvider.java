@@ -129,7 +129,8 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
                 .addTag(BlockTags.BASE_STONE_NETHER);
 
         tag(ModTags.Blocks.TAINT).add(ModBlocks.TAINT_FIBRE.get(), ModBlocks.TAINT_SOIL.get(),
-                ModBlocks.TAINT_CRUST.get(), ModBlocks.TAINT_ROCK.get(), ModBlocks.TAINT_LOG.get());
+                ModBlocks.TAINT_CRUST.get(), ModBlocks.TAINT_ROCK.get(), ModBlocks.TAINT_LOG.get(),
+                ModBlocks.TAINT_GEYSER.get());
         // what the taint eats, once it has a block surrounded, and what it turns it into
         tag(ModTags.Blocks.TAINT_ROTS_TO_SOIL)
                 .addTag(BlockTags.DIRT).addTag(BlockTags.SAND)
@@ -145,6 +146,7 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
                         Blocks.WET_SPONGE, Blocks.HAY_BLOCK, Blocks.BOOKSHELF);
 
         tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.TAINT_SOIL.get(), ModBlocks.TAINT_CRUST.get(), ModBlocks.TAINT_ROCK.get());
+        tag(BlockTags.MINEABLE_WITH_AXE).add(ModBlocks.TAINT_GEYSER.get());
         tag(BlockTags.MINEABLE_WITH_AXE).add(ModBlocks.TAINT_LOG.get());
         tag(BlockTags.MINEABLE_WITH_HOE).add(ModBlocks.TAINT_FIBRE.get());
     }

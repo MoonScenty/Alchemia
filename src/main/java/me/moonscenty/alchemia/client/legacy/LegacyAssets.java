@@ -97,6 +97,9 @@ public final class LegacyAssets {
     public static final String FIREBAT = "firebat";
     /** The pech, which the original built in code on a biped: jaw, pack and all. */
     public static final String PECH = "pech";
+    /** The taintacle, which the original built in code as a chain of segments: ten long, and six for a tendril. */
+    public static final String TAINTACLE = "taintacle";
+    public static final String TAINTACLE_TINY = "taintacle_tiny";
 
     /** The alchemometer as Thaumcraft 4's thaumometer: a six-sided brass frame. */
     public static final String SCANNER_MESH = "models/legacy/scanner.obj";
@@ -138,6 +141,10 @@ public final class LegacyAssets {
                     "thaumcraft/client/renderers/models/entity/ModelFireBat", "()V"))),
             Map.entry(PECH, List.of(new LegacyModelSource(LegacyEdition.FIVE,
                     "thaumcraft/client/renderers/models/entity/ModelPech", "()V"))),
+            Map.entry(TAINTACLE, List.of(new LegacyModelSource(LegacyEdition.FIVE,
+                    "thaumcraft/client/renderers/models/entity/ModelTaintacle", "(I)V", 10))),
+            Map.entry(TAINTACLE_TINY, List.of(new LegacyModelSource(LegacyEdition.FIVE,
+                    "thaumcraft/client/renderers/models/entity/ModelTaintacle", "(I)V", 6))),
             Map.entry(CENTRIFUGE, List.of(new LegacyModelSource(LegacyEdition.FIVE,
                     "thaumcraft/client/renderers/models/block/ModelCentrifuge", "()V"))),
             Map.entry(BORE, List.of(new LegacyModelSource(LegacyEdition.FIVE,
@@ -650,6 +657,19 @@ public final class LegacyAssets {
         all.add(LegacyAsset.of("textures/item/legacy/coin.png").five("textures/items/coin.png"));
         all.add(LegacyAsset.of("textures/item/legacy/knowledge_fragment.png")
                 .five("textures/items/knowledge_fragment.png"));
+        // the creatures of the taint: the crawler's skin for the game's silverfish, the taintacle's for the original's
+        // model, what they leave, and the geyser that lets up swarms
+        all.add(LegacyAsset.of("textures/entity/taint_crawler.png").five("textures/models/creature/crawler.png"));
+        all.add(LegacyAsset.of("textures/entity/taintacle.png").five("textures/models/creature/taintacle.png")
+                .forModel(TAINTACLE));
+        all.add(LegacyAsset.of("textures/item/legacy/tainted_goo.png").five("textures/items/taint_slime.png"));
+        all.add(LegacyAsset.of("textures/item/legacy/taint_tendril.png").five("textures/items/taint_tendril.png"));
+        all.add(block("taint_geyser_side", "taint_geyser_side", null));
+        all.add(block("taint_geyser_top", "taint_geyser_top", null));
+        for (String sound : List.of("swarm1", "swarm2", "swarm3", "swarmattack", "fly1", "fly2", "roots1", "roots2",
+                "roots3", "tentacle1", "tentacle2", "tentacle3", "gore1", "gore2")) {
+            all.add(LegacyAsset.of("sounds/legacy/" + sound + ".ogg").five("sounds/" + sound + ".ogg"));
+        }
         // the wisp's essence, and the original's recordings, which sounds.json names
         all.add(LegacyAsset.of("textures/item/legacy/wispy_essence.png").five("textures/items/wispy_essence.png"));
         for (String sound : List.of("wisplive1", "wisplive2", "wisplive3", "wispdead", "zap1", "zap2", "ice1", "ice2",

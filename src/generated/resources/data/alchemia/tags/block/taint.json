@@ -4,6 +4,7 @@
     "alchemia:taint_soil",
     "alchemia:taint_crust",
     "alchemia:taint_rock",
-    "alchemia:taint_log"
+    "alchemia:taint_log",
+    "alchemia:taint_geyser"
   ]
 }

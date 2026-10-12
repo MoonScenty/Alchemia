@@ -15,7 +15,9 @@ import net.minecraft.world.level.block.state.BlockState;
 
 /**
  * Land the taint has eaten: soil where there was dirt, rock where there was stone, and a crust where there was
- * wood or something softer.
+ * wood or something softer -- and, now and then, a geyser, where a growth on a tainted trunk has broken through.
+ * A geyser lets up a swarm when anybody comes within twenty-four blocks of it, and otherwise breathes flux into thin
+ * air.
  * <p>
  * All three keep the spread going while the flux holds out and go back to something ordinary when it does not.
  * The crust is the odd one: it has no more strength than sand, so it falls, and when it is stacked it slumps
@@ -23,7 +25,7 @@ import net.minecraft.world.level.block.state.BlockState;
  */
 public class TaintGroundBlock extends Block implements Tainted {
     public enum Kind implements StringRepresentable {
-        SOIL("soil"), CRUST("crust"), ROCK("rock");
+        SOIL("soil"), CRUST("crust"), ROCK("rock"), GEYSER("geyser");
 
         private final String name;
 
@@ -41,6 +43,8 @@ public class TaintGroundBlock extends Block implements Tainted {
     private static final int DIE_CHANCE = 10;
     /** How tall a stack of crust has to be before the top of it can slump off sideways. */
     private static final int SLUMP_FROM = 3;
+    /** Below this much flux about it, a geyser breathes more out. The original's quarter of the usual aura. */
+    private static final int GEYSER_BREATHES_BELOW = me.moonscenty.alchemia.aura.AuraGeneration.BASE / 4;
 
     private final Kind kind;
 
@@ -59,6 +63,7 @@ public class TaintGroundBlock extends Block implements Tainted {
             case SOIL -> Blocks.DIRT.defaultBlockState();
             case ROCK -> Blocks.STONE.defaultBlockState();
             case CRUST -> Blocks.AIR.defaultBlockState();
+            case GEYSER -> me.moonscenty.alchemia.registry.ModBlocks.FLUX_GOO.get().defaultBlockState();
         }, Block.UPDATE_ALL);
     }
 
@@ -73,6 +78,25 @@ public class TaintGroundBlock extends Block implements Tainted {
         }
         if (kind == Kind.CRUST) {
             slump(level, pos, random);
+        }
+        if (kind == Kind.GEYSER) {
+            vent(level, pos, random);
+        }
+    }
+
+    /**
+     * A geyser's turn: a swarm, one time in five, if anybody is within twenty-four blocks to be gone after; otherwise,
+     * if the air is thin of flux, a breath of it.
+     */
+    private static void vent(ServerLevel level, BlockPos pos, RandomSource random) {
+        if (random.nextFloat() < 0.2F
+                && level.getNearestPlayer(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 24.0, false) != null) {
+            var swarm = new me.moonscenty.alchemia.entity.TaintSwarm(level);
+            swarm.moveTo(pos.getX() + 0.5, pos.getY() + 1.25, pos.getZ() + 0.5, random.nextInt(360), 0.0F);
+            level.addFreshEntity(swarm);
+        } else if (me.moonscenty.alchemia.aura.AuraHandler.get(level, pos,
+                me.moonscenty.alchemia.registry.ModAspects.FLUX) < GEYSER_BREATHES_BELOW) {
+            me.moonscenty.alchemia.aura.AuraHandler.add(level, pos, me.moonscenty.alchemia.registry.ModAspects.FLUX, 1);
         }
     }
 

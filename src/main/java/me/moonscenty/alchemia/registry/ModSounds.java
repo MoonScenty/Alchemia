@@ -31,6 +31,15 @@ public final class ModSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> PECH_TRADE = sound("pech.trade");
     /** A pech rolling the bones over what it has been offered. */
     public static final DeferredHolder<SoundEvent, SoundEvent> PECH_DICE = sound("pech.dice");
+    /** A taint swarm humming, biting, and one of its flies buzzing past. */
+    public static final DeferredHolder<SoundEvent, SoundEvent> SWARM = sound("swarm");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SWARM_ATTACK = sound("swarm.attack");
+    public static final DeferredHolder<SoundEvent, SoundEvent> FLY = sound("fly");
+    /** A taintacle creaking like roots, and lashing. */
+    public static final DeferredHolder<SoundEvent, SoundEvent> ROOTS = sound("roots");
+    public static final DeferredHolder<SoundEvent, SoundEvent> TENTACLE = sound("tentacle");
+    /** Something bursting wetly. */
+    public static final DeferredHolder<SoundEvent, SoundEvent> GORE = sound("gore");
     /** A handful of coins. */
     public static final DeferredHolder<SoundEvent, SoundEvent> COINS = sound("coins");
 

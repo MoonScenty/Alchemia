@@ -184,6 +184,42 @@ public class ModEntities {
                     .clientTrackingRange(8)
                     .build("pech"));
 
+    /** A taint crawler: smaller than a silverfish, its eyes on the ground. */
+    public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.entity.TaintCrawler>>
+            TAINT_CRAWLER = ENTITIES.register("taint_crawler", () -> EntityType.Builder
+                    .<me.moonscenty.alchemia.entity.TaintCrawler>of(me.moonscenty.alchemia.entity.TaintCrawler::new,
+                            MobCategory.MONSTER)
+                    .sized(0.4F, 0.3F)
+                    .eyeHeight(0.1F)
+                    .clientTrackingRange(8)
+                    .build("taint_crawler"));
+    /** A taint swarm: a cloud two blocks across. */
+    public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.entity.TaintSwarm>>
+            TAINT_SWARM = ENTITIES.register("taint_swarm", () -> EntityType.Builder
+                    .<me.moonscenty.alchemia.entity.TaintSwarm>of(me.moonscenty.alchemia.entity.TaintSwarm::new,
+                            MobCategory.MONSTER)
+                    .sized(2.0F, 2.0F)
+                    .clientTrackingRange(8)
+                    .updateInterval(3)
+                    .build("taint_swarm"));
+    /** A taintacle: three blocks tall, rooted. */
+    public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.entity.Taintacle>>
+            TAINTACLE = ENTITIES.register("taintacle", () -> EntityType.Builder
+                    .<me.moonscenty.alchemia.entity.Taintacle>of(me.moonscenty.alchemia.entity.Taintacle::new,
+                            MobCategory.MONSTER)
+                    .sized(0.8F, 3.0F)
+                    .clientTrackingRange(8)
+                    .build("taintacle"));
+    /** A taint tendril: a taintacle a block tall and a finger thick. */
+    public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.entity.TaintacleTiny>>
+            TAINTACLE_TINY = ENTITIES.register("taintacle_tiny", () -> EntityType.Builder
+                    .<me.moonscenty.alchemia.entity.TaintacleTiny>of(
+                            me.moonscenty.alchemia.entity.TaintacleTiny::new, MobCategory.MONSTER)
+                    .sized(0.22F, 1.0F)
+                    .clientTrackingRange(8)
+                    .noSummon()
+                    .build("taintacle_tiny"));
+
     /** A zombie's size and a zombie's reach. */
     public static final DeferredHolder<EntityType<?>, EntityType<AngryZombie>> ANGRY_ZOMBIE =
             ENTITIES.register("angry_zombie", () -> EntityType.Builder
@@ -212,6 +248,10 @@ public class ModEntities {
         event.put(FIRE_BAT.get(), FireBat.attributes().build());
         event.put(WISP.get(), me.moonscenty.alchemia.entity.Wisp.attributes().build());
         event.put(PECH.get(), me.moonscenty.alchemia.entity.Pech.attributes().build());
+        event.put(TAINT_CRAWLER.get(), me.moonscenty.alchemia.entity.TaintCrawler.attributes().build());
+        event.put(TAINT_SWARM.get(), me.moonscenty.alchemia.entity.TaintSwarm.attributes().build());
+        event.put(TAINTACLE.get(), me.moonscenty.alchemia.entity.Taintacle.attributes().build());
+        event.put(TAINTACLE_TINY.get(), me.moonscenty.alchemia.entity.TaintacleTiny.attributes().build());
         event.put(ANGRY_ZOMBIE.get(), AngryZombie.attributes().build());
         event.put(FURIOUS_ZOMBIE.get(), FuriousZombie.attributes().build());
     }
@@ -231,6 +271,9 @@ public class ModEntities {
                 me.moonscenty.alchemia.entity.Wisp::checkSpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
         event.register(PECH.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 me.moonscenty.alchemia.entity.Pech::checkSpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
+        event.register(TAINTACLE.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                me.moonscenty.alchemia.entity.Taintacle::checkSpawnRules,
+                RegisterSpawnPlacementsEvent.Operation.REPLACE);
     }
 
     private ModEntities() {

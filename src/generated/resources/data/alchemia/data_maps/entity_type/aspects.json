@@ -17,6 +17,18 @@
       "alchemia:humanus": 2,
       "alchemia:permutatio": 2
     },
+    "alchemia:taint_swarm": {
+      "alchemia:aer": 3,
+      "alchemia:vitium": 3
+    },
+    "alchemia:taintacle": {
+      "alchemia:aqua": 2,
+      "alchemia:vitium": 3
+    },
+    "alchemia:taintacle_tiny": {
+      "alchemia:aqua": 1,
+      "alchemia:vitium": 1
+    },
     "alchemia:wisp": {
       "alchemia:aer": 1,
       "alchemia:auram": 1

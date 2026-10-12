@@ -180,7 +180,8 @@ public class Wisp extends FlyingMob implements Enemy, OwnAspects {
         } else {
             drift();
         }
-        if (target instanceof Player player && player.getAbilities().invulnerable || target != null && !target.isAlive()) {
+        if (target instanceof Player player && player.getAbilities().invulnerable
+                || target != null && !target.isAlive()) {
             setTarget(null);
         }
         grudge--;
@@ -196,8 +197,10 @@ public class Wisp extends FlyingMob implements Enemy, OwnAspects {
 
     /** About where it was, now and then somewhere new: six blocks across and a little up or down. */
     private void drift() {
-        if (driftingTo != null && (!level().isEmptyBlock(driftingTo) || driftingTo.getY() < level().getMinBuildHeight() + 1
-                || driftingTo.getY() > level().getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING,
+        if (driftingTo != null && (!level().isEmptyBlock(driftingTo)
+                || driftingTo.getY() < level().getMinBuildHeight() + 1
+                || driftingTo.getY() > level().getHeight(
+                        net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING,
                         driftingTo.getX(), driftingTo.getZ()) + 8)) {
             driftingTo = null;
         }

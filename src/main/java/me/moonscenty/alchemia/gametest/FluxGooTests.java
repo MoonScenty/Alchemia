@@ -134,8 +134,11 @@ public class FluxGooTests {
         FluxEvents.Trouble happened = null;
         for (int i = 0; i < 200 && (happened == null || !happened.name().equals("lightning")); i++) {
             happened = FluxEvents.strikeAt(helper.getLevel(), at, random);
-            // a cloud that gathers first would keep lightning off, so it is sent away again
+            // a cloud that gathers first would keep lightning off, and a creature let out first would draw the bolt
+            // to itself, so they are sent away again
             helper.getLevel().getEntitiesOfClass(TaintCloud.class, helper.getBounds().inflate(40)).forEach(TaintCloud::discard);
+            helper.getLevel().getEntitiesOfClass(net.minecraft.world.entity.Mob.class, helper.getBounds().inflate(40))
+                    .forEach(net.minecraft.world.entity.Entity::discard);
         }
         helper.assertTrue(happened != null && happened.name().equals("lightning"), "lightning should have struck by now");
         helper.assertBlockState(HERE, state -> state.is(ModBlocks.FLUX_GOO.get())

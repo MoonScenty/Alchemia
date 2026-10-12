@@ -169,9 +169,54 @@ public class TaintFibreBlock extends Block implements Tainted {
             die(level, pos, state);
         } else if (TaintSpread.starved(level, pos)) {
             die(level, pos, state);
+        } else if (state.getValue(GROWTH) != 0 && grow(state, level, pos, random)) {
+            return;
         } else {
             TaintSpread.spread(level, pos, random);
         }
+    }
+
+    /**
+     * What a growth does besides spreading, as the original's did: breathes flux into air thin of it, one turn in two
+     * hundred, and on top of an upright tainted trunk, one turn in a hundred, breaks through into a geyser.
+     *
+     * @return whether that was its turn
+     */
+    private static boolean grow(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+        if (me.moonscenty.alchemia.aura.AuraHandler.get(level, pos, me.moonscenty.alchemia.registry.ModAspects.FLUX)
+                <= TaintSpread.SPREADS_ABOVE && random.nextInt(200) == 0) {
+            me.moonscenty.alchemia.aura.AuraHandler.add(level, pos, me.moonscenty.alchemia.registry.ModAspects.FLUX, 1);
+            return true;
+        }
+        BlockState under = level.getBlockState(pos.below());
+        if (under.is(me.moonscenty.alchemia.registry.ModBlocks.TAINT_LOG.get())
+                && under.getOptionalValue(net.minecraft.world.level.block.RotatedPillarBlock.AXIS)
+                        .orElse(Direction.Axis.Y) == Direction.Axis.Y
+                && random.nextInt(100) == 0) {
+            if (random.nextFloat() < me.moonscenty.alchemia.AlchemiaConfig.TAINT_SPREAD_COST.get() * 5.0F) {
+                me.moonscenty.alchemia.aura.AuraHandler.drainAvailable(level, pos,
+                        me.moonscenty.alchemia.registry.ModAspects.FLUX, 1);
+            }
+            level.setBlock(pos, me.moonscenty.alchemia.registry.ModBlocks.TAINT_GEYSER.get().defaultBlockState(),
+                    Block.UPDATE_ALL);
+            return true;
+        }
+        return false;
+    }
+
+    /** A growth that goes, by whatever means, bursts: a crawler one time in three, or else a breath of flux. */
+    @Override
+    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState replacement, boolean moving) {
+        if (level instanceof ServerLevel served && state.getValue(GROWTH) != 0 && !replacement.is(this)) {
+            if (served.random.nextFloat() < 0.333F) {
+                me.moonscenty.alchemia.entity.TaintCrawler.spawnAt(served, pos.getX() + 0.5, pos.getY() + 0.5,
+                        pos.getZ() + 0.5);
+            } else {
+                me.moonscenty.alchemia.aura.AuraHandler.add(served, pos,
+                        me.moonscenty.alchemia.registry.ModAspects.FLUX, 1);
+            }
+        }
+        super.onRemove(state, level, pos, replacement, moving);
     }
 
     @Override

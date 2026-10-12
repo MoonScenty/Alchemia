@@ -397,6 +397,9 @@ public class ModBlocks {
     public static final DeferredBlock<TaintGroundBlock> TAINT_SOIL = registerTaintGround("taint_soil", TaintGroundBlock.Kind.SOIL);
     public static final DeferredBlock<TaintGroundBlock> TAINT_CRUST = registerTaintGround("taint_crust", TaintGroundBlock.Kind.CRUST);
     public static final DeferredBlock<TaintGroundBlock> TAINT_ROCK = registerTaintGround("taint_rock", TaintGroundBlock.Kind.ROCK);
+    /** A vent in tainted wood that lets up swarms. */
+    public static final DeferredBlock<TaintGroundBlock> TAINT_GEYSER = registerTaintGround("taint_geyser",
+            TaintGroundBlock.Kind.GEYSER);
 
     /** Spilt flux. A puddle in eight depths that runs downhill, levels out and dries into taint. */
     public static final DeferredBlock<FluxGooBlock> FLUX_GOO = register("flux_goo",

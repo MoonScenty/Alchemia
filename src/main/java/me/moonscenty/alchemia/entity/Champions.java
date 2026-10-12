@@ -56,7 +56,7 @@ import net.neoforged.neoforge.event.tick.EntityTickEvent;
  * <h3>Where this differs from the original</h3>
  * The original kept the roll in an attribute it gave every monster; here it is a number attached to the mob, saved
  * and sent to whoever can see it. The original also dropped a loot bag from a champion, which this mod does not have
- * yet. An infested champion bursts into taint crawlers only once there are taint crawlers.
+ * yet. An infested champion, struck, may burst a taint crawler out of itself.
  */
 @EventBusSubscriber(modid = Alchemia.MODID)
 public final class Champions {
@@ -216,8 +216,15 @@ public final class Champions {
                     return amount * 19.0F / 25.0F;
                 }
             }
+            case INFESTED -> {
+                if (champion.getRandom().nextFloat() < 0.4F && champion.level() instanceof ServerLevel served) {
+                    TaintCrawler.spawnAt(served, champion.getX(), champion.getY() + champion.getBbHeight() / 2.0F,
+                            champion.getZ());
+                    served.playSound(null, champion.getX(), champion.getY(), champion.getZ(),
+                            me.moonscenty.alchemia.registry.ModSounds.GORE.get(), SoundSource.HOSTILE, 0.5F, 1.0F);
+                }
+            }
             default -> {
-                // infested: taint crawlers, when there are any
             }
         }
         return amount;

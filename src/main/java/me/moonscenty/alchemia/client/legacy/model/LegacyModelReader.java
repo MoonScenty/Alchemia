@@ -719,9 +719,13 @@ public final class LegacyModelReader {
         return locals;
     }
 
-    /** {@code new} something. Only parts are built; anything else is a value nobody will look inside. */
-    private Object construct(MethodInsnNode call, Object[] arguments) {
-        if (!call.owner.equals(RENDERER)) {
+    /**
+     * {@code new} something. Only parts are built; anything else is a value nobody will look inside. A part may be of
+     * the original's own kind of part, built on the game's: it is read as a plain part, its corner taken from the same
+     * arguments, since what such a kind changed was how it drew, not what it was made of.
+     */
+    private Object construct(MethodInsnNode call, Object[] arguments) throws IOException {
+        if (!isPart(call.owner)) {
             return OPAQUE;
         }
         int u = 0;
@@ -735,6 +739,22 @@ public final class LegacyModelReader {
             return part;
         }
         return new LegacyPart(null, u, v, textureWidth, textureHeight);
+    }
+
+    /** Whether a class is the game's part, or one of the original's built on it. */
+    private boolean isPart(String owner) throws IOException {
+        String at = owner;
+        for (int depth = 0; at != null && depth < CALL_DEPTH_LIMIT; depth++) {
+            if (at.equals(RENDERER)) {
+                return true;
+            }
+            Optional<ClassNode> node = load(at);
+            if (node.isEmpty()) {
+                return false;
+            }
+            at = node.get().superName;
+        }
+        return false;
     }
 
     /**

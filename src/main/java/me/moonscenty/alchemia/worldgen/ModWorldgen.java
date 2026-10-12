@@ -77,6 +77,7 @@ public class ModWorldgen {
     public static final ResourceKey<BiomeModifier> SPAWN_FIREBATS = biomeModifier("spawn_firebats");
     public static final ResourceKey<BiomeModifier> SPAWN_WISPS = biomeModifier("spawn_wisps");
     public static final ResourceKey<BiomeModifier> SPAWN_PECHS = biomeModifier("spawn_pechs");
+    public static final ResourceKey<BiomeModifier> SPAWN_TAINTACLES = biomeModifier("spawn_taintacles");
 
     static {
         for (CrystalType type : CrystalType.values()) {
@@ -199,6 +200,11 @@ public class ModWorldgen {
                 biomes.getOrThrow(net.neoforged.neoforge.common.Tags.Biomes.IS_MAGICAL),
                 new net.minecraft.world.level.biome.MobSpawnSettings.SpawnerData(
                         me.moonscenty.alchemia.registry.ModEntities.PECH.get(), 10, 1, 1)));
+        // and taintacles, rarely, wherever the land is tainted; the original kept them to its tainted biome
+        context.register(SPAWN_TAINTACLES, BiomeModifiers.AddSpawnsBiomeModifier.singleSpawn(
+                biomes.getOrThrow(BiomeTags.IS_OVERWORLD),
+                new net.minecraft.world.level.biome.MobSpawnSettings.SpawnerData(
+                        me.moonscenty.alchemia.registry.ModEntities.TAINTACLE.get(), 1, 1, 1)));
     }
 
     private static List<PlacementModifier> ore(int count, PlacementModifier height) {

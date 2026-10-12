@@ -73,5 +73,49 @@
     "sounds": [
       "alchemia:legacy/coins"
     ]
+  },
+  "swarm": {
+    "subtitle": "subtitles.alchemia.swarm.ambient",
+    "sounds": [
+      "alchemia:legacy/swarm1",
+      "alchemia:legacy/swarm2",
+      "alchemia:legacy/swarm3"
+    ]
+  },
+  "swarm.attack": {
+    "subtitle": "subtitles.alchemia.swarm.attack",
+    "sounds": [
+      "alchemia:legacy/swarmattack"
+    ]
+  },
+  "fly": {
+    "subtitle": "subtitles.alchemia.swarm.buzz",
+    "sounds": [
+      "alchemia:legacy/fly1",
+      "alchemia:legacy/fly2"
+    ]
+  },
+  "roots": {
+    "subtitle": "subtitles.alchemia.taintacle.ambient",
+    "sounds": [
+      "alchemia:legacy/roots1",
+      "alchemia:legacy/roots2",
+      "alchemia:legacy/roots3"
+    ]
+  },
+  "tentacle": {
+    "subtitle": "subtitles.alchemia.taintacle.lash",
+    "sounds": [
+      "alchemia:legacy/tentacle1",
+      "alchemia:legacy/tentacle2",
+      "alchemia:legacy/tentacle3"
+    ]
+  },
+  "gore": {
+    "subtitle": "subtitles.alchemia.gore",
+    "sounds": [
+      "alchemia:legacy/gore1",
+      "alchemia:legacy/gore2"
+    ]
   }
 }

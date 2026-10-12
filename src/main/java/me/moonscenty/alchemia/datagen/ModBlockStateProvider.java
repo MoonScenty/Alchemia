@@ -91,6 +91,11 @@ public class ModBlockStateProvider extends BlockStateProvider {
         spotted(ModBlocks.TAINT_CRUST, 8);
         spotted(ModBlocks.TAINT_SOIL, 16);
         spotted(ModBlocks.TAINT_ROCK, 0);
+        // the geyser is the original's two pictures, its vent on top
+        var geyser = models().cubeColumn("taint_geyser", modLoc("block/taint_geyser_side"),
+                modLoc("block/taint_geyser_top"));
+        simpleBlock(ModBlocks.TAINT_GEYSER.get(), geyser);
+        simpleBlockItem(ModBlocks.TAINT_GEYSER.get(), geyser);
         taintLog();
         taintFibre();
         fluxGoo();

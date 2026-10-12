@@ -235,6 +235,8 @@ public class ModDataMapProvider extends DataMapProvider {
         // a breath of auram, besides the two points of whatever the wisp was
         item(ModItems.WISPY_ESSENCE, a(ModAspects.AURA, 1));
         item(ModItems.COIN, a(ModAspects.DESIRE, 1));
+        item(ModItems.TAINTED_GOO, a(ModAspects.FLUX, 2).add(ModAspects.WATER, 1).add(ModAspects.AURA, 1));
+        item(ModItems.TAINT_TENDRIL, a(ModAspects.FLUX, 2).add(ModAspects.DESIRE, 1).add(ModAspects.AURA, 1));
         item(ModItems.KNOWLEDGE_FRAGMENT, a(ModAspects.MIND, 8));
 
         // our trees are livelier than ordinary ones, and the silverwood hums with aura
@@ -273,6 +275,13 @@ public class ModDataMapProvider extends DataMapProvider {
         mob(EntityType.WITCH, a(ModAspects.MAN, 4).add(ModAspects.AURA, 4).add(ModAspects.MIND, 2));
         // any wisp is a little auram and air, and two of its own aspect besides
         mob(me.moonscenty.alchemia.registry.ModEntities.WISP.get(), a(ModAspects.AURA, 1).add(ModAspects.AIR, 1));
+        // the creatures of the taint, as the original had them; it gave the crawler nothing
+        mob(me.moonscenty.alchemia.registry.ModEntities.TAINT_SWARM.get(),
+                a(ModAspects.FLUX, 3).add(ModAspects.AIR, 3));
+        mob(me.moonscenty.alchemia.registry.ModEntities.TAINTACLE.get(),
+                a(ModAspects.FLUX, 3).add(ModAspects.WATER, 2));
+        mob(me.moonscenty.alchemia.registry.ModEntities.TAINTACLE_TINY.get(),
+                a(ModAspects.FLUX, 1).add(ModAspects.WATER, 1));
         // what every pech is; each kind adds its own
         mob(me.moonscenty.alchemia.registry.ModEntities.PECH.get(),
                 a(ModAspects.MAN, 2).add(ModAspects.AURA, 2).add(ModAspects.EXCHANGE, 2));

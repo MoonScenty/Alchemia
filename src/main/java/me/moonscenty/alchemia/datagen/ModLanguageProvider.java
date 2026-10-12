@@ -178,6 +178,10 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         addEntityType(me.moonscenty.alchemia.registry.ModEntities.WISP, pick("Wisp", "위습"));
         addEntityType(me.moonscenty.alchemia.registry.ModEntities.PECH, pick("Pech Forager", "페크 채집꾼"));
         add("entity.alchemia.pech.mage", pick("Pech Mage", "페크 마법사"));
+        addEntityType(me.moonscenty.alchemia.registry.ModEntities.TAINT_CRAWLER, pick("Tainted Crawler", "오염 크롤러"));
+        addEntityType(me.moonscenty.alchemia.registry.ModEntities.TAINT_SWARM, pick("Taint Swarm", "오염 떼"));
+        addEntityType(me.moonscenty.alchemia.registry.ModEntities.TAINTACLE, pick("Taintacle", "오염 촉수"));
+        addEntityType(me.moonscenty.alchemia.registry.ModEntities.TAINTACLE_TINY, pick("Taint Tendril", "오염 덩굴손"));
         add("entity.alchemia.pech.stalker", pick("Pech Stalker", "페크 추적자"));
         addEntityType(me.moonscenty.alchemia.registry.ModEntities.ANGRY_ZOMBIE, pick("Angry Zombie", "성난 좀비"));
         addEntityType(me.moonscenty.alchemia.registry.ModEntities.FURIOUS_ZOMBIE, pick("Furious Zombie", "격노한 좀비"));
@@ -189,6 +193,17 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         addItem(ModItems.WISPY_ESSENCE, pick("Wispy Essence", "위습의 정수"));
         addItem(ModItems.PECH_SPAWN_EGG, pick("Pech Spawn Egg", "페크 생성 알"));
         addItem(ModItems.COIN, pick("Gold Coin", "금화"));
+        addItem(ModItems.TAINTED_GOO, pick("Tainted Goo", "오염된 점액"));
+        addItem(ModItems.TAINT_TENDRIL, pick("Taint Tendril", "오염 덩굴손"));
+        addItem(ModItems.TAINT_CRAWLER_SPAWN_EGG, pick("Tainted Crawler Spawn Egg", "오염 크롤러 생성 알"));
+        addItem(ModItems.TAINT_SWARM_SPAWN_EGG, pick("Taint Swarm Spawn Egg", "오염 떼 생성 알"));
+        addItem(ModItems.TAINTACLE_SPAWN_EGG, pick("Taintacle Spawn Egg", "오염 촉수 생성 알"));
+        add("subtitles.alchemia.swarm.ambient", pick("Swarm hums", "떼가 웅웅거린다"));
+        add("subtitles.alchemia.swarm.attack", pick("Swarm bites", "떼가 문다"));
+        add("subtitles.alchemia.swarm.buzz", pick("Fly buzzes", "날벌레가 윙윙거린다"));
+        add("subtitles.alchemia.taintacle.ambient", pick("Taintacle creaks", "촉수가 삐걱거린다"));
+        add("subtitles.alchemia.taintacle.lash", pick("Taintacle lashes", "촉수가 후려친다"));
+        add("subtitles.alchemia.gore", pick("Something bursts", "무언가 터진다"));
         addItem(ModItems.KNOWLEDGE_FRAGMENT, pick("Knowledge Fragment", "지식의 조각"));
         add("item.alchemia.knowledge_fragment.help", pick("Use to gain experience", "사용하면 경험치를 얻는다"));
         add("item.alchemia.wispy_essence.holding", pick("Two points of %s", "%s 두 점"));
@@ -429,6 +444,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         addBlock(ModBlocks.TAINT_SOIL, pick("Tainted Soil", "오염된 흙"));
         addBlock(ModBlocks.TAINT_CRUST, pick("Crusted Taint", "오염 껍질"));
         addBlock(ModBlocks.TAINT_ROCK, pick("Tainted Rock", "오염된 바위"));
+        addBlock(ModBlocks.TAINT_GEYSER, pick("Taint Geyser", "오염 간헐천"));
         addBlock(ModBlocks.TAINT_LOG, pick("Taintwood Log", "오염된 원목"));
         addBlock(ModBlocks.FLUX_GOO, pick("Flux Goo", "플럭스 구스"));
         add("entity.alchemia.taint_cloud", pick("Taint Cloud", "오염 구름"));

@@ -192,6 +192,18 @@ public class ModItems {
     public static final DeferredItem<net.neoforged.neoforge.common.DeferredSpawnEggItem> PECH_SPAWN_EGG =
             ITEMS.register("pech_spawn_egg", () -> new net.neoforged.neoforge.common.DeferredSpawnEggItem(
                     ModEntities.PECH, 0xFFC0FF, 0x400040, new Item.Properties()));
+    public static final DeferredItem<net.neoforged.neoforge.common.DeferredSpawnEggItem> TAINT_CRAWLER_SPAWN_EGG =
+            ITEMS.register("taint_crawler_spawn_egg", () -> new net.neoforged.neoforge.common.DeferredSpawnEggItem(
+                    ModEntities.TAINT_CRAWLER, 0xA206A2, 0x303030, new Item.Properties()));
+    public static final DeferredItem<net.neoforged.neoforge.common.DeferredSpawnEggItem> TAINT_SWARM_SPAWN_EGG =
+            ITEMS.register("taint_swarm_spawn_egg", () -> new net.neoforged.neoforge.common.DeferredSpawnEggItem(
+                    ModEntities.TAINT_SWARM, 0xA206A2, 0xFF8080, new Item.Properties()));
+    public static final DeferredItem<net.neoforged.neoforge.common.DeferredSpawnEggItem> TAINTACLE_SPAWN_EGG =
+            ITEMS.register("taintacle_spawn_egg", () -> new net.neoforged.neoforge.common.DeferredSpawnEggItem(
+                    ModEntities.TAINTACLE, 0xA206A2, 0x443344, new Item.Properties()));
+    /** What the creatures of the taint are made of: its goo, and a tendril of it. */
+    public static final DeferredItem<Item> TAINTED_GOO = ITEMS.registerSimpleItem("tainted_goo");
+    public static final DeferredItem<Item> TAINT_TENDRIL = ITEMS.registerSimpleItem("taint_tendril");
     /** A gold coin, of the kind pechs hoard. */
     public static final DeferredItem<Item> COIN = ITEMS.registerSimpleItem("coin");
     /** A scrap of learning, worth a little experience. */
