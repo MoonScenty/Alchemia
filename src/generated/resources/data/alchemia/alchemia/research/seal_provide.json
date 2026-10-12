@@ -1,0 +1,25 @@
+{
+  "category": "alchemia:golemancy",
+  "column": -7,
+  "icon": "alchemia:seal_provider",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.seal_provide.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:seal_provider"
+    }
+  ],
+  "parents": [
+    "alchemia:seal_empty",
+    "alchemia:bioalchemic_mind"
+  ],
+  "requirements": {
+    "alchemia:cognitio": 5,
+    "alchemia:permutatio": 4,
+    "alchemia:vacuos": 3
+  },
+  "row": 6
+}

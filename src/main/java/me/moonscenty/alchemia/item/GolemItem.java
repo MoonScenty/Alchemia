@@ -26,7 +26,7 @@ import net.minecraft.world.level.Level;
  * <p>It is tinted the colour of what the golem is made of, and says what that is and what the golem is like. A
  * smart one also says how far it has come on.
  */
-public class GolemItem extends Item {
+public class GolemItem extends Item implements me.moonscenty.alchemia.golem.seal.SealDisplayer {
     public GolemItem(Properties properties) {
         super(properties);
     }

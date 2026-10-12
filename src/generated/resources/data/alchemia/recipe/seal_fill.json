@@ -1,0 +1,14 @@
+{
+  "type": "alchemia:crucible",
+  "aspects": {
+    "alchemia:aversio": 4
+  },
+  "catalyst": {
+    "item": "alchemia:seal_blank"
+  },
+  "research": "alchemia:seal_store",
+  "result": {
+    "count": 1,
+    "id": "alchemia:seal_fill"
+  }
+}

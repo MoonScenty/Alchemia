@@ -65,6 +65,23 @@ public final class LegacyRenderTypes extends RenderType {
                             .build())
                     .createCompositeState(false));
 
+    /**
+     * A flat picture laid on the world with its own alpha, both sides, not written into depth: how the original drew
+     * seals and the frames round their areas. Seen through walls, it is not tested against depth either.
+     */
+    private static final java.util.function.BiFunction<ResourceLocation, Boolean, RenderType> SEAL = Util.memoize(
+            (texture, throughWalls) -> create("alchemia_seal", DefaultVertexFormat.NEW_ENTITY,
+                    VertexFormat.Mode.QUADS, 1536, false, true, CompositeState.builder()
+                            .setShaderState(RENDERTYPE_ENTITY_TRANSLUCENT_SHADER)
+                            .setTextureState(new TextureStateShard(texture, false, false))
+                            .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
+                            .setCullState(NO_CULL)
+                            .setLightmapState(LIGHTMAP)
+                            .setOverlayState(OVERLAY)
+                            .setWriteMaskState(COLOR_WRITE)
+                            .setDepthTestState(throughWalls ? NO_DEPTH_TEST : LEQUAL_DEPTH_TEST)
+                            .createCompositeState(false)));
+
     private LegacyRenderTypes(String name, VertexFormat format, VertexFormat.Mode mode, int size, boolean crumbling,
             boolean sorted, Runnable setup, Runnable clear) {
         super(name, format, mode, size, crumbling, sorted, setup, clear);
@@ -77,6 +94,11 @@ public final class LegacyRenderTypes extends RenderType {
     /** A glow laid over a model at full brightness, faded by its own picture's alpha and the colour's. */
     public static RenderType glow(ResourceLocation texture) {
         return GLOW.apply(texture);
+    }
+
+    /** A seal, or a frame round its area, seen through walls if asked. */
+    public static RenderType seal(ResourceLocation texture, boolean throughWalls) {
+        return SEAL.apply(texture, throughWalls);
     }
 
     /** {@link #glow}, seen from behind as well as in front, for sheets hung in the air rather than laid on a model. */

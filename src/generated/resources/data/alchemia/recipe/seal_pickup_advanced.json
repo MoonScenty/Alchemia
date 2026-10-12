@@ -1,0 +1,15 @@
+{
+  "type": "alchemia:crucible",
+  "aspects": {
+    "alchemia:cognitio": 4,
+    "alchemia:sensus": 4
+  },
+  "catalyst": {
+    "item": "alchemia:seal_pickup"
+  },
+  "research": "alchemia:seal_collect",
+  "result": {
+    "count": 1,
+    "id": "alchemia:seal_pickup_advanced"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "category": "alchemia:golemancy",
+  "column": -4,
+  "icon": "alchemia:seal_pickup",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.seal_collect.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:seal_pickup"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:seal_pickup_advanced"
+    }
+  ],
+  "parents": [
+    "alchemia:control_seals"
+  ],
+  "row": 4
+}

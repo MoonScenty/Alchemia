@@ -319,7 +319,22 @@ public class ModResearchProvider {
         // and what they may be given: a bell to direct them, eyes, climbing legs, flight, grinders
         entry(context, "golem_direct", ModResearch.GOLEMANCY, ModItems.GOLEM_BELL, 1, 4,
                 AspectList.of(ModAspects.SENSES, 5).add(ModAspects.MIND, 5).add(ModAspects.SOUL, 8),
-                List.of("clockwork_mind"), false, NodeShape.MAJOR, 3, "golem_bell");
+                List.of("clockwork_mind"), false, NodeShape.MAJOR, 3);
+        // seals: how golems are given work, and the four that move things about
+        entry(context, "control_seals", ModResearch.GOLEMANCY, ModItems.SEAL_BLANK, -2, 5, AspectList.EMPTY,
+                List.of("distillation", "tallow", "nitor"), false, NodeShape.MAJOR, 1, "seal_blank", "golem_bell");
+        entry(context, "seal_collect", ModResearch.GOLEMANCY, ModItems.SEALS.get("pickup").get(), -4, 4,
+                AspectList.EMPTY, List.of("control_seals"), false, NodeShape.PLAIN, 1, "seal_pickup",
+                "seal_pickup_advanced");
+        entry(context, "seal_store", ModResearch.GOLEMANCY, ModItems.SEALS.get("fill").get(), -6, 4,
+                AspectList.of(ModAspects.VOID, 3).add(ModAspects.MIND, 3).add(ModAspects.EXCHANGE, 5),
+                List.of("seal_collect"), false, NodeShape.PLAIN, 1, "seal_fill", "seal_fill_advanced");
+        entry(context, "seal_empty", ModResearch.GOLEMANCY, ModItems.SEALS.get("empty").get(), -8, 4,
+                AspectList.of(ModAspects.VOID, 3).add(ModAspects.MIND, 3).add(ModAspects.EXCHANGE, 5),
+                List.of("seal_store"), false, NodeShape.PLAIN, 1, "seal_empty", "seal_empty_advanced");
+        entry(context, "seal_provide", ModResearch.GOLEMANCY, ModItems.SEALS.get("provider").get(), -7, 6,
+                AspectList.of(ModAspects.VOID, 3).add(ModAspects.MIND, 5).add(ModAspects.EXCHANGE, 4),
+                List.of("seal_empty", "bioalchemic_mind"), false, NodeShape.PLAIN, 1, "seal_provider");
         entry(context, "golem_vision", ModResearch.GOLEMANCY, ModItems.VISION_MODULE, -2, 2,
                 AspectList.of(ModAspects.MECHANISM, 3).add(ModAspects.SENSES, 5).add(ModAspects.CRYSTAL, 3)
                         .add(ModAspects.MIND, 3),
@@ -390,6 +405,10 @@ public class ModResearchProvider {
                 AspectList.of(ModAspects.MIND, 3).add(ModAspects.AURA, 3).add(ModAspects.ORDER, 3)
                         .add(ModAspects.LIFE, 3),
                 List.of("crucible"), false, NodeShape.PLAIN, 2, "bath_salts");
+        // flesh rendered to tallow in a crucible, which seals are made with
+        entry(context, "tallow", ModResearch.ALCHEMY, ModItems.TALLOW, -2, 2,
+                AspectList.of(ModAspects.BEAST, 3).add(ModAspects.FIRE, 1), List.of("crucible"), false,
+                NodeShape.PLAIN, 1, "tallow");
         entry(context, "spa", ModResearch.ALCHEMY, ModBlocks.SPA, -2, 0,
                 AspectList.of(ModAspects.WATER, 3).add(ModAspects.MECHANISM, 3).add(ModAspects.ORDER, 3),
                 List.of("bath_salts"), false, NodeShape.PLAIN, 1, "spa");

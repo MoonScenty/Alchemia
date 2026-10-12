@@ -1,0 +1,23 @@
+{
+  "category": "alchemia:alchemy",
+  "column": -2,
+  "icon": "alchemia:tallow",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.tallow.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:tallow"
+    }
+  ],
+  "parents": [
+    "alchemia:crucible"
+  ],
+  "requirements": {
+    "alchemia:bestia": 3,
+    "alchemia:ignis": 1
+  },
+  "row": 2
+}

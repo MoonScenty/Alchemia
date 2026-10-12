@@ -831,6 +831,16 @@ public final class LegacyAssets {
         for (String face : List.of("table_stone_top", "table_stone_side", "table_wood_top", "table_wood_side")) {
             all.add(LegacyAsset.of("textures/block/legacy/" + face + ".png").five("textures/blocks/" + face + ".png"));
         }
+        // seals, which shimmer and bring their timing with them, the tallow they are made with, and the ring and
+        // corners drawn round one that is stuck up
+        for (String seal : List.of("blank", "pickup", "pickup_advanced", "fill", "fill_advanced", "empty",
+                "empty_advanced", "provider")) {
+            all.add(LegacyAsset.of("textures/item/legacy/seal_" + seal + ".png")
+                    .five("textures/items/seals/seal_" + seal + ".png"));
+        }
+        all.add(LegacyAsset.of("textures/item/legacy/tallow.png").five("textures/items/tallow.png"));
+        all.add(LegacyAsset.of("textures/misc/seal_area.png").five("textures/misc/seal_area.png"));
+        all.add(LegacyAsset.of("textures/misc/frame_corner.png").five("textures/misc/frame_corner.png"));
         for (String sound : List.of("cameraclack1", "cameraclack2", "cameraclack3", "tool1", "tool2", "scan",
                 "wand1", "wand2", "wand3", "craftstart")) {
             all.add(LegacyAsset.of("sounds/legacy/" + sound + ".ogg").five("sounds/" + sound + ".ogg"));

@@ -537,6 +537,43 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         addItem(ModItems.VOID_NUGGET, pick("Void Nugget", "공허 조각"));
         addItem(ModItems.VOID_PLATE, pick("Void Plate", "공허 판"));
         addItem(ModItems.VOID_GEAR, pick("Void Gear", "공허 톱니바퀴"));
+        addItem(ModItems.TALLOW, pick("Magic Tallow", "마법 수지"));
+        addItem(ModItems.SEAL_BLANK, pick("Blank Seal", "빈 봉인"));
+        addItem(ModItems.SEALS.get("pickup"), pick("Control Seal: Collect", "제어 봉인: 수집"));
+        addItem(ModItems.SEALS.get("pickup_advanced"), pick("Advanced Control Seal: Collect", "상급 제어 봉인: 수집"));
+        addItem(ModItems.SEALS.get("fill"), pick("Control Seal: Store", "제어 봉인: 보관"));
+        addItem(ModItems.SEALS.get("fill_advanced"), pick("Advanced Control Seal: Store", "상급 제어 봉인: 보관"));
+        addItem(ModItems.SEALS.get("empty"), pick("Control Seal: Empty", "제어 봉인: 비우기"));
+        addItem(ModItems.SEALS.get("empty_advanced"), pick("Advanced Control Seal: Empty", "상급 제어 봉인: 비우기"));
+        addItem(ModItems.SEALS.get("provider"), pick("Control Seal: Provide", "제어 봉인: 공급"));
+        add("gui.alchemia.seal.category.0", pick("Priority / Locking", "우선순위·잠금"));
+        add("gui.alchemia.seal.category.1", pick("Filter", "필터"));
+        add("gui.alchemia.seal.category.2", pick("Area", "범위"));
+        add("gui.alchemia.seal.category.3", pick("Options", "옵션"));
+        add("gui.alchemia.seal.category.4", pick("Requirements", "요구 특성"));
+        add("gui.alchemia.seal.blacklist", pick("Blacklist", "차단 목록"));
+        add("gui.alchemia.seal.whitelist", pick("Whitelist", "허용 목록"));
+        add("gui.alchemia.seal.up_down", pick("Up / Down", "위 / 아래"));
+        add("gui.alchemia.seal.east_west", pick("East / West", "동 / 서"));
+        add("gui.alchemia.seal.north_south", pick("North / South", "북 / 남"));
+        add("gui.alchemia.seal.required", pick("Required", "필요"));
+        add("gui.alchemia.seal.forbidden", pick("Forbidden", "금지"));
+        add("golem.alchemia.prop.meta", pick("Compare damage", "손상도까지 비교"));
+        add("golem.alchemia.prop.nbt", pick("Compare item data", "아이템 데이터까지 비교"));
+        add("golem.alchemia.prop.ore", pick("Match by common tags", "공용 태그로 비교"));
+        add("golem.alchemia.prop.mod", pick("Anything from the same mod", "같은 모드의 것이면 됨"));
+        add("golem.alchemia.prop.exist", pick("Container must already hold it", "이미 들어 있는 것만"));
+        add("golem.alchemia.prop.cycle", pick("Cycle through the whitelist", "허용 목록을 차례로"));
+        add("golem.alchemia.prop.leave", pick("Always leave at least one", "늘 하나는 남김"));
+        add("golem.alchemia.prop.single", pick("One item at a time", "한 번에 하나만"));
+        add("golem.alchemia.prop.priority", pick("Task Priority", "작업 우선순위"));
+        add("golem.alchemia.prop.color", pick("Set for %s golems", "%s 골렘 전용"));
+        add("golem.alchemia.prop.colorall", pick("All golems", "모든 골렘"));
+        add("golem.alchemia.prop.owner", pick("You own this seal", "당신의 봉인이다"));
+        add("golem.alchemia.prop.lock", pick("Only golems of the seal's owner work it", "봉인 주인의 골렘만 일한다"));
+        add("golem.alchemia.prop.unlock", pick("Any golem can work it", "어느 골렘이든 일한다"));
+        add("golem.alchemia.prop.redon", pick("Stops while powered by redstone", "레드스톤 신호가 오면 멈춘다"));
+        add("golem.alchemia.prop.redoff", pick("Ignores redstone", "레드스톤을 무시한다"));
         addItem(ModItems.GOLEM, pick("Golem", "골렘"));
         addItem(ModItems.GOLEM_BELL, pick("Golemancer's Bell", "골렘술사의 종"));
         addItem(ModItems.VISION_MODULE, pick("Vision Module", "시야 모듈"));
@@ -942,6 +979,24 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                 {"golem_breaker", "Breaker Arms", "파쇄 팔",
                  "Arms ending in diamond-tipped grinders, driven by pistons. A golem with them is clumsy and hits hard, and can break most blocks.",
                  "피스톤으로 돌리는 다이아몬드 끝 분쇄기가 달린 팔이다. 이 팔을 단 골렘은 서투르고 세게 치며, 대부분의 블록을 부술 수 있다."},
+                {"tallow", "Magic Tallow", "마법 수지",
+                 "Rotten flesh stewed in a crucible with a little fire renders down to a clean, waxy tallow, which holds an arcane charge well. It is what control seals are made with.",
+                 "썩은 살점을 불을 조금 넣은 도가니에서 고면 깨끗한 밀랍 같은 수지가 된다. 비전의 기운을 잘 붙든다. 제어 봉인을 만드는 데 쓴다."},
+                {"control_seals", "Golem Control Seals", "골렘 제어 봉인",
+                 "Golems are given work with seals: clay and tallow worked with a red dye and a nitor, then steeped in a crucible into a seal that does one thing. Stuck to the face of a block, a seal offers tasks to any golem nearby that can do them, the nearest and most urgent first. Hold a seal, a golem or a golemancer's bell to see the seals about you, and crouch to see them through walls. Ring the bell at a seal to set it up: how urgent it is, whether only golems of one colour work it, whether only your own golems may, whether redstone stops it, and whatever else that kind of seal has. Ring it crouching to take the seal down.",
+                 "골렘에게는 봉인으로 일을 준다. 점토와 수지에 붉은 염료와 니토르를 섞어 만든 빈 봉인을 도가니에서 우려 한 가지 일을 하는 봉인으로 만든다. 블록 면에 붙인 봉인은 그 일을 할 수 있는 근처 골렘에게 일감을 내놓고, 가깝고 급한 것부터 맡긴다. 봉인이나 골렘이나 골렘술사의 종을 들면 둘레의 봉인이 보이고, 웅크리면 벽 너머로도 보인다. 봉인에 종을 울리면 설정판이 열린다. 얼마나 급한지, 한 색 골렘만 일할지, 내 골렘만 일할지, 레드스톤에 멈출지, 그리고 그 봉인만의 설정을 고른다. 웅크리고 울리면 봉인을 떼어 낸다."},
+                {"seal_collect", "Control Seal: Collect", "제어 봉인: 수집",
+                 "Golems pick up whatever lies still in the area in front of the seal and its filter lets by, as much as they can carry. The area can be widened up to eight blocks each way. The advanced seal, steeped again with mind and senses, has nine filter entries and its own options, and only smart golems work it. Clumsy golems cannot pick anything up.",
+                 "봉인 앞 범위에 가만히 놓인 것 가운데 필터가 들이는 것을, 골렘이 들 수 있는 만큼 줍는다. 범위는 각 방향으로 여덟 칸까지 넓힐 수 있다. 정신과 감각으로 한 번 더 우린 상급 봉인은 필터가 아홉 칸이고 옵션을 고를 수 있으며, 영리한 골렘만 일한다. 서투른 골렘은 줍지 못한다."},
+                {"seal_store", "Control Seal: Store", "제어 봉인: 보관",
+                 "Golems carrying something the filter lets by bring it here and put it in, through the face the seal is on; on something that is not a container they drop it in front. With a whitelist, how many of each thing are on the filter is how many are wanted here, and no more are brought; click a filter square with nothing in hand to raise it and right-click to lower it. The advanced seal can be set to bring only what is already there, and only smart golems work it.",
+                 "필터가 들이는 것을 든 골렘이 그것을 여기로 가져와 봉인이 붙은 면으로 넣는다. 통이 아닌 것에 붙어 있으면 앞에 떨군다. 허용 목록이면 필터에 놓인 개수가 여기 있어야 할 개수이고, 그보다 많이는 가져오지 않는다. 빈손으로 필터 칸을 누르면 늘고 오른쪽을 누르면 준다. 상급 봉인은 이미 들어 있는 것만 가져오게 할 수 있고, 영리한 골렘만 일한다."},
+                {"seal_empty", "Control Seal: Empty", "제어 봉인: 비우기",
+                 "Stuck on a container, golems take out of it whatever the filter lets by, as much as they can carry, through the face the seal is on. What they then do with it is up to other seals. It can be set to leave one of each thing behind. The advanced seal can work through its whitelist an entry at a time, and only smart golems work it.",
+                 "통에 붙이면 골렘이 필터가 들이는 것을 들 수 있는 만큼 봉인이 붙은 면으로 꺼낸다. 그다음 그것을 어떻게 할지는 다른 봉인이 정한다. 종류마다 하나씩은 남기게 할 수 있다. 상급 봉인은 허용 목록을 한 칸씩 차례로 처리할 수 있고, 영리한 골렘만 일한다."},
+                {"seal_provide", "Control Seal: Provide", "제어 봉인: 공급",
+                 "Stuck on a container, it answers other seals within sixty-four blocks that need something to work with: when one asks for something this seal's filter lets by and the container has it, a golem that works for the asking seal fetches it out. It can hand out one at a time and leave one behind. Only smart golems work it.",
+                 "통에 붙이면 64칸 안에서 일할 거리가 필요한 다른 봉인에 답한다. 어떤 봉인이 이 봉인의 필터가 들이는 것을 청하고 통에 그것이 있으면, 청한 봉인을 위해 일하는 골렘이 그것을 꺼내 간다. 한 번에 하나씩 내주거나 하나는 남기게 할 수 있다. 영리한 골렘만 일한다."},
                 {"warp", "Warp", "뒤틀림",
                  "Look too long into what should not be, and it begins looking back. The damage is not to the world but to the one studying it, and it does not undo itself with rest.",
                  "있어서는 안 될 것을 오래 들여다보면, 그것도 당신을 들여다보기 시작한다. 상하는 것은 세계가 아니라 그것을 연구하는 자이며, 쉰다고 해서 되돌아오지 않는다."},

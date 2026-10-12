@@ -7,10 +7,6 @@
     {
       "type": "text",
       "key": "research.alchemia.golem_direct.page"
-    },
-    {
-      "type": "recipe",
-      "recipe": "alchemia:golem_bell"
     }
   ],
   "parents": [

@@ -37,6 +37,12 @@ public class ModNetwork {
         registrar.playToServer(ToolSetting.TYPE, ToolSetting.STREAM_CODEC, ModNetwork::onToolSetting);
         registrar.playToServer(ChooseFocus.TYPE, ChooseFocus.STREAM_CODEC, ModNetwork::onChooseFocus);
         registrar.playToServer(StartGolem.TYPE, StartGolem.STREAM_CODEC, ModNetwork::onStartGolem);
+        registrar.playToClient(SyncSeal.TYPE, SyncSeal.STREAM_CODEC, (payload, context) -> context.enqueueWork(
+                () -> me.moonscenty.alchemia.client.ClientSeals.update(payload.pos(), payload.seal().orElse(null),
+                        context.player().registryAccess())));
+        registrar.playToClient(SyncSeals.TYPE, SyncSeals.STREAM_CODEC, (payload, context) -> context.enqueueWork(
+                () -> me.moonscenty.alchemia.client.ClientSeals.replace(payload.seals(),
+                        context.player().registryAccess())));
     }
 
     /**

@@ -1,0 +1,14 @@
+{
+  "type": "alchemia:crucible",
+  "aspects": {
+    "alchemia:ignis": 1
+  },
+  "catalyst": {
+    "item": "minecraft:rotten_flesh"
+  },
+  "research": "alchemia:tallow",
+  "result": {
+    "count": 1,
+    "id": "alchemia:tallow"
+  }
+}
