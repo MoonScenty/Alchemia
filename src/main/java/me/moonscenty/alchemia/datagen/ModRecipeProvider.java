@@ -79,7 +79,7 @@ public class ModRecipeProvider extends RecipeProvider {
     private static final int LAMP_UNSTABLE = 4;
     private static final int JUG_UNSTABLE = 1;
     /** How badly an altar takes to growing a brain into a clockwork mind. The original's number. */
-    private static final int BIOTHAUMIC_UNSTABLE = 4;
+    private static final int BIOALCHEMIC_UNSTABLE = 4;
     /** How badly an altar takes to giving a focus a mind of its own. The original's number. */
     private static final int AUTOCASTER_UNSTABLE = 5;
 
@@ -780,12 +780,12 @@ public class ModRecipeProvider extends RecipeProvider {
                         Ingredient.of(Items.MILK_BUCKET)),
                 AspectList.of(ModAspects.UNDEAD, 64).add(ModAspects.LIFE, 64).add(ModAspects.PROTECT, 16));
 
-        // the biothaumic mind: the clockwork one with a zombie's brain grown into it and a clock to keep it to time
-        infusion(output, "biothaumic_mind", Ingredient.of(ModItems.CLOCKWORK_MIND),
+        // the bioalchemic mind: the clockwork one with a zombie's brain grown into it and a clock to keep it to time
+        infusion(output, "bioalchemic_mind", Ingredient.of(ModItems.CLOCKWORK_MIND),
                 List.of(Ingredient.of(ModItems.ZOMBIE_BRAIN), Ingredient.of(Items.CLOCK)),
-                new ItemStack(ModItems.BIOTHAUMIC_MIND.get()),
-                AspectList.of(ModAspects.MIND, 16).add(ModAspects.MECHANISM, 16), BIOTHAUMIC_UNSTABLE,
-                "biothaumic_mind");
+                new ItemStack(ModItems.BIOALCHEMIC_MIND.get()),
+                AspectList.of(ModAspects.MIND, 16).add(ModAspects.MECHANISM, 16), BIOALCHEMIC_UNSTABLE,
+                "bioalchemic_mind");
 
         // the totems: a block of silverwood worked on with greatwood, a chest, a balanced shard, salis mundus and a
         // wisp's essence of any kind -- with amber and a lure to draw vis in, or quicksilver and a piston to push it
@@ -876,7 +876,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 JUG_UNSTABLE, "water_jug");
 
         // the autocaster: seven things round a made mind, as the original had it
-        infusion(output, "autocaster", Ingredient.of(ModItems.BIOTHAUMIC_MIND),
+        infusion(output, "autocaster", Ingredient.of(ModItems.BIOALCHEMIC_MIND),
                 List.of(Ingredient.of(ModItems.BALANCED_SHARD), Ingredient.of(ModItems.MORPHIC_RESONATOR),
                         Ingredient.of(ModBlocks.GREATWOOD.planks()), Ingredient.of(ModBlocks.GREATWOOD.planks()),
                         Ingredient.of(ModItems.BRASS_GEAR), Ingredient.of(ModItems.BRASS_PLATE),

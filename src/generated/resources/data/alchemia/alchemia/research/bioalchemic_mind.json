@@ -2,15 +2,15 @@
   "category": "alchemia:golemancy",
   "column": 0,
   "complexity": 2,
-  "icon": "alchemia:biothaumic_mind",
+  "icon": "alchemia:bioalchemic_mind",
   "pages": [
     {
       "type": "text",
-      "key": "research.alchemia.biothaumic_mind.page"
+      "key": "research.alchemia.bioalchemic_mind.page"
     },
     {
       "type": "recipe",
-      "recipe": "alchemia:biothaumic_mind"
+      "recipe": "alchemia:bioalchemic_mind"
     }
   ],
   "parents": [

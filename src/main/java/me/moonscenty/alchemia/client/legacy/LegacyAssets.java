@@ -599,7 +599,7 @@ public final class LegacyAssets {
         // the parts devices are built from, and the bellows' sheet
         for (String[] part : new String[][] {{"primal_charm", "primal_charm"}, {"mirrored_glass", "mirrored_glass"},
                 {"morphic_resonator", "morphic_resonator"}, {"clockwork_mind", "mind_clockwork"},
-                {"biothaumic_mind", "mind_biothaumic"}}) {
+                {"bioalchemic_mind", "mind_biothaumic"}}) {
             all.add(LegacyAsset.of("textures/item/legacy/" + part[0] + ".png").five("textures/items/" + part[1] + ".png"));
         }
         all.add(LegacyAsset.of("textures/entity/bellows.png").five("textures/models/bellows.png"));

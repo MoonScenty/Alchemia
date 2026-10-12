@@ -211,7 +211,7 @@ public class ModItemModelProvider extends ItemModelProvider {
                 .texture("layer0", modLoc("item/legacy/" + tool)));
         basicItem(ModItems.FOCUS_POUCH.get());
         for (String part : new String[] {"primal_charm", "mirrored_glass", "morphic_resonator", "clockwork_mind",
-                "biothaumic_mind"}) {
+                "bioalchemic_mind"}) {
             withExistingParent(part, mcLoc("item/generated")).texture("layer0", modLoc("item/legacy/" + part));
         }
         // a lamp in the hand is the lit lamp, as the original showed it; the jug is its block

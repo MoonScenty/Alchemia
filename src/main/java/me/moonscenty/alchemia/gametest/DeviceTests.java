@@ -628,8 +628,8 @@ public class DeviceTests {
     public static void theAutocasterIsBuiltOfItsOwnParts(GameTestHelper helper) {
         var recipe = helper.getLevel().getRecipeManager().byKey(Alchemia.id("autocaster")).orElseThrow();
         InfusionRecipe infusion = (InfusionRecipe) recipe.value();
-        helper.assertTrue(infusion.central().test(new ItemStack(ModItems.BIOTHAUMIC_MIND.get())),
-                "a biothaumic mind at the middle");
+        helper.assertTrue(infusion.central().test(new ItemStack(ModItems.BIOALCHEMIC_MIND.get())),
+                "a bioalchemic mind at the middle");
         helper.assertTrue(infusion.ring().stream().anyMatch(part ->
                 part.test(new ItemStack(ModItems.MORPHIC_RESONATOR.get()))), "and a resonator round it");
 

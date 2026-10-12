@@ -289,17 +289,17 @@ public class ModResearchProvider {
         entry(context, "autocaster", ModResearch.GOLEMANCY, ModItems.AUTOCASTER, 1, 6,
                 AspectList.of(ModAspects.MECHANISM, 3).add(ModAspects.AVERSION, 3).add(ModAspects.SENSES, 3)
                         .add(ModAspects.MIND, 3).add(ModAspects.AURA, 3),
-                List.of("biothaumic_mind", "infusion", "wand"), false, NodeShape.MAJOR, 2, "autocaster");
+                List.of("bioalchemic_mind", "infusion", "wand"), false, NodeShape.MAJOR, 2, "autocaster");
 
         // the made minds golemancy is built on: gears under glass, and the same with a brain grown into it
         entry(context, "clockwork_mind", ModResearch.GOLEMANCY, ModItems.CLOCKWORK_MIND, 0, 3,
                 AspectList.of(ModAspects.MECHANISM, 3).add(ModAspects.MIND, 3).add(ModAspects.SENSES, 3)
                         .add(ModAspects.ENERGY, 6).add(ModAspects.LIFE, 3),
                 List.of("arcane_workbench", "metallurgy"), false, NodeShape.PLAIN, 1, "clockwork_mind");
-        entry(context, "biothaumic_mind", ModResearch.GOLEMANCY, ModItems.BIOTHAUMIC_MIND, 0, 5,
+        entry(context, "bioalchemic_mind", ModResearch.GOLEMANCY, ModItems.BIOALCHEMIC_MIND, 0, 5,
                 AspectList.of(ModAspects.MECHANISM, 3).add(ModAspects.MIND, 3).add(ModAspects.SENSES, 3)
                         .add(ModAspects.UNDEAD, 3),
-                List.of("clockwork_mind", "infusion"), false, NodeShape.PLAIN, 2, "biothaumic_mind");
+                List.of("clockwork_mind", "infusion"), false, NodeShape.PLAIN, 2, "bioalchemic_mind");
 
         // where artifice starts: the charm of all six, and glass silvered to make a mirror of
         entry(context, "primal_charm", ModResearch.ARTIFICE, ModItems.PRIMAL_CHARM, 1, 1,

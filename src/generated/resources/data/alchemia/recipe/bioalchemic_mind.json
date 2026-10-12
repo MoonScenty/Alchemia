@@ -8,10 +8,10 @@
     "alchemia:machina": 16
   },
   "instability": 4,
-  "research": "alchemia:biothaumic_mind",
+  "research": "alchemia:bioalchemic_mind",
   "result": {
     "count": 1,
-    "id": "alchemia:biothaumic_mind"
+    "id": "alchemia:bioalchemic_mind"
   },
   "ring": [
     {

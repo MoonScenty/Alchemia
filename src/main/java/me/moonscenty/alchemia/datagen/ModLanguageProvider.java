@@ -697,7 +697,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                 {"clockwork_mind", "Clockwork Mind", "태엽 두뇌",
                  "Gears and a comparator under glass, plated in brass. It is not a mind in any way that matters, but it will follow one rule without being told twice, which is all a machine needs.",
                  "놋쇠를 댄 유리 속의 톱니와 비교기다. 따질 만한 의미의 두뇌는 아니지만 한 가지 규칙을 두 번 말하지 않아도 따른다. 기계에 필요한 것은 그것뿐이다."},
-                {"biothaumic_mind", "Biothaumic Mind", "생체마법 두뇌",
+                {"bioalchemic_mind", "Bioalchemic Mind", "생체연금 두뇌",
                  "The clockwork mind with something living grown into it on the altar. What comes out can be told to choose rather than only to follow, and the things that have to decide for themselves -- an autocaster picking its mark -- are built round one.",
                  "태엽 두뇌에 제단에서 살아 있는 것을 자라 들게 한 것이다. 나온 것은 따르기만 하는 것이 아니라 고르라고 시킬 수 있다. 스스로 정해야 하는 것들 — 노릴 것을 고르는 자동 시전기 같은 — 은 이것을 둘러싸고 짓는다."},
                 {"mirror", "Mirror Magic", "거울 마법",
@@ -898,7 +898,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("item.alchemia.mirrored_glass", pick("Mirrored Glass", "거울 유리"));
         add("item.alchemia.morphic_resonator", pick("Morphic Resonator", "변형 공명기"));
         add("item.alchemia.clockwork_mind", pick("Clockwork Mind", "태엽 두뇌"));
-        add("item.alchemia.biothaumic_mind", pick("Biothaumic Mind", "생체마법 두뇌"));
+        add("item.alchemia.bioalchemic_mind", pick("Bioalchemic Mind", "생체연금 두뇌"));
         add("block.alchemia.bellows", pick("Bellows", "풀무"));
         add("block.alchemia.centrifuge", pick("Essentia Centrifuge", "에센시아 원심분리기"));
         add("block.alchemia.arcane_bore", pick("Arcane Bore", "비전 굴착기"));

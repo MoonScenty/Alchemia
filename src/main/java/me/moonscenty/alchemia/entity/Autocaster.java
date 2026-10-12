@@ -396,7 +396,7 @@ public class Autocaster extends PathfinderMob implements OwnableEntity, Containe
     @Override
     protected void dropCustomDeathLoot(ServerLevel level, DamageSource cause, boolean recentlyHit) {
         super.dropCustomDeathLoot(level, cause, recentlyHit);
-        salvage(ModItems.BIOTHAUMIC_MIND.get(), MIND_SALVAGED);
+        salvage(ModItems.BIOALCHEMIC_MIND.get(), MIND_SALVAGED);
         salvage(ModItems.BRASS_GEAR.get(), SALVAGED);
         salvage(ModBlocks.GREATWOOD.planks().get(), SALVAGED);
         salvage(ModBlocks.GREATWOOD.planks().get(), SALVAGED);

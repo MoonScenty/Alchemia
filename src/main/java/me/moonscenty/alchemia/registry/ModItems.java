@@ -248,7 +248,7 @@ public class ModItems {
     /** A mind of gears and a comparator under glass. Enough to follow one rule without being told twice. */
     public static final DeferredItem<Item> CLOCKWORK_MIND = ITEMS.registerSimpleItem("clockwork_mind");
     /** The clockwork mind with a brain grown into it, which can be told to choose. */
-    public static final DeferredItem<Item> BIOTHAUMIC_MIND = ITEMS.registerSimpleItem("biothaumic_mind");
+    public static final DeferredItem<Item> BIOALCHEMIC_MIND = ITEMS.registerSimpleItem("bioalchemic_mind");
 
     public static final DeferredItem<Item> ALCHEMIUM_INGOT = ITEMS.registerSimpleItem("alchemium_ingot");
     public static final DeferredItem<Item> BRASS_INGOT = ITEMS.registerSimpleItem("brass_ingot");

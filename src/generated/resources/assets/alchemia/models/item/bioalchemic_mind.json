@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "alchemia:item/legacy/biothaumic_mind"
+    "layer0": "alchemia:item/legacy/bioalchemic_mind"
   }
 }

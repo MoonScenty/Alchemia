@@ -14,7 +14,7 @@
     }
   ],
   "parents": [
-    "alchemia:biothaumic_mind",
+    "alchemia:bioalchemic_mind",
     "alchemia:infusion",
     "alchemia:wand"
   ],
