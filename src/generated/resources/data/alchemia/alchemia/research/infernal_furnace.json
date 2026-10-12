@@ -1,0 +1,24 @@
+{
+  "category": "alchemia:artifice",
+  "column": 4,
+  "complexity": 2,
+  "icon": "minecraft:nether_bricks",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.infernal_furnace.page"
+    }
+  ],
+  "parents": [
+    "alchemia:primal_charm",
+    "alchemia:nitor",
+    "alchemia:alumentum"
+  ],
+  "requirements": {
+    "alchemia:auram": 3,
+    "alchemia:fabrico": 3,
+    "alchemia:ignis": 6,
+    "alchemia:metallum": 3
+  },
+  "row": -1
+}

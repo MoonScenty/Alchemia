@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "alchemia:block/infernal_furnace",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "alchemia:block/infernal_furnace"
+    },
+    "facing=south": {
+      "model": "alchemia:block/infernal_furnace",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "alchemia:block/infernal_furnace",
+      "y": 270
+    }
+  }
+}

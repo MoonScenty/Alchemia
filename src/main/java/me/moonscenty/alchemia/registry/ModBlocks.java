@@ -99,6 +99,29 @@ public class ModBlocks {
     public static final DeferredBlock<EssentiaSmelterBlock> VOID_SMELTER = register("void_smelter",
             () -> new EssentiaSmelterBlock(smelter(MapColor.COLOR_BLACK), EssentiaSmelterBlock.Tier.VOID));
     /** What goes against a smelter's sides: a pump that pours one more column, and a vent that catches its flux. */
+    /**
+     * An infernal furnace: its molten heart, where the lava was, and the shell of what was nether brick and obsidian
+     * round it. Neither has an item; both are made where they stand.
+     */
+    public static final DeferredBlock<me.moonscenty.alchemia.block.InfernalFurnaceBlock> INFERNAL_FURNACE =
+            registerBlockOnly("infernal_furnace", () -> new me.moonscenty.alchemia.block.InfernalFurnaceBlock(
+                    BlockBehaviour.Properties.of().mapColor(MapColor.FIRE).strength(2.0F, 12.0F)
+                            .sound(net.minecraft.world.level.block.SoundType.STONE).lightLevel(state -> 13)
+                            .noOcclusion().requiresCorrectToolForDrops()));
+    public static final DeferredBlock<me.moonscenty.alchemia.block.FurnaceShellBlock> FURNACE_SHELL =
+            registerBlockOnly("furnace_shell", () -> new me.moonscenty.alchemia.block.FurnaceShellBlock(
+                    BlockBehaviour.Properties.of().mapColor(MapColor.NETHER).strength(2.5F)
+                            .sound(net.minecraft.world.level.block.SoundType.STONE).noOcclusion()
+                            .requiresCorrectToolForDrops()));
+
+    /** The two mirrors: one that passes items to its partner, one that passes essentia. */
+    public static final DeferredBlock<me.moonscenty.alchemia.block.MirrorBlock> MIRROR = register("mirror",
+            () -> new me.moonscenty.alchemia.block.MirrorBlock(mirror(), false),
+            me.moonscenty.alchemia.item.MirrorBlockItem::new);
+    public static final DeferredBlock<me.moonscenty.alchemia.block.MirrorBlock> MIRROR_ESSENTIA =
+            register("mirror_essentia", () -> new me.moonscenty.alchemia.block.MirrorBlock(mirror(), true),
+                    me.moonscenty.alchemia.item.MirrorBlockItem::new);
+
     /** The arcane bore and the base it stands on or hangs from. Wood, as the original's were. */
     public static final DeferredBlock<me.moonscenty.alchemia.block.ArcaneBoreBaseBlock> ARCANE_BORE_BASE =
             register("arcane_bore_base", () -> new me.moonscenty.alchemia.block.ArcaneBoreBaseBlock(device()));
@@ -299,6 +322,12 @@ public class ModBlocks {
         return BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE)
                 .mapColor(colour)
                 .lightLevel(state -> state.getValue(EssentiaSmelterBlock.LIT) ? 13 : 0);
+    }
+
+    /** A mirror: a pane of glass and iron that nothing bumps into, broken with a touch. */
+    private static BlockBehaviour.Properties mirror() {
+        return BlockBehaviour.Properties.of().mapColor(MapColor.METAL).strength(0.1F, 12.0F)
+                .sound(net.minecraft.world.level.block.SoundType.GLASS).noOcclusion().noCollission();
     }
 
     /** Two essentia devices drawn wholly by their renderers, of wood as the original's were. */

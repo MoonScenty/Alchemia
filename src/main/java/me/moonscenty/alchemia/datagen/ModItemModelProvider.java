@@ -31,6 +31,17 @@ public class ModItemModelProvider extends ItemModelProvider {
         held("jar", modLoc("block/jar/jar"))
                 .override().predicate(Alchemia.id("filled"), 1).model(fullJar).end();
         held("arcane_pedestal", modLoc("block/pedestal"));
+        // a mirror is its frame and its pane, the pane open once it remembers a partner
+        for (String[] mirror : new String[][] {{"mirror", "mirrorframe"}, {"mirror_essentia", "mirrorframe2"}}) {
+            ModelFile open = withExistingParent(mirror[0] + "_on", mcLoc("item/generated"))
+                    .texture("layer0", modLoc("block/legacy/" + mirror[1]))
+                    .texture("layer1", modLoc("block/legacy/mirrorpaneopen"));
+            withExistingParent(mirror[0], mcLoc("item/generated"))
+                    .texture("layer0", modLoc("block/legacy/" + mirror[1]))
+                    .texture("layer1", modLoc("block/legacy/mirrorpane"))
+                    .override().predicate(Alchemia.id("linked"), 1).model(open).end();
+        }
+        withExistingParent("hand_mirror", mcLoc("item/handheld")).texture("layer0", modLoc("item/legacy/hand_mirror"));
         matrix();
         // a tube in the hand is the original's flat picture of it, one for each kind
         String[][] tubes = {{"tube", "tube_normal"}, {"tube_valve", "tube_valve"}, {"tube_oneway", "tube_oneway"},

@@ -123,6 +123,11 @@ public class AlchemiaClientSetup {
             ItemProperties.register(item, Alchemia.id("filled"), (stack, level, holder, seed) ->
                     stack.has(ModDataComponents.ESSENTIA.get()) ? 1 : 0);
         }
+        // a mirror in the hand that remembers a partner shows its pane open
+        for (Item item : List.of(ModBlocks.MIRROR.get().asItem(), ModBlocks.MIRROR_ESSENTIA.get().asItem())) {
+            ItemProperties.register(item, Alchemia.id("linked"), (stack, level, holder, seed) ->
+                    stack.has(ModDataComponents.MIRROR_LINK.get()) ? 1 : 0);
+        }
         ItemProperties.register(ModBlocks.JAR.get().asItem(), Alchemia.id("filled"),
                 (stack, level, holder, seed) -> stack.has(ModDataComponents.CONTENTS.get()) ? 1 : 0);
         // purifying fluid is seen through, as water is
@@ -189,6 +194,7 @@ public class AlchemiaClientSetup {
         event.register(ModMenus.RESEARCH_TABLE.get(), ResearchTableScreen::new);
         event.register(ModMenus.ARCANE_WORKBENCH.get(), ArcaneWorkbenchScreen::new);
         event.register(ModMenus.ESSENTIA_SMELTER.get(), EssentiaSmelterScreen::new);
+        event.register(ModMenus.HAND_MIRROR.get(), HandMirrorScreen::new);
         event.register(ModMenus.ARCANE_BORE.get(), ArcaneBoreScreen::new);
         event.register(ModMenus.THAUMATORIUM.get(), ThaumatoriumScreen::new);
         event.register(ModMenus.FOCUS_POUCH.get(), FocusPouchScreen::new);
@@ -315,6 +321,7 @@ public class AlchemiaClientSetup {
         event.registerBlockEntityRenderer(ModBlockEntities.TUBE.get(), OnewayMarkRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.BELLOWS.get(), BellowsRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.CENTRIFUGE.get(), CentrifugeRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.MIRROR.get(), MirrorRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.ARCANE_BORE.get(), ArcaneBoreRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.ARCANE_BORE_BASE.get(), ArcaneBoreBaseRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.BRAIN_JAR.get(), BrainJarRenderer::new);

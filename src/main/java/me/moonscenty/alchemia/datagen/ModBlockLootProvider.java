@@ -1,5 +1,6 @@
 package me.moonscenty.alchemia.datagen;
 
+import net.minecraft.world.level.block.Blocks;
 import java.util.Set;
 
 import me.moonscenty.alchemia.block.CrystalBlock;
@@ -89,6 +90,22 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
         dropSelf(ModBlocks.FOCAL_MANIPULATOR.get());
         dropSelf(ModBlocks.BELLOWS.get());
         dropSelf(ModBlocks.CENTRIFUGE.get());
+        // a mirror taken down from a pair remembers its partner
+        for (var mirror : java.util.List.of(ModBlocks.MIRROR.get(), ModBlocks.MIRROR_ESSENTIA.get())) {
+            add(mirror, block -> createSingleItemTable(block).apply(
+                    CopyComponentsFunction.copyComponents(CopyComponentsFunction.Source.BLOCK_ENTITY)
+                            .include(ModDataComponents.MIRROR_LINK.get())));
+        }
+        // the heart gives nothing; the shell gives back what it was
+        add(ModBlocks.INFERNAL_FURNACE.get(), noDrop());
+        add(ModBlocks.FURNACE_SHELL.get(), block -> LootTable.lootTable()
+                .withPool(applyExplosionCondition(block, LootPool.lootPool().setRolls(ConstantValue.exactly(1))
+                        .add(LootItem.lootTableItem(Blocks.OBSIDIAN)
+                                .when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block)
+                                        .setProperties(StatePropertiesPredicate.Builder.properties()
+                                                .hasProperty(me.moonscenty.alchemia.block.FurnaceShellBlock.OBSIDIAN,
+                                                        true)))
+                                .otherwise(LootItem.lootTableItem(Blocks.NETHER_BRICKS))))));
         dropSelf(ModBlocks.ARCANE_BORE.get());
         dropSelf(ModBlocks.ARCANE_BORE_BASE.get());
         // each half of a thaumatorium was a block of brass, and gives it back

@@ -1,0 +1,26 @@
+{
+  "category": "alchemia:artifice",
+  "column": -1,
+  "complexity": 2,
+  "icon": "alchemia:mirror",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.mirror.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:mirror"
+    }
+  ],
+  "parents": [
+    "alchemia:infusion"
+  ],
+  "requirements": {
+    "alchemia:alienis": 3,
+    "alchemia:motus": 6,
+    "alchemia:tenebrae": 3,
+    "alchemia:vitreus": 3
+  },
+  "row": 9
+}

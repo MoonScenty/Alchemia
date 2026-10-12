@@ -1,5 +1,6 @@
 package me.moonscenty.alchemia.item;
 
+import net.minecraft.world.level.block.state.BlockState;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -379,6 +380,15 @@ public class WandItem extends Item implements VisHolder {
                 level.playSound(null, pos, SoundEvents.LEVER_CLICK, SoundSource.BLOCKS, 0.3F,
                         1.9F + level.random.nextFloat() * 0.2F);
             }
+            return InteractionResult.sidedSuccess(level.isClientSide);
+        }
+
+        // nether brick, obsidian, lava and a set of bars, made into an infernal furnace if laid out right
+        BlockState clicked = level.getBlockState(pos);
+        if (context.getPlayer() != null
+                && (clicked.is(Blocks.OBSIDIAN) || clicked.is(Blocks.NETHER_BRICKS) || clicked.is(Blocks.IRON_BARS))
+                && me.moonscenty.alchemia.block.InfernalFurnaceBlock.form(level, pos, context.getPlayer(),
+                        context.getItemInHand())) {
             return InteractionResult.sidedSuccess(level.isClientSide);
         }
 

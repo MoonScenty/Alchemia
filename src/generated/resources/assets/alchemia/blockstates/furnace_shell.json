@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "obsidian=false": {
+      "model": "alchemia:block/furnace_shell_brick"
+    },
+    "obsidian=true": {
+      "model": "alchemia:block/furnace_shell_obsidian"
+    }
+  }
+}

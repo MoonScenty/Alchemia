@@ -175,6 +175,10 @@ public class ModItems {
             () -> new Item(new Item.Properties().rarity(net.minecraft.world.item.Rarity.UNCOMMON)));
     /** A pane of glass silvered with quicksilver. */
     public static final DeferredItem<Item> MIRRORED_GLASS = ITEMS.registerSimpleItem("mirrored_glass");
+    /** A mirror on a handle, that sends things through to a magic mirror wherever it is. */
+    public static final DeferredItem<me.moonscenty.alchemia.item.HandMirrorItem> HAND_MIRROR =
+            ITEMS.register("hand_mirror", () -> new me.moonscenty.alchemia.item.HandMirrorItem(
+                    new Item.Properties().stacksTo(1).rarity(net.minecraft.world.item.Rarity.UNCOMMON)));
     /** Glass and brass round a shard of flux, which takes whatever shape is pressed on it. */
     public static final DeferredItem<Item> MORPHIC_RESONATOR = ITEMS.registerSimpleItem("morphic_resonator");
     /** A mind of gears and a comparator under glass. Enough to follow one rule without being told twice. */

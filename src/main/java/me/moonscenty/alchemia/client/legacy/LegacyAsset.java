@@ -216,6 +216,11 @@ public record LegacyAsset(String target, List<Source> sources, Transform transfo
             if (lower.equals("builtin/generated")) {
                 return new JsonPrimitive("minecraft:item/generated");
             }
+            // and the game's own pictures without one too, some under names they have since lost
+            if (lower.startsWith("blocks/")) {
+                String name = value.substring("blocks/".length());
+                return new JsonPrimitive("minecraft:block/" + (name.equals("fire_layer_0") ? "fire_0" : name));
+            }
         }
         return element;
     }

@@ -39,6 +39,9 @@ public final class ModCapabilities {
                     ? new IntoTotem(totem) : null;
         }, ModBlocks.AURA_TOTEM_POLE_INNER.get(), ModBlocks.AURA_TOTEM_POLE_OUTER.get(),
                 ModBlocks.AURA_TOTEM_POLE_PURE.get());
+        // a magic mirror takes items from anyone's pipes, and passes them on; nothing is ever taken back out
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, ModBlockEntities.MIRROR.get(),
+                (mirror, side) -> mirror.essentia() ? null : new IntoMirror(mirror));
         // the spa's tank, and its pocket of salts, to anyone's pipes as to a bucket and a hopper
         event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, ModBlockEntities.SPA.get(),
                 (spa, side) -> spa.tank(side));
@@ -97,6 +100,44 @@ public final class ModCapabilities {
         @Override
         public FluidStack drain(int maxDrain, FluidAction action) {
             return FluidStack.EMPTY;
+        }
+    }
+
+    /** One square that is never full and never gives anything back: whatever goes in, goes through the mirror. */
+    private record IntoMirror(me.moonscenty.alchemia.block.entity.MirrorBlockEntity mirror)
+            implements net.neoforged.neoforge.items.IItemHandler {
+        @Override
+        public int getSlots() {
+            return 1;
+        }
+
+        @Override
+        public net.minecraft.world.item.ItemStack getStackInSlot(int slot) {
+            return net.minecraft.world.item.ItemStack.EMPTY;
+        }
+
+        @Override
+        public net.minecraft.world.item.ItemStack insertItem(int slot, net.minecraft.world.item.ItemStack stack,
+                boolean simulate) {
+            if (!simulate && !stack.isEmpty()) {
+                mirror.insert(stack.copy());
+            }
+            return net.minecraft.world.item.ItemStack.EMPTY;
+        }
+
+        @Override
+        public net.minecraft.world.item.ItemStack extractItem(int slot, int amount, boolean simulate) {
+            return net.minecraft.world.item.ItemStack.EMPTY;
+        }
+
+        @Override
+        public int getSlotLimit(int slot) {
+            return 64;
+        }
+
+        @Override
+        public boolean isItemValid(int slot, net.minecraft.world.item.ItemStack stack) {
+            return true;
         }
     }
 }

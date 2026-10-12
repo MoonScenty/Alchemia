@@ -67,6 +67,22 @@ public class ModBlockEntities {
                     .of(me.moonscenty.alchemia.block.entity.BrainJarBlockEntity::new, ModBlocks.BRAIN_JAR.get())
                     .build(null));
 
+    /** A mirror of either kind. */
+    public static final DeferredHolder<BlockEntityType<?>,
+            BlockEntityType<me.moonscenty.alchemia.block.entity.MirrorBlockEntity>> MIRROR =
+            BLOCK_ENTITIES.register("mirror", () -> BlockEntityType.Builder
+                    .of(me.moonscenty.alchemia.block.entity.MirrorBlockEntity::new, ModBlocks.MIRROR.get(),
+                            ModBlocks.MIRROR_ESSENTIA.get())
+                    .build(null));
+
+    /** The molten heart of an infernal furnace. */
+    public static final DeferredHolder<BlockEntityType<?>,
+            BlockEntityType<me.moonscenty.alchemia.block.entity.InfernalFurnaceBlockEntity>> INFERNAL_FURNACE =
+            BLOCK_ENTITIES.register("infernal_furnace", () -> BlockEntityType.Builder
+                    .of(me.moonscenty.alchemia.block.entity.InfernalFurnaceBlockEntity::new,
+                            ModBlocks.INFERNAL_FURNACE.get())
+                    .build(null));
+
     /** The bore at work, and its base, which takes essentia in for it. */
     public static final DeferredHolder<BlockEntityType<?>,
             BlockEntityType<me.moonscenty.alchemia.block.entity.ArcaneBoreBlockEntity>> ARCANE_BORE =

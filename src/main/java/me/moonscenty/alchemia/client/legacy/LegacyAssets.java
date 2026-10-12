@@ -397,6 +397,20 @@ public final class LegacyAssets {
         all.add(LegacyAsset.of(CRYSTALLIZER_MESH).five("models/obj/crystallizer.obj"));
         // the thaumatorium: its mesh, its sheet and its panel; and the matrix, the original's model file
         all.add(LegacyAsset.of(THAUMATORIUM_MESH).five("models/obj/thaumatorium.obj"));
+        // the mirrors: their frames and panes, the hand mirror, its panel, and the two pictures the swirl is made of
+        for (String picture : List.of("mirrorframe", "mirrorframe2", "mirrorpane", "mirrorpaneopen", "mirrorpanetrans")) {
+            all.add(LegacyAsset.of("textures/block/legacy/" + picture + ".png")
+                    .five("textures/blocks/" + picture + ".png"));
+        }
+        all.add(LegacyAsset.of("textures/item/legacy/hand_mirror.png").five("textures/items/hand_mirror.png"));
+        all.add(LegacyAsset.of("textures/gui/hand_mirror.png").five("textures/gui/gui_handmirror.png"));
+        all.add(LegacyAsset.of("textures/misc/mirror_tunnel.png").five("textures/misc/tunnel.png"));
+        all.add(LegacyAsset.of("textures/misc/mirror_field.png").five("textures/misc/particlefield.png"));
+        // the infernal furnace: the original's model of the whole furnace, and its sheet
+        all.add(LegacyAsset.of("models/block/infernal_furnace.json").five("models/block/infernal_furnace.json")
+                .asModel("cutout"));
+        all.add(LegacyAsset.of("textures/block/legacy/infernal_furnace.png")
+                .five("textures/blocks/infernal_furnace.png"));
         // the arcane bore: its sheet (the base's too), the jar it wears round its middle, its panel, its two beams
         all.add(LegacyAsset.of("textures/entity/bore.png").five("textures/models/bore.png").forModel(BORE));
         all.add(LegacyAsset.of("textures/entity/jar.png").five("textures/models/jar.png").forModel(JAR));

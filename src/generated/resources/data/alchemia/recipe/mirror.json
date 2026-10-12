@@ -1,0 +1,31 @@
+{
+  "type": "alchemia:infusion",
+  "central": {
+    "item": "alchemia:mirrored_glass"
+  },
+  "essentia": {
+    "alchemia:motus": 8,
+    "alchemia:permutatio": 8,
+    "alchemia:tenebrae": 8
+  },
+  "instability": 1,
+  "research": "alchemia:mirror",
+  "result": {
+    "count": 1,
+    "id": "alchemia:mirror"
+  },
+  "ring": [
+    {
+      "item": "minecraft:gold_ingot"
+    },
+    {
+      "item": "minecraft:gold_ingot"
+    },
+    {
+      "item": "minecraft:gold_ingot"
+    },
+    {
+      "item": "minecraft:ender_pearl"
+    }
+  ]
+}

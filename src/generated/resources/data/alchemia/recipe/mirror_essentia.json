@@ -1,0 +1,31 @@
+{
+  "type": "alchemia:infusion",
+  "central": {
+    "item": "alchemia:mirrored_glass"
+  },
+  "essentia": {
+    "alchemia:aqua": 8,
+    "alchemia:motus": 8,
+    "alchemia:permutatio": 8
+  },
+  "instability": 2,
+  "research": "alchemia:mirror_essentia",
+  "result": {
+    "count": 1,
+    "id": "alchemia:mirror_essentia"
+  },
+  "ring": [
+    {
+      "tag": "c:ingots/iron"
+    },
+    {
+      "tag": "c:ingots/iron"
+    },
+    {
+      "tag": "c:ingots/iron"
+    },
+    {
+      "item": "minecraft:ender_pearl"
+    }
+  ]
+}

@@ -816,6 +816,23 @@ public class ModRecipeProvider extends RecipeProvider {
                         .add(ModAspects.AVERSION, 25), TOTEM_UNSTABLE, "aura_totem");
 
         // the recharge pedestal: a pedestal worked on with gold, diamonds and a primal charm
+        // the mirrors: mirrored glass framed in gold or iron, with an ender pearl; and a mirror on a handle
+        infusion(output, "mirror", Ingredient.of(ModItems.MIRRORED_GLASS),
+                List.of(Ingredient.of(Items.GOLD_INGOT), Ingredient.of(Items.GOLD_INGOT), Ingredient.of(Items.GOLD_INGOT),
+                        Ingredient.of(Items.ENDER_PEARL)),
+                new ItemStack(ModBlocks.MIRROR.get()),
+                AspectList.of(ModAspects.MOTION, 8).add(ModAspects.DARKNESS, 8).add(ModAspects.EXCHANGE, 8), 1, "mirror");
+        infusion(output, "hand_mirror", Ingredient.of(ModBlocks.MIRROR),
+                List.of(Ingredient.of(Items.STICK), Ingredient.of(Items.COMPASS), Ingredient.of(Items.MAP)),
+                new ItemStack(ModItems.HAND_MIRROR.get()),
+                AspectList.of(ModAspects.TOOL, 16).add(ModAspects.MOTION, 16), 5, "mirror_hand");
+        infusion(output, "mirror_essentia", Ingredient.of(ModItems.MIRRORED_GLASS),
+                List.of(Ingredient.of(Tags.Items.INGOTS_IRON), Ingredient.of(Tags.Items.INGOTS_IRON),
+                        Ingredient.of(Tags.Items.INGOTS_IRON), Ingredient.of(Items.ENDER_PEARL)),
+                new ItemStack(ModBlocks.MIRROR_ESSENTIA.get()),
+                AspectList.of(ModAspects.MOTION, 8).add(ModAspects.WATER, 8).add(ModAspects.EXCHANGE, 8), 2,
+                "mirror_essentia");
+
         // the bore: a clockwork mind given the pick, the shovel and the earth to dig with
         infusion(output, "arcane_bore", Ingredient.of(ModItems.CLOCKWORK_MIND),
                 List.of(Ingredient.of(ModBlocks.GREATWOOD.planks()), Ingredient.of(ModBlocks.GREATWOOD.planks()),

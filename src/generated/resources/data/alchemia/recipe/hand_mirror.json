@@ -1,0 +1,27 @@
+{
+  "type": "alchemia:infusion",
+  "central": {
+    "item": "alchemia:mirror"
+  },
+  "essentia": {
+    "alchemia:instrumentum": 16,
+    "alchemia:motus": 16
+  },
+  "instability": 5,
+  "research": "alchemia:mirror_hand",
+  "result": {
+    "count": 1,
+    "id": "alchemia:hand_mirror"
+  },
+  "ring": [
+    {
+      "item": "minecraft:stick"
+    },
+    {
+      "item": "minecraft:compass"
+    },
+    {
+      "item": "minecraft:map"
+    }
+  ]
+}

@@ -51,9 +51,27 @@ public final class LegacyRenderTypes extends RenderType {
                     .setWriteMaskState(COLOR_WRITE)
                     .createCompositeState(false)));
 
+    /**
+     * The swirl seen in a paired mirror: the original drew it the way the game draws the end portal, layer on
+     * layer, with two pictures of its own, and the game's end-portal shader does the same with whichever two it is
+     * given.
+     */
+    private static final RenderType MIRROR_PORTAL = create("alchemia_mirror_portal", DefaultVertexFormat.POSITION,
+            VertexFormat.Mode.QUADS, 256, false, false, CompositeState.builder()
+                    .setShaderState(RENDERTYPE_END_PORTAL_SHADER)
+                    .setTextureState(MultiTextureStateShard.builder()
+                            .add(me.moonscenty.alchemia.Alchemia.id("textures/misc/mirror_tunnel.png"), false, false)
+                            .add(me.moonscenty.alchemia.Alchemia.id("textures/misc/mirror_field.png"), false, false)
+                            .build())
+                    .createCompositeState(false));
+
     private LegacyRenderTypes(String name, VertexFormat format, VertexFormat.Mode mode, int size, boolean crumbling,
             boolean sorted, Runnable setup, Runnable clear) {
         super(name, format, mode, size, crumbling, sorted, setup, clear);
+    }
+
+    public static RenderType mirrorPortal() {
+        return MIRROR_PORTAL;
     }
 
     /** A glow laid over a model at full brightness, faded by its own picture's alpha and the colour's. */

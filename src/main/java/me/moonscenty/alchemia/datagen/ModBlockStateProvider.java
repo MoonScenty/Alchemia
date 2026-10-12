@@ -448,6 +448,19 @@ public class ModBlockStateProvider extends BlockStateProvider {
         drawnElsewhere(ModBlocks.BELLOWS, "block/greatwood_planks");
         // the original's two essentia devices threw greatwood about when broken, having no model of their own
         drawnElsewhere(ModBlocks.CENTRIFUGE, "block/greatwood_planks");
+        // the mirrors are drawn by their renderer; broken, they throw their frames about
+        for (var mirror : java.util.List.of(ModBlocks.MIRROR, ModBlocks.MIRROR_ESSENTIA)) {
+            String frame = mirror == ModBlocks.MIRROR ? "block/legacy/mirrorframe" : "block/legacy/mirrorframe2";
+            getVariantBuilder(mirror.get()).partialState().setModels(new ConfiguredModel(
+                    models().getBuilder(mirror.getId().getPath()).texture("particle", modLoc(frame))));
+        }
+        // the infernal furnace's heart wears the original's model of the whole furnace; the shell draws nothing
+        horizontalBlock(ModBlocks.INFERNAL_FURNACE.get(), models().getExistingFile(modLoc("block/infernal_furnace")));
+        ModelFile brick = models().getBuilder("furnace_shell_brick").texture("particle", mcLoc("block/nether_bricks"));
+        ModelFile obsidian = models().getBuilder("furnace_shell_obsidian").texture("particle", mcLoc("block/obsidian"));
+        getVariantBuilder(ModBlocks.FURNACE_SHELL.get()).forAllStates(state -> ConfiguredModel.builder()
+                .modelFile(state.getValue(me.moonscenty.alchemia.block.FurnaceShellBlock.OBSIDIAN) ? obsidian : brick)
+                .build());
         // the bore and its base are drawn by their renderers and threw greatwood about when broken
         for (var bore : java.util.List.of(ModBlocks.ARCANE_BORE, ModBlocks.ARCANE_BORE_BASE)) {
             getVariantBuilder(bore.get()).partialState().setModels(new ConfiguredModel(

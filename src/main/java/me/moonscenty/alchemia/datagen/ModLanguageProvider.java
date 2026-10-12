@@ -632,6 +632,18 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                 {"biothaumic_mind", "Biothaumic Mind", "생체마법 두뇌",
                  "The clockwork mind with something living grown into it on the altar. What comes out can be told to choose rather than only to follow, and the things that have to decide for themselves -- an autocaster picking its mark -- are built round one.",
                  "태엽 두뇌에 제단에서 살아 있는 것을 자라 들게 한 것이다. 나온 것은 따르기만 하는 것이 아니라 고르라고 시킬 수 있다. 스스로 정해야 하는 것들 — 노릴 것을 고르는 자동 시전기 같은 — 은 이것을 둘러싸고 짓는다."},
+                {"mirror", "Mirror Magic", "거울 마법",
+                 "Two mirrors made a pair pass to each other whatever is thrown or piped into either -- even from one world to another -- but never anything living. Put one up, hold a second against it, then put the second up wherever it should open. A pair is two and only two. A mirror taken down remembers its partner, and either can be put up again elsewhere. Moving things strains the aura, and the more is moved the more flux it lets out.",
+                 "짝을 이룬 두 거울은 어느 한쪽에 던지거나 관으로 넣은 것을 서로 건넨다. 다른 세계로도 건넨다. 살아 있는 것은 건네지 않는다. 하나를 걸고, 둘째 거울을 그것에 대었다가, 둘째를 열고 싶은 곳에 건다. 짝은 둘뿐이다. 떼어 낸 거울은 짝을 기억하니 어느 쪽이든 다른 곳에 다시 걸 수 있다. 건네는 일은 오라를 긁고, 많이 건넬수록 플럭스가 더 샌다."},
+                {"mirror_hand", "Magical Hand Mirror", "마법 손거울",
+                 "A mirror on a handle. Held against a magic mirror it remembers it, even one already paired; opened anywhere, whatever is put in it comes out of that mirror. It only sends, never receives.",
+                 "손잡이 달린 거울이다. 마법 거울에 대면 그것을 기억한다. 이미 짝이 있는 거울이어도 된다. 어디서든 열어서 넣은 것은 그 거울로 나온다. 보내기만 하고 받지는 않는다."},
+                {"mirror_essentia", "Essentia Mirrors", "에센시아 거울",
+                 "Essentia cannot be piped through a mirror. But an essentia mirror stands in for whatever essentia is held within eight blocks in front of its partner, so that an altar or a lamp reaching for essentia near one draws on jars by the other. It strains the aura as the other mirrors do.",
+                 "에센시아는 거울로 관을 통해 넣을 수 없다. 하지만 에센시아 거울은 짝 거울 앞 여덟 칸 안에 담긴 에센시아를 대신해 준다. 한쪽 근처에서 에센시아를 찾는 제단이나 램프가 다른 쪽 단지에서 끌어 쓴다. 다른 거울처럼 오라를 긁는다."},
+                {"infernal_furnace", "Infernal Furnace", "지옥의 화로",
+                 "A furnace of obsidian and nether brick round a heart of lava, which needs no fuel. Build it three blocks every way: nether brick at the corners, obsidian on the edges and the floor, still lava in the middle with air above it, and iron bars in place of one of the four obsidian blocks beside the lava. Work it with a wand. Things dropped in through the top are smelted and spat out where the bars were; anything that will not smelt is burned to nothing. It is slow on its own, and much quicker on fire drawn out of the air; bellows blowing into it from two blocks out make it quicker still. Ores come out with a nugget besides now and then, more often with bellows. A little flux escapes now and again.",
+                 "흑요석과 네더 벽돌로 용암의 심장을 감싼 화로로, 연료가 필요 없다. 사방 세 칸으로 쌓는다. 모서리는 네더 벽돌, 변과 바닥은 흑요석, 가운데는 위가 비어 있는 고인 용암, 그리고 용암 옆 흑요석 넷 가운데 하나 자리에 철창. 완드로 다룬다. 위로 떨어뜨린 것은 녹여서 철창이 있던 쪽으로 뱉는다. 녹지 않는 것은 타서 없어진다. 혼자서는 느리지만 공기의 불을 끌어 쓰면 훨씬 빠르고, 두 칸 밖에서 안으로 부는 풀무가 있으면 더 빠르다. 광석은 이따금 덩어리를 하나 더 내놓고, 풀무가 있으면 더 자주 그런다. 이따금 플럭스가 조금 새어 나온다."},
                 {"arcane_bore", "Arcane Bore", "비전 굴착기",
                  "A machine that carries an excavation focus further than any wand, and without anyone standing over it. It goes directly above or below its base; point it with a wand and give it a redstone signal, and it eats a tunnel out the way it faces, sixty-four blocks deep, sweeping a spiral as it goes. It wants an excavation focus in its left slot and any pickaxe in its right: whatever is worked into either -- force, efficiency, widening, treasure, fortune, silk touch, dowsing -- goes into what it mines. The pickaxe wears a point a block, and the bore stops while it has one left. Everything mined comes out of the base's nozzle, into a container there if there is one; a wand on the base turns the nozzle. Entropy piped into the base drives it fast, twenty blocks a point; without it, it draws entropy out of the air, a block a point and far slower.",
                  "완드로는 닿지 않는 데까지, 지켜보는 사람 없이도 발굴 포커스를 부리는 기계다. 받침 바로 위나 아래에 놓는다. 완드로 방향을 잡고 레드스톤 신호를 주면 바라보는 쪽으로 나선을 그리며 예순네 칸 깊이의 굴을 판다. 왼쪽 칸에 발굴 포커스를, 오른쪽 칸에 아무 곡괭이나 넣는다. 둘에 깃든 것 — 힘, 효율, 넓히기, 보물, 행운, 섬세한 손길, 탐광 — 이 캐는 것에 그대로 들어간다. 곡괭이는 한 칸마다 한 점씩 닳고, 한 점 남으면 굴착기가 멈춘다. 캔 것은 모두 받침의 주둥이로 나온다. 거기 상자가 있으면 상자로. 받침을 완드로 치면 주둥이가 돈다. 받침에 관으로 혼돈을 넣으면 한 점에 스무 칸을 빠르게 판다. 없으면 공기에서 혼돈을 끌어 쓰는데, 한 점에 한 칸이고 훨씬 느리다."},
@@ -822,6 +834,17 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("block.alchemia.bellows", pick("Bellows", "풀무"));
         add("block.alchemia.centrifuge", pick("Essentia Centrifuge", "에센시아 원심분리기"));
         add("block.alchemia.arcane_bore", pick("Arcane Bore", "비전 굴착기"));
+        add("block.alchemia.mirror", pick("Magic Mirror", "마법 거울"));
+        add("block.alchemia.mirror_essentia", pick("Essentia Mirror", "에센시아 거울"));
+        add("block.alchemia.mirror.linked_to", pick("Linked to %s, %s, %s in %s", "%4$s의 %1$s, %2$s, %3$s에 이어짐"));
+        add("block.alchemia.mirror.already_linked", pick("That mirror is already linked to a valid destination.",
+                "그 거울은 이미 짝이 있다."));
+        addItem(ModItems.HAND_MIRROR, pick("Magic Hand Mirror", "마법 손거울"));
+        add("item.alchemia.hand_mirror.linked", pick("Link established.", "이어졌다."));
+        add("item.alchemia.hand_mirror.error", pick("Destination mirror is missing or misplaced. Link broken.",
+                "이어진 거울이 없거나 자리를 옮겼다. 끊어졌다."));
+        add("block.alchemia.infernal_furnace", pick("Infernal Furnace", "지옥의 화로"));
+        add("block.alchemia.furnace_shell", pick("Infernal Furnace", "지옥의 화로"));
         add("block.alchemia.arcane_bore_base", pick("Arcane Bore Base", "비전 굴착기 받침"));
         add("gui.alchemia.arcane_bore.width", pick("Width: %s", "너비: %s"));
         add("gui.alchemia.arcane_bore.speed", pick("Speed: +%s", "속도: +%s"));

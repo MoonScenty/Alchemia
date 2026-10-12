@@ -1,0 +1,39 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "block": "alchemia:furnace_shell",
+                  "condition": "minecraft:block_state_property",
+                  "properties": {
+                    "obsidian": "true"
+                  }
+                }
+              ],
+              "name": "minecraft:obsidian"
+            },
+            {
+              "type": "minecraft:item",
+              "name": "minecraft:nether_bricks"
+            }
+          ]
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "alchemia:blocks/furnace_shell"
+}

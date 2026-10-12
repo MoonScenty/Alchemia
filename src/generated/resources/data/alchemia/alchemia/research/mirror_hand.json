@@ -1,0 +1,26 @@
+{
+  "category": "alchemia:artifice",
+  "column": -2,
+  "complexity": 2,
+  "icon": "alchemia:hand_mirror",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.mirror_hand.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:hand_mirror"
+    }
+  ],
+  "parents": [
+    "alchemia:mirror"
+  ],
+  "requirements": {
+    "alchemia:alienis": 3,
+    "alchemia:instrumentum": 6,
+    "alchemia:motus": 3,
+    "alchemia:vitreus": 3
+  },
+  "row": 10
+}

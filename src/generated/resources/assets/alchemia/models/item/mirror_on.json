@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "alchemia:block/legacy/mirrorframe",
+    "layer1": "alchemia:block/legacy/mirrorpaneopen"
+  }
+}

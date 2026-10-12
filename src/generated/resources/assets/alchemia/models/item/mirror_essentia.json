@@ -1,0 +1,15 @@
+{
+  "parent": "minecraft:item/generated",
+  "overrides": [
+    {
+      "model": "alchemia:item/mirror_essentia_on",
+      "predicate": {
+        "alchemia:linked": 1.0
+      }
+    }
+  ],
+  "textures": {
+    "layer0": "alchemia:block/legacy/mirrorframe2",
+    "layer1": "alchemia:block/legacy/mirrorpane"
+  }
+}

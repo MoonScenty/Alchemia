@@ -42,6 +42,7 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
                 .addTag(ModTags.Blocks.ORES_CINNABAR)
                 .addTag(ModTags.Blocks.CRYSTALS)
                 .add(ModBlocks.THAUMATORIUM.get(), ModBlocks.MNEMONIC_MATRIX.get(), ModBlocks.BRAIN_JAR.get())
+                .add(ModBlocks.INFERNAL_FURNACE.get(), ModBlocks.FURNACE_SHELL.get())
                 .add(ModBlocks.ALCHEMIUM_SMELTER.get(), ModBlocks.VOID_SMELTER.get(), ModBlocks.SMELTER_AUX.get(),
                         ModBlocks.SMELTER_VENT.get())
                 .add(ModBlocks.CRUCIBLE.get(), ModBlocks.ESSENTIA_SMELTER.get(), ModBlocks.ALEMBIC.get(),

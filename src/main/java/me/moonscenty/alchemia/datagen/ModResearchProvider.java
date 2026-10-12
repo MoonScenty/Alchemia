@@ -1,5 +1,6 @@
 package me.moonscenty.alchemia.datagen;
 
+import net.minecraft.world.level.block.Blocks;
 import java.util.List;
 
 import me.moonscenty.alchemia.Alchemia;
@@ -118,6 +119,26 @@ public class ModResearchProvider {
                 AspectList.of(ModAspects.WATER, 3).add(ModAspects.EXCHANGE, 6).add(ModAspects.ORDER, 3),
                 List.of("tubes"), false, NodeShape.PLAIN, 3,
                 "tube_filter", "tube_restrict", "tube_oneway", "tube_buffer");
+
+        // mirrors that pass things between them, a hand mirror that sends to one, and mirrors that pass essentia
+        entry(context, "mirror", ModResearch.ARTIFICE, ModBlocks.MIRROR, -1, 9,
+                AspectList.of(ModAspects.MOTION, 6).add(ModAspects.ELDRITCH, 3).add(ModAspects.DARKNESS, 3)
+                        .add(ModAspects.CRYSTAL, 3),
+                List.of("infusion"), false, NodeShape.PLAIN, 2, "mirror");
+        entry(context, "mirror_hand", ModResearch.ARTIFICE, ModItems.HAND_MIRROR, -2, 10,
+                AspectList.of(ModAspects.TOOL, 6).add(ModAspects.ELDRITCH, 3).add(ModAspects.CRYSTAL, 3)
+                        .add(ModAspects.MOTION, 3),
+                List.of("mirror"), false, NodeShape.PLAIN, 2, "hand_mirror");
+        entry(context, "mirror_essentia", ModResearch.ARTIFICE, ModBlocks.MIRROR_ESSENTIA, 0, 10,
+                AspectList.of(ModAspects.MOTION, 6).add(ModAspects.ELDRITCH, 3).add(ModAspects.WATER, 3)
+                        .add(ModAspects.ENERGY, 3),
+                List.of("mirror"), false, NodeShape.PLAIN, 2, "mirror_essentia");
+
+        // a furnace with a heart of lava, built where it stands
+        entry(context, "infernal_furnace", ModResearch.ARTIFICE, Blocks.NETHER_BRICKS, 4, -1,
+                AspectList.of(ModAspects.FIRE, 6).add(ModAspects.METAL, 3).add(ModAspects.CRAFT, 3)
+                        .add(ModAspects.AURA, 3),
+                List.of("primal_charm", "nitor", "alumentum"), false, NodeShape.PLAIN, 2);
 
         // a machine that carries an excavation focus where no wand reaches
         entry(context, "arcane_bore", ModResearch.GOLEMANCY, ModBlocks.ARCANE_BORE, 5, 5,

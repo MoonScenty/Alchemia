@@ -48,6 +48,13 @@ public class ModDataComponents {
      * Only meaningful on a focus that has one. Without the component the focus simply works as far as it can,
      * which is what every other focus does and what this one does until somebody turns it down.
      */
+    /** Where a mirror's partner is, or the mirror a hand mirror sends to: carried on the item. */
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<net.minecraft.core.GlobalPos>>
+            MIRROR_LINK = COMPONENTS.register("mirror_link", () -> DataComponentType.<net.minecraft.core.GlobalPos>builder()
+                    .persistent(net.minecraft.core.GlobalPos.CODEC)
+                    .networkSynchronized(net.minecraft.core.GlobalPos.STREAM_CODEC)
+                    .build());
+
     /** What a brain in a jar has eaten, kept on the jar when it is picked up. */
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> STORED_XP =
             COMPONENTS.register("stored_xp", () -> DataComponentType.<Integer>builder()
