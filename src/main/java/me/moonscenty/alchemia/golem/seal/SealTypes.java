@@ -22,6 +22,13 @@ public final class SealTypes {
         KINDS.put("empty", () -> new EmptySeal(false));
         KINDS.put("empty_advanced", () -> new EmptySeal(true));
         KINDS.put("provider", ProvideSeal::new);
+        KINDS.put("guard", () -> new GuardSeal(false));
+        KINDS.put("guard_advanced", () -> new GuardSeal(true));
+        KINDS.put("butcher", ButcherSeal::new);
+        KINDS.put("harvest", HarvestSeal::new);
+        KINDS.put("lumber", LumberSeal::new);
+        KINDS.put("breaker", BreakerSeal::new);
+        KINDS.put("use", UseSeal::new);
     }
 
     private SealTypes() {

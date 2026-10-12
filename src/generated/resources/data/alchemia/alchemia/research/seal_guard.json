@@ -1,0 +1,34 @@
+{
+  "category": "alchemia:golemancy",
+  "column": -12,
+  "complexity": 2,
+  "icon": "alchemia:seal_guard",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.seal_guard.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:aggression_module"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:seal_guard"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:seal_guard_advanced"
+    }
+  ],
+  "parents": [
+    "alchemia:control_seals"
+  ],
+  "requirements": {
+    "alchemia:aversio": 5,
+    "alchemia:cognitio": 3,
+    "alchemia:humanus": 3,
+    "alchemia:praemunio": 5
+  },
+  "row": 4
+}

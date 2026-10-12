@@ -136,6 +136,25 @@ public final class SealEntity {
                 face.getStepZ() == 0 ? area.getZ() - 1 : 0);
     }
 
+    /**
+     * The n-th block of its area, counting through every block of it in turn and round again: how the seals that
+     * look over an area block by block go about it. The original's arithmetic, odd signs and all.
+     */
+    public BlockPos posInArea(int count) {
+        Direction face = pos.face();
+        int across = 1 + (area.getX() - 1) * (face.getStepX() == 0 ? 2 : 1);
+        int up = 1 + (area.getY() - 1) * (face.getStepY() == 0 ? 2 : 1);
+        int along = 1 + (area.getZ() - 1) * (face.getStepZ() == 0 ? 2 : 1);
+        int qx = face.getStepX() != 0 ? face.getStepX() : 1;
+        int qy = face.getStepY() != 0 ? face.getStepY() : 1;
+        int qz = face.getStepZ() != 0 ? face.getStepZ() : 1;
+        int y = qy * (count / along / across) % up + face.getStepY();
+        int x = qx * (count / along) % across + face.getStepX();
+        int z = qz * count % along + face.getStepZ();
+        return pos.pos().offset(x - (face.getStepX() == 0 ? across / 2 : 0), y - (face.getStepY() == 0 ? up / 2 : 0),
+                z - (face.getStepZ() == 0 ? along / 2 : 0));
+    }
+
     // --- saving ---------------------------------------------------------------------------------------------
 
     public CompoundTag save(HolderLookup.Provider registries) {

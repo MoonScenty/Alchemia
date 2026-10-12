@@ -1,0 +1,28 @@
+{
+  "category": "alchemia:golemancy",
+  "column": -10,
+  "complexity": 2,
+  "icon": "alchemia:seal_breaker",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.seal_break.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:seal_breaker"
+    }
+  ],
+  "parents": [
+    "alchemia:control_seals",
+    "alchemia:infusion",
+    "alchemia:golem_breaker"
+  ],
+  "requirements": {
+    "alchemia:cognitio": 3,
+    "alchemia:humanus": 3,
+    "alchemia:instrumentum": 5,
+    "alchemia:perditio": 5
+  },
+  "row": 4
+}

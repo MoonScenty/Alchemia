@@ -124,7 +124,8 @@ public class ModItemModelProvider extends ItemModelProvider {
         // golems and what goes into them, on the original's pictures; a golem item is tinted by its material
         for (String golemancy : new String[] {"golem", "golem_bell", "vision_module", "aggression_module", "tallow",
                 "seal_blank", "seal_pickup", "seal_pickup_advanced", "seal_fill", "seal_fill_advanced", "seal_empty",
-                "seal_empty_advanced", "seal_provider"}) {
+                "seal_empty_advanced", "seal_provider", "seal_guard", "seal_guard_advanced", "seal_butcher",
+                "seal_harvest", "seal_lumber", "seal_breaker", "seal_use"}) {
             withExistingParent(golemancy, mcLoc("item/generated"))
                     .texture("layer0", modLoc("item/legacy/" + golemancy));
         }

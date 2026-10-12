@@ -316,6 +316,7 @@ public class AlchemiaClientSetup {
         event.registerEntityRenderer(ModEntities.TAINTED_RABBIT.get(), TaintedAnimalRenderers.TaintedRabbit::new);
         event.registerEntityRenderer(ModEntities.ALCHEMIC_SLIME.get(), TaintedAnimalRenderers.AlchemicSlime::new);
         event.registerEntityRenderer(ModEntities.GOLEM.get(), GolemRenderer::new);
+        event.registerEntityRenderer(ModEntities.GOLEM_DART.get(), GolemDartRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.GOLEM_PRESS.get(), GolemPressRenderer::new);
         event.registerEntityRenderer(ModEntities.TAINT_SWARM.get(), TaintSwarmRenderer::new);
         event.registerEntityRenderer(ModEntities.TAINTACLE.get(), context -> new TaintacleRenderer<>(context,

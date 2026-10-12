@@ -1,0 +1,27 @@
+{
+  "category": "alchemia:golemancy",
+  "column": -11,
+  "complexity": 2,
+  "icon": "alchemia:seal_butcher",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.seal_butcher.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:seal_butcher"
+    }
+  ],
+  "parents": [
+    "alchemia:bioalchemic_mind",
+    "alchemia:infusion",
+    "alchemia:seal_guard"
+  ],
+  "requirements": {
+    "alchemia:bestia": 5,
+    "alchemia:cognitio": 3,
+    "alchemia:humanus": 3
+  },
+  "row": 6
+}

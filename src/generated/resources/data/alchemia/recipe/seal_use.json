@@ -1,0 +1,16 @@
+{
+  "type": "alchemia:crucible",
+  "aspects": {
+    "alchemia:cognitio": 4,
+    "alchemia:fabrico": 8,
+    "alchemia:sensus": 4
+  },
+  "catalyst": {
+    "item": "alchemia:seal_blank"
+  },
+  "research": "alchemia:seal_use",
+  "result": {
+    "count": 1,
+    "id": "alchemia:seal_use"
+  }
+}

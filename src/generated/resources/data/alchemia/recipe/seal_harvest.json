@@ -1,0 +1,36 @@
+{
+  "type": "alchemia:infusion",
+  "central": {
+    "item": "alchemia:seal_blank"
+  },
+  "essentia": {
+    "alchemia:herba": 4,
+    "alchemia:humanus": 4,
+    "alchemia:sensus": 4
+  },
+  "research": "alchemia:seal_harvest",
+  "result": {
+    "count": 1,
+    "id": "alchemia:seal_harvest"
+  },
+  "ring": [
+    {
+      "item": "minecraft:wheat_seeds"
+    },
+    {
+      "item": "minecraft:pumpkin_seeds"
+    },
+    {
+      "item": "minecraft:melon_seeds"
+    },
+    {
+      "item": "minecraft:cocoa_beans"
+    },
+    {
+      "item": "minecraft:sugar_cane"
+    },
+    {
+      "item": "minecraft:cactus"
+    }
+  ]
+}

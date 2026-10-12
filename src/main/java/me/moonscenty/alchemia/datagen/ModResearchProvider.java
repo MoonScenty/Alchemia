@@ -335,6 +335,33 @@ public class ModResearchProvider {
         entry(context, "seal_provide", ModResearch.GOLEMANCY, ModItems.SEALS.get("provider").get(), -7, 6,
                 AspectList.of(ModAspects.VOID, 3).add(ModAspects.MIND, 5).add(ModAspects.EXCHANGE, 4),
                 List.of("seal_empty", "bioalchemic_mind"), false, NodeShape.PLAIN, 1, "seal_provider");
+        // the seals that fight, farm and break, and the fighting parts a golem may be given
+        entry(context, "seal_guard", ModResearch.GOLEMANCY, ModItems.SEALS.get("guard").get(), -12, 4,
+                AspectList.of(ModAspects.MAN, 3).add(ModAspects.MIND, 3).add(ModAspects.PROTECT, 5)
+                        .add(ModAspects.AVERSION, 5),
+                List.of("control_seals"), false, NodeShape.PLAIN, 2, "aggression_module", "seal_guard",
+                "seal_guard_advanced");
+        entry(context, "golem_combat", ModResearch.GOLEMANCY, ModItems.AGGRESSION_MODULE, -12, 2,
+                AspectList.of(ModAspects.MECHANISM, 5).add(ModAspects.AVERSION, 5).add(ModAspects.PROTECT, 5)
+                        .add(ModAspects.MIND, 5),
+                List.of("seal_guard"), false, NodeShape.PLAIN, 2);
+        entry(context, "seal_butcher", ModResearch.GOLEMANCY, ModItems.SEALS.get("butcher").get(), -11, 6,
+                AspectList.of(ModAspects.MAN, 3).add(ModAspects.MIND, 3).add(ModAspects.BEAST, 5),
+                List.of("bioalchemic_mind", "infusion", "seal_guard"), false, NodeShape.PLAIN, 2, "seal_butcher");
+        entry(context, "seal_use", ModResearch.GOLEMANCY, ModItems.SEALS.get("use").get(), -3, 6,
+                AspectList.of(ModAspects.MAN, 3).add(ModAspects.MIND, 3).add(ModAspects.CRAFT, 5),
+                List.of("control_seals", "bioalchemic_mind", "infusion"), false, NodeShape.PLAIN, 1, "seal_use");
+        entry(context, "seal_harvest", ModResearch.GOLEMANCY, ModItems.SEALS.get("harvest").get(), -5, 6,
+                AspectList.of(ModAspects.MAN, 3).add(ModAspects.MIND, 3).add(ModAspects.PLANT, 5),
+                List.of("seal_use", "infusion"), false, NodeShape.PLAIN, 2, "seal_harvest");
+        entry(context, "seal_break", ModResearch.GOLEMANCY, ModItems.SEALS.get("breaker").get(), -10, 4,
+                AspectList.of(ModAspects.MAN, 3).add(ModAspects.MIND, 3).add(ModAspects.ENTROPY, 5)
+                        .add(ModAspects.TOOL, 5),
+                List.of("control_seals", "infusion", "golem_breaker"), false, NodeShape.PLAIN, 2, "seal_breaker");
+        entry(context, "seal_lumber", ModResearch.GOLEMANCY, ModItems.SEALS.get("lumber").get(), -9, 6,
+                AspectList.of(ModAspects.MAN, 3).add(ModAspects.MIND, 3).add(ModAspects.PLANT, 5)
+                        .add(ModAspects.TOOL, 5),
+                List.of("seal_break", "bioalchemic_mind"), false, NodeShape.PLAIN, 2, "seal_lumber");
         entry(context, "golem_vision", ModResearch.GOLEMANCY, ModItems.VISION_MODULE, -2, 2,
                 AspectList.of(ModAspects.MECHANISM, 3).add(ModAspects.SENSES, 5).add(ModAspects.CRYSTAL, 3)
                         .add(ModAspects.MIND, 3),

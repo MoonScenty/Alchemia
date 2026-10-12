@@ -1,0 +1,26 @@
+{
+  "category": "alchemia:golemancy",
+  "column": -5,
+  "complexity": 2,
+  "icon": "alchemia:seal_harvest",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.seal_harvest.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:seal_harvest"
+    }
+  ],
+  "parents": [
+    "alchemia:seal_use",
+    "alchemia:infusion"
+  ],
+  "requirements": {
+    "alchemia:cognitio": 3,
+    "alchemia:herba": 5,
+    "alchemia:humanus": 3
+  },
+  "row": 6
+}

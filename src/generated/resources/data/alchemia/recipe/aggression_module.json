@@ -1,0 +1,31 @@
+{
+  "type": "alchemia:arcane_shaped",
+  "key": {
+    "G": {
+      "item": "alchemia:brass_gear"
+    },
+    "P": {
+      "item": "alchemia:brass_plate"
+    },
+    "R": {
+      "tag": "c:glass_panes"
+    },
+    "T": {
+      "item": "minecraft:blaze_powder"
+    }
+  },
+  "pattern": [
+    " R ",
+    "RTR",
+    "PGP"
+  ],
+  "research": "alchemia:seal_guard",
+  "result": {
+    "count": 1,
+    "id": "alchemia:aggression_module"
+  },
+  "vis": {
+    "alchemia:ignis": 25,
+    "alchemia:perditio": 25
+  }
+}

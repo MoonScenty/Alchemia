@@ -1,0 +1,36 @@
+{
+  "type": "alchemia:infusion",
+  "central": {
+    "item": "alchemia:seal_guard"
+  },
+  "essentia": {
+    "alchemia:bestia": 4,
+    "alchemia:humanus": 4,
+    "alchemia:sensus": 4
+  },
+  "research": "alchemia:seal_butcher",
+  "result": {
+    "count": 1,
+    "id": "alchemia:seal_butcher"
+  },
+  "ring": [
+    {
+      "item": "minecraft:leather"
+    },
+    {
+      "tag": "minecraft:wool"
+    },
+    {
+      "item": "minecraft:rabbit_hide"
+    },
+    {
+      "item": "minecraft:porkchop"
+    },
+    {
+      "item": "minecraft:mutton"
+    },
+    {
+      "item": "minecraft:beef"
+    }
+  ]
+}

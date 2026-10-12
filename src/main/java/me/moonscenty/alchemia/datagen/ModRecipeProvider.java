@@ -406,6 +406,14 @@ public class ModRecipeProvider extends RecipeProvider {
                 Map.of('S', Ingredient.of(Tags.Items.RODS_WOODEN),
                         'Q', Ingredient.of(Tags.Items.GEMS_QUARTZ)),
                 " QQ", " QQ", "S  ");
+        // what makes a golem want to fight: blaze powder behind glass, on brass
+        arcane(output, "aggression_module", "seal_guard", new ItemStack(ModItems.AGGRESSION_MODULE.get()),
+                AspectList.of(ModAspects.FIRE, 25).add(ModAspects.ENTROPY, 25),
+                Map.of('R', Ingredient.of(net.neoforged.neoforge.common.Tags.Items.GLASS_PANES),
+                        'T', Ingredient.of(Items.BLAZE_POWDER),
+                        'P', Ingredient.of(ModItems.BRASS_PLATE),
+                        'G', Ingredient.of(ModItems.BRASS_GEAR)),
+                " R ", "RTR", "PGP");
         // blank seals, three at a time: clay, tallow, a red dye and a nitor
         shapeless(output, "seal_blank", "control_seals", new ItemStack(ModItems.SEAL_BLANK.get(), 3),
                 AspectList.of(ModAspects.FIRE, 10).add(ModAspects.ORDER, 10),
@@ -807,6 +815,27 @@ public class ModRecipeProvider extends RecipeProvider {
                 AspectList.of(ModAspects.UNDEAD, 64).add(ModAspects.LIFE, 64).add(ModAspects.PROTECT, 16));
 
         // the bioalchemic mind: the clockwork one with a zombie's brain grown into it and a clock to keep it to time
+        // the seals that need an altar: harvesting, butchering and breaking
+        infusion(output, "seal_harvest", Ingredient.of(ModItems.SEAL_BLANK),
+                List.of(Ingredient.of(Items.WHEAT_SEEDS), Ingredient.of(Items.PUMPKIN_SEEDS),
+                        Ingredient.of(Items.MELON_SEEDS), Ingredient.of(Items.COCOA_BEANS),
+                        Ingredient.of(Items.SUGAR_CANE), Ingredient.of(Items.CACTUS)),
+                new ItemStack(ModItems.SEALS.get("harvest").get()),
+                AspectList.of(ModAspects.PLANT, 4).add(ModAspects.SENSES, 4).add(ModAspects.MAN, 4), 0,
+                "seal_harvest");
+        infusion(output, "seal_butcher", Ingredient.of(ModItems.SEALS.get("guard").get()),
+                List.of(Ingredient.of(Items.LEATHER), Ingredient.of(net.minecraft.tags.ItemTags.WOOL),
+                        Ingredient.of(Items.RABBIT_HIDE), Ingredient.of(Items.PORKCHOP),
+                        Ingredient.of(Items.MUTTON), Ingredient.of(Items.BEEF)),
+                new ItemStack(ModItems.SEALS.get("butcher").get()),
+                AspectList.of(ModAspects.BEAST, 4).add(ModAspects.SENSES, 4).add(ModAspects.MAN, 4), 0,
+                "seal_butcher");
+        infusion(output, "seal_breaker", Ingredient.of(ModItems.SEAL_BLANK),
+                List.of(Ingredient.of(Items.GOLDEN_PICKAXE), Ingredient.of(Items.GOLDEN_AXE),
+                        Ingredient.of(Items.GOLDEN_SHOVEL)),
+                new ItemStack(ModItems.SEALS.get("breaker").get()),
+                AspectList.of(ModAspects.TOOL, 4).add(ModAspects.ENTROPY, 4).add(ModAspects.MAN, 4), 1,
+                "seal_break");
         infusion(output, "bioalchemic_mind", Ingredient.of(ModItems.CLOCKWORK_MIND),
                 List.of(Ingredient.of(ModItems.ZOMBIE_BRAIN), Ingredient.of(Items.CLOCK)),
                 new ItemStack(ModItems.BIOALCHEMIC_MIND.get()),
@@ -1152,6 +1181,14 @@ public class ModRecipeProvider extends RecipeProvider {
                 AspectList.of(ModAspects.SENSES, 4).add(ModAspects.MIND, 4), "seal_empty");
         seal(output, "provider", ModItems.SEALS.get("empty_advanced").get(),
                 AspectList.of(ModAspects.EXCHANGE, 4).add(ModAspects.DESIRE, 4), "seal_provide");
+        seal(output, "guard", ModItems.SEAL_BLANK.get(),
+                AspectList.of(ModAspects.AVERSION, 8).add(ModAspects.PROTECT, 8), "seal_guard");
+        seal(output, "guard_advanced", ModItems.SEALS.get("guard").get(),
+                AspectList.of(ModAspects.SENSES, 8).add(ModAspects.MIND, 8), "seal_guard");
+        seal(output, "lumber", ModItems.SEALS.get("breaker").get(),
+                AspectList.of(ModAspects.PLANT, 16).add(ModAspects.SENSES, 8), "seal_lumber");
+        seal(output, "use", ModItems.SEAL_BLANK.get(),
+                AspectList.of(ModAspects.CRAFT, 8).add(ModAspects.SENSES, 4).add(ModAspects.MIND, 4), "seal_use");
 
         // coal boiled until it is four coals, and glowstone boiled until it is light with nothing under it
         crucible(output, "bath_salts", Ingredient.of(ModItems.SALIS_MUNDUS),
