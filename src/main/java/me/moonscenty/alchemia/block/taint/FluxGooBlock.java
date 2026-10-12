@@ -31,7 +31,8 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * and it runs downhill and levels out with its neighbours until it is spread thin. Then it dries, and each depth
  * that goes puts a point of flux back in the aura; the last of it, half the time, is where fibres start.
  * <p>
- * The original also had it congeal into thaumic slimes. Those come with the creatures.
+ * Now and then a deep enough puddle congeals into an alchemic slime instead, and an alchemic slime that wades through
+ * goo deeper than it is big may soak some of it up and grow.
  */
 public class FluxGooBlock extends Block {
     /** How deep the puddle is: nothing but a film, up to a full block. */
@@ -150,7 +151,7 @@ public class FluxGooBlock extends Block {
 
     @Override
     protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-        if (random.nextInt(DRY_CHANCE) != 0) {
+        if (congeal(state, level, pos, random) || random.nextInt(DRY_CHANCE) != 0) {
             return;
         }
         int depth = state.getValue(LEVEL);
@@ -165,10 +166,44 @@ public class FluxGooBlock extends Block {
         }
     }
 
+    /**
+     * One time in fifty, with open air over it, a puddle of some depth congeals: a little slime out of a middling one,
+     * a bigger one out of a deep one. The original's depths.
+     *
+     * @return whether it did
+     */
+    private static boolean congeal(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+        int depth = state.getValue(LEVEL);
+        if (depth < 2 || !level.isEmptyBlock(pos.above()) || random.nextInt(50) != 0) {
+            return false;
+        }
+        level.removeBlock(pos, false);
+        var slime = new me.moonscenty.alchemia.entity.AlchemicSlime(level);
+        slime.setSize(depth >= 6 ? 2 : 1, true);
+        slime.moveTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0.0F, 0.0F);
+        level.addFreshEntity(slime);
+        level.playSound(null, pos, me.moonscenty.alchemia.registry.ModSounds.GORE.get(),
+                net.minecraft.sounds.SoundSource.HOSTILE, 1.0F, 1.0F);
+        return true;
+    }
+
     // --- being waded through -------------------------------------------------
 
     @Override
     protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
+        // an alchemic slime smaller than the goo is deep may soak up a depth of it and grow
+        if (entity instanceof me.moonscenty.alchemia.entity.AlchemicSlime slime) {
+            int depth = state.getValue(LEVEL);
+            if (!level.isClientSide && slime.getSize() < depth && level.random.nextBoolean()) {
+                slime.setSize(slime.getSize() + 1, true);
+                if (depth > 1) {
+                    level.setBlock(pos, of(this, depth - 1), Block.UPDATE_ALL);
+                } else {
+                    level.removeBlock(pos, false);
+                }
+            }
+            return;
+        }
         // thick enough to wade through, not to drown in
         entity.makeStuckInBlock(state, new Vec3(0.5, 0.35, 0.5));
     }

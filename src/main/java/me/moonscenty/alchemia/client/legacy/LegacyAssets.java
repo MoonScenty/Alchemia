@@ -663,6 +663,14 @@ public final class LegacyAssets {
         all.add(LegacyAsset.of("textures/entity/taintacle.png").five("textures/models/creature/taintacle.png")
                 .forModel(TAINTACLE));
         all.add(LegacyAsset.of("textures/item/legacy/tainted_goo.png").five("textures/items/taint_slime.png"));
+        // the animals it makes over, in the original's skins for the game's models, and its slime
+        for (String[] animal : new String[][] {{"tainted_cow", "cow"}, {"tainted_pig", "pig"},
+                {"tainted_chicken", "chicken"}, {"tainted_sheep", "sheep"}, {"tainted_sheep_fur", "sheep_fur"},
+                {"tainted_creeper", "creeper"}, {"tainted_villager", "villager"}, {"tainted_rabbit", "taintrabbit"},
+                {"alchemic_slime", "tslime"}}) {
+            all.add(LegacyAsset.of("textures/entity/" + animal[0] + ".png")
+                    .five("textures/models/creature/" + animal[1] + ".png"));
+        }
         all.add(LegacyAsset.of("textures/item/legacy/taint_tendril.png").five("textures/items/taint_tendril.png"));
         all.add(block("taint_geyser_side", "taint_geyser_side", null));
         all.add(block("taint_geyser_top", "taint_geyser_top", null));

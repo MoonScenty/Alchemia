@@ -282,6 +282,23 @@ public class ModDataMapProvider extends DataMapProvider {
                 a(ModAspects.FLUX, 3).add(ModAspects.WATER, 2));
         mob(me.moonscenty.alchemia.registry.ModEntities.TAINTACLE_TINY.get(),
                 a(ModAspects.FLUX, 1).add(ModAspects.WATER, 1));
+        // the animals it makes over, and its slime, as the original had them
+        mob(me.moonscenty.alchemia.registry.ModEntities.TAINTED_COW.get(),
+                a(ModAspects.FLUX, 3).add(ModAspects.EARTH, 3));
+        mob(me.moonscenty.alchemia.registry.ModEntities.TAINTED_PIG.get(),
+                a(ModAspects.FLUX, 2).add(ModAspects.EARTH, 2));
+        mob(me.moonscenty.alchemia.registry.ModEntities.TAINTED_SHEEP.get(),
+                a(ModAspects.FLUX, 2).add(ModAspects.EARTH, 2));
+        mob(me.moonscenty.alchemia.registry.ModEntities.TAINTED_CHICKEN.get(),
+                a(ModAspects.FLUX, 2).add(ModAspects.FLIGHT, 2).add(ModAspects.AIR, 1));
+        mob(me.moonscenty.alchemia.registry.ModEntities.TAINTED_RABBIT.get(),
+                a(ModAspects.FLUX, 2).add(ModAspects.MOTION, 2));
+        mob(me.moonscenty.alchemia.registry.ModEntities.TAINTED_VILLAGER.get(),
+                a(ModAspects.FLUX, 3).add(ModAspects.AIR, 2));
+        mob(me.moonscenty.alchemia.registry.ModEntities.TAINTED_CREEPER.get(),
+                a(ModAspects.FLUX, 2).add(ModAspects.FIRE, 2));
+        mob(me.moonscenty.alchemia.registry.ModEntities.ALCHEMIC_SLIME.get(),
+                a(ModAspects.LIFE, 2).add(ModAspects.WATER, 2).add(ModAspects.FLUX, 1));
         // what every pech is; each kind adds its own
         mob(me.moonscenty.alchemia.registry.ModEntities.PECH.get(),
                 a(ModAspects.MAN, 2).add(ModAspects.AURA, 2).add(ModAspects.EXCHANGE, 2));

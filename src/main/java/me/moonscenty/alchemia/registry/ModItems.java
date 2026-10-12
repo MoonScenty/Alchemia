@@ -201,6 +201,30 @@ public class ModItems {
     public static final DeferredItem<net.neoforged.neoforge.common.DeferredSpawnEggItem> TAINTACLE_SPAWN_EGG =
             ITEMS.register("taintacle_spawn_egg", () -> new net.neoforged.neoforge.common.DeferredSpawnEggItem(
                     ModEntities.TAINTACLE, 0xA206A2, 0x443344, new Item.Properties()));
+    public static final DeferredItem<net.neoforged.neoforge.common.DeferredSpawnEggItem> TAINTED_COW_SPAWN_EGG =
+            ITEMS.register("tainted_cow_spawn_egg", () -> new net.neoforged.neoforge.common.DeferredSpawnEggItem(
+                    ModEntities.TAINTED_COW, 0xA206A2, 0x7E3B3B, new Item.Properties()));
+    public static final DeferredItem<net.neoforged.neoforge.common.DeferredSpawnEggItem> TAINTED_PIG_SPAWN_EGG =
+            ITEMS.register("tainted_pig_spawn_egg", () -> new net.neoforged.neoforge.common.DeferredSpawnEggItem(
+                    ModEntities.TAINTED_PIG, 0xA206A2, 0xEF98AF, new Item.Properties()));
+    public static final DeferredItem<net.neoforged.neoforge.common.DeferredSpawnEggItem> TAINTED_CHICKEN_SPAWN_EGG =
+            ITEMS.register("tainted_chicken_spawn_egg", () -> new net.neoforged.neoforge.common.DeferredSpawnEggItem(
+                    ModEntities.TAINTED_CHICKEN, 0xA206A2, 0xC0C0C0, new Item.Properties()));
+    public static final DeferredItem<net.neoforged.neoforge.common.DeferredSpawnEggItem> TAINTED_SHEEP_SPAWN_EGG =
+            ITEMS.register("tainted_sheep_spawn_egg", () -> new net.neoforged.neoforge.common.DeferredSpawnEggItem(
+                    ModEntities.TAINTED_SHEEP, 0xA206A2, 0x808080, new Item.Properties()));
+    public static final DeferredItem<net.neoforged.neoforge.common.DeferredSpawnEggItem> TAINTED_CREEPER_SPAWN_EGG =
+            ITEMS.register("tainted_creeper_spawn_egg", () -> new net.neoforged.neoforge.common.DeferredSpawnEggItem(
+                    ModEntities.TAINTED_CREEPER, 0xA206A2, 0x00FF00, new Item.Properties()));
+    public static final DeferredItem<net.neoforged.neoforge.common.DeferredSpawnEggItem> TAINTED_VILLAGER_SPAWN_EGG =
+            ITEMS.register("tainted_villager_spawn_egg", () -> new net.neoforged.neoforge.common.DeferredSpawnEggItem(
+                    ModEntities.TAINTED_VILLAGER, 0xA206A2, 0x00FFFF, new Item.Properties()));
+    public static final DeferredItem<net.neoforged.neoforge.common.DeferredSpawnEggItem> TAINTED_RABBIT_SPAWN_EGG =
+            ITEMS.register("tainted_rabbit_spawn_egg", () -> new net.neoforged.neoforge.common.DeferredSpawnEggItem(
+                    ModEntities.TAINTED_RABBIT, 0xA206A2, 0xF0C0C0, new Item.Properties()));
+    public static final DeferredItem<net.neoforged.neoforge.common.DeferredSpawnEggItem> ALCHEMIC_SLIME_SPAWN_EGG =
+            ITEMS.register("alchemic_slime_spawn_egg", () -> new net.neoforged.neoforge.common.DeferredSpawnEggItem(
+                    ModEntities.ALCHEMIC_SLIME, 0xA206A2, 0xFF80FF, new Item.Properties()));
     /** What the creatures of the taint are made of: its goo, and a tendril of it. */
     public static final DeferredItem<Item> TAINTED_GOO = ITEMS.registerSimpleItem("tainted_goo");
     public static final DeferredItem<Item> TAINT_TENDRIL = ITEMS.registerSimpleItem("taint_tendril");

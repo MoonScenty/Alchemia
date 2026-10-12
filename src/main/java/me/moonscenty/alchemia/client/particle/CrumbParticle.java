@@ -39,6 +39,14 @@ public class CrumbParticle extends TextureSheetParticle {
         this.vo = random.nextFloat() * 3.0F;
     }
 
+    /** Sent off this way, rather than the game's random hop. */
+    public CrumbParticle moving(double x, double y, double z) {
+        this.xd = x;
+        this.yd = y;
+        this.zd = z;
+        return this;
+    }
+
     @Override
     public void tick() {
         super.tick();

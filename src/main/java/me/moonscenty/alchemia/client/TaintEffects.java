@@ -69,6 +69,62 @@ public final class TaintEffects {
         }
     }
 
+    /** Gobbets of taint about a creature the taint has just made over, a ring of them up its height. */
+    public static void sploosh(Entity creature) {
+        if (!(creature.level() instanceof ClientLevel level)) {
+            return;
+        }
+        RandomSource random = creature.getRandom();
+        for (int gobbet = 0; gobbet < 10; gobbet++) {
+            float angle = random.nextFloat() * Mth.TWO_PI;
+            float out = random.nextFloat() * 0.5F + 0.5F;
+            boolean dark = random.nextBoolean();
+            Minecraft.getInstance().particleEngine.add(new CrumbParticle(level,
+                    creature.getX() + Mth.sin(angle) * out,
+                    creature.getY() + random.nextFloat() * creature.getBbHeight(),
+                    creature.getZ() + Mth.cos(angle) * out, new ItemStack(Items.SLIME_BALL), dark ? 0.3F : 0.6F, 0.0F,
+                    0.3F, dark ? 0.6F : 0.4F, (int) (66.0F / (random.nextFloat() * 0.9F + 0.1F))));
+        }
+    }
+
+    /** A tainted creeper going off: gobbets of taint flung every way. */
+    public static void taintsplosion(Entity creeper) {
+        if (!(creeper.level() instanceof ClientLevel level)) {
+            return;
+        }
+        RandomSource random = creeper.getRandom();
+        for (int gobbet = 0; gobbet < 100; gobbet++) {
+            double x = random.nextDouble() * 2.0 - 1.0;
+            double y = random.nextDouble() * 2.0 - 1.0;
+            double z = random.nextDouble() * 2.0 - 1.0;
+            double length = Math.sqrt(x * x + y * y + z * z);
+            double speed = (random.nextDouble() + random.nextDouble() + 1.0) * 0.15 * 0.964;
+            boolean dark = random.nextBoolean();
+            Minecraft.getInstance().particleEngine.add(new CrumbParticle(level, creeper.getX(),
+                    creeper.getY() + random.nextFloat() * creeper.getBbHeight(), creeper.getZ(),
+                    new ItemStack(Items.SLIME_BALL), dark ? 0.3F : 0.6F, 0.0F, 0.3F, dark ? 0.6F : 0.4F,
+                    (int) (66.0F / (random.nextFloat() * 0.9F + 0.1F)))
+                    .moving(x / length * speed, y / length * speed + 0.1, z / length * speed));
+        }
+    }
+
+    /** An alchemic slime landing, or flung: a splash of violet about it, the wider the bigger it is. */
+    public static void slimeSplash(Entity slime, int size, int count) {
+        if (!(slime.level() instanceof ClientLevel level)) {
+            return;
+        }
+        RandomSource random = slime.getRandom();
+        for (int drop = 0; drop < count; drop++) {
+            float angle = random.nextFloat() * Mth.TWO_PI;
+            float out = random.nextFloat() * 0.5F + 0.5F;
+            Minecraft.getInstance().particleEngine.add(new CrumbParticle(level,
+                    slime.getX() + Mth.sin(angle) * size * 0.5F * out,
+                    (slime.getBoundingBox().minY + slime.getBoundingBox().maxY) / 2.0,
+                    slime.getZ() + Mth.cos(angle) * size * 0.5F * out, new ItemStack(Items.SLIME_BALL), 0.7F, 0.0F,
+                    1.0F, 0.4F, (int) (66.0F / (random.nextFloat() * 0.9F + 0.1F))));
+        }
+    }
+
     /** Slime and broken ground thrown up in a ring as a tentacle rises out of the earth. */
     public static void arise(Entity tentacle) {
         if (!(tentacle.level() instanceof ClientLevel level)) {

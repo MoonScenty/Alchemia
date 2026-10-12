@@ -1,5 +1,10 @@
 {
   "values": {
+    "alchemia:alchemic_slime": {
+      "alchemia:aqua": 2,
+      "alchemia:victus": 2,
+      "alchemia:vitium": 1
+    },
     "alchemia:angry_zombie": {
       "alchemia:cognitio": 1,
       "alchemia:exanimis": 3,
@@ -28,6 +33,35 @@
     "alchemia:taintacle_tiny": {
       "alchemia:aqua": 1,
       "alchemia:vitium": 1
+    },
+    "alchemia:tainted_chicken": {
+      "alchemia:aer": 1,
+      "alchemia:vitium": 2,
+      "alchemia:volatus": 2
+    },
+    "alchemia:tainted_cow": {
+      "alchemia:terra": 3,
+      "alchemia:vitium": 3
+    },
+    "alchemia:tainted_creeper": {
+      "alchemia:ignis": 2,
+      "alchemia:vitium": 2
+    },
+    "alchemia:tainted_pig": {
+      "alchemia:terra": 2,
+      "alchemia:vitium": 2
+    },
+    "alchemia:tainted_rabbit": {
+      "alchemia:motus": 2,
+      "alchemia:vitium": 2
+    },
+    "alchemia:tainted_sheep": {
+      "alchemia:terra": 2,
+      "alchemia:vitium": 2
+    },
+    "alchemia:tainted_villager": {
+      "alchemia:aer": 2,
+      "alchemia:vitium": 3
     },
     "alchemia:wisp": {
       "alchemia:aer": 1,

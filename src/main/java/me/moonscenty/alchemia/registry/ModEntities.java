@@ -220,6 +220,68 @@ public class ModEntities {
                     .noSummon()
                     .build("taintacle_tiny"));
 
+    /** The animals the taint has made over, each the size of what it was. */
+    public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.entity.TaintedCow>>
+            TAINTED_COW = ENTITIES.register("tainted_cow", () -> EntityType.Builder
+                    .<me.moonscenty.alchemia.entity.TaintedCow>of(me.moonscenty.alchemia.entity.TaintedCow::new,
+                            MobCategory.MONSTER)
+                    .sized(0.9F, 1.3F)
+                    .clientTrackingRange(8)
+                    .build("tainted_cow"));
+    public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.entity.TaintedPig>>
+            TAINTED_PIG = ENTITIES.register("tainted_pig", () -> EntityType.Builder
+                    .<me.moonscenty.alchemia.entity.TaintedPig>of(me.moonscenty.alchemia.entity.TaintedPig::new,
+                            MobCategory.MONSTER)
+                    .sized(0.9F, 0.9F)
+                    .clientTrackingRange(8)
+                    .build("tainted_pig"));
+    public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.entity.TaintedChicken>>
+            TAINTED_CHICKEN = ENTITIES.register("tainted_chicken", () -> EntityType.Builder
+                    .<me.moonscenty.alchemia.entity.TaintedChicken>of(me.moonscenty.alchemia.entity.TaintedChicken::new,
+                            MobCategory.MONSTER)
+                    .sized(0.5F, 0.8F)
+                    .clientTrackingRange(8)
+                    .build("tainted_chicken"));
+    public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.entity.TaintedSheep>>
+            TAINTED_SHEEP = ENTITIES.register("tainted_sheep", () -> EntityType.Builder
+                    .<me.moonscenty.alchemia.entity.TaintedSheep>of(me.moonscenty.alchemia.entity.TaintedSheep::new,
+                            MobCategory.MONSTER)
+                    .sized(0.9F, 1.3F)
+                    .clientTrackingRange(8)
+                    .build("tainted_sheep"));
+    public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.entity.TaintedCreeper>>
+            TAINTED_CREEPER = ENTITIES.register("tainted_creeper", () -> EntityType.Builder
+                    .<me.moonscenty.alchemia.entity.TaintedCreeper>of(me.moonscenty.alchemia.entity.TaintedCreeper::new,
+                            MobCategory.MONSTER)
+                    .sized(0.6F, 1.8F)
+                    .clientTrackingRange(8)
+                    .build("tainted_creeper"));
+    public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.entity.TaintedVillager>>
+            TAINTED_VILLAGER = ENTITIES.register("tainted_villager", () -> EntityType.Builder
+                    .<me.moonscenty.alchemia.entity.TaintedVillager>of(
+                            me.moonscenty.alchemia.entity.TaintedVillager::new,
+                            MobCategory.MONSTER)
+                    .sized(0.6F, 1.8F)
+                    .clientTrackingRange(8)
+                    .build("tainted_villager"));
+    /** A made-over rabbit keeps to the world as a rabbit does. */
+    public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.entity.TaintedRabbit>>
+            TAINTED_RABBIT = ENTITIES.register("tainted_rabbit", () -> EntityType.Builder
+                    .<me.moonscenty.alchemia.entity.TaintedRabbit>of(me.moonscenty.alchemia.entity.TaintedRabbit::new,
+                            MobCategory.CREATURE)
+                    .sized(0.6F, 0.7F)
+                    .clientTrackingRange(8)
+                    .build("tainted_rabbit"));
+    /** An alchemic slime: a slime's measure, grown by its size. */
+    public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.entity.AlchemicSlime>>
+            ALCHEMIC_SLIME = ENTITIES.register("alchemic_slime", () -> EntityType.Builder
+                    .<me.moonscenty.alchemia.entity.AlchemicSlime>of(me.moonscenty.alchemia.entity.AlchemicSlime::new,
+                            MobCategory.MONSTER)
+                    .sized(0.52F, 0.52F)
+                    .eyeHeight(0.325F)
+                    .clientTrackingRange(10)
+                    .build("alchemic_slime"));
+
     /** A zombie's size and a zombie's reach. */
     public static final DeferredHolder<EntityType<?>, EntityType<AngryZombie>> ANGRY_ZOMBIE =
             ENTITIES.register("angry_zombie", () -> EntityType.Builder
@@ -252,6 +314,14 @@ public class ModEntities {
         event.put(TAINT_SWARM.get(), me.moonscenty.alchemia.entity.TaintSwarm.attributes().build());
         event.put(TAINTACLE.get(), me.moonscenty.alchemia.entity.Taintacle.attributes().build());
         event.put(TAINTACLE_TINY.get(), me.moonscenty.alchemia.entity.TaintacleTiny.attributes().build());
+        event.put(TAINTED_COW.get(), me.moonscenty.alchemia.entity.TaintedCow.attributes().build());
+        event.put(TAINTED_PIG.get(), me.moonscenty.alchemia.entity.TaintedPig.attributes().build());
+        event.put(TAINTED_CHICKEN.get(), me.moonscenty.alchemia.entity.TaintedChicken.attributes().build());
+        event.put(TAINTED_SHEEP.get(), me.moonscenty.alchemia.entity.TaintedSheep.attributes().build());
+        event.put(TAINTED_CREEPER.get(), me.moonscenty.alchemia.entity.TaintedCreeper.attributes().build());
+        event.put(TAINTED_VILLAGER.get(), me.moonscenty.alchemia.entity.TaintedVillager.attributes().build());
+        event.put(TAINTED_RABBIT.get(), me.moonscenty.alchemia.entity.TaintedRabbit.attributes().build());
+        event.put(ALCHEMIC_SLIME.get(), net.minecraft.world.entity.monster.Monster.createMonsterAttributes().build());
         event.put(ANGRY_ZOMBIE.get(), AngryZombie.attributes().build());
         event.put(FURIOUS_ZOMBIE.get(), FuriousZombie.attributes().build());
     }

@@ -193,6 +193,22 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         addItem(ModItems.WISPY_ESSENCE, pick("Wispy Essence", "위습의 정수"));
         addItem(ModItems.PECH_SPAWN_EGG, pick("Pech Spawn Egg", "페크 생성 알"));
         addItem(ModItems.COIN, pick("Gold Coin", "금화"));
+        addEntityType(me.moonscenty.alchemia.registry.ModEntities.TAINTED_COW, pick("Tainted Cow", "오염된 소"));
+        addItem(ModItems.TAINTED_COW_SPAWN_EGG, pick("Tainted Cow Spawn Egg", "오염된 소 생성 알"));
+        addEntityType(me.moonscenty.alchemia.registry.ModEntities.TAINTED_PIG, pick("Tainted Pig", "오염된 돼지"));
+        addItem(ModItems.TAINTED_PIG_SPAWN_EGG, pick("Tainted Pig Spawn Egg", "오염된 돼지 생성 알"));
+        addEntityType(me.moonscenty.alchemia.registry.ModEntities.TAINTED_CHICKEN, pick("Tainted Chicken", "오염된 닭"));
+        addItem(ModItems.TAINTED_CHICKEN_SPAWN_EGG, pick("Tainted Chicken Spawn Egg", "오염된 닭 생성 알"));
+        addEntityType(me.moonscenty.alchemia.registry.ModEntities.TAINTED_SHEEP, pick("Tainted Sheep", "오염된 양"));
+        addItem(ModItems.TAINTED_SHEEP_SPAWN_EGG, pick("Tainted Sheep Spawn Egg", "오염된 양 생성 알"));
+        addEntityType(me.moonscenty.alchemia.registry.ModEntities.TAINTED_CREEPER, pick("Tainted Creeper", "오염된 크리퍼"));
+        addItem(ModItems.TAINTED_CREEPER_SPAWN_EGG, pick("Tainted Creeper Spawn Egg", "오염된 크리퍼 생성 알"));
+        addEntityType(me.moonscenty.alchemia.registry.ModEntities.TAINTED_VILLAGER, pick("Tainted Villager", "오염된 주민"));
+        addItem(ModItems.TAINTED_VILLAGER_SPAWN_EGG, pick("Tainted Villager Spawn Egg", "오염된 주민 생성 알"));
+        addEntityType(me.moonscenty.alchemia.registry.ModEntities.TAINTED_RABBIT, pick("Tainted Rabbit", "오염된 토끼"));
+        addItem(ModItems.TAINTED_RABBIT_SPAWN_EGG, pick("Tainted Rabbit Spawn Egg", "오염된 토끼 생성 알"));
+        addEntityType(me.moonscenty.alchemia.registry.ModEntities.ALCHEMIC_SLIME, pick("Alchemic Slime", "연금 슬라임"));
+        addItem(ModItems.ALCHEMIC_SLIME_SPAWN_EGG, pick("Alchemic Slime Spawn Egg", "연금 슬라임 생성 알"));
         addItem(ModItems.TAINTED_GOO, pick("Tainted Goo", "오염된 점액"));
         addItem(ModItems.TAINT_TENDRIL, pick("Taint Tendril", "오염 덩굴손"));
         addItem(ModItems.TAINT_CRAWLER_SPAWN_EGG, pick("Tainted Crawler Spawn Egg", "오염 크롤러 생성 알"));
@@ -657,7 +673,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                 {"recharge_pedestal", "Recharge Pedestal", "재충전 받침대",
                  "Travelling the countryside to fill a wand is all very well, but a pedestal that does it for you is better. Set a wand on it and it draws vis from the aura of its chunk to fill it, as much as a wand held in the hand would, twice a second. Like a wand in the hand, it leaves alone any aura run down below a tenth of what it should be. A hopper can set a wand on it and take one off.",
                  "지팡이를 채우러 들판을 돌아다니는 것도 좋지만, 대신 해 주는 받침대가 더 낫다. 지팡이를 올려 두면 제 청크의 오라에서 비스를 끌어 채운다. 손에 든 지팡이만큼씩, 1초에 두 번이다. 손에 든 지팡이처럼, 원래의 10분의 1 밑으로 떨어진 오라는 건드리지 않는다. 깔때기로 지팡이를 올리고 내릴 수도 있다."},
-                {"dioptra", "Thaumic Dioptra", "마법 디옵트라",
+                {"dioptra", "Alchemic Dioptra", "연금 디옵트라",
                  "A device that shows the aura round it plainly. Set a vis shard in the crystal on its top and it draws, in the air over itself, a map thirteen chunks across of how strong that aspect is in each; a balanced shard shows whichever primal is strongest in each chunk instead. Chunks with a node in them sparkle now and then -- not precise, but a help in finding them. A comparator reads how strong the aura is in its own chunk, and a redstone signal puts it out.",
                  "둘레의 오라를 한눈에 보여 주는 장치다. 위쪽 결정에 비스 조각을 끼우면 13청크 너비의 지도를 제 위 공중에 그려, 각 청크에서 그 상이 얼마나 센지 보여 준다. 균형 잡힌 조각을 끼우면 청크마다 가장 센 원시 상을 보여 준다. 노드가 있는 청크는 이따금 반짝인다. 정확하지는 않아도 노드를 찾는 데 도움이 된다. 비교기를 대면 제 청크의 오라 세기를 읽고, 레드스톤 신호가 들어오면 꺼진다."},
                 {"bath_salts", "Purifying Bath Salts", "정화의 목욕 소금",
@@ -923,7 +939,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("block.alchemia.aura_totem_pole_inner", pick("Totem Pole Inner", "안쪽 토템 기둥"));
         add("block.alchemia.aura_totem_pole_outer", pick("Totem Pole Outer", "바깥쪽 토템 기둥"));
         add("block.alchemia.aura_totem_pole_pure", pick("Stabilizing Totem Pole", "안정시키는 토템 기둥"));
-        add("block.alchemia.dioptra", pick("Thaumic Dioptra", "마법 디옵트라"));
+        add("block.alchemia.dioptra", pick("Alchemic Dioptra", "연금 디옵트라"));
         add("block.alchemia.dioptra.showing", pick("Showing %s levels in the aura", "오라의 %s 수준을 보여 준다"));
         add("block.alchemia.dioptra.strongest", pick("Showing highest aura levels", "가장 높은 오라 수준을 보여 준다"));
         add("block.alchemia.purifying_fluid", pick("Purifying Fluid", "정화의 액체"));

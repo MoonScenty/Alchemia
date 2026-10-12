@@ -302,6 +302,14 @@ public class AlchemiaClientSetup {
         event.registerEntityRenderer(ModEntities.WISP.get(), WispRenderer::new);
         event.registerEntityRenderer(ModEntities.PECH.get(), PechRenderer::new);
         event.registerEntityRenderer(ModEntities.TAINT_CRAWLER.get(), TaintCrawlerRenderer::new);
+        event.registerEntityRenderer(ModEntities.TAINTED_COW.get(), TaintedAnimalRenderers.Cow::new);
+        event.registerEntityRenderer(ModEntities.TAINTED_PIG.get(), TaintedAnimalRenderers.Pig::new);
+        event.registerEntityRenderer(ModEntities.TAINTED_CHICKEN.get(), TaintedAnimalRenderers.Chicken::new);
+        event.registerEntityRenderer(ModEntities.TAINTED_SHEEP.get(), TaintedAnimalRenderers.Sheep::new);
+        event.registerEntityRenderer(ModEntities.TAINTED_CREEPER.get(), TaintedAnimalRenderers.Creeper::new);
+        event.registerEntityRenderer(ModEntities.TAINTED_VILLAGER.get(), TaintedAnimalRenderers.Villager::new);
+        event.registerEntityRenderer(ModEntities.TAINTED_RABBIT.get(), TaintedAnimalRenderers.TaintedRabbit::new);
+        event.registerEntityRenderer(ModEntities.ALCHEMIC_SLIME.get(), TaintedAnimalRenderers.AlchemicSlime::new);
         event.registerEntityRenderer(ModEntities.TAINT_SWARM.get(), TaintSwarmRenderer::new);
         event.registerEntityRenderer(ModEntities.TAINTACLE.get(), context -> new TaintacleRenderer<>(context,
                 me.moonscenty.alchemia.client.legacy.LegacyAssets.TAINTACLE, 10, 0.6F));
