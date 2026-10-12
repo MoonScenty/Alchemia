@@ -207,6 +207,7 @@
   "entity.alchemia.aura_node": "오라 노드",
   "entity.alchemia.autocaster": "자동 시전기",
   "entity.alchemia.autocaster.not_yours": "남의 것이다",
+  "entity.alchemia.firebat": "불박쥐",
   "entity.alchemia.taint_cloud": "오염 구름",
   "flux_event.alchemia.sickness": "이곳의 오라가 잠시 불안정해져 마법이 둔해진다.",
   "flux_event.alchemia.warp": "주변의 오라가 갑자기 비틀리며 생각이 헝클어진다.",

@@ -17,6 +17,7 @@ import me.moonscenty.alchemia.item.RobeItem;
 import me.moonscenty.alchemia.wand.Focus;
 import me.moonscenty.alchemia.wand.spell.Excavation;
 import me.moonscenty.alchemia.wand.spell.Shock;
+import me.moonscenty.alchemia.wand.spell.Hellbat;
 import me.moonscenty.alchemia.wand.spell.Hole;
 import me.moonscenty.alchemia.wand.spell.Swapping;
 import me.moonscenty.alchemia.wand.spell.Thrown;
@@ -276,7 +277,7 @@ public class ModItems {
         kinds.put("grapple", () -> Focus.of(0x1515FF, AspectList.of(ModAspects.WATER, 10)
                 .add(ModAspects.AIR, 10)).cooldown(250).casts(Thrown::grapple));
         kinds.put("hellbat", () -> Focus.of(0xDC3602, AspectList.of(ModAspects.FIRE, 10)
-                .add(ModAspects.ENTROPY, 5).add(ModAspects.AIR, 5)).cooldown(1000).inTurrets());
+                .add(ModAspects.ENTROPY, 5).add(ModAspects.AIR, 5)).cooldown(1000).inTurrets().casts(Hellbat::cast));
         kinds.put("pech", () -> Focus.of(0x229944, AspectList.of(ModAspects.EARTH, 2)
                 .add(ModAspects.ENTROPY, 2).add(ModAspects.WATER, 2))
                 .cooldown(250).inTurrets(32.0F, 12.0F).casts(Thrown::pech));

@@ -174,6 +174,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
     private void autocaster() {
         addItem(ModItems.AUTOCASTER, pick("Autocaster", "자동 시전기"));
         addEntityType(me.moonscenty.alchemia.registry.ModEntities.AUTOCASTER, pick("Autocaster", "자동 시전기"));
+        addEntityType(me.moonscenty.alchemia.registry.ModEntities.FIRE_BAT, pick("Firebat", "불박쥐"));
         add("item.alchemia.autocaster.note",
                 pick("Fires a fitted focus on its own", "끼운 포커스를 혼자 쏜다"));
         add("entity.alchemia.autocaster.not_yours", pick("Not yours", "남의 것이다"));

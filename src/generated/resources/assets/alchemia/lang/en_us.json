@@ -207,6 +207,7 @@
   "entity.alchemia.aura_node": "Aura Node",
   "entity.alchemia.autocaster": "Autocaster",
   "entity.alchemia.autocaster.not_yours": "Not yours",
+  "entity.alchemia.firebat": "Firebat",
   "entity.alchemia.taint_cloud": "Taint Cloud",
   "flux_event.alchemia.sickness": "The local aura momentarily becomes unstable, hampering your magical ability.",
   "flux_event.alchemia.warp": "The nearby aura suddenly twists and warps, leaving your thoughts in a shambles.",

@@ -80,6 +80,8 @@ public final class LegacyAssets {
 
     /** The valve's wheel and stem, which the original built in code and also used for the one-way tube's mark. */
     public static final String VALVE = "valve";
+    /** The firebat, which the original built in code: the old bat's shape. */
+    public static final String FIREBAT = "firebat";
 
     /** The alchemometer as Thaumcraft 4's thaumometer: a six-sided brass frame. */
     public static final String SCANNER_MESH = "models/legacy/scanner.obj";
@@ -117,6 +119,8 @@ public final class LegacyAssets {
                             "thaumcraft/client/renderers/models/gear/ModelRobe", "(F)V", 0.5F)),
             VALVE, List.of(new LegacyModelSource(LegacyEdition.FIVE,
                     "thaumcraft/client/renderers/models/block/ModelTubeValve", "()V")),
+            FIREBAT, List.of(new LegacyModelSource(LegacyEdition.FIVE,
+                    "thaumcraft/client/renderers/models/entity/ModelFireBat", "()V")),
             BELLOWS, List.of(new LegacyModelSource(LegacyEdition.FIVE,
                     "thaumcraft/client/renderers/models/block/ModelBellows", "()V")),
             RESEARCH_TABLE, List.of(new LegacyModelSource(LegacyEdition.FIVE,
@@ -370,6 +374,12 @@ public final class LegacyAssets {
         all.add(LegacyAsset.of("textures/entity/autocaster.png").five("textures/models/focus_turret.png"));
         all.add(LegacyAsset.of("textures/gui/autocaster.png").five("textures/gui/gui_turret_focus.png"));
         all.add(LegacyAsset.of("textures/item/legacy/autocaster.png").five("textures/items/turret_focus.png"));
+
+        // the firebat Nine Hells lets off, in its two skins, both laid out for the original's model
+        for (String skin : List.of("firebat", "vampirebat")) {
+            all.add(LegacyAsset.of("textures/entity/" + skin + ".png")
+                    .five("textures/models/creature/" + skin + ".png").forModel(FIREBAT));
+        }
     }
 
     /**

@@ -4,6 +4,7 @@ import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.aura.TaintCloud;
 import me.moonscenty.alchemia.aura.node.AuraNode;
 import me.moonscenty.alchemia.entity.Autocaster;
+import me.moonscenty.alchemia.entity.FireBat;
 import me.moonscenty.alchemia.wand.spell.Ember;
 import me.moonscenty.alchemia.wand.spell.FireOrb;
 import me.moonscenty.alchemia.wand.spell.ShockOrb;
@@ -143,9 +144,23 @@ public class ModEntities {
                     .noSummon()
                     .build("autocaster"));
 
+    /**
+     * A bat that burns. Small, fire-proof, and followed at the original's distance; it moves too fast and too
+     * often for anything slower than every third tick to keep up with.
+     */
+    public static final DeferredHolder<EntityType<?>, EntityType<FireBat>> FIRE_BAT =
+            ENTITIES.register("firebat", () -> EntityType.Builder
+                    .<FireBat>of(FireBat::new, MobCategory.MONSTER)
+                    .sized(0.5F, 0.9F)
+                    .fireImmune()
+                    .clientTrackingRange(8)
+                    .updateInterval(3)
+                    .build("firebat"));
+
     /** What anything alive needs before the game will make one. */
     public static void attributes(EntityAttributeCreationEvent event) {
         event.put(AUTOCASTER.get(), Autocaster.attributes().build());
+        event.put(FIRE_BAT.get(), FireBat.attributes().build());
     }
 
     private ModEntities() {
