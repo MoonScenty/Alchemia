@@ -4,7 +4,13 @@ import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.aura.TaintCloud;
 import me.moonscenty.alchemia.aura.node.AuraNode;
 import me.moonscenty.alchemia.entity.Autocaster;
+import me.moonscenty.alchemia.entity.AngryZombie;
 import me.moonscenty.alchemia.entity.FireBat;
+import me.moonscenty.alchemia.entity.FuriousZombie;
+import net.minecraft.world.entity.SpawnPlacementTypes;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
 import me.moonscenty.alchemia.wand.spell.Ember;
 import me.moonscenty.alchemia.wand.spell.FireOrb;
 import me.moonscenty.alchemia.wand.spell.ShockOrb;
@@ -157,10 +163,47 @@ public class ModEntities {
                     .updateInterval(3)
                     .build("firebat"));
 
+    /** A zombie's size and a zombie's reach. */
+    public static final DeferredHolder<EntityType<?>, EntityType<AngryZombie>> ANGRY_ZOMBIE =
+            ENTITIES.register("angry_zombie", () -> EntityType.Builder
+                    .<AngryZombie>of(AngryZombie::new, MobCategory.MONSTER)
+                    .sized(0.6F, 1.95F)
+                    .eyeHeight(1.74F)
+                    .passengerAttachments(2.0125F)
+                    .ridingOffset(-0.7F)
+                    .clientTrackingRange(8)
+                    .build("angry_zombie"));
+
+    /** A zombie's size to begin with; its anger makes it bigger. */
+    public static final DeferredHolder<EntityType<?>, EntityType<FuriousZombie>> FURIOUS_ZOMBIE =
+            ENTITIES.register("furious_zombie", () -> EntityType.Builder
+                    .<FuriousZombie>of(FuriousZombie::new, MobCategory.MONSTER)
+                    .sized(0.6F, 1.95F)
+                    .eyeHeight(1.74F)
+                    .passengerAttachments(2.0125F)
+                    .ridingOffset(-0.7F)
+                    .clientTrackingRange(8)
+                    .build("furious_zombie"));
+
     /** What anything alive needs before the game will make one. */
     public static void attributes(EntityAttributeCreationEvent event) {
         event.put(AUTOCASTER.get(), Autocaster.attributes().build());
         event.put(FIRE_BAT.get(), FireBat.attributes().build());
+        event.put(ANGRY_ZOMBIE.get(), AngryZombie.attributes().build());
+        event.put(FURIOUS_ZOMBIE.get(), FuriousZombie.attributes().build());
+    }
+
+    /**
+     * Where they may come of themselves. The zombies as any monster does, in the dark on solid ground. A firebat
+     * wants it darker still: whatever light there is has to be no more than a throw of seven.
+     */
+    public static void spawnPlacements(RegisterSpawnPlacementsEvent event) {
+        event.register(ANGRY_ZOMBIE.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                Monster::checkMonsterSpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
+        event.register(FURIOUS_ZOMBIE.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                Monster::checkMonsterSpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
+        event.register(FIRE_BAT.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                FireBat::checkSpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
     }
 
     private ModEntities() {

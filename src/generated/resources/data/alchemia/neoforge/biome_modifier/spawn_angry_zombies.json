@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#alchemia:has_angry_zombies",
+  "spawners": {
+    "type": "alchemia:angry_zombie",
+    "maxCount": 1,
+    "minCount": 1,
+    "weight": 10
+  }
+}

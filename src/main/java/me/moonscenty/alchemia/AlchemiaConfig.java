@@ -15,6 +15,11 @@ public class AlchemiaConfig {
                     "Higher means taint burns itself out sooner.")
             .defineInRange("taintSpreadCost", 0.05, 0.0, 1.0);
 
+    public static final ModConfigSpec.BooleanValue CHAMPION_MOBS = COMMON_BUILDER
+            .comment("Whether monsters are sometimes champions: stronger, named, and with a gift of their own.",
+                    "Even when off there is a slight chance of them in the Nether, the End and spooky places.")
+            .define("championMobs", true);
+
     static final ModConfigSpec COMMON_SPEC = COMMON_BUILDER.build();
 
     private static final ModConfigSpec.Builder CLIENT_BUILDER = new ModConfigSpec.Builder();

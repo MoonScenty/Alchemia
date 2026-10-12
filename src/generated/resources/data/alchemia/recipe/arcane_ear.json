@@ -2,7 +2,7 @@
   "type": "alchemia:arcane_shaped",
   "key": {
     "B": {
-      "item": "minecraft:rotten_flesh"
+      "item": "alchemia:zombie_brain"
     },
     "P": {
       "item": "alchemia:brass_plate"

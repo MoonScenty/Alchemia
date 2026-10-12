@@ -73,6 +73,8 @@ public class ModWorldgen {
     public static final ResourceKey<BiomeModifier> ADD_NODES = biomeModifier("add_nodes");
     public static final ResourceKey<BiomeModifier> ADD_GREATWOOD = biomeModifier("add_greatwood");
     public static final ResourceKey<BiomeModifier> ADD_SILVERWOOD = biomeModifier("add_silverwood");
+    public static final ResourceKey<BiomeModifier> SPAWN_ANGRY_ZOMBIES = biomeModifier("spawn_angry_zombies");
+    public static final ResourceKey<BiomeModifier> SPAWN_FIREBATS = biomeModifier("spawn_firebats");
 
     static {
         for (CrystalType type : CrystalType.values()) {
@@ -175,6 +177,16 @@ public class ModWorldgen {
         CRYSTAL_PATCHES_PLACED.values().forEach(key -> crystals.add(placed.getOrThrow(key)));
         context.register(ADD_CRYSTALS, new BiomeModifiers.AddFeaturesBiomeModifier(overworld,
                 HolderSet.direct(crystals), GenerationStep.Decoration.UNDERGROUND_DECORATION));
+
+        // the original's spawns: an angry zombie now and then among the others, and firebats in the Nether
+        context.register(SPAWN_ANGRY_ZOMBIES, BiomeModifiers.AddSpawnsBiomeModifier.singleSpawn(
+                biomes.getOrThrow(ModTags.Biomes.HAS_ANGRY_ZOMBIES),
+                new net.minecraft.world.level.biome.MobSpawnSettings.SpawnerData(
+                        me.moonscenty.alchemia.registry.ModEntities.ANGRY_ZOMBIE.get(), 10, 1, 1)));
+        context.register(SPAWN_FIREBATS, BiomeModifiers.AddSpawnsBiomeModifier.singleSpawn(
+                biomes.getOrThrow(BiomeTags.IS_NETHER),
+                new net.minecraft.world.level.biome.MobSpawnSettings.SpawnerData(
+                        me.moonscenty.alchemia.registry.ModEntities.FIRE_BAT.get(), 10, 1, 2)));
     }
 
     private static List<PlacementModifier> ore(int count, PlacementModifier height) {

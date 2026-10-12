@@ -122,6 +122,17 @@ public class FireBat extends Monster {
                 .add(Attributes.ATTACK_KNOCKBACK, 0.0);
     }
 
+    /**
+     * Where a wild one may come of itself: anywhere a monster may, but darker. Any light at all has to come out at or
+     * under a throw of seven, which a bat in lava light seldom does.
+     */
+    public static boolean checkSpawnRules(EntityType<FireBat> type, net.minecraft.world.level.ServerLevelAccessor level,
+            net.minecraft.world.entity.MobSpawnType reason, BlockPos pos, net.minecraft.util.RandomSource random) {
+        return level.getDifficulty() != net.minecraft.world.Difficulty.PEACEFUL
+                && level.getMaxLocalRawBrightness(pos) <= random.nextInt(7)
+                && checkMobSpawnRules(type, level, reason, pos, random);
+    }
+
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);

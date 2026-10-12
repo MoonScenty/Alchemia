@@ -426,7 +426,7 @@ public class ModRecipeProvider extends RecipeProvider {
         arcane(output, "arcane_ear", "arcane_ear", new ItemStack(ModBlocks.ARCANE_EAR.get()),
                 AspectList.of(ModAspects.AIR, 10).add(ModAspects.ORDER, 5),
                 Map.of('P', Ingredient.of(ModItems.BRASS_PLATE),
-                        'B', Ingredient.of(Items.ROTTEN_FLESH),
+                        'B', Ingredient.of(ModItems.ZOMBIE_BRAIN),
                         'W', Ingredient.of(net.minecraft.tags.ItemTags.WOODEN_SLABS),
                         'R', Ingredient.of(Items.REDSTONE)),
                 "PBP", " P ", "WRW");
@@ -774,10 +774,10 @@ public class ModRecipeProvider extends RecipeProvider {
                 Optional.empty(), Optional.of(HelmFitting.GOGGLES)), null);
 
         // the three masks. Each is a dye, two irons and a hide round the one thing that gives it its face.
-        // The original's numbers. What a zombie's brain was is not in this mod yet, so the flesh stands for it
+        // The original's numbers.
         mask(output, "mask_grinning_devil", HelmFitting.GRINNING_DEVIL,
                 List.of(Ingredient.of(Items.INK_SAC), Ingredient.of(ModBlocks.SHIMMERLEAF.get()),
-                        Ingredient.of(Items.ROTTEN_FLESH)),
+                        Ingredient.of(ModItems.ZOMBIE_BRAIN)),
                 AspectList.of(ModAspects.MIND, 64).add(ModAspects.LIFE, 64).add(ModAspects.PROTECT, 16));
         mask(output, "mask_angry_ghost", HelmFitting.ANGRY_GHOST,
                 List.of(Ingredient.of(Items.BONE_MEAL), Ingredient.of(Items.POISONOUS_POTATO),
@@ -788,11 +788,9 @@ public class ModRecipeProvider extends RecipeProvider {
                         Ingredient.of(Items.MILK_BUCKET)),
                 AspectList.of(ModAspects.UNDEAD, 64).add(ModAspects.LIFE, 64).add(ModAspects.PROTECT, 16));
 
-        // the biothaumic mind: the clockwork one with a brain grown into it and a clock to keep it to time. The
-        // original's brain is a zombie's, which this mod does not drop yet, so the flesh stands for it as it
-        // does on the grinning devil's mask
+        // the biothaumic mind: the clockwork one with a zombie's brain grown into it and a clock to keep it to time
         infusion(output, "biothaumic_mind", Ingredient.of(ModItems.CLOCKWORK_MIND),
-                List.of(Ingredient.of(Items.ROTTEN_FLESH), Ingredient.of(Items.CLOCK)),
+                List.of(Ingredient.of(ModItems.ZOMBIE_BRAIN), Ingredient.of(Items.CLOCK)),
                 new ItemStack(ModItems.BIOTHAUMIC_MIND.get()),
                 AspectList.of(ModAspects.MIND, 16).add(ModAspects.MECHANISM, 16), BIOTHAUMIC_UNSTABLE,
                 "biothaumic_mind");
@@ -845,10 +843,9 @@ public class ModRecipeProvider extends RecipeProvider {
                         .add(ModAspects.VOID, 16).add(ModAspects.MOTION, 16),
                 4, "arcane_bore");
 
-        // a warded jar with a brain in it. The original's brain came out of a zombie, which there are none of yet;
-        // rotten flesh stands in for it
+        // a warded jar with a zombie's brain in it
         infusion(output, "brain_jar", Ingredient.of(ModBlocks.JAR),
-                List.of(Ingredient.of(Items.ROTTEN_FLESH), Ingredient.of(Items.SPIDER_EYE),
+                List.of(Ingredient.of(ModItems.ZOMBIE_BRAIN), Ingredient.of(Items.SPIDER_EYE),
                         Ingredient.of(Items.WATER_BUCKET), Ingredient.of(Items.SPIDER_EYE)),
                 new ItemStack(ModBlocks.BRAIN_JAR.get()),
                 AspectList.of(ModAspects.MIND, 10).add(ModAspects.SENSES, 10).add(ModAspects.UNDEAD, 20),

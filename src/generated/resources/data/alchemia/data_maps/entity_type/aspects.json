@@ -1,5 +1,17 @@
 {
   "values": {
+    "alchemia:angry_zombie": {
+      "alchemia:cognitio": 1,
+      "alchemia:exanimis": 3,
+      "alchemia:humanus": 1,
+      "alchemia:terra": 1
+    },
+    "alchemia:furious_zombie": {
+      "alchemia:cognitio": 1,
+      "alchemia:exanimis": 4,
+      "alchemia:humanus": 2,
+      "alchemia:terra": 2
+    },
     "minecraft:blaze": {
       "alchemia:ignis": 8,
       "alchemia:potentia": 4

@@ -169,6 +169,8 @@ public class ModDataMapProvider extends DataMapProvider {
         item(Items.GHAST_TEAR, a(ModAspects.WATER, 1).add(ModAspects.UNDEAD, 4).add(ModAspects.SOUL, 4));
         item(Items.SPIDER_EYE, a(ModAspects.SENSES, 2).add(ModAspects.BEAST, 2).add(ModAspects.DEATH, 1));
         item(Items.ROTTEN_FLESH, a(ModAspects.MAN, 1).add(ModAspects.LIFE, 2));
+        item(me.moonscenty.alchemia.registry.ModItems.ZOMBIE_BRAIN.get(),
+                a(ModAspects.LIFE, 2).add(ModAspects.MIND, 4).add(ModAspects.UNDEAD, 2));
         item(Items.EGG, a(ModAspects.LIFE, 1).add(ModAspects.BEAST, 1));
         tag(ItemTags.WOOL, a(ModAspects.BEAST, 2).add(ModAspects.CRAFT, 1));
 
@@ -265,6 +267,10 @@ public class ModDataMapProvider extends DataMapProvider {
         mob(EntityType.BLAZE, a(ModAspects.FIRE, 8).add(ModAspects.ENERGY, 4));
         mob(EntityType.VILLAGER, a(ModAspects.MAN, 6).add(ModAspects.EXCHANGE, 2).add(ModAspects.MIND, 2));
         mob(EntityType.WITCH, a(ModAspects.MAN, 4).add(ModAspects.AURA, 4).add(ModAspects.MIND, 2));
+        mob(me.moonscenty.alchemia.registry.ModEntities.ANGRY_ZOMBIE.get(),
+                a(ModAspects.UNDEAD, 3).add(ModAspects.MAN, 1).add(ModAspects.MIND, 1).add(ModAspects.EARTH, 1));
+        mob(me.moonscenty.alchemia.registry.ModEntities.FURIOUS_ZOMBIE.get(),
+                a(ModAspects.UNDEAD, 4).add(ModAspects.MAN, 2).add(ModAspects.MIND, 1).add(ModAspects.EARTH, 2));
     }
 
     private static Holder<Aspect> aspectOf(CrystalType type) {

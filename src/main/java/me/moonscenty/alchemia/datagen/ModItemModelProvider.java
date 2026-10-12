@@ -100,6 +100,11 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.ALCHEMIUM_NUGGET.get());
         basicItem(ModItems.BRASS_NUGGET.get());
         basicItem(ModItems.QUICKSILVER_DROP.get());
+        basicItem(ModItems.ZOMBIE_BRAIN.get());
+        for (var egg : java.util.List.of(ModItems.ANGRY_ZOMBIE_SPAWN_EGG, ModItems.FURIOUS_ZOMBIE_SPAWN_EGG,
+                ModItems.FIREBAT_SPAWN_EGG)) {
+            withExistingParent(egg.getId().getPath(), mcLoc("item/template_spawn_egg"));
+        }
         basicItem(ModItems.ALCHEMIUM_GEAR.get());
         basicItem(ModItems.BRASS_GEAR.get());
         basicItem(ModItems.ALCHEMIUM_PLATE.get());

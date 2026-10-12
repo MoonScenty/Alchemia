@@ -297,6 +297,8 @@ public class AlchemiaClientSetup {
         event.registerEntityRenderer(ModEntities.AURA_NODE.get(), AuraNodeRenderer::new);
         event.registerEntityRenderer(ModEntities.AUTOCASTER.get(), AutocasterRenderer::new);
         event.registerEntityRenderer(ModEntities.FIRE_BAT.get(), FireBatRenderer::new);
+        event.registerEntityRenderer(ModEntities.ANGRY_ZOMBIE.get(), AngryZombieRenderer::new);
+        event.registerEntityRenderer(ModEntities.FURIOUS_ZOMBIE.get(), AngryZombieRenderer::new);
         // a cloud is all particles, so there is nothing to draw for the entity itself
         event.registerEntityRenderer(ModEntities.TAINT_CLOUD.get(), NoopRenderer::new);
         // both of these are a trail of particles and nothing else, as the thing they came from was

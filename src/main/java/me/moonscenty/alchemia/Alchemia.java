@@ -62,6 +62,7 @@ public class Alchemia {
         ModEffects.EFFECTS.register(modEventBus);
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(ModEntities::attributes);
+        modEventBus.addListener(ModEntities::spawnPlacements);
 
         modContainer.registerConfig(ModConfig.Type.COMMON, AlchemiaConfig.COMMON_SPEC);
         modContainer.registerConfig(ModConfig.Type.CLIENT, AlchemiaConfig.CLIENT_SPEC);

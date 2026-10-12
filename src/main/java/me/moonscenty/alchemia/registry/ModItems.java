@@ -173,6 +173,19 @@ public class ModItems {
     /** All six primals and the balance between them, worked round a ring of gold. The root of artifice. */
     public static final DeferredItem<Item> PRIMAL_CHARM = ITEMS.register("primal_charm",
             () -> new Item(new Item.Properties().rarity(net.minecraft.world.item.Rarity.UNCOMMON)));
+    /** What an angry zombie still had. Food of a sort, and warp. */
+    public static final DeferredItem<me.moonscenty.alchemia.item.ZombieBrainItem> ZOMBIE_BRAIN =
+            ITEMS.register("zombie_brain", () -> new me.moonscenty.alchemia.item.ZombieBrainItem(new Item.Properties()));
+    /** The original's eggs, all pink with the mob's own colour for the spots. */
+    public static final DeferredItem<net.neoforged.neoforge.common.DeferredSpawnEggItem> ANGRY_ZOMBIE_SPAWN_EGG =
+            ITEMS.register("angry_zombie_spawn_egg", () -> new net.neoforged.neoforge.common.DeferredSpawnEggItem(
+                    ModEntities.ANGRY_ZOMBIE, 0xFFC0FF, 0x008000, new Item.Properties()));
+    public static final DeferredItem<net.neoforged.neoforge.common.DeferredSpawnEggItem> FURIOUS_ZOMBIE_SPAWN_EGG =
+            ITEMS.register("furious_zombie_spawn_egg", () -> new net.neoforged.neoforge.common.DeferredSpawnEggItem(
+                    ModEntities.FURIOUS_ZOMBIE, 0xFFC0FF, 0x004000, new Item.Properties()));
+    public static final DeferredItem<net.neoforged.neoforge.common.DeferredSpawnEggItem> FIREBAT_SPAWN_EGG =
+            ITEMS.register("firebat_spawn_egg", () -> new net.neoforged.neoforge.common.DeferredSpawnEggItem(
+                    ModEntities.FIRE_BAT, 0xFFC0FF, 0xF00000, new Item.Properties()));
     /** A pane of glass silvered with quicksilver. */
     public static final DeferredItem<Item> MIRRORED_GLASS = ITEMS.registerSimpleItem("mirrored_glass");
     /** A mirror on a handle, that sends things through to a magic mirror wherever it is. */

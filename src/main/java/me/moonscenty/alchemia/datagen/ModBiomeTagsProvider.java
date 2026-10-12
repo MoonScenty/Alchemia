@@ -32,6 +32,16 @@ public class ModBiomeTagsProvider extends BiomeTagsProvider {
                 .add(Biomes.DESERT)
                 .addTag(BiomeTags.IS_BADLANDS);
 
+        // the original put angry zombies in every warm, cool, icy and dry land the game had, which was most of the
+        // overworld above water save the mushroom islands
+        tag(ModTags.Biomes.HAS_ANGRY_ZOMBIES)
+                .addTag(BiomeTags.IS_FOREST)
+                .addTag(BiomeTags.IS_TAIGA)
+                .addTag(BiomeTags.IS_HILL)
+                .addTag(BiomeTags.IS_SAVANNA)
+                .add(Biomes.PLAINS, Biomes.SUNFLOWER_PLAINS, Biomes.SWAMP, Biomes.DESERT, Biomes.SNOWY_PLAINS,
+                        Biomes.ICE_SPIKES);
+
         // stands in until there is somewhere properly eerie for a dark node to make
         tag(ModTags.Biomes.NODE_DARKENS_INTO)
                 .add(Biomes.DESERT);

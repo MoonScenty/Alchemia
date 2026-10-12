@@ -1,0 +1,14 @@
+{
+  "values": [
+    "#minecraft:is_forest",
+    "#minecraft:is_taiga",
+    "#minecraft:is_hill",
+    "#minecraft:is_savanna",
+    "minecraft:plains",
+    "minecraft:sunflower_plains",
+    "minecraft:swamp",
+    "minecraft:desert",
+    "minecraft:snowy_plains",
+    "minecraft:ice_spikes"
+  ]
+}

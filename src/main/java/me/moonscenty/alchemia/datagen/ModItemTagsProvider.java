@@ -27,6 +27,8 @@ public class ModItemTagsProvider extends ItemTagsProvider {
         ModBlocks.NITOR.values().forEach(flame -> tag(ModTags.Items.NITOR).add(flame.get().asItem()));
         ModItems.FOCI.values().forEach(focus -> tag(ModTags.Items.FOCI).add(focus.get()));
         robes();
+        // wolves will eat it, as the original's would
+        tag(ItemTags.MEAT).add(ModItems.ZOMBIE_BRAIN.get());
         metalGear();
         tag(net.minecraft.tags.ItemTags.HEAD_ARMOR).add(ModItems.GOGGLES.get());
         tag(net.minecraft.tags.ItemTags.DURABILITY_ENCHANTABLE).add(ModItems.GOGGLES.get());

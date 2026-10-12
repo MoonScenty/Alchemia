@@ -446,6 +446,10 @@ public final class LegacyAssets {
             all.add(LegacyAsset.of("textures/entity/" + skin + ".png")
                     .five("textures/models/creature/" + skin + ".png").forModel(FIREBAT));
         }
+
+        // the angry zombie's skin, which the furious one wears as well; a zombie's sheet, so the game's model fits it
+        all.add(LegacyAsset.of("textures/entity/angry_zombie.png").five("textures/models/creature/bzombie.png")
+                .four("textures/models/bzombie.png"));
     }
 
     /**
@@ -731,6 +735,7 @@ public final class LegacyAssets {
         all.add(item("amber", "amber", "amber"));
         all.add(item("quicksilver", "quicksilver", "quicksilver"));
         all.add(item("quicksilver_drop", "nugget_quicksilver", "nuggetquicksilver"));
+        all.add(item("zombie_brain", "brain", "brain"));
         all.add(item("iron_cluster", "cluster_iron", "clusteriron"));
         all.add(item("gold_cluster", "cluster_gold", "clustergold"));
         all.add(item("copper_cluster", "cluster_copper", "clustercopper"));

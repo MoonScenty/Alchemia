@@ -53,7 +53,15 @@ public class ModTags {
         }
     }
 
+    public static class Entities {
+        /** What may be rolled for a champion when it comes into a world. */
+        public static final TagKey<net.minecraft.world.entity.EntityType<?>> CHAMPION_CANDIDATES =
+                TagKey.create(Registries.ENTITY_TYPE, Alchemia.id("champion_candidates"));
+    }
+
     public static class Biomes {
+        /** Where angry zombies walk with the others: the original's warm, cool, icy and dry lands. */
+        public static final TagKey<Biome> HAS_ANGRY_ZOMBIES = TagKey.create(Registries.BIOME, Alchemia.id("has_angry_zombies"));
         public static final TagKey<Biome> HAS_GREATWOOD = TagKey.create(Registries.BIOME, Alchemia.id("has_greatwood"));
         public static final TagKey<Biome> HAS_SILVERWOOD = TagKey.create(Registries.BIOME, Alchemia.id("has_silverwood"));
         public static final TagKey<Biome> HAS_CINDERPEARL = TagKey.create(Registries.BIOME, Alchemia.id("has_cinderpearl"));

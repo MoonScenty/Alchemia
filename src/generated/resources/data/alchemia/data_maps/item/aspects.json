@@ -255,6 +255,11 @@
       "alchemia:aqua": 2,
       "alchemia:vitreus": 1
     },
+    "alchemia:zombie_brain": {
+      "alchemia:cognitio": 4,
+      "alchemia:exanimis": 2,
+      "alchemia:victus": 2
+    },
     "minecraft:amethyst_shard": {
       "alchemia:sensus": 1,
       "alchemia:vitreus": 3

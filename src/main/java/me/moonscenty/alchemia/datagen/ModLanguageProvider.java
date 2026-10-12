@@ -175,6 +175,20 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         addItem(ModItems.AUTOCASTER, pick("Autocaster", "자동 시전기"));
         addEntityType(me.moonscenty.alchemia.registry.ModEntities.AUTOCASTER, pick("Autocaster", "자동 시전기"));
         addEntityType(me.moonscenty.alchemia.registry.ModEntities.FIRE_BAT, pick("Firebat", "불박쥐"));
+        addEntityType(me.moonscenty.alchemia.registry.ModEntities.ANGRY_ZOMBIE, pick("Angry Zombie", "성난 좀비"));
+        addEntityType(me.moonscenty.alchemia.registry.ModEntities.FURIOUS_ZOMBIE, pick("Furious Zombie", "격노한 좀비"));
+        addItem(ModItems.ZOMBIE_BRAIN, pick("Zombie Brain", "좀비 뇌"));
+        addItem(ModItems.ANGRY_ZOMBIE_SPAWN_EGG, pick("Angry Zombie Spawn Egg", "성난 좀비 생성 알"));
+        addItem(ModItems.FURIOUS_ZOMBIE_SPAWN_EGG, pick("Furious Zombie Spawn Egg", "격노한 좀비 생성 알"));
+        addItem(ModItems.FIREBAT_SPAWN_EGG, pick("Firebat Spawn Egg", "불박쥐 생성 알"));
+        String[][] champions = {{"bold", "Bold", "대담한"}, {"spine", "Spined", "가시 돋친"},
+                {"armor", "Armored", "무장한"}, {"mighty", "Mighty", "강력한"}, {"grim", "Grim", "음산한"},
+                {"warded", "Warded", "보호받는"}, {"warp", "Warped", "뒤틀린"}, {"undying", "Undying", "죽지 않는"},
+                {"fiery", "Fiery", "불타는"}, {"sickly", "Sickly", "병든"}, {"venomous", "Venomous", "독이 있는"},
+                {"vampiric", "Vampiric", "흡혈하는"}, {"infested", "Infested", "감염된"}};
+        for (String[] champion : champions) {
+            add("champion.mod." + champion[0], pick(champion[1], champion[2]));
+        }
         add("item.alchemia.autocaster.note",
                 pick("Fires a fitted focus on its own", "끼운 포커스를 혼자 쏜다"));
         add("entity.alchemia.autocaster.not_yours", pick("Not yours", "남의 것이다"));

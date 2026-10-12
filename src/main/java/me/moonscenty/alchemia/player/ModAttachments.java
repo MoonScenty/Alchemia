@@ -31,6 +31,18 @@ public class ModAttachments {
                     .copyOnDeath()
                     .build());
 
+    /**
+     * Whether a monster is a champion, and of what: {@code -2} never rolled, {@code -1} rolled and ordinary, and
+     * from nought the {@link me.moonscenty.alchemia.entity.ChampionModifier} it has. Everyone who can see it is told,
+     * for the sparks.
+     */
+    public static final DeferredHolder<AttachmentType<?>, AttachmentType<Integer>> CHAMPION =
+            ATTACHMENTS.register("champion", () -> AttachmentType
+                    .builder(() -> me.moonscenty.alchemia.entity.Champions.UNROLLED)
+                    .serialize(com.mojang.serialization.Codec.INT)
+                    .sync(net.minecraft.network.codec.ByteBufCodecs.VAR_INT)
+                    .build());
+
     private ModAttachments() {
     }
 }
