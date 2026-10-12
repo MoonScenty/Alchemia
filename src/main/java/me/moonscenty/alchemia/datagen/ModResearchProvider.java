@@ -119,6 +119,11 @@ public class ModResearchProvider {
                 List.of("tubes"), false, NodeShape.PLAIN, 3,
                 "tube_filter", "tube_restrict", "tube_oneway", "tube_buffer");
 
+        // a brain kept in brine, that eats what is learned by dying near it
+        entry(context, "brain_jar", ModResearch.ARTIFICE, ModBlocks.BRAIN_JAR, -2, 2,
+                AspectList.of(ModAspects.DESIRE, 6).add(ModAspects.MIND, 3).add(ModAspects.UNDEAD, 3),
+                List.of("infusion"), false, NodeShape.PLAIN, 2, "brain_jar");
+
         // a crucible that works on its own, and the matrix that lets it keep more in mind
         entry(context, "thaumatorium", ModResearch.ALCHEMY, ModBlocks.CRUCIBLE, 6, 8,
                 AspectList.of(ModAspects.WATER, 3).add(ModAspects.ENERGY, 6).add(ModAspects.EXCHANGE, 3)

@@ -150,4 +150,25 @@ public class EssentiaDeviceTests {
         helper.succeed();
     }
 
+    /** A brain in a jar eats an orb that touches it, and gives some back when shaken. */
+    @GameTest(template = TEMPLATE)
+    public static void aBrainInAJarEatsExperienceAndGivesSomeBack(GameTestHelper helper) {
+        helper.setBlock(WHERE, ModBlocks.BRAIN_JAR.get());
+        BlockPos at = helper.absolutePos(WHERE);
+        var jar = (me.moonscenty.alchemia.block.entity.BrainJarBlockEntity) helper.getLevel().getBlockEntity(at);
+        var orb = new net.minecraft.world.entity.ExperienceOrb(helper.getLevel(), at.getX() + 0.5, at.getY() + 0.5,
+                at.getZ() + 0.5, 10);
+        helper.getLevel().addFreshEntity(orb);
+        me.moonscenty.alchemia.block.entity.BrainJarBlockEntity.tick(helper.getLevel(), at,
+                helper.getLevel().getBlockState(at), jar);
+        helper.assertValueEqual(jar.xp(), 10, "it ate the orb");
+        helper.assertFalse(orb.isAlive(), "and the orb is gone");
+
+        jar.setXp(100);
+        for (int shakes = 0; shakes < 10 && jar.xp() == 100; shakes++) {
+            jar.shake(helper.getLevel());
+        }
+        helper.assertTrue(jar.xp() < 100, "shaken, it gave some back");
+        helper.succeed();
+    }
 }

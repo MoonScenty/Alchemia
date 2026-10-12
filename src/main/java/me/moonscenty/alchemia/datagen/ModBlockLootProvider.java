@@ -75,6 +75,10 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
                 CopyComponentsFunction.copyComponents(CopyComponentsFunction.Source.BLOCK_ENTITY)
                         .include(ModDataComponents.CONTENTS.get())
                         .include(ModDataComponents.ESSENTIA.get())));
+        // a brain in a jar keeps what it has eaten
+        add(ModBlocks.BRAIN_JAR.get(), block -> createSingleItemTable(block).apply(
+                CopyComponentsFunction.copyComponents(CopyComponentsFunction.Source.BLOCK_ENTITY)
+                        .include(ModDataComponents.STORED_XP.get())));
         dropSelf(ModBlocks.ESSENTIA_SMELTER.get());
         dropSelf(ModBlocks.ALCHEMIUM_SMELTER.get());
         dropSelf(ModBlocks.VOID_SMELTER.get());

@@ -497,6 +497,9 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                 {"distillation", "Distillation", "증류",
                  "Burning a thing is a crude way to ask what it is made of, but it is an honest one. A smelter sends the answer up as smoke, and alembics stacked above it catch that smoke one aspect at a time.",
                  "무엇으로 이루어졌는지 묻는 데에 태우는 것은 거칠지만 정직한 방법이다. 제련로가 그 답을 연기로 올려 보내고, 위에 쌓아 올린 증류기가 연기를 상 하나씩 받아 낸다."},
+                {"brain_jar", "Brain in a Jar", "단지 속 두뇌",
+                 "A zombie's brain, woken and sealed in a warded jar. It keeps some of its hunger, and though it cannot eat brains any more it enjoys the thoughts and experience of whatever dies nearby, drawing them in from six blocks off, up to two thousand. A good shake makes it give some back. When it is full it lets off wisps. It counts as two bookshelves to an enchanting table.",
+                 "깨워서 봉인된 단지에 담은 좀비의 두뇌다. 굶주림을 얼마간 간직하고 있어서, 이제 뇌를 먹을 수는 없지만 가까이에서 죽은 것들의 생각과 경험은 즐겨 먹는다. 여섯 칸 밖에서부터 끌어당겨 이천까지 담는다. 세게 흔들면 얼마를 돌려준다. 가득 차면 위로 빛줄기를 피운다. 마법 부여대에는 책장 두 개로 친다."},
                 {"thaumatorium", "Automated Alchemy", "자동 연금술",
                  "A crucible that works on its own. Stand two blocks of brass on a crucible and work them with a wand, from the side you want it to face: what it makes comes out of that side, into a container there if there is one, onto the ground if not. Put a catalyst in it and choose, from the recipes you know that catalyst finishes, what it is to make; it draws the essentia up the pipes itself, an aspect at a time, and as long as there is catalyst it makes the thing perfectly, every time. The crucible under it needs no water, but it does need heat: lava, fire or a nitor directly below. It keeps one recipe in mind; every mnemonic matrix fixed to its sides or top, facing in, lets it keep two more. A redstone signal stops it.",
                  "스스로 일하는 도가니다. 도가니 위에 황동 블록 둘을 세우고, 앞으로 삼을 쪽에서 완드로 다룬다. 만든 것은 그쪽으로 나온다. 거기에 상자가 있으면 상자로, 없으면 바닥으로. 촉매를 넣고, 그 촉매로 마무리되는 알고 있는 레시피 가운데 무엇을 만들지 고른다. 에센시아는 관으로 상 하나씩 스스로 끌어오고, 촉매가 남아 있는 한 언제나 틀림없이 만든다. 아래의 도가니에 물은 필요 없지만 열은 필요하다. 바로 아래에 용암, 불, 또는 니토르. 레시피는 하나만 기억한다. 옆이나 위에 안쪽을 보게 붙인 기억 행렬 하나마다 둘씩 더 기억한다. 레드스톤 신호가 멈춘다."},
@@ -816,6 +819,8 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("block.alchemia.bellows", pick("Bellows", "풀무"));
         add("block.alchemia.centrifuge", pick("Essentia Centrifuge", "에센시아 원심분리기"));
         add("block.alchemia.thaumatorium", pick("Thaumatorium", "타우마토리움"));
+        add("block.alchemia.brain_jar", pick("Brain in a Jar", "단지 속 두뇌"));
+        add("block.alchemia.brain_jar.xp", pick("%s xp", "경험치 %s"));
         add("block.alchemia.mnemonic_matrix", pick("Mnemonic Matrix", "기억 행렬"));
         add("block.alchemia.crystallizer", pick("Essentia Crystallizer", "에센시아 결정화기"));
         add("block.alchemia.levitator", pick("Arcane Levitator", "비전 부양기"));

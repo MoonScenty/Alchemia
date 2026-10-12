@@ -43,6 +43,8 @@ public class ModItemModelProvider extends ItemModelProvider {
         withExistingParent("void_smelter", modLoc("block/void_smelter"));
         withExistingParent("smelter_aux", modLoc("block/smelter_aux"));
         withExistingParent("mnemonic_matrix", modLoc("block/mnemonic_matrix"));
+        // in the hand, the original's still picture of a jar with a brain in it
+        withExistingParent("brain_jar", modLoc("block/brain_jar_item"));
         withExistingParent("smelter_vent", modLoc("block/smelter_vent"));
         withExistingParent("arcane_workbench", modLoc("block/arcane_workbench"));
         withExistingParent("focal_manipulator", modLoc("block/focal_manipulator"));

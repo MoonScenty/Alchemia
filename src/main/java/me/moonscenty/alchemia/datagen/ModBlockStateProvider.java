@@ -448,6 +448,8 @@ public class ModBlockStateProvider extends BlockStateProvider {
         drawnElsewhere(ModBlocks.BELLOWS, "block/greatwood_planks");
         // the original's two essentia devices threw greatwood about when broken, having no model of their own
         drawnElsewhere(ModBlocks.CENTRIFUGE, "block/greatwood_planks");
+        // the brain jar is the warded jar's glass; the brain and the brine are drawn by its renderer
+        simpleBlock(ModBlocks.BRAIN_JAR.get(), models().getExistingFile(modLoc("block/jar/jar")));
         // the thaumatorium is drawn whole by its renderer; broken, it throws brass about, which is what it was
         getVariantBuilder(ModBlocks.THAUMATORIUM.get()).partialState().setModels(new ConfiguredModel(
                 models().getBuilder("thaumatorium").texture("particle", modLoc("block/brass_block"))));

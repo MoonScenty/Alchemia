@@ -1,0 +1,25 @@
+{
+  "category": "alchemia:artifice",
+  "column": -2,
+  "complexity": 2,
+  "icon": "alchemia:brain_jar",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.brain_jar.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:brain_jar"
+    }
+  ],
+  "parents": [
+    "alchemia:infusion"
+  ],
+  "requirements": {
+    "alchemia:cognitio": 3,
+    "alchemia:desiderium": 6,
+    "alchemia:exanimis": 3
+  },
+  "row": 2
+}

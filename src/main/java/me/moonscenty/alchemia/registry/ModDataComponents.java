@@ -48,6 +48,13 @@ public class ModDataComponents {
      * Only meaningful on a focus that has one. Without the component the focus simply works as far as it can,
      * which is what every other focus does and what this one does until somebody turns it down.
      */
+    /** What a brain in a jar has eaten, kept on the jar when it is picked up. */
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> STORED_XP =
+            COMPONENTS.register("stored_xp", () -> DataComponentType.<Integer>builder()
+                    .persistent(Codec.INT)
+                    .networkSynchronized(ByteBufCodecs.VAR_INT)
+                    .build());
+
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> FOCUS_REACH =
             COMPONENTS.register("focus_reach", () -> DataComponentType.<Integer>builder()
                     .persistent(Codec.INT)

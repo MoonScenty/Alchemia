@@ -60,6 +60,13 @@ public class ModBlockEntities {
                             ModBlocks.THAUMATORIUM.get())
                     .build(null));
 
+    /** A brain in a jar, eating. */
+    public static final DeferredHolder<BlockEntityType<?>,
+            BlockEntityType<me.moonscenty.alchemia.block.entity.BrainJarBlockEntity>> BRAIN_JAR =
+            BLOCK_ENTITIES.register("brain_jar", () -> BlockEntityType.Builder
+                    .of(me.moonscenty.alchemia.block.entity.BrainJarBlockEntity::new, ModBlocks.BRAIN_JAR.get())
+                    .build(null));
+
     /** Bellows pumping, which on the server is a furnace being pushed along. */
     public static final DeferredHolder<BlockEntityType<?>,
             BlockEntityType<me.moonscenty.alchemia.block.entity.BellowsBlockEntity>> BELLOWS =

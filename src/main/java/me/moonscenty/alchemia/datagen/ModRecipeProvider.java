@@ -809,6 +809,15 @@ public class ModRecipeProvider extends RecipeProvider {
                         .add(ModAspects.AVERSION, 25), TOTEM_UNSTABLE, "aura_totem");
 
         // the recharge pedestal: a pedestal worked on with gold, diamonds and a primal charm
+        // a warded jar with a brain in it. The original's brain came out of a zombie, which there are none of yet;
+        // rotten flesh stands in for it
+        infusion(output, "brain_jar", Ingredient.of(ModBlocks.JAR),
+                List.of(Ingredient.of(Items.ROTTEN_FLESH), Ingredient.of(Items.SPIDER_EYE),
+                        Ingredient.of(Items.WATER_BUCKET), Ingredient.of(Items.SPIDER_EYE)),
+                new ItemStack(ModBlocks.BRAIN_JAR.get()),
+                AspectList.of(ModAspects.MIND, 10).add(ModAspects.SENSES, 10).add(ModAspects.UNDEAD, 20),
+                4, "brain_jar");
+
         infusion(output, "recharge_pedestal", Ingredient.of(ModBlocks.ARCANE_PEDESTAL),
                 List.of(Ingredient.of(Items.GOLD_INGOT), Ingredient.of(Items.DIAMOND),
                         Ingredient.of(ModItems.PRIMAL_CHARM), Ingredient.of(Items.DIAMOND)),

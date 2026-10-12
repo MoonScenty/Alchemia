@@ -71,6 +71,9 @@ public final class LegacyAssets {
     public static final String THAUMATORIUM_MESH = "models/legacy/thaumatorium.obj";
     /** The centrifuge, which the original built in code. */
     public static final String CENTRIFUGE = "centrifuge";
+    /** The brain in a jar, and the jar whose brine it floats in, both built in code. */
+    public static final String BRAIN = "brain";
+    public static final String JAR = "jar";
 
     /** The wand: a rod, a cap at either end, and room for a sceptre's crossbar and a focus. */
     public static final String WAND_MESH = "models/legacy/wand.obj";
@@ -129,6 +132,10 @@ public final class LegacyAssets {
                     "thaumcraft/client/renderers/models/entity/ModelFireBat", "()V"))),
             Map.entry(CENTRIFUGE, List.of(new LegacyModelSource(LegacyEdition.FIVE,
                     "thaumcraft/client/renderers/models/block/ModelCentrifuge", "()V"))),
+            Map.entry(BRAIN, List.of(new LegacyModelSource(LegacyEdition.FIVE,
+                    "thaumcraft/client/renderers/models/block/ModelBrain", "()V"))),
+            Map.entry(JAR, List.of(new LegacyModelSource(LegacyEdition.FIVE,
+                    "thaumcraft/client/renderers/models/block/ModelJar", "()V"))),
             Map.entry(BELLOWS, List.of(new LegacyModelSource(LegacyEdition.FIVE,
                     "thaumcraft/client/renderers/models/block/ModelBellows", "()V"))),
             Map.entry(RESEARCH_TABLE, List.of(new LegacyModelSource(LegacyEdition.FIVE,
@@ -380,6 +387,16 @@ public final class LegacyAssets {
         all.add(LegacyAsset.of(CRYSTALLIZER_MESH).five("models/obj/crystallizer.obj"));
         // the thaumatorium: its mesh, its sheet and its panel; and the matrix, the original's model file
         all.add(LegacyAsset.of(THAUMATORIUM_MESH).five("models/obj/thaumatorium.obj"));
+        // the brain in a jar: the brain's sheet and the brine's, and its still picture in a hand
+        all.add(LegacyAsset.of("textures/entity/brain.png").five("textures/models/brain2.png").forModel(BRAIN));
+        all.add(LegacyAsset.of("textures/entity/jar_brine.png").five("textures/models/jarbrine.png")
+                .forModel(JAR));
+        all.add(LegacyAsset.of("models/block/brain_jar_item.json").five("models/block/jar_brain_item.json")
+                .asModel("translucent"));
+        for (String picture : List.of("flesh", "jar_brine")) {
+            all.add(LegacyAsset.of("textures/block/legacy/" + picture + ".png")
+                    .five("textures/blocks/" + picture + ".png"));
+        }
         all.add(LegacyAsset.of("textures/entity/thaumatorium.png").five("textures/models/thaumatorium.png"));
         all.add(LegacyAsset.of("textures/gui/thaumatorium.png").five("textures/gui/gui_thaumatorium.png"));
         all.add(LegacyAsset.of("models/block/mnemonic_matrix.json").five("models/block/brain_box.json").asModel());

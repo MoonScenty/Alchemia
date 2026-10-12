@@ -126,6 +126,13 @@ public class ModBlocks {
                     .mapColor(MapColor.STONE)
                     .noOcclusion()));
 
+    /** A warded jar with a zombie's brain in it, which eats experience. */
+    public static final DeferredBlock<me.moonscenty.alchemia.block.BrainJarBlock> BRAIN_JAR = register("brain_jar",
+            () -> new me.moonscenty.alchemia.block.BrainJarBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS)
+                    .mapColor(MapColor.NONE)
+                    .noOcclusion()),
+            me.moonscenty.alchemia.item.BrainJarItem::new);
+
     public static final DeferredBlock<JarBlock> JAR = register("jar",
             () -> new JarBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS)
                     .mapColor(MapColor.NONE)
