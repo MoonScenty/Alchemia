@@ -242,6 +242,13 @@ public class AlchemiaClientSetup {
      */
     @SubscribeEvent
     public static void registerClientExtensions(RegisterClientExtensionsEvent event) {
+        // the centrifuge and the crystallizer in a hand are their blocks' own renderers, standing still
+        event.registerItem(new net.neoforged.neoforge.client.extensions.common.IClientItemExtensions() {
+            @Override
+            public net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer getCustomRenderer() {
+                return DeviceItemRenderer.INSTANCE;
+            }
+        }, ModBlocks.CENTRIFUGE.get().asItem(), ModBlocks.CRYSTALLIZER.get().asItem());
         // the bellows in a hand is the block's own model, breathing on a clock of its own
         event.registerItem(new net.neoforged.neoforge.client.extensions.common.IClientItemExtensions() {
             @Override
@@ -304,6 +311,8 @@ public class AlchemiaClientSetup {
         event.registerBlockEntityRenderer(ModBlockEntities.TUBE_VALVE.get(), ValveHandleRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.TUBE.get(), OnewayMarkRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.BELLOWS.get(), BellowsRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.CENTRIFUGE.get(), CentrifugeRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.CRYSTALLIZER.get(), CrystallizerRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.HUNGRY_CHEST.get(), HungryChestRenderer::new);
     }
 }

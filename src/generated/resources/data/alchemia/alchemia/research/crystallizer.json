@@ -1,0 +1,25 @@
+{
+  "category": "alchemia:alchemy",
+  "column": 5,
+  "icon": "alchemia:crystallizer",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.crystallizer.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:crystallizer"
+    }
+  ],
+  "parents": [
+    "alchemia:tube_filter"
+  ],
+  "requirements": {
+    "alchemia:aqua": 5,
+    "alchemia:permutatio": 3,
+    "alchemia:potentia": 5,
+    "alchemia:vitreus": 5
+  },
+  "row": 6
+}

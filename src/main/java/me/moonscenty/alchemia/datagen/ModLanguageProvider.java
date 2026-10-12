@@ -497,6 +497,12 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                 {"distillation", "Distillation", "증류",
                  "Burning a thing is a crude way to ask what it is made of, but it is an honest one. A smelter sends the answer up as smoke, and alembics stacked above it catch that smoke one aspect at a time.",
                  "무엇으로 이루어졌는지 묻는 데에 태우는 것은 거칠지만 정직한 방법이다. 제련로가 그 답을 연기로 올려 보내고, 위에 쌓아 올린 증류기가 연기를 상 하나씩 받아 낸다."},
+                {"centrifuge", "Alchemical Centrifuge", "연금술 원심분리기",
+                 "Compound essentia piped in from below is spun until it comes apart, and one of the two things it was made of, either one, is drawn off the top. Only one: the other half is lost in the spinning. It holds one point coming in and one going out, takes nothing while either is full, and will not take the six primals, which have nothing to come apart into. It never pushes; something above has to draw on it. A redstone signal stops it.",
+                 "아래에서 관으로 들어온 합성 에센시아를 갈라질 때까지 돌리고, 그것을 이루던 둘 가운데 하나를 위로 뽑아낸다. 하나만이다. 나머지 반은 도는 동안 사라진다. 들어오는 것 하나, 나가는 것 하나만 담고, 어느 쪽이든 차 있으면 받지 않는다. 더 쪼갤 것이 없는 여섯 원시는 받지 않는다. 스스로 밀어내지 않으니 위에서 무언가가 뽑아 가야 한다. 레드스톤 신호가 멈춘다."},
+                {"crystallizer", "Essentia Crystallization", "에센시아 결정화",
+                 "Essentia piped in at its back is set into crystals one point at a time, which come out of the other end into whatever container stands there, or onto the ground. Any aspect will do. It works on earth drawn out of the air, four points at a time; with none in the air it simply waits. A redstone signal stops it.",
+                 "뒤로 관을 통해 들어온 에센시아를 한 점씩 결정으로 굳혀 반대쪽 끝으로 내보낸다. 그쪽에 상자가 있으면 거기에, 없으면 바닥에 떨군다. 어느 상이든 된다. 공기 중의 흙을 네 점씩 끌어다 쓰고, 공기에 흙이 없으면 그저 기다린다. 레드스톤 신호가 멈춘다."},
                 {"improved_distillation", "Improved Distillation", "증류 개량",
                  "Two things to set against a smelter's sides or back. An auxiliary slurry pump draws on what the smelter holds and pours it up into alembics stacked on the pump itself, so one fire fills another column for every pump. An auxiliary venting port catches some of what the smelter loses before it gets into the air: a third with one, more with each one after, though less each time.",
                  "제련로 옆이나 뒤에 붙이는 것 둘. 보조 슬러리 펌프는 제련로에 든 것을 끌어다 펌프 위에 쌓은 증류기로 올려 보낸다. 펌프 하나마다 불 하나로 채우는 기둥이 하나씩 늘어난다. 보조 배기구는 제련로가 흘리는 것이 공기로 나가기 전에 일부를 붙잡는다. 하나면 셋에 하나, 더 붙일수록 더 많이 잡지만 늘어나는 몫은 점점 줄어든다."},
@@ -805,6 +811,8 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("item.alchemia.clockwork_mind", pick("Clockwork Mind", "태엽 두뇌"));
         add("item.alchemia.biothaumic_mind", pick("Biothaumic Mind", "생체마법 두뇌"));
         add("block.alchemia.bellows", pick("Bellows", "풀무"));
+        add("block.alchemia.centrifuge", pick("Essentia Centrifuge", "에센시아 원심분리기"));
+        add("block.alchemia.crystallizer", pick("Essentia Crystallizer", "에센시아 결정화기"));
         add("block.alchemia.levitator", pick("Arcane Levitator", "비전 부양기"));
         add("block.alchemia.levitator.range", pick("Range set to %s blocks (%s aer a minute for each thing lifted)",
                 "범위를 %s칸으로 맞췄다 (들어 올리는 것 하나에 분당 공기 %s점)"));

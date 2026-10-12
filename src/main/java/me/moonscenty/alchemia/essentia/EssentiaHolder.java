@@ -39,4 +39,17 @@ public interface EssentiaHolder {
     default boolean reachableFrom(Direction side) {
         return true;
     }
+
+    /**
+     * Whether a pipe on this side may fill it. Most things take in on every side they can be reached from; a
+     * centrifuge takes in only from below.
+     */
+    default boolean takesFrom(Direction side) {
+        return true;
+    }
+
+    /** Whether a pipe on this side may draw from it. A centrifuge gives up only what it has split, and only above. */
+    default boolean givesTo(Direction side) {
+        return true;
+    }
 }

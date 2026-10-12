@@ -1,5 +1,7 @@
 {
   "values": [
+    "alchemia:centrifuge",
+    "alchemia:crystallizer",
     "alchemia:bellows",
     "alchemia:hungry_chest",
     "alchemia:levitator",

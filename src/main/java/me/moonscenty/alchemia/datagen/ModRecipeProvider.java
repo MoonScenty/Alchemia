@@ -543,6 +543,22 @@ public class ModRecipeProvider extends RecipeProvider {
                         'G', Ingredient.of(ModItems.PRIMAL_CHARM),
                         'I', Ingredient.of(ModItems.VOID_INGOT)),
                 "BFB", "IGI", "III");
+        arcane(output, "centrifuge", "centrifuge", new ItemStack(ModBlocks.CENTRIFUGE.get()),
+                AspectList.of(ModAspects.WATER, 100).add(ModAspects.ORDER, 100).add(ModAspects.ENTROPY, 100),
+                Map.of('T', Ingredient.of(ModBlocks.TUBE),
+                        'R', Ingredient.of(ModItems.MORPHIC_RESONATOR),
+                        'C', Ingredient.of(ModBlocks.BRASS_BLOCK),
+                        'P', Ingredient.of(ModItems.BRASS_GEAR)),
+                " T ", "RCP", " T ");
+        arcane(output, "crystallizer", "crystallizer", new ItemStack(ModBlocks.CRYSTALLIZER.get()),
+                AspectList.of(ModAspects.WATER, 100).add(ModAspects.EARTH, 250).add(ModAspects.ORDER, 100),
+                Map.of('I', Ingredient.of(Tags.Items.INGOTS_IRON),
+                        'D', Ingredient.of(ModItems.BRASS_GEAR),
+                        'Q', Ingredient.of(ModItems.BALANCED_SHARD),
+                        'C', Ingredient.of(ModBlocks.BRASS_BLOCK),
+                        'W', Ingredient.of(net.minecraft.tags.ItemTags.PLANKS),
+                        'T', Ingredient.of(ModBlocks.TUBE)),
+                "IDI", "QCQ", "WTW");
         arcane(output, "smelter_aux", "improved_distillation", new ItemStack(ModBlocks.SMELTER_AUX.get()),
                 AspectList.of(ModAspects.AIR, 50).add(ModAspects.WATER, 50).add(ModAspects.EARTH, 25),
                 Map.of('W', Ingredient.of(ModBlocks.GREATWOOD.planks()),

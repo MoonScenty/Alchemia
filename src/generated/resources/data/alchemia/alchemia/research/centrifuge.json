@@ -1,0 +1,26 @@
+{
+  "category": "alchemia:alchemy",
+  "column": 5,
+  "complexity": 2,
+  "icon": "alchemia:centrifuge",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.centrifuge.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:centrifuge"
+    }
+  ],
+  "parents": [
+    "alchemia:tube_filter"
+  ],
+  "requirements": {
+    "alchemia:fabrico": 3,
+    "alchemia:permutatio": 3,
+    "alchemia:potentia": 3,
+    "alchemia:vitium": 3
+  },
+  "row": 5
+}

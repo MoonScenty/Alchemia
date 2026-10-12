@@ -99,6 +99,11 @@ public class ModBlocks {
     public static final DeferredBlock<EssentiaSmelterBlock> VOID_SMELTER = register("void_smelter",
             () -> new EssentiaSmelterBlock(smelter(MapColor.COLOR_BLACK), EssentiaSmelterBlock.Tier.VOID));
     /** What goes against a smelter's sides: a pump that pours one more column, and a vent that catches its flux. */
+    /** A centrifuge that splits a compound into one of its parts, and a crystallizer that sets essentia hard. */
+    public static final DeferredBlock<me.moonscenty.alchemia.block.CentrifugeBlock> CENTRIFUGE =
+            register("centrifuge", () -> new me.moonscenty.alchemia.block.CentrifugeBlock(device()));
+    public static final DeferredBlock<me.moonscenty.alchemia.block.CrystallizerBlock> CRYSTALLIZER =
+            register("crystallizer", () -> new me.moonscenty.alchemia.block.CrystallizerBlock(device()));
     public static final DeferredBlock<me.moonscenty.alchemia.block.SmelterAuxBlock> SMELTER_AUX =
             register("smelter_aux", () -> new me.moonscenty.alchemia.block.SmelterAuxBlock(
                     BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).strength(1.0F, 10.0F).noOcclusion()));
@@ -271,6 +276,15 @@ public class ModBlocks {
         return BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE)
                 .mapColor(colour)
                 .lightLevel(state -> state.getValue(EssentiaSmelterBlock.LIT) ? 13 : 0);
+    }
+
+    /** Two essentia devices drawn wholly by their renderers, of wood as the original's were. */
+    private static BlockBehaviour.Properties device() {
+        return BlockBehaviour.Properties.of()
+                .mapColor(MapColor.WOOD)
+                .sound(net.minecraft.world.level.block.SoundType.WOOD)
+                .strength(2.0F, 12.0F)
+                .noOcclusion();
     }
 
     /** Soft wood but hard to blow apart, as the original's. */

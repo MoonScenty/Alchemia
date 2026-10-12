@@ -228,6 +228,22 @@ public class ModItemModelProvider extends ItemModelProvider {
                 .transform(net.minecraft.world.item.ItemDisplayContext.FIRST_PERSON_RIGHT_HAND)
                 .rotation(0, 45, 0).scale(0.4F).end()
                 .end();
+        // drawn by the blocks' own renderers; only how they are held is said here, as the bellows
+        for (String device : java.util.List.of("centrifuge", "crystallizer")) {
+            getBuilder(device).parent(new net.neoforged.neoforge.client.model.generators.ModelFile
+                            .UncheckedModelFile("minecraft:builtin/entity"))
+                    .transforms()
+                    .transform(net.minecraft.world.item.ItemDisplayContext.GUI).rotation(30, 225, 0).scale(0.625F)
+                    .end()
+                    .transform(net.minecraft.world.item.ItemDisplayContext.GROUND).translation(0, 3, 0).scale(0.25F)
+                    .end()
+                    .transform(net.minecraft.world.item.ItemDisplayContext.FIXED).scale(0.5F).end()
+                    .transform(net.minecraft.world.item.ItemDisplayContext.THIRD_PERSON_RIGHT_HAND)
+                    .rotation(75, 45, 0).translation(0, 2.5F, 0).scale(0.375F).end()
+                    .transform(net.minecraft.world.item.ItemDisplayContext.FIRST_PERSON_RIGHT_HAND)
+                    .rotation(0, 45, 0).scale(0.4F).end()
+                    .end();
+        }
         withExistingParent("autocaster", mcLoc("item/generated"))
                 .texture("layer0", modLoc("item/legacy/autocaster"));
 

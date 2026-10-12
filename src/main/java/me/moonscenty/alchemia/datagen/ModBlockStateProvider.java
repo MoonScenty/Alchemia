@@ -446,6 +446,10 @@ public class ModBlockStateProvider extends BlockStateProvider {
     /** Drawn by BellowsRenderer; the block itself only has to say what it breaks into. */
     private void bellows() {
         drawnElsewhere(ModBlocks.BELLOWS, "block/greatwood_planks");
+        // the original's two essentia devices threw greatwood about when broken, having no model of their own
+        drawnElsewhere(ModBlocks.CENTRIFUGE, "block/greatwood_planks");
+        getVariantBuilder(ModBlocks.CRYSTALLIZER.get()).partialState().setModels(new ConfiguredModel(
+                models().getBuilder("crystallizer").texture("particle", modLoc("block/greatwood_planks"))));
     }
 
     /** The original's own model file again, with the other skin on it. */

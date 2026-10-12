@@ -1,0 +1,38 @@
+{
+  "type": "alchemia:arcane_shaped",
+  "key": {
+    "C": {
+      "item": "alchemia:brass_block"
+    },
+    "D": {
+      "item": "alchemia:brass_gear"
+    },
+    "I": {
+      "tag": "c:ingots/iron"
+    },
+    "Q": {
+      "item": "alchemia:balanced_shard"
+    },
+    "T": {
+      "item": "alchemia:tube"
+    },
+    "W": {
+      "tag": "minecraft:planks"
+    }
+  },
+  "pattern": [
+    "IDI",
+    "QCQ",
+    "WTW"
+  ],
+  "research": "alchemia:crystallizer",
+  "result": {
+    "count": 1,
+    "id": "alchemia:crystallizer"
+  },
+  "vis": {
+    "alchemia:aqua": 100,
+    "alchemia:ordo": 100,
+    "alchemia:terra": 250
+  }
+}

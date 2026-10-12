@@ -39,6 +39,19 @@ public class ModBlockEntities {
                             ModBlocks.FOCAL_MANIPULATOR.get())
                     .build(null));
 
+    /** The centrifuge spinning, and the crystallizer at work. */
+    public static final DeferredHolder<BlockEntityType<?>,
+            BlockEntityType<me.moonscenty.alchemia.block.entity.CentrifugeBlockEntity>> CENTRIFUGE =
+            BLOCK_ENTITIES.register("centrifuge", () -> BlockEntityType.Builder
+                    .of(me.moonscenty.alchemia.block.entity.CentrifugeBlockEntity::new, ModBlocks.CENTRIFUGE.get())
+                    .build(null));
+    public static final DeferredHolder<BlockEntityType<?>,
+            BlockEntityType<me.moonscenty.alchemia.block.entity.CrystallizerBlockEntity>> CRYSTALLIZER =
+            BLOCK_ENTITIES.register("crystallizer", () -> BlockEntityType.Builder
+                    .of(me.moonscenty.alchemia.block.entity.CrystallizerBlockEntity::new,
+                            ModBlocks.CRYSTALLIZER.get())
+                    .build(null));
+
     /** Bellows pumping, which on the server is a furnace being pushed along. */
     public static final DeferredHolder<BlockEntityType<?>,
             BlockEntityType<me.moonscenty.alchemia.block.entity.BellowsBlockEntity>> BELLOWS =

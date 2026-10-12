@@ -65,6 +65,10 @@ public final class LegacyAssets {
 
     /** The vis relay the original drew as its workbench charger, kept as an OBJ file. */
     public static final String RELAY_MESH = "models/legacy/vis_relay.obj";
+    /** The crystallizer's body, which the original kept as an OBJ. */
+    public static final String CRYSTALLIZER_MESH = "models/legacy/crystallizer.obj";
+    /** The centrifuge, which the original built in code. */
+    public static final String CENTRIFUGE = "centrifuge";
 
     /** The wand: a rod, a cap at either end, and room for a sceptre's crossbar and a focus. */
     public static final String WAND_MESH = "models/legacy/wand.obj";
@@ -121,6 +125,8 @@ public final class LegacyAssets {
                     "thaumcraft/client/renderers/models/block/ModelTubeValve", "()V"))),
             Map.entry(FIREBAT, List.of(new LegacyModelSource(LegacyEdition.FIVE,
                     "thaumcraft/client/renderers/models/entity/ModelFireBat", "()V"))),
+            Map.entry(CENTRIFUGE, List.of(new LegacyModelSource(LegacyEdition.FIVE,
+                    "thaumcraft/client/renderers/models/block/ModelCentrifuge", "()V"))),
             Map.entry(BELLOWS, List.of(new LegacyModelSource(LegacyEdition.FIVE,
                     "thaumcraft/client/renderers/models/block/ModelBellows", "()V"))),
             Map.entry(RESEARCH_TABLE, List.of(new LegacyModelSource(LegacyEdition.FIVE,
@@ -366,6 +372,11 @@ public final class LegacyAssets {
         all.add(LegacyAsset.of(RELAY_MESH).five("models/obj/vis_relay.obj"));
         all.add(LegacyAsset.of("textures/entity/vis_relay.png").five("textures/models/vis_relay.png"));
         all.add(LegacyAsset.of("textures/item/legacy/vis_relay.png").five("textures/models/vis_relay.png"));
+        // the centrifuge's sheet, and the crystallizer's body and sheet; its crystals are the vis relay's above
+        all.add(LegacyAsset.of("textures/entity/centrifuge.png").five("textures/models/centrifuge.png")
+                .forModel(CENTRIFUGE));
+        all.add(LegacyAsset.of(CRYSTALLIZER_MESH).five("models/obj/crystallizer.obj"));
+        all.add(LegacyAsset.of("textures/entity/crystallizer.png").five("textures/models/crystallizer.png"));
         // the wand itself, built on the original's mesh from the rod and cap pictures above
         all.add(LegacyAsset.of(WAND_MESH).five("models/obj/wand.obj"));
 

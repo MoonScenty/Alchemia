@@ -119,6 +119,16 @@ public class ModResearchProvider {
                 List.of("tubes"), false, NodeShape.PLAIN, 3,
                 "tube_filter", "tube_restrict", "tube_oneway", "tube_buffer");
 
+        // the two things a run of pipe can be finished with: one that takes essentia apart, one that sets it hard
+        entry(context, "centrifuge", ModResearch.ALCHEMY, ModBlocks.CENTRIFUGE, 5, 5,
+                AspectList.of(ModAspects.FLUX, 3).add(ModAspects.ENERGY, 3).add(ModAspects.EXCHANGE, 3)
+                        .add(ModAspects.CRAFT, 3),
+                List.of("tube_filter"), false, NodeShape.PLAIN, 2, "centrifuge");
+        entry(context, "crystallizer", ModResearch.ALCHEMY, ModBlocks.CRYSTALLIZER, 5, 6,
+                AspectList.of(ModAspects.WATER, 5).add(ModAspects.CRYSTAL, 5).add(ModAspects.EXCHANGE, 3)
+                        .add(ModAspects.ENERGY, 5),
+                List.of("tube_filter"), false, NodeShape.PLAIN, 1, "crystallizer");
+
         // what a smelter can be made better with: pumps and vents against it, and two better smelters
         entry(context, "improved_distillation", ModResearch.ALCHEMY, ModBlocks.SMELTER_AUX, 4, 7,
                 AspectList.of(ModAspects.FIRE, 5).add(ModAspects.TOOL, 3).add(ModAspects.WATER, 5)

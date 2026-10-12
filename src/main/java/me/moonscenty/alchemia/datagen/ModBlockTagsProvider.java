@@ -101,6 +101,7 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
             tag(BlockTags.SLABS).add(set.slab().get());
         }
 
+        tag(BlockTags.MINEABLE_WITH_AXE).add(ModBlocks.CENTRIFUGE.get(), ModBlocks.CRYSTALLIZER.get());
         tag(BlockTags.MINEABLE_WITH_AXE).add(ModBlocks.BELLOWS.get(), ModBlocks.HUNGRY_CHEST.get(),
                 ModBlocks.LEVITATOR.get(), ModBlocks.ARCANE_EAR.get());
         tag(BlockTags.MINEABLE_WITH_AXE).add(ModBlocks.AURA_TOTEM_PUSH.get(), ModBlocks.AURA_TOTEM_PULL.get(),

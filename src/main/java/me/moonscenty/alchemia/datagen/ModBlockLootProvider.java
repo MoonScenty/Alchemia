@@ -84,6 +84,8 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
         dropSelf(ModBlocks.ARCANE_WORKBENCH.get());
         dropSelf(ModBlocks.FOCAL_MANIPULATOR.get());
         dropSelf(ModBlocks.BELLOWS.get());
+        dropSelf(ModBlocks.CENTRIFUGE.get());
+        dropSelf(ModBlocks.CRYSTALLIZER.get());
         dropSelf(ModBlocks.ARCANE_LAMP.get());
         dropSelf(ModBlocks.GROWTH_LAMP.get());
         dropSelf(ModBlocks.FERTILITY_LAMP.get());

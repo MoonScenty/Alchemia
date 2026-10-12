@@ -74,6 +74,7 @@ public class TubeBlockEntity extends BlockEntity {
             }
             if (level.getBlockEntity(pos.relative(side)) instanceof EssentiaHolder sink
                     && sink.reachableFrom(side.getOpposite())
+                    && sink.takesFrom(side.getOpposite())
                     && draw(level, pos, sink, side)) {
                 return;
             }
@@ -177,7 +178,8 @@ public class TubeBlockEntity extends BlockEntity {
                     }
                     case BLOCK -> {
                         if (level.getBlockEntity(next) instanceof EssentiaHolder holder
-                                && holder.reachableFrom(side.getOpposite())) {
+                                && holder.reachableFrom(side.getOpposite())
+                                && holder.givesTo(side.getOpposite())) {
                             found.add(new Route(holder, only, waits));
                         }
                     }
