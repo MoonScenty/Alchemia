@@ -600,6 +600,12 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         addBlock(ModBlocks.GOLEM_PRESS, pick("Golem Press", "골렘 프레스"));
         addBlock(ModBlocks.GOLEM_PRESS_PART, pick("Golem Press", "골렘 프레스"));
 
+        // the lands
+        add("biome.alchemia.magical_forest", pick("Magical Forest", "마법의 숲"));
+        add("biome.alchemia.eerie", pick("Eerie", "으스스한 땅"));
+        add("biome.alchemia.tainted_land", pick("Tainted Land", "오염된 땅"));
+        addBlock(ModBlocks.AMBIENT_GRASS, pick("Ambient Grass", "은은한 풀"));
+
 
 
         addItem(ModItems.ALCHEMOMETER, pick("Alchemometer", "알케모미터"));

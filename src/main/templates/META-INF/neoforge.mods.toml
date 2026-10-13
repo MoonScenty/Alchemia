@@ -26,3 +26,10 @@ Reimplements the gameplay of Thaumcraft 5 for Minecraft 1.21.1.
     versionRange="${minecraft_version_range}"
     ordering="NONE"
     side="BOTH"
+
+[[dependencies.${mod_id}]]
+    modId="terrablender"
+    type="required"
+    versionRange="[${terrablender_version},)"
+    ordering="AFTER"
+    side="BOTH"

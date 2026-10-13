@@ -152,6 +152,9 @@ public class AlchemiaClientSetup {
         // a golem is the colour of what it is made of
         event.register((stack, tint) -> 0xFF000000
                 | me.moonscenty.alchemia.item.GolemItem.design(stack).material().colour(), ModItems.GOLEM.get());
+        // the glimmering grass, held, is the colour grass is held
+        event.register((stack, tint) -> 0xFF000000 | net.minecraft.world.level.GrassColor.get(0.5, 1.0),
+                ModBlocks.AMBIENT_GRASS.get());
         // a crystal is drawn in grey and painted by the one point it holds
         event.register((stack, tint) -> tint == 0 ? named(stack) : PLAIN, ModItems.CRYSTALLIZED_ESSENCE.get());
         event.register((stack, tint) -> tint == 0 ? named(stack) : PLAIN, ModItems.WISPY_ESSENCE.get());
@@ -225,6 +228,11 @@ public class AlchemiaClientSetup {
                 level != null && pos != null && level.getBlockEntity(pos) instanceof FilterTubeBlockEntity filter
                         ? filter.only().map(aspect -> aspect.value().color()).orElse(0xFFFFFF)
                         : 0xFFFFFF, ModBlocks.TUBE_FILTER.get());
+
+        // the glimmering grass takes the colour of the land it grows in, as grass does
+        event.register((state, level, pos, tint) -> level != null && pos != null
+                ? net.minecraft.client.renderer.BiomeColors.getAverageGrassColor(level, pos)
+                : net.minecraft.world.level.GrassColor.getDefaultColor(), ModBlocks.AMBIENT_GRASS.get());
 
         // a totem glows in the colour of what it moves, and nearly black when it moves nothing
         event.register((state, level, pos, tint) ->

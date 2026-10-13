@@ -1,0 +1,8 @@
+{
+  "feature": "alchemia:vishrooms_by_trees",
+  "placement": [
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

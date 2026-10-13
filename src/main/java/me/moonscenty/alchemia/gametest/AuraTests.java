@@ -123,8 +123,10 @@ public class AuraTests {
     /** Land run down past a tenth of what it holds is worth leaving alone. */
     @GameTest(template = TEMPLATE)
     public static void thinAuraAsksToBeSpared(GameTestHelper helper) {
+        // freshly drawn up, whatever a test next door has done to this chunk's aura already
         LevelChunk chunk = chunkOf(helper);
-        AuraGeneration.ensure(helper.getLevel(), chunk, RandomSource.create(7L));
+        chunk.setData(ModAuraAttachment.AURA, AuraGeneration.drawUp(helper.getLevel(), chunk.getPos(),
+                RandomSource.create(7L)));
         BlockPos here = helper.absolutePos(BlockPos.ZERO);
 
         helper.assertTrue(!AuraHandler.shouldSpare(helper.getLevel(), here, ModAspects.ORDER),

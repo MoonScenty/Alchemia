@@ -459,6 +459,14 @@ public class ModBlockStateProvider extends BlockStateProvider {
             getVariantBuilder(mirror.get()).partialState().setModels(new ConfiguredModel(
                     models().getBuilder(mirror.getId().getPath()).texture("particle", modLoc(frame))));
         }
+        // the glimmering grass looks like any other grass, turned about as grass is
+        ModelFile grass = models().getExistingFile(mcLoc("block/grass_block"));
+        ModelFile snowy = models().getExistingFile(mcLoc("block/grass_block_snow"));
+        getVariantBuilder(ModBlocks.AMBIENT_GRASS.get()).forAllStates(state -> state.getValue(
+                net.minecraft.world.level.block.SnowyDirtBlock.SNOWY)
+                ? ConfiguredModel.builder().modelFile(snowy).build()
+                : ConfiguredModel.allYRotations(grass, 0, false));
+        simpleBlockItem(ModBlocks.AMBIENT_GRASS.get(), grass);
         // the stone table is the original's model; a golem press is drawn by its renderer, all of it
         simpleBlock(ModBlocks.STONE_TABLE.get(), models().getExistingFile(modLoc("block/table_stone")));
         getVariantBuilder(ModBlocks.GOLEM_PRESS.get()).partialState().setModels(new ConfiguredModel(

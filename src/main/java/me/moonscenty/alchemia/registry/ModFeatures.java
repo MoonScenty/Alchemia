@@ -42,4 +42,14 @@ public class ModFeatures {
 
     public static final DeferredHolder<Feature<?>, NodeFeature> AURA_NODE = FEATURES.register("aura_node",
             () -> new NodeFeature(NoneFeatureConfiguration.CODEC));
+
+    /** The magical forest's floor: its glimmering grass, and its vishrooms by the trees. */
+    public static final DeferredHolder<Feature<?>, me.moonscenty.alchemia.worldgen.MagicalForestFloorFeature>
+            AMBIENT_GRASS = FEATURES.register("ambient_grass",
+                    () -> new me.moonscenty.alchemia.worldgen.MagicalForestFloorFeature(NoneFeatureConfiguration.CODEC,
+                            true));
+    public static final DeferredHolder<Feature<?>, me.moonscenty.alchemia.worldgen.MagicalForestFloorFeature>
+            VISHROOMS_BY_TREES = FEATURES.register("vishrooms_by_trees",
+                    () -> new me.moonscenty.alchemia.worldgen.MagicalForestFloorFeature(NoneFeatureConfiguration.CODEC,
+                            false));
 }
