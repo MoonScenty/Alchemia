@@ -169,6 +169,7 @@ public class TaintFibreBlock extends Block implements Tainted {
             die(level, pos, state);
         } else if (TaintSpread.starved(level, pos)) {
             die(level, pos, state);
+            TaintSpread.heal(level, pos, random, 25);
         } else if (state.getValue(GROWTH) != 0 && grow(state, level, pos, random)) {
             return;
         } else {

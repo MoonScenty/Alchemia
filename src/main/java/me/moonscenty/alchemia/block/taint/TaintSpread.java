@@ -3,9 +3,11 @@ package me.moonscenty.alchemia.block.taint;
 import me.moonscenty.alchemia.AlchemiaConfig;
 import me.moonscenty.alchemia.aura.AuraGeneration;
 import me.moonscenty.alchemia.aura.AuraHandler;
+import me.moonscenty.alchemia.aura.BiomePaint;
 import me.moonscenty.alchemia.registry.ModAspects;
 import me.moonscenty.alchemia.registry.ModBlocks;
 import me.moonscenty.alchemia.registry.ModTags;
+import me.moonscenty.alchemia.worldgen.ModBiomes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -46,6 +48,8 @@ public final class TaintSpread {
         if (!AlchemiaConfig.TAINT_SPREADS.get() || AuraHandler.get(level, from, ModAspects.FLUX) <= SPREADS_ABOVE) {
             return;
         }
+        // where the taint is lively the land itself turns
+        spoil(level, from, random.nextInt(10) == 0);
         BlockPos at = from.offset(random.nextInt(3) - 1, random.nextInt(3) - 1, random.nextInt(3) - 1);
         if (at.equals(from)) {
             return;
@@ -94,6 +98,20 @@ public final class TaintSpread {
             AuraHandler.drainAvailable(level, at, ModAspects.FLUX, 1);
         }
         level.setBlock(at, taint, Block.UPDATE_ALL);
+        spoil(level, at, true);
+    }
+
+    /** Makes the land at a place tainted land. */
+    public static void spoil(ServerLevel level, BlockPos at, boolean tell) {
+        BiomePaint.named(level, ModBiomes.TAINTED_LAND).ifPresent(land -> BiomePaint.paint(level, at, land, tell));
+    }
+
+    /**
+     * Gives the land back what it was made as, where the taint dying here leaves it: the original did this whenever
+     * a tainted thing starved, and told those watching about one time in so many.
+     */
+    public static void heal(ServerLevel level, BlockPos at, RandomSource random, int tellOneIn) {
+        BiomePaint.restore(level, at, ModBiomes.TAINTED_LAND, random.nextInt(tellOneIn) == 0);
     }
 
     public static boolean besideSolid(LevelReader level, BlockPos pos) {

@@ -11,6 +11,14 @@ import me.moonscenty.alchemia.block.CrystalType;
 import me.moonscenty.alchemia.registry.ModBlocks;
 import me.moonscenty.alchemia.registry.ModFeatures;
 import me.moonscenty.alchemia.registry.ModTags;
+import net.minecraft.world.level.levelgen.feature.WeightedPlacedFeature;
+import net.minecraft.world.level.levelgen.feature.configurations.RandomFeatureConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.RandomBooleanFeatureConfiguration;
+import net.minecraft.data.worldgen.features.TreeFeatures;
+import net.minecraft.data.worldgen.features.MiscOverworldFeatures;
+import net.minecraft.data.worldgen.placement.VegetationPlacements;
+import net.minecraft.util.valueproviders.UniformInt;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
@@ -68,6 +76,18 @@ public class ModWorldgen {
     public static final ResourceKey<PlacedFeature> ORE_CINNABAR_PLACED = placed("ore_cinnabar");
     public static final Map<CrystalType, ResourceKey<PlacedFeature>> CRYSTAL_PATCHES_PLACED = new EnumMap<>(CrystalType.class);
 
+    // the magical forest: its mix of trees, its boulders and huge mushrooms, its vishrooms and glimmering grass
+    public static final ResourceKey<ConfiguredFeature<?, ?>> MAGICAL_FOREST_TREES = configured("magical_forest_trees");
+    public static final ResourceKey<PlacedFeature> MAGICAL_FOREST_TREES_PLACED = placed("magical_forest_trees");
+    public static final ResourceKey<PlacedFeature> MAGICAL_FOREST_ROCKS_PLACED = placed("magical_forest_rocks");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> MAGICAL_FOREST_MUSHROOMS =
+            configured("magical_forest_mushrooms");
+    public static final ResourceKey<PlacedFeature> MAGICAL_FOREST_MUSHROOMS_PLACED = placed("magical_forest_mushrooms");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> VISHROOMS_BY_TREES = configured("vishrooms_by_trees");
+    public static final ResourceKey<PlacedFeature> VISHROOMS_BY_TREES_PLACED = placed("vishrooms_by_trees");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> AMBIENT_GRASS = configured("ambient_grass");
+    public static final ResourceKey<PlacedFeature> AMBIENT_GRASS_PLACED = placed("ambient_grass");
+
     public static final ResourceKey<BiomeModifier> ADD_ORES = biomeModifier("add_ores");
     public static final ResourceKey<BiomeModifier> ADD_CRYSTALS = biomeModifier("add_crystals");
     public static final ResourceKey<BiomeModifier> ADD_NODES = biomeModifier("add_nodes");
@@ -77,7 +97,6 @@ public class ModWorldgen {
     public static final ResourceKey<BiomeModifier> SPAWN_FIREBATS = biomeModifier("spawn_firebats");
     public static final ResourceKey<BiomeModifier> SPAWN_WISPS = biomeModifier("spawn_wisps");
     public static final ResourceKey<BiomeModifier> SPAWN_PECHS = biomeModifier("spawn_pechs");
-    public static final ResourceKey<BiomeModifier> SPAWN_TAINTACLES = biomeModifier("spawn_taintacles");
 
     static {
         for (CrystalType type : CrystalType.values()) {
@@ -127,6 +146,34 @@ public class ModWorldgen {
 
         context.register(AURA_NODE, new ConfiguredFeature<>(ModFeatures.AURA_NODE.get(), NoneFeatureConfiguration.INSTANCE));
 
+        // the magical forest's trees: mostly great oaks, one in ten of the rest a greatwood, one in fourteen of all a
+        // silverwood, each only where its sapling could stand
+        HolderGetter<ConfiguredFeature<?, ?>> features = context.lookup(Registries.CONFIGURED_FEATURE);
+        context.register(MAGICAL_FOREST_TREES, new ConfiguredFeature<>(Feature.RANDOM_SELECTOR,
+                new RandomFeatureConfiguration(List.of(
+                        new WeightedPlacedFeature(PlacementUtils.inlinePlaced(
+                                features.getOrThrow(SILVERWOOD_TREE),
+                                PlacementUtils.filteredByBlockSurvival(ModBlocks.SILVERWOOD.sapling().get())),
+                                1.0F / 14.0F),
+                        new WeightedPlacedFeature(PlacementUtils.inlinePlaced(
+                                features.getOrThrow(GREATWOOD_TREE),
+                                PlacementUtils.filteredByBlockSurvival(ModBlocks.GREATWOOD.sapling().get())),
+                                13.0F / 140.0F)),
+                        PlacementUtils.inlinePlaced(
+                                features.getOrThrow(TreeFeatures.FANCY_OAK),
+                                PlacementUtils.filteredByBlockSurvival(Blocks.OAK_SAPLING)))));
+        // huge mushrooms, brown or red
+        context.register(MAGICAL_FOREST_MUSHROOMS, new ConfiguredFeature<>(Feature.RANDOM_BOOLEAN_SELECTOR,
+                new RandomBooleanFeatureConfiguration(
+                        PlacementUtils.inlinePlaced(features.getOrThrow(
+                                TreeFeatures.HUGE_BROWN_MUSHROOM)),
+                        PlacementUtils.inlinePlaced(features.getOrThrow(
+                                TreeFeatures.HUGE_RED_MUSHROOM)))));
+        context.register(VISHROOMS_BY_TREES, new ConfiguredFeature<>(ModFeatures.VISHROOMS_BY_TREES.get(),
+                NoneFeatureConfiguration.INSTANCE));
+        context.register(AMBIENT_GRASS, new ConfiguredFeature<>(ModFeatures.AMBIENT_GRASS.get(),
+                NoneFeatureConfiguration.INSTANCE));
+
         CRYSTAL_PATCHES.forEach((type, key) -> context.register(key, new ConfiguredFeature<>(ModFeatures.CRYSTAL_PATCH.get(),
                 new BlockStateConfiguration(ModBlocks.CRYSTALS.get(type).get().defaultBlockState()))));
     }
@@ -151,6 +198,24 @@ public class ModWorldgen {
         // one chunk in thirty or so gets a node, which is about what the original worked out to
         context.register(AURA_NODE_PLACED, new PlacedFeature(configured.getOrThrow(AURA_NODE),
                 List.of(RarityFilter.onAverageOnceEvery(30), InSquarePlacement.spread(), BiomeFilter.biome())));
+
+        // two trees a chunk and now and then a third, as the original's forest had
+        context.register(MAGICAL_FOREST_TREES_PLACED, new PlacedFeature(configured.getOrThrow(MAGICAL_FOREST_TREES),
+                VegetationPlacements.treePlacement(
+                        PlacementUtils.countExtra(2, 0.1F, 1))));
+        // up to two mossy boulders a chunk
+        context.register(MAGICAL_FOREST_ROCKS_PLACED, new PlacedFeature(configured.getOrThrow(
+                MiscOverworldFeatures.FOREST_ROCK),
+                List.of(CountPlacement.of(UniformInt.of(0, 2)),
+                        InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome())));
+        // a huge mushroom in about two chunks of five
+        context.register(MAGICAL_FOREST_MUSHROOMS_PLACED, new PlacedFeature(configured.getOrThrow(
+                MAGICAL_FOREST_MUSHROOMS), List.of(RarityFilter.onAverageOnceEvery(3), InSquarePlacement.spread(),
+                        PlacementUtils.HEIGHTMAP, BiomeFilter.biome())));
+        context.register(VISHROOMS_BY_TREES_PLACED, new PlacedFeature(configured.getOrThrow(VISHROOMS_BY_TREES),
+                List.of(BiomeFilter.biome())));
+        context.register(AMBIENT_GRASS_PLACED, new PlacedFeature(configured.getOrThrow(AMBIENT_GRASS),
+                List.of(BiomeFilter.biome())));
 
         CRYSTAL_PATCHES_PLACED.forEach((type, key) -> context.register(key, new PlacedFeature(configured.getOrThrow(CRYSTAL_PATCHES.get(type)),
                 ore(2, HeightRangePlacement.uniform(VerticalAnchor.aboveBottom(8), VerticalAnchor.absolute(64))))));
@@ -199,12 +264,7 @@ public class ModWorldgen {
         context.register(SPAWN_PECHS, BiomeModifiers.AddSpawnsBiomeModifier.singleSpawn(
                 biomes.getOrThrow(net.neoforged.neoforge.common.Tags.Biomes.IS_MAGICAL),
                 new net.minecraft.world.level.biome.MobSpawnSettings.SpawnerData(
-                        me.moonscenty.alchemia.registry.ModEntities.PECH.get(), 10, 1, 1)));
-        // and taintacles, rarely, wherever the land is tainted; the original kept them to its tainted biome
-        context.register(SPAWN_TAINTACLES, BiomeModifiers.AddSpawnsBiomeModifier.singleSpawn(
-                biomes.getOrThrow(BiomeTags.IS_OVERWORLD),
-                new net.minecraft.world.level.biome.MobSpawnSettings.SpawnerData(
-                        me.moonscenty.alchemia.registry.ModEntities.TAINTACLE.get(), 1, 1, 1)));
+                        me.moonscenty.alchemia.registry.ModEntities.PECH.get(), 10, 1, 2)));
     }
 
     private static List<PlacementModifier> ore(int count, PlacementModifier height) {

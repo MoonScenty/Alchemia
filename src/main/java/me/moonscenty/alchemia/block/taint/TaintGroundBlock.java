@@ -71,6 +71,7 @@ public class TaintGroundBlock extends Block implements Tainted {
     protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         if (TaintSpread.starved(level, pos) && random.nextInt(DIE_CHANCE) == 0) {
             die(level, pos, state);
+            TaintSpread.heal(level, pos, random, 25);
             return;
         }
         if (kind != Kind.ROCK) {

@@ -4,6 +4,7 @@ import java.util.concurrent.CompletableFuture;
 
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.registry.ModTags;
+import me.moonscenty.alchemia.worldgen.ModBiomes;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.BiomeTagsProvider;
@@ -42,8 +43,18 @@ public class ModBiomeTagsProvider extends BiomeTagsProvider {
                 .add(Biomes.PLAINS, Biomes.SUNFLOWER_PLAINS, Biomes.SWAMP, Biomes.DESERT, Biomes.SNOWY_PLAINS,
                         Biomes.ICE_SPIKES);
 
-        // stands in until there is somewhere properly eerie for a dark node to make
+        // a dark node makes the land round it eerie
         tag(ModTags.Biomes.NODE_DARKENS_INTO)
-                .add(Biomes.DESERT);
+                .add(ModBiomes.EERIE);
+
+        // the original's three lands, as the original sorted them: all magical; the forest a forest, the eerie
+        // land spooky, the tainted land waste; all of the overworld, where ores, crystals and nodes are found
+        tag(Tags.Biomes.IS_MAGICAL).add(ModBiomes.MAGICAL_FOREST,
+                ModBiomes.EERIE, ModBiomes.TAINTED_LAND);
+        tag(Tags.Biomes.IS_FOREST).add(ModBiomes.MAGICAL_FOREST);
+        tag(Tags.Biomes.IS_SPOOKY).add(ModBiomes.EERIE);
+        tag(Tags.Biomes.IS_WASTELAND).add(ModBiomes.TAINTED_LAND);
+        tag(BiomeTags.IS_OVERWORLD).add(ModBiomes.MAGICAL_FOREST,
+                ModBiomes.EERIE, ModBiomes.TAINTED_LAND);
     }
 }

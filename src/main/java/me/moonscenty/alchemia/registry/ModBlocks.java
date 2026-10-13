@@ -446,6 +446,10 @@ public class ModBlocks {
             () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).mapColor(MapColor.GOLD)));
 
     // Silverwood glows faintly
+    /** Grass in the magical forest that glimmers at night. */
+    public static final DeferredBlock<me.moonscenty.alchemia.block.AmbientGrassBlock> AMBIENT_GRASS =
+            register("ambient_grass", () -> new me.moonscenty.alchemia.block.AmbientGrassBlock(
+                    BlockBehaviour.Properties.ofFullCopy(Blocks.GRASS_BLOCK)));
     /** A stone table: a slab of stone on four legs, and the anvil's bench in a golem press. */
     public static final DeferredBlock<Block> STONE_TABLE = register("stone_table",
             () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).noOcclusion()));

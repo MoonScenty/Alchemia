@@ -1,0 +1,8 @@
+{
+  "feature": "alchemia:ambient_grass",
+  "placement": [
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

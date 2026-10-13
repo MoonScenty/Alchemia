@@ -29,6 +29,7 @@ public class TaintLogBlock extends RotatedPillarBlock implements Tainted {
     protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         if (TaintSpread.starved(level, pos) && random.nextInt(DIE_CHANCE) == 0) {
             die(level, pos, state);
+            TaintSpread.heal(level, pos, random, 50);
         } else {
             TaintSpread.spread(level, pos, random);
         }

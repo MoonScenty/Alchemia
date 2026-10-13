@@ -20,6 +20,11 @@ public class AlchemiaConfig {
                     "Even when off there is a slight chance of them in the Nether, the End and spooky places.")
             .define("championMobs", true);
 
+    public static final ModConfigSpec.IntValue MAGICAL_FOREST_WEIGHT = COMMON_BUILDER
+            .comment("How large a share of the overworld has magical forest where forest would be, against the",
+                    "game's own share of ten. Nought leaves it out. Takes effect for land not yet made.")
+            .defineInRange("magicalForestWeight", 2, 0, 50);
+
     static final ModConfigSpec COMMON_SPEC = COMMON_BUILDER.build();
 
     private static final ModConfigSpec.Builder CLIENT_BUILDER = new ModConfigSpec.Builder();

@@ -53,6 +53,12 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
                 .add(ModBlocks.ARCANE_PEDESTAL.get(), ModBlocks.INFUSION_MATRIX.get(),
                         ModBlocks.ARCANE_PILLAR.get());
 
+        // the glimmering grass is grass in every way that matters to what grows and grazes on it
+        tag(BlockTags.MINEABLE_WITH_SHOVEL).add(ModBlocks.AMBIENT_GRASS.get());
+        tag(BlockTags.DIRT).add(ModBlocks.AMBIENT_GRASS.get());
+        tag(BlockTags.ANIMALS_SPAWNABLE_ON).add(ModBlocks.AMBIENT_GRASS.get());
+        tag(BlockTags.VALID_SPAWN).add(ModBlocks.AMBIENT_GRASS.get());
+
         // what counts as a fire under a crucible. Anything with a lit state is only counted while it is lit,
         // which the block asks about itself, since a tag cannot say it.
         // skulls and candles: what the original counted, and what anybody decorating an altar reaches for anyway

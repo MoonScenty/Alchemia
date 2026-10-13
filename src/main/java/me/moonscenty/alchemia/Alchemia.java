@@ -72,6 +72,10 @@ public class Alchemia {
 
     private void commonSetup(FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
+            int forest = AlchemiaConfig.MAGICAL_FOREST_WEIGHT.get();
+            if (forest > 0) {
+                terrablender.api.Regions.register(new me.moonscenty.alchemia.worldgen.MagicalForestRegion(forest));
+            }
             FireBlock fire = (FireBlock) Blocks.FIRE;
             for (WoodSet wood : ModBlocks.WOODS) {
                 fire.setFlammable(wood.log().get(), 5, 5);

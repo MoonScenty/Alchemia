@@ -13,6 +13,7 @@ public class ModDatapackEntries {
     public static final RegistrySetBuilder BUILDER = new RegistrySetBuilder()
             .add(Registries.CONFIGURED_FEATURE, ModWorldgen::bootstrapConfigured)
             .add(Registries.PLACED_FEATURE, ModWorldgen::bootstrapPlaced)
+            .add(Registries.BIOME, me.moonscenty.alchemia.worldgen.ModBiomes::bootstrap)
             .add(NeoForgeRegistries.Keys.BIOME_MODIFIERS, ModWorldgen::bootstrapBiomeModifiers)
             .add(ModResearch.CATEGORY_KEY, ModResearchProvider::categories)
             .add(ModResearch.ENTRY_KEY, ModResearchProvider::entries);

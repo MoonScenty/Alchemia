@@ -38,14 +38,18 @@ public class DataGenerators {
         ModBlockTagsProvider blockTags = generator.addProvider(event.includeServer(), new ModBlockTagsProvider(output, lookupProvider, existingFileHelper));
         generator.addProvider(event.includeServer(), new ModItemTagsProvider(output, lookupProvider, blockTags.contentsGetter(), existingFileHelper));
         generator.addProvider(event.includeServer(), new ModRecipeProvider(output, lookupProvider));
-        generator.addProvider(event.includeServer(), new ModBiomeTagsProvider(output, lookupProvider, existingFileHelper));
+        // the mod's own lands are written by the entries provider, so the biome tags look them up through it
+        DatapackBuiltinEntriesProvider entries = generator.addProvider(event.includeServer(),
+                new DatapackBuiltinEntriesProvider(output, lookupProvider, ModDatapackEntries.BUILDER,
+                        Set.of(Alchemia.MODID)));
+        generator.addProvider(event.includeServer(), new ModBiomeTagsProvider(output, entries.getRegistryProvider(),
+                existingFileHelper));
         generator.addProvider(event.includeServer(), new ModDataMapProvider(output, lookupProvider));
         generator.addProvider(event.includeServer(), new LootTableProvider(output, Set.of(),
                 List.of(new LootTableProvider.SubProviderEntry(ModBlockLootProvider::new, LootContextParamSets.BLOCK),
                         new LootTableProvider.SubProviderEntry(ModEntityLootProvider::new, LootContextParamSets.ENTITY)),
                 lookupProvider));
         generator.addProvider(event.includeServer(), new ModEntityTypeTagsProvider(output, lookupProvider, existingFileHelper));
-        generator.addProvider(event.includeServer(), new DatapackBuiltinEntriesProvider(output, lookupProvider, ModDatapackEntries.BUILDER, Set.of(Alchemia.MODID)));
     }
 
     /**
