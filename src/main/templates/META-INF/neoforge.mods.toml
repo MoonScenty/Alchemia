@@ -9,8 +9,9 @@ displayName="${mod_name}"
 authors="MoonScenty"
 credits="Aspect icons by Lorc (game-icons.net, CC BY 3.0)"
 description='''
-A magic mod about aspects, essentia and arcane research.
-Reimplements the gameplay of Thaumcraft 5 for Minecraft 1.21.1.
+An addon for Thaumcraft that gets it running on Minecraft 1.21.1.
+Needs the player's own Thaumcraft 4 (1.7.10) and Thaumcraft 5 (1.8.9) jars in the game folder's legacy/ folder:
+the gameplay follows Thaumcraft 5.2.4, and the pictures, models and sounds are read from the two jars.
 '''
 
 [[dependencies.${mod_id}]]
