@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "alchemia:item/banner_stand",
+    "layer1": "alchemia:item/banner_cultist"
+  }
+}

@@ -50,6 +50,8 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
                         ModBlocks.TUBE.get(), ModBlocks.JAR.get())
                 .add(ModBlocks.TUBE_VALVE.get(), ModBlocks.TUBE_ONEWAY.get(), ModBlocks.TUBE_RESTRICT.get(),
                         ModBlocks.TUBE_FILTER.get(), ModBlocks.TUBE_BUFFER.get())
+                .add(ModBlocks.ELDRITCH_ALTAR.get(), ModBlocks.ELDRITCH_CAP.get(), ModBlocks.ELDRITCH_OBELISK.get(),
+                        ModBlocks.ELDRITCH_OBELISK_BODY.get())
                 .add(ModBlocks.ANCIENT_PEDESTAL.get(), ModBlocks.ELDRITCH_PEDESTAL.get(), ModBlocks.ANCIENT_ROCK.get(),
                         ModBlocks.ANCIENT_TILE.get(), ModBlocks.GLYPHED_STONE.get(), ModBlocks.CRUSTED_STONE.get(),
                         ModBlocks.GLOWING_CRUSTED_STONE.get(), ModBlocks.POROUS_STONE.get())
@@ -105,6 +107,10 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         tag(BlockTags.BEACON_BASE_BLOCKS).add(ModBlocks.AMBER_BLOCK.get(), ModBlocks.AMBER_BRICKS.get());
         // Amber gives way to bare hands, but a pickaxe is still the quicker route
         tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.AMBER_BLOCK.get(), ModBlocks.AMBER_BRICKS.get());
+
+        tag(ModTags.Blocks.ELDRITCH_STONEWORK).add(ModBlocks.ELDRITCH_ALTAR.get(), ModBlocks.ELDRITCH_CAP.get(),
+                ModBlocks.ELDRITCH_OBELISK.get(), ModBlocks.ELDRITCH_OBELISK_BODY.get(), ModBlocks.ELDRITCH_PORTAL.get());
+        tag(BlockTags.MINEABLE_WITH_AXE).add(ModBlocks.BANNER.get());
 
         for (StoneSet set : ModBlocks.STONE_SETS) {
             tag(BlockTags.MINEABLE_WITH_PICKAXE).add(set.block().get(), set.stairs().get(), set.slab().get());

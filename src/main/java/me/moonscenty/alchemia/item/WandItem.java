@@ -390,6 +390,12 @@ public class WandItem extends Item implements VisHolder {
 
         // nether brick, obsidian, lava and a set of bars, made into an infernal furnace if laid out right
         BlockState clicked = level.getBlockState(pos);
+        // an eldritch altar with its four eyes in it: the way above it opens
+        if (context.getPlayer() != null && clicked.is(ModBlocks.ELDRITCH_ALTAR.get())
+                && me.moonscenty.alchemia.block.eldritch.Oculus.open(level, pos, context.getPlayer(),
+                        context.getItemInHand())) {
+            return InteractionResult.sidedSuccess(level.isClientSide);
+        }
         if (context.getPlayer() != null
                 && (clicked.is(Blocks.OBSIDIAN) || clicked.is(Blocks.NETHER_BRICKS) || clicked.is(Blocks.IRON_BARS))
                 && me.moonscenty.alchemia.block.InfernalFurnaceBlock.form(level, pos, context.getPlayer(),

@@ -1,0 +1,14 @@
+{
+  "category": "alchemia:eldritch",
+  "column": -1,
+  "hidden": true,
+  "icon": "minecraft:ender_eye",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.eldritch_major.page"
+    }
+  ],
+  "row": 0,
+  "shape": "special"
+}

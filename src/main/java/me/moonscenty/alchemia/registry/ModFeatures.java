@@ -40,6 +40,14 @@ public class ModFeatures {
     public static final DeferredHolder<Feature<?>, CrystalPatchFeature> CRYSTAL_PATCH = FEATURES.register("crystal_patch",
             () -> new CrystalPatchFeature(BlockStateConfiguration.CODEC));
 
+    /** An eldritch ring, and a lesser crimson portal over bare ground. */
+    public static final DeferredHolder<Feature<?>, me.moonscenty.alchemia.worldgen.EldritchRingFeature> ELDRITCH_RING =
+            FEATURES.register("eldritch_ring",
+                    () -> new me.moonscenty.alchemia.worldgen.EldritchRingFeature(NoneFeatureConfiguration.CODEC));
+    public static final DeferredHolder<Feature<?>, me.moonscenty.alchemia.worldgen.CultistPortalFeature> CULTIST_PORTAL =
+            FEATURES.register("cultist_portal",
+                    () -> new me.moonscenty.alchemia.worldgen.CultistPortalFeature(NoneFeatureConfiguration.CODEC));
+
     public static final DeferredHolder<Feature<?>, NodeFeature> AURA_NODE = FEATURES.register("aura_node",
             () -> new NodeFeature(NoneFeatureConfiguration.CODEC));
 

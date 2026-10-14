@@ -105,6 +105,10 @@ public class ModItemModelProvider extends ItemModelProvider {
         handheldItem(ModItems.CRIMSON_BLADE.get());
         basicItem(ModItems.CRIMSON_RITES.get());
         basicItem(ModItems.ELDRITCH_EYE.get());
+        withExistingParent("banner", mcLoc("item/generated")).texture("layer0", modLoc("item/banner_stand"))
+                .texture("layer1", modLoc("item/banner")).texture("layer2", modLoc("item/banner_symbol"));
+        withExistingParent("crimson_banner", mcLoc("item/generated")).texture("layer0", modLoc("item/banner_stand"))
+                .texture("layer1", modLoc("item/banner_cultist"));
         for (var egg : java.util.List.of(ModItems.CULTIST_KNIGHT_SPAWN_EGG, ModItems.CULTIST_CLERIC_SPAWN_EGG,
                 ModItems.CULTIST_PORTAL_SPAWN_EGG, ModItems.ELDRITCH_CRAB_SPAWN_EGG, ModItems.INHABITED_ZOMBIE_SPAWN_EGG,
                 ModItems.ELDRITCH_GUARDIAN_SPAWN_EGG, ModItems.MIND_SPIDER_SPAWN_EGG)) {

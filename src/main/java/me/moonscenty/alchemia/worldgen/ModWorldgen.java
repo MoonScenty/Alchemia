@@ -71,6 +71,11 @@ public class ModWorldgen {
     public static final ResourceKey<PlacedFeature> GREATWOOD_TREE_PLACED = placed("greatwood_tree");
     public static final ResourceKey<PlacedFeature> SILVERWOOD_TREE_PLACED = placed("silverwood_tree");
     public static final ResourceKey<ConfiguredFeature<?, ?>> AURA_NODE = configured("aura_node");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> ELDRITCH_RING = configured("eldritch_ring");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> CULTIST_PORTAL = configured("cultist_portal");
+    public static final ResourceKey<PlacedFeature> ELDRITCH_RING_PLACED = placed("eldritch_ring");
+    public static final ResourceKey<PlacedFeature> CULTIST_PORTAL_PLACED = placed("cultist_portal");
+    public static final ResourceKey<BiomeModifier> ADD_ELDRITCH = biomeModifier("add_eldritch");
     public static final ResourceKey<PlacedFeature> AURA_NODE_PLACED = placed("aura_node");
     public static final ResourceKey<PlacedFeature> ORE_AMBER_PLACED = placed("ore_amber");
     public static final ResourceKey<PlacedFeature> ORE_CINNABAR_PLACED = placed("ore_cinnabar");
@@ -145,6 +150,10 @@ public class ModWorldgen {
                         new SimpleBlockConfiguration(BlockStateProvider.simple(ModBlocks.CINDERPEARL.get()))))));
 
         context.register(AURA_NODE, new ConfiguredFeature<>(ModFeatures.AURA_NODE.get(), NoneFeatureConfiguration.INSTANCE));
+        context.register(ELDRITCH_RING, new ConfiguredFeature<>(ModFeatures.ELDRITCH_RING.get(),
+                NoneFeatureConfiguration.INSTANCE));
+        context.register(CULTIST_PORTAL, new ConfiguredFeature<>(ModFeatures.CULTIST_PORTAL.get(),
+                NoneFeatureConfiguration.INSTANCE));
 
         // the magical forest's trees: mostly great oaks, one in ten of the rest a greatwood, one in fourteen of all a
         // silverwood, each only where its sapling could stand
@@ -195,6 +204,18 @@ public class ModWorldgen {
         context.register(SILVERWOOD_TREE_PLACED, new PlacedFeature(configured.getOrThrow(SILVERWOOD_TREE),
                 tree(40, ModBlocks.SILVERWOOD.sapling().get())));
 
+        // a ring in about one chunk in sixty-six, a portal in one in five hundred: the original's odds
+        context.register(ELDRITCH_RING_PLACED, new PlacedFeature(configured.getOrThrow(ELDRITCH_RING),
+                List.of(RarityFilter.onAverageOnceEvery(66), InSquarePlacement.spread(),
+                        net.minecraft.world.level.levelgen.placement.HeightmapPlacement.onHeightmap(
+                                net.minecraft.world.level.levelgen.Heightmap.Types.WORLD_SURFACE_WG),
+                        BiomeFilter.biome())));
+        context.register(CULTIST_PORTAL_PLACED, new PlacedFeature(configured.getOrThrow(CULTIST_PORTAL),
+                List.of(RarityFilter.onAverageOnceEvery(500), InSquarePlacement.spread(),
+                        net.minecraft.world.level.levelgen.placement.HeightmapPlacement.onHeightmap(
+                                net.minecraft.world.level.levelgen.Heightmap.Types.WORLD_SURFACE_WG),
+                        BiomeFilter.biome())));
+
         // one chunk in thirty or so gets a node, which is about what the original worked out to
         context.register(AURA_NODE_PLACED, new PlacedFeature(configured.getOrThrow(AURA_NODE),
                 List.of(RarityFilter.onAverageOnceEvery(30), InSquarePlacement.spread(), BiomeFilter.biome())));
@@ -237,6 +258,10 @@ public class ModWorldgen {
 
         context.register(ADD_CINDERPEARL, new BiomeModifiers.AddFeaturesBiomeModifier(biomes.getOrThrow(ModTags.Biomes.HAS_CINDERPEARL),
                 HolderSet.direct(placed.getOrThrow(CINDERPEARL_PATCH_PLACED)), GenerationStep.Decoration.VEGETAL_DECORATION));
+
+        context.register(ADD_ELDRITCH, new BiomeModifiers.AddFeaturesBiomeModifier(overworld,
+                HolderSet.direct(placed.getOrThrow(ELDRITCH_RING_PLACED), placed.getOrThrow(CULTIST_PORTAL_PLACED)),
+                GenerationStep.Decoration.SURFACE_STRUCTURES));
 
         context.register(ADD_NODES, new BiomeModifiers.AddFeaturesBiomeModifier(overworld,
                 HolderSet.direct(placed.getOrThrow(AURA_NODE_PLACED)), GenerationStep.Decoration.TOP_LAYER_MODIFICATION));

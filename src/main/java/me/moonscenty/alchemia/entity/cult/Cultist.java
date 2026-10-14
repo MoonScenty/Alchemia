@@ -194,7 +194,11 @@ public abstract class Cultist extends Monster {
             AABB reach = new AABB(mob.blockPosition()).inflate(CALLS_ACROSS, CALLS_UP, CALLS_ACROSS);
             for (Cultist other : mob.level().getEntitiesOfClass(Cultist.class, reach)) {
                 if (other != mob && other.getTarget() == null && !other.isAlliedTo(attacker)) {
-                    other.setTarget(attacker);
+                    if (other instanceof CultistCleric cleric && cleric.isRitualist()) {
+                        cleric.calledOn(attacker);
+                    } else {
+                        other.setTarget(attacker);
+                    }
                 }
             }
             super.start();

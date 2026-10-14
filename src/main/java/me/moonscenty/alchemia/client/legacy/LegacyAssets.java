@@ -45,6 +45,10 @@ public final class LegacyAssets {
     public static final String KNIGHT_ARMOUR_LOWER = "knight_armour_lower";
     /** The eldritch crab, which the original built in code. */
     public static final String ELDRITCH_CRAB = "eldritch_crab";
+    /** The banner, which the original built in code. */
+    public static final String BANNER = "banner";
+    /** The capstone the eldritch ring and its obelisk wear. */
+    public static final String OBELISK_CAP_MESH = "models/legacy/obelisk_cap.obj";
     /** The eldritch guardian, which the original built in code. */
     public static final String ELDRITCH_GUARDIAN = "eldritch_guardian";
 
@@ -152,6 +156,8 @@ public final class LegacyAssets {
                     "thaumcraft/client/renderers/models/entity/ModelTaintacle", "(I)V", 10))),
             Map.entry(ELDRITCH_GUARDIAN, List.of(new LegacyModelSource(LegacyEdition.FIVE,
                     "thaumcraft/client/renderers/models/entity/ModelEldritchGuardian", "()V"))),
+            Map.entry(BANNER, List.of(new LegacyModelSource(LegacyEdition.FIVE,
+                    "thaumcraft/client/renderers/models/block/ModelBanner", "()V"))),
             Map.entry(ELDRITCH_CRAB, List.of(new LegacyModelSource(LegacyEdition.FIVE,
                     "thaumcraft/client/renderers/models/entity/ModelEldritchCrab", "()V"))),
             Map.entry(KNIGHT_ARMOUR, List.of(new LegacyModelSource(LegacyEdition.FIVE,
@@ -597,6 +603,22 @@ public final class LegacyAssets {
         for (String face : List.of("pedestal_ancient_side", "pedestal_eldritch_side", "ancient_tile",
                 "eldritch_stone_1")) {
             all.add(LegacyAsset.of("textures/block/legacy/" + face + ".png").five("textures/blocks/" + face + ".png"));
+        }
+
+        // the eldritch ring: its capstone mesh, its pictures, the way to the Outer Lands, the cult's thread
+        all.add(LegacyAsset.of(OBELISK_CAP_MESH).five("models/obj/obelisk_cap.obj"));
+        for (String picture : List.of("obelisk_cap", "obelisk_cap_2", "obelisk_side", "obelisk_side_2")) {
+            all.add(LegacyAsset.of("textures/entity/" + picture + ".png").five("textures/models/" + picture + ".png"));
+        }
+        all.add(LegacyAsset.of("textures/entity/eldritch_portal.png").five("textures/misc/eldritch_portal.png"));
+        all.add(LegacyAsset.of("textures/misc/wispy.png").five("textures/misc/wispy.png"));
+        // banners: the cloth on the original's model, and the three layers of the one in the hand
+        all.add(LegacyAsset.of("textures/entity/banner_cultist.png").five("textures/models/banner_cultist.png")
+                .forModel(BANNER));
+        all.add(LegacyAsset.of("textures/entity/banner_blank.png").five("textures/models/banner_blank.png")
+                .forModel(BANNER));
+        for (String layer : List.of("banner_stand", "banner", "banner_symbol", "banner_cultist")) {
+            all.add(item(layer, layer, null));
         }
 
         // the Outer Lands' stone

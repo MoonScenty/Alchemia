@@ -264,6 +264,12 @@ public class ModItems {
     public static final DeferredItem<net.neoforged.neoforge.common.DeferredSpawnEggItem> INHABITED_ZOMBIE_SPAWN_EGG =
             ITEMS.register("inhabited_zombie_spawn_egg", () -> new net.neoforged.neoforge.common.DeferredSpawnEggItem(
                     ModEntities.INHABITED_ZOMBIE, 0x808080, 0x550000, new Item.Properties()));
+    /** A banner of any of sixteen colours, and the Crimson Cult's. */
+    public static final DeferredItem<me.moonscenty.alchemia.block.BannerItem> BANNER = ITEMS.register("banner",
+            () -> new me.moonscenty.alchemia.block.BannerItem(new Item.Properties().stacksTo(16), false));
+    public static final DeferredItem<me.moonscenty.alchemia.block.BannerItem> CRIMSON_BANNER = ITEMS.register(
+            "crimson_banner", () -> new me.moonscenty.alchemia.block.BannerItem(new Item.Properties().stacksTo(16),
+                    true));
     /** A guardian's eye, that does not close. */
     public static final DeferredItem<Item> ELDRITCH_EYE = ITEMS.register("eldritch_eye",
             () -> new Item(new Item.Properties().rarity(net.minecraft.world.item.Rarity.UNCOMMON)));
