@@ -68,6 +68,67 @@ public final class EldritchEffects {
                 .size(1.0F, 0.2F));
     }
 
+    /** A purple bubble rising off liquid death, lower the further it has flowed. */
+    public static void deathBubble(net.minecraft.world.level.Level world, net.minecraft.core.BlockPos pos, int flowed,
+            RandomSource random) {
+        if (!(world instanceof ClientLevel level)) {
+            return;
+        }
+        int red = (int) ((0.3F - random.nextFloat() * 0.1F) * 255);
+        int blue = (int) ((0.4F + random.nextFloat() * 0.1F) * 255);
+        Minecraft.getInstance().particleEngine.add(new me.moonscenty.alchemia.client.particle.BubbleParticle(level,
+                pos.getX() + random.nextFloat(), pos.getY() + 0.1F + 0.225F * (4 - Math.min(flowed, 3)),
+                pos.getZ() + random.nextFloat(), red << 16 | blue, 1, 0.002,
+                me.moonscenty.alchemia.client.particle.BubbleParticle.Kind.BUBBLE));
+    }
+
+    /** A puff out of a crab vent, the way it faces. */
+    public static void vent(net.minecraft.world.level.Level world, net.minecraft.core.BlockPos pos,
+            net.minecraft.core.Direction facing) {
+        if (!(world instanceof ClientLevel level)) {
+            return;
+        }
+        RandomSource random = level.random;
+        float jx = 0.15F - random.nextFloat() * 0.3F;
+        float jy = 0.15F - random.nextFloat() * 0.3F;
+        float jz = 0.15F - random.nextFloat() * 0.3F;
+        float vx = 0.1F - random.nextFloat() * 0.2F;
+        float vy = 0.1F - random.nextFloat() * 0.2F;
+        float vz = 0.1F - random.nextFloat() * 0.2F;
+        Minecraft.getInstance().particleEngine.add(new me.moonscenty.alchemia.client.particle.VentParticle(level,
+                pos.getX() + 0.5 + jx + facing.getStepX() / 2.1F, pos.getY() + 0.5 + jy + facing.getStepY() / 2.1F,
+                pos.getZ() + 0.5 + jz + facing.getStepZ() / 2.1F, facing.getStepX() / 3.0F + vx,
+                facing.getStepY() / 3.0F + vy, facing.getStepZ() / 3.0F + vz, 0x9988AA).scaled(2.0F));
+    }
+
+    /** A faint dark stream from somewhere in a void down to where it pours from, and now and then the wind. */
+    public static void voidDraw(net.minecraft.world.level.Level world, net.minecraft.core.BlockPos from,
+            net.minecraft.core.BlockPos to) {
+        if (!(world instanceof ClientLevel level)) {
+            return;
+        }
+        RandomSource random = level.random;
+        double x = from.getX() + random.nextFloat();
+        double y = from.getY() + random.nextFloat();
+        double z = from.getZ() + random.nextFloat();
+        double tx = to.getX() + 0.5;
+        double ty = to.getY() + 0.5;
+        double tz = to.getZ() + 0.5;
+        int lasts = 20 + (int) Math.sqrt(from.distSqr(to)) * 4;
+        Minecraft.getInstance().particleEngine.add(new GenericParticle(level, x, y, z, (tx - x) / lasts,
+                (ty - y) / lasts, (tz - z) / lasts, LegacySheet.COVER, 16)
+                .lasts(lasts)
+                .colour(0.0F, 0.0F, 0.0F)
+                .opacity(0.4F, 0.4F)
+                .cells(48, 14, 1)
+                .loops()
+                .size(3.0F, 3.0F));
+        if (random.nextInt(33) == 0) {
+            level.playLocalSound(from, me.moonscenty.alchemia.registry.ModSounds.WIND.get(),
+                    net.minecraft.sounds.SoundSource.AMBIENT, 0.33F, 1.0F, false);
+        }
+    }
+
     /** Thirty dark wisps thrown out from where an orb burst, shrinking as they go. */
     public static void burst(EldritchOrb orb) {
         if (!(orb.level() instanceof ClientLevel level)) {

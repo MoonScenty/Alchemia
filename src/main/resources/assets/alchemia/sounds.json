@@ -74,6 +74,39 @@
       "alchemia:legacy/coins"
     ]
   },
+  "jacobs": {
+    "subtitle": "subtitles.alchemia.jacobs",
+    "sounds": [
+      "alchemia:legacy/jacobs"
+    ]
+  },
+  "wind": {
+    "subtitle": "subtitles.alchemia.wind",
+    "sounds": [
+      "alchemia:legacy/wind1",
+      "alchemia:legacy/wind2"
+    ]
+  },
+  "pump": {
+    "subtitle": "subtitles.alchemia.pump",
+    "sounds": [
+      "alchemia:legacy/pump1",
+      "alchemia:legacy/pump2",
+      "alchemia:legacy/pump3"
+    ]
+  },
+  "runicshieldcharge": {
+    "subtitle": "subtitles.alchemia.runicshieldcharge",
+    "sounds": [
+      "alchemia:legacy/runicshieldcharge"
+    ]
+  },
+  "evilportal": {
+    "subtitle": "subtitles.alchemia.evilportal",
+    "sounds": [
+      "alchemia:legacy/evilportal"
+    ]
+  },
   "urnbreak": {
     "subtitle": "subtitles.alchemia.urnbreak",
     "sounds": [

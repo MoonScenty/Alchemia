@@ -282,6 +282,14 @@ public class ModItems {
     public static final DeferredItem<me.moonscenty.alchemia.item.LootBagItem> LOOT_BAG_RARE = ITEMS.register(
             "loot_bag_rare", () -> new me.moonscenty.alchemia.item.LootBagItem(
                     new Item.Properties().rarity(net.minecraft.world.item.Rarity.RARE), 2));
+    /** The key to a great hall of the Outer Lands. */
+    public static final DeferredItem<me.moonscenty.alchemia.item.RunedTabletItem> RUNED_TABLET = ITEMS.register(
+            "runed_tablet", () -> new me.moonscenty.alchemia.item.RunedTabletItem(new Item.Properties().stacksTo(1)
+                    .rarity(net.minecraft.world.item.Rarity.RARE)));
+    public static final DeferredItem<net.minecraft.world.item.BucketItem> LIQUID_DEATH_BUCKET = ITEMS.register(
+            "liquid_death_bucket", () -> new net.minecraft.world.item.BucketItem(ModFluids.DEATH.get(),
+                    new Item.Properties().craftRemainder(net.minecraft.world.item.Items.BUCKET).stacksTo(1)
+                            .rarity(net.minecraft.world.item.Rarity.RARE)));
     /** A guardian's eye, that does not close. */
     public static final DeferredItem<Item> ELDRITCH_EYE = ITEMS.register("eldritch_eye",
             () -> new Item(new Item.Properties().rarity(net.minecraft.world.item.Rarity.UNCOMMON)));

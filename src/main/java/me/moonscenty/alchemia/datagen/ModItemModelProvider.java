@@ -109,6 +109,9 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.LOOT_BAG_COMMON.get());
         basicItem(ModItems.LOOT_BAG_UNCOMMON.get());
         basicItem(ModItems.LOOT_BAG_RARE.get());
+        basicItem(ModItems.RUNED_TABLET.get());
+        withExistingParent("liquid_death_bucket", mcLoc("item/generated"))
+                .texture("layer0", modLoc("item/legacy/liquid_death_bucket"));
         withExistingParent("banner", mcLoc("item/generated")).texture("layer0", modLoc("item/banner_stand"))
                 .texture("layer1", modLoc("item/banner")).texture("layer2", modLoc("item/banner_symbol"));
         withExistingParent("crimson_banner", mcLoc("item/generated")).texture("layer0", modLoc("item/banner_stand"))

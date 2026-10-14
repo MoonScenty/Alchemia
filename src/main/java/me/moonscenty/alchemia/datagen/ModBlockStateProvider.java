@@ -388,6 +388,8 @@ public class ModBlockStateProvider extends BlockStateProvider {
                 .texture("particle", modLoc("block/legacy/spa_side")));
         simpleBlock(ModBlocks.PURIFYING_FLUID.get(), models().getBuilder("purifying_fluid")
                 .texture("particle", mcLoc("block/water_still")));
+        simpleBlock(ModBlocks.LIQUID_DEATH.get(), models().getBuilder("liquid_death")
+                .texture("particle", modLoc("block/legacy/liquid_death")));
     }
 
     /** The recharge pedestal and the dioptra, on the original's model files. */
@@ -660,6 +662,14 @@ public class ModBlockStateProvider extends BlockStateProvider {
         }
         simpleBlock(ModBlocks.BANNER.get(), models().getBuilder("banner")
                 .texture("particle", mcLoc("block/oak_planks")));
+        // the Outer Lands' bedrock with the stars in it; the void is not drawn as a block
+        simpleBlockWithItem(ModBlocks.ANCIENT_BEDROCK.get(), models().cubeAll("ancient_bedrock",
+                modLoc("block/legacy/ancient_bedrock")));
+        for (var unseen : java.util.List.of(ModBlocks.VACUUM)) {
+            getVariantBuilder(unseen.get()).partialState().setModels(new ConfiguredModel(models()
+                    .getBuilder(unseen.getId().getPath()).texture("particle", modLoc("block/eldritch_stone"))));
+        }
+        simpleBlock(ModBlocks.CRAB_SPAWNER.get(), models().cubeAll("crab_spawner", modLoc("block/crusted_stone")));
         java.util.List<ConfiguredModel> rock = new java.util.ArrayList<>();
         for (int i = 1; i <= 4; i++) {
             rock.add(ConfiguredModel.builder().modelFile(models().cubeAll("ancient_rock_" + i,

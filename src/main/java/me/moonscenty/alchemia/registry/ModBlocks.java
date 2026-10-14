@@ -532,6 +532,23 @@ public class ModBlocks {
     /** The way to the Outer Lands: nothing breaks it, and nothing bumps into it. */
     public static final DeferredBlock<me.moonscenty.alchemia.block.eldritch.EldritchPortalBlock> ELDRITCH_PORTAL = registerBlockOnly("eldritch_portal",
             () -> new me.moonscenty.alchemia.block.eldritch.EldritchPortalBlock(eldritch().strength(-1.0F, 3600000.0F).noCollission()));
+    /** What the Outer Lands are made of: unbreakable, and laid bare it gives way to the void. */
+    public static final DeferredBlock<me.moonscenty.alchemia.block.eldritch.AncientBedrockBlock> ANCIENT_BEDROCK = register("ancient_bedrock",
+            () -> new me.moonscenty.alchemia.block.eldritch.AncientBedrockBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLACK)
+                    .strength(-1.0F, 3600000.0F).noLootTable().isValidSpawn(ModBlocks::never)
+                    .sound(SoundType.STONE)));
+    /** The deadly void: unseen, untouchable, and pulling everything toward where it pours from. */
+    public static final DeferredBlock<me.moonscenty.alchemia.block.eldritch.VacuumBlock> VACUUM = registerBlockOnly("vacuum",
+            () -> new me.moonscenty.alchemia.block.eldritch.VacuumBlock(BlockBehaviour.Properties.of().mapColor(MapColor.NONE).noCollission()
+                    .strength(-1.0F, 999.0F).noLootTable().randomTicks().replaceable().air()
+                    .pushReaction(net.minecraft.world.level.material.PushReaction.BLOCK)));
+    /** A crab vent in the crust. */
+    public static final DeferredBlock<me.moonscenty.alchemia.block.eldritch.CrabSpawnerBlock> CRAB_SPAWNER = registerBlockOnly("crab_spawner",
+            () -> new me.moonscenty.alchemia.block.eldritch.CrabSpawnerBlock(eldritch().strength(25.0F, 1200.0F)));
+    /** Liquid death, that dissolves whatever stands in it. */
+    public static final DeferredBlock<me.moonscenty.alchemia.block.eldritch.LiquidDeathBlock> LIQUID_DEATH = registerBlockOnly("liquid_death",
+            () -> new me.moonscenty.alchemia.block.eldritch.LiquidDeathBlock(ModFluids.DEATH.get(), BlockBehaviour.Properties.ofFullCopy(Blocks.LAVA)
+                    .mapColor(MapColor.COLOR_PURPLE).lightLevel(state -> 4)));
     /** A banner, dyed or the Crimson Cult's. Its two items place it. */
     public static final DeferredBlock<me.moonscenty.alchemia.block.BannerBlock> BANNER = registerBlockOnly("banner",
             () -> new me.moonscenty.alchemia.block.BannerBlock(BlockBehaviour.Properties.of()

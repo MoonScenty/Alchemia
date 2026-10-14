@@ -42,6 +42,16 @@ public final class ModSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> GORE = sound("gore");
     /** A handful of coins. */
     public static final DeferredHolder<SoundEvent, SoundEvent> COINS = sound("coins");
+    /** The Construct crackling as it charges. */
+    public static final DeferredHolder<SoundEvent, SoundEvent> JACOBS = sound("jacobs");
+    /** A low wind, out of the void. */
+    public static final DeferredHolder<SoundEvent, SoundEvent> WIND = sound("wind");
+    /** A lock of the Outer Lands turning: a heave and a hiss. */
+    public static final DeferredHolder<SoundEvent, SoundEvent> PUMP = sound("pump");
+    /** Runes catching: a tablet going into a lock. */
+    public static final DeferredHolder<SoundEvent, SoundEvent> RUNIC_SHIELD_CHARGE = sound("runicshieldcharge");
+    /** The hum of an open way to the Outer Lands. */
+    public static final DeferredHolder<SoundEvent, SoundEvent> EVIL_PORTAL = sound("evilportal");
     /** Pottery smashing: an urn broken open. */
     public static final DeferredHolder<SoundEvent, SoundEvent> URN_BREAK = sound("urnbreak");
 
