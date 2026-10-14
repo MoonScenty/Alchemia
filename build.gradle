@@ -37,6 +37,11 @@ repositories {
         name = "ModMaven"
         url = "https://modmaven.dev"
     }
+    // Curios is published here
+    maven {
+        name = "Illusive Soulworks"
+        url = "https://maven.theillusivec4.top/"
+    }
     // TerraBlender is published here
     maven {
         name = "Forge"
@@ -143,6 +148,10 @@ dependencies {
     // TerraBlender, which the mod needs: it is how the magical forest is woven into the overworld's biomes, which
     // the game gives a mod no way of its own to add to.
     implementation "com.github.glitchfiend:TerraBlender-neoforge:${minecraft_version}-${terrablender_version}"
+
+    // Curios, which the mod needs: the original wore its amulets, rings and girdles in Baubles' slots, and these
+    // are Curios' slots by those names.
+    implementation "top.theillusivec4.curios:curios-neoforge:${curios_version}"
 
     // Example mod dependency using a mod jar from ./libs with a flat dir repository
     // This maps to ./libs/coolmod-${mc_version}-${coolmod_version}.jar

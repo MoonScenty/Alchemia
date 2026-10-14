@@ -1,0 +1,26 @@
+{
+  "category": "alchemia:arcana",
+  "column": 7,
+  "complexity": 2,
+  "icon": "alchemia:vis_amulet",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.vis_amulet.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:vis_amulet"
+    }
+  ],
+  "parents": [
+    "alchemia:recharge_pedestal",
+    "alchemia:infusion"
+  ],
+  "requirements": {
+    "alchemia:auram": 3,
+    "alchemia:potentia": 9,
+    "alchemia:vacuos": 3
+  },
+  "row": 0
+}

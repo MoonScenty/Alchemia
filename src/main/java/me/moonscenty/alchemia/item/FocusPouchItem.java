@@ -28,7 +28,7 @@ import net.minecraft.world.level.Level;
  * the point of carrying one: a player with a pouch has every focus on one key without eighteen slots gone from
  * their inventory.
  */
-public class FocusPouchItem extends Item {
+public class FocusPouchItem extends Item implements top.theillusivec4.curios.api.type.capability.ICurioItem {
     /** Six across and three down, laid out to match what is drawn on the screen. */
     public static final int ACROSS = 6;
     public static final int DOWN = 3;

@@ -489,10 +489,10 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
         InfusionRecipe recipe = found.get().value();
         working = found.get().id();
         reckon(level);
-        owed = priced(recipe.essentia());
+        owed = priced(recipe.essentiaFor(under.held()));
         ring = List.copyOf(holding);
         // what the recipe asks for, and what the altar around it is doing about that
-        instability = Math.max(0, Math.min(WORST, recipe.instability() + symmetry(level)));
+        instability = Math.max(0, Math.min(WORST, recipe.instabilityFor(under.held()) + symmetry(level)));
         counter = 0;
         level.playSound(null, worldPosition, SoundEvents.BEACON_ACTIVATE, SoundSource.BLOCKS, 0.7F, 1.6F);
         changed();

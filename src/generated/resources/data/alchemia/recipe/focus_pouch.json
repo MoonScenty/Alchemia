@@ -2,7 +2,7 @@
   "type": "alchemia:arcane_shaped",
   "key": {
     "B": {
-      "tag": "c:ingots/brass"
+      "item": "alchemia:mundane_belt"
     },
     "G": {
       "item": "minecraft:gold_ingot"

@@ -45,7 +45,13 @@ public class RechargePedestalBlockEntity extends BlockEntity implements WorldlyC
 
     public static void tick(Level level, BlockPos pos, BlockState state, RechargePedestalBlockEntity pedestal) {
         if (pedestal.counter++ % EVERY != 0 || !(level instanceof ServerLevel served)
-                || !(pedestal.held.getItem() instanceof WandItem)) {
+                || !me.moonscenty.alchemia.item.bauble.Recharging.chargeable(pedestal.held)) {
+            return;
+        }
+        if (!(pedestal.held.getItem() instanceof WandItem)) {
+            if (me.moonscenty.alchemia.item.bauble.Recharging.charge(pedestal.held, served, pos, AMOUNT)) {
+                pedestal.changed();
+            }
             return;
         }
         WandItem.Charged charged = WandItem.chargeFrom(pedestal.held, served, pos, AMOUNT);
@@ -117,7 +123,7 @@ public class RechargePedestalBlockEntity extends BlockEntity implements WorldlyC
 
     @Override
     public boolean canPlaceItem(int slot, ItemStack stack) {
-        return stack.getItem() instanceof WandItem;
+        return me.moonscenty.alchemia.item.bauble.Recharging.chargeable(stack);
     }
 
     @Override

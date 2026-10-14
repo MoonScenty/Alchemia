@@ -41,26 +41,67 @@ import net.minecraft.world.level.Level;
  *                 hands back the same tool with one more thing on it, so its result is whatever went in
  * @param fits what this works into a helm, on the same terms: the helm that went in comes back wearing it.
  *             A helm takes one and the altar will not sell a second
+ * @param augments whether this is runic augmentation: one more hardening on whatever runic gear is worked, its
+ *                 ring a diamond and a salis mundus and one salis mundus more for each point of shield it already
+ *                 holds, and its essentia doubling with each
  */
 public record InfusionRecipe(Ingredient central, List<Ingredient> ring, ItemStack result, AspectList essentia,
                              int instability, Optional<ResourceLocation> research,
                              Optional<InfusionEnchantment> enchants,
-                             Optional<HelmFitting> fits) implements Recipe<InfusionInput> {
+                             Optional<HelmFitting> fits, boolean augments) implements Recipe<InfusionInput> {
+
+    public InfusionRecipe(Ingredient central, List<Ingredient> ring, ItemStack result, AspectList essentia,
+            int instability, Optional<ResourceLocation> research, Optional<InfusionEnchantment> enchants,
+            Optional<HelmFitting> fits) {
+        this(central, ring, result, essentia, instability, research, enchants, fits, false);
+    }
 
     /** The old shape, for the recipes that make a thing rather than work on one. */
     public InfusionRecipe(Ingredient central, List<Ingredient> ring, ItemStack result, AspectList essentia,
             int instability, Optional<ResourceLocation> research) {
-        this(central, ring, result, essentia, instability, research, Optional.empty(), Optional.empty());
+        this(central, ring, result, essentia, instability, research, Optional.empty(), Optional.empty(), false);
     }
 
     /** For the recipes that put a working on a tool. */
     public InfusionRecipe(Ingredient central, List<Ingredient> ring, ItemStack result, AspectList essentia,
             int instability, Optional<ResourceLocation> research, Optional<InfusionEnchantment> enchants) {
-        this(central, ring, result, essentia, instability, research, enchants, Optional.empty());
+        this(central, ring, result, essentia, instability, research, enchants, Optional.empty(), false);
+    }
+
+    /** The shield a piece of runic gear holds now, which is what augmenting it once more costs by. */
+    private static int held(ItemStack central) {
+        return me.moonscenty.alchemia.item.bauble.RunicGear.charge(central);
+    }
+
+    /** The essentia this asks to work this thing: augmentation's doubles with every point already there. */
+    public AspectList essentiaFor(ItemStack central) {
+        if (!augments) {
+            return essentia;
+        }
+        int vis = (int) (32 * Math.pow(2, held(central)));
+        return AspectList.of(me.moonscenty.alchemia.registry.ModAspects.PROTECT, vis / 2)
+                .add(me.moonscenty.alchemia.registry.ModAspects.CRYSTAL, vis / 2)
+                .add(me.moonscenty.alchemia.registry.ModAspects.ENERGY, vis);
+    }
+
+    /** How unsteady working this thing is: augmentation's grows by one with every second point. */
+    public int instabilityFor(ItemStack central) {
+        return augments ? 5 + held(central) / 2 : instability;
     }
 
     @Override
     public boolean matches(InfusionInput input, Level level) {
+        if (augments) {
+            if (!me.moonscenty.alchemia.item.bauble.RunicGear.augmentable(input.central())) {
+                return false;
+            }
+            int salis = 1 + held(input.central());
+            long diamonds = input.ring().stream().filter(stack -> stack.is(net.minecraft.world.item.Items.DIAMOND))
+                    .count();
+            long salt = input.ring().stream()
+                    .filter(stack -> stack.is(me.moonscenty.alchemia.registry.ModItems.SALIS_MUNDUS.get())).count();
+            return diamonds == 1 && salt == salis && input.ring().size() == 1 + salis;
+        }
         if (!central.test(input.central()) || input.ring().size() != ring.size()) {
             return false;
         }
@@ -92,6 +133,12 @@ public record InfusionRecipe(Ingredient central, List<Ingredient> ring, ItemStac
 
     @Override
     public ItemStack assemble(InfusionInput input, HolderLookup.Provider registries) {
+        if (augments) {
+            ItemStack hardened = input.central().copy();
+            hardened.set(me.moonscenty.alchemia.registry.ModDataComponents.RUNIC_HARDENING.get(),
+                    me.moonscenty.alchemia.item.bauble.RunicGear.hardening(hardened) + 1);
+            return hardened;
+        }
         if (fits.isPresent()) {
             return FortressArmorItem.wearing(input.central(), fits.get());
         }
@@ -145,14 +192,16 @@ public record InfusionRecipe(Ingredient central, List<Ingredient> ring, ItemStac
                                 .forGetter(InfusionRecipe::instability),
                         ResourceLocation.CODEC.optionalFieldOf("research").forGetter(InfusionRecipe::research),
                         InfusionEnchantment.CODEC.optionalFieldOf("enchants").forGetter(InfusionRecipe::enchants),
-                        HelmFitting.CODEC.optionalFieldOf("fits").forGetter(InfusionRecipe::fits))
+                        HelmFitting.CODEC.optionalFieldOf("fits").forGetter(InfusionRecipe::fits),
+                        com.mojang.serialization.Codec.BOOL.optionalFieldOf("augments", false)
+                                .forGetter(InfusionRecipe::augments))
                 .apply(instance, InfusionRecipe::new));
 
         /**
          * Written out by hand rather than composed.
          * <p>
-         * The helper that stitches stream codecs together stops at six pieces and this has eight. Writing the
-         * eight out is duller than one more line of composition would have been and no less plain.
+         * The helper that stitches stream codecs together stops at six pieces and this has nine. Writing the
+         * nine out is duller than one more line of composition would have been and no less plain.
          */
         private static final StreamCodec<RegistryFriendlyByteBuf, InfusionRecipe> STREAM_CODEC =
                 new StreamCodec<>() {
@@ -170,8 +219,9 @@ public record InfusionRecipe(Ingredient central, List<Ingredient> ring, ItemStac
                                 ByteBufCodecs.optional(InfusionEnchantment.STREAM_CODEC).decode(buffer);
                         Optional<HelmFitting> fits =
                                 ByteBufCodecs.optional(HelmFitting.STREAM_CODEC).decode(buffer);
+                        boolean augments = ByteBufCodecs.BOOL.decode(buffer);
                         return new InfusionRecipe(central, ring, result, essentia, instability, research,
-                                enchants, fits);
+                                enchants, fits, augments);
                     }
 
                     @Override
@@ -185,6 +235,7 @@ public record InfusionRecipe(Ingredient central, List<Ingredient> ring, ItemStac
                         ByteBufCodecs.optional(InfusionEnchantment.STREAM_CODEC)
                                 .encode(buffer, recipe.enchants());
                         ByteBufCodecs.optional(HelmFitting.STREAM_CODEC).encode(buffer, recipe.fits());
+                        ByteBufCodecs.BOOL.encode(buffer, recipe.augments());
                     }
                 };
 

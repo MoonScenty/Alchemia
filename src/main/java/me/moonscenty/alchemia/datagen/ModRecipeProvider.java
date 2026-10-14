@@ -89,6 +89,7 @@ public class ModRecipeProvider extends RecipeProvider {
 
     @Override
     protected void buildRecipes(RecipeOutput output) {
+        baubles(output);
         cook(output, "amber_from_ore", Ingredient.of(ModTags.Items.ORES_AMBER), has(ModTags.Items.ORES_AMBER), new ItemStack(ModItems.AMBER.get()));
         cook(output, "quicksilver_from_ore", Ingredient.of(ModTags.Items.ORES_CINNABAR), has(ModTags.Items.ORES_CINNABAR), new ItemStack(ModItems.QUICKSILVER.get()));
         cook(output, "quicksilver_from_raw_cinnabar", Ingredient.of(ModItems.RAW_CINNABAR), has(ModItems.RAW_CINNABAR), new ItemStack(ModItems.QUICKSILVER.get()));
@@ -333,13 +334,12 @@ public class ModRecipeProvider extends RecipeProvider {
                 Map.of('I', Ingredient.of(ModItems.ENCHANTED_FABRIC)), "I I", "I I");
 
         // the pouch: a leather bag with a brass buckle and a gold clasp. The original held a mundane girdle in
-        // the middle, which is leather round a brass ingot; the girdle is a bauble and there are none yet, so what
-        // it is made of goes in instead of the girdle itself
+        // the middle, which is a plain belt
         arcane(output, "focus_pouch", new ItemStack(ModItems.FOCUS_POUCH.get()),
                 AspectList.of(ModAspects.EARTH, 25).add(ModAspects.ORDER, 25).add(ModAspects.ENTROPY, 25),
                 Map.of('L', Ingredient.of(Items.LEATHER),
                         'G', Ingredient.of(Items.GOLD_INGOT),
-                        'B', Ingredient.of(ModTags.Items.INGOTS_BRASS)),
+                        'B', Ingredient.of(ModItems.MUNDANE_BELT)),
                 "LGL", "LBL", "LLL");
 
         // goggles: two alchemometers looking through brass, held on with leather
@@ -510,6 +510,135 @@ public class ModRecipeProvider extends RecipeProvider {
                         'A', Ingredient.of(ModItems.ALUMENTUM),
                         'G', Ingredient.of(Blocks.GOLD_BLOCK)),
                 "SAS", "AGA", "SAS");
+    }
+
+    /** A crystal of one aspect's essence, as a ring ingredient. */
+    private static Ingredient essence(net.minecraft.core.Holder<me.moonscenty.alchemia.aspect.Aspect> aspect) {
+        return net.neoforged.neoforge.common.crafting.DataComponentIngredient.of(false,
+                me.moonscenty.alchemia.item.CrystallizedEssenceItem.of(aspect));
+    }
+
+    /** A potion of exactly this kind, as a ring ingredient. */
+    private static Ingredient potion(net.minecraft.world.item.Item bottle,
+            net.minecraft.core.Holder<net.minecraft.world.item.alchemy.Potion> potion) {
+        return net.neoforged.neoforge.common.crafting.DataComponentIngredient.of(false,
+                net.minecraft.world.item.alchemy.PotionContents.createItemStack(bottle, potion));
+    }
+
+    /**
+     * The baubles: the plain and fancy ones at a crafting table, the rest at the altar, and runic augmentation,
+     * which hardens whatever runic gear it is given.
+     */
+    private void baubles(RecipeOutput output) {
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.MUNDANE_AMULET.get())
+                .pattern(" S ").pattern("S S").pattern(" I ")
+                .define('S', Items.STRING).define('I', ModTags.Items.INGOTS_BRASS)
+                .unlockedBy("has_input", has(ModTags.Items.INGOTS_BRASS)).save(output);
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.MUNDANE_RING.get())
+                .pattern("NNN").pattern("N N").pattern("NNN")
+                .define('N', ModTags.Items.NUGGETS_BRASS)
+                .unlockedBy("has_input", has(ModTags.Items.NUGGETS_BRASS)).save(output);
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.MUNDANE_BELT.get())
+                .pattern(" L ").pattern("L L").pattern(" I ")
+                .define('L', Items.LEATHER).define('I', ModTags.Items.INGOTS_BRASS)
+                .unlockedBy("has_input", has(ModTags.Items.INGOTS_BRASS)).save(output);
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.FANCY_AMULET.get())
+                .pattern(" S ").pattern("SGS").pattern(" I ")
+                .define('S', Items.STRING).define('G', Items.DIAMOND).define('I', Items.GOLD_INGOT)
+                .unlockedBy("has_input", has(Items.DIAMOND)).save(output);
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.FANCY_RING.get())
+                .pattern("NGN").pattern("N N").pattern("NNN")
+                .define('N', Items.GOLD_NUGGET).define('G', Items.DIAMOND)
+                .unlockedBy("has_input", has(Items.DIAMOND)).save(output);
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.FANCY_BELT.get())
+                .pattern(" L ").pattern("LGL").pattern(" I ")
+                .define('L', Items.LEATHER).define('G', Items.DIAMOND).define('I', Items.GOLD_INGOT)
+                .unlockedBy("has_input", has(Items.DIAMOND)).save(output);
+        // the original made its treat of three kinds of meat chunk, which this mod does not have; three cooked
+        // meats stand for them
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.FOOD, ModItems.TRIPLE_MEAT_TREAT.get())
+                .requires(Items.SUGAR).requires(Items.COOKED_BEEF).requires(Items.COOKED_PORKCHOP)
+                .requires(Items.COOKED_CHICKEN)
+                .unlockedBy("has_input", has(Items.SUGAR)).save(output);
+
+        Ingredient charm = Ingredient.of(ModItems.PRIMAL_CHARM);
+        Ingredient amber = Ingredient.of(ModItems.AMBER);
+        Ingredient fabric = Ingredient.of(ModItems.ENCHANTED_FABRIC);
+        Ingredient nitor = Ingredient.of(ModTags.Items.NITOR);
+        Ingredient scribing = Ingredient.of(ModItems.SCRIBING_TOOLS);
+        Ingredient balanced = Ingredient.of(ModItems.BALANCED_SHARD);
+        Ingredient air = Ingredient.of(ModItems.SHARDS.get(me.moonscenty.alchemia.block.CrystalType.AIR).get());
+        Ingredient earth = Ingredient.of(ModItems.SHARDS.get(me.moonscenty.alchemia.block.CrystalType.EARTH).get());
+        Ingredient fire = Ingredient.of(ModItems.SHARDS.get(me.moonscenty.alchemia.block.CrystalType.FIRE).get());
+        Ingredient water = Ingredient.of(ModItems.SHARDS.get(me.moonscenty.alchemia.block.CrystalType.WATER).get());
+
+        infusion(output, "thaumostatic_girdle", Ingredient.of(ModItems.MUNDANE_BELT),
+                List.of(air, Ingredient.of(Items.FEATHER), Ingredient.of(Items.GOLD_INGOT), earth,
+                        Ingredient.of(Items.FEATHER), Ingredient.of(Items.GOLD_INGOT)),
+                new ItemStack(ModItems.THAUMOSTATIC_GIRDLE.get()), AspectList.of(ModAspects.FLIGHT, 16)
+                        .add(ModAspects.ENERGY, 32).add(ModAspects.AIR, 32).add(ModAspects.MOTION, 16),
+                8, "thaumostatic_girdle");
+        infusion(output, "vis_amulet", Ingredient.of(ModItems.MUNDANE_AMULET),
+                List.of(charm, air, fire, charm, water, earth),
+                new ItemStack(ModItems.VIS_AMULET.get()), AspectList.of(ModAspects.AURA, 24)
+                        .add(ModAspects.ENERGY, 128).add(ModAspects.VOID, 24),
+                6, "vis_amulet");
+        infusion(output, "runic_amulet", Ingredient.of(ModItems.MUNDANE_AMULET),
+                List.of(charm, amber, fabric, nitor, nitor, scribing),
+                new ItemStack(ModItems.RUNIC_AMULET.get()), AspectList.of(ModAspects.PROTECT, 30)
+                        .add(ModAspects.ENERGY, 50), 4, "runic_shielding");
+        infusion(output, "runic_ring", Ingredient.of(ModItems.MUNDANE_RING),
+                List.of(charm, amber, fabric, nitor, scribing),
+                new ItemStack(ModItems.RUNIC_RING.get()), AspectList.of(ModAspects.PROTECT, 25)
+                        .add(ModAspects.ENERGY, 45), 3, "runic_shielding");
+        infusion(output, "runic_girdle", Ingredient.of(ModItems.MUNDANE_BELT),
+                List.of(charm, amber, fabric, nitor, nitor, nitor, scribing),
+                new ItemStack(ModItems.RUNIC_GIRDLE.get()), AspectList.of(ModAspects.PROTECT, 40)
+                        .add(ModAspects.ENERGY, 64), 4, "runic_shielding");
+        infusion(output, "emergency_runic_amulet", Ingredient.of(ModItems.RUNIC_AMULET),
+                List.of(balanced, earth, earth, potion(Items.POTION, net.minecraft.world.item.alchemy.Potions.STRONG_STRENGTH),
+                        earth, earth),
+                new ItemStack(ModItems.EMERGENCY_RUNIC_AMULET.get()), AspectList.of(ModAspects.PROTECT, 30)
+                        .add(ModAspects.EARTH, 50).add(ModAspects.VOID, 32), 7, "runic_special");
+        infusion(output, "charged_runic_ring", Ingredient.of(ModItems.RUNIC_RING),
+                List.of(balanced, fire, fire, potion(Items.POTION, net.minecraft.world.item.alchemy.Potions.STRONG_SWIFTNESS),
+                        fire, fire),
+                new ItemStack(ModItems.CHARGED_RUNIC_RING.get()), AspectList.of(ModAspects.PROTECT, 25)
+                        .add(ModAspects.ENERGY, 64), 6, "runic_special");
+        infusion(output, "revitalizing_runic_ring", Ingredient.of(ModItems.RUNIC_RING),
+                List.of(balanced, water, water, potion(Items.POTION, net.minecraft.world.item.alchemy.Potions.LONG_REGENERATION),
+                        water, water),
+                new ItemStack(ModItems.REVITALIZING_RUNIC_RING.get()), AspectList.of(ModAspects.PROTECT, 25)
+                        .add(ModAspects.WATER, 32).add(ModAspects.LIFE, 32), 6, "runic_special");
+        infusion(output, "kinetic_runic_girdle", Ingredient.of(ModItems.RUNIC_GIRDLE),
+                List.of(balanced, air, air, potion(Items.SPLASH_POTION, net.minecraft.world.item.alchemy.Potions.STRONG_HARMING),
+                        air, air),
+                new ItemStack(ModItems.KINETIC_RUNIC_GIRDLE.get()), AspectList.of(ModAspects.PROTECT, 40)
+                        .add(ModAspects.AIR, 64), 7, "runic_special");
+        infusion(output, "verdant_heart", Ingredient.of(ModItems.FANCY_RING),
+                List.of(Ingredient.of(ModItems.PRIMORDIAL_PEARL), essence(ModAspects.LIFE),
+                        Ingredient.of(Items.MILK_BUCKET), essence(ModAspects.PLANT)),
+                new ItemStack(ModItems.VERDANT_HEART.get()), AspectList.of(ModAspects.LIFE, 48)
+                        .add(ModAspects.ORDER, 24).add(ModAspects.PLANT, 48), 5, "verdant_heart");
+        infusion(output, "verdant_heart_lifegiver", Ingredient.of(ModItems.VERDANT_HEART),
+                List.of(Ingredient.of(Items.GOLDEN_APPLE), essence(ModAspects.LIFE),
+                        potion(Items.POTION, net.minecraft.world.item.alchemy.Potions.REGENERATION), essence(ModAspects.MAN)),
+                me.moonscenty.alchemia.item.bauble.VerdantHeartItem.of(new ItemStack(ModItems.VERDANT_HEART.get()),
+                        me.moonscenty.alchemia.item.bauble.VerdantHeartItem.LIFEGIVER),
+                AspectList.of(ModAspects.LIFE, 64).add(ModAspects.MAN, 64), 5, "verdant_heart_lifegiver");
+        infusion(output, "verdant_heart_sustainer", Ingredient.of(ModItems.VERDANT_HEART),
+                List.of(Ingredient.of(ModItems.TRIPLE_MEAT_TREAT), essence(ModAspects.DESIRE),
+                        potion(Items.POTION, net.minecraft.world.item.alchemy.Potions.WATER_BREATHING), essence(ModAspects.AIR)),
+                me.moonscenty.alchemia.item.bauble.VerdantHeartItem.of(new ItemStack(ModItems.VERDANT_HEART.get()),
+                        me.moonscenty.alchemia.item.bauble.VerdantHeartItem.SUSTAINER),
+                AspectList.of(ModAspects.DESIRE, 64).add(ModAspects.AIR, 64), 5, "verdant_heart_lifegiver");
+        // what the altar is given for this is worked out from what is on it; the ring and essentia here are the
+        // first time's, for the book to show
+        output.accept(Alchemia.id("runic_augmentation"), new InfusionRecipe(
+                Ingredient.of(ModTags.Items.RUNIC_AUGMENTABLE),
+                List.of(Ingredient.of(Items.DIAMOND), Ingredient.of(ModItems.SALIS_MUNDUS)), ItemStack.EMPTY,
+                AspectList.of(ModAspects.PROTECT, 16).add(ModAspects.CRYSTAL, 16).add(ModAspects.ENERGY, 32), 5,
+                Optional.of(Alchemia.id("runic_augmentation")), Optional.empty(), Optional.empty(), true), null);
     }
 
     private void arcane(RecipeOutput output, String name, ItemStack result, AspectList cost,

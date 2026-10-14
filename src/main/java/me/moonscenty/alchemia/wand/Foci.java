@@ -108,6 +108,14 @@ public final class Foci {
                 }
             }
         }
+        List<ItemStack> pouches = worn(bag);
+        for (int which = 0; which < pouches.size(); which++) {
+            for (int inside = 0; inside < FocusPouchItem.SIZE; inside++) {
+                if (FocusPouchItem.item(pouches.get(which), inside).is(ModTags.Items.FOCI)) {
+                    spots.add(new Spot(bag.getContainerSize() + which, inside));
+                }
+            }
+        }
         spots.sort(Comparator.comparing(spot -> named(read(bag, spot))));
         return spots;
     }
@@ -131,8 +139,32 @@ public final class Foci {
         return spots.get(0);
     }
 
+    /** The pouches worn on the belt, which count as squares past the end of the bag. */
+    private static List<ItemStack> worn(Inventory bag) {
+        List<ItemStack> pouches = new ArrayList<>();
+        top.theillusivec4.curios.api.CuriosApi.getCuriosInventory(bag.player).ifPresent(curios -> {
+            var baubles = curios.getEquippedCurios();
+            for (int i = 0; i < baubles.getSlots(); i++) {
+                if (baubles.getStackInSlot(i).getItem() instanceof FocusPouchItem) {
+                    pouches.add(baubles.getStackInSlot(i));
+                }
+            }
+        });
+        return pouches;
+    }
+
+    /** A square of the bag, or past its end, a worn pouch. */
+    private static ItemStack at(Inventory bag, int slot) {
+        if (slot < bag.getContainerSize()) {
+            return bag.getItem(slot);
+        }
+        List<ItemStack> pouches = worn(bag);
+        int which = slot - bag.getContainerSize();
+        return which < pouches.size() ? pouches.get(which) : ItemStack.EMPTY;
+    }
+
     private static ItemStack read(Inventory bag, Spot spot) {
-        return spot.inBag() ? bag.getItem(spot.slot()) : FocusPouchItem.item(bag.getItem(spot.slot()), spot.inPouch());
+        return spot.inBag() ? bag.getItem(spot.slot()) : FocusPouchItem.item(at(bag, spot.slot()), spot.inPouch());
     }
 
     private static void write(Inventory bag, Spot spot, ItemStack stack) {
@@ -140,7 +172,7 @@ public final class Foci {
             bag.setItem(spot.slot(), stack);
             return;
         }
-        ItemStack pouch = bag.getItem(spot.slot());
+        ItemStack pouch = at(bag, spot.slot());
         List<ItemStack> items = new ArrayList<>(FocusPouchItem.SIZE);
         for (int inside = 0; inside < FocusPouchItem.SIZE; inside++) {
             items.add(inside == spot.inPouch() ? stack : FocusPouchItem.item(pouch, inside));
@@ -150,8 +182,9 @@ public final class Foci {
 
     /** Puts a focus in the first pouch with room, and says whether one had room. */
     private static boolean intoPouch(Inventory bag, ItemStack focus) {
-        for (int slot = 0; slot < bag.getContainerSize(); slot++) {
-            ItemStack pouch = bag.getItem(slot);
+        int squares = bag.getContainerSize() + worn(bag).size();
+        for (int slot = 0; slot < squares; slot++) {
+            ItemStack pouch = at(bag, slot);
             if (!(pouch.getItem() instanceof FocusPouchItem)) {
                 continue;
             }

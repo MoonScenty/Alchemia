@@ -1,0 +1,33 @@
+{
+  "type": "alchemia:infusion",
+  "central": {
+    "item": "alchemia:mundane_ring"
+  },
+  "essentia": {
+    "alchemia:potentia": 45,
+    "alchemia:praemunio": 25
+  },
+  "instability": 3,
+  "research": "alchemia:runic_shielding",
+  "result": {
+    "count": 1,
+    "id": "alchemia:runic_ring"
+  },
+  "ring": [
+    {
+      "item": "alchemia:primal_charm"
+    },
+    {
+      "item": "alchemia:amber"
+    },
+    {
+      "item": "alchemia:enchanted_fabric"
+    },
+    {
+      "tag": "alchemia:nitor"
+    },
+    {
+      "item": "alchemia:scribing_tools"
+    }
+  ]
+}

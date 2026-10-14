@@ -128,10 +128,9 @@ public class WandItem extends Item implements VisHolder {
      */
     @Override
     public void take(ItemStack stack, AspectList cost, Player player, Spending why) {
-        float rate = rate(stack, player, why);
         AspectList left = fine(stack);
         for (Holder<Aspect> aspect : cost.sortedByName()) {
-            int asked = Math.round(cost.get(aspect) * FINE * rate);
+            int asked = Math.round(cost.get(aspect) * FINE * rate(stack, player, why, aspect));
             left = left.withAmount(aspect, Math.max(0, left.get(aspect) - asked));
         }
         stack.set(ModDataComponents.VIS.get(), left);
@@ -144,10 +143,9 @@ public class WandItem extends Item implements VisHolder {
      */
     @Override
     public boolean holds(ItemStack stack, AspectList cost, Player player, Spending why) {
-        float rate = rate(stack, player, why);
         AspectList have = fine(stack);
         for (Holder<Aspect> aspect : cost.sortedByName()) {
-            if (have.get(aspect) < Math.round(cost.get(aspect) * FINE * rate)) {
+            if (have.get(aspect) < Math.round(cost.get(aspect) * FINE * rate(stack, player, why, aspect))) {
                 return false;
             }
         }
@@ -161,8 +159,8 @@ public class WandItem extends Item implements VisHolder {
      * thrift worked into the focus. A focus pays for its own working only: a wand lying on a bench is holding
      * vis for somebody else's recipe, and what is screwed into its end has nothing to do with that.
      */
-    private static float rate(ItemStack stack, Player player, Spending why) {
-        float rate = VisDiscount.rate(cap(stack).discount(), player);
+    private static float rate(ItemStack stack, Player player, Spending why, Holder<Aspect> aspect) {
+        float rate = VisDiscount.rate(cap(stack).discount(), player, aspect);
         if (why == Spending.WORKING) {
             rate -= FocusUpgrades.level(focus(stack), FocusUpgrade.FRUGAL) * THRIFT;
         }

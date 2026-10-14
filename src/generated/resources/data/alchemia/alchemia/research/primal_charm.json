@@ -14,6 +14,30 @@
     {
       "type": "recipe",
       "recipe": "alchemia:mirrored_glass"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:mundane_amulet"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:mundane_ring"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:mundane_belt"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:fancy_amulet"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:fancy_ring"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:fancy_belt"
     }
   ],
   "parents": [

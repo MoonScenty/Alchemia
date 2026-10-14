@@ -80,6 +80,12 @@
       "alchemia:legacy/jacobs"
     ]
   },
+  "runicshieldeffect": {
+    "subtitle": "subtitles.alchemia.runicshieldeffect",
+    "sounds": [
+      "alchemia:legacy/runicshieldeffect"
+    ]
+  },
   "wind": {
     "subtitle": "subtitles.alchemia.wind",
     "sounds": [

@@ -209,6 +209,15 @@ public class ModDataComponents {
                                     InfusionEnchantment.STREAM_CODEC, ByteBufCodecs.VAR_INT))
                             .build());
 
+    /** How many times runic augmentation has hardened a piece of gear: a point of shield each. */
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> RUNIC_HARDENING =
+            COMPONENTS.register("runic_hardening", () -> DataComponentType.<Integer>builder()
+                    .persistent(Codec.intRange(0, 127)).networkSynchronized(ByteBufCodecs.VAR_INT).build());
+    /** What a verdant heart band has been worked into: nothing more, a lifegiver, or a sustainer. */
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> VERDANT_KIND =
+            COMPONENTS.register("verdant_kind", () -> DataComponentType.<Integer>builder()
+                    .persistent(Codec.intRange(0, 2)).networkSynchronized(ByteBufCodecs.VAR_INT).build());
+
     private ModDataComponents() {
     }
 }

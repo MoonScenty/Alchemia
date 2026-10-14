@@ -55,6 +55,7 @@ public final class LegacyAssets {
     /** The capstone the eldritch ring and its obelisk wear. */
     public static final String OBELISK_CAP_MESH = "models/legacy/obelisk_cap.obj";
     public static final String CRAB_VENT_MESH = "models/legacy/crabvent.obj";
+    public static final String HEMIS_MESH = "models/legacy/hemis.obj";
     /** The eldritch guardian, which the original built in code. */
     public static final String ELDRITCH_GUARDIAN = "eldritch_guardian";
 
@@ -678,6 +679,26 @@ public final class LegacyAssets {
         all.add(LegacyAsset.of("textures/entity/crabvent.png").five("textures/models/crabvent.png"));
         all.add(LegacyAsset.of(CRAB_VENT_MESH).five("models/obj/crabvent.obj"));
         all.add(item("runed_tablet", "runed_tablet", null));
+        // the baubles, the runic shield's flare and its sound, the triple meat treat
+        String[][] baubles = {{"mundane_amulet", "amulet_mundane"}, {"mundane_ring", "ring_mundane"},
+                {"mundane_belt", "girdle_mundane"}, {"fancy_amulet", "amulet_fancy"}, {"fancy_ring", "ring_fancy"},
+                {"fancy_belt", "girdle_fancy"}, {"apprentice_ring", "ring_apprentice"},
+                {"runic_amulet", "amulet_runic"}, {"emergency_runic_amulet", "amulet_runic_emergency"},
+                {"protection_ring", "ring_protection"}, {"runic_ring", "ring_runic"},
+                {"charged_runic_ring", "ring_runic_charge"}, {"revitalizing_runic_ring", "ring_runic_regen"},
+                {"runic_girdle", "girdle_runic"}, {"kinetic_runic_girdle", "girdle_runic_kinetic"},
+                {"vis_stone", "amulet_vis_stone"}, {"vis_amulet", "amulet_vis"},
+                {"thaumostatic_girdle", "girdle_hover"}, {"verdant_heart", "ring_verdant"},
+                {"triple_meat_treat", "tripletreat"}};
+        for (String[] bauble : baubles) {
+            all.add(item(bauble[0], bauble[1], null));
+        }
+        all.add(LegacyAsset.of(HEMIS_MESH).five("models/obj/hemis.obj"));
+        for (int frame = 1; frame <= 15; frame++) {
+            all.add(LegacyAsset.of("textures/entity/hemis" + frame + ".png").five("textures/models/hemis" + frame + ".png"));
+            all.add(LegacyAsset.of("textures/entity/ripple" + frame + ".png").five("textures/models/ripple" + frame + ".png"));
+        }
+        all.add(LegacyAsset.of("sounds/legacy/runicshieldeffect.ogg").five("sounds/runicShieldEffect.ogg"));
         all.add(LegacyAsset.of("textures/block/legacy/liquid_death.png").five("textures/blocks/animatedglow.png"));
         all.add(LegacyAsset.of("textures/item/legacy/liquid_death_bucket.png").five("textures/items/bucket_death.png"));
         for (String sound : List.of("wind1", "wind2", "pump1", "pump2", "pump3", "evilportal")) {

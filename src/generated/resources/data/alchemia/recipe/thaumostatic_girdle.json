@@ -1,0 +1,38 @@
+{
+  "type": "alchemia:infusion",
+  "central": {
+    "item": "alchemia:mundane_belt"
+  },
+  "essentia": {
+    "alchemia:aer": 32,
+    "alchemia:motus": 16,
+    "alchemia:potentia": 32,
+    "alchemia:volatus": 16
+  },
+  "instability": 8,
+  "research": "alchemia:thaumostatic_girdle",
+  "result": {
+    "count": 1,
+    "id": "alchemia:thaumostatic_girdle"
+  },
+  "ring": [
+    {
+      "item": "alchemia:air_shard"
+    },
+    {
+      "item": "minecraft:feather"
+    },
+    {
+      "item": "minecraft:gold_ingot"
+    },
+    {
+      "item": "alchemia:earth_shard"
+    },
+    {
+      "item": "minecraft:feather"
+    },
+    {
+      "item": "minecraft:gold_ingot"
+    }
+  ]
+}

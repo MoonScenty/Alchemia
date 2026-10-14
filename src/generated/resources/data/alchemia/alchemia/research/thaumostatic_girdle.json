@@ -1,0 +1,26 @@
+{
+  "category": "alchemia:artifice",
+  "column": -2,
+  "complexity": 3,
+  "icon": "alchemia:thaumostatic_girdle",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.thaumostatic_girdle.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:thaumostatic_girdle"
+    }
+  ],
+  "parents": [
+    "alchemia:infusion",
+    "alchemia:levitator"
+  ],
+  "requirements": {
+    "alchemia:aer": 3,
+    "alchemia:motus": 6,
+    "alchemia:volatus": 6
+  },
+  "row": 0
+}

@@ -1,0 +1,37 @@
+{
+  "category": "alchemia:artifice",
+  "column": -2,
+  "complexity": 2,
+  "icon": "alchemia:charged_runic_ring",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.runic_special.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:charged_runic_ring"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:revitalizing_runic_ring"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:kinetic_runic_girdle"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:emergency_runic_amulet"
+    }
+  ],
+  "parents": [
+    "alchemia:runic_shielding"
+  ],
+  "requirements": {
+    "alchemia:ordo": 3,
+    "alchemia:potentia": 6,
+    "alchemia:praemunio": 3
+  },
+  "row": 7
+}

@@ -45,6 +45,7 @@ public class DataGenerators {
         generator.addProvider(event.includeServer(), new ModBiomeTagsProvider(output, entries.getRegistryProvider(),
                 existingFileHelper));
         generator.addProvider(event.includeServer(), new ModDataMapProvider(output, lookupProvider));
+        generator.addProvider(event.includeServer(), new ModCuriosProvider(output, existingFileHelper, lookupProvider));
         generator.addProvider(event.includeServer(), new LootTableProvider(output, Set.of(),
                 List.of(new LootTableProvider.SubProviderEntry(ModBlockLootProvider::new, LootContextParamSets.BLOCK),
                         new LootTableProvider.SubProviderEntry(ModEntityLootProvider::new, LootContextParamSets.ENTITY)),

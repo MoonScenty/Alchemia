@@ -87,6 +87,8 @@ public class ModTags {
         public static final TagKey<Item> REVEALS = mod("reveals");
         /** All sixteen flames, so that a dye can be put to any of them without naming all sixteen. */
         public static final TagKey<Item> NITOR = mod("nitor");
+        /** What runic augmentation will harden: every piece of the mod's armour, and every bauble. */
+        public static final TagKey<Item> RUNIC_AUGMENTABLE = mod("runic_augmentable");
 
         /**
          * The twelve foci, so that a slot can ask for "a focus" rather than naming all twelve.
