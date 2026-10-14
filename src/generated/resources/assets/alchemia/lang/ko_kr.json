@@ -804,6 +804,7 @@
   "item.alchemia.wispy_essence.holding": "%s 두 점",
   "item.alchemia.zombie_brain": "좀비 뇌",
   "itemGroup.alchemia": "Alchemia",
+  "jei.alchemia.instability": "불안정: %s",
   "key.alchemia.change_focus": "완드 포커스 바꾸기",
   "key.alchemia.tool_setting": "도구 설정 바꾸기",
   "key.categories.alchemia": "Alchemia",
