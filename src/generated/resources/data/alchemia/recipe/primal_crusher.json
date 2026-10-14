@@ -1,7 +1,7 @@
 {
   "type": "alchemia:infusion",
   "central": {
-    "item": "minecraft:nether_star"
+    "item": "alchemia:primordial_pearl"
   },
   "essentia": {
     "alchemia:alienis": 16,

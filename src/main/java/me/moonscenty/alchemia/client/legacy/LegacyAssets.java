@@ -621,6 +621,12 @@ public final class LegacyAssets {
             all.add(item(layer, layer, null));
         }
 
+        // the primordial pearl, which turns through sixteen frames, and the three bags of loot
+        all.add(item("primordial_pearl", "primordial_pearl", null));
+        all.add(item("loot_bag_common", "loot_bag_common", "lootbag"));
+        all.add(item("loot_bag_uncommon", "loot_bag_uncommon", "lootbagunc"));
+        all.add(item("loot_bag_rare", "loot_bag_rare", "lootbagrare"));
+
         // the Outer Lands' stone
         all.add(block("ancient_stone", "ancient_stone_1", null));
         for (int i = 2; i <= 5; i++) {

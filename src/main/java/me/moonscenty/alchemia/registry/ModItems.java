@@ -270,6 +270,18 @@ public class ModItems {
     public static final DeferredItem<me.moonscenty.alchemia.block.BannerItem> CRIMSON_BANNER = ITEMS.register(
             "crimson_banner", () -> new me.moonscenty.alchemia.block.BannerItem(new Item.Properties().stacksTo(16),
                     true));
+    /** A pearl of every primal at once, which only the Outer Lands' greatest things and the rarest bags give up. */
+    public static final DeferredItem<Item> PRIMORDIAL_PEARL = ITEMS.register("primordial_pearl",
+            () -> new Item(new Item.Properties().fireResistant()));
+    /** Bags of loot, common, uncommon and rare. */
+    public static final DeferredItem<me.moonscenty.alchemia.item.LootBagItem> LOOT_BAG_COMMON = ITEMS.register(
+            "loot_bag_common", () -> new me.moonscenty.alchemia.item.LootBagItem(new Item.Properties(), 0));
+    public static final DeferredItem<me.moonscenty.alchemia.item.LootBagItem> LOOT_BAG_UNCOMMON = ITEMS.register(
+            "loot_bag_uncommon", () -> new me.moonscenty.alchemia.item.LootBagItem(
+                    new Item.Properties().rarity(net.minecraft.world.item.Rarity.UNCOMMON), 1));
+    public static final DeferredItem<me.moonscenty.alchemia.item.LootBagItem> LOOT_BAG_RARE = ITEMS.register(
+            "loot_bag_rare", () -> new me.moonscenty.alchemia.item.LootBagItem(
+                    new Item.Properties().rarity(net.minecraft.world.item.Rarity.RARE), 2));
     /** A guardian's eye, that does not close. */
     public static final DeferredItem<Item> ELDRITCH_EYE = ITEMS.register("eldritch_eye",
             () -> new Item(new Item.Properties().rarity(net.minecraft.world.item.Rarity.UNCOMMON)));

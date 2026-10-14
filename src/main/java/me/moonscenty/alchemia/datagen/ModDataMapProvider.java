@@ -263,6 +263,11 @@ public class ModDataMapProvider extends DataMapProvider {
         item(ModBlocks.ANCIENT_DOORWAY, a(ModAspects.METAL, 1).add(ModAspects.ELDRITCH, 1).add(ModAspects.TRAP, 1));
         item(ModBlocks.GLYPHED_STONE, a(ModAspects.METAL, 1).add(ModAspects.ELDRITCH, 1).add(ModAspects.MIND, 1));
         item(ModBlocks.POROUS_STONE, a(ModAspects.EARTH, 1).add(ModAspects.VOID, 1));
+        item(me.moonscenty.alchemia.registry.ModItems.PRIMORDIAL_PEARL, a(ModAspects.AIR, 16).add(ModAspects.EARTH, 16)
+                .add(ModAspects.FIRE, 16).add(ModAspects.WATER, 16).add(ModAspects.ORDER, 16)
+                .add(ModAspects.ENTROPY, 16).add(ModAspects.FLUX, 16));
+        item(me.moonscenty.alchemia.registry.ModItems.ELDRITCH_EYE, a(ModAspects.ELDRITCH, 5).add(ModAspects.AURA, 3)
+                .add(ModAspects.SENSES, 3).add(ModAspects.SOUL, 3));
     }
 
     private void mobAspects() {

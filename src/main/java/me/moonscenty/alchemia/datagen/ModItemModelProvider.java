@@ -105,6 +105,10 @@ public class ModItemModelProvider extends ItemModelProvider {
         handheldItem(ModItems.CRIMSON_BLADE.get());
         basicItem(ModItems.CRIMSON_RITES.get());
         basicItem(ModItems.ELDRITCH_EYE.get());
+        basicItem(ModItems.PRIMORDIAL_PEARL.get());
+        basicItem(ModItems.LOOT_BAG_COMMON.get());
+        basicItem(ModItems.LOOT_BAG_UNCOMMON.get());
+        basicItem(ModItems.LOOT_BAG_RARE.get());
         withExistingParent("banner", mcLoc("item/generated")).texture("layer0", modLoc("item/banner_stand"))
                 .texture("layer1", modLoc("item/banner")).texture("layer2", modLoc("item/banner_symbol"));
         withExistingParent("crimson_banner", mcLoc("item/generated")).texture("layer0", modLoc("item/banner_stand"))

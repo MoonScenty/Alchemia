@@ -51,12 +51,11 @@ import net.neoforged.neoforge.event.tick.EntityTickEvent;
  * <h3>What one is</h3>
  * A hundred more health (of which it gets twenty-five at once, not all), three times the bite, a name that says what
  * it is the champion of, and one of the thirteen {@link ChampionModifier modifiers}. It dies for five to seven more
- * experience than it would have.
+ * experience than it would have, and a bag of loot: common or uncommon, and with looting now and then rare.
  *
  * <h3>Where this differs from the original</h3>
  * The original kept the roll in an attribute it gave every monster; here it is a number attached to the mob, saved
- * and sent to whoever can see it. The original also dropped a loot bag from a champion, which this mod does not have
- * yet. An infested champion, struck, may burst a taint crawler out of itself.
+ * and sent to whoever can see it. An infested champion, struck, may burst a taint crawler out of itself.
  */
 @EventBusSubscriber(modid = Alchemia.MODID)
 public final class Champions {
@@ -276,5 +275,13 @@ public final class Champions {
             return;
         }
         ExperienceOrb.award(level, dead.position(), 5 + dead.getRandom().nextInt(3));
+        int looting = 0;
+        if (event.getSource().getEntity() instanceof LivingEntity killer) {
+            looting = net.minecraft.world.item.enchantment.EnchantmentHelper.getEnchantmentLevel(level.registryAccess()
+                    .registryOrThrow(net.minecraft.core.registries.Registries.ENCHANTMENT)
+                    .getHolderOrThrow(net.minecraft.world.item.enchantment.Enchantments.LOOTING), killer);
+        }
+        event.getDrops().add(new net.minecraft.world.entity.item.ItemEntity(level, dead.getX(), dead.getEyeY(),
+                dead.getZ(), me.moonscenty.alchemia.item.LootBagItem.forChampion(dead.getRandom(), looting)));
     }
 }

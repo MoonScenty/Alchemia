@@ -687,6 +687,10 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         addBlock(ModBlocks.ELDRITCH_PORTAL, pick("Eldritch Portal", "엘드리치 차원문"));
         addBlock(ModBlocks.BANNER, pick("Banner", "깃발"));
         addItem(ModItems.CRIMSON_BANNER, pick("Crimson Cult Banner", "진홍 교단 깃발"));
+        addItem(ModItems.PRIMORDIAL_PEARL, pick("Primordial Pearl", "원시 진주"));
+        addItem(ModItems.LOOT_BAG_COMMON, pick("Bag of Loot", "전리품 주머니"));
+        addItem(ModItems.LOOT_BAG_UNCOMMON, pick("Bag of Uncommon Loot", "드문 전리품 주머니"));
+        addItem(ModItems.LOOT_BAG_RARE, pick("Bag of Rare Loot", "귀한 전리품 주머니"));
         String[][] banners = {{"white", "White Banner", "흰 깃발"}, {"orange", "Orange Banner", "주황 깃발"},
                 {"magenta", "Magenta Banner", "자홍 깃발"}, {"light_blue", "Light Blue Banner", "하늘색 깃발"},
                 {"yellow", "Yellow Banner", "노란 깃발"}, {"lime", "Lime Banner", "연두 깃발"},
