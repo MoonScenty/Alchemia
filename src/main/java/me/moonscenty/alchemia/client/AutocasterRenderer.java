@@ -28,6 +28,7 @@ import net.minecraft.util.Mth;
  */
 public class AutocasterRenderer extends EntityRenderer<Autocaster> {
     private static final ResourceLocation SHEET = Alchemia.id("textures/entity/autocaster.png");
+    private static final ResourceLocation ELDRITCH = Alchemia.id("textures/entity/eldritch_autocaster.png");
     /** How far the ball sits above the thing's feet, which is the middle of the square it stands in. */
     private static final float MIDDLE = 0.5F;
     /** How hard a fresh wound shakes it. The original's number. */
@@ -118,6 +119,6 @@ public class AutocasterRenderer extends EntityRenderer<Autocaster> {
 
     @Override
     public ResourceLocation getTextureLocation(Autocaster turret) {
-        return SHEET;
+        return turret instanceof me.moonscenty.alchemia.entity.EldritchAutocaster ? ELDRITCH : SHEET;
     }
 }

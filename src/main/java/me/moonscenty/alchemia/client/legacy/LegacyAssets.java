@@ -47,6 +47,11 @@ public final class LegacyAssets {
     public static final String ELDRITCH_CRAB = "eldritch_crab";
     /** The banner, which the original built in code. */
     public static final String BANNER = "banner";
+    public static final String CUBE = "cube";
+    public static final String ELDRITCH_GOLEM = "eldritch_golem";
+    public static final String LEADER_ARMOUR = "leader_armour";
+    public static final String LEADER_ARMOUR_LOWER = "leader_armour_lower";
+    public static final String TAINTACLE_GIANT = "taintacle_giant";
     /** The capstone the eldritch ring and its obelisk wear. */
     public static final String OBELISK_CAP_MESH = "models/legacy/obelisk_cap.obj";
     public static final String CRAB_VENT_MESH = "models/legacy/crabvent.obj";
@@ -157,6 +162,16 @@ public final class LegacyAssets {
                     "thaumcraft/client/renderers/models/entity/ModelTaintacle", "(I)V", 10))),
             Map.entry(ELDRITCH_GUARDIAN, List.of(new LegacyModelSource(LegacyEdition.FIVE,
                     "thaumcraft/client/renderers/models/entity/ModelEldritchGuardian", "()V"))),
+            Map.entry(ELDRITCH_GOLEM, List.of(new LegacyModelSource(LegacyEdition.FIVE,
+                    "thaumcraft/client/renderers/models/entity/ModelEldritchGolem", "()V"))),
+            Map.entry(LEADER_ARMOUR, List.of(new LegacyModelSource(LegacyEdition.FIVE,
+                    "thaumcraft/client/renderers/models/gear/ModelLeaderArmor", "(F)V", 1.0F))),
+            Map.entry(LEADER_ARMOUR_LOWER, List.of(new LegacyModelSource(LegacyEdition.FIVE,
+                    "thaumcraft/client/renderers/models/gear/ModelLeaderArmor", "(F)V", 0.5F))),
+            Map.entry(TAINTACLE_GIANT, List.of(new LegacyModelSource(LegacyEdition.FIVE,
+                    "thaumcraft/client/renderers/models/entity/ModelTaintacle", "(I)V", 14))),
+            Map.entry(CUBE, List.of(new LegacyModelSource(LegacyEdition.FIVE,
+                    "thaumcraft/client/renderers/models/ModelCube", "(I)V", 0))),
             Map.entry(BANNER, List.of(new LegacyModelSource(LegacyEdition.FIVE,
                     "thaumcraft/client/renderers/models/block/ModelBanner", "()V"))),
             Map.entry(ELDRITCH_CRAB, List.of(new LegacyModelSource(LegacyEdition.FIVE,
@@ -473,6 +488,8 @@ public final class LegacyAssets {
         // the autocaster: the original's mesh, its sheet, the panel it opens as, and its picture in a hand
         all.add(LegacyAsset.of(TURRET_MESH).five("models/obj/turret.obj"));
         all.add(LegacyAsset.of("textures/entity/autocaster.png").five("textures/models/focus_turret.png"));
+        all.add(LegacyAsset.of("textures/entity/eldritch_autocaster.png")
+                .five("textures/models/focus_turret_eldritch.png"));
         all.add(LegacyAsset.of("textures/gui/autocaster.png").five("textures/gui/gui_turret_focus.png"));
         all.add(LegacyAsset.of("textures/item/legacy/autocaster.png").five("textures/items/turret_focus.png"));
 
@@ -653,9 +670,11 @@ public final class LegacyAssets {
             }
         }
         all.add(LegacyAsset.of("sounds/legacy/urnbreak.ogg").five("sounds/urnbreak.ogg"));
-        // the Outer Lands: their bedrock with the stars in it, the crab vent, the tablet, liquid death, and the
-        // sounds of the Outer Lands
+        // the Outer Lands: their bedrock with the stars in it, the lock and its arms, the crab vent, the tablet,
+        // and their sounds
         all.add(LegacyAsset.of("textures/block/legacy/ancient_bedrock.png").five("textures/misc/particlefield32.png"));
+        all.add(LegacyAsset.of("textures/entity/eldritch_lock.png").five("textures/models/eldritch_lock.png"));
+        all.add(LegacyAsset.of("textures/entity/eldritch_cube.png").five("textures/models/eldritch_cube.png"));
         all.add(LegacyAsset.of("textures/entity/crabvent.png").five("textures/models/crabvent.png"));
         all.add(LegacyAsset.of(CRAB_VENT_MESH).five("models/obj/crabvent.obj"));
         all.add(item("runed_tablet", "runed_tablet", null));
@@ -665,6 +684,18 @@ public final class LegacyAssets {
             all.add(LegacyAsset.of("sounds/legacy/" + sound + ".ogg").five("sounds/" + sound + ".ogg"));
         }
         all.add(LegacyAsset.of("sounds/legacy/runicshieldcharge.ogg").five("sounds/runicShieldCharge.ogg"));
+        // the great halls' bosses: the Warden in the guardian's model, the Construct in its own, the Praetor's plate
+        all.add(LegacyAsset.of("textures/entity/eldritch_warden.png").five("textures/models/creature/eldritch_warden.png")
+                .forModel(ELDRITCH_GUARDIAN));
+        all.add(LegacyAsset.of("textures/entity/eldritch_golem.png").five("textures/models/creature/eldritch_golem.png")
+                .forModel(ELDRITCH_GOLEM));
+        for (int layer = 1; layer <= 2; layer++) {
+            all.add(LegacyAsset.of("textures/models/armor/crimson_praetor_layer_" + layer + ".png")
+                    .five("textures/models/armor/cultist_leader_armor.png").forModel(LEADER_ARMOUR));
+        }
+        for (String name : List.of("crimson_praetor_helm", "crimson_praetor_chest", "crimson_praetor_legs")) {
+            all.add(item(name, name, null));
+        }
         all.add(LegacyAsset.of("sounds/legacy/jacobs.ogg").five("sounds/jacobs.ogg"));
     }
 

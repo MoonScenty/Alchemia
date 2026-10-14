@@ -542,6 +542,22 @@ public class ModBlocks {
             () -> new me.moonscenty.alchemia.block.eldritch.VacuumBlock(BlockBehaviour.Properties.of().mapColor(MapColor.NONE).noCollission()
                     .strength(-1.0F, 999.0F).noLootTable().randomTicks().replaceable().air()
                     .pushReaction(net.minecraft.world.level.material.PushReaction.BLOCK)));
+    /** The lock on a great hall's door, and the door it holds shut: neither breaks. */
+    public static final DeferredBlock<me.moonscenty.alchemia.block.eldritch.EldritchLockBlock> ELDRITCH_LOCK = registerBlockOnly("eldritch_lock",
+            () -> new me.moonscenty.alchemia.block.eldritch.EldritchLockBlock(eldritch().strength(-1.0F, 3600000.0F)));
+    public static final DeferredBlock<Block> ELDRITCH_DOOR = registerBlockOnly("eldritch_door",
+            () -> new Block(eldritch().strength(-1.0F, 3600000.0F)) {
+                @Override
+                protected net.minecraft.world.level.block.RenderShape getRenderShape(
+                        net.minecraft.world.level.block.state.BlockState state) {
+                    return net.minecraft.world.level.block.RenderShape.INVISIBLE;
+                }
+            });
+    /** The Eldritch Warden's sapping, unseen underfoot. */
+    public static final DeferredBlock<me.moonscenty.alchemia.block.eldritch.SappingBlock> SAPPING = registerBlockOnly("sapping",
+            () -> new me.moonscenty.alchemia.block.eldritch.SappingBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.NONE).noCollission().replaceable().strength(-1.0F, 999.0F).noLootTable()
+                    .lightLevel(state -> 7).randomTicks().air()));
     /** A crab vent in the crust. */
     public static final DeferredBlock<me.moonscenty.alchemia.block.eldritch.CrabSpawnerBlock> CRAB_SPAWNER = registerBlockOnly("crab_spawner",
             () -> new me.moonscenty.alchemia.block.eldritch.CrabSpawnerBlock(eldritch().strength(25.0F, 1200.0F)));

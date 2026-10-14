@@ -316,6 +316,8 @@ public class AlchemiaClientSetup {
                         piece.get());
                 case PLATE -> event.registerItem(me.moonscenty.alchemia.client.armour.CultistArmourExtensions.PLATE,
                         piece.get());
+                case PRAETOR -> event.registerItem(
+                        me.moonscenty.alchemia.client.armour.CultistArmourExtensions.PRAETOR, piece.get());
                 default -> {
                 }
             }
@@ -343,9 +345,17 @@ public class AlchemiaClientSetup {
         event.registerBlockEntityRenderer(ModBlockEntities.ELDRITCH_OBELISK.get(), EldritchObeliskRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.ELDRITCH_PORTAL.get(), EldritchPortalRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.BANNER.get(), BannerRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.ELDRITCH_LOCK.get(), EldritchLockRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.CRAB_SPAWNER.get(), CrabSpawnerRenderer::new);
         event.registerEntityRenderer(ModEntities.AURA_NODE.get(), AuraNodeRenderer::new);
         event.registerEntityRenderer(ModEntities.AUTOCASTER.get(), AutocasterRenderer::new);
+        event.registerEntityRenderer(ModEntities.ELDRITCH_AUTOCASTER.get(), AutocasterRenderer::new);
+        event.registerEntityRenderer(ModEntities.ELDRITCH_WARDEN.get(), EldritchWardenRenderer::new);
+        event.registerEntityRenderer(ModEntities.ELDRITCH_GOLEM.get(), EldritchGolemRenderer::new);
+        event.registerEntityRenderer(ModEntities.CULTIST_LEADER.get(), CultistLeaderRenderer::new);
+        event.registerEntityRenderer(ModEntities.GREATER_CULTIST_PORTAL.get(), CultistPortalRenderer::new);
+        event.registerEntityRenderer(ModEntities.TAINTACLE_GIANT.get(), context -> new TaintacleRenderer<>(context,
+                me.moonscenty.alchemia.client.legacy.LegacyAssets.TAINTACLE_GIANT, 14, 1.0F));
         event.registerEntityRenderer(ModEntities.FIRE_BAT.get(), FireBatRenderer::new);
         event.registerEntityRenderer(ModEntities.CULTIST_KNIGHT.get(), CultistRenderer::new);
         event.registerEntityRenderer(ModEntities.CULTIST_CLERIC.get(), CultistRenderer::new);

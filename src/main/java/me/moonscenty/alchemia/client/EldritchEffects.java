@@ -7,6 +7,7 @@ import me.moonscenty.alchemia.entity.EldritchOrb;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.ParticleStatus;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 
 /** What the Outer Lands' creatures leave in the air: the guardian's trail of black smoke and the orb's dark burst. */
@@ -66,6 +67,120 @@ public final class EldritchEffects {
                 .cells(WISP_CELLS, WISP_FRAMES, 1)
                 .loops()
                 .size(1.0F, 0.2F));
+    }
+
+    /** A dark wisp drifting up off the Warden, every tick. */
+    public static void wardenWisp(me.moonscenty.alchemia.entity.boss.EldritchWarden warden) {
+        if (!(warden.level() instanceof ClientLevel level)) {
+            return;
+        }
+        RandomSource random = level.random;
+        double x = warden.getX() + (random.nextFloat() - random.nextFloat()) * 0.2;
+        double z = warden.getZ() + (random.nextFloat() - random.nextFloat()) * 0.2;
+        float shade = random.nextFloat() * 0.1F;
+        Minecraft.getInstance().particleEngine.add(new GenericParticle(level, x, warden.getY()
+                + warden.getBbHeight() * 0.25, z, 0.0, 0.02, 0.0, LegacySheet.COVER, 16)
+                .lasts(20 + random.nextInt(10))
+                .colour(shade, shade, shade)
+                .opacity(0.5F, 0.0F)
+                .cells(WISP_CELLS, WISP_FRAMES, 1)
+                .loops()
+                .size(1.0F, 0.3F));
+    }
+
+    /** The smoke the Warden rises out of the floor in: spirals, higher the further it has risen. */
+    public static void wardenRise(me.moonscenty.alchemia.entity.boss.EldritchWarden warden) {
+        if (!(warden.level() instanceof ClientLevel level)) {
+            return;
+        }
+        RandomSource random = level.random;
+        float risen = Math.max(1.0F, warden.getBbHeight()
+                * ((me.moonscenty.alchemia.entity.boss.EldritchWarden.RISING - warden.spawnTimer())
+                        / (float) me.moonscenty.alchemia.entity.boss.EldritchWarden.RISING));
+        for (int i = 0; i < 33; i++) {
+            double angle = Math.toRadians(random.nextInt(360));
+            double radius = risen / 2.0;
+            double x = warden.getX() + Math.cos(angle) * radius * random.nextFloat();
+            double z = warden.getZ() + Math.sin(angle) * radius * random.nextFloat();
+            double y = warden.getBoundingBox().minY + random.nextFloat() * risen;
+            Minecraft.getInstance().particleEngine.add(new GenericParticle(level, x, y, z,
+                    -Math.sin(angle) * 0.05, 0.01, Math.cos(angle) * 0.05, LegacySheet.COVER, 16)
+                    .lasts(15 + random.nextInt(10))
+                    .colour(0x22 / 255.0F, 0x11 / 255.0F, 0x2F / 255.0F)
+                    .opacity(0.6F, 0.0F)
+                    .cells(WISP_CELLS, WISP_FRAMES, 1)
+                    .loops()
+                    .size(1.5F, 0.5F));
+        }
+    }
+
+    /** The Warden's screech: a ring going out from it. */
+    public static void screech(me.moonscenty.alchemia.entity.boss.EldritchWarden warden) {
+        if (!(warden.level() instanceof ClientLevel level)) {
+            return;
+        }
+        for (int i = 0; i < 36; i++) {
+            double angle = Math.toRadians(i * 10);
+            Minecraft.getInstance().particleEngine.add(new GenericParticle(level, warden.getX(),
+                    warden.getEyeY() - 0.5, warden.getZ(), Math.cos(angle) * 0.6, 0.0, Math.sin(angle) * 0.6,
+                    LegacySheet.COVER, 16)
+                    .lasts(10)
+                    .colour(0.3F, 0.1F, 0.4F)
+                    .opacity(0.6F, 0.0F)
+                    .cells(WISP_CELLS, WISP_FRAMES, 1)
+                    .loops()
+                    .size(1.0F, 2.0F));
+        }
+    }
+
+    /** The headless Construct: smoke out of its neck, now and then a spark, and its crackling while it charges. */
+    public static void golemNeck(me.moonscenty.alchemia.entity.boss.EldritchGolem golem) {
+        if (!(golem.level() instanceof ClientLevel level)) {
+            return;
+        }
+        RandomSource random = level.random;
+        float body = -golem.yBodyRot * Mth.DEG_TO_RAD - Mth.PI;
+        double nx = Mth.sin(body) * -1.0;
+        double nz = Mth.cos(body) * -1.0;
+        double neckY = golem.getY() + 3.33 - 0.75;
+        Minecraft.getInstance().particleEngine.add(new me.moonscenty.alchemia.client.particle.VentParticle(level,
+                golem.getX() + nx * 0.66, neckY, golem.getZ() + nz * 0.66, 0.0, 0.001, 0.0, 0x555555).scaled(4.0F));
+        if (random.nextInt(20) == 0) {
+            float a = (random.nextFloat() - random.nextFloat()) / 2.0F;
+            float b = (random.nextFloat() - random.nextFloat()) / 2.0F;
+            spark(level, golem.getX() + nx + a, neckY + 0.5, golem.getZ() + nz + b, 0.65F + random.nextFloat() * 0.1F,
+                    1.0F, 1.0F);
+        }
+        if (golem.arcing > 0) {
+            arc(level, golem.getX(), golem.getY() + golem.getBbHeight() / 2.0, golem.getZ(),
+                    golem.arcTo.getX() + 0.5, golem.arcTo.getY() + 1.0, golem.arcTo.getZ() + 0.5,
+                    0.65F + random.nextFloat() * 0.1F, 1.0F, 1.0F);
+            golem.arcing--;
+        }
+    }
+
+    private static void spark(ClientLevel level, double x, double y, double z, float r, float g, float b) {
+        Minecraft.getInstance().particleEngine.add(new GenericParticle(level, x, y, z, 0.0, 0.0, 0.0,
+                LegacySheet.GLOW, 16)
+                .lasts(6)
+                .colour(r, g, b)
+                .opacity(0.8F, 0.0F)
+                .cells(WISP_CELLS, WISP_FRAMES, 1)
+                .size(0.3F, 0.1F));
+    }
+
+    /** A crooked line of light from one point to another, gone in a moment. */
+    public static void arc(ClientLevel level, double x, double y, double z, double tx, double ty, double tz,
+            float r, float g, float b) {
+        RandomSource random = level.random;
+        int steps = Math.max(4, (int) (Math.sqrt((tx - x) * (tx - x) + (ty - y) * (ty - y) + (tz - z) * (tz - z)) * 4));
+        for (int i = 0; i <= steps; i++) {
+            double t = i / (double) steps;
+            double jitter = i == 0 || i == steps ? 0.0 : 0.2;
+            spark(level, x + (tx - x) * t + (random.nextFloat() - 0.5) * jitter,
+                    y + (ty - y) * t + (random.nextFloat() - 0.5) * jitter,
+                    z + (tz - z) * t + (random.nextFloat() - 0.5) * jitter, r, g, b);
+        }
     }
 
     /** A purple bubble rising off liquid death, lower the further it has flowed. */

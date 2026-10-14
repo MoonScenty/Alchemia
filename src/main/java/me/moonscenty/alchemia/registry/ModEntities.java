@@ -150,6 +150,44 @@ public class ModEntities {
                     .noSummon()
                     .build("autocaster"));
 
+    /** The great halls' bosses. */
+    public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.entity.boss.EldritchWarden>> ELDRITCH_WARDEN =
+            ENTITIES.register("eldritch_warden", () -> EntityType.Builder
+                    .<me.moonscenty.alchemia.entity.boss.EldritchWarden>of(me.moonscenty.alchemia.entity.boss.EldritchWarden::new, MobCategory.MONSTER)
+                    .sized(1.5F, 3.5F).eyeHeight(3.1F).clientTrackingRange(10).updateInterval(3)
+                    .build("eldritch_warden"));
+    public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.entity.boss.EldritchGolem>> ELDRITCH_GOLEM =
+            ENTITIES.register("eldritch_golem", () -> EntityType.Builder
+                    .<me.moonscenty.alchemia.entity.boss.EldritchGolem>of(me.moonscenty.alchemia.entity.boss.EldritchGolem::new, MobCategory.MONSTER)
+                    .sized(1.75F, 3.5F).eyeHeight(3.0F).fireImmune().clientTrackingRange(10).updateInterval(3)
+                    .build("eldritch_golem"));
+    public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.entity.boss.CultistLeader>> CULTIST_LEADER =
+            ENTITIES.register("cultist_leader", () -> EntityType.Builder
+                    .<me.moonscenty.alchemia.entity.boss.CultistLeader>of(me.moonscenty.alchemia.entity.boss.CultistLeader::new, MobCategory.MONSTER)
+                    .sized(0.75F, 2.25F).clientTrackingRange(10).updateInterval(3)
+                    .build("cultist_leader"));
+    public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.entity.boss.GreaterCultistPortal>> GREATER_CULTIST_PORTAL =
+            ENTITIES.register("greater_cultist_portal", () -> EntityType.Builder
+                    .<me.moonscenty.alchemia.entity.boss.GreaterCultistPortal>of(me.moonscenty.alchemia.entity.boss.GreaterCultistPortal::new, MobCategory.MONSTER)
+                    .sized(1.5F, 3.0F).fireImmune().clientTrackingRange(10).updateInterval(20)
+                    .build("greater_cultist_portal"));
+    public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.entity.boss.TaintacleGiant>> TAINTACLE_GIANT =
+            ENTITIES.register("taintacle_giant", () -> EntityType.Builder
+                    .<me.moonscenty.alchemia.entity.boss.TaintacleGiant>of(me.moonscenty.alchemia.entity.boss.TaintacleGiant::new, MobCategory.MONSTER)
+                    .sized(1.1F, 6.0F).clientTrackingRange(12).updateInterval(3)
+                    .build("taintacle_giant"));
+
+    /** The ancient autocaster of the Outer Lands' mazes. */
+    public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.entity.EldritchAutocaster>> ELDRITCH_AUTOCASTER =
+            ENTITIES.register("eldritch_autocaster", () -> EntityType.Builder
+                    .<me.moonscenty.alchemia.entity.EldritchAutocaster>of(me.moonscenty.alchemia.entity.EldritchAutocaster::new,
+                            MobCategory.MISC)
+                    .sized(0.9F, 0.9F)
+                    .eyeHeight(0.45F)
+                    .clientTrackingRange(4)
+                    .updateInterval(3)
+                    .build("eldritch_autocaster"));
+
     /**
      * A bat that burns. Small, fire-proof, and followed at the original's distance; it moves too fast and too
      * often for anything slower than every third tick to keep up with.
@@ -409,6 +447,12 @@ public class ModEntities {
     /** What anything alive needs before the game will make one. */
     public static void attributes(EntityAttributeCreationEvent event) {
         event.put(AUTOCASTER.get(), Autocaster.attributes().build());
+        event.put(ELDRITCH_AUTOCASTER.get(), me.moonscenty.alchemia.entity.EldritchAutocaster.attributes().build());
+        event.put(ELDRITCH_WARDEN.get(), me.moonscenty.alchemia.entity.boss.EldritchWarden.attributes().build());
+        event.put(ELDRITCH_GOLEM.get(), me.moonscenty.alchemia.entity.boss.EldritchGolem.attributes().build());
+        event.put(CULTIST_LEADER.get(), me.moonscenty.alchemia.entity.boss.CultistLeader.attributes().build());
+        event.put(GREATER_CULTIST_PORTAL.get(), me.moonscenty.alchemia.entity.boss.GreaterCultistPortal.attributes().build());
+        event.put(TAINTACLE_GIANT.get(), me.moonscenty.alchemia.entity.boss.TaintacleGiant.attributes().build());
         event.put(CULTIST_KNIGHT.get(), me.moonscenty.alchemia.entity.cult.CultistKnight.attributes().build());
         event.put(ELDRITCH_CRAB.get(), me.moonscenty.alchemia.entity.EldritchCrab.attributes().build());
         event.put(ELDRITCH_GUARDIAN.get(), me.moonscenty.alchemia.entity.EldritchGuardian.attributes().build());

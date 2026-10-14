@@ -23,7 +23,8 @@ import net.minecraft.util.Mth;
  * It does not walk. Its arms bob, lifting when it casts, and its panels and cloak sway, by the original's sums. It is
  * drawn as see-through as its renderer says.
  */
-public class EldritchGuardianModel extends EntityModel<EldritchGuardian> {
+public class EldritchGuardianModel<T extends net.minecraft.world.entity.LivingEntity & me.moonscenty.alchemia.entity.ArmLifting>
+        extends EntityModel<T> {
     private static final List<String> ROOTS = List.of("BeltR", "Mbelt", "MbeltL", "MbeltR", "BeltL", "Chestplate",
             "Hood1", "Backplate", "ShoulderplateTopR", "ShoulderplateR1", "ShoulderplateR2", "ShoulderplateR3",
             "ShoulderR", "ArmL1", "ArmR1", "ShoulderL", "ShoulderplateLtop", "ShoulderplateL1", "ShoulderplateL2",
@@ -37,7 +38,7 @@ public class EldritchGuardianModel extends EntityModel<EldritchGuardian> {
     float alpha = 1.0F;
 
     @Override
-    public void setupAnim(EldritchGuardian guardian, float limbSwing, float limbSwingAmount, float age,
+    public void setupAnim(T guardian, float limbSwing, float limbSwingAmount, float age,
             float headYaw, float headPitch) {
         if (!refresh()) {
             return;
@@ -45,8 +46,8 @@ public class EldritchGuardianModel extends EntityModel<EldritchGuardian> {
         ModelPart hood = parts.get("Hood1");
         hood.yRot = headYaw * Mth.DEG_TO_RAD;
         hood.xRot = headPitch * Mth.DEG_TO_RAD;
-        parts.get("ArmL1").xRot = -1.0F - guardian.armLiftL + Mth.sin((age + 20.0F) / 10.0F) * 0.08F;
-        parts.get("ArmR1").xRot = -1.0F - guardian.armLiftR + Mth.sin(age / 10.0F) * 0.08F;
+        parts.get("ArmL1").xRot = -1.0F - guardian.leftArmLift() + Mth.sin((age + 20.0F) / 10.0F) * 0.08F;
+        parts.get("ArmR1").xRot = -1.0F - guardian.rightArmLift() + Mth.sin(age / 10.0F) * 0.08F;
         ModelPart c1 = parts.get("LegpanelC1");
         ModelPart c2 = c1.getChild("LegpanelC2");
         c1.xRot = -0.15F + Mth.sin(age / 8.0F) * 0.12F;

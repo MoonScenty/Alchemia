@@ -106,6 +106,10 @@ public final class ModArmorMaterials {
     public static final DeferredHolder<ArmorMaterial, ArmorMaterial> CRIMSON_PLATE =
             MATERIALS.register("crimson_plate", () -> material("crimson_plate", stops(2, 6, 5, 2), 9,
                     () -> Ingredient.of(net.minecraft.world.item.Items.IRON_INGOT)));
+    /** The Crimson Praetor's: the cult's best, iron to mend. */
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> CRIMSON_PRAETOR =
+            MATERIALS.register("crimson_praetor", () -> material("crimson_praetor", stops(3, 8, 6, 3), 20,
+                    () -> Ingredient.of(net.minecraft.world.item.Items.IRON_INGOT)));
     public static final DeferredHolder<ArmorMaterial, ArmorMaterial> CRIMSON_BOOTS =
             MATERIALS.register("crimson_boots", () -> material("crimson_boots", stops(2, 6, 5, 2), 9,
                     () -> Ingredient.of(net.minecraft.world.item.Items.IRON_INGOT)));

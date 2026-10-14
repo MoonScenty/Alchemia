@@ -79,9 +79,13 @@ public class CultistPortal extends Monster {
         if (pulse > 0) {
             pulse--;
         }
-        if (!(level() instanceof ServerLevel served)) {
-            return;
+        if (level() instanceof ServerLevel served) {
+            think(served);
         }
+    }
+
+    /** Wakes when someone comes near, and lets the cult through while they stay. */
+    protected void think(ServerLevel served) {
         if (!isActive()) {
             if (tickCount % 10 == 0 && level().getNearestPlayer(this, WAKES_WITHIN) != null) {
                 entityData.set(ACTIVE, true);
@@ -103,6 +107,16 @@ public class CultistPortal extends Monster {
             }
             nextIn = 50 + random.nextInt(50);
         }
+    }
+
+    /** Awake from the first, for a portal that never sleeps. */
+    protected void activate() {
+        entityData.set(ACTIVE, true);
+    }
+
+    /** Dies without the lesser portal's own blast, for one that has a bigger. */
+    protected void dieQuietly(DamageSource source) {
+        super.die(source);
     }
 
     /** One more of the cult, and the toll it takes. */

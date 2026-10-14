@@ -67,10 +67,20 @@ import net.neoforged.neoforge.network.PacketDistributor;
  * <h3>Where this differs from the original</h3>
  * The original's screech was a ripple drawn on a hemisphere of its own; here it is the game's own sonic boom.
  */
-public class EldritchGuardian extends Monster implements RangedAttackMob, EldritchMob {
+public class EldritchGuardian extends Monster implements RangedAttackMob, EldritchMob, ArmLifting {
     /** How far an arm is raised, for the drawing. */
     public float armLiftL;
     public float armLiftR;
+
+    @Override
+    public float leftArmLift() {
+        return armLiftL;
+    }
+
+    @Override
+    public float rightArmLift() {
+        return armLiftR;
+    }
     private boolean lastBlast;
 
     public EldritchGuardian(EntityType<? extends EldritchGuardian> type, Level level) {

@@ -1,6 +1,8 @@
 {
   "values": [
     "alchemia:ancient_bedrock",
-    "alchemia:vacuum"
+    "alchemia:vacuum",
+    "alchemia:eldritch_lock",
+    "alchemia:eldritch_door"
   ]
 }

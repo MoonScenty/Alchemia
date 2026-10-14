@@ -23,6 +23,8 @@ public class CultistArmourExtensions implements IClientItemExtensions {
             LegacyAssets.ROBE_SKIRT, false);
     public static final CultistArmourExtensions PLATE = new CultistArmourExtensions(LegacyAssets.KNIGHT_ARMOUR,
             LegacyAssets.KNIGHT_ARMOUR_LOWER, true);
+    public static final CultistArmourExtensions PRAETOR = new CultistArmourExtensions(LegacyAssets.LEADER_ARMOUR,
+            LegacyAssets.LEADER_ARMOUR_LOWER, true);
 
     private static final float STRIDE = 0.6662F;
     private static final float SWING = 1.4F;
@@ -68,7 +70,7 @@ public class CultistArmourExtensions implements IClientItemExtensions {
         float swing = Math.min(Mth.cos(limbSwing * STRIDE) * SWING * limbSwingAmount,
                 Mth.cos(limbSwing * STRIDE + Mth.PI) * SWING * limbSwingAmount);
         if (plate) {
-            turn(drawn, List.of("Frontcloth1"), swing - 0.1047198F);
+            turn(drawn, List.of("Frontcloth1", "LegClothR", "LegClothL"), swing - 0.1047198F);
             turn(drawn, List.of("Frontcloth2"), swing - 0.3316126F);
             turn(drawn, List.of("Cloak1"), -swing / 2.0F + 0.1396263F);
             turn(drawn, List.of("Cloak2"), -swing / 2.0F + 0.3069452F);
