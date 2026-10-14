@@ -54,6 +54,16 @@ public class CultistArmorItem extends ArmorItem implements WarpingGear, VisDisco
         return kind.mark;
     }
 
+    /** A husk's plate is the same plate, stained by what has been living in it. */
+    @Override
+    public net.minecraft.resources.ResourceLocation getArmorTexture(ItemStack stack, net.minecraft.world.entity.Entity entity,
+            net.minecraft.world.entity.EquipmentSlot slot, ArmorMaterial.Layer layer, boolean innerModel) {
+        if (kind == Kind.PLATE && entity instanceof me.moonscenty.alchemia.entity.InhabitedZombie) {
+            return me.moonscenty.alchemia.Alchemia.id("textures/models/armor/crimson_plate_husk.png");
+        }
+        return null;
+    }
+
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> lines, TooltipFlag flag) {
         if (kind.mark > 0) {

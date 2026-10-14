@@ -349,6 +349,25 @@ public class ModEntities {
                     .clientTrackingRange(8)
                     .updateInterval(20)
                     .build("cultist_portal"));
+    /** The crab, low and broad, and the husk it lives in, a zombie's shape. */
+    public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.entity.EldritchCrab>>
+            ELDRITCH_CRAB = ENTITIES.register("eldritch_crab", () -> EntityType.Builder
+                    .<me.moonscenty.alchemia.entity.EldritchCrab>of(
+                            me.moonscenty.alchemia.entity.EldritchCrab::new, MobCategory.MONSTER)
+                    .sized(0.8F, 0.6F)
+                    .clientTrackingRange(8)
+                    .build("eldritch_crab"));
+    public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.entity.InhabitedZombie>>
+            INHABITED_ZOMBIE = ENTITIES.register("inhabited_zombie", () -> EntityType.Builder
+                    .<me.moonscenty.alchemia.entity.InhabitedZombie>of(
+                            me.moonscenty.alchemia.entity.InhabitedZombie::new, MobCategory.MONSTER)
+                    .sized(0.6F, 1.95F)
+                    .eyeHeight(1.74F)
+                    .passengerAttachments(2.0125F)
+                    .ridingOffset(-0.7F)
+                    .clientTrackingRange(8)
+                    .build("inhabited_zombie"));
+
     /** The cleric's orb. */
     public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.entity.cult.GolemOrb>>
             GOLEM_ORB = ENTITIES.register("golem_orb", () -> EntityType.Builder
@@ -364,6 +383,8 @@ public class ModEntities {
     public static void attributes(EntityAttributeCreationEvent event) {
         event.put(AUTOCASTER.get(), Autocaster.attributes().build());
         event.put(CULTIST_KNIGHT.get(), me.moonscenty.alchemia.entity.cult.CultistKnight.attributes().build());
+        event.put(ELDRITCH_CRAB.get(), me.moonscenty.alchemia.entity.EldritchCrab.attributes().build());
+        event.put(INHABITED_ZOMBIE.get(), me.moonscenty.alchemia.entity.InhabitedZombie.attributes().build());
         event.put(CULTIST_CLERIC.get(), me.moonscenty.alchemia.entity.cult.CultistCleric.attributes().build());
         event.put(CULTIST_PORTAL.get(), me.moonscenty.alchemia.entity.cult.CultistPortal.attributes().build());
         event.put(FIRE_BAT.get(), FireBat.attributes().build());
@@ -391,6 +412,11 @@ public class ModEntities {
      * wants it darker still: whatever light there is has to be no more than a throw of seven.
      */
     public static void spawnPlacements(RegisterSpawnPlacementsEvent event) {
+        event.register(INHABITED_ZOMBIE.get(), SpawnPlacementTypes.ON_GROUND,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, me.moonscenty.alchemia.entity.InhabitedZombie::checkSpawnRules,
+                RegisterSpawnPlacementsEvent.Operation.REPLACE);
+        event.register(ELDRITCH_CRAB.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                Monster::checkMonsterSpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
         event.register(ANGRY_ZOMBIE.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 Monster::checkMonsterSpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
         event.register(FURIOUS_ZOMBIE.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,

@@ -191,5 +191,25 @@
     "sounds": [
       "alchemia:legacy/learn"
     ]
+  },
+  "crabtalk": {
+    "subtitle": "subtitles.alchemia.eldritch_crab.ambient",
+    "sounds": [
+      "alchemia:legacy/crabtalk1",
+      "alchemia:legacy/crabtalk2",
+      "alchemia:legacy/crabtalk3"
+    ]
+  },
+  "crabclaw": {
+    "subtitle": "subtitles.alchemia.eldritch_crab.bite",
+    "sounds": [
+      "alchemia:legacy/crabclaw"
+    ]
+  },
+  "crabdeath": {
+    "subtitle": "subtitles.alchemia.eldritch_crab.death",
+    "sounds": [
+      "alchemia:legacy/crabdeath"
+    ]
   }
 }

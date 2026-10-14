@@ -60,6 +60,10 @@ public final class ModSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> WAND_FAIL = sound("wandfail");
     public static final DeferredHolder<SoundEvent, SoundEvent> EG_ATTACK = sound("egattack");
     public static final DeferredHolder<SoundEvent, SoundEvent> SHOCK = sound("shock");
+    /** The eldritch crab's chatter, the snap of its claws and its last. */
+    public static final DeferredHolder<SoundEvent, SoundEvent> CRAB_TALK = sound("crabtalk");
+    public static final DeferredHolder<SoundEvent, SoundEvent> CRAB_CLAW = sound("crabclaw");
+    public static final DeferredHolder<SoundEvent, SoundEvent> CRAB_DEATH = sound("crabdeath");
     /** Something learnt off a page. */
     public static final DeferredHolder<SoundEvent, SoundEvent> LEARN = sound("learn");
 
