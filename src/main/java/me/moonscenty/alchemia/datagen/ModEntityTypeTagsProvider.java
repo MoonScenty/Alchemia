@@ -27,11 +27,14 @@ public class ModEntityTypeTagsProvider extends EntityTypeTagsProvider {
                         EntityType.ENDERMAN, EntityType.SKELETON, EntityType.STRAY, EntityType.WITHER_SKELETON,
                         EntityType.BOGGED, EntityType.WITCH)
                 .add(ModEntities.CULTIST_KNIGHT.get(), ModEntities.CULTIST_CLERIC.get())
+                .add(ModEntities.ELDRITCH_CRAB.get(), ModEntities.INHABITED_ZOMBIE.get())
                 .add(ModEntities.ANGRY_ZOMBIE.get(), ModEntities.FURIOUS_ZOMBIE.get(), ModEntities.TAINTACLE.get());
 
         // a crawler is a grub, and bane of arthropods knows it
-        tag(EntityTypeTags.ARTHROPOD).add(ModEntities.TAINT_CRAWLER.get());
-        tag(EntityTypeTags.UNDEAD).add(ModEntities.ANGRY_ZOMBIE.get(), ModEntities.FURIOUS_ZOMBIE.get());
-        tag(EntityTypeTags.ZOMBIES).add(ModEntities.ANGRY_ZOMBIE.get(), ModEntities.FURIOUS_ZOMBIE.get());
+        tag(EntityTypeTags.ARTHROPOD).add(ModEntities.TAINT_CRAWLER.get(), ModEntities.ELDRITCH_CRAB.get());
+        tag(EntityTypeTags.UNDEAD).add(ModEntities.ANGRY_ZOMBIE.get(), ModEntities.FURIOUS_ZOMBIE.get(),
+                ModEntities.INHABITED_ZOMBIE.get());
+        tag(EntityTypeTags.ZOMBIES).add(ModEntities.ANGRY_ZOMBIE.get(), ModEntities.FURIOUS_ZOMBIE.get(),
+                ModEntities.INHABITED_ZOMBIE.get());
     }
 }

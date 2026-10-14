@@ -21,6 +21,11 @@
       "alchemia:aversio": 1,
       "alchemia:humanus": 2
     },
+    "alchemia:eldritch_crab": {
+      "alchemia:alienis": 1,
+      "alchemia:bestia": 1,
+      "alchemia:vinculum": 1
+    },
     "alchemia:furious_zombie": {
       "alchemia:cognitio": 1,
       "alchemia:exanimis": 4,
@@ -31,6 +36,11 @@
       "alchemia:aer": 2,
       "alchemia:motus": 2,
       "alchemia:terra": 2
+    },
+    "alchemia:inhabited_zombie": {
+      "alchemia:alienis": 1,
+      "alchemia:exanimis": 1,
+      "alchemia:humanus": 1
     },
     "alchemia:pech": {
       "alchemia:auram": 2,

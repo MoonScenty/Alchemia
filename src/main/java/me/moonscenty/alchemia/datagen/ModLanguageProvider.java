@@ -189,6 +189,14 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         addEntityType(me.moonscenty.alchemia.registry.ModEntities.CULTIST_PORTAL,
                 pick("Lesser Crimson Portal", "작은 진홍 차원문"));
         addEntityType(me.moonscenty.alchemia.registry.ModEntities.GOLEM_ORB, pick("Golem Orb", "골렘 구체"));
+        addEntityType(me.moonscenty.alchemia.registry.ModEntities.ELDRITCH_CRAB, pick("Eldritch Crab", "엘드리치 게"));
+        addEntityType(me.moonscenty.alchemia.registry.ModEntities.INHABITED_ZOMBIE,
+                pick("Shambling Husk", "비틀거리는 껍데기"));
+        addItem(ModItems.ELDRITCH_CRAB_SPAWN_EGG, pick("Eldritch Crab Spawn Egg", "엘드리치 게 생성 알"));
+        addItem(ModItems.INHABITED_ZOMBIE_SPAWN_EGG, pick("Shambling Husk Spawn Egg", "비틀거리는 껍데기 생성 알"));
+        add("subtitles.alchemia.eldritch_crab.ambient", pick("Crab chatters", "게가 딸깍거린다"));
+        add("subtitles.alchemia.eldritch_crab.bite", pick("Crab snaps", "게가 집게를 휘두른다"));
+        add("subtitles.alchemia.eldritch_crab.death", pick("Crab dies", "게가 죽는다"));
         String[][] crimson = {{"crimson_robe_helm", "Crimson Cult Hood", "진홍 교단 두건"},
                 {"crimson_robe_chest", "Crimson Cult Robe", "진홍 교단 로브"},
                 {"crimson_robe_legs", "Crimson Cult Leggings", "진홍 교단 바지"},

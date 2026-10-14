@@ -258,6 +258,12 @@ public class ModItems {
     public static final DeferredItem<net.neoforged.neoforge.common.DeferredSpawnEggItem> CULTIST_PORTAL_SPAWN_EGG =
             ITEMS.register("cultist_portal_spawn_egg", () -> new net.neoforged.neoforge.common.DeferredSpawnEggItem(
                     ModEntities.CULTIST_PORTAL, 0x900608, 0x6060D2, new Item.Properties()));
+    public static final DeferredItem<net.neoforged.neoforge.common.DeferredSpawnEggItem> ELDRITCH_CRAB_SPAWN_EGG =
+            ITEMS.register("eldritch_crab_spawn_egg", () -> new net.neoforged.neoforge.common.DeferredSpawnEggItem(
+                    ModEntities.ELDRITCH_CRAB, 0x808080, 0x550000, new Item.Properties()));
+    public static final DeferredItem<net.neoforged.neoforge.common.DeferredSpawnEggItem> INHABITED_ZOMBIE_SPAWN_EGG =
+            ITEMS.register("inhabited_zombie_spawn_egg", () -> new net.neoforged.neoforge.common.DeferredSpawnEggItem(
+                    ModEntities.INHABITED_ZOMBIE, 0x808080, 0x550000, new Item.Properties()));
     /** A pane of glass silvered with quicksilver. */
     public static final DeferredItem<Item> MIRRORED_GLASS = ITEMS.registerSimpleItem("mirrored_glass");
     /** A mirror on a handle, that sends things through to a magic mirror wherever it is. */

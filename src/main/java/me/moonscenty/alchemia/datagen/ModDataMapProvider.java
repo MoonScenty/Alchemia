@@ -278,6 +278,10 @@ public class ModDataMapProvider extends DataMapProvider {
                 me.moonscenty.alchemia.registry.ModEntities.CULTIST_CLERIC.get()}) {
             mob(cultist, a(ModAspects.ELDRITCH, 1).add(ModAspects.MAN, 2).add(ModAspects.AVERSION, 1));
         }
+        mob(me.moonscenty.alchemia.registry.ModEntities.ELDRITCH_CRAB.get(),
+                a(ModAspects.ELDRITCH, 1).add(ModAspects.BEAST, 1).add(ModAspects.TRAP, 1));
+        mob(me.moonscenty.alchemia.registry.ModEntities.INHABITED_ZOMBIE.get(),
+                a(ModAspects.ELDRITCH, 1).add(ModAspects.UNDEAD, 1).add(ModAspects.MAN, 1));
         for (String plate : new String[] {"crimson_plate_helm", "crimson_plate_chest", "crimson_plate_legs"}) {
             item(me.moonscenty.alchemia.registry.ModItems.CRIMSON.get(plate).get(),
                     a(ModAspects.METAL, 5).add(ModAspects.ELDRITCH, 1));
