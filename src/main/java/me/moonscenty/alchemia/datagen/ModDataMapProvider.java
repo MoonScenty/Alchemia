@@ -263,6 +263,14 @@ public class ModDataMapProvider extends DataMapProvider {
         item(ModBlocks.ANCIENT_DOORWAY, a(ModAspects.METAL, 1).add(ModAspects.ELDRITCH, 1).add(ModAspects.TRAP, 1));
         item(ModBlocks.GLYPHED_STONE, a(ModAspects.METAL, 1).add(ModAspects.ELDRITCH, 1).add(ModAspects.MIND, 1));
         item(ModBlocks.POROUS_STONE, a(ModAspects.EARTH, 1).add(ModAspects.VOID, 1));
+        // the baubles found rather than made
+        for (var ring : me.moonscenty.alchemia.registry.ModItems.APPRENTICE_RINGS.values()) {
+            item(ring, a(ModAspects.AURA, 2).add(ModAspects.METAL, 1).add(ring.get().primal(), 5));
+        }
+        item(me.moonscenty.alchemia.registry.ModItems.VIS_STONE, a(ModAspects.AURA, 2).add(ModAspects.METAL, 1)
+                .add(ModAspects.ENERGY, 5));
+        item(me.moonscenty.alchemia.registry.ModItems.PROTECTION_RING, a(ModAspects.METAL, 1)
+                .add(ModAspects.PROTECT, 3).add(ModAspects.ENERGY, 3));
         item(me.moonscenty.alchemia.registry.ModItems.PRIMORDIAL_PEARL, a(ModAspects.AIR, 16).add(ModAspects.EARTH, 16)
                 .add(ModAspects.FIRE, 16).add(ModAspects.WATER, 16).add(ModAspects.ORDER, 16)
                 .add(ModAspects.ENTROPY, 16).add(ModAspects.FLUX, 16));

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "G": {
+      "item": "minecraft:diamond"
+    },
+    "N": {
+      "item": "minecraft:gold_nugget"
+    }
+  },
+  "pattern": [
+    "NGN",
+    "N N",
+    "NNN"
+  ],
+  "result": {
+    "count": 1,
+    "id": "alchemia:fancy_ring"
+  }
+}

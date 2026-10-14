@@ -1,0 +1,37 @@
+{
+  "type": "alchemia:infusion",
+  "central": {
+    "item": "alchemia:mundane_amulet"
+  },
+  "essentia": {
+    "alchemia:auram": 24,
+    "alchemia:potentia": 128,
+    "alchemia:vacuos": 24
+  },
+  "instability": 6,
+  "research": "alchemia:vis_amulet",
+  "result": {
+    "count": 1,
+    "id": "alchemia:vis_amulet"
+  },
+  "ring": [
+    {
+      "item": "alchemia:primal_charm"
+    },
+    {
+      "item": "alchemia:air_shard"
+    },
+    {
+      "item": "alchemia:fire_shard"
+    },
+    {
+      "item": "alchemia:primal_charm"
+    },
+    {
+      "item": "alchemia:water_shard"
+    },
+    {
+      "item": "alchemia:earth_shard"
+    }
+  ]
+}

@@ -753,6 +753,36 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         addBlock(ModBlocks.CRAB_SPAWNER, pick("Crab Vent", "게 구멍"));
         addBlock(ModBlocks.LIQUID_DEATH, pick("Liquid Death", "액체 죽음"));
         addItem(ModItems.RUNED_TABLET, pick("Runed Tablet", "룬 석판"));
+        addItem(ModItems.MUNDANE_AMULET, pick("Mundane Amulet", "평범한 부적"));
+        addItem(ModItems.MUNDANE_RING, pick("Mundane Ring", "평범한 반지"));
+        addItem(ModItems.MUNDANE_BELT, pick("Mundane Belt", "평범한 허리띠"));
+        addItem(ModItems.FANCY_AMULET, pick("Fancy Amulet", "멋진 부적"));
+        addItem(ModItems.FANCY_RING, pick("Fancy Ring", "멋진 반지"));
+        addItem(ModItems.FANCY_BELT, pick("Fancy Belt", "멋진 허리띠"));
+        add("item.alchemia.apprentice_ring", pick("Apprentice's Ring of %s", "%s의 견습생 반지"));
+        ModItems.APPRENTICE_RINGS.values().forEach(ring -> addItem(ring, pick("Apprentice's Ring", "견습생 반지")));
+        addItem(ModItems.RUNIC_AMULET, pick("Amulet of Runic Shielding", "룬 보호막 부적"));
+        addItem(ModItems.EMERGENCY_RUNIC_AMULET, pick("Amulet of Emergency Shielding", "비상 보호막 부적"));
+        addItem(ModItems.PROTECTION_RING, pick("Ring of Protection", "보호의 반지"));
+        addItem(ModItems.RUNIC_RING, pick("Ring of Runic Shielding", "룬 보호막 반지"));
+        addItem(ModItems.CHARGED_RUNIC_RING, pick("Charged Ring of Shielding", "충전된 보호막 반지"));
+        addItem(ModItems.REVITALIZING_RUNIC_RING, pick("Revitalizing Ring of Shielding", "회복의 보호막 반지"));
+        addItem(ModItems.RUNIC_GIRDLE, pick("Girdle of Runic Shielding", "룬 보호막 허리띠"));
+        addItem(ModItems.KINETIC_RUNIC_GIRDLE, pick("Kinetic Girdle of Shielding", "반동의 보호막 허리띠"));
+        addItem(ModItems.VIS_STONE, pick("Vis Stone", "비스 돌"));
+        add("item.alchemia.vis_stone.text", pick("Recharges wands in hotbar", "단축바의 완드를 충전한다"));
+        addItem(ModItems.VIS_AMULET, pick("Amulet of Vis", "비스 부적"));
+        addItem(ModItems.THAUMOSTATIC_GIRDLE, pick("Thaumostatic Girdle", "알케모스태틱 허리띠"));
+        addItem(ModItems.VERDANT_HEART, pick("Verdant Heart Band", "푸른 심장 반지"));
+        add("item.alchemia.verdant_heart.lifegiver", pick("Lifegiver", "생명을 주는 것"));
+        add("item.alchemia.verdant_heart.sustainer", pick("Sustainer", "지탱하는 것"));
+        add("item.alchemia.vis_charge", pick("Vis charge: %s%%", "비스 충전: %s%%"));
+        add("item.alchemia.runic_charge", pick("Runic shield +%s", "룬 보호막 +%s"));
+        addItem(ModItems.TRIPLE_MEAT_TREAT, pick("Triple Meat Treat", "세 고기 간식"));
+        add("subtitles.alchemia.runicshieldeffect", pick("Runic shield flares", "룬 보호막이 번쩍인다"));
+        add("curios.identifier.necklace", pick("Amulet", "부적"));
+        add("curios.identifier.ring", pick("Ring", "반지"));
+        add("curios.identifier.belt", pick("Belt", "허리띠"));
         add("item.alchemia.runed_tablet.text", pick("It seems to be part of something larger.",
                 "더 큰 무언가의 일부인 것 같다."));
         addItem(ModItems.LIQUID_DEATH_BUCKET, pick("Bucket of Liquid Death", "액체 죽음 양동이"));
@@ -1033,6 +1063,27 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                 {"banners", "Banners", "깃발",
                  "Dyed cloth on a pole, or hung from a wall. Put a filled phial to one to paint its aspect on it; crouch and touch it to wipe it off again.",
                  "장대에 매달거나 벽에 거는 물들인 천이다. 채운 유리병을 대면 그 상을 그려 넣고, 웅크리고 대면 지운다."},
+                {"runic_shielding", "Runic Shielding", "룬 보호막",
+                 "Runes cut into a bauble with a primal charm, amber and enchanted cloth hold up a shield over whoever wears it: a pool of hits that are taken before their own, shown as golden hearts. It fills again by itself, a point every two seconds, drawing a point of air and one of earth out of the aura for each, and waits four seconds after it has been beaten down before it starts. Amulet, ring and girdle hold eight, five and ten.",
+                 "부적·호박·마법부여된 천으로 장신구에 새긴 룬이 착용자 위에 보호막을 세운다. 자기 체력보다 먼저 깎이는 몇 번의 타격이고, 황금 하트로 보인다. 스스로 다시 차는데 2초마다 1씩, 그때마다 오라에서 공기와 흙을 1씩 끌어온다. 다 깎이면 4초 기다렸다가 다시 차기 시작한다. 부적·반지·허리띠가 각각 8·5·10을 든다."},
+                {"runic_special", "Specialized Runic Baubles", "특수한 룬 장신구",
+                 "Each of these gives up a little shield for something it does. The charged ring holds four, and each one worn brings the shield back a quarter faster. The revitalizing ring holds four, and when the shield is beaten down it mends its wearer for twelve seconds, once in twenty. The kinetic girdle holds nine, and when the shield is beaten down it throws everything near away in a blast that breaks nothing, once in twenty seconds. The emergency amulet holds seven, and when the shield is beaten down it puts eight back at once, once a minute.",
+                 "각각 보호막을 조금 내주고 그 대신 무언가를 한다. 충전된 반지는 4를 들고, 하나 낄 때마다 보호막이 4분의 1씩 빨리 찬다. 회복의 반지는 4를 들고, 보호막이 깎이면 착용자를 12초 동안 낫게 한다(20초에 한 번). 반동의 허리띠는 9를 들고, 보호막이 깎이면 아무것도 부수지 않는 폭발로 가까운 것을 날려 보낸다(20초에 한 번). 비상 부적은 7을 들고, 보호막이 깎이면 8을 곧바로 되돌린다(1분에 한 번)."},
+                {"runic_augmentation", "Runic Shielding Augmentation", "룬 보호막 강화",
+                 "Any of the mod's armour and any bauble can be worked on the altar to hold one more point of shield: a diamond and salis mundus round it, one salis mundus more for every point it already holds, and essentia that doubles with every point. It can be done again and again, for as long as the essentia can be found.",
+                 "이 모드의 갑옷이나 장신구라면 무엇이든 제단에서 보호막을 1 더 들게 할 수 있다. 둘레에 다이아몬드와 소금 문디를 놓되 이미 든 보호막마다 소금 문디를 하나씩 더 놓고, 에센시아는 1마다 두 배가 된다. 에센시아를 구할 수 있는 한 몇 번이고 거듭할 수 있다."},
+                {"verdant_heart", "Verdant Heart Band", "푸른 심장 반지",
+                 "A band that holds two hundred of life, and spends it once a second on whatever ails its wearer: twenty to lift withering, ten to lift poison, five to lift the flux flu. It cannot mend a wound. It is charged like a wand -- on a recharge pedestal, or by an amulet of vis -- out of earth and water in the aura.",
+                 "생명을 이백 담아 두었다가 1초마다 착용자를 괴롭히는 것에 쓰는 반지다. 시듦을 걷는 데 20, 독에 10, 플럭스 감기에 5. 상처를 낫게 하지는 못한다. 완드처럼 충전 받침대나 비스 부적으로 오라의 흙과 물에서 충전한다."},
+                {"verdant_heart_lifegiver", "Lifegiver & Sustainer", "생명을 주는 것과 지탱하는 것",
+                 "A verdant heart can be worked once more, into one of two things, not both. A lifegiver spends five to mend a point of its wearer's health. A sustainer spends one to give back breath to someone drowning, or else to feed someone hungry. The sustainer wants a triple meat treat, which is sugar and three meats.",
+                 "푸른 심장은 한 번 더, 둘 중 하나로만 다듬을 수 있다. 생명을 주는 것은 5를 써서 착용자의 체력을 1 낫게 한다. 지탱하는 것은 1을 써서 물에 빠진 사람에게 숨을 돌려주거나, 그렇지 않으면 배고픈 사람을 먹인다. 지탱하는 것에는 설탕과 세 가지 고기로 만든 세 고기 간식이 든다."},
+                {"thaumostatic_girdle", "Thaumostatic Girdle", "알케모스태틱 허리띠",
+                 "A belt worked with air and motion that takes a third of a block off every fall for every moment its wearer falls, which is enough that most falls do no harm at all.",
+                 "공기와 움직임을 엮은 허리띠다. 착용자가 떨어지는 동안 매 순간 낙하 거리를 3분의 1블록씩 덜어 주어, 웬만한 낙하는 아무 해도 없다."},
+                {"vis_amulet", "Portable Vis Recharging", "들고 다니는 비스 충전",
+                 "An amulet that draws vis out of the aura where its wearer stands and puts it into what they carry, four times a second: the wands in the hotbar first, then whatever else is worn that a pedestal could charge. The vis stone sometimes found does the same, slowly.",
+                 "착용자가 선 곳의 오라에서 비스를 끌어와 지닌 것에 1초에 네 번 넣는 부적이다. 단축바의 완드부터, 그다음 충전 받침대가 충전할 수 있는 착용한 것. 가끔 발견되는 비스 돌도 같은 일을 느리게 한다."},
                 {"enter_outer", "The Outer Lands", "바깥 땅",
                  "You have gone through. Beyond the altar is a maze cut out of a black rock that nothing breaks and that the stars show through, and the fog never lifts. Break through to the rock and the void behind it pours out and pulls at you. Somewhere in the maze a runed tablet lies on a pedestal under guard, and somewhere a great hall is sealed with a lock it fits. The way back is the portal you came in by.",
                  "건너왔다. 제단 너머에는 아무것도 부수지 못하고 별이 비쳐 보이는 검은 바위를 깎아 낸 미로가 있고, 안개는 걷히지 않는다. 그 바위까지 뚫으면 뒤에 있던 공허가 쏟아져 나와 몸을 끌어당긴다. 미로 어딘가에 룬 석판이 받침대 위에 지켜지고 있고, 어딘가에는 그것이 맞는 자물쇠로 잠긴 큰 방이 있다. 돌아가는 길은 들어온 차원문이다."},

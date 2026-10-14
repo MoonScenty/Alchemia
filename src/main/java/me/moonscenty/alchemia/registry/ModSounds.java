@@ -44,6 +44,8 @@ public final class ModSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> COINS = sound("coins");
     /** The Construct crackling as it charges. */
     public static final DeferredHolder<SoundEvent, SoundEvent> JACOBS = sound("jacobs");
+    /** A runic shield flaring under a blow. */
+    public static final DeferredHolder<SoundEvent, SoundEvent> RUNIC_SHIELD_EFFECT = sound("runicshieldeffect");
     /** A low wind, out of the void. */
     public static final DeferredHolder<SoundEvent, SoundEvent> WIND = sound("wind");
     /** A lock of the Outer Lands turning: a heave and a hiss. */

@@ -131,6 +131,36 @@
       "alchemia:alienis": 1,
       "alchemia:terra": 1
     },
+    "alchemia:apprentice_ring_air": {
+      "alchemia:aer": 5,
+      "alchemia:auram": 2,
+      "alchemia:metallum": 1
+    },
+    "alchemia:apprentice_ring_earth": {
+      "alchemia:auram": 2,
+      "alchemia:metallum": 1,
+      "alchemia:terra": 5
+    },
+    "alchemia:apprentice_ring_entropy": {
+      "alchemia:auram": 2,
+      "alchemia:metallum": 1,
+      "alchemia:perditio": 5
+    },
+    "alchemia:apprentice_ring_fire": {
+      "alchemia:auram": 2,
+      "alchemia:ignis": 5,
+      "alchemia:metallum": 1
+    },
+    "alchemia:apprentice_ring_order": {
+      "alchemia:auram": 2,
+      "alchemia:metallum": 1,
+      "alchemia:ordo": 5
+    },
+    "alchemia:apprentice_ring_water": {
+      "alchemia:aqua": 5,
+      "alchemia:auram": 2,
+      "alchemia:metallum": 1
+    },
     "alchemia:arcane_stone": {
       "alchemia:potentia": 1,
       "alchemia:terra": 1
@@ -318,6 +348,11 @@
       "alchemia:terra": 16,
       "alchemia:vitium": 16
     },
+    "alchemia:protection_ring": {
+      "alchemia:metallum": 1,
+      "alchemia:potentia": 3,
+      "alchemia:praemunio": 3
+    },
     "alchemia:quicksilver": {
       "alchemia:metallum": 3,
       "alchemia:mortuus": 1,
@@ -358,6 +393,11 @@
       "alchemia:aqua": 1,
       "alchemia:auram": 1,
       "alchemia:vitium": 2
+    },
+    "alchemia:vis_stone": {
+      "alchemia:auram": 2,
+      "alchemia:metallum": 1,
+      "alchemia:potentia": 5
     },
     "alchemia:vishroom": {
       "alchemia:auram": 1,

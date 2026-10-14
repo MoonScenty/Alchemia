@@ -110,6 +110,21 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.LOOT_BAG_UNCOMMON.get());
         basicItem(ModItems.LOOT_BAG_RARE.get());
         basicItem(ModItems.RUNED_TABLET.get());
+        for (var bauble : java.util.List.of(ModItems.MUNDANE_AMULET, ModItems.MUNDANE_RING, ModItems.MUNDANE_BELT,
+                ModItems.FANCY_AMULET, ModItems.FANCY_RING, ModItems.FANCY_BELT, ModItems.RUNIC_AMULET,
+                ModItems.EMERGENCY_RUNIC_AMULET, ModItems.PROTECTION_RING, ModItems.RUNIC_RING,
+                ModItems.CHARGED_RUNIC_RING, ModItems.REVITALIZING_RUNIC_RING, ModItems.RUNIC_GIRDLE,
+                ModItems.KINETIC_RUNIC_GIRDLE)) {
+            basicItem(bauble.get());
+        }
+        basicItem(ModItems.VIS_STONE.get());
+        basicItem(ModItems.VIS_AMULET.get());
+        basicItem(ModItems.THAUMOSTATIC_GIRDLE.get());
+        basicItem(ModItems.VERDANT_HEART.get());
+        basicItem(ModItems.TRIPLE_MEAT_TREAT.get());
+        // the six apprentice's rings are the one band, coloured as their primal
+        ModItems.APPRENTICE_RINGS.values().forEach(ring -> withExistingParent(ring.getId().getPath(),
+                mcLoc("item/generated")).texture("layer0", modLoc("item/apprentice_ring")));
         withExistingParent("liquid_death_bucket", mcLoc("item/generated"))
                 .texture("layer0", modLoc("item/legacy/liquid_death_bucket"));
         withExistingParent("banner", mcLoc("item/generated")).texture("layer0", modLoc("item/banner_stand"))

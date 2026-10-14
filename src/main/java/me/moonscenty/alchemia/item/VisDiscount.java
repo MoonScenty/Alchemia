@@ -15,7 +15,7 @@ import net.minecraft.world.item.ItemStack;
  * of a void robe are fifteen parts off every bill, which is a great deal and meant to be.
  */
 public interface VisDiscount {
-    /** The four places a discount can be worn. Trinkets will want adding here when there are any. */
+    /** The four places armour can give a discount; baubles give theirs from wherever they are worn. */
     EquipmentSlot[] WORN = {EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET};
 
     /**
@@ -29,16 +29,42 @@ public interface VisDiscount {
     /** How much less a wand spends while this piece is worn, in whole parts of a hundred. */
     int visDiscount(ItemStack stack, Player wearer);
 
-    /** Everything the player has on, added up. */
+    /**
+     * How much less a wand spends of this one primal while this is worn, over and above {@link #visDiscount}: the
+     * apprentice's ring of a primal is five parts off that primal and nothing off the rest.
+     */
+    default int visDiscount(ItemStack stack, Player wearer,
+            net.minecraft.core.Holder<me.moonscenty.alchemia.aspect.Aspect> aspect) {
+        return 0;
+    }
+
+    /** Everything the player has on, armour and baubles, added up. */
     static int worn(Player wearer) {
+        return worn(wearer, null);
+    }
+
+    /** The same, with what is off this one primal besides, when there is a primal to ask about. */
+    static int worn(Player wearer, net.minecraft.core.Holder<me.moonscenty.alchemia.aspect.Aspect> aspect) {
         if (wearer == null) {
             return 0;
         }
-        int total = 0;
+        java.util.List<ItemStack> pieces = new java.util.ArrayList<>();
         for (EquipmentSlot slot : WORN) {
-            ItemStack piece = wearer.getItemBySlot(slot);
+            pieces.add(wearer.getItemBySlot(slot));
+        }
+        top.theillusivec4.curios.api.CuriosApi.getCuriosInventory(wearer).ifPresent(curios -> {
+            var baubles = curios.getEquippedCurios();
+            for (int i = 0; i < baubles.getSlots(); i++) {
+                pieces.add(baubles.getStackInSlot(i));
+            }
+        });
+        int total = 0;
+        for (ItemStack piece : pieces) {
             if (piece.getItem() instanceof VisDiscount gear) {
                 total += gear.visDiscount(piece, wearer);
+                if (aspect != null) {
+                    total += gear.visDiscount(piece, wearer, aspect);
+                }
             }
         }
         return total;
@@ -53,5 +79,11 @@ public interface VisDiscount {
      */
     static float rate(float cap, Player wearer) {
         return Math.max(LEAST, cap - worn(wearer) / 100.0F);
+    }
+
+    /** The same, for one primal: the general discount and that primal's own. */
+    static float rate(float cap, Player wearer,
+            net.minecraft.core.Holder<me.moonscenty.alchemia.aspect.Aspect> aspect) {
+        return Math.max(LEAST, cap - worn(wearer, aspect) / 100.0F);
     }
 }

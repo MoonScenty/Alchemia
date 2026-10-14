@@ -154,6 +154,9 @@ public class AlchemiaClientSetup {
     @SubscribeEvent
     public static void registerItemColours(RegisterColorHandlersEvent.Item event) {
         event.register((stack, tint) -> tint == 0 ? named(stack) : PLAIN, ModItems.PHIAL.get());
+        // an apprentice's ring takes its primal's colour
+        ModItems.APPRENTICE_RINGS.values().forEach(ring -> event.register((stack, tint) ->
+                FastColor.ARGB32.opaque(ring.get().primal().value().color()), ring.get()));
         // a banner's cloth in its dye, its symbol in its aspect
         event.register((stack, tint) -> {
             net.minecraft.world.item.DyeColor dye = stack.getOrDefault(

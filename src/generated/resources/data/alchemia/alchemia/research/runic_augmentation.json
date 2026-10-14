@@ -1,0 +1,25 @@
+{
+  "category": "alchemia:artifice",
+  "column": -4,
+  "icon": "alchemia:salis_mundus",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.runic_augmentation.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:runic_augmentation"
+    }
+  ],
+  "parents": [
+    "alchemia:runic_shielding"
+  ],
+  "requirements": {
+    "alchemia:desiderium": 4,
+    "alchemia:ordo": 3,
+    "alchemia:permutatio": 4,
+    "alchemia:praemunio": 3
+  },
+  "row": 7
+}

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "I": {
+      "tag": "c:ingots/brass"
+    },
+    "S": {
+      "item": "minecraft:string"
+    }
+  },
+  "pattern": [
+    " S ",
+    "S S",
+    " I "
+  ],
+  "result": {
+    "count": 1,
+    "id": "alchemia:mundane_amulet"
+  }
+}

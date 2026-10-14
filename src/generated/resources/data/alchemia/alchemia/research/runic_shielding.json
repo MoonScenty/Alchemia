@@ -1,0 +1,34 @@
+{
+  "category": "alchemia:artifice",
+  "column": -3,
+  "complexity": 3,
+  "icon": "alchemia:runic_amulet",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.runic_shielding.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:runic_ring"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:runic_amulet"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:runic_girdle"
+    }
+  ],
+  "parents": [
+    "alchemia:infusion"
+  ],
+  "requirements": {
+    "alchemia:aer": 3,
+    "alchemia:cognitio": 3,
+    "alchemia:potentia": 3,
+    "alchemia:praemunio": 6
+  },
+  "row": 6
+}

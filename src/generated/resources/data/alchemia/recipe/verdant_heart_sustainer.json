@@ -1,0 +1,77 @@
+{
+  "type": "alchemia:infusion",
+  "central": {
+    "item": "alchemia:verdant_heart"
+  },
+  "essentia": {
+    "alchemia:aer": 64,
+    "alchemia:desiderium": 64
+  },
+  "instability": 5,
+  "research": "alchemia:verdant_heart_lifegiver",
+  "result": {
+    "components": {
+      "alchemia:verdant_kind": 2
+    },
+    "count": 1,
+    "id": "alchemia:verdant_heart"
+  },
+  "ring": [
+    {
+      "item": "alchemia:triple_meat_treat"
+    },
+    {
+      "type": "neoforge:components",
+      "components": {
+        "alchemia:essentia": "alchemia:desiderium",
+        "minecraft:attribute_modifiers": {
+          "modifiers": []
+        },
+        "minecraft:enchantments": {
+          "levels": {}
+        },
+        "minecraft:lore": [],
+        "minecraft:max_stack_size": 64,
+        "minecraft:rarity": "common",
+        "minecraft:repair_cost": 0
+      },
+      "items": "alchemia:crystallized_essence"
+    },
+    {
+      "type": "neoforge:components",
+      "components": {
+        "minecraft:attribute_modifiers": {
+          "modifiers": []
+        },
+        "minecraft:enchantments": {
+          "levels": {}
+        },
+        "minecraft:lore": [],
+        "minecraft:max_stack_size": 1,
+        "minecraft:potion_contents": {
+          "potion": "minecraft:water_breathing"
+        },
+        "minecraft:rarity": "common",
+        "minecraft:repair_cost": 0
+      },
+      "items": "minecraft:potion"
+    },
+    {
+      "type": "neoforge:components",
+      "components": {
+        "alchemia:essentia": "alchemia:aer",
+        "minecraft:attribute_modifiers": {
+          "modifiers": []
+        },
+        "minecraft:enchantments": {
+          "levels": {}
+        },
+        "minecraft:lore": [],
+        "minecraft:max_stack_size": 64,
+        "minecraft:rarity": "common",
+        "minecraft:repair_cost": 0
+      },
+      "items": "alchemia:crystallized_essence"
+    }
+  ]
+}

@@ -402,7 +402,36 @@ public class ModResearchProvider {
         // where artifice starts: the charm of all six, and glass silvered to make a mirror of
         entry(context, "primal_charm", ModResearch.ARTIFICE, ModItems.PRIMAL_CHARM, 1, 1,
                 AspectList.EMPTY, List.of("vis_crystals"), false, NodeShape.MAJOR, 1,
-                "primal_charm", "mirrored_glass");
+                "primal_charm", "mirrored_glass", "mundane_amulet", "mundane_ring", "mundane_belt", "fancy_amulet",
+                "fancy_ring", "fancy_belt");
+        // baubles: runic shielding, and what else is worn
+        entry(context, "runic_shielding", ModResearch.ARTIFICE, ModItems.RUNIC_AMULET, -3, 6,
+                AspectList.of(ModAspects.PROTECT, 6).add(ModAspects.AIR, 3).add(ModAspects.ENERGY, 3)
+                        .add(ModAspects.MIND, 3),
+                List.of("infusion"), false, NodeShape.PLAIN, 3, "runic_ring", "runic_amulet", "runic_girdle");
+        entry(context, "runic_special", ModResearch.ARTIFICE, ModItems.CHARGED_RUNIC_RING, -2, 7,
+                AspectList.of(ModAspects.ORDER, 3).add(ModAspects.PROTECT, 3).add(ModAspects.ENERGY, 6),
+                List.of("runic_shielding"), false, NodeShape.PLAIN, 2, "charged_runic_ring", "revitalizing_runic_ring",
+                "kinetic_runic_girdle", "emergency_runic_amulet");
+        entry(context, "runic_augmentation", ModResearch.ARTIFICE, ModItems.SALIS_MUNDUS, -4, 7,
+                AspectList.of(ModAspects.ORDER, 3).add(ModAspects.PROTECT, 3).add(ModAspects.EXCHANGE, 4)
+                        .add(ModAspects.DESIRE, 4),
+                List.of("runic_shielding"), false, NodeShape.PLAIN, 1, "runic_augmentation");
+        entry(context, "verdant_heart", ModResearch.ARTIFICE, ModItems.VERDANT_HEART, 2, 8,
+                AspectList.of(ModAspects.LIFE, 8).add(ModAspects.ORDER, 6).add(ModAspects.WATER, 6)
+                        .add(ModAspects.PLANT, 6),
+                List.of("infusion", "recharge_pedestal"), false, NodeShape.PLAIN, 3, "verdant_heart");
+        entry(context, "verdant_heart_lifegiver", ModResearch.ARTIFICE, Items.GOLDEN_APPLE, 4, 8,
+                AspectList.of(ModAspects.LIFE, 8).add(ModAspects.MAN, 6).add(ModAspects.DESIRE, 6)
+                        .add(ModAspects.AIR, 6).add(ModAspects.PLANT, 6),
+                List.of("infusion_enchantment", "verdant_heart"), false, NodeShape.PLAIN, 3,
+                "verdant_heart_lifegiver", "verdant_heart_sustainer", "triple_meat_treat");
+        entry(context, "thaumostatic_girdle", ModResearch.ARTIFICE, ModItems.THAUMOSTATIC_GIRDLE, -2, 0,
+                AspectList.of(ModAspects.FLIGHT, 6).add(ModAspects.AIR, 3).add(ModAspects.MOTION, 6),
+                List.of("infusion", "levitator"), false, NodeShape.PLAIN, 3, "thaumostatic_girdle");
+        entry(context, "vis_amulet", ModResearch.ARCANA, ModItems.VIS_AMULET, 7, 0,
+                AspectList.of(ModAspects.AURA, 3).add(ModAspects.ENERGY, 9).add(ModAspects.VOID, 3),
+                List.of("recharge_pedestal", "infusion"), false, NodeShape.PLAIN, 2, "vis_amulet");
         // the lamps: one that lights the dark, and the two worked from it that tend what grows and what breeds
         entry(context, "arcane_lamp", ModResearch.ARTIFICE, ModBlocks.ARCANE_LAMP, 0, -1,
                 AspectList.of(ModAspects.LIGHT, 6).add(ModAspects.FIRE, 3).add(ModAspects.AIR, 3),

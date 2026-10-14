@@ -1,0 +1,22 @@
+{
+  "type": "alchemia:infusion",
+  "augments": true,
+  "central": {
+    "tag": "alchemia:runic_augmentable"
+  },
+  "essentia": {
+    "alchemia:potentia": 32,
+    "alchemia:praemunio": 16,
+    "alchemia:vitreus": 16
+  },
+  "instability": 5,
+  "research": "alchemia:runic_augmentation",
+  "ring": [
+    {
+      "item": "minecraft:diamond"
+    },
+    {
+      "item": "alchemia:salis_mundus"
+    }
+  ]
+}

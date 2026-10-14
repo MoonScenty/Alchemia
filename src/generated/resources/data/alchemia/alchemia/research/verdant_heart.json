@@ -1,0 +1,27 @@
+{
+  "category": "alchemia:artifice",
+  "column": 2,
+  "complexity": 3,
+  "icon": "alchemia:verdant_heart",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.verdant_heart.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:verdant_heart"
+    }
+  ],
+  "parents": [
+    "alchemia:infusion",
+    "alchemia:recharge_pedestal"
+  ],
+  "requirements": {
+    "alchemia:aqua": 6,
+    "alchemia:herba": 6,
+    "alchemia:ordo": 6,
+    "alchemia:victus": 8
+  },
+  "row": 8
+}

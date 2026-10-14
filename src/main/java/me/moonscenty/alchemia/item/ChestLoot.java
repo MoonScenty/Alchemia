@@ -55,11 +55,16 @@ public final class ChestLoot {
                 pool.add(LootItem.lootTableItem(common).setWeight(weights[0])
                         .apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))));
             }
-            for (ItemLike uncommon : new ItemLike[] {ModItems.LOOT_BAG_UNCOMMON, ModItems.KNOWLEDGE_FRAGMENT}) {
+            for (ItemLike uncommon : new ItemLike[] {ModItems.LOOT_BAG_UNCOMMON, ModItems.KNOWLEDGE_FRAGMENT,
+                    ModItems.MUNDANE_AMULET, ModItems.MUNDANE_RING, ModItems.MUNDANE_BELT}) {
                 pool.add(LootItem.lootTableItem(uncommon).setWeight(weights[1])
                         .apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2))));
             }
             for (ItemLike rare : new ItemLike[] {ModItems.LOOT_BAG_RARE, ModItems.ALCHEMONOMICON,
+                    ModItems.PROTECTION_RING, ModItems.VIS_STONE, ModItems.APPRENTICE_RINGS.get("air"),
+                    ModItems.APPRENTICE_RINGS.get("earth"), ModItems.APPRENTICE_RINGS.get("fire"),
+                    ModItems.APPRENTICE_RINGS.get("water"), ModItems.APPRENTICE_RINGS.get("order"),
+                    ModItems.APPRENTICE_RINGS.get("entropy"),
                     ModItems.METAL_TOOLS.get("alchemium_sword"), ModItems.METAL_TOOLS.get("alchemium_axe"),
                     ModItems.METAL_TOOLS.get("alchemium_hoe"), ModItems.METAL_TOOLS.get("alchemium_pickaxe")}) {
                 pool.add(LootItem.lootTableItem(rare).setWeight(1));

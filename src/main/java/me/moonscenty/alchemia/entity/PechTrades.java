@@ -141,6 +141,7 @@ public final class PechTrades {
         lots.add(item(4, ModItems.ROBES.get("cloth_legs").get()));
         lots.add(item(5, Items.ENCHANTED_GOLDEN_APPLE));
         lots.add(item(5, ModItems.FOCI.get("pech").get()));
+        lots.add(item(5, ModItems.VIS_STONE.get()));
         return List.copyOf(lots);
     }
 
@@ -159,6 +160,7 @@ public final class PechTrades {
         lots.add(item(5, Items.ENCHANTED_GOLDEN_APPLE));
         lots.add(book(5, Enchantments.FLAME));
         lots.add(book(5, Enchantments.INFINITY));
+        lots.add(item(5, ModItems.PROTECTION_RING.get()));
         return List.copyOf(lots);
     }
 

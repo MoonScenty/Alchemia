@@ -26,6 +26,7 @@ public class ModItemTagsProvider extends ItemTagsProvider {
     protected void addTags(HolderLookup.Provider provider) {
         ModBlocks.NITOR.values().forEach(flame -> tag(ModTags.Items.NITOR).add(flame.get().asItem()));
         ModItems.FOCI.values().forEach(focus -> tag(ModTags.Items.FOCI).add(focus.get()));
+        baubles();
         robes();
         // wolves will eat it, as the original's would
         tag(ItemTags.MEAT).add(ModItems.ZOMBIE_BRAIN.get());
@@ -104,6 +105,28 @@ public class ModItemTagsProvider extends ItemTagsProvider {
     }
 
     /** Each robe piece where the game looks for armour of its shape, and where an enchanting table looks. */
+    /** Which Curios slot each bauble goes in, and what runic augmentation will take to. */
+    private void baubles() {
+        var necklace = net.minecraft.tags.ItemTags.create(net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(
+                "curios", "necklace"));
+        var ring = net.minecraft.tags.ItemTags.create(net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(
+                "curios", "ring"));
+        var belt = net.minecraft.tags.ItemTags.create(net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(
+                "curios", "belt"));
+        tag(necklace).add(ModItems.MUNDANE_AMULET.get(), ModItems.FANCY_AMULET.get(), ModItems.RUNIC_AMULET.get(),
+                ModItems.EMERGENCY_RUNIC_AMULET.get(), ModItems.VIS_STONE.get(), ModItems.VIS_AMULET.get());
+        tag(ring).add(ModItems.MUNDANE_RING.get(), ModItems.FANCY_RING.get(), ModItems.PROTECTION_RING.get(),
+                ModItems.RUNIC_RING.get(), ModItems.CHARGED_RUNIC_RING.get(), ModItems.REVITALIZING_RUNIC_RING.get(),
+                ModItems.VERDANT_HEART.get());
+        ModItems.APPRENTICE_RINGS.values().forEach(apprentice -> tag(ring).add(apprentice.get()));
+        tag(belt).add(ModItems.MUNDANE_BELT.get(), ModItems.FANCY_BELT.get(), ModItems.RUNIC_GIRDLE.get(),
+                ModItems.KINETIC_RUNIC_GIRDLE.get(), ModItems.THAUMOSTATIC_GIRDLE.get(), ModItems.FOCUS_POUCH.get());
+        ModItems.ITEMS.getEntries().stream().map(entry -> entry.get())
+                .filter(item -> item instanceof net.minecraft.world.item.ArmorItem
+                        || item instanceof me.moonscenty.alchemia.item.bauble.RunicGear && !(item instanceof me.moonscenty.alchemia.item.bauble.VerdantHeartItem))
+                .forEach(item -> tag(ModTags.Items.RUNIC_AUGMENTABLE).add(item));
+    }
+
     private void robes() {
         java.util.Map<net.minecraft.world.item.ArmorItem.Type, net.minecraft.tags.TagKey<net.minecraft.world.item.Item>> shapes =
                 java.util.Map.of(

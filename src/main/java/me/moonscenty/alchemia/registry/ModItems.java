@@ -290,6 +290,77 @@ public class ModItems {
             "liquid_death_bucket", () -> new net.minecraft.world.item.BucketItem(ModFluids.DEATH.get(),
                     new Item.Properties().craftRemainder(net.minecraft.world.item.Items.BUCKET).stacksTo(1)
                             .rarity(net.minecraft.world.item.Rarity.RARE)));
+    // --- baubles, worn in Curios' slots ------------------------------------------------------------------------
+    /** The plain amulet, ring and belt the rest are worked from, and their finer kin. */
+    public static final DeferredItem<me.moonscenty.alchemia.item.bauble.BaubleItem> MUNDANE_AMULET = bauble("mundane_amulet");
+    public static final DeferredItem<me.moonscenty.alchemia.item.bauble.BaubleItem> MUNDANE_RING = bauble("mundane_ring");
+    public static final DeferredItem<me.moonscenty.alchemia.item.bauble.BaubleItem> MUNDANE_BELT = bauble("mundane_belt");
+    public static final DeferredItem<me.moonscenty.alchemia.item.bauble.BaubleItem> FANCY_AMULET = bauble("fancy_amulet");
+    public static final DeferredItem<me.moonscenty.alchemia.item.bauble.BaubleItem> FANCY_RING = bauble("fancy_ring");
+    public static final DeferredItem<me.moonscenty.alchemia.item.bauble.BaubleItem> FANCY_BELT = bauble("fancy_belt");
+    /** An apprentice's ring of each primal: found, never made. */
+    public static final Map<String, DeferredItem<me.moonscenty.alchemia.item.bauble.ApprenticeRingItem>> APPRENTICE_RINGS = registerApprenticeRings();
+    /** Runic shielding: amulets, rings and girdles, and the specialised ones. */
+    public static final DeferredItem<me.moonscenty.alchemia.item.bauble.BaubleItem> RUNIC_AMULET = runic("runic_amulet", 8,
+            me.moonscenty.alchemia.item.bauble.RunicShield.Upgrade.NONE, Rarity.RARE);
+    public static final DeferredItem<me.moonscenty.alchemia.item.bauble.BaubleItem> EMERGENCY_RUNIC_AMULET = runic("emergency_runic_amulet", 7,
+            me.moonscenty.alchemia.item.bauble.RunicShield.Upgrade.EMERGENCY, Rarity.RARE);
+    public static final DeferredItem<me.moonscenty.alchemia.item.bauble.BaubleItem> PROTECTION_RING = runic("protection_ring", 1,
+            me.moonscenty.alchemia.item.bauble.RunicShield.Upgrade.NONE, Rarity.UNCOMMON);
+    public static final DeferredItem<me.moonscenty.alchemia.item.bauble.BaubleItem> RUNIC_RING = runic("runic_ring", 5,
+            me.moonscenty.alchemia.item.bauble.RunicShield.Upgrade.NONE, Rarity.RARE);
+    public static final DeferredItem<me.moonscenty.alchemia.item.bauble.BaubleItem> CHARGED_RUNIC_RING = runic("charged_runic_ring", 4,
+            me.moonscenty.alchemia.item.bauble.RunicShield.Upgrade.CHARGED, Rarity.RARE);
+    public static final DeferredItem<me.moonscenty.alchemia.item.bauble.BaubleItem> REVITALIZING_RUNIC_RING = runic("revitalizing_runic_ring", 4,
+            me.moonscenty.alchemia.item.bauble.RunicShield.Upgrade.HEALING, Rarity.RARE);
+    public static final DeferredItem<me.moonscenty.alchemia.item.bauble.BaubleItem> RUNIC_GIRDLE = runic("runic_girdle", 10,
+            me.moonscenty.alchemia.item.bauble.RunicShield.Upgrade.NONE, Rarity.RARE);
+    public static final DeferredItem<me.moonscenty.alchemia.item.bauble.BaubleItem> KINETIC_RUNIC_GIRDLE = runic("kinetic_runic_girdle", 9,
+            me.moonscenty.alchemia.item.bauble.RunicShield.Upgrade.KINETIC, Rarity.RARE);
+    /** The vis stone that is found, and the amulet of vis that is made: they charge what is carried. */
+    public static final DeferredItem<me.moonscenty.alchemia.item.bauble.VisAmuletItem> VIS_STONE = ITEMS.register("vis_stone",
+            () -> new me.moonscenty.alchemia.item.bauble.VisAmuletItem(new Item.Properties().rarity(Rarity.UNCOMMON), 40, true));
+    public static final DeferredItem<me.moonscenty.alchemia.item.bauble.VisAmuletItem> VIS_AMULET = ITEMS.register("vis_amulet",
+            () -> new me.moonscenty.alchemia.item.bauble.VisAmuletItem(new Item.Properties().rarity(Rarity.RARE), 5, false));
+    /** The thaumostatic girdle, that softens every fall. */
+    public static final DeferredItem<me.moonscenty.alchemia.item.bauble.HoverGirdleItem> THAUMOSTATIC_GIRDLE = ITEMS.register("thaumostatic_girdle",
+            () -> new me.moonscenty.alchemia.item.bauble.HoverGirdleItem(new Item.Properties().rarity(Rarity.RARE)));
+    /** The verdant heart band, and what it may be worked into. */
+    public static final DeferredItem<me.moonscenty.alchemia.item.bauble.VerdantHeartItem> VERDANT_HEART = ITEMS.register("verdant_heart",
+            () -> new me.moonscenty.alchemia.item.bauble.VerdantHeartItem(new Item.Properties().rarity(Rarity.RARE)));
+    /** Three meats and sugar: food, and the sustainer's heart. */
+    public static final DeferredItem<Item> TRIPLE_MEAT_TREAT = ITEMS.register("triple_meat_treat",
+            () -> new Item(new Item.Properties().food(new net.minecraft.world.food.FoodProperties.Builder()
+                    .nutrition(6).saturationModifier(0.8F).alwaysEdible()
+                    .effect(() -> new net.minecraft.world.effect.MobEffectInstance(
+                            net.minecraft.world.effect.MobEffects.REGENERATION, 100, 0), 0.66F)
+                    .build())));
+
+    private static DeferredItem<me.moonscenty.alchemia.item.bauble.BaubleItem> bauble(String name) {
+        return ITEMS.register(name, () -> new me.moonscenty.alchemia.item.bauble.BaubleItem(new Item.Properties()));
+    }
+
+    private static DeferredItem<me.moonscenty.alchemia.item.bauble.BaubleItem> runic(String name, int charge, me.moonscenty.alchemia.item.bauble.RunicShield.Upgrade upgrade,
+            Rarity rarity) {
+        return ITEMS.register(name, () -> new me.moonscenty.alchemia.item.bauble.BaubleItem(new Item.Properties().rarity(rarity), charge, upgrade));
+    }
+
+    private static Map<String, DeferredItem<me.moonscenty.alchemia.item.bauble.ApprenticeRingItem>> registerApprenticeRings() {
+        Map<String, DeferredItem<me.moonscenty.alchemia.item.bauble.ApprenticeRingItem>> made = new java.util.LinkedHashMap<>();
+        Map<String, java.util.function.Supplier<net.minecraft.core.Holder<me.moonscenty.alchemia.aspect.Aspect>>> primals =
+                new java.util.LinkedHashMap<>();
+        primals.put("air", () -> ModAspects.AIR);
+        primals.put("earth", () -> ModAspects.EARTH);
+        primals.put("fire", () -> ModAspects.FIRE);
+        primals.put("water", () -> ModAspects.WATER);
+        primals.put("order", () -> ModAspects.ORDER);
+        primals.put("entropy", () -> ModAspects.ENTROPY);
+        primals.forEach((name, primal) -> made.put(name, ITEMS.register("apprentice_ring_" + name,
+                () -> new me.moonscenty.alchemia.item.bauble.ApprenticeRingItem(new Item.Properties().rarity(Rarity.UNCOMMON), primal))));
+        // unmodifiableMap rather than Map.copyOf, for the reason written above registerMetalTools
+        return Collections.unmodifiableMap(made);
+    }
+
     /** A guardian's eye, that does not close. */
     public static final DeferredItem<Item> ELDRITCH_EYE = ITEMS.register("eldritch_eye",
             () -> new Item(new Item.Properties().rarity(net.minecraft.world.item.Rarity.UNCOMMON)));

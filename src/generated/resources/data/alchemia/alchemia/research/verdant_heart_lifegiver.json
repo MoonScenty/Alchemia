@@ -1,0 +1,36 @@
+{
+  "category": "alchemia:artifice",
+  "column": 4,
+  "complexity": 3,
+  "icon": "minecraft:golden_apple",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.verdant_heart_lifegiver.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:verdant_heart_lifegiver"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:verdant_heart_sustainer"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:triple_meat_treat"
+    }
+  ],
+  "parents": [
+    "alchemia:infusion_enchantment",
+    "alchemia:verdant_heart"
+  ],
+  "requirements": {
+    "alchemia:aer": 6,
+    "alchemia:desiderium": 6,
+    "alchemia:herba": 6,
+    "alchemia:humanus": 6,
+    "alchemia:victus": 8
+  },
+  "row": 8
+}

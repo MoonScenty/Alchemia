@@ -88,6 +88,17 @@ public class LootBagItem extends Item {
         add(things, weights, new ItemStack(Items.ENCHANTED_GOLDEN_APPLE), rarity + 1);
         add(things, weights, new ItemStack(Items.GOLDEN_APPLE), 3 * (rarity + 1));
         add(things, weights, new ItemStack(Items.BOOK), 10);
+        if (rarity == 0) {
+            add(things, weights, new ItemStack(ModItems.MUNDANE_AMULET.get()), 10);
+            add(things, weights, new ItemStack(ModItems.MUNDANE_RING.get()), 10);
+            add(things, weights, new ItemStack(ModItems.MUNDANE_BELT.get()), 10);
+        } else {
+            for (var ring : ModItems.APPRENTICE_RINGS.values()) {
+                add(things, weights, new ItemStack(ring.get()), rarity == 1 ? 5 : 7);
+            }
+            add(things, weights, new ItemStack(ModItems.VIS_STONE.get()), 6);
+            add(things, weights, new ItemStack(ModItems.PROTECTION_RING.get()), 5);
+        }
         // every drinkable and splash potion there is, the stronger and longer ones weighted higher
         for (Holder.Reference<Potion> potion : BuiltInRegistries.POTION.holders().toList()) {
             if (potion.value().getEffects().isEmpty()) {
