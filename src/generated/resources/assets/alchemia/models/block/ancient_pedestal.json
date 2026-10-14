@@ -1,0 +1,8 @@
+{
+  "parent": "alchemia:block/eldritch_pedestal",
+  "textures": {
+    "particle": "alchemia:block/legacy/pedestal_ancient_side",
+    "side": "alchemia:block/legacy/pedestal_ancient_side",
+    "top": "alchemia:block/legacy/ancient_tile"
+  }
+}

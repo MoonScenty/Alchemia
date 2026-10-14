@@ -148,7 +148,29 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
         dropSelf(ModBlocks.ARCANE_PEDESTAL.get());
         dropSelf(ModBlocks.INFUSION_MATRIX.get());
         // a corner is arcane stone that has been told what it is for; broken, it is arcane stone again
-        dropOther(ModBlocks.ARCANE_PILLAR.get(), ModBlocks.ARCANE_STONE.block().get());
+        // a pillar gives back the stone it was built of
+        add(ModBlocks.ARCANE_PILLAR.get(), block -> {
+            net.minecraft.world.level.storage.loot.LootTable.Builder table =
+                    net.minecraft.world.level.storage.loot.LootTable.lootTable();
+            for (me.moonscenty.alchemia.block.PillarKind kind : me.moonscenty.alchemia.block.PillarKind.values()) {
+                table.withPool(applyExplosionCondition(block, net.minecraft.world.level.storage.loot.LootPool.lootPool()
+                        .add(net.minecraft.world.level.storage.loot.entries.LootItem.lootTableItem(kind.stone()))
+                        .when(net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition
+                                .hasBlockStateProperties(block).setProperties(
+                                        net.minecraft.advancements.critereon.StatePropertiesPredicate.Builder
+                                                .properties().hasProperty(
+                                                        me.moonscenty.alchemia.block.ArcanePillarBlock.KIND, kind)))));
+            }
+            return table;
+        });
+        for (var stone : java.util.List.of(ModBlocks.ANCIENT_ROCK, ModBlocks.ANCIENT_TILE, ModBlocks.GLYPHED_STONE,
+                ModBlocks.CRUSTED_STONE, ModBlocks.GLOWING_CRUSTED_STONE)) {
+            dropSelf(stone.get());
+        }
+        // what it drops it works out for itself
+        add(ModBlocks.POROUS_STONE.get(), noDrop());
+        dropSelf(ModBlocks.ANCIENT_PEDESTAL.get());
+        dropSelf(ModBlocks.ELDRITCH_PEDESTAL.get());
 
         // nothing tainted is worth keeping; what the growths gave in the original arrives with those items
         add(ModBlocks.TAINT_FIBRE.get(), noDrop());

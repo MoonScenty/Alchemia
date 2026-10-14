@@ -61,7 +61,7 @@ public class TaintGroundBlock extends Block implements Tainted {
     public void die(ServerLevel level, BlockPos pos, BlockState state) {
         level.setBlock(pos, switch (kind) {
             case SOIL -> Blocks.DIRT.defaultBlockState();
-            case ROCK -> Blocks.STONE.defaultBlockState();
+            case ROCK -> me.moonscenty.alchemia.registry.ModBlocks.POROUS_STONE.get().defaultBlockState();
             case CRUST -> Blocks.AIR.defaultBlockState();
             case GEYSER -> me.moonscenty.alchemia.registry.ModBlocks.FLUX_GOO.get().defaultBlockState();
         }, Block.UPDATE_ALL);

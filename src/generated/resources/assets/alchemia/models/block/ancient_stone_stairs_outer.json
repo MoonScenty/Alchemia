@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "bottom": "alchemia:block/ancient_stone",
+    "side": "alchemia:block/ancient_stone_2",
+    "top": "alchemia:block/ancient_tile"
+  }
+}

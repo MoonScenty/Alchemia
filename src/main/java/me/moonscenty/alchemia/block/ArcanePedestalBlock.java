@@ -42,8 +42,20 @@ public class ArcanePedestalBlock extends BaseEntityBlock {
             Block.box(4, 4, 4, 12, 12, 12),
             Block.box(2, 12, 2, 14, 16, 14));
 
-    public ArcanePedestalBlock(Properties properties) {
+    private final PillarKind kind;
+
+    public ArcanePedestalBlock(Properties properties, PillarKind kind) {
         super(properties);
+        this.kind = kind;
+    }
+
+    /** What it is built of. */
+    public PillarKind kind() {
+        return kind;
+    }
+
+    public ArcanePedestalBlock(Properties properties) {
+        this(properties, PillarKind.NORMAL);
     }
 
     @Override

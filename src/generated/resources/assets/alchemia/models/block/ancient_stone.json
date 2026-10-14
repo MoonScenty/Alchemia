@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "down": "alchemia:block/ancient_stone",
+    "east": "alchemia:block/ancient_stone_2",
+    "north": "alchemia:block/ancient_stone_4",
+    "particle": "alchemia:block/ancient_tile",
+    "south": "alchemia:block/ancient_stone_5",
+    "up": "alchemia:block/ancient_tile",
+    "west": "alchemia:block/ancient_stone_3"
+  }
+}

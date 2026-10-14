@@ -262,7 +262,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         simpleBlock(ModBlocks.ARCANE_PEDESTAL.get(), models().getExistingFile(modLoc("block/pedestal")));
         simpleBlock(ModBlocks.INFUSION_MATRIX.get(), models().getExistingFile(modLoc("block/infusion_matrix")));
         // the corner draws nothing either: the pillar standing on it is drawn by the matrix
-        simpleBlock(ModBlocks.ARCANE_PILLAR.get(), models().getExistingFile(modLoc("block/infusion_matrix")));
+        outerStone();
         // a hole is the absence of a block, so there is nothing to draw and nothing to draw it with
         simpleBlock(ModBlocks.HOLE.get(), models().getExistingFile(mcLoc("block/air")));
     }
@@ -548,6 +548,14 @@ public class ModBlockStateProvider extends BlockStateProvider {
             arcaneStone(set);
             return;
         }
+        if (set == ModBlocks.ANCIENT_STONE) {
+            ancientStone(set);
+            return;
+        }
+        if (set == ModBlocks.ELDRITCH_STONE) {
+            eldritchStone(set);
+            return;
+        }
         simpleBlockWithItem(set.block());
 
         ResourceLocation texture = blockTexture(set.block().get());
@@ -577,6 +585,74 @@ public class ModBlockStateProvider extends BlockStateProvider {
         simpleBlockItem(set.stairs().get(), models().getExistingFile(set.stairs().getId().withPrefix("block/")));
         slabBlock(set.slab().get(), modLoc("block/arcane_stone"), three, one, two);
         simpleBlockItem(set.slab().get(), models().getExistingFile(set.slab().getId().withPrefix("block/")));
+    }
+
+    /**
+     * Ancient stone, as the original laid its six pictures -- a tile on top, five worn faces round the rest -- at
+     * any of sixteen turns.
+     */
+    private void ancientStone(StoneSet set) {
+        ResourceLocation tile = modLoc("block/ancient_tile");
+        ModelFile block = models().cube("ancient_stone", modLoc("block/ancient_stone"), tile,
+                modLoc("block/ancient_stone_4"), modLoc("block/ancient_stone_5"), modLoc("block/ancient_stone_2"),
+                modLoc("block/ancient_stone_3")).texture("particle", tile);
+        java.util.List<ConfiguredModel> turns = new java.util.ArrayList<>();
+        for (int x : new int[] {0, 90, 180, 270}) {
+            for (int y : new int[] {0, 90, 180, 270}) {
+                turns.add(ConfiguredModel.builder().modelFile(block).rotationX(x).rotationY(y).buildLast());
+            }
+        }
+        getVariantBuilder(set.block().get()).partialState().setModels(turns.toArray(ConfiguredModel[]::new));
+        simpleBlockItem(set.block().get(), block);
+        stairsBlock(set.stairs().get(), modLoc("block/ancient_stone_2"), modLoc("block/ancient_stone"), tile);
+        simpleBlockItem(set.stairs().get(), models().getExistingFile(set.stairs().getId().withPrefix("block/")));
+        slabBlock(set.slab().get(), modLoc("block/ancient_stone"), modLoc("block/ancient_stone_2"),
+                modLoc("block/ancient_stone"), tile);
+        simpleBlockItem(set.slab().get(), models().getExistingFile(set.slab().getId().withPrefix("block/")));
+    }
+
+    /** Eldritch stone, laid as arcane stone is: three pictures, any of four turns. */
+    private void eldritchStone(StoneSet set) {
+        ResourceLocation one = modLoc("block/eldritch_stone");
+        ResourceLocation two = modLoc("block/eldritch_stone_2");
+        ResourceLocation three = modLoc("block/eldritch_stone_3");
+        ModelFile block = models().cube("eldritch_stone", one, one, three, three, two, two).texture("particle", one);
+        getVariantBuilder(set.block().get()).partialState().setModels(Arrays.stream(TURNS)
+                .map(turn -> ConfiguredModel.builder().modelFile(block).rotationX(turn[0]).rotationY(turn[1])
+                        .buildLast())
+                .toArray(ConfiguredModel[]::new));
+        simpleBlockItem(set.block().get(), block);
+        stairsBlock(set.stairs().get(), three, one, one);
+        simpleBlockItem(set.stairs().get(), models().getExistingFile(set.stairs().getId().withPrefix("block/")));
+        slabBlock(set.slab().get(), one, three, one, one);
+        simpleBlockItem(set.slab().get(), models().getExistingFile(set.slab().getId().withPrefix("block/")));
+    }
+
+    /** The rest of the Outer Lands' stone, and the two pedestals. */
+    private void outerStone() {
+        java.util.List<ConfiguredModel> rock = new java.util.ArrayList<>();
+        for (int i = 1; i <= 4; i++) {
+            rock.add(ConfiguredModel.builder().modelFile(models().cubeAll("ancient_rock_" + i,
+                    modLoc("block/ancient_rock_" + i))).buildLast());
+        }
+        getVariantBuilder(ModBlocks.ANCIENT_ROCK.get()).partialState().setModels(rock.toArray(ConfiguredModel[]::new));
+        simpleBlockItem(ModBlocks.ANCIENT_ROCK.get(), models().getExistingFile(modLoc("block/ancient_rock_1")));
+        simpleBlockWithItem(ModBlocks.ANCIENT_TILE);
+        simpleBlockWithItem(ModBlocks.GLYPHED_STONE);
+        simpleBlockWithItem(ModBlocks.ANCIENT_DOORWAY);
+        simpleBlockWithItem(ModBlocks.CRUSTED_STONE);
+        simpleBlockWithItem(ModBlocks.GLOWING_CRUSTED_STONE);
+        simpleBlockWithItem(ModBlocks.POROUS_STONE);
+        ModelFile eldritch = models().getExistingFile(modLoc("block/eldritch_pedestal"));
+        simpleBlockWithItem(ModBlocks.ELDRITCH_PEDESTAL.get(), eldritch);
+        ModelFile ancient = models().withExistingParent("ancient_pedestal", modLoc("block/eldritch_pedestal"))
+                .texture("side", modLoc("block/legacy/pedestal_ancient_side"))
+                .texture("top", modLoc("block/legacy/ancient_tile"))
+                .texture("particle", modLoc("block/legacy/pedestal_ancient_side"));
+        simpleBlockWithItem(ModBlocks.ANCIENT_PEDESTAL.get(), ancient);
+        // the pillar is drawn by the matrix whatever it is built of
+        getVariantBuilder(ModBlocks.ARCANE_PILLAR.get()).partialState()
+                .setModels(new ConfiguredModel(models().getExistingFile(modLoc("block/infusion_matrix"))));
     }
 
     private void translucentBlock(DeferredBlock<? extends Block> block) {

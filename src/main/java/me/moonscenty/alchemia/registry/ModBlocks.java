@@ -472,7 +472,45 @@ public class ModBlocks {
 
     public static final StoneSet ARCANE_STONE = registerStoneSet("arcane_stone", MapColor.COLOR_BLACK);
     public static final StoneSet ARCANE_STONE_BRICKS = registerStoneSet("arcane_stone_bricks", MapColor.COLOR_BLACK);
-    public static final List<StoneSet> STONE_SETS = List.of(ARCANE_STONE, ARCANE_STONE_BRICKS);
+    /** The ancient stone of the Outer Lands, and the eldritch stone of its rings and altars, which barely breaks. */
+    public static final StoneSet ANCIENT_STONE = registerStoneSet("ancient_stone", MapColor.COLOR_GRAY);
+    public static final StoneSet ELDRITCH_STONE = registerStoneSet("eldritch_stone",
+            () -> stone(MapColor.COLOR_BLACK).strength(15.0F, 1000.0F));
+    public static final List<StoneSet> STONE_SETS = List.of(ARCANE_STONE, ARCANE_STONE_BRICKS, ANCIENT_STONE,
+            ELDRITCH_STONE);
+
+    /** The rest of the Outer Lands' stone: some of it nothing will spawn on, and one door that nothing breaks. */
+    public static final DeferredBlock<Block> ANCIENT_ROCK = register("ancient_rock",
+            () -> new Block(stone(MapColor.COLOR_GRAY).strength(6.0F, 20.0F).isValidSpawn(ModBlocks::never)));
+    public static final DeferredBlock<Block> ANCIENT_TILE = register("ancient_tile",
+            () -> new Block(stone(MapColor.COLOR_GRAY).isValidSpawn(ModBlocks::never)));
+    public static final DeferredBlock<Block> GLYPHED_STONE = register("glyphed_stone",
+            () -> new Block(stone(MapColor.COLOR_GRAY).isValidSpawn(ModBlocks::never)));
+    public static final DeferredBlock<Block> ANCIENT_DOORWAY = register("ancient_doorway",
+            () -> new Block(stone(MapColor.COLOR_GRAY).strength(-1.0F, 6.0F).noLootTable()
+                    .isValidSpawn(ModBlocks::never)));
+    public static final DeferredBlock<Block> CRUSTED_STONE = register("crusted_stone",
+            () -> new Block(stone(MapColor.COLOR_PURPLE).strength(1.0F, 5.0F)));
+    public static final DeferredBlock<Block> GLOWING_CRUSTED_STONE = register("glowing_crusted_stone",
+            () -> new Block(stone(MapColor.COLOR_PURPLE).strength(1.0F, 5.0F).lightLevel(state -> 9)));
+    /** What tainted rock leaves when the taint dies: soft stone with things caught in it. */
+    public static final DeferredBlock<me.moonscenty.alchemia.block.PorousStoneBlock> POROUS_STONE = register(
+            "porous_stone", () -> new me.moonscenty.alchemia.block.PorousStoneBlock(
+                    stone(MapColor.STONE).strength(0.5F, 5.0F)));
+
+    /** The pedestal built of ancient stone, and of eldritch: each changes a working, as the corners do. */
+    public static final DeferredBlock<ArcanePedestalBlock> ANCIENT_PEDESTAL = register("ancient_pedestal",
+            () -> new ArcanePedestalBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS)
+                    .mapColor(MapColor.COLOR_GRAY).noOcclusion(), me.moonscenty.alchemia.block.PillarKind.ANCIENT));
+    public static final DeferredBlock<ArcanePedestalBlock> ELDRITCH_PEDESTAL = register("eldritch_pedestal",
+            () -> new ArcanePedestalBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS)
+                    .mapColor(MapColor.COLOR_BLACK).noOcclusion(), me.moonscenty.alchemia.block.PillarKind.ELDRITCH));
+
+    private static boolean never(net.minecraft.world.level.block.state.BlockState state,
+            net.minecraft.world.level.BlockGetter level, net.minecraft.core.BlockPos pos,
+            net.minecraft.world.entity.EntityType<?> type) {
+        return false;
+    }
 
     /**
      * The two stones an altar is built on top of, laid two below its corners.
@@ -490,10 +528,15 @@ public class ModBlocks {
     public static final DeferredBlock<HalfTransparentBlock> AMBER_BRICKS = register("amber_bricks", () -> new HalfTransparentBlock(amber()));
 
     private static StoneSet registerStoneSet(String name, MapColor color) {
-        DeferredBlock<Block> base = register(name, () -> new Block(stone(color)));
+        return registerStoneSet(name, () -> stone(color));
+    }
+
+    private static StoneSet registerStoneSet(String name,
+            java.util.function.Supplier<BlockBehaviour.Properties> properties) {
+        DeferredBlock<Block> base = register(name, () -> new Block(properties.get()));
         return new StoneSet(base,
-                register(name + "_stairs", () -> new StairBlock(base.get().defaultBlockState(), stone(color))),
-                register(name + "_slab", () -> new SlabBlock(stone(color))));
+                register(name + "_stairs", () -> new StairBlock(base.get().defaultBlockState(), properties.get())),
+                register(name + "_slab", () -> new SlabBlock(properties.get())));
     }
 
     private static BlockBehaviour.Properties stone(MapColor color) {
