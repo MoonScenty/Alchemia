@@ -170,6 +170,8 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
         // what it drops it works out for itself
         add(ModBlocks.POROUS_STONE.get(), noDrop());
         dropSelf(ModBlocks.ANCIENT_PEDESTAL.get());
+        // a banner works out for itself which banner it is
+        add(ModBlocks.BANNER.get(), noDrop());
         dropSelf(ModBlocks.ELDRITCH_PEDESTAL.get());
 
         // nothing tainted is worth keeping; what the growths gave in the original arrives with those items

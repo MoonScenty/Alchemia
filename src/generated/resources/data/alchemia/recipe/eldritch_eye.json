@@ -1,0 +1,26 @@
+{
+  "type": "alchemia:infusion",
+  "central": {
+    "item": "minecraft:ender_eye"
+  },
+  "essentia": {
+    "alchemia:alienis": 64,
+    "alchemia:motus": 16,
+    "alchemia:tenebrae": 16,
+    "alchemia:vacuos": 16
+  },
+  "instability": 5,
+  "research": "alchemia:oculus",
+  "result": {
+    "count": 1,
+    "id": "alchemia:eldritch_eye"
+  },
+  "ring": [
+    {
+      "item": "alchemia:void_seed"
+    },
+    {
+      "item": "minecraft:gold_ingot"
+    }
+  ]
+}

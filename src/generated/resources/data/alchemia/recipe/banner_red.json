@@ -1,0 +1,31 @@
+{
+  "type": "alchemia:arcane_shaped",
+  "key": {
+    "B": {
+      "tag": "minecraft:wooden_slabs"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    },
+    "W": {
+      "item": "minecraft:red_wool"
+    }
+  },
+  "pattern": [
+    "WS",
+    "WS",
+    "WB"
+  ],
+  "research": "alchemia:banners",
+  "result": {
+    "components": {
+      "minecraft:base_color": "red"
+    },
+    "count": 1,
+    "id": "alchemia:banner"
+  },
+  "vis": {
+    "alchemia:aqua": 5,
+    "alchemia:terra": 5
+  }
+}

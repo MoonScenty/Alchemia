@@ -43,6 +43,31 @@ public final class EldritchEffects {
         }
     }
 
+    /** A dark wisp from somewhere on an obelisk's shaft down to something from the Outer Lands it is keeping. */
+    public static void obeliskWisp(net.minecraft.world.level.Level world, net.minecraft.core.BlockPos pos,
+            net.minecraft.world.entity.LivingEntity kept) {
+        if (!(world instanceof ClientLevel level)) {
+            return;
+        }
+        RandomSource random = level.random;
+        double x = pos.getX() + 0.5;
+        double y = pos.getY() + 1.0 + random.nextFloat() * 3.0;
+        double z = pos.getZ() + 0.5;
+        int lasts = 20 + random.nextInt(10);
+        double tx = kept.getX();
+        double ty = kept.getY() + kept.getBbHeight() / 2.0;
+        double tz = kept.getZ();
+        float shade = random.nextFloat() * 0.1F;
+        Minecraft.getInstance().particleEngine.add(new GenericParticle(level, x, y, z, (tx - x) / lasts,
+                (ty - y) / lasts, (tz - z) / lasts, LegacySheet.COVER, 16)
+                .lasts(lasts)
+                .colour(shade, shade, shade)
+                .opacity(0.5F, 0.0F)
+                .cells(WISP_CELLS, WISP_FRAMES, 1)
+                .loops()
+                .size(1.0F, 0.2F));
+    }
+
     /** Thirty dark wisps thrown out from where an orb burst, shrinking as they go. */
     public static void burst(EldritchOrb orb) {
         if (!(orb.level() instanceof ClientLevel level)) {

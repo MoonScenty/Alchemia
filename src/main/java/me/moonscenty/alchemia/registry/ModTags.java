@@ -10,6 +10,8 @@ import net.minecraft.world.level.block.Block;
 
 public class ModTags {
     public static class Blocks {
+        /** An eldritch ring's stonework, which an obelisk brings down with it. */
+        public static final TagKey<Block> ELDRITCH_STONEWORK = mod("eldritch_stonework");
         public static final TagKey<Block> CRYSTALS = mod("crystals");
         /** Blocks a naturally generated crystal can grow on. */
         public static final TagKey<Block> CRYSTAL_GROWABLE = mod("crystal_growable");

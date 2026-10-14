@@ -630,6 +630,14 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
     /** The rest of the Outer Lands' stone, and the two pedestals. */
     private void outerStone() {
+        // drawn by their renderers; the model is only for the dust they throw up when struck
+        for (var drawn : java.util.List.of(ModBlocks.ELDRITCH_ALTAR, ModBlocks.ELDRITCH_CAP, ModBlocks.ELDRITCH_OBELISK,
+                ModBlocks.ELDRITCH_OBELISK_BODY, ModBlocks.ELDRITCH_PORTAL)) {
+            simpleBlock(drawn.get(), models().getBuilder(drawn.getId().getPath())
+                    .texture("particle", modLoc("block/eldritch_stone")));
+        }
+        simpleBlock(ModBlocks.BANNER.get(), models().getBuilder("banner")
+                .texture("particle", mcLoc("block/oak_planks")));
         java.util.List<ConfiguredModel> rock = new java.util.ArrayList<>();
         for (int i = 1; i <= 4; i++) {
             rock.add(ConfiguredModel.builder().modelFile(models().cubeAll("ancient_rock_" + i,

@@ -149,6 +149,19 @@ public class AlchemiaClientSetup {
     @SubscribeEvent
     public static void registerItemColours(RegisterColorHandlersEvent.Item event) {
         event.register((stack, tint) -> tint == 0 ? named(stack) : PLAIN, ModItems.PHIAL.get());
+        // a banner's cloth in its dye, its symbol in its aspect
+        event.register((stack, tint) -> {
+            net.minecraft.world.item.DyeColor dye = stack.getOrDefault(
+                    net.minecraft.core.component.DataComponents.BASE_COLOR, net.minecraft.world.item.DyeColor.WHITE);
+            if (tint == 1) {
+                return FastColor.ARGB32.opaque(dye.getTextureDiffuseColor());
+            }
+            if (tint == 2) {
+                return stack.has(ModDataComponents.ESSENTIA.get()) ? named(stack)
+                        : FastColor.ARGB32.opaque(dye.getTextureDiffuseColor());
+            }
+            return PLAIN;
+        }, ModItems.BANNER.get());
         // a golem is the colour of what it is made of
         event.register((stack, tint) -> 0xFF000000
                 | me.moonscenty.alchemia.item.GolemItem.design(stack).material().colour(), ModItems.GOLEM.get());
@@ -319,6 +332,11 @@ public class AlchemiaClientSetup {
     @SubscribeEvent
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerBlockEntityRenderer(ModBlockEntities.RESEARCH_TABLE.get(), ResearchTableRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.ELDRITCH_ALTAR.get(), EldritchCapRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.ELDRITCH_CAP.get(), EldritchCapRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.ELDRITCH_OBELISK.get(), EldritchObeliskRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.ELDRITCH_PORTAL.get(), EldritchPortalRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.BANNER.get(), BannerRenderer::new);
         event.registerEntityRenderer(ModEntities.AURA_NODE.get(), AuraNodeRenderer::new);
         event.registerEntityRenderer(ModEntities.AUTOCASTER.get(), AutocasterRenderer::new);
         event.registerEntityRenderer(ModEntities.FIRE_BAT.get(), FireBatRenderer::new);

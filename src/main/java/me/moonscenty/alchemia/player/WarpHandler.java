@@ -59,6 +59,32 @@ public class WarpHandler {
         player.setData(ModAttachments.WARP, afterEvent(warp, gear));
         int severity = severityOf(warp, gear);
         inflict(player, severity, random.nextInt(Math.max(1, severity)));
+        epiphany(player, warp.permanent() + warp.sticky());
+    }
+
+    /**
+     * Warp that has settled in teaches. Past twenty-five of it that will not pass, a warp event leaves the minor
+     * eldritch lore behind it; past fifty, the major. The original's thresholds.
+     */
+    public static void epiphany(net.minecraft.world.entity.player.Player player, int lasting) {
+        if (lasting > 25) {
+            learn(player, me.moonscenty.alchemia.Alchemia.id("eldritch_minor"));
+        }
+        if (lasting > 50) {
+            learn(player, me.moonscenty.alchemia.Alchemia.id("eldritch_major"));
+        }
+    }
+
+    private static void learn(net.minecraft.world.entity.player.Player player,
+            net.minecraft.resources.ResourceLocation research) {
+        me.moonscenty.alchemia.player.PlayerKnowledge knowledge = me.moonscenty.alchemia.player.PlayerKnowledge
+                .of(player);
+        if (knowledge.hasResearch(research)) {
+            return;
+        }
+        player.setData(ModAttachments.KNOWLEDGE, knowledge.withResearch(research));
+        player.displayClientMessage(Component.translatable("note.alchemia.learned",
+                me.moonscenty.alchemia.research.ResearchEntry.displayName(research)), false);
     }
 
     /**

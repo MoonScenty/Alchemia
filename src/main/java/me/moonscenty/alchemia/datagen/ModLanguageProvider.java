@@ -680,6 +680,24 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         addBlock(ModBlocks.JAR, pick("Warded Jar", "봉인된 단지"));
         addBlock(ModBlocks.ARCANE_PEDESTAL, pick("Arcane Pedestal", "비전 받침대"));
         addBlock(ModBlocks.ANCIENT_PEDESTAL, pick("Ancient Pedestal", "고대 받침대"));
+        addBlock(ModBlocks.ELDRITCH_ALTAR, pick("Eldritch Altar", "엘드리치 제단"));
+        addBlock(ModBlocks.ELDRITCH_CAP, pick("Eldritch Capstone", "엘드리치 갓돌"));
+        addBlock(ModBlocks.ELDRITCH_OBELISK, pick("Eldritch Obelisk", "엘드리치 오벨리스크"));
+        addBlock(ModBlocks.ELDRITCH_OBELISK_BODY, pick("Eldritch Obelisk", "엘드리치 오벨리스크"));
+        addBlock(ModBlocks.ELDRITCH_PORTAL, pick("Eldritch Portal", "엘드리치 차원문"));
+        addBlock(ModBlocks.BANNER, pick("Banner", "깃발"));
+        addItem(ModItems.CRIMSON_BANNER, pick("Crimson Cult Banner", "진홍 교단 깃발"));
+        String[][] banners = {{"white", "White Banner", "흰 깃발"}, {"orange", "Orange Banner", "주황 깃발"},
+                {"magenta", "Magenta Banner", "자홍 깃발"}, {"light_blue", "Light Blue Banner", "하늘색 깃발"},
+                {"yellow", "Yellow Banner", "노란 깃발"}, {"lime", "Lime Banner", "연두 깃발"},
+                {"pink", "Pink Banner", "분홍 깃발"}, {"gray", "Gray Banner", "회색 깃발"},
+                {"light_gray", "Light Gray Banner", "연회색 깃발"}, {"cyan", "Cyan Banner", "청록 깃발"},
+                {"purple", "Purple Banner", "보라 깃발"}, {"blue", "Blue Banner", "파란 깃발"},
+                {"brown", "Brown Banner", "갈색 깃발"}, {"green", "Green Banner", "초록 깃발"},
+                {"red", "Red Banner", "빨간 깃발"}, {"black", "Black Banner", "검은 깃발"}};
+        for (String[] banner : banners) {
+            add("item.alchemia.banner." + banner[0], pick(banner[1], banner[2]));
+        }
         addBlock(ModBlocks.ELDRITCH_PEDESTAL, pick("Eldritch Pedestal", "엘드리치 받침대"));
         addBlock(ModBlocks.ANCIENT_STONE.block(), pick("Ancient Stone", "고대 돌"));
         addBlock(ModBlocks.ANCIENT_STONE.stairs(), pick("Ancient Stone Stairs", "고대 돌 계단"));
@@ -955,6 +973,18 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                 {"elemental_tools", "Elemental Tools", "원소 도구",
                  "Alchemium tools with a primal bound into each on the altar, and what that element is in a tool already worked into them. The axe of the stream fells a tree from its top and sends what falls to whoever felled it, and held up it draws every loose thing nearby in. The pickaxe of the core refines ore into clusters now and then, sounds out the stone it is tapped against, and sets alight whatever it strikes. The sword of the zephyr carries a blow on to what is standing about, and held up it raises a whirlwind that lifts its bearer and throws back anything that comes close. The shovel of the earthmover digs three by three, and used against a face it lays three by three of that same block out of the bag; the setting key turns which way the square stands. The hoe of growth tills three by three and makes things grow where there is nothing to till. Crouch with any of them and it is only a tool.",
                  "제단에서 알케미움 도구에 원시를 하나씩 묶고, 그 원소가 도구에서 하는 일을 미리 새겨 둔 것이다. 흐름의 도끼는 나무를 꼭대기부터 베고 떨어진 것을 벤 사람에게 보내며, 들고 있으면 둘레의 떨어진 것을 모두 끌어온다. 핵의 곡괭이는 광석을 이따금 군집으로 정련하고, 두드린 돌 너머를 짚어 보며, 친 것에 불을 붙인다. 미풍의 검은 맞은 것 옆에 선 것까지 베고, 들고 있으면 회오리를 일으켜 든 사람을 띄우고 다가오는 것을 밀쳐 낸다. 흙꾼의 삽은 3×3으로 파고, 면에 대고 쓰면 그 블록을 가방에서 꺼내 3×3으로 깐다 — 설정 키로 네모가 서는 방향을 바꾼다. 성장의 괭이는 3×3으로 갈고, 갈 것이 없으면 자라게 한다. 무엇이든 웅크리고 쓰면 그냥 도구다."},
+                {"eldritch_minor", "Eldritch Epiphany", "엘드리치의 깨달음",
+                 "Warp that does not pass has started to teach. In the moments when the world goes wrong you have glimpsed something under it -- a place outside, older than the aura and colder, that leans against this one. The void seed is a little of it: a seed sown in the crucible with darkness and the void worked into it, that grows something the world did not make.",
+                 "사라지지 않는 뒤틀림이 무언가를 가르치기 시작했다. 세상이 어긋나는 순간마다 그 밑의 무언가를 언뜻 보았다. 오라보다 오래되고 차가운 바깥의 장소가 이쪽에 기대어 있다. 공허 씨앗은 그것의 한 조각이다. 도가니에 어둠과 공허를 함께 넣어 기른 씨앗은 이 세상이 만들지 않은 것을 키운다."},
+                {"eldritch_major", "Eldritch Revelation", "엘드리치의 계시",
+                 "You understand now what the stone rings are. Each is a door to the Outer Lands, held shut by the altar at its heart; the obelisk over it is the lock's weight. The Crimson Cult wants them open. What they would let through, you would rather not see.",
+                 "이제 돌 고리가 무엇인지 안다. 저마다 바깥 땅으로 가는 문이고, 한가운데 제단이 그것을 닫아 두며, 그 위의 오벨리스크는 자물쇠의 무게다. 진홍 교단은 그것을 열고 싶어 한다. 그리로 무엇이 건너올지는 보고 싶지 않다."},
+                {"oculus", "Opening the Eye", "눈 뜨기",
+                 "It is simple, and you cannot think why the cult has never seen it. Set four eldritch eyes into the altar at the heart of a stone ring, one to a side, and touch it with a wand holding five hundred of every primal. The way over the altar opens. An eldritch eye is an ender eye worked on the altar with a void seed and gold.",
+                 "너무 간단해서 교단이 왜 몰랐는지 모를 일이다. 돌 고리 한가운데 제단에 엘드리치의 눈 넷을 한 면에 하나씩 끼우고, 원시마다 오백씩 담은 완드를 대면 된다. 제단 위의 길이 열린다. 엘드리치의 눈은 엔더의 눈을 공허 씨앗과 금으로 제단에서 주입한 것이다."},
+                {"banners", "Banners", "깃발",
+                 "Dyed cloth on a pole, or hung from a wall. Put a filled phial to one to paint its aspect on it; crouch and touch it to wipe it off again.",
+                 "장대에 매달거나 벽에 거는 물들인 천이다. 채운 유리병을 대면 그 상을 그려 넣고, 웅크리고 대면 지운다."},
                 {"crimson", "The Crimson Cult", "진홍 교단",
                  "Most of the book is in a crabbed script you cannot read, but enough of it is plain to say what the cult is after. Nobody knows where they came from. They are working towards a rite they call Apertis Oculis, the Opening of the Eye. What opening it would do, the book does not say; you doubt very much that it is anything good. Knights in crimson plate and clerics in crimson robes come through rips in the air wherever the cult has a mind to be, and fight as one.",
                  "책 대부분은 읽을 수 없는 꼬부랑 글씨지만, 교단이 무엇을 노리는지 알 만큼은 읽힌다. 그들이 어디서 왔는지는 아무도 모른다. 그들은 '아페르티스 오쿨리스', 곧 눈 뜨기라 부르는 의식을 완성하려 한다. 무엇을 여는 의식인지 책은 말하지 않는다. 좋은 것일 리는 없을 것 같다. 진홍 판금의 기사와 진홍 로브의 사제가 교단이 마음먹은 곳마다 허공의 틈으로 건너와 한 몸처럼 싸운다."},

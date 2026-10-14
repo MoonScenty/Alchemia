@@ -1,0 +1,13 @@
+{
+  "auto_unlock": true,
+  "category": "alchemia:artifice",
+  "column": 0,
+  "icon": "alchemia:banner",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.banners.page"
+    }
+  ],
+  "row": -5
+}

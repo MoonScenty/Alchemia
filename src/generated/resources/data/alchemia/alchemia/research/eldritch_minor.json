@@ -1,0 +1,14 @@
+{
+  "category": "alchemia:eldritch",
+  "column": 1,
+  "hidden": true,
+  "icon": "alchemia:void_seed",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.eldritch_minor.page"
+    }
+  ],
+  "row": 0,
+  "shape": "special"
+}

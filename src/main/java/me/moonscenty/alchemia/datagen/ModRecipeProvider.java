@@ -719,6 +719,23 @@ public class ModRecipeProvider extends RecipeProvider {
                 Map.of('S', Ingredient.of(ModBlocks.ELDRITCH_STONE.slab()),
                         'B', Ingredient.of(ModBlocks.ELDRITCH_STONE.block())),
                 "SSS", " B ", "SSS");
+        // banners: a stick, a slab and wool of the colour
+        for (net.minecraft.world.item.DyeColor dye : net.minecraft.world.item.DyeColor.values()) {
+            arcane(output, "banner_" + dye.getName(), "banners",
+                    me.moonscenty.alchemia.block.BannerItem.of(dye, null),
+                    AspectList.of(ModAspects.WATER, 5).add(ModAspects.EARTH, 5),
+                    Map.of('W', Ingredient.of(net.minecraft.core.registries.BuiltInRegistries.ITEM.get(
+                                    net.minecraft.resources.ResourceLocation.withDefaultNamespace(dye.getName() + "_wool"))),
+                            'S', Ingredient.of(Items.STICK),
+                            'B', Ingredient.of(net.minecraft.tags.ItemTags.WOODEN_SLABS)),
+                    "WS", "WS", "WB");
+        }
+        // the eye that opens a stone ring: an ender eye with a void seed and gold about it
+        infusion(output, "eldritch_eye", Ingredient.of(Items.ENDER_EYE),
+                List.of(Ingredient.of(ModItems.VOID_SEED), Ingredient.of(Items.GOLD_INGOT)),
+                new ItemStack(ModItems.ELDRITCH_EYE.get()),
+                AspectList.of(ModAspects.ELDRITCH, 64).add(ModAspects.VOID, 16).add(ModAspects.DARKNESS, 16)
+                        .add(ModAspects.MOTION, 16), 5, "oculus");
         arcane(output, "arcane_pedestal", "infusion", new ItemStack(ModBlocks.ARCANE_PEDESTAL.get()),
                 AspectList.of(ModAspects.AIR, 5),
                 Map.of('S', Ingredient.of(ModBlocks.ARCANE_STONE.slab()),

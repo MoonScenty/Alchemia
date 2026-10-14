@@ -506,6 +506,32 @@ public class ModBlocks {
             () -> new ArcanePedestalBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS)
                     .mapColor(MapColor.COLOR_BLACK).noOcclusion(), me.moonscenty.alchemia.block.PillarKind.ELDRITCH));
 
+    /** The stonework of an eldritch ring: drawn by its renderers, slow to break, and leaving nothing. */
+    public static final DeferredBlock<me.moonscenty.alchemia.block.eldritch.EldritchStoneworkBlock> ELDRITCH_ALTAR = registerBlockOnly("eldritch_altar",
+            () -> new me.moonscenty.alchemia.block.eldritch.EldritchStoneworkBlock(eldritch(), me.moonscenty.alchemia.block.eldritch.EldritchStoneworkBlock.Part.ALTAR));
+    public static final DeferredBlock<me.moonscenty.alchemia.block.eldritch.EldritchStoneworkBlock> ELDRITCH_CAP = registerBlockOnly("eldritch_cap",
+            () -> new me.moonscenty.alchemia.block.eldritch.EldritchStoneworkBlock(eldritch(), me.moonscenty.alchemia.block.eldritch.EldritchStoneworkBlock.Part.CAP));
+    public static final DeferredBlock<me.moonscenty.alchemia.block.eldritch.EldritchStoneworkBlock> ELDRITCH_OBELISK = registerBlockOnly(
+            "eldritch_obelisk", () -> new me.moonscenty.alchemia.block.eldritch.EldritchStoneworkBlock(eldritch(),
+                    me.moonscenty.alchemia.block.eldritch.EldritchStoneworkBlock.Part.OBELISK));
+    public static final DeferredBlock<me.moonscenty.alchemia.block.eldritch.EldritchStoneworkBlock> ELDRITCH_OBELISK_BODY = registerBlockOnly(
+            "eldritch_obelisk_body", () -> new me.moonscenty.alchemia.block.eldritch.EldritchStoneworkBlock(eldritch(),
+                    me.moonscenty.alchemia.block.eldritch.EldritchStoneworkBlock.Part.OBELISK_BODY));
+    /** The way to the Outer Lands: nothing breaks it, and nothing bumps into it. */
+    public static final DeferredBlock<me.moonscenty.alchemia.block.eldritch.EldritchPortalBlock> ELDRITCH_PORTAL = registerBlockOnly("eldritch_portal",
+            () -> new me.moonscenty.alchemia.block.eldritch.EldritchPortalBlock(eldritch().strength(-1.0F, 3600000.0F).noCollission()));
+    /** A banner, dyed or the Crimson Cult's. Its two items place it. */
+    public static final DeferredBlock<me.moonscenty.alchemia.block.BannerBlock> BANNER = registerBlockOnly("banner",
+            () -> new me.moonscenty.alchemia.block.BannerBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOD).strength(1.0F).sound(SoundType.WOOD).noCollission().noOcclusion()
+                    .ignitedByLava()));
+
+    private static BlockBehaviour.Properties eldritch() {
+        return BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLACK).strength(50.0F, 1200.0F)
+                .sound(SoundType.STONE).lightLevel(state -> 8).noOcclusion().noLootTable()
+                .isValidSpawn(ModBlocks::never);
+    }
+
     private static boolean never(net.minecraft.world.level.block.state.BlockState state,
             net.minecraft.world.level.BlockGetter level, net.minecraft.core.BlockPos pos,
             net.minecraft.world.entity.EntityType<?> type) {

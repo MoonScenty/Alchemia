@@ -278,6 +278,17 @@ public class ModResearchProvider {
                 "elemental_axe", "elemental_pickaxe", "elemental_sword", "elemental_shovel", "elemental_hoe");
         // filed under eldritch, as the original filed it: it is the first thing beaten round something that
         // should not hold it
+        // what warp teaches, and the rite of the stone rings
+        hidden(context, "eldritch_minor", ModResearch.ELDRITCH, ModItems.VOID_SEED, 1, 0, NodeShape.SPECIAL);
+        hidden(context, "eldritch_major", ModResearch.ELDRITCH, net.minecraft.world.item.Items.ENDER_EYE, -1, 0,
+                NodeShape.SPECIAL);
+        entry(context, "oculus", ModResearch.ELDRITCH, ModItems.ELDRITCH_EYE, -2, 3,
+                AspectList.of(ModAspects.MIND, 3).add(ModAspects.DARKNESS, 3).add(ModAspects.EXCHANGE, 3)
+                        .add(ModAspects.MOTION, 6).add(ModAspects.ELDRITCH, 6),
+                List.of("crimson", "eldritch_major"), false, NodeShape.SPECIAL, 1, "eldritch_eye");
+        entry(context, "banners", ModResearch.ARTIFICE, ModItems.BANNER, 0, -5, AspectList.EMPTY, List.of(), true,
+                NodeShape.PLAIN, 1);
+
         // the cult: in nobody's book until its rites have been read
         hidden(context, "crimson", ModResearch.ELDRITCH, ModItems.CRIMSON_RITES, 0, 2, NodeShape.SPECIAL);
 

@@ -1,0 +1,28 @@
+{
+  "category": "alchemia:eldritch",
+  "column": -2,
+  "icon": "alchemia:eldritch_eye",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.oculus.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:eldritch_eye"
+    }
+  ],
+  "parents": [
+    "alchemia:crimson",
+    "alchemia:eldritch_major"
+  ],
+  "requirements": {
+    "alchemia:alienis": 6,
+    "alchemia:cognitio": 3,
+    "alchemia:motus": 6,
+    "alchemia:permutatio": 3,
+    "alchemia:tenebrae": 3
+  },
+  "row": 3,
+  "shape": "special"
+}

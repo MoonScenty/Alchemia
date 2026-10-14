@@ -261,6 +261,23 @@ public class ModBlockEntities {
                     .of(JarBlockEntity::new, ModBlocks.JAR.get())
                     .build(null));
 
+    /** The eldritch ring's altar, capstones, obelisk and the way above the altar; and banners. */
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<me.moonscenty.alchemia.block.eldritch.EldritchAltarBlockEntity>>
+            ELDRITCH_ALTAR = BLOCK_ENTITIES.register("eldritch_altar", () -> BlockEntityType.Builder
+                    .of(me.moonscenty.alchemia.block.eldritch.EldritchAltarBlockEntity::new, ModBlocks.ELDRITCH_ALTAR.get()).build(null));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<me.moonscenty.alchemia.block.eldritch.EldritchCapBlockEntity>>
+            ELDRITCH_CAP = BLOCK_ENTITIES.register("eldritch_cap", () -> BlockEntityType.Builder
+                    .of(me.moonscenty.alchemia.block.eldritch.EldritchCapBlockEntity::new, ModBlocks.ELDRITCH_CAP.get()).build(null));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<me.moonscenty.alchemia.block.eldritch.EldritchObeliskBlockEntity>>
+            ELDRITCH_OBELISK = BLOCK_ENTITIES.register("eldritch_obelisk", () -> BlockEntityType.Builder
+                    .of(me.moonscenty.alchemia.block.eldritch.EldritchObeliskBlockEntity::new, ModBlocks.ELDRITCH_OBELISK.get()).build(null));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<me.moonscenty.alchemia.block.eldritch.EldritchPortalBlockEntity>>
+            ELDRITCH_PORTAL = BLOCK_ENTITIES.register("eldritch_portal", () -> BlockEntityType.Builder
+                    .of(me.moonscenty.alchemia.block.eldritch.EldritchPortalBlockEntity::new, ModBlocks.ELDRITCH_PORTAL.get()).build(null));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<me.moonscenty.alchemia.block.BannerBlockEntity>>
+            BANNER = BLOCK_ENTITIES.register("banner", () -> BlockEntityType.Builder
+                    .of(me.moonscenty.alchemia.block.BannerBlockEntity::new, ModBlocks.BANNER.get()).build(null));
+
     /** What one pedestal is holding up. */
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ArcanePedestalBlockEntity>>
             ARCANE_PEDESTAL = BLOCK_ENTITIES.register("arcane_pedestal", () -> BlockEntityType.Builder
