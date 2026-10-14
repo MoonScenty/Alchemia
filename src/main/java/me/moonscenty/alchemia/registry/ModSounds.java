@@ -42,6 +42,8 @@ public final class ModSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> GORE = sound("gore");
     /** A handful of coins. */
     public static final DeferredHolder<SoundEvent, SoundEvent> COINS = sound("coins");
+    /** Pottery smashing: an urn broken open. */
+    public static final DeferredHolder<SoundEvent, SoundEvent> URN_BREAK = sound("urnbreak");
 
     /** A shutter clacking: a golem going about, or hurt. */
     public static final DeferredHolder<SoundEvent, SoundEvent> CAMERA_CLACK = sound("cameraclack");

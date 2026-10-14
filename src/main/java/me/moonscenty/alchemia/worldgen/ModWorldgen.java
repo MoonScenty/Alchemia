@@ -76,6 +76,9 @@ public class ModWorldgen {
     public static final ResourceKey<PlacedFeature> ELDRITCH_RING_PLACED = placed("eldritch_ring");
     public static final ResourceKey<PlacedFeature> CULTIST_PORTAL_PLACED = placed("cultist_portal");
     public static final ResourceKey<BiomeModifier> ADD_ELDRITCH = biomeModifier("add_eldritch");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> MOUND = configured("mound");
+    public static final ResourceKey<PlacedFeature> MOUND_PLACED = placed("mound");
+    public static final ResourceKey<BiomeModifier> ADD_MOUND = biomeModifier("add_mound");
     public static final ResourceKey<PlacedFeature> AURA_NODE_PLACED = placed("aura_node");
     public static final ResourceKey<PlacedFeature> ORE_AMBER_PLACED = placed("ore_amber");
     public static final ResourceKey<PlacedFeature> ORE_CINNABAR_PLACED = placed("ore_cinnabar");
@@ -154,6 +157,7 @@ public class ModWorldgen {
                 NoneFeatureConfiguration.INSTANCE));
         context.register(CULTIST_PORTAL, new ConfiguredFeature<>(ModFeatures.CULTIST_PORTAL.get(),
                 NoneFeatureConfiguration.INSTANCE));
+        context.register(MOUND, new ConfiguredFeature<>(ModFeatures.MOUND.get(), NoneFeatureConfiguration.INSTANCE));
 
         // the magical forest's trees: mostly great oaks, one in ten of the rest a greatwood, one in fourteen of all a
         // silverwood, each only where its sapling could stand
@@ -205,6 +209,12 @@ public class ModWorldgen {
                 tree(40, ModBlocks.SILVERWOOD.sapling().get())));
 
         // a ring in about one chunk in sixty-six, a portal in one in five hundred: the original's odds
+        // a mound one chunk in a hundred and fifty, as the original
+        context.register(MOUND_PLACED, new PlacedFeature(configured.getOrThrow(MOUND),
+                List.of(RarityFilter.onAverageOnceEvery(150), InSquarePlacement.spread(),
+                        net.minecraft.world.level.levelgen.placement.HeightmapPlacement.onHeightmap(
+                                net.minecraft.world.level.levelgen.Heightmap.Types.WORLD_SURFACE_WG),
+                        BiomeFilter.biome())));
         context.register(ELDRITCH_RING_PLACED, new PlacedFeature(configured.getOrThrow(ELDRITCH_RING),
                 List.of(RarityFilter.onAverageOnceEvery(66), InSquarePlacement.spread(),
                         net.minecraft.world.level.levelgen.placement.HeightmapPlacement.onHeightmap(
@@ -262,6 +272,9 @@ public class ModWorldgen {
         context.register(ADD_ELDRITCH, new BiomeModifiers.AddFeaturesBiomeModifier(overworld,
                 HolderSet.direct(placed.getOrThrow(ELDRITCH_RING_PLACED), placed.getOrThrow(CULTIST_PORTAL_PLACED)),
                 GenerationStep.Decoration.SURFACE_STRUCTURES));
+
+        context.register(ADD_MOUND, new BiomeModifiers.AddFeaturesBiomeModifier(overworld,
+                HolderSet.direct(placed.getOrThrow(MOUND_PLACED)), GenerationStep.Decoration.SURFACE_STRUCTURES));
 
         context.register(ADD_NODES, new BiomeModifiers.AddFeaturesBiomeModifier(overworld,
                 HolderSet.direct(placed.getOrThrow(AURA_NODE_PLACED)), GenerationStep.Decoration.TOP_LAYER_MODIFICATION));

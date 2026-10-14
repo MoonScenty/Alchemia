@@ -74,6 +74,12 @@
       "alchemia:legacy/coins"
     ]
   },
+  "urnbreak": {
+    "subtitle": "subtitles.alchemia.urnbreak",
+    "sounds": [
+      "alchemia:legacy/urnbreak"
+    ]
+  },
   "swarm": {
     "subtitle": "subtitles.alchemia.swarm.ambient",
     "sounds": [

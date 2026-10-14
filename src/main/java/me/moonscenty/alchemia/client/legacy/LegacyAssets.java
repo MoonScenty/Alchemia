@@ -644,6 +644,14 @@ public final class LegacyAssets {
         all.add(block("crusted_stone", "crust", null));
         all.add(block("glowing_crusted_stone", "crust_glow", null));
         all.add(block("porous_stone", "porous_stone", null));
+        // the mound's urns and crates, a side for each rarity, and the urn breaking
+        for (String kind : List.of("loot_urn", "loot_crate")) {
+            all.add(block(kind + "_top", kind + "_top", null));
+            for (int rarity = 0; rarity <= 2; rarity++) {
+                all.add(block(kind + "_side_" + rarity, kind + "_side_" + rarity, null));
+            }
+        }
+        all.add(LegacyAsset.of("sounds/legacy/urnbreak.ogg").five("sounds/urnbreak.ogg"));
     }
 
     private static Map<FocusUpgrade, String> originalUpgrades() {

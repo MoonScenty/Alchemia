@@ -591,6 +591,28 @@ public class ModBlockStateProvider extends BlockStateProvider {
      * Ancient stone, as the original laid its six pictures -- a tile on top, five worn faces round the rest -- at
      * any of sixteen turns.
      */
+    /** An urn or crate: boxes with the one top and a side for each rarity, as the original drew them. */
+    private void lootBlock(net.minecraft.world.level.block.Block block, String name, int[][] boxes) {
+        var states = getVariantBuilder(block);
+        for (int rarity = 0; rarity <= 2; rarity++) {
+            String side = "block/" + name + "_side_" + rarity;
+            var model = models().getBuilder(name + "_" + rarity).ao(false)
+                    .texture("side", modLoc(side)).texture("top", modLoc("block/" + name + "_top"))
+                    .texture("particle", modLoc(side));
+            for (int[] box : boxes) {
+                model.element().from(box[0], box[1], box[2]).to(box[3], box[4], box[5])
+                        .allFaces((direction, face) -> face.texture(
+                                direction.getAxis() == net.minecraft.core.Direction.Axis.Y ? "#top" : "#side"))
+                        .end();
+            }
+            states.partialState().with(me.moonscenty.alchemia.block.LootBlock.RARITY, rarity)
+                    .modelForState().modelFile(model).addModel();
+            if (rarity == 0) {
+                simpleBlockItem(block, model);
+            }
+        }
+    }
+
     private void ancientStone(StoneSet set) {
         ResourceLocation tile = modLoc("block/ancient_tile");
         ModelFile block = models().cube("ancient_stone", modLoc("block/ancient_stone"), tile,
@@ -651,6 +673,9 @@ public class ModBlockStateProvider extends BlockStateProvider {
         simpleBlockWithItem(ModBlocks.CRUSTED_STONE);
         simpleBlockWithItem(ModBlocks.GLOWING_CRUSTED_STONE);
         simpleBlockWithItem(ModBlocks.POROUS_STONE);
+        lootBlock(ModBlocks.LOOT_URN.get(), "loot_urn",
+                new int[][] {{3, 0, 3, 13, 1, 13}, {2, 1, 2, 14, 13, 14}, {4, 13, 4, 12, 16, 12}});
+        lootBlock(ModBlocks.LOOT_CRATE.get(), "loot_crate", new int[][] {{1, 0, 1, 15, 14, 15}});
         ModelFile eldritch = models().getExistingFile(modLoc("block/eldritch_pedestal"));
         simpleBlockWithItem(ModBlocks.ELDRITCH_PEDESTAL.get(), eldritch);
         ModelFile ancient = models().withExistingParent("ancient_pedestal", modLoc("block/eldritch_pedestal"))

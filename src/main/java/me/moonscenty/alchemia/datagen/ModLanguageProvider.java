@@ -282,6 +282,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("subtitles.alchemia.pech.trade", pick("Pech chatters", "페크가 재잘댄다"));
         add("subtitles.alchemia.pech.dice", pick("Bones rattle", "뼈 주사위가 구른다"));
         add("subtitles.alchemia.coins", pick("Coins jingle", "동전이 짤랑거린다"));
+        add("subtitles.alchemia.urnbreak", pick("Urn shatters", "항아리가 깨진다"));
         String[][] champions = {{"bold", "Bold", "대담한"}, {"spine", "Spined", "가시 돋친"},
                 {"armor", "Armored", "무장한"}, {"mighty", "Mighty", "강력한"}, {"grim", "Grim", "음산한"},
                 {"warded", "Warded", "보호받는"}, {"warp", "Warped", "뒤틀린"}, {"undying", "Undying", "죽지 않는"},
@@ -716,6 +717,8 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         addBlock(ModBlocks.CRUSTED_STONE, pick("Crusted Stone", "딱지 앉은 돌"));
         addBlock(ModBlocks.GLOWING_CRUSTED_STONE, pick("Glowing Crusted Stone", "빛나는 딱지 앉은 돌"));
         addBlock(ModBlocks.POROUS_STONE, pick("Porous Stone", "구멍 숭숭한 돌"));
+        addBlock(ModBlocks.LOOT_URN, pick("Ancient Urn", "오래된 항아리"));
+        addBlock(ModBlocks.LOOT_CRATE, pick("Old Crate", "오래된 상자"));
         addBlock(ModBlocks.INFUSION_MATRIX, pick("Runic Matrix", "룬 결계"));
         addBlock(ModBlocks.ARCANE_PILLAR, pick("Arcane Pillar", "비전 기둥"));
         add("block.alchemia.infusion_matrix.asleep", pick("The stones hang still", "돌이 가만히 떠 있다"));
