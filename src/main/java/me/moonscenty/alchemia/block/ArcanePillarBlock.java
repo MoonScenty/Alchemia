@@ -23,6 +23,9 @@ import net.minecraft.world.level.block.state.BlockState;
  */
 public class ArcanePillarBlock extends Block {
     public static final MapCodec<ArcanePillarBlock> CODEC = simpleCodec(ArcanePillarBlock::new);
+    /** What the corner was built of, and so gives back. */
+    public static final net.minecraft.world.level.block.state.properties.EnumProperty<PillarKind> KIND =
+            net.minecraft.world.level.block.state.properties.EnumProperty.create("kind", PillarKind.class);
 
     /**
      * Where a matrix would be, if this corner belongs to one.
@@ -36,6 +39,13 @@ public class ArcanePillarBlock extends Block {
 
     public ArcanePillarBlock(Properties properties) {
         super(properties);
+        registerDefaultState(stateDefinition.any().setValue(KIND, PillarKind.NORMAL));
+    }
+
+    @Override
+    protected void createBlockStateDefinition(
+            net.minecraft.world.level.block.state.StateDefinition.Builder<Block, BlockState> builder) {
+        builder.add(KIND);
     }
 
     @Override

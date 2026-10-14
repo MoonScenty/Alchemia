@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "alchemia:ancient_stone"
+  },
+  "result": {
+    "count": 1,
+    "id": "alchemia:ancient_stone_stairs"
+  }
+}

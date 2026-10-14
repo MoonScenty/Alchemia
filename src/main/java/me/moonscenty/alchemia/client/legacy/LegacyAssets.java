@@ -584,6 +584,38 @@ public final class LegacyAssets {
                 .forModel(INFUSER));
         all.add(LegacyAsset.of(PILLAR_MESH).five("models/obj/pillar.obj"));
         all.add(LegacyAsset.of("textures/entity/arcane_pillar.png").five("textures/blocks/pillar_normal.png"));
+
+        // 8C: the altar built of ancient or eldritch stone, its pillars, its matrix, its pedestals
+        all.add(LegacyAsset.of("textures/entity/ancient_pillar.png").five("textures/blocks/pillar_ancient.png"));
+        all.add(LegacyAsset.of("textures/entity/eldritch_pillar.png").five("textures/blocks/pillar_eldritch.png"));
+        all.add(LegacyAsset.of("textures/entity/infusion_matrix_ancient.png").five("textures/blocks/infuser_ancient.png")
+                .forModel(INFUSER));
+        all.add(LegacyAsset.of("textures/entity/infusion_matrix_eldritch.png")
+                .five("textures/blocks/infuser_eldritch.png").forModel(INFUSER));
+        all.add(LegacyAsset.of("models/block/eldritch_pedestal.json").five("models/block/pedestal_eldritch.json")
+                .asModel());
+        for (String face : List.of("pedestal_ancient_side", "pedestal_eldritch_side", "ancient_tile",
+                "eldritch_stone_1")) {
+            all.add(LegacyAsset.of("textures/block/legacy/" + face + ".png").five("textures/blocks/" + face + ".png"));
+        }
+
+        // the Outer Lands' stone
+        all.add(block("ancient_stone", "ancient_stone_1", null));
+        for (int i = 2; i <= 5; i++) {
+            all.add(block("ancient_stone_" + i, "ancient_stone_" + i, null));
+        }
+        all.add(block("ancient_tile", "ancient_tile", null));
+        for (int i = 1; i <= 4; i++) {
+            all.add(block("ancient_rock_" + i, "ancient_rock_stone_" + i, null));
+        }
+        all.add(block("eldritch_stone", "eldritch_stone_1", null));
+        all.add(block("eldritch_stone_2", "eldritch_stone_2", null));
+        all.add(block("eldritch_stone_3", "eldritch_stone_3", null));
+        all.add(block("glyphed_stone", "ancient_glyph", null));
+        all.add(block("ancient_doorway", "eldritch_door", null));
+        all.add(block("crusted_stone", "crust", null));
+        all.add(block("glowing_crusted_stone", "crust_glow", null));
+        all.add(block("porous_stone", "porous_stone", null));
     }
 
     private static Map<FocusUpgrade, String> originalUpgrades() {

@@ -1,0 +1,22 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "alchemia:block/eldritch_stone"
+      },
+      {
+        "model": "alchemia:block/eldritch_stone",
+        "x": 90
+      },
+      {
+        "model": "alchemia:block/eldritch_stone",
+        "y": 90
+      },
+      {
+        "model": "alchemia:block/eldritch_stone",
+        "x": 90,
+        "y": 90
+      }
+    ]
+  }
+}

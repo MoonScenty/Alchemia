@@ -1,0 +1,18 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "alchemia:block/ancient_rock_1"
+      },
+      {
+        "model": "alchemia:block/ancient_rock_2"
+      },
+      {
+        "model": "alchemia:block/ancient_rock_3"
+      },
+      {
+        "model": "alchemia:block/ancient_rock_4"
+      }
+    ]
+  }
+}

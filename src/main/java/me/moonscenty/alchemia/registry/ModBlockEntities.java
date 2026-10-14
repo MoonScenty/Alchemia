@@ -264,7 +264,8 @@ public class ModBlockEntities {
     /** What one pedestal is holding up. */
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ArcanePedestalBlockEntity>>
             ARCANE_PEDESTAL = BLOCK_ENTITIES.register("arcane_pedestal", () -> BlockEntityType.Builder
-                    .of(ArcanePedestalBlockEntity::new, ModBlocks.ARCANE_PEDESTAL.get())
+                    .of(ArcanePedestalBlockEntity::new, ModBlocks.ARCANE_PEDESTAL.get(), ModBlocks.ANCIENT_PEDESTAL.get(),
+                            ModBlocks.ELDRITCH_PEDESTAL.get())
                     .build(null));
 
     /** What an infusion is: what is being made, what is owed for it, and how badly it is going. */

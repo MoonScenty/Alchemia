@@ -114,6 +114,23 @@
       "alchemia:vinculum": 2,
       "alchemia:vitreus": 2
     },
+    "alchemia:ancient_doorway": {
+      "alchemia:alienis": 1,
+      "alchemia:metallum": 1,
+      "alchemia:vinculum": 1
+    },
+    "alchemia:ancient_rock": {
+      "alchemia:alienis": 1,
+      "alchemia:terra": 1
+    },
+    "alchemia:ancient_stone": {
+      "alchemia:alienis": 1,
+      "alchemia:terra": 1
+    },
+    "alchemia:ancient_tile": {
+      "alchemia:alienis": 1,
+      "alchemia:terra": 1
+    },
     "alchemia:arcane_stone": {
       "alchemia:potentia": 1,
       "alchemia:terra": 1
@@ -154,6 +171,52 @@
       "alchemia:ordo": 1,
       "alchemia:terra": 1
     },
+    "alchemia:crimson_blade": {
+      "alchemia:alienis": 1,
+      "alchemia:metallum": 4,
+      "alchemia:mortuus": 1
+    },
+    "alchemia:crimson_boots": {
+      "alchemia:alienis": 1,
+      "alchemia:metallum": 4
+    },
+    "alchemia:crimson_plate_chest": {
+      "alchemia:alienis": 1,
+      "alchemia:metallum": 5
+    },
+    "alchemia:crimson_plate_helm": {
+      "alchemia:alienis": 1,
+      "alchemia:metallum": 5
+    },
+    "alchemia:crimson_plate_legs": {
+      "alchemia:alienis": 1,
+      "alchemia:metallum": 5
+    },
+    "alchemia:crimson_rites": {
+      "alchemia:alienis": 3,
+      "alchemia:cognitio": 5,
+      "alchemia:spiritus": 3
+    },
+    "alchemia:crimson_robe_chest": {
+      "alchemia:alienis": 1,
+      "alchemia:bestia": 1,
+      "alchemia:metallum": 3
+    },
+    "alchemia:crimson_robe_helm": {
+      "alchemia:alienis": 1,
+      "alchemia:bestia": 1,
+      "alchemia:metallum": 3
+    },
+    "alchemia:crimson_robe_legs": {
+      "alchemia:alienis": 1,
+      "alchemia:bestia": 1,
+      "alchemia:metallum": 3
+    },
+    "alchemia:crusted_stone": {
+      "alchemia:alienis": 1,
+      "alchemia:terra": 1,
+      "alchemia:victus": 1
+    },
     "alchemia:earth_crystal": {
       "alchemia:terra": 4,
       "alchemia:vitreus": 2
@@ -161,6 +224,10 @@
     "alchemia:earth_shard": {
       "alchemia:terra": 2,
       "alchemia:vitreus": 1
+    },
+    "alchemia:eldritch_stone": {
+      "alchemia:alienis": 1,
+      "alchemia:terra": 1
     },
     "alchemia:entropy_crystal": {
       "alchemia:perditio": 4,
@@ -185,6 +252,17 @@
     "alchemia:flux_shard": {
       "alchemia:vitium": 2,
       "alchemia:vitreus": 1
+    },
+    "alchemia:glowing_crusted_stone": {
+      "alchemia:alienis": 1,
+      "alchemia:lux": 1,
+      "alchemia:terra": 1,
+      "alchemia:victus": 1
+    },
+    "alchemia:glyphed_stone": {
+      "alchemia:alienis": 1,
+      "alchemia:cognitio": 1,
+      "alchemia:metallum": 1
     },
     "alchemia:gold_cluster": {
       "alchemia:desiderium": 2,
@@ -220,6 +298,10 @@
     "alchemia:order_shard": {
       "alchemia:ordo": 2,
       "alchemia:vitreus": 1
+    },
+    "alchemia:porous_stone": {
+      "alchemia:terra": 1,
+      "alchemia:vacuos": 1
     },
     "alchemia:quicksilver": {
       "alchemia:metallum": 3,

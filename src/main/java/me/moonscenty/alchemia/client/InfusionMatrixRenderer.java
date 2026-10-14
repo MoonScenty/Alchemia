@@ -63,6 +63,11 @@ public class InfusionMatrixRenderer implements BlockEntityRenderer<InfusionMatri
     /** The original's pictures for its cube and its pillar. */
     private static final ResourceLocation STONE_TEXTURE = Alchemia.id("textures/entity/infusion_matrix.png");
     private static final ResourceLocation PILLAR_TEXTURE = Alchemia.id("textures/entity/arcane_pillar.png");
+    /** The same for an altar built of ancient or eldritch stone, as the original chose them by the first corner. */
+    private static final ResourceLocation ANCIENT_STONE_TEXTURE = Alchemia.id("textures/entity/infusion_matrix_ancient.png");
+    private static final ResourceLocation ANCIENT_PILLAR_TEXTURE = Alchemia.id("textures/entity/ancient_pillar.png");
+    private static final ResourceLocation ELDRITCH_STONE_TEXTURE = Alchemia.id("textures/entity/infusion_matrix_eldritch.png");
+    private static final ResourceLocation ELDRITCH_PILLAR_TEXTURE = Alchemia.id("textures/entity/eldritch_pillar.png");
     /** The colour the original gave the glow. */
     private static final float GLOW_R = 0.8F, GLOW_G = 0.1F, GLOW_B = 1.0F;
 
@@ -88,6 +93,20 @@ public class InfusionMatrixRenderer implements BlockEntityRenderer<InfusionMatri
         // nothing snaps into motion: a woken altar takes a few seconds to come up to speed
         float running = Math.min(1.0F, since / WINDS_UP);
         float shake = matrix.busy() ? matrix.instability() * running : 0.0F;
+        var first = matrix.getLevel().getBlockState(matrix.getBlockPos().offset(-1, -2, -1));
+        me.moonscenty.alchemia.block.PillarKind kind = first.hasProperty(me.moonscenty.alchemia.block.ArcanePillarBlock.KIND)
+                ? first.getValue(me.moonscenty.alchemia.block.ArcanePillarBlock.KIND)
+                : me.moonscenty.alchemia.block.PillarKind.NORMAL;
+        ResourceLocation stoneTexture = switch (kind) {
+            case ANCIENT -> ANCIENT_STONE_TEXTURE;
+            case ELDRITCH -> ELDRITCH_STONE_TEXTURE;
+            default -> STONE_TEXTURE;
+        };
+        ResourceLocation pillarTexture = switch (kind) {
+            case ANCIENT -> ANCIENT_PILLAR_TEXTURE;
+            case ELDRITCH -> ELDRITCH_PILLAR_TEXTURE;
+            default -> PILLAR_TEXTURE;
+        };
 
         // the altar itself, drawn by the matrix because it is the matrix that knows it is an altar
         if (matrix.awake()) {
@@ -97,7 +116,7 @@ public class InfusionMatrixRenderer implements BlockEntityRenderer<InfusionMatri
                 pose.mulPose(Axis.YP.rotationDegrees(corner[3]));
                 pose.translate(-0.5, 0.0, -0.5);
                 // the mesh is modelled from the block's corner, two blocks tall
-                pillarMesh.render(pose.last(), buffers.getBuffer(RenderType.entityCutoutNoCull(PILLAR_TEXTURE)),
+                pillarMesh.render(pose.last(), buffers.getBuffer(RenderType.entityCutoutNoCull(pillarTexture)),
                         0xFFFFFFFF, light, OverlayTexture.NO_OVERLAY);
                 pose.popPose();
             }
@@ -129,10 +148,10 @@ public class InfusionMatrixRenderer implements BlockEntityRenderer<InfusionMatri
                     }
                     pose.scale(SMALL, SMALL, SMALL);
                     // the original's cube is a whole block about its own middle
-                    legacyStone.render(pose, buffers.getBuffer(RenderType.entityCutoutNoCull(STONE_TEXTURE)),
+                    legacyStone.render(pose, buffers.getBuffer(RenderType.entityCutoutNoCull(stoneTexture)),
                             light, OverlayTexture.NO_OVERLAY);
                     if (legacyGlow != null && matrix.awake()) {
-                        legacyGlow.render(pose, buffers.getBuffer(LegacyRenderTypes.glow(STONE_TEXTURE)),
+                        legacyGlow.render(pose, buffers.getBuffer(LegacyRenderTypes.glow(stoneTexture)),
                                 LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY,
                                 glow(ticks, east, up, south, running));
                     }

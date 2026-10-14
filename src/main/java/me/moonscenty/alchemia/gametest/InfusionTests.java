@@ -381,4 +381,55 @@ public class InfusionTests {
                 "and what is left on the pedestal is the finished cap, not the casting: " + under.held());
         helper.succeed();
     }
+
+    /** The corners built of another stone: the same altar, two high at each corner. */
+    private static void rebuildCorners(GameTestHelper helper, net.minecraft.world.level.block.Block stone) {
+        for (int east = -1; east <= 1; east += 2) {
+            for (int south = -1; south <= 1; south += 2) {
+                helper.setBlock(MATRIX.offset(east, -2, south), stone);
+                helper.setBlock(MATRIX.offset(east, -1, south), stone);
+            }
+        }
+    }
+
+    /**
+     * Corners of eldritch stone work faster and cost a little more; corners of ancient stone work a little faster
+     * and cost a tenth less. Each wakes into pillars of its own stone.
+     */
+    @GameTest(template = TEMPLATE)
+    public static void olderStonesMakeADifferentAltar(GameTestHelper helper) {
+        Player player = scholar(helper);
+        laidOut(helper);
+        rebuildCorners(helper, ModBlocks.ELDRITCH_STONE.block().get());
+        InfusionMatrixBlockEntity eldritch =
+                (InfusionMatrixBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(MATRIX));
+        eldritch.wake(player);
+        helper.assertTrue(helper.getBlockState(MATRIX.offset(1, -2, 1))
+                .getValue(me.moonscenty.alchemia.block.ArcanePillarBlock.KIND)
+                == me.moonscenty.alchemia.block.PillarKind.ELDRITCH, "it woke into eldritch pillars");
+        eldritch.wake(player);
+        helper.assertValueEqual(eldritch.cycle(), 16, "eldritch corners take a turn down to sixteen");
+        helper.assertValueEqual(eldritch.cost(), 105, "and cost five parts in a hundred more");
+
+        laidOut(helper);
+        rebuildCorners(helper, ModBlocks.ANCIENT_STONE.block().get());
+        InfusionMatrixBlockEntity ancient =
+                (InfusionMatrixBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(MATRIX));
+        ancient.wake(player);
+        ancient.wake(player);
+        helper.assertValueEqual(ancient.cycle(), 18, "ancient corners take a turn down to eighteen");
+        helper.assertValueEqual(ancient.cost(), 90, "and take a tenth off the bill");
+        helper.succeed();
+    }
+
+    /** Tainted rock, when its taint dies, is porous stone. */
+    @GameTest(template = TEMPLATE)
+    public static void deadTaintedRockIsPorous(GameTestHelper helper) {
+        BlockPos at = new BlockPos(2, 2, 2);
+        helper.setBlock(at, ModBlocks.TAINT_ROCK.get());
+        ((me.moonscenty.alchemia.block.taint.TaintGroundBlock) ModBlocks.TAINT_ROCK.get()).die(helper.getLevel(),
+                helper.absolutePos(at), helper.getBlockState(at));
+        helper.assertBlockPresent(ModBlocks.POROUS_STONE.get(), at);
+        helper.succeed();
+    }
 }

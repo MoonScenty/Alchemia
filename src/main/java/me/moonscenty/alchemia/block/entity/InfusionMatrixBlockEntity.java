@@ -61,6 +61,13 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
     private static final int SPEED_STONE_COST = 1;
     private static final int COST_STONE_CYCLE = 1;
     private static final int COST_STONE_COST = -2;
+    /** What four ancient or four eldritch corners do. The original's. */
+    private static final int ANCIENT_CORNERS_CYCLE = -2;
+    private static final int ANCIENT_CORNERS_COST = -10;
+    private static final int ANCIENT_CORNERS_SHAKE = 2;
+    private static final int ELDRITCH_CORNERS_CYCLE = -4;
+    private static final int ELDRITCH_CORNERS_COST = 5;
+    private static final int ELDRITCH_CORNERS_SHAKE = -4;
     /** How far out the ring of pedestals may stand, and how far below the matrix they may be. */
     private static final int RING = 8;
     private static final int DEEP = 10;
@@ -168,7 +175,32 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
      * pulled apart under a working, it will not go on with it.
      */
     public boolean built(Level level) {
-        return standing(level, ModBlocks.ARCANE_PILLAR.get()) || standing(level, ModBlocks.ARCANE_STONE.block().get());
+        return corners(level) != null;
+    }
+
+    /**
+     * What the four corners are built of, if they are all the one thing, whether still stone or already woken.
+     * Null if they are not.
+     */
+    public me.moonscenty.alchemia.block.PillarKind corners(Level level) {
+        for (me.moonscenty.alchemia.block.PillarKind kind : me.moonscenty.alchemia.block.PillarKind.values()) {
+            if (standing(level, kind.stone()) || standingPillars(level, kind)) {
+                return kind;
+            }
+        }
+        return null;
+    }
+
+    private boolean standingPillars(Level level, me.moonscenty.alchemia.block.PillarKind kind) {
+        if (!standing(level, ModBlocks.ARCANE_PILLAR.get())) {
+            return false;
+        }
+        for (BlockPos at : columns()) {
+            if (level.getBlockState(at).getValue(me.moonscenty.alchemia.block.ArcanePillarBlock.KIND) != kind) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -209,14 +241,32 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
             }
             boolean holding = !stand.held().isEmpty();
             against += holding ? 3 : 2;
+            if (holding && kindOf(level, at) == me.moonscenty.alchemia.block.PillarKind.ELDRITCH) {
+                against += 1;
+            }
 
             ArcanePedestalBlockEntity opposite = stand(level, mirror(at));
-            if (opposite != null) {
-                against -= holding && !opposite.held().isEmpty() ? 3 : 2;
+            if (opposite != null && level.getBlockState(mirror(at)).is(level.getBlockState(at).getBlock())) {
+                against -= 2;
+                if (holding && !opposite.held().isEmpty()) {
+                    against -= 1;
+                    if (kindOf(level, mirror(at)) == me.moonscenty.alchemia.block.PillarKind.ELDRITCH) {
+                        against -= 2;
+                    }
+                }
             }
         }
-        return against + steadying(level);
+        me.moonscenty.alchemia.block.PillarKind kind = corners(level);
+        if (kind == me.moonscenty.alchemia.block.PillarKind.ANCIENT) {
+            against += ANCIENT_CORNERS_SHAKE;
+        } else if (kind == me.moonscenty.alchemia.block.PillarKind.ELDRITCH) {
+            against += ELDRITCH_CORNERS_SHAKE;
+        }
+        return against + ancientStands / 4 + steadying(level);
     }
+
+    /** How many ancient pedestals the ring has, counted when the price was. */
+    private int ancientStands;
 
     /**
      * What the four stones under the altar's corners do to a working.
@@ -232,6 +282,27 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
     private void reckon(Level level) {
         cycle = CYCLE;
         cost = FULL_COST;
+        me.moonscenty.alchemia.block.PillarKind kind = corners(level);
+        if (kind == me.moonscenty.alchemia.block.PillarKind.ANCIENT) {
+            cycle += ANCIENT_CORNERS_CYCLE;
+            cost += ANCIENT_CORNERS_COST;
+        } else if (kind == me.moonscenty.alchemia.block.PillarKind.ELDRITCH) {
+            cycle += ELDRITCH_CORNERS_CYCLE;
+            cost += ELDRITCH_CORNERS_COST;
+        }
+        // each ancient pedestal a part in a hundred off, each eldritch one a quarter part on
+        int quarters = 0;
+        ancientStands = 0;
+        for (BlockPos at : around(level, worldPosition)) {
+            me.moonscenty.alchemia.block.PillarKind stand = kindOf(level, at);
+            if (stand == me.moonscenty.alchemia.block.PillarKind.ANCIENT) {
+                cost -= 1;
+                ancientStands++;
+            } else if (stand == me.moonscenty.alchemia.block.PillarKind.ELDRITCH) {
+                quarters++;
+            }
+        }
+        cost += quarters / 4;
         for (Vec3i corner : CORNERS) {
             BlockState under = level.getBlockState(worldPosition.offset(corner).below());
             if (under.is(ModBlocks.INFUSION_SPEED_STONE.get())) {
@@ -309,18 +380,31 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
 
     /** Wakes the corners: the stone stops being drawn and the matrix draws a pillar standing where it was. */
     private void raise(Level level) {
+        me.moonscenty.alchemia.block.PillarKind kind = corners(level);
+        if (kind == null) {
+            return;
+        }
         for (BlockPos at : columns()) {
-            level.setBlock(at, ModBlocks.ARCANE_PILLAR.get().defaultBlockState(), Block.UPDATE_ALL);
+            level.setBlock(at, ModBlocks.ARCANE_PILLAR.get().defaultBlockState()
+                    .setValue(me.moonscenty.alchemia.block.ArcanePillarBlock.KIND, kind), Block.UPDATE_ALL);
         }
     }
 
-    /** And gives the stone back. */
+    /** And gives the stone back, whichever stone it was. */
     private void lower(Level level) {
         for (BlockPos at : columns()) {
-            if (level.getBlockState(at).is(ModBlocks.ARCANE_PILLAR.get())) {
-                level.setBlock(at, ModBlocks.ARCANE_STONE.block().get().defaultBlockState(), Block.UPDATE_ALL);
+            BlockState there = level.getBlockState(at);
+            if (there.is(ModBlocks.ARCANE_PILLAR.get())) {
+                level.setBlock(at, there.getValue(me.moonscenty.alchemia.block.ArcanePillarBlock.KIND).stone()
+                        .defaultBlockState(), Block.UPDATE_ALL);
             }
         }
+    }
+
+    /** What a pedestal is built of. */
+    private static me.moonscenty.alchemia.block.PillarKind kindOf(Level level, BlockPos at) {
+        return level.getBlockState(at).getBlock() instanceof me.moonscenty.alchemia.block.ArcanePedestalBlock stand
+                ? stand.kind() : me.moonscenty.alchemia.block.PillarKind.NORMAL;
     }
 
     /**

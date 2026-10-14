@@ -250,9 +250,19 @@ public class ModDataMapProvider extends DataMapProvider {
         item(ModBlocks.CINDERPEARL, a(ModAspects.PLANT, 2).add(ModAspects.AURA, 1).add(ModAspects.FIRE, 2));
         item(ModBlocks.VISHROOM, a(ModAspects.PLANT, 2).add(ModAspects.DEATH, 1).add(ModAspects.AURA, 1).add(ModAspects.ENTROPY, 1));
 
-        for (StoneSet set : ModBlocks.STONE_SETS) {
+        for (StoneSet set : java.util.List.of(ModBlocks.ARCANE_STONE, ModBlocks.ARCANE_STONE_BRICKS)) {
             item(set.block(), a(ModAspects.EARTH, 1).add(ModAspects.ENERGY, 1));
         }
+        for (var old : java.util.List.of(ModBlocks.ANCIENT_STONE.block(), ModBlocks.ELDRITCH_STONE.block(),
+                ModBlocks.ANCIENT_ROCK, ModBlocks.ANCIENT_TILE)) {
+            item(old, a(ModAspects.EARTH, 1).add(ModAspects.ELDRITCH, 1));
+        }
+        item(ModBlocks.CRUSTED_STONE, a(ModAspects.EARTH, 1).add(ModAspects.ELDRITCH, 1).add(ModAspects.LIFE, 1));
+        item(ModBlocks.GLOWING_CRUSTED_STONE,
+                a(ModAspects.EARTH, 1).add(ModAspects.ELDRITCH, 1).add(ModAspects.LIFE, 1).add(ModAspects.LIGHT, 1));
+        item(ModBlocks.ANCIENT_DOORWAY, a(ModAspects.METAL, 1).add(ModAspects.ELDRITCH, 1).add(ModAspects.TRAP, 1));
+        item(ModBlocks.GLYPHED_STONE, a(ModAspects.METAL, 1).add(ModAspects.ELDRITCH, 1).add(ModAspects.MIND, 1));
+        item(ModBlocks.POROUS_STONE, a(ModAspects.EARTH, 1).add(ModAspects.VOID, 1));
     }
 
     private void mobAspects() {

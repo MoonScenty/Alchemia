@@ -1,0 +1,26 @@
+{
+  "type": "alchemia:arcane_shaped",
+  "key": {
+    "B": {
+      "item": "alchemia:ancient_stone"
+    },
+    "S": {
+      "item": "alchemia:ancient_stone_slab"
+    }
+  },
+  "pattern": [
+    "SSS",
+    " B ",
+    "SSS"
+  ],
+  "research": "alchemia:infusion",
+  "result": {
+    "count": 1,
+    "id": "alchemia:ancient_pedestal"
+  },
+  "vis": {
+    "alchemia:aer": 25,
+    "alchemia:ordo": 150,
+    "alchemia:perditio": 25
+  }
+}

@@ -708,6 +708,17 @@ public class ModRecipeProvider extends RecipeProvider {
                         'N', Ingredient.of(ModItems.BALANCED_SHARD)),
                 "SBS", "BNB", "SBS");
 
+        // the pedestals of the two older stones: the original's patterns and prices
+        arcane(output, "ancient_pedestal", "infusion", new ItemStack(ModBlocks.ANCIENT_PEDESTAL.get()),
+                AspectList.of(ModAspects.AIR, 25).add(ModAspects.ENTROPY, 25).add(ModAspects.ORDER, 150),
+                Map.of('S', Ingredient.of(ModBlocks.ANCIENT_STONE.slab()),
+                        'B', Ingredient.of(ModBlocks.ANCIENT_STONE.block())),
+                "SSS", " B ", "SSS");
+        arcane(output, "eldritch_pedestal", "infusion", new ItemStack(ModBlocks.ELDRITCH_PEDESTAL.get()),
+                AspectList.of(ModAspects.AIR, 25).add(ModAspects.ENTROPY, 150).add(ModAspects.ORDER, 25),
+                Map.of('S', Ingredient.of(ModBlocks.ELDRITCH_STONE.slab()),
+                        'B', Ingredient.of(ModBlocks.ELDRITCH_STONE.block())),
+                "SSS", " B ", "SSS");
         arcane(output, "arcane_pedestal", "infusion", new ItemStack(ModBlocks.ARCANE_PEDESTAL.get()),
                 AspectList.of(ModAspects.AIR, 5),
                 Map.of('S', Ingredient.of(ModBlocks.ARCANE_STONE.slab()),

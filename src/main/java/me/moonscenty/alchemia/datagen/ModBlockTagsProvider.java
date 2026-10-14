@@ -50,6 +50,9 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
                         ModBlocks.TUBE.get(), ModBlocks.JAR.get())
                 .add(ModBlocks.TUBE_VALVE.get(), ModBlocks.TUBE_ONEWAY.get(), ModBlocks.TUBE_RESTRICT.get(),
                         ModBlocks.TUBE_FILTER.get(), ModBlocks.TUBE_BUFFER.get())
+                .add(ModBlocks.ANCIENT_PEDESTAL.get(), ModBlocks.ELDRITCH_PEDESTAL.get(), ModBlocks.ANCIENT_ROCK.get(),
+                        ModBlocks.ANCIENT_TILE.get(), ModBlocks.GLYPHED_STONE.get(), ModBlocks.CRUSTED_STONE.get(),
+                        ModBlocks.GLOWING_CRUSTED_STONE.get(), ModBlocks.POROUS_STONE.get())
                 .add(ModBlocks.ARCANE_PEDESTAL.get(), ModBlocks.INFUSION_MATRIX.get(),
                         ModBlocks.ARCANE_PILLAR.get());
 

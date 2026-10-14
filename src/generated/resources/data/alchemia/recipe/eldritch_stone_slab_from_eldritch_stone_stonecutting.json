@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "alchemia:eldritch_stone"
+  },
+  "result": {
+    "count": 2,
+    "id": "alchemia:eldritch_stone_slab"
+  }
+}
