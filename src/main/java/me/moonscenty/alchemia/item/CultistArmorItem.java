@@ -23,6 +23,7 @@ public class CultistArmorItem extends ArmorItem implements WarpingGear, VisDisco
     public enum Kind {
         ROBE(1),
         PLATE(0),
+        PRAETOR(0),
         BOOTS(1);
 
         /** Warp carried, and parts of a hundred off a wand's bill. The original's: the same for both. */

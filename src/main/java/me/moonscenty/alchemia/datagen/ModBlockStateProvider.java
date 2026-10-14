@@ -662,10 +662,10 @@ public class ModBlockStateProvider extends BlockStateProvider {
         }
         simpleBlock(ModBlocks.BANNER.get(), models().getBuilder("banner")
                 .texture("particle", mcLoc("block/oak_planks")));
-        // the Outer Lands' bedrock with the stars in it; the void is not drawn as a block
+        // the Outer Lands' bedrock with the stars in it; the void, the door and the lock are not drawn as blocks
         simpleBlockWithItem(ModBlocks.ANCIENT_BEDROCK.get(), models().cubeAll("ancient_bedrock",
                 modLoc("block/legacy/ancient_bedrock")));
-        for (var unseen : java.util.List.of(ModBlocks.VACUUM)) {
+        for (var unseen : java.util.List.of(ModBlocks.VACUUM, ModBlocks.ELDRITCH_DOOR, ModBlocks.ELDRITCH_LOCK)) {
             getVariantBuilder(unseen.get()).partialState().setModels(new ConfiguredModel(models()
                     .getBuilder(unseen.getId().getPath()).texture("particle", modLoc("block/eldritch_stone"))));
         }

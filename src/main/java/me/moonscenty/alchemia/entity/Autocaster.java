@@ -207,7 +207,7 @@ public class Autocaster extends PathfinderMob implements OwnableEntity, Containe
         int least = Integer.MAX_VALUE;
         for (Holder<Aspect> primal : ModAspects.primals()) {
             int here = vis.get(primal);
-            if (here < HOLDS && here < least && AuraHandler.get(level(), blockPosition(), primal) > 0) {
+            if (here < holdsAtMost() && here < least && AuraHandler.get(level(), blockPosition(), primal) > 0) {
                 lowest = primal;
                 least = here;
             }
@@ -290,10 +290,20 @@ public class Autocaster extends PathfinderMob implements OwnableEntity, Containe
         }
     }
 
+    /** The most of any one primal it holds. */
+    protected int holdsAtMost() {
+        return HOLDS;
+    }
+
+    /** Sets how much of one aspect it holds. */
+    protected void setVis(Holder<Aspect> aspect, int amount) {
+        vis = vis.withAmount(aspect, amount);
+    }
+
     /** Fills it up, which is a thing only a test and the creative hand have any business doing. */
     public void fill() {
         for (Holder<Aspect> primal : ModAspects.primals()) {
-            vis = vis.withAmount(primal, HOLDS);
+            vis = vis.withAmount(primal, holdsAtMost());
         }
     }
 
@@ -306,7 +316,7 @@ public class Autocaster extends PathfinderMob implements OwnableEntity, Containe
      * already its owner's is passed over unless it has been set against friends, which is how the original let
      * somebody build a trap for themselves on purpose.
      */
-    private boolean worthShooting(LivingEntity other) {
+    protected boolean worthShooting(LivingEntity other) {
         boolean friendly = minds(FRIENDS);
         if (other instanceof Player player) {
             if (!minds(PLAYERS) || player.isCreative() || player.isSpectator()) {

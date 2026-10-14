@@ -511,6 +511,10 @@ public class ModItems {
         crimson(made, "crimson_plate_helm", ArmorItem.Type.HELMET, plate, ModArmorMaterials.CRIMSON_PLATE);
         crimson(made, "crimson_plate_chest", ArmorItem.Type.CHESTPLATE, plate, ModArmorMaterials.CRIMSON_PLATE);
         crimson(made, "crimson_plate_legs", ArmorItem.Type.LEGGINGS, plate, ModArmorMaterials.CRIMSON_PLATE);
+        var praetor = me.moonscenty.alchemia.item.CultistArmorItem.Kind.PRAETOR;
+        crimson(made, "crimson_praetor_helm", ArmorItem.Type.HELMET, praetor, ModArmorMaterials.CRIMSON_PRAETOR);
+        crimson(made, "crimson_praetor_chest", ArmorItem.Type.CHESTPLATE, praetor, ModArmorMaterials.CRIMSON_PRAETOR);
+        crimson(made, "crimson_praetor_legs", ArmorItem.Type.LEGGINGS, praetor, ModArmorMaterials.CRIMSON_PRAETOR);
         crimson(made, "crimson_boots", ArmorItem.Type.BOOTS, me.moonscenty.alchemia.item.CultistArmorItem.Kind.BOOTS,
                 ModArmorMaterials.CRIMSON_BOOTS);
         // unmodifiableMap rather than Map.copyOf, for the reason written above registerMetalTools

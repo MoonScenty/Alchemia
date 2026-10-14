@@ -60,9 +60,11 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
 
         tag(BlockTags.MINEABLE_WITH_AXE).add(ModBlocks.LOOT_CRATE.get());
         tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.CRAB_SPAWNER.get());
-        // nothing that breaks blocks breaks the Outer Lands' bedrock or its void
-        tag(BlockTags.WITHER_IMMUNE).add(ModBlocks.ANCIENT_BEDROCK.get(), ModBlocks.VACUUM.get());
-        tag(BlockTags.DRAGON_IMMUNE).add(ModBlocks.ANCIENT_BEDROCK.get(), ModBlocks.VACUUM.get());
+        // nothing that breaks blocks breaks the Outer Lands' bedrock, its void, or a great hall's door
+        tag(BlockTags.WITHER_IMMUNE).add(ModBlocks.ANCIENT_BEDROCK.get(), ModBlocks.VACUUM.get(),
+                ModBlocks.ELDRITCH_LOCK.get(), ModBlocks.ELDRITCH_DOOR.get());
+        tag(BlockTags.DRAGON_IMMUNE).add(ModBlocks.ANCIENT_BEDROCK.get(), ModBlocks.VACUUM.get(),
+                ModBlocks.ELDRITCH_LOCK.get(), ModBlocks.ELDRITCH_DOOR.get());
 
         // the glimmering grass is grass in every way that matters to what grows and grazes on it
         tag(BlockTags.MINEABLE_WITH_SHOVEL).add(ModBlocks.AMBIENT_GRASS.get());

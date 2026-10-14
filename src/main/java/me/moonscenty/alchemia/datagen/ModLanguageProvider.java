@@ -174,6 +174,30 @@ public abstract class ModLanguageProvider extends LanguageProvider {
     private void autocaster() {
         addItem(ModItems.AUTOCASTER, pick("Autocaster", "자동 시전기"));
         addEntityType(me.moonscenty.alchemia.registry.ModEntities.AUTOCASTER, pick("Autocaster", "자동 시전기"));
+        addEntityType(me.moonscenty.alchemia.registry.ModEntities.ELDRITCH_AUTOCASTER,
+                pick("Ancient Autocaster", "고대 자동 시전기"));
+        addEntityType(me.moonscenty.alchemia.registry.ModEntities.ELDRITCH_WARDEN, pick("Eldritch Warden", "엘드리치 감시자"));
+        add("entity.alchemia.eldritch_warden.titled", pick("%s the %s", "%2$s %1$s"));
+        addEntityType(me.moonscenty.alchemia.registry.ModEntities.ELDRITCH_GOLEM,
+                pick("Eldritch Construct", "엘드리치 구조체"));
+        add("entity.alchemia.eldritch_golem.titled", pick("%s Eldritch Construct", "%s 엘드리치 구조체"));
+        addEntityType(me.moonscenty.alchemia.registry.ModEntities.CULTIST_LEADER, pick("Crimson Praetor", "진홍 집정관"));
+        add("entity.alchemia.cultist_leader.titled", pick("Praetor %s the %s", "%2$s 집정관 %1$s"));
+        addEntityType(me.moonscenty.alchemia.registry.ModEntities.GREATER_CULTIST_PORTAL,
+                pick("Greater Crimson Portal", "큰 진홍 차원문"));
+        addEntityType(me.moonscenty.alchemia.registry.ModEntities.TAINTACLE_GIANT, pick("Giant Taintacle", "거대 오염 촉수"));
+        add("entity.alchemia.boss.enraged", pick("%s is enraged by your powerful blows.",
+                "%s(이)가 강력한 일격에 격노한다."));
+        add("boss.alchemia.warden", pick("Black energy bubbles on the distant pedestal. Something is coming...",
+                "먼 받침대 위에서 검은 기운이 끓어오른다. 무언가가 온다..."));
+        add("boss.alchemia.golem", pick("A lone sentinel stands frozen in this room...",
+                "이 방에 홀로 선 파수꾼이 굳은 채 서 있다..."));
+        add("boss.alchemia.crimson", pick("A ruby portal opens nearby heralding the arrival of the Crimson Cult. You must close the portal quickly!",
+                "가까이에 진홍빛 차원문이 열리며 진홍 교단이 온다. 어서 차원문을 닫아야 한다!"));
+        add("boss.alchemia.taint", pick("An organic rustling comes from the room beyond...",
+                "저 너머 방에서 살아 있는 것이 바스락거린다..."));
+        add("subtitles.alchemia.jacobs", pick("Construct crackles", "구조체가 지직거린다"));
+        addBlock(ModBlocks.SAPPING, pick("Sapping", "흡취"));
         addEntityType(me.moonscenty.alchemia.registry.ModEntities.FIRE_BAT, pick("Firebat", "불박쥐"));
         addEntityType(me.moonscenty.alchemia.registry.ModEntities.WISP, pick("Wisp", "위습"));
         addEntityType(me.moonscenty.alchemia.registry.ModEntities.PECH, pick("Pech Forager", "페크 채집꾼"));
@@ -213,6 +237,9 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                 {"crimson_plate_helm", "Crimson Cult Helm", "진홍 교단 투구"},
                 {"crimson_plate_chest", "Crimson Cult Chestplate", "진홍 교단 흉갑"},
                 {"crimson_plate_legs", "Crimson Cult Greaves", "진홍 교단 각반"},
+                {"crimson_praetor_helm", "Crimson Praetor Helm", "진홍 집정관 투구"},
+                {"crimson_praetor_chest", "Crimson Praetor Chestplate", "진홍 집정관 흉갑"},
+                {"crimson_praetor_legs", "Crimson Praetor Greaves", "진홍 집정관 각반"},
                 {"crimson_boots", "Crimson Cult Boots", "진홍 교단 장화"}};
         for (String[] piece : crimson) {
             addItem(ModItems.CRIMSON.get(piece[0]), pick(piece[1], piece[2]));
@@ -721,6 +748,8 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         addBlock(ModBlocks.LOOT_CRATE, pick("Old Crate", "오래된 상자"));
         addBlock(ModBlocks.ANCIENT_BEDROCK, pick("Ancient Bedrock", "고대 기반암"));
         addBlock(ModBlocks.VACUUM, pick("Deadly Void", "죽음의 공허"));
+        addBlock(ModBlocks.ELDRITCH_LOCK, pick("Eldritch Lock", "엘드리치 자물쇠"));
+        addBlock(ModBlocks.ELDRITCH_DOOR, pick("Void Door", "공허의 문"));
         addBlock(ModBlocks.CRAB_SPAWNER, pick("Crab Vent", "게 구멍"));
         addBlock(ModBlocks.LIQUID_DEATH, pick("Liquid Death", "액체 죽음"));
         addItem(ModItems.RUNED_TABLET, pick("Runed Tablet", "룬 석판"));

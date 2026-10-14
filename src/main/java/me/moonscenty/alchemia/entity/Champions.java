@@ -93,6 +93,10 @@ public final class Champions {
         if (event.getLevel().isClientSide || !(event.getEntity() instanceof Monster mob) || of(mob) != UNROLLED) {
             return;
         }
+        if (mob instanceof me.moonscenty.alchemia.entity.boss.ThaumcraftBoss boss) {
+            makeBoss(boss);
+            return;
+        }
         roll(mob);
     }
 
@@ -116,6 +120,30 @@ public final class Champions {
         } else {
             mob.setData(ModAttachments.CHAMPION, ORDINARY);
         }
+    }
+
+    /** A boss is a champion of something always, and gets only what that kind of champion adds. */
+    public static void makeBoss(me.moonscenty.alchemia.entity.boss.ThaumcraftBoss boss) {
+        ChampionModifier modifier = ChampionModifier.values()[boss.getRandom().nextInt(ChampionModifier.values().length)];
+        boss.setData(ModAttachments.CHAMPION, modifier.ordinal());
+        switch (modifier) {
+            case BOLD -> add(boss, Attributes.MOVEMENT_SPEED, BOLD, 0.3, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
+            case MIGHTY -> add(boss, Attributes.ATTACK_DAMAGE, MIGHTY, 2.0,
+                    AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
+            case WARDED -> {
+                int ward = ward(boss);
+                add(boss, Attributes.MAX_ABSORPTION, WARDED, ward, AttributeModifier.Operation.ADD_VALUE);
+                boss.setAbsorptionAmount(boss.getAbsorptionAmount() + ward);
+            }
+            default -> {
+            }
+        }
+        boss.name();
+    }
+
+    /** Makes it a champion of something, by chance. */
+    public static void makeRandom(Monster mob) {
+        make(mob, ChampionModifier.values()[mob.getRandom().nextInt(ChampionModifier.values().length)]);
     }
 
     /** Makes it the champion of this, whatever it was before. */

@@ -274,6 +274,9 @@ public class ModBlockEntities {
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<me.moonscenty.alchemia.block.eldritch.EldritchPortalBlockEntity>>
             ELDRITCH_PORTAL = BLOCK_ENTITIES.register("eldritch_portal", () -> BlockEntityType.Builder
                     .of(me.moonscenty.alchemia.block.eldritch.EldritchPortalBlockEntity::new, ModBlocks.ELDRITCH_PORTAL.get()).build(null));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<me.moonscenty.alchemia.block.eldritch.EldritchLockBlockEntity>>
+            ELDRITCH_LOCK = BLOCK_ENTITIES.register("eldritch_lock", () -> BlockEntityType.Builder
+                    .of(me.moonscenty.alchemia.block.eldritch.EldritchLockBlockEntity::new, ModBlocks.ELDRITCH_LOCK.get()).build(null));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<me.moonscenty.alchemia.block.eldritch.CrabSpawnerBlockEntity>>
             CRAB_SPAWNER = BLOCK_ENTITIES.register("crab_spawner", () -> BlockEntityType.Builder
                     .of(me.moonscenty.alchemia.block.eldritch.CrabSpawnerBlockEntity::new, ModBlocks.CRAB_SPAWNER.get()).build(null));
