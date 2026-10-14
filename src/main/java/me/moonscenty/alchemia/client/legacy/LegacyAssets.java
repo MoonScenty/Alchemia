@@ -49,6 +49,7 @@ public final class LegacyAssets {
     public static final String BANNER = "banner";
     /** The capstone the eldritch ring and its obelisk wear. */
     public static final String OBELISK_CAP_MESH = "models/legacy/obelisk_cap.obj";
+    public static final String CRAB_VENT_MESH = "models/legacy/crabvent.obj";
     /** The eldritch guardian, which the original built in code. */
     public static final String ELDRITCH_GUARDIAN = "eldritch_guardian";
 
@@ -652,6 +653,19 @@ public final class LegacyAssets {
             }
         }
         all.add(LegacyAsset.of("sounds/legacy/urnbreak.ogg").five("sounds/urnbreak.ogg"));
+        // the Outer Lands: their bedrock with the stars in it, the crab vent, the tablet, liquid death, and the
+        // sounds of the Outer Lands
+        all.add(LegacyAsset.of("textures/block/legacy/ancient_bedrock.png").five("textures/misc/particlefield32.png"));
+        all.add(LegacyAsset.of("textures/entity/crabvent.png").five("textures/models/crabvent.png"));
+        all.add(LegacyAsset.of(CRAB_VENT_MESH).five("models/obj/crabvent.obj"));
+        all.add(item("runed_tablet", "runed_tablet", null));
+        all.add(LegacyAsset.of("textures/block/legacy/liquid_death.png").five("textures/blocks/animatedglow.png"));
+        all.add(LegacyAsset.of("textures/item/legacy/liquid_death_bucket.png").five("textures/items/bucket_death.png"));
+        for (String sound : List.of("wind1", "wind2", "pump1", "pump2", "pump3", "evilportal")) {
+            all.add(LegacyAsset.of("sounds/legacy/" + sound + ".ogg").five("sounds/" + sound + ".ogg"));
+        }
+        all.add(LegacyAsset.of("sounds/legacy/runicshieldcharge.ogg").five("sounds/runicShieldCharge.ogg"));
+        all.add(LegacyAsset.of("sounds/legacy/jacobs.ogg").five("sounds/jacobs.ogg"));
     }
 
     private static Map<FocusUpgrade, String> originalUpgrades() {

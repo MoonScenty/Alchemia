@@ -130,6 +130,11 @@ public class AlchemiaClientSetup {
         }
         ItemProperties.register(ModBlocks.JAR.get().asItem(), Alchemia.id("filled"),
                 (stack, level, holder, seed) -> stack.has(ModDataComponents.CONTENTS.get()) ? 1 : 0);
+        for (var death : List.of(me.moonscenty.alchemia.registry.ModFluids.DEATH.get(),
+                me.moonscenty.alchemia.registry.ModFluids.FLOWING_DEATH.get())) {
+            net.minecraft.client.renderer.ItemBlockRenderTypes.setRenderLayer(death,
+                    net.minecraft.client.renderer.RenderType.translucent());
+        }
         // purifying fluid is seen through, as water is
         net.minecraft.client.renderer.ItemBlockRenderTypes.setRenderLayer(
                 me.moonscenty.alchemia.registry.ModFluids.PURIFYING.get(),
@@ -301,6 +306,7 @@ public class AlchemiaClientSetup {
         }, ModBlocks.HUNGRY_CHEST.get().asItem());
         event.registerFluidType(PurifyingFluidLook.INSTANCE,
                 me.moonscenty.alchemia.registry.ModFluids.PURIFYING_TYPE.get());
+        event.registerFluidType(LiquidDeathLook.INSTANCE, me.moonscenty.alchemia.registry.ModFluids.DEATH_TYPE.get());
         event.registerBlock(PlainBreakParticles.INSTANCE,
                 ModBlocks.CRUCIBLE.get(), ModBlocks.JAR.get(), ModBlocks.TUBE_FILTER.get());
         // robes in the original's violet until dyed; the void robe on the original's model when its jar is there
@@ -337,6 +343,7 @@ public class AlchemiaClientSetup {
         event.registerBlockEntityRenderer(ModBlockEntities.ELDRITCH_OBELISK.get(), EldritchObeliskRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.ELDRITCH_PORTAL.get(), EldritchPortalRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.BANNER.get(), BannerRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.CRAB_SPAWNER.get(), CrabSpawnerRenderer::new);
         event.registerEntityRenderer(ModEntities.AURA_NODE.get(), AuraNodeRenderer::new);
         event.registerEntityRenderer(ModEntities.AUTOCASTER.get(), AutocasterRenderer::new);
         event.registerEntityRenderer(ModEntities.FIRE_BAT.get(), FireBatRenderer::new);

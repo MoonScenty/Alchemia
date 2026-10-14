@@ -719,6 +719,18 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         addBlock(ModBlocks.POROUS_STONE, pick("Porous Stone", "구멍 숭숭한 돌"));
         addBlock(ModBlocks.LOOT_URN, pick("Ancient Urn", "오래된 항아리"));
         addBlock(ModBlocks.LOOT_CRATE, pick("Old Crate", "오래된 상자"));
+        addBlock(ModBlocks.ANCIENT_BEDROCK, pick("Ancient Bedrock", "고대 기반암"));
+        addBlock(ModBlocks.VACUUM, pick("Deadly Void", "죽음의 공허"));
+        addBlock(ModBlocks.CRAB_SPAWNER, pick("Crab Vent", "게 구멍"));
+        addBlock(ModBlocks.LIQUID_DEATH, pick("Liquid Death", "액체 죽음"));
+        addItem(ModItems.RUNED_TABLET, pick("Runed Tablet", "룬 석판"));
+        add("item.alchemia.runed_tablet.text", pick("It seems to be part of something larger.",
+                "더 큰 무언가의 일부인 것 같다."));
+        addItem(ModItems.LIQUID_DEATH_BUCKET, pick("Bucket of Liquid Death", "액체 죽음 양동이"));
+        add("subtitles.alchemia.wind", pick("Wind howls", "바람이 운다"));
+        add("subtitles.alchemia.pump", pick("Lock turns", "자물쇠가 돈다"));
+        add("subtitles.alchemia.runicshieldcharge", pick("Runes catch", "룬이 깨어난다"));
+        add("subtitles.alchemia.evilportal", pick("Way hums", "길이 웅웅거린다"));
         addBlock(ModBlocks.INFUSION_MATRIX, pick("Runic Matrix", "룬 결계"));
         addBlock(ModBlocks.ARCANE_PILLAR, pick("Arcane Pillar", "비전 기둥"));
         add("block.alchemia.infusion_matrix.asleep", pick("The stones hang still", "돌이 가만히 떠 있다"));

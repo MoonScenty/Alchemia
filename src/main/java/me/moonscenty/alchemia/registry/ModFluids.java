@@ -41,6 +41,32 @@ public final class ModFluids {
     public static final DeferredHolder<Fluid, BaseFlowingFluid.Flowing> FLOWING_PURIFYING =
             FLUIDS.register("flowing_purifying_fluid", () -> new BaseFlowingFluid.Flowing(purifying()));
 
+    /** Liquid death: a slow purple ooze, four steps to a source, that dissolves the living. */
+    public static final DeferredHolder<FluidType, FluidType> DEATH_TYPE = TYPES.register("liquid_death",
+            () -> new FluidType(FluidType.Properties.create()
+                    .descriptionId("block.alchemia.liquid_death")
+                    .lightLevel(4)
+                    .density(2000)
+                    .viscosity(3000)
+                    .rarity(Rarity.RARE)
+                    .canSwim(false)
+                    .canDrown(false)
+                    .sound(SoundActions.BUCKET_FILL, SoundEvents.BUCKET_FILL_LAVA)
+                    .sound(SoundActions.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY_LAVA)));
+    public static final DeferredHolder<Fluid, BaseFlowingFluid.Source> DEATH =
+            FLUIDS.register("liquid_death", () -> new BaseFlowingFluid.Source(death()));
+    public static final DeferredHolder<Fluid, BaseFlowingFluid.Flowing> FLOWING_DEATH =
+            FLUIDS.register("flowing_liquid_death", () -> new BaseFlowingFluid.Flowing(death()));
+
+    private static BaseFlowingFluid.Properties death() {
+        return new BaseFlowingFluid.Properties(DEATH_TYPE, DEATH, FLOWING_DEATH)
+                .block(ModBlocks.LIQUID_DEATH)
+                .bucket(ModItems.LIQUID_DEATH_BUCKET)
+                .slopeFindDistance(2)
+                .levelDecreasePerBlock(2)
+                .tickRate(20);
+    }
+
     private static BaseFlowingFluid.Properties purifying() {
         return new BaseFlowingFluid.Properties(PURIFYING_TYPE, PURIFYING, FLOWING_PURIFYING)
                 .block(ModBlocks.PURIFYING_FLUID)
