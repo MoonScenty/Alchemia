@@ -64,6 +64,10 @@ public final class ModSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> CRAB_TALK = sound("crabtalk");
     public static final DeferredHolder<SoundEvent, SoundEvent> CRAB_CLAW = sound("crabclaw");
     public static final DeferredHolder<SoundEvent, SoundEvent> CRAB_DEATH = sound("crabdeath");
+    /** The guardian's breathing, its screech and its last. */
+    public static final DeferredHolder<SoundEvent, SoundEvent> EG_IDLE = sound("egidle");
+    public static final DeferredHolder<SoundEvent, SoundEvent> EG_SCREECH = sound("egscreech");
+    public static final DeferredHolder<SoundEvent, SoundEvent> EG_DEATH = sound("egdeath");
     /** Something learnt off a page. */
     public static final DeferredHolder<SoundEvent, SoundEvent> LEARN = sound("learn");
 

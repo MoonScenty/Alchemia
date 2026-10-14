@@ -368,6 +368,33 @@ public class ModEntities {
                     .clientTrackingRange(8)
                     .build("inhabited_zombie"));
 
+    /** The guardian, tall and narrow; the mind spider, half a spider; the guardian's orb. */
+    public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.entity.EldritchGuardian>>
+            ELDRITCH_GUARDIAN = ENTITIES.register("eldritch_guardian", () -> EntityType.Builder
+                    .<me.moonscenty.alchemia.entity.EldritchGuardian>of(
+                            me.moonscenty.alchemia.entity.EldritchGuardian::new, MobCategory.MONSTER)
+                    .sized(0.8F, 2.25F)
+                    .eyeHeight(2.1F)
+                    .clientTrackingRange(8)
+                    .build("eldritch_guardian"));
+    public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.entity.MindSpider>>
+            MIND_SPIDER = ENTITIES.register("mind_spider", () -> EntityType.Builder
+                    .<me.moonscenty.alchemia.entity.MindSpider>of(
+                            me.moonscenty.alchemia.entity.MindSpider::new, MobCategory.MONSTER)
+                    .sized(0.7F, 0.5F)
+                    .eyeHeight(0.45F)
+                    .clientTrackingRange(8)
+                    .build("mind_spider"));
+    public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.entity.EldritchOrb>>
+            ELDRITCH_ORB = ENTITIES.register("eldritch_orb", () -> EntityType.Builder
+                    .<me.moonscenty.alchemia.entity.EldritchOrb>of(
+                            me.moonscenty.alchemia.entity.EldritchOrb::new, MobCategory.MISC)
+                    .sized(0.25F, 0.25F)
+                    .clientTrackingRange(8)
+                    .updateInterval(10)
+                    .noSummon()
+                    .build("eldritch_orb"));
+
     /** The cleric's orb. */
     public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.entity.cult.GolemOrb>>
             GOLEM_ORB = ENTITIES.register("golem_orb", () -> EntityType.Builder
@@ -384,6 +411,8 @@ public class ModEntities {
         event.put(AUTOCASTER.get(), Autocaster.attributes().build());
         event.put(CULTIST_KNIGHT.get(), me.moonscenty.alchemia.entity.cult.CultistKnight.attributes().build());
         event.put(ELDRITCH_CRAB.get(), me.moonscenty.alchemia.entity.EldritchCrab.attributes().build());
+        event.put(ELDRITCH_GUARDIAN.get(), me.moonscenty.alchemia.entity.EldritchGuardian.attributes().build());
+        event.put(MIND_SPIDER.get(), me.moonscenty.alchemia.entity.MindSpider.attributes().build());
         event.put(INHABITED_ZOMBIE.get(), me.moonscenty.alchemia.entity.InhabitedZombie.attributes().build());
         event.put(CULTIST_CLERIC.get(), me.moonscenty.alchemia.entity.cult.CultistCleric.attributes().build());
         event.put(CULTIST_PORTAL.get(), me.moonscenty.alchemia.entity.cult.CultistPortal.attributes().build());
@@ -414,6 +443,9 @@ public class ModEntities {
     public static void spawnPlacements(RegisterSpawnPlacementsEvent event) {
         event.register(INHABITED_ZOMBIE.get(), SpawnPlacementTypes.ON_GROUND,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, me.moonscenty.alchemia.entity.InhabitedZombie::checkSpawnRules,
+                RegisterSpawnPlacementsEvent.Operation.REPLACE);
+        event.register(ELDRITCH_GUARDIAN.get(), SpawnPlacementTypes.ON_GROUND,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, me.moonscenty.alchemia.entity.EldritchGuardian::checkSpawnRules,
                 RegisterSpawnPlacementsEvent.Operation.REPLACE);
         event.register(ELDRITCH_CRAB.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 Monster::checkMonsterSpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);

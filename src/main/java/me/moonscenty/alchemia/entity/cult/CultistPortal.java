@@ -222,31 +222,6 @@ public class CultistPortal extends Monster {
         entityData.set(ACTIVE, tag.getBoolean("Active"));
     }
 
-    /**
-     * Opens a portal somewhere near a player, as warp does: up to fifty tries, each seven to twenty-four blocks off
-     * along any of the three ways or none, on solid ground with room to stand and no water.
-     *
-     * @return whether one opened
-     */
-    public static boolean openNear(ServerLevel level, Player player) {
-        BlockPos at = player.blockPosition();
-        for (int tries = 0; tries < 50; tries++) {
-            BlockPos spot = at.offset(off(level), off(level), off(level));
-            CultistPortal portal = new CultistPortal(level);
-            portal.moveTo(spot.getX() + 0.5, spot.getY() + 1, spot.getZ() + 0.5, 0.0F, 0.0F);
-            if (level.getBlockState(spot).isFaceSturdy(level, spot, net.minecraft.core.Direction.UP)
-                    && level.noCollision(portal) && !level.containsAnyLiquid(portal.getBoundingBox())) {
-                portal.finalizeSpawn(level, level.getCurrentDifficultyAt(spot), MobSpawnType.EVENT, null);
-                return level.addFreshEntity(portal);
-            }
-        }
-        return false;
-    }
-
-    private static int off(ServerLevel level) {
-        return (7 + level.random.nextInt(18)) * (level.random.nextInt(3) - 1);
-    }
-
     @Override
     public boolean checkSpawnRules(net.minecraft.world.level.LevelAccessor level, MobSpawnType reason) {
         return level.getDifficulty() != Difficulty.PEACEFUL;

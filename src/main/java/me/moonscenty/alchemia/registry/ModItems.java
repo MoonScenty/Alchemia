@@ -264,6 +264,15 @@ public class ModItems {
     public static final DeferredItem<net.neoforged.neoforge.common.DeferredSpawnEggItem> INHABITED_ZOMBIE_SPAWN_EGG =
             ITEMS.register("inhabited_zombie_spawn_egg", () -> new net.neoforged.neoforge.common.DeferredSpawnEggItem(
                     ModEntities.INHABITED_ZOMBIE, 0x808080, 0x550000, new Item.Properties()));
+    /** A guardian's eye, that does not close. */
+    public static final DeferredItem<Item> ELDRITCH_EYE = ITEMS.register("eldritch_eye",
+            () -> new Item(new Item.Properties().rarity(net.minecraft.world.item.Rarity.UNCOMMON)));
+    public static final DeferredItem<net.neoforged.neoforge.common.DeferredSpawnEggItem> ELDRITCH_GUARDIAN_SPAWN_EGG =
+            ITEMS.register("eldritch_guardian_spawn_egg", () -> new net.neoforged.neoforge.common.DeferredSpawnEggItem(
+                    ModEntities.ELDRITCH_GUARDIAN, 0x808080, 0x000000, new Item.Properties()));
+    public static final DeferredItem<net.neoforged.neoforge.common.DeferredSpawnEggItem> MIND_SPIDER_SPAWN_EGG =
+            ITEMS.register("mind_spider_spawn_egg", () -> new net.neoforged.neoforge.common.DeferredSpawnEggItem(
+                    ModEntities.MIND_SPIDER, 0x4C3E30, 0x444444, new Item.Properties()));
     /** A pane of glass silvered with quicksilver. */
     public static final DeferredItem<Item> MIRRORED_GLASS = ITEMS.registerSimpleItem("mirrored_glass");
     /** A mirror on a handle, that sends things through to a magic mirror wherever it is. */

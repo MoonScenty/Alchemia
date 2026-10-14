@@ -33,7 +33,8 @@ public class ModEntityTypeTagsProvider extends EntityTypeTagsProvider {
         // a crawler is a grub, and bane of arthropods knows it
         tag(EntityTypeTags.ARTHROPOD).add(ModEntities.TAINT_CRAWLER.get(), ModEntities.ELDRITCH_CRAB.get());
         tag(EntityTypeTags.UNDEAD).add(ModEntities.ANGRY_ZOMBIE.get(), ModEntities.FURIOUS_ZOMBIE.get(),
-                ModEntities.INHABITED_ZOMBIE.get());
+                ModEntities.INHABITED_ZOMBIE.get(), ModEntities.ELDRITCH_GUARDIAN.get());
+        tag(EntityTypeTags.ARTHROPOD).add(ModEntities.MIND_SPIDER.get());
         tag(EntityTypeTags.ZOMBIES).add(ModEntities.ANGRY_ZOMBIE.get(), ModEntities.FURIOUS_ZOMBIE.get(),
                 ModEntities.INHABITED_ZOMBIE.get());
     }

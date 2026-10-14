@@ -327,6 +327,9 @@ public class AlchemiaClientSetup {
         event.registerEntityRenderer(ModEntities.CULTIST_PORTAL.get(), CultistPortalRenderer::new);
         event.registerEntityRenderer(ModEntities.GOLEM_ORB.get(), GolemOrbRenderer::new);
         event.registerEntityRenderer(ModEntities.ELDRITCH_CRAB.get(), EldritchCrabRenderer::new);
+        event.registerEntityRenderer(ModEntities.ELDRITCH_GUARDIAN.get(), EldritchGuardianRenderer::new);
+        event.registerEntityRenderer(ModEntities.MIND_SPIDER.get(), MindSpiderRenderer::new);
+        event.registerEntityRenderer(ModEntities.ELDRITCH_ORB.get(), EldritchOrbRenderer::new);
         event.registerEntityRenderer(ModEntities.INHABITED_ZOMBIE.get(), InhabitedZombieRenderer::new);
         event.registerEntityRenderer(ModEntities.WISP.get(), WispRenderer::new);
         event.registerEntityRenderer(ModEntities.PECH.get(), PechRenderer::new);

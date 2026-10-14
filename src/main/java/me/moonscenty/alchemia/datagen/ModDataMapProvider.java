@@ -278,6 +278,10 @@ public class ModDataMapProvider extends DataMapProvider {
                 me.moonscenty.alchemia.registry.ModEntities.CULTIST_CLERIC.get()}) {
             mob(cultist, a(ModAspects.ELDRITCH, 1).add(ModAspects.MAN, 2).add(ModAspects.AVERSION, 1));
         }
+        mob(me.moonscenty.alchemia.registry.ModEntities.ELDRITCH_GUARDIAN.get(),
+                a(ModAspects.ELDRITCH, 4).add(ModAspects.DEATH, 2).add(ModAspects.UNDEAD, 4));
+        // the original's, which it copied by mistake from the tainted creeper's
+        mob(me.moonscenty.alchemia.registry.ModEntities.MIND_SPIDER.get(), a(ModAspects.FLUX, 2).add(ModAspects.FIRE, 2));
         mob(me.moonscenty.alchemia.registry.ModEntities.ELDRITCH_CRAB.get(),
                 a(ModAspects.ELDRITCH, 1).add(ModAspects.BEAST, 1).add(ModAspects.TRAP, 1));
         mob(me.moonscenty.alchemia.registry.ModEntities.INHABITED_ZOMBIE.get(),

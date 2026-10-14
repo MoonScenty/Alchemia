@@ -129,6 +129,16 @@ public class WarpHandler {
     /** What a warp event calls up out of the dark, if anything. */
     public enum Summons {
         NOTHING,
+        /** A fog, and a guardian in it. */
+        GUARDIAN,
+        /** A fog, and a guardian in it for every thirty of warp. */
+        GUARDIANS,
+        /** A fog, and a guardian in it for every fifteen of warp. */
+        MANY_GUARDIANS,
+        /** Spiders only the player can see. */
+        ILLUSORY_SPIDERS,
+        /** Spiders. */
+        SPIDERS,
         /** A lesser crimson portal somewhere near. */
         PORTAL
     }
@@ -137,8 +147,7 @@ public class WarpHandler {
      * Works through the same ladder of outcomes the original used. The roll decides how far up it lands; the warp
      * itself decides how hard the outcome bites.
      * <p>
-     * A few rungs originally called something up out of the dark. Those have nothing to call yet, so for now they
-     * only give the player warning; they get their teeth back in steps 11 and 13.
+     * A few rungs call something up out of the dark: a fog with guardians in it, spiders real or not, a portal.
      */
     public static Outcome outcomeFor(int warp, int roll) {
         int amp = Math.min(3, warp / 15);
@@ -158,7 +167,7 @@ public class WarpHandler {
         } else if (roll <= 28) {
             return Outcome.whisper(6);
         } else if (roll <= 32) {
-            return Outcome.whisper(7); // a mist, and something walking in it
+            return Outcome.summon(7, Summons.GUARDIAN); // a mist, and something walking in it
         } else if (roll <= 36) {
             return Outcome.ail(8, ModEffects.BLURRED_VISION, Math.min(32000, 10 * warp), 0);
         } else if (roll <= 40) {
@@ -173,11 +182,11 @@ public class WarpHandler {
         } else if (roll <= 56) {
             return Outcome.ail(13, ModEffects.DEADLY_GAZE, 6000, amp);
         } else if (roll <= 60) {
-            return Outcome.whisper(12); // spiders, or the idea of them
+            return Outcome.summon(12, Summons.ILLUSORY_SPIDERS); // spiders, or the idea of them
         } else if (roll <= 64) {
             return Outcome.whisper(13);
         } else if (roll <= 68) {
-            return Outcome.whisper(7); // more mist, and more in it
+            return Outcome.summon(7, Summons.GUARDIANS); // more mist, and more in it
         } else if (roll <= 72) {
             return Outcome.ail(10, MobEffects.BLINDNESS, Math.min(32000, 5 * warp), 0);
         } else if (roll <= 80) {
@@ -185,9 +194,9 @@ public class WarpHandler {
         } else if (roll <= 88) {
             return Outcome.summon(15, Summons.PORTAL); // chanting, somewhere close
         } else if (roll <= 92) {
-            return Outcome.whisper(12); // spiders again, and these ones are real
+            return Outcome.summon(12, Summons.SPIDERS); // spiders again, and these ones are real
         }
-        return Outcome.whisper(14);
+        return Outcome.summon(7, Summons.MANY_GUARDIANS);
     }
 
     private static void inflict(ServerPlayer player, int warp, int roll) {
@@ -195,8 +204,15 @@ public class WarpHandler {
         outcome.effect().ifPresent(effect ->
                 player.addEffect(new MobEffectInstance(effect, outcome.duration(), outcome.amplifier(), true, true)));
         whisper(player, outcome.message());
-        if (outcome.summons() == Summons.PORTAL) {
-            me.moonscenty.alchemia.entity.cult.CultistPortal.openNear(player.serverLevel(), player);
+        switch (outcome.summons()) {
+            case GUARDIAN -> me.moonscenty.alchemia.entity.WarpSummons.mist(player, 1);
+            case GUARDIANS -> me.moonscenty.alchemia.entity.WarpSummons.mist(player, warp / 30);
+            case MANY_GUARDIANS -> me.moonscenty.alchemia.entity.WarpSummons.mist(player, warp / 15);
+            case ILLUSORY_SPIDERS -> me.moonscenty.alchemia.entity.WarpSummons.spiders(player, warp, false);
+            case SPIDERS -> me.moonscenty.alchemia.entity.WarpSummons.spiders(player, warp, true);
+            case PORTAL -> me.moonscenty.alchemia.entity.WarpSummons.portal(player);
+            default -> {
+            }
         }
     }
 
