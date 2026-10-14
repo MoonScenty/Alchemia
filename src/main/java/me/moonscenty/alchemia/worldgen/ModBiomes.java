@@ -116,6 +116,8 @@ public final class ModBiomes {
         spawns.addSpawn(MobCategory.MONSTER,
                 new MobSpawnSettings.SpawnerData(ModEntities.FURIOUS_ZOMBIE.get(), 8, 1, 1));
         spawns.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(ModEntities.WISP.get(), 3, 1, 1));
+        spawns.addSpawn(MobCategory.MONSTER,
+                new MobSpawnSettings.SpawnerData(ModEntities.ELDRITCH_GUARDIAN.get(), 1, 1, 1));
         return land(0.5F, 0.5F, 0x404840, 0x404840, 0x222299, 0x2E535F, spawns, generation, null);
     }
 

@@ -190,6 +190,16 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                 pick("Lesser Crimson Portal", "작은 진홍 차원문"));
         addEntityType(me.moonscenty.alchemia.registry.ModEntities.GOLEM_ORB, pick("Golem Orb", "골렘 구체"));
         addEntityType(me.moonscenty.alchemia.registry.ModEntities.ELDRITCH_CRAB, pick("Eldritch Crab", "엘드리치 게"));
+        addEntityType(me.moonscenty.alchemia.registry.ModEntities.ELDRITCH_GUARDIAN,
+                pick("Eldritch Guardian", "엘드리치 수호자"));
+        addEntityType(me.moonscenty.alchemia.registry.ModEntities.MIND_SPIDER, pick("Mind Spider", "정신 거미"));
+        addEntityType(me.moonscenty.alchemia.registry.ModEntities.ELDRITCH_ORB, pick("Eldritch Orb", "엘드리치 구체"));
+        addItem(ModItems.ELDRITCH_EYE, pick("Eldritch Eye", "엘드리치의 눈"));
+        addItem(ModItems.ELDRITCH_GUARDIAN_SPAWN_EGG, pick("Eldritch Guardian Spawn Egg", "엘드리치 수호자 생성 알"));
+        addItem(ModItems.MIND_SPIDER_SPAWN_EGG, pick("Mind Spider Spawn Egg", "정신 거미 생성 알"));
+        add("subtitles.alchemia.eldritch_guardian.ambient", pick("Guardian breathes", "수호자가 숨을 쉰다"));
+        add("subtitles.alchemia.eldritch_guardian.screech", pick("Guardian screeches", "수호자가 비명을 지른다"));
+        add("subtitles.alchemia.eldritch_guardian.death", pick("Guardian dies", "수호자가 죽는다"));
         addEntityType(me.moonscenty.alchemia.registry.ModEntities.INHABITED_ZOMBIE,
                 pick("Shambling Husk", "비틀거리는 껍데기"));
         addItem(ModItems.ELDRITCH_CRAB_SPAWN_EGG, pick("Eldritch Crab Spawn Egg", "엘드리치 게 생성 알"));

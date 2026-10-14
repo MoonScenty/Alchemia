@@ -45,6 +45,8 @@ public final class LegacyAssets {
     public static final String KNIGHT_ARMOUR_LOWER = "knight_armour_lower";
     /** The eldritch crab, which the original built in code. */
     public static final String ELDRITCH_CRAB = "eldritch_crab";
+    /** The eldritch guardian, which the original built in code. */
+    public static final String ELDRITCH_GUARDIAN = "eldritch_guardian";
 
     /**
      * The stone a matrix is eight of, and the glow laid over it while it works: one class, a sixteen-block cube, read
@@ -148,6 +150,8 @@ public final class LegacyAssets {
                     "thaumcraft/client/renderers/models/entity/ModelPech", "()V"))),
             Map.entry(TAINTACLE, List.of(new LegacyModelSource(LegacyEdition.FIVE,
                     "thaumcraft/client/renderers/models/entity/ModelTaintacle", "(I)V", 10))),
+            Map.entry(ELDRITCH_GUARDIAN, List.of(new LegacyModelSource(LegacyEdition.FIVE,
+                    "thaumcraft/client/renderers/models/entity/ModelEldritchGuardian", "()V"))),
             Map.entry(ELDRITCH_CRAB, List.of(new LegacyModelSource(LegacyEdition.FIVE,
                     "thaumcraft/client/renderers/models/entity/ModelEldritchCrab", "()V"))),
             Map.entry(KNIGHT_ARMOUR, List.of(new LegacyModelSource(LegacyEdition.FIVE,
@@ -814,10 +818,14 @@ public final class LegacyAssets {
         all.add(LegacyAsset.of("textures/models/armor/crimson_plate_husk.png")
                 .five("textures/models/armor/zombie_plate_armor.png").forModel(KNIGHT_ARMOUR));
         all.add(LegacyAsset.of("textures/entity/inhabited_zombie.png").five("textures/models/creature/czombie.png"));
+        all.add(LegacyAsset.of("textures/entity/eldritch_guardian.png")
+                .five("textures/models/creature/eldritch_guardian.png").forModel(ELDRITCH_GUARDIAN));
+        all.add(item("eldritch_eye", "eldritch_eye", null));
         all.add(LegacyAsset.of("textures/entity/eldritch_crab.png").five("textures/models/creature/crab.png")
                 .forModel(ELDRITCH_CRAB));
         for (String sound : List.of("chant1", "chant2", "chant3", "monolith", "wandfail", "egattack", "shock1",
-                "shock2", "learn", "crabtalk1", "crabtalk2", "crabtalk3", "crabclaw", "crabdeath")) {
+                "shock2", "learn", "crabtalk1", "crabtalk2", "crabtalk3", "crabclaw", "crabdeath", "egidle1", "egidle2",
+                "egscreech", "egdeath")) {
             all.add(LegacyAsset.of("sounds/legacy/" + sound + ".ogg").five("sounds/" + sound + ".ogg"));
         }
     }

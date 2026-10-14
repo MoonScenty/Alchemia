@@ -104,8 +104,10 @@ public class ModItemModelProvider extends ItemModelProvider {
         ModItems.CRIMSON.values().forEach(piece -> basicItem(piece.get()));
         handheldItem(ModItems.CRIMSON_BLADE.get());
         basicItem(ModItems.CRIMSON_RITES.get());
+        basicItem(ModItems.ELDRITCH_EYE.get());
         for (var egg : java.util.List.of(ModItems.CULTIST_KNIGHT_SPAWN_EGG, ModItems.CULTIST_CLERIC_SPAWN_EGG,
-                ModItems.CULTIST_PORTAL_SPAWN_EGG, ModItems.ELDRITCH_CRAB_SPAWN_EGG, ModItems.INHABITED_ZOMBIE_SPAWN_EGG)) {
+                ModItems.CULTIST_PORTAL_SPAWN_EGG, ModItems.ELDRITCH_CRAB_SPAWN_EGG, ModItems.INHABITED_ZOMBIE_SPAWN_EGG,
+                ModItems.ELDRITCH_GUARDIAN_SPAWN_EGG, ModItems.MIND_SPIDER_SPAWN_EGG)) {
             withExistingParent(egg.getId().getPath(), mcLoc("item/template_spawn_egg"));
         }
         for (String hoard : new String[] {"coin", "knowledge_fragment", "tainted_goo", "taint_tendril"}) {

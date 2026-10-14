@@ -211,5 +211,24 @@
     "sounds": [
       "alchemia:legacy/crabdeath"
     ]
+  },
+  "egidle": {
+    "subtitle": "subtitles.alchemia.eldritch_guardian.ambient",
+    "sounds": [
+      "alchemia:legacy/egidle1",
+      "alchemia:legacy/egidle2"
+    ]
+  },
+  "egscreech": {
+    "subtitle": "subtitles.alchemia.eldritch_guardian.screech",
+    "sounds": [
+      "alchemia:legacy/egscreech"
+    ]
+  },
+  "egdeath": {
+    "subtitle": "subtitles.alchemia.eldritch_guardian.death",
+    "sounds": [
+      "alchemia:legacy/egdeath"
+    ]
   }
 }
