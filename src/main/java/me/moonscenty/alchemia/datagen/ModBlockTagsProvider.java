@@ -54,9 +54,11 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
                         ModBlocks.ELDRITCH_OBELISK_BODY.get())
                 .add(ModBlocks.ANCIENT_PEDESTAL.get(), ModBlocks.ELDRITCH_PEDESTAL.get(), ModBlocks.ANCIENT_ROCK.get(),
                         ModBlocks.ANCIENT_TILE.get(), ModBlocks.GLYPHED_STONE.get(), ModBlocks.CRUSTED_STONE.get(),
-                        ModBlocks.GLOWING_CRUSTED_STONE.get(), ModBlocks.POROUS_STONE.get())
+                        ModBlocks.GLOWING_CRUSTED_STONE.get(), ModBlocks.POROUS_STONE.get(), ModBlocks.LOOT_URN.get())
                 .add(ModBlocks.ARCANE_PEDESTAL.get(), ModBlocks.INFUSION_MATRIX.get(),
                         ModBlocks.ARCANE_PILLAR.get());
+
+        tag(BlockTags.MINEABLE_WITH_AXE).add(ModBlocks.LOOT_CRATE.get());
 
         // the glimmering grass is grass in every way that matters to what grows and grazes on it
         tag(BlockTags.MINEABLE_WITH_SHOVEL).add(ModBlocks.AMBIENT_GRASS.get());

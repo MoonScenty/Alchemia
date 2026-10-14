@@ -169,6 +169,8 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
         }
         // what it drops it works out for itself
         add(ModBlocks.POROUS_STONE.get(), noDrop());
+        add(ModBlocks.LOOT_URN.get(), noDrop());
+        add(ModBlocks.LOOT_CRATE.get(), noDrop());
         dropSelf(ModBlocks.ANCIENT_PEDESTAL.get());
         // a banner works out for itself which banner it is
         add(ModBlocks.BANNER.get(), noDrop());

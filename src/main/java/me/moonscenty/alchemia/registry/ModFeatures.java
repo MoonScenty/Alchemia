@@ -44,6 +44,9 @@ public class ModFeatures {
     public static final DeferredHolder<Feature<?>, me.moonscenty.alchemia.worldgen.EldritchRingFeature> ELDRITCH_RING =
             FEATURES.register("eldritch_ring",
                     () -> new me.moonscenty.alchemia.worldgen.EldritchRingFeature(NoneFeatureConfiguration.CODEC));
+    public static final DeferredHolder<Feature<?>, me.moonscenty.alchemia.worldgen.MoundFeature> MOUND =
+            FEATURES.register("mound",
+                    () -> new me.moonscenty.alchemia.worldgen.MoundFeature(NoneFeatureConfiguration.CODEC));
     public static final DeferredHolder<Feature<?>, me.moonscenty.alchemia.worldgen.CultistPortalFeature> CULTIST_PORTAL =
             FEATURES.register("cultist_portal",
                     () -> new me.moonscenty.alchemia.worldgen.CultistPortalFeature(NoneFeatureConfiguration.CODEC));

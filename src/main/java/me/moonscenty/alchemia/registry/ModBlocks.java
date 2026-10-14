@@ -497,6 +497,18 @@ public class ModBlocks {
     public static final DeferredBlock<me.moonscenty.alchemia.block.PorousStoneBlock> POROUS_STONE = register(
             "porous_stone", () -> new me.moonscenty.alchemia.block.PorousStoneBlock(
                     stone(MapColor.STONE).strength(0.5F, 5.0F)));
+    /** An urn and a crate of the dead, in the mound, that give up loot when broken. */
+    public static final DeferredBlock<me.moonscenty.alchemia.block.LootBlock> LOOT_URN = register("loot_urn",
+            () -> new me.moonscenty.alchemia.block.LootBlock(BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_ORANGE)
+                    .strength(0.15F, 0.0F).noOcclusion().sound(new net.neoforged.neoforge.common.util.DeferredSoundType(
+                            1.0F, 1.0F, me.moonscenty.alchemia.registry.ModSounds.URN_BREAK,
+                            () -> net.minecraft.sounds.SoundEvents.STONE_STEP,
+                            () -> net.minecraft.sounds.SoundEvents.STONE_PLACE,
+                            () -> net.minecraft.sounds.SoundEvents.STONE_HIT,
+                            () -> net.minecraft.sounds.SoundEvents.STONE_FALL)), true));
+    public static final DeferredBlock<me.moonscenty.alchemia.block.LootBlock> LOOT_CRATE = register("loot_crate",
+            () -> new me.moonscenty.alchemia.block.LootBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD)
+                    .strength(0.15F, 0.0F).noOcclusion().sound(SoundType.WOOD).ignitedByLava(), false));
 
     /** The pedestal built of ancient stone, and of eldritch: each changes a working, as the corners do. */
     public static final DeferredBlock<ArcanePedestalBlock> ANCIENT_PEDESTAL = register("ancient_pedestal",
