@@ -111,14 +111,26 @@ public class WarpHandler {
      * @param message which whisper the player hears
      * @param effect  what settles on them, if anything
      */
-    public record Outcome(int message, Optional<Holder<MobEffect>> effect, int duration, int amplifier) {
+    public record Outcome(int message, Optional<Holder<MobEffect>> effect, int duration, int amplifier,
+            Summons summons) {
         static Outcome whisper(int message) {
-            return new Outcome(message, Optional.empty(), 0, 0);
+            return new Outcome(message, Optional.empty(), 0, 0, Summons.NOTHING);
         }
 
         static Outcome ail(int message, Holder<MobEffect> effect, int duration, int amplifier) {
-            return new Outcome(message, Optional.of(effect), duration, amplifier);
+            return new Outcome(message, Optional.of(effect), duration, amplifier, Summons.NOTHING);
         }
+
+        static Outcome summon(int message, Summons summons) {
+            return new Outcome(message, Optional.empty(), 0, 0, summons);
+        }
+    }
+
+    /** What a warp event calls up out of the dark, if anything. */
+    public enum Summons {
+        NOTHING,
+        /** A lesser crimson portal somewhere near. */
+        PORTAL
     }
 
     /**
@@ -171,7 +183,7 @@ public class WarpHandler {
         } else if (roll <= 80) {
             return Outcome.ail(5, ModEffects.UNNATURAL_HUNGER, 6000, amp);
         } else if (roll <= 88) {
-            return Outcome.whisper(14); // a way opening that should stay shut
+            return Outcome.summon(15, Summons.PORTAL); // chanting, somewhere close
         } else if (roll <= 92) {
             return Outcome.whisper(12); // spiders again, and these ones are real
         }
@@ -183,11 +195,14 @@ public class WarpHandler {
         outcome.effect().ifPresent(effect ->
                 player.addEffect(new MobEffectInstance(effect, outcome.duration(), outcome.amplifier(), true, true)));
         whisper(player, outcome.message());
+        if (outcome.summons() == Summons.PORTAL) {
+            me.moonscenty.alchemia.entity.cult.CultistPortal.openNear(player.serverLevel(), player);
+        }
     }
 
     /** Warp speaks to the player before it does anything, always in the same unsettling italics. */
     private static void whisper(ServerPlayer player, int line) {
-        player.sendSystemMessage(Component.translatable("warp.alchemia.text." + Mth.clamp(line, 0, 14))
+        player.sendSystemMessage(Component.translatable("warp.alchemia.text." + Mth.clamp(line, 0, 15))
                 .withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.ITALIC));
     }
 }

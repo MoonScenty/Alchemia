@@ -274,6 +274,24 @@ public class ModDataMapProvider extends DataMapProvider {
         mob(EntityType.BLAZE, a(ModAspects.FIRE, 8).add(ModAspects.ENERGY, 4));
         mob(EntityType.VILLAGER, a(ModAspects.MAN, 6).add(ModAspects.EXCHANGE, 2).add(ModAspects.MIND, 2));
         mob(EntityType.WITCH, a(ModAspects.MAN, 4).add(ModAspects.AURA, 4).add(ModAspects.MIND, 2));
+        for (EntityType<?> cultist : new EntityType<?>[] {me.moonscenty.alchemia.registry.ModEntities.CULTIST_KNIGHT.get(),
+                me.moonscenty.alchemia.registry.ModEntities.CULTIST_CLERIC.get()}) {
+            mob(cultist, a(ModAspects.ELDRITCH, 1).add(ModAspects.MAN, 2).add(ModAspects.AVERSION, 1));
+        }
+        for (String plate : new String[] {"crimson_plate_helm", "crimson_plate_chest", "crimson_plate_legs"}) {
+            item(me.moonscenty.alchemia.registry.ModItems.CRIMSON.get(plate).get(),
+                    a(ModAspects.METAL, 5).add(ModAspects.ELDRITCH, 1));
+        }
+        for (String robe : new String[] {"crimson_robe_helm", "crimson_robe_chest", "crimson_robe_legs"}) {
+            item(me.moonscenty.alchemia.registry.ModItems.CRIMSON.get(robe).get(),
+                    a(ModAspects.METAL, 3).add(ModAspects.BEAST, 1).add(ModAspects.ELDRITCH, 1));
+        }
+        item(me.moonscenty.alchemia.registry.ModItems.CRIMSON.get("crimson_boots").get(),
+                a(ModAspects.METAL, 4).add(ModAspects.ELDRITCH, 1));
+        item(me.moonscenty.alchemia.registry.ModItems.CRIMSON_BLADE.get(),
+                a(ModAspects.METAL, 4).add(ModAspects.ELDRITCH, 1).add(ModAspects.DEATH, 1));
+        item(me.moonscenty.alchemia.registry.ModItems.CRIMSON_RITES.get(),
+                a(ModAspects.MIND, 5).add(ModAspects.ELDRITCH, 3).add(ModAspects.SOUL, 3));
         // any wisp is a little auram and air, and two of its own aspect besides
         mob(me.moonscenty.alchemia.registry.ModEntities.WISP.get(), a(ModAspects.AURA, 1).add(ModAspects.AIR, 1));
         // a golem, as the original had it

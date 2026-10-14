@@ -211,10 +211,14 @@ public class AlchemonomiconScreen extends Screen {
             if (!research.category().equals(openCategory)) {
                 continue;
             }
+            if (!research.isShownTo(knowledge::hasResearch, entry.getKey().location())) {
+                continue;
+            }
             float[] colour = lineColour(research, entry.getKey().location(), knowledge);
             for (ResourceLocation parentId : research.parents()) {
                 ResearchEntry parent = entries.get(parentId);
-                if (parent != null && parent.category().equals(openCategory)) {
+                if (parent != null && parent.category().equals(openCategory)
+                        && parent.isShownTo(knowledge::hasResearch, parentId)) {
                     drawLine(graphics, research.column(), research.row(), parent.column(), parent.row(), colour);
                 }
             }
@@ -232,6 +236,9 @@ public class AlchemonomiconScreen extends Screen {
                 continue;
             }
             ResourceLocation id = entry.getKey().location();
+            if (!research.isShownTo(knowledge::hasResearch, id)) {
+                continue;
+            }
             int x = research.column() * GRID;
             int y = research.row() * GRID;
             drawNode(graphics, research, id, knowledge, x, y);

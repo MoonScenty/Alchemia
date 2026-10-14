@@ -149,7 +149,7 @@ public class PlayerDataTests {
         Set<Holder<MobEffect>> seen = new HashSet<>();
         for (int roll = 0; roll <= 100; roll++) {
             WarpHandler.Outcome outcome = WarpHandler.outcomeFor(60, roll);
-            helper.assertTrue(outcome.message() >= 0 && outcome.message() <= 14,
+            helper.assertTrue(outcome.message() >= 0 && outcome.message() <= 15,
                     "roll " + roll + " pointed at whisper " + outcome.message() + ", which does not exist");
             outcome.effect().ifPresent(effect -> {
                 helper.assertTrue(outcome.duration() > 0, "an ailment with no duration is no ailment");

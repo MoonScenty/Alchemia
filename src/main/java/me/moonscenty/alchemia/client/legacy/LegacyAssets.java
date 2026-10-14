@@ -40,6 +40,9 @@ public final class LegacyAssets {
      */
     public static final String ROBE = "robe";
     public static final String ROBE_SKIRT = "robe_skirt";
+    /** The Crimson Cult's plate, which the original built at full size for the chest and at half for the rest. */
+    public static final String KNIGHT_ARMOUR = "knight_armour";
+    public static final String KNIGHT_ARMOUR_LOWER = "knight_armour_lower";
 
     /**
      * The stone a matrix is eight of, and the glow laid over it while it works: one class, a sixteen-block cube, read
@@ -143,6 +146,10 @@ public final class LegacyAssets {
                     "thaumcraft/client/renderers/models/entity/ModelPech", "()V"))),
             Map.entry(TAINTACLE, List.of(new LegacyModelSource(LegacyEdition.FIVE,
                     "thaumcraft/client/renderers/models/entity/ModelTaintacle", "(I)V", 10))),
+            Map.entry(KNIGHT_ARMOUR, List.of(new LegacyModelSource(LegacyEdition.FIVE,
+                    "thaumcraft/client/renderers/models/gear/ModelKnightArmor", "(F)V", 1.0F))),
+            Map.entry(KNIGHT_ARMOUR_LOWER, List.of(new LegacyModelSource(LegacyEdition.FIVE,
+                    "thaumcraft/client/renderers/models/gear/ModelKnightArmor", "(F)V", 0.5F))),
             Map.entry(TAINTACLE_TINY, List.of(new LegacyModelSource(LegacyEdition.FIVE,
                     "thaumcraft/client/renderers/models/entity/ModelTaintacle", "(I)V", 6))),
             Map.entry(CENTRIFUGE, List.of(new LegacyModelSource(LegacyEdition.FIVE,
@@ -181,6 +188,7 @@ public final class LegacyAssets {
         infusion(all);
         gear(all);
         golems(all);
+        cult(all);
         return List.copyOf(all);
     }
 
@@ -781,6 +789,29 @@ public final class LegacyAssets {
      * Golems and their press: the meshes a golem is put together from and the pictures they are drawn in, the press
      * and its panel, the little pictures of every part and trait on that panel, the items, and the stone table.
      */
+    /** Step 13B: the Crimson Cult, what it wears and carries, its portal and its sounds. */
+    private static void cult(List<LegacyAsset> all) {
+        all.add(LegacyAsset.of("textures/entity/cultist.png").five("textures/models/creature/cultist.png"));
+        all.add(LegacyAsset.of("textures/entity/cultist_portal.png").five("textures/misc/cultist_portal.png"));
+        for (int layer = 1; layer <= 2; layer++) {
+            all.add(LegacyAsset.of("textures/models/armor/crimson_robe_layer_" + layer + ".png")
+                    .five("textures/models/armor/cultist_robe_armor.png").forModel(ROBE));
+            all.add(LegacyAsset.of("textures/models/armor/crimson_plate_layer_" + layer + ".png")
+                    .five("textures/models/armor/cultist_plate_armor.png").forModel(KNIGHT_ARMOUR));
+        }
+        all.add(LegacyAsset.of("textures/models/armor/crimson_boots_layer_1.png")
+                .five("textures/models/armor/cultistboots.png"));
+        for (String name : List.of("crimson_robe_helm", "crimson_robe_chest", "crimson_robe_legs",
+                "crimson_plate_helm", "crimson_plate_chest", "crimson_plate_legs", "crimson_boots", "crimson_blade",
+                "crimson_rites")) {
+            all.add(item(name, name, null));
+        }
+        for (String sound : List.of("chant1", "chant2", "chant3", "monolith", "wandfail", "egattack", "shock1",
+                "shock2", "learn")) {
+            all.add(LegacyAsset.of("sounds/legacy/" + sound + ".ogg").five("sounds/" + sound + ".ogg"));
+        }
+    }
+
     private static void golems(List<LegacyAsset> all) {
         for (String mesh : List.of("golem_base", "golem_head_basic", "golem_head_smart", "golem_head_smart_armor",
                 "golem_head_scout", "golem_head_scout_smart", "golem_arms_basic", "golem_arms_fine",

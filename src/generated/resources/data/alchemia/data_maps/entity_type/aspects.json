@@ -11,6 +11,16 @@
       "alchemia:humanus": 1,
       "alchemia:terra": 1
     },
+    "alchemia:cultist_cleric": {
+      "alchemia:alienis": 1,
+      "alchemia:aversio": 1,
+      "alchemia:humanus": 2
+    },
+    "alchemia:cultist_knight": {
+      "alchemia:alienis": 1,
+      "alchemia:aversio": 1,
+      "alchemia:humanus": 2
+    },
     "alchemia:furious_zombie": {
       "alchemia:cognitio": 1,
       "alchemia:exanimis": 4,

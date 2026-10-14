@@ -118,6 +118,19 @@ public class ModItemTagsProvider extends ItemTagsProvider {
             tag(ItemTags.ARMOR_ENCHANTABLE).add(piece);
             tag(ItemTags.EQUIPPABLE_ENCHANTABLE).add(piece);
         });
+        ModItems.CRIMSON.values().forEach(held -> {
+            var piece = held.get();
+            tag(shapes.get(piece.getType())).add(piece);
+            tag(ItemTags.DURABILITY_ENCHANTABLE).add(piece);
+            tag(ItemTags.ARMOR_ENCHANTABLE).add(piece);
+            tag(ItemTags.EQUIPPABLE_ENCHANTABLE).add(piece);
+        });
+        tag(ItemTags.SWORDS).add(ModItems.CRIMSON_BLADE.get());
+        tag(ItemTags.SWORD_ENCHANTABLE).add(ModItems.CRIMSON_BLADE.get());
+        tag(ItemTags.DURABILITY_ENCHANTABLE).add(ModItems.CRIMSON_BLADE.get());
+        tag(ItemTags.WEAPON_ENCHANTABLE).add(ModItems.CRIMSON_BLADE.get());
+        tag(ItemTags.SHARP_WEAPON_ENCHANTABLE).add(ModItems.CRIMSON_BLADE.get());
+        tag(ItemTags.FIRE_ASPECT_ENCHANTABLE).add(ModItems.CRIMSON_BLADE.get());
         ModItems.ROBES.values().forEach(held -> {
             me.moonscenty.alchemia.item.RobeItem robe = held.get();
             tag(shapes.get(robe.getType())).add(robe);

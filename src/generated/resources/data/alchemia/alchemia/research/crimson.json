@@ -1,0 +1,14 @@
+{
+  "category": "alchemia:eldritch",
+  "column": 0,
+  "hidden": true,
+  "icon": "alchemia:crimson_rites",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.crimson.page"
+    }
+  ],
+  "row": 2,
+  "shape": "special"
+}

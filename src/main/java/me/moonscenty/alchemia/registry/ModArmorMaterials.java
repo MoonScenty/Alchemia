@@ -96,6 +96,23 @@ public final class ModArmorMaterials {
 
     public static final int FORTRESS_LASTS = 25;
 
+    /**
+     * What the Crimson Cult wears: iron, all of it, the original's numbers exactly. The robe and the plate are drawn
+     * on the original's own models; the boots are plain armour.
+     */
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> CRIMSON_ROBE =
+            MATERIALS.register("crimson_robe", () -> material("crimson_robe", stops(2, 6, 5, 2), 9,
+                    () -> Ingredient.of(net.minecraft.world.item.Items.IRON_INGOT)));
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> CRIMSON_PLATE =
+            MATERIALS.register("crimson_plate", () -> material("crimson_plate", stops(2, 6, 5, 2), 9,
+                    () -> Ingredient.of(net.minecraft.world.item.Items.IRON_INGOT)));
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> CRIMSON_BOOTS =
+            MATERIALS.register("crimson_boots", () -> material("crimson_boots", stops(2, 6, 5, 2), 9,
+                    () -> Ingredient.of(net.minecraft.world.item.Items.IRON_INGOT)));
+
+    /** Iron's. */
+    public static final int CRIMSON_LASTS = 15;
+
     /** How many times over the base each robe lasts. */
     public static final int CLOTH_LASTS = 25;
     public static final int VOID_ROBE_LASTS = 10;
