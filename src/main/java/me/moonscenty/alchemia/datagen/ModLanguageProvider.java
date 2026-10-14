@@ -184,6 +184,36 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         addEntityType(me.moonscenty.alchemia.registry.ModEntities.TAINTACLE_TINY, pick("Taint Tendril", "오염 덩굴손"));
         add("entity.alchemia.pech.stalker", pick("Pech Stalker", "페크 추적자"));
         addEntityType(me.moonscenty.alchemia.registry.ModEntities.ANGRY_ZOMBIE, pick("Angry Zombie", "성난 좀비"));
+        addEntityType(me.moonscenty.alchemia.registry.ModEntities.CULTIST_KNIGHT, pick("Crimson Knight", "진홍 기사"));
+        addEntityType(me.moonscenty.alchemia.registry.ModEntities.CULTIST_CLERIC, pick("Crimson Cleric", "진홍 사제"));
+        addEntityType(me.moonscenty.alchemia.registry.ModEntities.CULTIST_PORTAL,
+                pick("Lesser Crimson Portal", "작은 진홍 차원문"));
+        addEntityType(me.moonscenty.alchemia.registry.ModEntities.GOLEM_ORB, pick("Golem Orb", "골렘 구체"));
+        String[][] crimson = {{"crimson_robe_helm", "Crimson Cult Hood", "진홍 교단 두건"},
+                {"crimson_robe_chest", "Crimson Cult Robe", "진홍 교단 로브"},
+                {"crimson_robe_legs", "Crimson Cult Leggings", "진홍 교단 바지"},
+                {"crimson_plate_helm", "Crimson Cult Helm", "진홍 교단 투구"},
+                {"crimson_plate_chest", "Crimson Cult Chestplate", "진홍 교단 흉갑"},
+                {"crimson_plate_legs", "Crimson Cult Greaves", "진홍 교단 각반"},
+                {"crimson_boots", "Crimson Cult Boots", "진홍 교단 장화"}};
+        for (String[] piece : crimson) {
+            addItem(ModItems.CRIMSON.get(piece[0]), pick(piece[1], piece[2]));
+        }
+        addItem(ModItems.CRIMSON_BLADE, pick("Crimson Blade", "진홍 검"));
+        add("item.alchemia.crimson_blade.sapping", pick("Greater Sapping", "큰 흡취"));
+        addItem(ModItems.CRIMSON_RITES, pick("Crimson Rites", "진홍 의식서"));
+        add("item.alchemia.crimson_rites.text.0", pick("The book is filled with strange symbols.",
+                "낯선 기호로 가득한 책이다."));
+        add("item.alchemia.crimson_rites.text.1", pick("Use it to study it.", "써서 읽어 본다."));
+        addItem(ModItems.CULTIST_KNIGHT_SPAWN_EGG, pick("Crimson Knight Spawn Egg", "진홍 기사 생성 알"));
+        addItem(ModItems.CULTIST_CLERIC_SPAWN_EGG, pick("Crimson Cleric Spawn Egg", "진홍 사제 생성 알"));
+        addItem(ModItems.CULTIST_PORTAL_SPAWN_EGG, pick("Lesser Crimson Portal Spawn Egg", "작은 진홍 차원문 생성 알"));
+        add("subtitles.alchemia.cultist.chant", pick("Cleric chants", "사제가 읊조린다"));
+        add("subtitles.alchemia.cultist_portal.ambient", pick("Portal hums", "차원문이 웅웅거린다"));
+        add("subtitles.alchemia.cultist_portal.summon", pick("Cultist steps through", "교단원이 건너온다"));
+        add("subtitles.alchemia.cultist.cast", pick("Cleric casts", "사제가 주문을 던진다"));
+        add("subtitles.alchemia.golem_orb.burst", pick("Orb bursts", "구체가 터진다"));
+        add("subtitles.alchemia.crimson_rites.read", pick("Something learnt", "무언가를 깨친다"));
         addEntityType(me.moonscenty.alchemia.registry.ModEntities.FURIOUS_ZOMBIE, pick("Furious Zombie", "격노한 좀비"));
         addItem(ModItems.ZOMBIE_BRAIN, pick("Zombie Brain", "좀비 뇌"));
         addItem(ModItems.ANGRY_ZOMBIE_SPAWN_EGG, pick("Angry Zombie Spawn Egg", "성난 좀비 생성 알"));
@@ -892,6 +922,9 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                 {"elemental_tools", "Elemental Tools", "원소 도구",
                  "Alchemium tools with a primal bound into each on the altar, and what that element is in a tool already worked into them. The axe of the stream fells a tree from its top and sends what falls to whoever felled it, and held up it draws every loose thing nearby in. The pickaxe of the core refines ore into clusters now and then, sounds out the stone it is tapped against, and sets alight whatever it strikes. The sword of the zephyr carries a blow on to what is standing about, and held up it raises a whirlwind that lifts its bearer and throws back anything that comes close. The shovel of the earthmover digs three by three, and used against a face it lays three by three of that same block out of the bag; the setting key turns which way the square stands. The hoe of growth tills three by three and makes things grow where there is nothing to till. Crouch with any of them and it is only a tool.",
                  "제단에서 알케미움 도구에 원시를 하나씩 묶고, 그 원소가 도구에서 하는 일을 미리 새겨 둔 것이다. 흐름의 도끼는 나무를 꼭대기부터 베고 떨어진 것을 벤 사람에게 보내며, 들고 있으면 둘레의 떨어진 것을 모두 끌어온다. 핵의 곡괭이는 광석을 이따금 군집으로 정련하고, 두드린 돌 너머를 짚어 보며, 친 것에 불을 붙인다. 미풍의 검은 맞은 것 옆에 선 것까지 베고, 들고 있으면 회오리를 일으켜 든 사람을 띄우고 다가오는 것을 밀쳐 낸다. 흙꾼의 삽은 3×3으로 파고, 면에 대고 쓰면 그 블록을 가방에서 꺼내 3×3으로 깐다 — 설정 키로 네모가 서는 방향을 바꾼다. 성장의 괭이는 3×3으로 갈고, 갈 것이 없으면 자라게 한다. 무엇이든 웅크리고 쓰면 그냥 도구다."},
+                {"crimson", "The Crimson Cult", "진홍 교단",
+                 "Most of the book is in a crabbed script you cannot read, but enough of it is plain to say what the cult is after. Nobody knows where they came from. They are working towards a rite they call Apertis Oculis, the Opening of the Eye. What opening it would do, the book does not say; you doubt very much that it is anything good. Knights in crimson plate and clerics in crimson robes come through rips in the air wherever the cult has a mind to be, and fight as one.",
+                 "책 대부분은 읽을 수 없는 꼬부랑 글씨지만, 교단이 무엇을 노리는지 알 만큼은 읽힌다. 그들이 어디서 왔는지는 아무도 모른다. 그들은 '아페르티스 오쿨리스', 곧 눈 뜨기라 부르는 의식을 완성하려 한다. 무엇을 여는 의식인지 책은 말하지 않는다. 좋은 것일 리는 없을 것 같다. 진홍 판금의 기사와 진홍 로브의 사제가 교단이 마음먹은 곳마다 허공의 틈으로 건너와 한 몸처럼 싸운다."},
                 {"primal_crusher", "Primal Crusher", "원시 분쇄기",
                  "Both elemental diggers and both of their void-metal counterparts beaten together round something that should not be able to hold all four. What comes out is a pickaxe and a shovel at once that digs three by three and refines ore as it goes. It has lost the building and the sounding; what is left only breaks things. Like void metal it mends itself, a point a second, and unlike anything else it is uneasy in the hand -- it carries two points of warp while it is held.",
                  "원소 굴착 도구 둘과 그 공허 금속 짝 둘을, 넷을 다 품을 수 없어야 마땅한 것 둘레에 두들겨 합친 것이다. 나온 것은 곡괭이이자 삽이고, 3×3으로 파며 파는 대로 광석을 정련한다. 짓는 일과 짚어 보는 일은 잃었고 남은 것은 부수는 일뿐이다. 공허 금속처럼 초마다 한 점씩 스스로 고쳐지고, 다른 무엇과도 달리 손에 들기가 꺼림칙하다 — 들고 있는 동안 뒤틀림 2를 지닌다."},
@@ -1077,6 +1110,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                 {"You are no longer entirely alone in here.", "이 안에 당신만 있는 것이 아니다."},
                 {"Whatever you look at, looks back.", "무엇을 보든, 그것도 당신을 본다."},
                 {"It has stopped being patient.", "그것이 더는 참지 않는다."},
+                {"Somewhere close, voices are chanting.", "가까운 어딘가에서 읊조리는 소리가 들린다."},
         };
         for (int line = 0; line < whispers.length; line++) {
             add("warp." + Alchemia.MODID + ".text." + line, pick(whispers[line][0], whispers[line][1]));

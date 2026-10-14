@@ -291,6 +291,16 @@ public class AlchemiaClientSetup {
         event.registerBlock(PlainBreakParticles.INSTANCE,
                 ModBlocks.CRUCIBLE.get(), ModBlocks.JAR.get(), ModBlocks.TUBE_FILTER.get());
         // robes in the original's violet until dyed; the void robe on the original's model when its jar is there
+        ModItems.CRIMSON.values().forEach(piece -> {
+            switch (piece.get().kind()) {
+                case ROBE -> event.registerItem(me.moonscenty.alchemia.client.armour.CultistArmourExtensions.ROBE,
+                        piece.get());
+                case PLATE -> event.registerItem(me.moonscenty.alchemia.client.armour.CultistArmourExtensions.PLATE,
+                        piece.get());
+                default -> {
+                }
+            }
+        });
         ModItems.ROBES.values().forEach(robe -> event.registerItem(
                 robe.get().drab() ? RobeExtensions.VOID : RobeExtensions.CLOTH, robe.get()));
         // fortress armour on the original's own model when its jar is there, plain armour when not
@@ -312,6 +322,10 @@ public class AlchemiaClientSetup {
         event.registerEntityRenderer(ModEntities.AURA_NODE.get(), AuraNodeRenderer::new);
         event.registerEntityRenderer(ModEntities.AUTOCASTER.get(), AutocasterRenderer::new);
         event.registerEntityRenderer(ModEntities.FIRE_BAT.get(), FireBatRenderer::new);
+        event.registerEntityRenderer(ModEntities.CULTIST_KNIGHT.get(), CultistRenderer::new);
+        event.registerEntityRenderer(ModEntities.CULTIST_CLERIC.get(), CultistRenderer::new);
+        event.registerEntityRenderer(ModEntities.CULTIST_PORTAL.get(), CultistPortalRenderer::new);
+        event.registerEntityRenderer(ModEntities.GOLEM_ORB.get(), GolemOrbRenderer::new);
         event.registerEntityRenderer(ModEntities.WISP.get(), WispRenderer::new);
         event.registerEntityRenderer(ModEntities.PECH.get(), PechRenderer::new);
         event.registerEntityRenderer(ModEntities.TAINT_CRAWLER.get(), TaintCrawlerRenderer::new);

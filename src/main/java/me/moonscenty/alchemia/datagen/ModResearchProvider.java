@@ -278,6 +278,9 @@ public class ModResearchProvider {
                 "elemental_axe", "elemental_pickaxe", "elemental_sword", "elemental_shovel", "elemental_hoe");
         // filed under eldritch, as the original filed it: it is the first thing beaten round something that
         // should not hold it
+        // the cult: in nobody's book until its rites have been read
+        hidden(context, "crimson", ModResearch.ELDRITCH, ModItems.CRIMSON_RITES, 0, 2, NodeShape.SPECIAL);
+
         entry(context, "primal_crusher", ModResearch.ELDRITCH, ModItems.PRIMAL_CRUSHER, 1, 5,
                 AspectList.of(ModAspects.EARTH, 6).add(ModAspects.TOOL, 6).add(ModAspects.ENTROPY, 6)
                         .add(ModAspects.VOID, 6).add(ModAspects.AVERSION, 6).add(ModAspects.ELDRITCH, 6)
@@ -484,11 +487,27 @@ public class ModResearchProvider {
     private static void entry(BootstrapContext<ResearchEntry> context, String name, ResourceKey<ResearchCategory> category,
             ItemLike icon, int column, int row, AspectList requirements, List<String> parents, boolean autoUnlock,
             NodeShape shape, int complexity, String... recipes) {
+        register(context, name, category, icon, column, row, requirements, parents, autoUnlock, shape, complexity,
+                false, recipes);
+    }
+
+    /** An entry that is not in the book until it is known, and that the table cannot work out. */
+    private static void hidden(BootstrapContext<ResearchEntry> context, String name,
+            ResourceKey<ResearchCategory> category, ItemLike icon, int column, int row, NodeShape shape,
+            String... recipes) {
+        register(context, name, category, icon, column, row, AspectList.EMPTY, List.of(), false, shape, 1, true,
+                recipes);
+    }
+
+    private static void register(BootstrapContext<ResearchEntry> context, String name,
+            ResourceKey<ResearchCategory> category, ItemLike icon, int column, int row, AspectList requirements,
+            List<String> parents, boolean autoUnlock, NodeShape shape, int complexity, boolean hidden,
+            String... recipes) {
         context.register(ResourceKey.create(ModResearch.ENTRY_KEY, Alchemia.id(name)),
                 new ResearchEntry(category, requirements, column, row,
                         BuiltInRegistries.ITEM.wrapAsHolder(icon.asItem()),
                         parents.stream().map(Alchemia::id).toList(),
                         pages(name, recipes),
-                        autoUnlock, shape, complexity));
+                        autoUnlock, shape, complexity, hidden));
     }
 }

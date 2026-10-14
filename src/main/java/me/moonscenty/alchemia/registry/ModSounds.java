@@ -54,6 +54,15 @@ public final class ModSounds {
     /** Something starting to be made. */
     public static final DeferredHolder<SoundEvent, SoundEvent> CRAFT_START = sound("craftstart");
 
+    /** The Crimson Cult: a cleric's chanting, a portal's hum, a summons gone through, an orb cast and landing. */
+    public static final DeferredHolder<SoundEvent, SoundEvent> CHANT = sound("chant");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MONOLITH = sound("monolith");
+    public static final DeferredHolder<SoundEvent, SoundEvent> WAND_FAIL = sound("wandfail");
+    public static final DeferredHolder<SoundEvent, SoundEvent> EG_ATTACK = sound("egattack");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SHOCK = sound("shock");
+    /** Something learnt off a page. */
+    public static final DeferredHolder<SoundEvent, SoundEvent> LEARN = sound("learn");
+
     private static DeferredHolder<SoundEvent, SoundEvent> sound(String name) {
         return SOUNDS.register(name, () -> SoundEvent.createVariableRangeEvent(Alchemia.id(name)));
     }

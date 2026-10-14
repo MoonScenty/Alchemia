@@ -324,9 +324,48 @@ public class ModEntities {
                     .updateInterval(20)
                     .build("golem_dart"));
 
+    /** The Crimson Cult: a player's size, followed as far as the original followed them. */
+    public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.entity.cult.CultistKnight>>
+            CULTIST_KNIGHT = ENTITIES.register("cultist_knight", () -> EntityType.Builder
+                    .<me.moonscenty.alchemia.entity.cult.CultistKnight>of(
+                            me.moonscenty.alchemia.entity.cult.CultistKnight::new, MobCategory.MONSTER)
+                    .sized(0.6F, 1.8F)
+                    .clientTrackingRange(8)
+                    .build("cultist_knight"));
+    public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.entity.cult.CultistCleric>>
+            CULTIST_CLERIC = ENTITIES.register("cultist_cleric", () -> EntityType.Builder
+                    .<me.moonscenty.alchemia.entity.cult.CultistCleric>of(
+                            me.moonscenty.alchemia.entity.cult.CultistCleric::new, MobCategory.MONSTER)
+                    .sized(0.6F, 1.8F)
+                    .clientTrackingRange(8)
+                    .build("cultist_cleric"));
+    /** A lesser crimson portal: still, fire-proof, and told about seldom, as the original's was. */
+    public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.entity.cult.CultistPortal>>
+            CULTIST_PORTAL = ENTITIES.register("cultist_portal", () -> EntityType.Builder
+                    .<me.moonscenty.alchemia.entity.cult.CultistPortal>of(
+                            me.moonscenty.alchemia.entity.cult.CultistPortal::new, MobCategory.MONSTER)
+                    .sized(1.5F, 3.0F)
+                    .fireImmune()
+                    .clientTrackingRange(8)
+                    .updateInterval(20)
+                    .build("cultist_portal"));
+    /** The cleric's orb. */
+    public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.entity.cult.GolemOrb>>
+            GOLEM_ORB = ENTITIES.register("golem_orb", () -> EntityType.Builder
+                    .<me.moonscenty.alchemia.entity.cult.GolemOrb>of(
+                            me.moonscenty.alchemia.entity.cult.GolemOrb::new, MobCategory.MISC)
+                    .sized(0.25F, 0.25F)
+                    .clientTrackingRange(8)
+                    .updateInterval(3)
+                    .noSummon()
+                    .build("golem_orb"));
+
     /** What anything alive needs before the game will make one. */
     public static void attributes(EntityAttributeCreationEvent event) {
         event.put(AUTOCASTER.get(), Autocaster.attributes().build());
+        event.put(CULTIST_KNIGHT.get(), me.moonscenty.alchemia.entity.cult.CultistKnight.attributes().build());
+        event.put(CULTIST_CLERIC.get(), me.moonscenty.alchemia.entity.cult.CultistCleric.attributes().build());
+        event.put(CULTIST_PORTAL.get(), me.moonscenty.alchemia.entity.cult.CultistPortal.attributes().build());
         event.put(FIRE_BAT.get(), FireBat.attributes().build());
         event.put(WISP.get(), me.moonscenty.alchemia.entity.Wisp.attributes().build());
         event.put(PECH.get(), me.moonscenty.alchemia.entity.Pech.attributes().build());

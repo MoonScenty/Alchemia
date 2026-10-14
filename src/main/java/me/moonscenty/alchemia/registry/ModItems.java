@@ -237,6 +237,27 @@ public class ModItems {
     /** What is left of a wisp: two points of its aspect. */
     public static final DeferredItem<me.moonscenty.alchemia.item.WispyEssenceItem> WISPY_ESSENCE = ITEMS.register(
             "wispy_essence", () -> new me.moonscenty.alchemia.item.WispyEssenceItem(new Item.Properties()));
+    /** The Crimson Cult's robes, plate and boots, in the original's names. Never made, only taken off a cultist. */
+    public static final Map<String, DeferredItem<me.moonscenty.alchemia.item.CultistArmorItem>> CRIMSON =
+            registerCrimson();
+    /** The cult's own sword, which saps whatever it cuts. */
+    public static final DeferredItem<me.moonscenty.alchemia.item.CrimsonBladeItem> CRIMSON_BLADE =
+            ITEMS.register("crimson_blade", () -> new me.moonscenty.alchemia.item.CrimsonBladeItem(ModTiers.CRIMSON,
+                    new Item.Properties().rarity(net.minecraft.world.item.Rarity.EPIC).attributes(
+                            SwordItem.createAttributes(ModTiers.CRIMSON, 3, -2.4F))));
+    /** A book of the cult's, which teaches what it is about and leaves its mark. */
+    public static final DeferredItem<me.moonscenty.alchemia.item.CrimsonRitesItem> CRIMSON_RITES =
+            ITEMS.register("crimson_rites", () -> new me.moonscenty.alchemia.item.CrimsonRitesItem(
+                    new Item.Properties().stacksTo(1).rarity(net.minecraft.world.item.Rarity.RARE)));
+    public static final DeferredItem<net.neoforged.neoforge.common.DeferredSpawnEggItem> CULTIST_KNIGHT_SPAWN_EGG =
+            ITEMS.register("cultist_knight_spawn_egg", () -> new net.neoforged.neoforge.common.DeferredSpawnEggItem(
+                    ModEntities.CULTIST_KNIGHT, 0x900608, 0x000080, new Item.Properties()));
+    public static final DeferredItem<net.neoforged.neoforge.common.DeferredSpawnEggItem> CULTIST_CLERIC_SPAWN_EGG =
+            ITEMS.register("cultist_cleric_spawn_egg", () -> new net.neoforged.neoforge.common.DeferredSpawnEggItem(
+                    ModEntities.CULTIST_CLERIC, 0x900608, 0x800000, new Item.Properties()));
+    public static final DeferredItem<net.neoforged.neoforge.common.DeferredSpawnEggItem> CULTIST_PORTAL_SPAWN_EGG =
+            ITEMS.register("cultist_portal_spawn_egg", () -> new net.neoforged.neoforge.common.DeferredSpawnEggItem(
+                    ModEntities.CULTIST_PORTAL, 0x900608, 0x6060D2, new Item.Properties()));
     /** A pane of glass silvered with quicksilver. */
     public static final DeferredItem<Item> MIRRORED_GLASS = ITEMS.registerSimpleItem("mirrored_glass");
     /** A mirror on a handle, that sends things through to a magic mirror wherever it is. */
@@ -437,6 +458,29 @@ public class ModItems {
             DeferredHolder<ArmorMaterial, ArmorMaterial> material, int lasts, int discount, boolean drab) {
         into.put(name, ITEMS.register(name, () -> new RobeItem(material, type, discount, drab,
                 new Item.Properties().durability(type.getDurability(lasts)))));
+    }
+
+    private static Map<String, DeferredItem<me.moonscenty.alchemia.item.CultistArmorItem>> registerCrimson() {
+        Map<String, DeferredItem<me.moonscenty.alchemia.item.CultistArmorItem>> made = new java.util.LinkedHashMap<>();
+        var robe = me.moonscenty.alchemia.item.CultistArmorItem.Kind.ROBE;
+        var plate = me.moonscenty.alchemia.item.CultistArmorItem.Kind.PLATE;
+        crimson(made, "crimson_robe_helm", ArmorItem.Type.HELMET, robe, ModArmorMaterials.CRIMSON_ROBE);
+        crimson(made, "crimson_robe_chest", ArmorItem.Type.CHESTPLATE, robe, ModArmorMaterials.CRIMSON_ROBE);
+        crimson(made, "crimson_robe_legs", ArmorItem.Type.LEGGINGS, robe, ModArmorMaterials.CRIMSON_ROBE);
+        crimson(made, "crimson_plate_helm", ArmorItem.Type.HELMET, plate, ModArmorMaterials.CRIMSON_PLATE);
+        crimson(made, "crimson_plate_chest", ArmorItem.Type.CHESTPLATE, plate, ModArmorMaterials.CRIMSON_PLATE);
+        crimson(made, "crimson_plate_legs", ArmorItem.Type.LEGGINGS, plate, ModArmorMaterials.CRIMSON_PLATE);
+        crimson(made, "crimson_boots", ArmorItem.Type.BOOTS, me.moonscenty.alchemia.item.CultistArmorItem.Kind.BOOTS,
+                ModArmorMaterials.CRIMSON_BOOTS);
+        // unmodifiableMap rather than Map.copyOf, for the reason written above registerMetalTools
+        return Collections.unmodifiableMap(made);
+    }
+
+    private static void crimson(Map<String, DeferredItem<me.moonscenty.alchemia.item.CultistArmorItem>> into,
+            String name, ArmorItem.Type type, me.moonscenty.alchemia.item.CultistArmorItem.Kind kind,
+            DeferredHolder<ArmorMaterial, ArmorMaterial> material) {
+        into.put(name, ITEMS.register(name, () -> new me.moonscenty.alchemia.item.CultistArmorItem(material, type,
+                kind, new Item.Properties().durability(type.getDurability(ModArmorMaterials.CRIMSON_LASTS)))));
     }
 
     private static Map<String, DeferredItem<FortressArmorItem>> registerFortress() {

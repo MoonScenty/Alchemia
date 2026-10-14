@@ -41,6 +41,14 @@ public final class ModTiers {
             BlockTags.INCORRECT_FOR_NETHERITE_TOOL, 500, 8.0F, 4.0F, 20,
             () -> Ingredient.of(ModItems.VOID_INGOT));
 
+    /**
+     * The Crimson Blade's: void metal's edge on a blade that holds up a little longer, and mends itself as void metal
+     * does. The original's two hundred uses and three and a half over a plain sword.
+     */
+    public static final Tier CRIMSON = new SimpleTier(
+            BlockTags.INCORRECT_FOR_NETHERITE_TOOL, 200, 8.0F, 3.5F, 20,
+            () -> Ingredient.of(ModItems.VOID_INGOT));
+
     private ModTiers() {
     }
 }

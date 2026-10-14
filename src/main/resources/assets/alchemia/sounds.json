@@ -152,5 +152,44 @@
     "sounds": [
       "alchemia:legacy/craftstart"
     ]
+  },
+  "chant": {
+    "subtitle": "subtitles.alchemia.cultist.chant",
+    "sounds": [
+      "alchemia:legacy/chant1",
+      "alchemia:legacy/chant2",
+      "alchemia:legacy/chant3"
+    ]
+  },
+  "monolith": {
+    "subtitle": "subtitles.alchemia.cultist_portal.ambient",
+    "sounds": [
+      "alchemia:legacy/monolith"
+    ]
+  },
+  "wandfail": {
+    "subtitle": "subtitles.alchemia.cultist_portal.summon",
+    "sounds": [
+      "alchemia:legacy/wandfail"
+    ]
+  },
+  "egattack": {
+    "subtitle": "subtitles.alchemia.cultist.cast",
+    "sounds": [
+      "alchemia:legacy/egattack"
+    ]
+  },
+  "shock": {
+    "subtitle": "subtitles.alchemia.golem_orb.burst",
+    "sounds": [
+      "alchemia:legacy/shock1",
+      "alchemia:legacy/shock2"
+    ]
+  },
+  "learn": {
+    "subtitle": "subtitles.alchemia.crimson_rites.read",
+    "sounds": [
+      "alchemia:legacy/learn"
+    ]
   }
 }
