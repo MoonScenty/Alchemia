@@ -36,6 +36,8 @@ public final class ModBiomes {
     public static final ResourceKey<Biome> MAGICAL_FOREST = key("magical_forest");
     public static final ResourceKey<Biome> EERIE = key("eerie");
     public static final ResourceKey<Biome> TAINTED_LAND = key("tainted_land");
+    /** The Outer Lands' only land. */
+    public static final ResourceKey<Biome> ELDRITCH = key("eldritch");
 
     /** The sky every land the original left to its default had, at the forest's warmth. */
     private static final int FOG = 0xC0D8FF;
@@ -54,6 +56,7 @@ public final class ModBiomes {
         context.register(MAGICAL_FOREST, magicalForest(placed, carvers));
         context.register(EERIE, eerie(placed, carvers));
         context.register(TAINTED_LAND, taintedLand(placed, carvers));
+        context.register(ELDRITCH, eldritch(placed, carvers));
     }
 
     /** What every overworld land has under and around it: caves, lakes, geodes, springs, dungeons, ice. */
@@ -128,6 +131,30 @@ public final class ModBiomes {
         MobSpawnSettings.Builder spawns = new MobSpawnSettings.Builder();
         spawns.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(ModEntities.TAINTACLE.get(), 1, 1, 1));
         return land(0.8F, 0.4F, 0x6D4189, 0x7C6D87, 0x7C44FF, 0xCC1188, spawns, generation, null);
+    }
+
+    /** Nothing grows; the inhabited dead and the guardians walk the mazes, one at a time. The sky is black. */
+    private static Biome eldritch(HolderGetter<PlacedFeature> placed, HolderGetter<ConfiguredWorldCarver<?>> carvers) {
+        MobSpawnSettings.Builder spawns = new MobSpawnSettings.Builder();
+        spawns.addSpawn(MobCategory.MONSTER,
+                new MobSpawnSettings.SpawnerData(ModEntities.INHABITED_ZOMBIE.get(), 1, 1, 1));
+        spawns.addSpawn(MobCategory.MONSTER,
+                new MobSpawnSettings.SpawnerData(ModEntities.ELDRITCH_GUARDIAN.get(), 1, 1, 1));
+        BiomeSpecialEffects effects = new BiomeSpecialEffects.Builder()
+                .waterColor(0x3F76E4)
+                .waterFogColor(WATER_FOG)
+                .fogColor(0x181318)
+                .skyColor(0)
+                .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS)
+                .build();
+        return new Biome.BiomeBuilder()
+                .hasPrecipitation(false)
+                .temperature(0.5F)
+                .downfall(0.0F)
+                .specialEffects(effects)
+                .mobSpawnSettings(spawns.build())
+                .generationSettings(new BiomeGenerationSettings.Builder(placed, carvers).build())
+                .build();
     }
 
     private static Biome land(float temperature, float downfall, int grass, int foliage, int sky, int water,

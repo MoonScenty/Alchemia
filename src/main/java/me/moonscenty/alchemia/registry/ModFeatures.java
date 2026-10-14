@@ -44,6 +44,12 @@ public class ModFeatures {
     public static final DeferredHolder<Feature<?>, me.moonscenty.alchemia.worldgen.EldritchRingFeature> ELDRITCH_RING =
             FEATURES.register("eldritch_ring",
                     () -> new me.moonscenty.alchemia.worldgen.EldritchRingFeature(NoneFeatureConfiguration.CODEC));
+    public static final net.neoforged.neoforge.registries.DeferredRegister<com.mojang.serialization.MapCodec<? extends net.minecraft.world.level.chunk.ChunkGenerator>> CHUNK_GENERATORS =
+            net.neoforged.neoforge.registries.DeferredRegister.create(
+                    net.minecraft.core.registries.Registries.CHUNK_GENERATOR, me.moonscenty.alchemia.Alchemia.MODID);
+    /** The Outer Lands' generator: solid ancient bedrock, and mazes. */
+    public static final DeferredHolder<com.mojang.serialization.MapCodec<? extends net.minecraft.world.level.chunk.ChunkGenerator>, com.mojang.serialization.MapCodec<me.moonscenty.alchemia.outer.OuterLandsChunkGenerator>> OUTER_LANDS =
+            CHUNK_GENERATORS.register("outer_lands", () -> me.moonscenty.alchemia.outer.OuterLandsChunkGenerator.CODEC);
     public static final DeferredHolder<Feature<?>, me.moonscenty.alchemia.worldgen.MoundFeature> MOUND =
             FEATURES.register("mound",
                     () -> new me.moonscenty.alchemia.worldgen.MoundFeature(NoneFeatureConfiguration.CODEC));

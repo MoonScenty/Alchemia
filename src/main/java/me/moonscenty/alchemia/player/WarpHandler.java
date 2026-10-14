@@ -75,7 +75,8 @@ public class WarpHandler {
         }
     }
 
-    private static void learn(net.minecraft.world.entity.player.Player player,
+    /** Teaches a player a piece of research, and tells them, unless they knew it. */
+    public static void learn(net.minecraft.world.entity.player.Player player,
             net.minecraft.resources.ResourceLocation research) {
         me.moonscenty.alchemia.player.PlayerKnowledge knowledge = me.moonscenty.alchemia.player.PlayerKnowledge
                 .of(player);

@@ -1,0 +1,10 @@
+{
+  "type": "alchemia:outer_lands",
+  "generator": {
+    "type": "alchemia:outer_lands",
+    "biome_source": {
+      "type": "minecraft:fixed",
+      "biome": "alchemia:eldritch"
+    }
+  }
+}

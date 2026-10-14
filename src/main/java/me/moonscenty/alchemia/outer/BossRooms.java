@@ -71,7 +71,7 @@ public final class BossRooms {
                 }
             }
         }
-        BlockPos middle = new BlockPos(bx * 16 + 16, 50, bz * 16 + 16);
+        BlockPos middle = new BlockPos(bx * 16 + 16, MazeBuilder.Y, bz * 16 + 16);
         String which;
         switch (labyrinth.nextBoss(level.random)) {
             case 0 -> {
