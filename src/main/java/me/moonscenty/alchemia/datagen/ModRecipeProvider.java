@@ -566,7 +566,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 AspectList.of(ModAspects.FIRE, 750).add(ModAspects.WATER, 750),
                 Map.of('B', Ingredient.of(ModItems.BRASS_PLATE),
                         'F', Ingredient.of(ModBlocks.ALCHEMIUM_SMELTER),
-                        'G', Ingredient.of(ModItems.PRIMAL_CHARM),
+                        'G', Ingredient.of(ModItems.PRIMORDIAL_PEARL),
                         'I', Ingredient.of(ModItems.VOID_INGOT)),
                 "BFB", "IGI", "III");
         arcane(output, "arcane_bore_base", "arcane_bore", new ItemStack(ModBlocks.ARCANE_BORE_BASE.get()),
@@ -982,10 +982,8 @@ public class ModRecipeProvider extends RecipeProvider {
         elemental(output, "elemental_hoe", "alchemium_hoe", CrystalType.ORDER, CrystalType.ENTROPY,
                 AspectList.of(ModAspects.ORDER, 8).add(ModAspects.PLANT, 8).add(ModAspects.ENTROPY, 8));
 
-        // the crusher: the four diggers and two primal charms round a primordial pearl. The pearl is eldritch
-        // and not in this mod yet, so a nether star stands for it -- something earned from the hardest thing
-        // there is to kill
-        infusion(output, "primal_crusher", Ingredient.of(Items.NETHER_STAR),
+        // the crusher: the four diggers and two primal charms round a primordial pearl
+        infusion(output, "primal_crusher", Ingredient.of(ModItems.PRIMORDIAL_PEARL),
                 List.of(Ingredient.of(ModItems.PRIMAL_CHARM),
                         Ingredient.of(ModItems.METAL_TOOLS.get("void_pickaxe")),
                         Ingredient.of(ModItems.METAL_TOOLS.get("void_shovel")),
