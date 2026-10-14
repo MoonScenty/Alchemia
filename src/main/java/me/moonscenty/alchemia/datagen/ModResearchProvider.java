@@ -291,6 +291,8 @@ public class ModResearchProvider {
 
         // the cult: in nobody's book until its rites have been read
         hidden(context, "crimson", ModResearch.ELDRITCH, ModItems.CRIMSON_RITES, 0, 2, NodeShape.SPECIAL);
+        // learned by going through
+        hidden(context, "enter_outer", ModResearch.ELDRITCH, ModItems.RUNED_TABLET, -3, 5, NodeShape.SPECIAL);
 
         entry(context, "primal_crusher", ModResearch.ELDRITCH, ModItems.PRIMAL_CRUSHER, 1, 5,
                 AspectList.of(ModAspects.EARTH, 6).add(ModAspects.TOOL, 6).add(ModAspects.ENTROPY, 6)

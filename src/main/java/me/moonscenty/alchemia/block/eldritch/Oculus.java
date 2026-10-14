@@ -38,6 +38,10 @@ public final class Oculus {
         if (holder == null || !holder.holds(wand, cost, player, VisHolder.Spending.CRAFTING)) {
             return false;
         }
+        if (level instanceof net.minecraft.server.level.ServerLevel served) {
+            // the original would not open the way until a maze lay beyond it; one is laid now if there is none
+            me.moonscenty.alchemia.outer.Labyrinth.of(served.getServer()).ensureMaze(pos, level.random);
+        }
         if (!level.isClientSide) {
             holder.take(wand, cost, player, VisHolder.Spending.CRAFTING);
             altar.setOpen(true);

@@ -94,6 +94,9 @@ public class EldritchStoneworkBlock extends BaseEntityBlock {
         }
         if (!level.isClientSide) {
             altar.addEye();
+            if (level instanceof ServerLevel served) {
+                me.moonscenty.alchemia.outer.Labyrinth.of(served.getServer()).ensureMaze(pos, level.random);
+            }
             held.consume(1, player);
             level.playSound(null, pos, SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.BLOCKS, 0.6F, 1.0F);
         }

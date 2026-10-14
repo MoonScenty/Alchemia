@@ -16,7 +16,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 
 /**
- * Whether the way is open, and how far it has opened, for the drawing. Where it leads comes with the Outer Lands.
+ * Whether the way is open, and how far it has opened, for the drawing. In the Outer Lands it is always open. Every
+ * quarter second it takes whoever stands in it through, to the Outer Lands or back out of them.
  */
 public class EldritchPortalBlockEntity extends BlockEntity {
     private boolean open;
@@ -42,12 +43,24 @@ public class EldritchPortalBlockEntity extends BlockEntity {
 
     public static void tick(Level level, BlockPos pos, BlockState state, EldritchPortalBlockEntity portal) {
         portal.count++;
-        if (!portal.open || !level.isClientSide) {
+        if (!portal.open && me.moonscenty.alchemia.outer.OuterLands.isOuterLands(level)) {
+            portal.open = true;
+        }
+        if (!portal.open) {
+            return;
+        }
+        if (!level.isClientSide) {
+            if (portal.count % 5 == 0) {
+                for (net.minecraft.server.level.ServerPlayer player : level.getEntitiesOfClass(
+                        net.minecraft.server.level.ServerPlayer.class, new AABB(pos).inflate(0.5, 1.0, 0.5))) {
+                    me.moonscenty.alchemia.outer.OuterLands.travel(player, pos);
+                }
+            }
             return;
         }
         if (portal.count % 250 == 0 || portal.count == 1) {
-            level.playLocalSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, SoundEvents.PORTAL_AMBIENT,
-                    SoundSource.BLOCKS, 0.5F, 0.6F, false);
+            level.playLocalSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
+                    me.moonscenty.alchemia.registry.ModSounds.EVIL_PORTAL.get(), SoundSource.BLOCKS, 1.0F, 1.0F, false);
         }
         if (portal.opened < 30) {
             portal.opened++;

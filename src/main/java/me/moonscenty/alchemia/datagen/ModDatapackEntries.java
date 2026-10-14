@@ -14,6 +14,8 @@ public class ModDatapackEntries {
             .add(Registries.CONFIGURED_FEATURE, ModWorldgen::bootstrapConfigured)
             .add(Registries.PLACED_FEATURE, ModWorldgen::bootstrapPlaced)
             .add(Registries.BIOME, me.moonscenty.alchemia.worldgen.ModBiomes::bootstrap)
+            .add(Registries.DIMENSION_TYPE, me.moonscenty.alchemia.outer.OuterLandsData::dimensionType)
+            .add(Registries.LEVEL_STEM, me.moonscenty.alchemia.outer.OuterLandsData::levelStem)
             .add(NeoForgeRegistries.Keys.BIOME_MODIFIERS, ModWorldgen::bootstrapBiomeModifiers)
             .add(ModResearch.CATEGORY_KEY, ModResearchProvider::categories)
             .add(ModResearch.ENTRY_KEY, ModResearchProvider::entries);

@@ -1,0 +1,14 @@
+{
+  "category": "alchemia:eldritch",
+  "column": -3,
+  "hidden": true,
+  "icon": "alchemia:runed_tablet",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.enter_outer.page"
+    }
+  ],
+  "row": 5,
+  "shape": "special"
+}

@@ -144,8 +144,13 @@ public class Taintacle extends Monster implements TaintedMob {
 
     /** A tendril up out of the ground under something that stands on taint. */
     private void tendrilUnder(ServerLevel level, LivingEntity target) {
-        if (!onTaint(level, target.blockPosition())) {
+        boolean outer = level.getBiome(target.blockPosition()).is(me.moonscenty.alchemia.worldgen.ModBiomes.ELDRITCH);
+        if (!outer && !onTaint(level, target.blockPosition())) {
             return;
+        }
+        if (outer && level.isEmptyBlock(target.blockPosition())) {
+            level.setBlock(target.blockPosition(), me.moonscenty.alchemia.block.taint.TaintFibreBlock.fitted(level,
+                    target.blockPosition(), me.moonscenty.alchemia.registry.ModBlocks.TAINT_FIBRE.get().defaultBlockState()), 3);
         }
         TaintacleTiny tendril = new TaintacleTiny(level);
         tendril.moveTo(target.getX() + random.nextFloat() - random.nextFloat(), target.getY(),

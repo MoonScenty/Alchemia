@@ -50,6 +50,7 @@ public class Alchemia {
         ModRecipes.SERIALIZERS.register(modEventBus);
         ModCreativeTabs.CREATIVE_MODE_TABS.register(modEventBus);
         ModFeatures.FEATURES.register(modEventBus);
+        ModFeatures.CHUNK_GENERATORS.register(modEventBus);
         ModFeatures.TRUNK_PLACERS.register(modEventBus);
         ModFeatures.FOLIAGE_PLACERS.register(modEventBus);
         ModFeatures.TREE_DECORATORS.register(modEventBus);

@@ -338,6 +338,11 @@ public class AlchemiaClientSetup {
     }
 
     @SubscribeEvent
+    public static void registerDimensionEffects(net.neoforged.neoforge.client.event.RegisterDimensionSpecialEffectsEvent event) {
+        event.register(me.moonscenty.alchemia.Alchemia.id("outer_lands"), new OuterLandsEffects());
+    }
+
+    @SubscribeEvent
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerBlockEntityRenderer(ModBlockEntities.RESEARCH_TABLE.get(), ResearchTableRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.ELDRITCH_ALTAR.get(), EldritchCapRenderer::new);
