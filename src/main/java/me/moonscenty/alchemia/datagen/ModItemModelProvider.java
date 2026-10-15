@@ -111,6 +111,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.LOOT_BAG_RARE.get());
         basicItem(ModItems.RUNED_TABLET.get());
         basicItem(ModItems.SANITY_SOAP.get());
+        ModItems.PRIMAL_ARROWS.values().forEach(arrow -> basicItem(arrow.get()));
         // the lodestone lights while it is looked through towards a portal
         getBuilder("sinister_stone_on").parent(new ModelFile.UncheckedModelFile(mcLoc("item/generated")))
                 .texture("layer0", modLoc("item/sinister_stone_on"));

@@ -941,6 +941,9 @@ public final class LegacyAssets {
      */
     private static void leftovers(List<LegacyAsset> all) {
         all.add(item("sanity_soap", "sanity_soap", null));
+        for (String element : List.of("air", "fire", "water", "earth", "order", "entropy")) {
+            all.add(item("primal_arrow_" + element, "primal_arrow_" + element, null));
+        }
         all.add(item("sinister_stone", "sinister_stone", null));
         all.add(item("sinister_stone_on", "sinister_stone_active", null));
         all.add(LegacyAsset.of("models/block/candle.json").five("models/block/candle.json").asModel("cutout"));

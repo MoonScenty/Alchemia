@@ -481,6 +481,14 @@ public class ModResearchProvider {
         entry(context, "tallow", ModResearch.ALCHEMY, ModItems.TALLOW, -2, 2,
                 AspectList.of(ModAspects.BEAST, 3).add(ModAspects.FIRE, 1), List.of("crucible"), false,
                 NodeShape.PLAIN, 1, "tallow", "tallow_candle");
+        // arrows with a primal bound into them
+        entry(context, "primal_arrows", ModResearch.ARTIFICE,
+                ModItems.PRIMAL_ARROWS.get(CrystalType.FIRE), -4, 0,
+                AspectList.of(ModAspects.AVERSION, 3).add(ModAspects.AIR, 3).add(ModAspects.FIRE, 3)
+                        .add(ModAspects.WATER, 3).add(ModAspects.EARTH, 3).add(ModAspects.ORDER, 3)
+                        .add(ModAspects.ENTROPY, 3),
+                List.of("arcane_workbench"), false, NodeShape.PLAIN, 2, "primal_arrow_air", "primal_arrow_fire",
+                "primal_arrow_water", "primal_arrow_earth", "primal_arrow_order", "primal_arrow_entropy");
         // a liquid nothing living survives
         entry(context, "liquid_death", ModResearch.ALCHEMY, ModItems.LIQUID_DEATH_BUCKET, -4, 3,
                 AspectList.of(ModAspects.DEATH, 5).add(ModAspects.ENTROPY, 5).add(ModAspects.WATER, 1),

@@ -634,6 +634,21 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         addItem(ModItems.TALLOW, pick("Magic Tallow", "마법 수지"));
         addBlock(ModBlocks.FLESH_BLOCK, pick("Block of Flesh", "살덩이 블록"));
         addItem(ModItems.SANITY_SOAP, pick("Sanitizing Soap", "정신 정화 비누"));
+        java.util.Map<me.moonscenty.alchemia.block.CrystalType, String[]> arrows = java.util.Map.of(
+                me.moonscenty.alchemia.block.CrystalType.AIR, new String[] {"Air Arrow", "공기 화살"},
+                me.moonscenty.alchemia.block.CrystalType.FIRE, new String[] {"Fire Arrow", "불 화살"},
+                me.moonscenty.alchemia.block.CrystalType.WATER, new String[] {"Water Arrow", "물 화살"},
+                me.moonscenty.alchemia.block.CrystalType.EARTH, new String[] {"Earth Arrow", "흙 화살"},
+                me.moonscenty.alchemia.block.CrystalType.ORDER, new String[] {"Order Arrow", "질서 화살"},
+                me.moonscenty.alchemia.block.CrystalType.ENTROPY, new String[] {"Entropy Arrow", "엔트로피 화살"});
+        ModItems.PRIMAL_ARROWS.forEach((type, arrow) -> addItem(arrow, pick(arrows.get(type)[0], arrows.get(type)[1])));
+        add("entity.alchemia.primal_arrow", pick("Primal Arrow", "원시 화살"));
+        for (String kind : new String[] {"air_arrow", "fire_arrow", "order_arrow"}) {
+            add("death.attack.alchemia." + kind, pick("%1$s was shot by a primal arrow",
+                    "%1$s이(가) 원시 화살에 맞았다"));
+            add("death.attack.alchemia." + kind + ".player", pick("%1$s was shot by %2$s",
+                    "%1$s이(가) %2$s에게 원시 화살로 맞았다"));
+        }
         addItem(ModItems.SINISTER_STONE, pick("Sinister Lodestone", "불길한 자석"));
         addBlock(ModBlocks.PATTERN_CRAFTER, pick("Arcane Pattern Crafter", "비전 문양 제작기"));
         add("subtitles.alchemia.key", pick("Dial clicks", "다이얼이 딸깍인다"));
@@ -1295,6 +1310,9 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                 {"warp", "Warp", "뒤틀림",
                  "Look too long into what should not be, and it begins looking back. The damage is not to the world but to the one studying it, and it does not undo itself with rest.",
                  "있어서는 안 될 것을 오래 들여다보면, 그것도 당신을 들여다보기 시작한다. 상하는 것은 세계가 아니라 그것을 연구하는 자이며, 쉰다고 해서 되돌아오지 않는다."},
+                {"primal_arrows", "Primal Arrows", "원시 화살",
+                 "Arrows each bound with one primal, laid eight round a shard. Air arrows hurt as an arrow does but as magic, past any armour. Fire arrows burn and set their targets alight. Water arrows chill the target to the bone and slow it badly. Earth arrows simply hit a great deal harder, and knock back further. Order arrows hit a little less but past armour, and leave the target weak. Entropy arrows hit a little less and wither what they strike. A bow reaches for them before any other arrow. They cannot be picked up again, and Infinity spares one only a time in three.",
+                 "화살마다 원시 하나를 묶은 것으로, 조각 하나에 화살 여덟을 둘러 만든다. 공기 화살은 화살만큼 다치게 하되 마법이라 어떤 갑옷도 막지 못한다. 불 화살은 불로 다치게 하고 맞은 것에 불을 붙인다. 물 화살은 뼛속까지 얼려 크게 느리게 한다. 흙 화살은 그저 훨씬 세게 맞히고 더 멀리 밀쳐 낸다. 질서 화살은 조금 약하지만 갑옷을 뚫고 맞은 것을 나약하게 한다. 엔트로피 화살은 조금 약하지만 맞은 것을 시들게 한다. 활은 다른 화살보다 이것을 먼저 집는다. 다시 주울 수 없고, 무한은 세 번에 한 번만 아껴 준다."},
                 {"liquid_death", "Liquid Death", "액체 죽음",
                  "For external use only. Death, crystal and entropy steeped together in a crucible and caught in a bucket make a liquid so toxic that almost nothing keeps it from dissolving flesh, bone and harder things. Nothing alive, or with any semblance of life, survives it. What essentia a creature held as it dissolved is said to settle out as crystals.",
                  "외용으로만 쓸 것. 죽음·결정·엔트로피를 도가니에서 함께 우려 양동이에 받으면, 살과 뼈와 그보다 단단한 것까지 녹여 버리는 지독한 액체가 된다. 살아 있는 것, 살아 있는 척이라도 하는 것은 아무것도 견디지 못한다. 녹아 버린 것이 지녔던 에센시아는 결정으로 가라앉는다고 한다."},

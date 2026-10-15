@@ -258,6 +258,8 @@ public class ModDataMapProvider extends DataMapProvider {
             item(old, a(ModAspects.EARTH, 1).add(ModAspects.ELDRITCH, 1));
         }
         // a candle is a light and a little of what it was rendered from
+        // an arrow, and the primal in it
+        ModItems.PRIMAL_ARROWS.forEach((type, arrow) -> item(arrow, a(ModAspects.AVERSION, 1).add(type.aspect(), 1)));
         ModBlocks.TALLOW_CANDLES.values().forEach(candle ->
                 item(candle, a(ModAspects.LIGHT, 1).add(ModAspects.LIFE, 1)));
         item(ModBlocks.CRUSTED_STONE, a(ModAspects.EARTH, 1).add(ModAspects.ELDRITCH, 1).add(ModAspects.LIFE, 1));

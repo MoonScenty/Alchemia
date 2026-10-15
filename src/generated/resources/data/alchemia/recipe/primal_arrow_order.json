@@ -1,0 +1,24 @@
+{
+  "type": "alchemia:arcane_shaped",
+  "key": {
+    "A": {
+      "item": "minecraft:arrow"
+    },
+    "S": {
+      "item": "alchemia:order_shard"
+    }
+  },
+  "pattern": [
+    "AAA",
+    "ASA",
+    "AAA"
+  ],
+  "research": "alchemia:primal_arrows",
+  "result": {
+    "count": 8,
+    "id": "alchemia:primal_arrow_order"
+  },
+  "vis": {
+    "alchemia:ordo": 25
+  }
+}

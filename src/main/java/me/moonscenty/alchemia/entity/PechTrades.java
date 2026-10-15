@@ -33,7 +33,7 @@ import net.minecraft.world.level.Level;
  * the pech pays it out in lots of one to five, each lot a thing from its own list of that worth.
  *
  * <p>Each kind of pech keeps its own list, the original's. What this game does not have is left off -- the
- * stalker's primal arrows and bone bow, and enchanted books of the original's own enchantments -- and a lot nothing on
+ * stalker's bone bow, and enchanted books of the original's own enchantments -- and a lot nothing on
  * the list is worth is paid in the nearest worth there is.
  */
 public final class PechTrades {
@@ -152,6 +152,10 @@ public final class PechTrades {
             if (colour != net.minecraft.world.item.DyeColor.BLACK) {
                 lots.add(item(1, me.moonscenty.alchemia.registry.ModBlocks.TALLOW_CANDLES.get(colour).get().asItem()));
             }
+        }
+        // a bundle of eight primal arrows of each kind
+        for (var arrow : ModItems.PRIMAL_ARROWS.values()) {
+            lots.add(new Lot(2, level -> new ItemStack(arrow.get(), 8)));
         }
         lots.add(item(2, Items.GHAST_TEAR));
         lots.add(potion(2, Potions.SWIFTNESS));

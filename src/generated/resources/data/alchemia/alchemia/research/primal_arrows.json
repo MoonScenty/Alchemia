@@ -1,0 +1,49 @@
+{
+  "category": "alchemia:artifice",
+  "column": -4,
+  "complexity": 2,
+  "icon": "alchemia:primal_arrow_fire",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.primal_arrows.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:primal_arrow_air"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:primal_arrow_fire"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:primal_arrow_water"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:primal_arrow_earth"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:primal_arrow_order"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:primal_arrow_entropy"
+    }
+  ],
+  "parents": [
+    "alchemia:arcane_workbench"
+  ],
+  "requirements": {
+    "alchemia:aer": 3,
+    "alchemia:aqua": 3,
+    "alchemia:aversio": 3,
+    "alchemia:ignis": 3,
+    "alchemia:ordo": 3,
+    "alchemia:perditio": 3,
+    "alchemia:terra": 3
+  },
+  "row": 0
+}
