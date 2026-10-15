@@ -81,7 +81,7 @@ public class BannerBlock extends BaseEntityBlock {
         if (player.isShiftKeyDown()) {
             if (!level.isClientSide) {
                 banner.paint(null);
-                level.playSound(null, pos, SoundEvents.WOOL_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
+                level.playSound(null, pos, SoundEvents.WOOL_STEP, SoundSource.BLOCKS, 1.0F, 1.0F);
             }
             return ItemInteractionResult.sidedSuccess(level.isClientSide);
         }
@@ -91,7 +91,7 @@ public class BannerBlock extends BaseEntityBlock {
         if (!level.isClientSide) {
             banner.paint(PhialItem.inside(held).get());
             held.consume(1, player);
-            level.playSound(null, pos, SoundEvents.WOOL_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
+            level.playSound(null, pos, SoundEvents.WOOL_STEP, SoundSource.BLOCKS, 1.0F, 1.0F);
         }
         return ItemInteractionResult.sidedSuccess(level.isClientSide);
     }

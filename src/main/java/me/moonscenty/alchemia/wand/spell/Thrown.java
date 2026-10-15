@@ -1,8 +1,10 @@
 package me.moonscenty.alchemia.wand.spell;
 
+import me.moonscenty.alchemia.registry.ModSounds;
 import me.moonscenty.alchemia.wand.Casting;
 import me.moonscenty.alchemia.wand.FocusUpgrade;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
@@ -70,7 +72,8 @@ public final class Thrown {
         if (Casting.has(wand, FocusUpgrade.FIREBALL)) {
             FireOrb ball = new FireOrb(level, caster)
                     .bursting(1.0F + potency * FireOrb.HARDER, alchemists > 0);
-            return let(level, caster, ball, 0.6F);
+            return let(level, caster, ball, SoundEvents.BLAZE_SHOOT, 2.0F,
+                    1.0F + (level.random.nextFloat() - level.random.nextFloat()) * 0.2F);
         }
 
         boolean beam = Casting.has(wand, FocusUpgrade.FIREBEAM);
@@ -89,7 +92,7 @@ public final class Thrown {
         }
         if (heldFor % ROARS_EVERY == 0) {
             level.playSound(null, caster.getX(), caster.getY(), caster.getZ(),
-                    SoundEvents.FIRECHARGE_USE, SoundSource.PLAYERS, 0.33F, 1.8F);
+                    ModSounds.FIRE_LOOP.get(), SoundSource.PLAYERS, 0.33F, 2.0F);
         }
         return true;
     }
@@ -112,15 +115,17 @@ public final class Thrown {
                 level.addFreshEntity(splinter);
             }
             level.playSound(null, caster.getX(), caster.getY(), caster.getZ(),
-                    SoundEvents.GLASS_BREAK, SoundSource.PLAYERS, 0.4F, 1.6F);
+                    ModSounds.ICE.get(), SoundSource.PLAYERS, 0.4F, 1.0F + level.random.nextFloat() * 0.1F);
             return true;
         }
         if (Casting.has(wand, FocusUpgrade.ICE_BOULDER)) {
             return let(level, caster, new FrostShard(level, caster)
-                    .biting(BOULDER + potency * SHARPENS_BOULDER, chills).bouncing(WALLS), 0.9F);
+                    .biting(BOULDER + potency * SHARPENS_BOULDER, chills).bouncing(WALLS),
+                    ModSounds.ICE.get(), 0.4F, 1.0F + level.random.nextFloat() * 0.1F);
         }
         return let(level, caster, new FrostShard(level, caster)
-                .biting(SPIKE + potency * SHARPENS_SPIKE, chills), 1.4F);
+                .biting(SPIKE + potency * SHARPENS_SPIKE, chills),
+                ModSounds.ICE.get(), 0.4F, 1.0F + level.random.nextFloat() * 0.1F);
     }
 
     /**
@@ -137,7 +142,7 @@ public final class Thrown {
         int potency = Casting.worked(wand, FocusUpgrade.POTENCY);
         VisShard shard = new VisShard(level, caster, mark)
                 .chasing(SLIVER + potency * SHARPENS_SLIVER, Casting.has(wand, FocusUpgrade.PERSISTENT));
-        return let(level, caster, shard, 1.7F);
+        return let(level, caster, shard, ModSounds.SCAN.get(), 0.3F, 1.1F + level.random.nextFloat() * 0.1F);
     }
 
     /** All six primals wound into a ball, and a hole where it lands. */
@@ -147,7 +152,7 @@ public final class Thrown {
         if (Casting.has(wand, FocusUpgrade.SEEKER)) {
             orb.seeking();
         }
-        return let(level, caster, orb, 0.8F);
+        return let(level, caster, orb, ModSounds.ICE.get(), 0.3F, 0.8F + level.random.nextFloat() * 0.1F);
     }
 
     /** A pech's curse, thrown at nothing in particular. */
@@ -156,7 +161,7 @@ public final class Thrown {
                 Casting.worked(wand, FocusUpgrade.POTENCY),
                 Casting.worked(wand, FocusUpgrade.EXTEND),
                 Casting.has(wand, FocusUpgrade.NIGHTSHADE));
-        return let(level, caster, blast, 1.2F);
+        return let(level, caster, blast, ModSounds.ICE.get(), 0.4F, 1.0F + level.random.nextFloat() * 0.1F);
     }
 
     /** A hook, thrown at a wall. */
@@ -165,15 +170,16 @@ public final class Thrown {
         Grapple hook = new Grapple(level, caster).hauling(
                 Casting.worked(wand, FocusUpgrade.POTENCY),
                 Casting.has(wand, FocusUpgrade.STICKY));
-        return let(level, caster, hook, 0.9F);
+        return let(level, caster, hook, ModSounds.ICE.get(), 0.3F, 0.8F + level.random.nextFloat() * 0.1F);
     }
 
-    /** Sends it off along the line of sight and says that something happened, because it did. */
-    private static boolean let(ServerLevel level, LivingEntity caster, ThrowableProjectile thrown, float pitch) {
+    /** Sends it off along the line of sight and says that something happened, in the sound its focus made. */
+    private static boolean let(ServerLevel level, LivingEntity caster, ThrowableProjectile thrown, SoundEvent sound,
+            float volume, float pitch) {
         thrown.shootFromRotation(caster, caster.getXRot(), caster.getYRot(), 0.0F, FLIES, TRUE);
         level.addFreshEntity(thrown);
         level.playSound(null, caster.getX(), caster.getY(), caster.getZ(),
-                SoundEvents.SNOWBALL_THROW, SoundSource.PLAYERS, 0.4F, pitch);
+                sound, SoundSource.PLAYERS, volume, pitch);
         return true;
     }
 }

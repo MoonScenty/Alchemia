@@ -1,10 +1,12 @@
 package me.moonscenty.alchemia.wand.spell;
 
 import me.moonscenty.alchemia.registry.ModEntities;
+import me.moonscenty.alchemia.registry.ModSounds;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -107,6 +109,10 @@ public class VisShard extends Bolt {
         level.sendParticles(ParticleTypes.END_ROD, getX(), getY(), getZ(), 8, 0.1, 0.1, 0.1, 0.05);
         if (where instanceof EntityHitResult struck) {
             struck.getEntity().hurt(damageSources().indirectMagic(this, getOwner()), hurts);
+            if (struck.getEntity() instanceof LivingEntity) {
+                level.playSound(null, getX(), getY(), getZ(), ModSounds.ZAP.get(), SoundSource.PLAYERS, 1.0F,
+                        1.0F + (random.nextFloat() - random.nextFloat()) * 0.2F);
+            }
         }
     }
 

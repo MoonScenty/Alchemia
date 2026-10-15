@@ -4,6 +4,7 @@ import java.util.List;
 
 import me.moonscenty.alchemia.player.WarpHandler;
 import me.moonscenty.alchemia.player.WarpData;
+import me.moonscenty.alchemia.registry.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -68,7 +69,9 @@ public final class InfusionMishaps {
         ItemEntity loose = new ItemEntity(level, at.getX() + 0.5, at.getY() + 1.2, at.getZ() + 0.5, thrown);
         loose.setDeltaMovement((level.random.nextDouble() - 0.5) * 0.6, 0.4, (level.random.nextDouble() - 0.5) * 0.6);
         level.addFreshEntity(loose);
-        level.playSound(null, at, SoundEvents.ITEM_FRAME_REMOVE_ITEM, SoundSource.BLOCKS, 1.0F, 0.6F);
+        level.playSound(null, at, SoundEvents.GENERIC_SWIM, SoundSource.BLOCKS, 0.3F, 1.0F);
+        level.playSound(null, at, ModSounds.POOF.get(), SoundSource.BLOCKS, 0.4F,
+                1.0F + (float) level.random.nextGaussian() * 0.05F);
     }
 
     /** Lightning, without the fire. A works that burns its own roof down teaches nothing. */
@@ -77,9 +80,12 @@ public final class InfusionMishaps {
         if (bolt == null) {
             return;
         }
-        bolt.moveTo(Vec3.atBottomCenterOf(nearby(level, pos)));
+        BlockPos target = nearby(level, pos);
+        bolt.moveTo(Vec3.atBottomCenterOf(target));
         bolt.setVisualOnly(true);
         level.addFreshEntity(bolt);
+        level.playSound(null, target, SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, 1.0F,
+                2.0F + level.random.nextFloat() * 0.4F);
         harm(level, pos);
     }
 

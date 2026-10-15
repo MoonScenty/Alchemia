@@ -4,10 +4,16 @@ import java.util.Optional;
 
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.player.effect.ModEffects;
+import me.moonscenty.alchemia.registry.ModSounds;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffect;
@@ -57,6 +63,8 @@ public class WarpHandler {
         }
 
         player.setData(ModAttachments.WARP, afterEvent(warp, gear));
+        // the heart pounds before anything else happens, and only the one it is happening to hears it
+        hear(player, ModSounds.HEARTBEAT, player.getX(), player.getY(), player.getZ(), 1.0F, 1.0F);
         int severity = severityOf(warp, gear);
         inflict(player, severity, random.nextInt(Math.max(1, severity)));
         epiphany(player, warp.permanent() + warp.sticky());
@@ -130,6 +138,17 @@ public class WarpHandler {
             return;
         }
         player.setData(ModAttachments.WARP, WarpData.of(player).add(kind, amount));
+        // warp that settles in is heard settling
+        if (amount > 0 && kind != WarpData.Kind.TEMPORARY && player instanceof ServerPlayer server) {
+            hear(server, ModSounds.WHISPERS, player.getX(), player.getY(), player.getZ(), 0.5F, 1.0F);
+        }
+    }
+
+    /** A sound only this player hears, as the original's warp sounds were played on the client alone. */
+    private static void hear(ServerPlayer player, Holder<SoundEvent> sound, double x, double y, double z,
+            float volume, float pitch) {
+        player.connection.send(new ClientboundSoundPacket(sound, SoundSource.AMBIENT, x, y, z, volume, pitch,
+                player.getRandom().nextLong()));
     }
 
     /**
@@ -231,6 +250,17 @@ public class WarpHandler {
         outcome.effect().ifPresent(effect ->
                 player.addEffect(new MobEffectInstance(effect, outcome.duration(), outcome.amplifier(), true, true)));
         whisper(player, outcome.message());
+        // the two mildest are only noises: a creeper hissing at your back, or something going off out of sight
+        RandomSource random = player.getRandom();
+        if (roll <= 4) {
+            hear(player, BuiltInRegistries.SOUND_EVENT.wrapAsHolder(SoundEvents.CREEPER_PRIMED),
+                    player.getX(), player.getY(), player.getZ(), 1.0F, 0.5F);
+        } else if (roll <= 8) {
+            hear(player, SoundEvents.GENERIC_EXPLODE, player.getX() + (random.nextFloat() - 0.5F) * 20.0F,
+                    player.getY() + (random.nextFloat() - 0.5F) * 20.0F,
+                    player.getZ() + (random.nextFloat() - 0.5F) * 20.0F, 4.0F,
+                    (1.0F + (random.nextFloat() - random.nextFloat()) * 0.2F) * 0.7F);
+        }
         switch (outcome.summons()) {
             case GUARDIAN -> me.moonscenty.alchemia.entity.WarpSummons.mist(player, 1);
             case GUARDIANS -> me.moonscenty.alchemia.entity.WarpSummons.mist(player, warp / 30);

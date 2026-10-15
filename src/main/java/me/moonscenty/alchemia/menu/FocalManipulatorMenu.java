@@ -76,7 +76,16 @@ public class FocalManipulatorMenu extends AbstractContainerMenu {
         if (bench == null || which < 0 || which >= upgrades.length) {
             return false;
         }
-        return bench.start(upgrades[which], player);
+        if (bench.start(upgrades[which], player)) {
+            return true;
+        }
+        // refused: not enough levels, or nothing on the bench that could take it
+        if (!player.level().isClientSide) {
+            player.level().playSound(null, bench.getBlockPos(),
+                    me.moonscenty.alchemia.registry.ModSounds.CRAFT_FAIL.get(),
+                    net.minecraft.sounds.SoundSource.BLOCKS, 0.33F, 1.0F);
+        }
+        return false;
     }
 
     @Override

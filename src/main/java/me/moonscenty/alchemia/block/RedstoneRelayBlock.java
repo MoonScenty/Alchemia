@@ -2,10 +2,10 @@ package me.moonscenty.alchemia.block;
 
 import com.mojang.serialization.MapCodec;
 
+import me.moonscenty.alchemia.registry.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -117,8 +117,7 @@ public class RedstoneRelayBlock extends DiodeBlock {
             }
             player.displayClientMessage(Component.translatable("block.alchemia.redstone_relay." + toggle.getName(),
                     stepped.getValue(toggle)), true);
-            level.playSound(null, pos, SoundEvents.COMPARATOR_CLICK, SoundSource.BLOCKS, 0.3F,
-                    0.5F + stepped.getValue(toggle) / 30.0F);
+            level.playSound(null, pos, ModSounds.KEY.get(), SoundSource.BLOCKS, 0.5F, 1.0F);
         }
         return InteractionResult.sidedSuccess(level.isClientSide);
     }

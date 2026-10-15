@@ -3,11 +3,11 @@ package me.moonscenty.alchemia.wand.spell;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.moonscenty.alchemia.registry.ModSounds;
 import me.moonscenty.alchemia.wand.Casting;
 import me.moonscenty.alchemia.wand.FocusUpgrade;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -63,8 +63,9 @@ public final class Shock {
         hit.hurt(level.damageSources().indirectMagic(caster, caster),
                 (chained > 0 ? HURTS_CHAINED : HURTS) + potency);
         sparks(level, hit);
-        level.playSound(null, hit.getX(), hit.getY(), hit.getZ(),
-                SoundEvents.LIGHTNING_BOLT_IMPACT, SoundSource.PLAYERS, 0.25F, 1.6F);
+        // heard at the wand that let it go, as the original's was
+        level.playSound(null, caster.getX(), caster.getY(), caster.getZ(),
+                ModSounds.SHOCK.get(), SoundSource.PLAYERS, 0.25F, 1.0F);
         if (chained > 0) {
             jumpOn(level, caster, hit, (chained + wider) * JUMPS_A_RANK, HURTS + potency);
         }
@@ -128,7 +129,8 @@ public final class Shock {
         orb.shootFromRotation(caster, caster.getXRot(), caster.getYRot(), 0.0F, 1.2F, 0.0F);
         level.addFreshEntity(orb);
         level.playSound(null, caster.getX(), caster.getY(), caster.getZ(),
-                SoundEvents.LIGHTNING_BOLT_THUNDER, SoundSource.PLAYERS, 0.33F, 1.6F);
+                ModSounds.ZAP.get(), SoundSource.PLAYERS, 1.0F,
+                1.0F + (level.random.nextFloat() - level.random.nextFloat()) * 0.2F);
         return true;
     }
 

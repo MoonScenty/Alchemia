@@ -7,13 +7,13 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.block.entity.SpaBlockEntity;
 import me.moonscenty.alchemia.menu.SpaMenu;
+import me.moonscenty.alchemia.registry.ModSounds;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.material.Fluid;
@@ -102,7 +102,7 @@ public class SpaScreen extends AbstractContainerScreen<SpaMenu> {
         if (over(mouseX, mouseY, SWITCH_X, SWITCH_Y, SWITCH_SIZE, SWITCH_SIZE) && minecraft != null
                 && minecraft.gameMode != null) {
             minecraft.gameMode.handleInventoryButtonClick(menu.containerId, SpaMenu.TOGGLE_MIXING);
-            minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+            minecraft.getSoundManager().play(SimpleSoundInstance.forUI(ModSounds.CAMERA_CLACK.get(), 1.0F, 0.4F));
             return true;
         }
         return super.mouseClicked(mouseX, mouseY, button);

@@ -12,9 +12,11 @@ import me.moonscenty.alchemia.aspect.Aspect;
 import me.moonscenty.alchemia.block.TubeBlock;
 import me.moonscenty.alchemia.essentia.EssentiaHolder;
 import me.moonscenty.alchemia.registry.ModBlockEntities;
+import me.moonscenty.alchemia.registry.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -37,6 +39,8 @@ public class TubeBlockEntity extends BlockEntity {
     private static final int PULLS_EVERY = 10;
     /** How far along the pipe a pull will look. A run longer than this simply needs a second pump of its own. */
     private static final int REACH = 96;
+    /** One point moved in this many makes the pipe creak. The original's odds. */
+    private static final int CREAKS_ONE_IN = 100;
 
     private int counter;
     /** How many turns this tube has taken. A run held up along the way only moves on some of them. */
@@ -106,6 +110,11 @@ public class TubeBlockEntity extends BlockEntity {
                     continue;
                 }
                 if (sink.accept(aspect)) {
+                    // and now and then the pipe creaks with it, as the original's did
+                    if (level.random.nextInt(CREAKS_ONE_IN) == 0) {
+                        level.playSound(null, pos, ModSounds.CREAK.get(), SoundSource.BLOCKS, 1.0F,
+                                1.3F + level.random.nextFloat() * 0.2F);
+                    }
                     return true;
                 }
                 // the sink changed its mind between being asked and being handed it; put it back

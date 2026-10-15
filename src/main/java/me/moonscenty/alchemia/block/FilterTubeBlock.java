@@ -9,11 +9,11 @@ import me.moonscenty.alchemia.aspect.Aspect;
 import me.moonscenty.alchemia.block.entity.FilterTubeBlockEntity;
 import me.moonscenty.alchemia.item.PhialItem;
 import me.moonscenty.alchemia.registry.ModItems;
+import me.moonscenty.alchemia.registry.ModSounds;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -67,7 +67,7 @@ public class FilterTubeBlock extends TubeBlock {
         }
         if (!level.isClientSide) {
             filter.only(aspect.get());
-            level.playSound(null, pos, SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.BLOCKS, 0.5F, 1.2F);
+            level.playSound(null, pos, ModSounds.PAGE.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
             say(player, filter);
         }
         return ItemInteractionResult.sidedSuccess(level.isClientSide);
@@ -82,6 +82,9 @@ public class FilterTubeBlock extends TubeBlock {
         }
         if (!level.isClientSide) {
             if (player.isSecondaryUseActive()) {
+                if (filter.only().isPresent()) {
+                    level.playSound(null, pos, ModSounds.PAGE.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
+                }
                 filter.only(null);
             }
             say(player, filter);

@@ -332,7 +332,7 @@ public class Pech extends Monster implements RangedAttackMob, OwnAspects {
             double dz = target.getZ() - getZ();
             double across = Math.sqrt(dx * dx + dz * dz);
             arrow.shoot(dx, dy + across * 0.2, dz, 1.6F, 14 - level().getDifficulty().getId() * 4);
-            playSound(SoundEvents.SKELETON_SHOOT, 1.0F, 1.0F / (getRandom().nextFloat() * 0.4F + 0.8F));
+            playSound(SoundEvents.ARROW_SHOOT, 1.0F, 1.0F / (getRandom().nextFloat() * 0.4F + 0.8F));
             level().addFreshEntity(arrow);
         } else if (getKind() == MAGE) {
             PechBlast blast = new PechBlast(level(), this).cursing(1, 0, random.nextFloat() < 0.1F);

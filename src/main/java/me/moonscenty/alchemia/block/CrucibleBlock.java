@@ -123,7 +123,8 @@ public class CrucibleBlock extends BaseEntityBlock {
                 if (!player.getAbilities().instabuild) {
                     player.setItemInHand(hand, new ItemStack(Items.BUCKET));
                 }
-                level.playSound(null, pos, SoundEvents.BUCKET_EMPTY, SoundSource.BLOCKS, 1.0F, 1.0F);
+                level.playSound(null, pos, SoundEvents.GENERIC_SWIM, SoundSource.BLOCKS, 0.33F,
+                        1.0F + (level.random.nextFloat() - level.random.nextFloat()) * 0.3F);
             }
             return ItemInteractionResult.sidedSuccess(level.isClientSide);
         }

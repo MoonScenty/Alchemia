@@ -1,10 +1,10 @@
 package me.moonscenty.alchemia.wand.spell;
 
 import me.moonscenty.alchemia.entity.FireBat;
+import me.moonscenty.alchemia.registry.ModSounds;
 import me.moonscenty.alchemia.wand.Casting;
 import me.moonscenty.alchemia.wand.FocusUpgrade;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -58,12 +58,12 @@ public final class Hellbat {
                 Casting.has(wand, FocusUpgrade.BAT_BOMBS), Casting.has(wand, FocusUpgrade.DEVIL_BATS),
                 Casting.has(wand, FocusUpgrade.VAMPIRE_BATS));
         if (!level.addFreshEntity(bat)) {
-            level.playSound(null, caster.getX(), caster.getY(), caster.getZ(), SoundEvents.FIRE_EXTINGUISH,
+            level.playSound(null, caster.getX(), caster.getY(), caster.getZ(), ModSounds.WAND_FAIL.get(),
                     SoundSource.PLAYERS, 0.1F, 0.8F + level.random.nextFloat() * 0.1F);
             return false;
         }
         level.levelEvent(LevelEvent.PARTICLES_MOBBLOCK_SPAWN, bat.blockPosition(), 0);
-        level.playSound(null, bat.getX(), bat.getY(), bat.getZ(), SoundEvents.BLAZE_SHOOT, SoundSource.PLAYERS,
+        level.playSound(null, bat.getX(), bat.getY(), bat.getZ(), ModSounds.ICE.get(), SoundSource.PLAYERS,
                 0.2F, 0.95F + level.random.nextFloat() * 0.1F);
         return true;
     }

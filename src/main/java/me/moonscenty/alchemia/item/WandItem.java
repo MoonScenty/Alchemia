@@ -12,6 +12,7 @@ import me.moonscenty.alchemia.registry.ModAspects;
 import me.moonscenty.alchemia.registry.ModBlocks;
 import me.moonscenty.alchemia.registry.ModDataComponents;
 import me.moonscenty.alchemia.registry.ModItems;
+import me.moonscenty.alchemia.registry.ModSounds;
 import me.moonscenty.alchemia.registry.ModWandParts;
 import me.moonscenty.alchemia.wand.WandCap;
 import me.moonscenty.alchemia.wand.WandRod;
@@ -20,7 +21,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import me.moonscenty.alchemia.wand.Casting;
 import me.moonscenty.alchemia.wand.Focus;
@@ -361,7 +361,9 @@ public class WandItem extends Item implements VisHolder {
             if (!level.isClientSide) {
                 level.removeBlock(pos, false);
                 drop(level, pos, new ItemStack(ModItems.ALCHEMONOMICON.get()));
-                level.playSound(null, pos, SoundEvents.ILLUSIONER_CAST_SPELL, SoundSource.BLOCKS, 0.7F, 1.4F);
+                level.playSound(null, pos, ModSounds.WAND.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
+                level.playSound(null, pos, ModSounds.POOF.get(), SoundSource.BLOCKS, 0.4F,
+                        1.0F + (float) level.random.nextGaussian() * 0.05F);
             }
             return InteractionResult.sidedSuccess(level.isClientSide);
         }
@@ -370,7 +372,7 @@ public class WandItem extends Item implements VisHolder {
         if (level.getBlockEntity(pos) instanceof me.moonscenty.alchemia.block.entity.ArcaneBoreBlockEntity bore) {
             if (!level.isClientSide) {
                 bore.aim(context.getClickedFace());
-                level.playSound(null, pos, SoundEvents.LEVER_CLICK, SoundSource.BLOCKS, 0.5F,
+                level.playSound(null, pos, ModSounds.TOOL.get(), SoundSource.BLOCKS, 0.5F,
                         0.9F + level.random.nextFloat() * 0.2F);
             }
             return InteractionResult.sidedSuccess(level.isClientSide);
@@ -380,7 +382,7 @@ public class WandItem extends Item implements VisHolder {
             if (!level.isClientSide) {
                 level.setBlockAndUpdate(pos, level.getBlockState(pos).setValue(
                         me.moonscenty.alchemia.block.ArcaneBoreBaseBlock.FACING, context.getClickedFace()));
-                level.playSound(null, pos, SoundEvents.LEVER_CLICK, SoundSource.BLOCKS, 0.3F,
+                level.playSound(null, pos, ModSounds.TOOL.get(), SoundSource.BLOCKS, 0.3F,
                         1.9F + level.random.nextFloat() * 0.2F);
             }
             return InteractionResult.sidedSuccess(level.isClientSide);
@@ -421,7 +423,9 @@ public class WandItem extends Item implements VisHolder {
         if (level.getBlockState(pos).getBlock() instanceof AbstractCauldronBlock) {
             if (!level.isClientSide) {
                 level.setBlockAndUpdate(pos, ModBlocks.CRUCIBLE.get().defaultBlockState());
-                level.playSound(null, pos, SoundEvents.ANVIL_USE, SoundSource.BLOCKS, 0.5F, 1.6F);
+                level.playSound(null, pos, ModSounds.WAND.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
+                level.playSound(null, pos, ModSounds.POOF.get(), SoundSource.BLOCKS, 0.4F,
+                        1.0F + (float) level.random.nextGaussian() * 0.05F);
             }
             return InteractionResult.sidedSuccess(level.isClientSide);
         }

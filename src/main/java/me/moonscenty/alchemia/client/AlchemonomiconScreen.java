@@ -503,6 +503,8 @@ public class AlchemonomiconScreen extends Screen {
                 openCategory = categories.get(index);
                 viewX = 0;
                 viewY = 0;
+                minecraft.getSoundManager().play(net.minecraft.client.resources.sounds.SimpleSoundInstance
+                        .forUI(me.moonscenty.alchemia.registry.ModSounds.CAMERA_CLACK.get(), 1.0F, 0.4F));
                 return true;
             }
         }

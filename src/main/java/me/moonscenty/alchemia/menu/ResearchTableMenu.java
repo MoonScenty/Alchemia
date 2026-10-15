@@ -9,10 +9,12 @@ import me.moonscenty.alchemia.registry.ModAspects;
 import me.moonscenty.alchemia.registry.ModBlocks;
 import me.moonscenty.alchemia.registry.ModDataComponents;
 import me.moonscenty.alchemia.registry.ModMenus;
+import me.moonscenty.alchemia.registry.ModSounds;
 import me.moonscenty.alchemia.research.HexGrid;
 import me.moonscenty.alchemia.research.NoteSolving;
 import me.moonscenty.alchemia.research.ResearchNote;
 import net.minecraft.core.Holder;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
@@ -110,6 +112,9 @@ public class ResearchTableMenu extends AbstractContainerMenu {
         ResearchNote written = NoteSolving.place(note, at, aspect);
         if (NoteSolving.isSolved(written)) {
             written = NoteSolving.settle(written);
+            // the table's own sound of a thing worked out, heard by everyone standing round it
+            access.execute((level, pos) -> level.playSound(null, pos, ModSounds.LEARN.get(), SoundSource.BLOCKS,
+                    1.0F, 1.0F));
         }
         write(written);
     }

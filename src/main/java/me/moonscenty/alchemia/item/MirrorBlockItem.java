@@ -5,11 +5,11 @@ import java.util.List;
 import me.moonscenty.alchemia.block.MirrorBlock;
 import me.moonscenty.alchemia.block.entity.MirrorBlockEntity;
 import me.moonscenty.alchemia.registry.ModDataComponents;
+import me.moonscenty.alchemia.registry.ModSounds;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -53,7 +53,7 @@ public class MirrorBlockItem extends BlockItem {
         }
         ItemStack linked = context.getItemInHand().copyWithCount(1);
         linked.set(ModDataComponents.MIRROR_LINK.get(), GlobalPos.of(level.dimension(), pos));
-        level.playSound(null, pos, SoundEvents.GLASS_PLACE, SoundSource.BLOCKS, 1.0F, 2.0F);
+        level.playSound(null, pos, ModSounds.JAR.get(), SoundSource.BLOCKS, 1.0F, 2.0F);
         if (!player.getInventory().add(linked)) {
             player.drop(linked, false);
         }

@@ -7,11 +7,11 @@ import java.util.Optional;
 
 import me.moonscenty.alchemia.item.FocusPouchItem;
 import me.moonscenty.alchemia.item.WandItem;
+import me.moonscenty.alchemia.registry.ModSounds;
 import me.moonscenty.alchemia.registry.ModTags;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -230,9 +230,8 @@ public final class Foci {
         player.displayClientMessage(Component.translatable(
                 fitted ? "item.alchemia.wand.focus_fitted" : "item.alchemia.wand.focus_removed",
                 focus.getHoverName()), true);
-        player.level().playSound(null, player.blockPosition(),
-                fitted ? SoundEvents.ITEM_FRAME_ADD_ITEM : SoundEvents.ITEM_FRAME_REMOVE_ITEM,
-                SoundSource.PLAYERS, 0.4F, fitted ? 1.4F : 1.1F);
+        player.level().playSound(null, player.blockPosition(), ModSounds.CAMERA_TICKS.get(),
+                SoundSource.PLAYERS, 0.3F, fitted ? 1.0F : 0.9F);
     }
 
     /**

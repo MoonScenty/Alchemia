@@ -133,7 +133,7 @@ public class LevitatorBlock extends BaseEntityBlock {
             levitator.stepRange();
             player.displayClientMessage(net.minecraft.network.chat.Component.translatable(
                     "block.alchemia.levitator.range", levitator.range(), levitator.cost()), true);
-            level.playSound(null, pos, net.minecraft.sounds.SoundEvents.WOODEN_BUTTON_CLICK_ON,
+            level.playSound(null, pos, me.moonscenty.alchemia.registry.ModSounds.KEY.get(),
                     net.minecraft.sounds.SoundSource.BLOCKS, 0.5F, 1.0F);
         }
         return InteractionResult.sidedSuccess(level.isClientSide);

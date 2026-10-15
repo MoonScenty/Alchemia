@@ -5,6 +5,7 @@ import java.util.List;
 
 import me.moonscenty.alchemia.registry.ModBlockEntities;
 import me.moonscenty.alchemia.registry.ModDataComponents;
+import me.moonscenty.alchemia.registry.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentMap;
@@ -37,6 +38,9 @@ public class BrainJarBlockEntity extends BlockEntity {
     private static final double REACHES = 6.0;
     private static final int GIVES_UP_TO = 64;
     private static final int WAITS = 40;
+    /** After a sigh, it is quiet for this long and then anything up to this much longer, in ticks. The original's. */
+    private static final int SIGHS_AFTER = 100;
+    private static final int SIGHS_WITHIN = 500;
 
     private int xp;
     private int waiting;
@@ -45,6 +49,8 @@ public class BrainJarBlockEntity extends BlockEntity {
     private float turned;
     private float turnedBefore;
     private float looking;
+    /** When it may next sigh, by the world clock, client side only. */
+    private long nextSigh;
 
     public BrainJarBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.BRAIN_JAR.get(), pos, state);
@@ -86,6 +92,13 @@ public class BrainJarBlockEntity extends BlockEntity {
                 jar.looking += 0.01F;
             }
             jar.turned += Mth.wrapDegrees((jar.looking - jar.turned) * Mth.RAD_TO_DEG) * Mth.DEG_TO_RAD * 0.04F;
+            // it sighs at whoever comes close, and then not again for a good while
+            if (level.getGameTime() >= jar.nextSigh
+                    && level.getNearestPlayer(middle.x, middle.y, middle.z, REACHES, false) != null) {
+                level.playLocalSound(middle.x, middle.y, middle.z, ModSounds.BRAIN.get(), SoundSource.BLOCKS, 0.15F,
+                        0.8F + level.random.nextFloat() * 0.4F, false);
+                jar.nextSigh = level.getGameTime() + SIGHS_AFTER + level.random.nextInt(SIGHS_WITHIN);
+            }
         }
         if (jar.waiting > 0) {
             jar.waiting--;

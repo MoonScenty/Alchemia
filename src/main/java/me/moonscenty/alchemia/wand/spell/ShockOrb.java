@@ -1,11 +1,11 @@
 package me.moonscenty.alchemia.wand.spell;
 
 import me.moonscenty.alchemia.registry.ModEntities;
+import me.moonscenty.alchemia.registry.ModSounds;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -77,8 +77,8 @@ public class ShockOrb extends Bolt {
         }
         level.sendParticles(ParticleTypes.ELECTRIC_SPARK, getX(), getY(), getZ(),
                 SPARKS, reaches / 2.0, 0.5, reaches / 2.0, 0.2);
-        level.playSound(null, getX(), getY(), getZ(), SoundEvents.LIGHTNING_BOLT_IMPACT,
-                SoundSource.PLAYERS, 0.8F, 1.2F);
+        level.playSound(null, getX(), getY(), getZ(), ModSounds.SHOCK.get(),
+                SoundSource.PLAYERS, 1.0F, 1.0F + (random.nextFloat() - random.nextFloat()) * 0.2F);
     }
 
     @Override

@@ -122,7 +122,8 @@ public class FrostShard extends Bolt {
                 face.getStepY() != 0 ? -going.y : going.y,
                 face.getStepZ() != 0 ? -going.z : going.z).scale(KEEPS));
         setPos(position().add(getDeltaMovement().normalize().scale(0.05)));
-        playSound(SoundEvents.GLASS_STEP, 0.4F, 1.6F);
+        playSound(level().getBlockState(off.getBlockPos()).getSoundType().getBreakSound(), 0.3F,
+                1.2F / (random.nextFloat() * 0.2F + 0.9F));
     }
 
     /** What is left of it: a shower of ice and the sound of it going. */
@@ -130,6 +131,7 @@ public class FrostShard extends Bolt {
     protected void land(ServerLevel level, HitResult where) {
         level.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, Blocks.ICE.defaultBlockState()),
                 getX(), getY(), getZ(), 12, 0.2, 0.2, 0.2, 0.15);
-        level.playSound(null, getX(), getY(), getZ(), SoundEvents.GLASS_BREAK, SoundSource.PLAYERS, 0.5F, 1.4F);
+        level.playSound(null, getX(), getY(), getZ(), SoundEvents.GLASS_BREAK, SoundSource.PLAYERS, 0.3F,
+                1.2F / (random.nextFloat() * 0.2F + 0.9F));
     }
 }

@@ -355,13 +355,22 @@ public class ResearchPageScreen extends Screen {
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (spread > 0 && overTurn(mouseX, mouseY, false)) {
             spread -= 2;
+            turned();
             return true;
         }
         if (spread + 2 < pages.size() && overTurn(mouseX, mouseY, true)) {
             spread += 2;
+            turned();
             return true;
         }
         return super.mouseClicked(mouseX, mouseY, button);
+    }
+
+    /** The original's rustle of a page turning. */
+    private void turned() {
+        if (minecraft.player != null) {
+            minecraft.player.playSound(me.moonscenty.alchemia.registry.ModSounds.PAGE.get(), 0.66F, 1.0F);
+        }
     }
 
     /** Closing goes back to the tree rather than out of the book, which keeps the branch and the panning. */

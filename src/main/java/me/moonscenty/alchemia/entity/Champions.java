@@ -5,6 +5,7 @@ import me.moonscenty.alchemia.AlchemiaConfig;
 import me.moonscenty.alchemia.player.ModAttachments;
 import me.moonscenty.alchemia.player.WarpData;
 import me.moonscenty.alchemia.player.WarpHandler;
+import me.moonscenty.alchemia.registry.ModSounds;
 import me.moonscenty.alchemia.registry.ModTags;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
@@ -212,8 +213,9 @@ public final class Champions {
         ChampionModifier defending = hurt instanceof Monster ? modifier(hurt) : null;
         if (defending != null) {
             if (defending == ChampionModifier.WARDED && hurt.getAbsorptionAmount() > 0.0F) {
-                hurt.level().playSound(null, hurt.getX(), hurt.getY(), hurt.getZ(), SoundEvents.SHIELD_BLOCK,
-                        SoundSource.HOSTILE, 0.66F, 1.1F + hurt.getRandom().nextFloat() * 0.1F);
+                hurt.level().playSound(null, hurt.getX(), hurt.getY(), hurt.getZ(),
+                        ModSounds.RUNIC_SHIELD_EFFECT.get(), SoundSource.HOSTILE, 0.66F,
+                        1.1F + hurt.getRandom().nextFloat() * 0.1F);
             } else if (defending.when() == ChampionModifier.When.HURT
                     && source.getEntity() instanceof LivingEntity attacker) {
                 event.setAmount(defend(defending, hurt, attacker, source, event.getAmount()));
