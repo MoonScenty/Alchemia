@@ -211,6 +211,10 @@ public class EldritchWarden extends ThaumcraftBoss implements RangedAttackMob, E
                 if (level().isEmptyBlock(at) && level().getBlockState(at.below()).isRedstoneConductor(level(), at.below())) {
                     level().setBlock(at, ModBlocks.SAPPING.get().defaultBlockState(), Block.UPDATE_ALL);
                     level().scheduleTick(at, ModBlocks.SAPPING.get(), 250 + random.nextInt(150));
+                    if (random.nextFloat() < 0.3F && level() instanceof net.minecraft.server.level.ServerLevel server) {
+                        me.moonscenty.alchemia.network.BlockArc.send(server, at, this,
+                                0.5F + random.nextFloat() * 0.2F, 0.0F, 0.5F + random.nextFloat() * 0.2F);
+                    }
                 }
             }
             level().playSound(null, getX(), getY(), getZ(), ModSounds.ZAP.get(), SoundSource.HOSTILE, 1.0F,

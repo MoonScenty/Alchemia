@@ -247,7 +247,8 @@ public final class LegacyAssets {
      * each cell is cut out. The cells are the original's; which of our effects is which of its is in the name.
      */
     private static void effects(List<LegacyAsset> all) {
-        effect(all, "flux_flu", 3, 1); // flux taint
+        effect(all, "taint_poison", 3, 1); // flux taint
+        effect(all, "flux_flu", 5, 1); // vis exhaust
         effect(all, "flux_phage", 6, 1); // infectious vis exhaust
         effect(all, "unnatural_hunger", 7, 1);
         effect(all, "sun_scorned", 6, 2);

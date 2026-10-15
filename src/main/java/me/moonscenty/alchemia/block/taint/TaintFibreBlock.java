@@ -224,7 +224,7 @@ public class TaintFibreBlock extends Block implements Tainted {
     protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
         if (!level.isClientSide && entity instanceof LivingEntity living && !living.isInvertedHealAndHarm()
                 && level.random.nextInt(FLU_CHANCE) == 0) {
-            living.addEffect(new MobEffectInstance(ModEffects.FLUX_FLU, FLU_LASTS, 0, false, true));
+            living.addEffect(new MobEffectInstance(ModEffects.TAINT_POISON, FLU_LASTS, 0, false, true));
         }
     }
 

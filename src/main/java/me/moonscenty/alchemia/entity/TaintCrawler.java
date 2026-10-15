@@ -124,7 +124,7 @@ public class TaintCrawler extends Monster implements TaintedMob {
             int strength = level().getDifficulty() == Difficulty.NORMAL ? 3
                     : level().getDifficulty() == Difficulty.HARD ? 6 : 0;
             if (strength > 0 && random.nextInt(strength + 1) > 2) {
-                living.addEffect(new MobEffectInstance(ModEffects.FLUX_FLU, strength * 20, 0), this);
+                living.addEffect(new MobEffectInstance(ModEffects.TAINT_POISON, strength * 20, 0), this);
             }
         }
         return true;

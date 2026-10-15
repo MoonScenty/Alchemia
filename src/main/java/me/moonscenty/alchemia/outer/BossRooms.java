@@ -10,6 +10,8 @@ import me.moonscenty.alchemia.entity.boss.GreaterCultistPortal;
 import me.moonscenty.alchemia.entity.boss.TaintacleGiant;
 import me.moonscenty.alchemia.aura.AuraGeneration;
 import me.moonscenty.alchemia.aura.AuraHandler;
+import me.moonscenty.alchemia.aura.BiomePaint;
+import me.moonscenty.alchemia.worldgen.ModBiomes;
 import me.moonscenty.alchemia.registry.ModAspects;
 import me.moonscenty.alchemia.registry.ModBlocks;
 import me.moonscenty.alchemia.registry.ModEntities;
@@ -289,6 +291,23 @@ public final class BossRooms {
         int y = middle.getY();
         int z = middle.getZ();
         AuraHandler.add(level, middle, ModAspects.FLUX, AuraGeneration.BASE * 4);
+        // the hall goes over to tainted land, floor to ceiling, as the original turned its whole column
+        BiomePaint.named(level, ModBiomes.TAINTED_LAND).ifPresent(tainted -> {
+            java.util.Set<net.minecraft.world.level.chunk.LevelChunk> touched = new java.util.HashSet<>();
+            for (int a = -12; a <= 12; a += 4) {
+                for (int b = -12; b <= 12; b += 4) {
+                    for (int k = 0; k <= 12; k += 4) {
+                        BlockPos at = new BlockPos(x + b, y + k, z + a);
+                        if (BiomePaint.paint(level, at, tainted, false)) {
+                            touched.add(level.getChunkAt(at));
+                        }
+                    }
+                }
+            }
+            if (!touched.isEmpty()) {
+                level.getChunkSource().chunkMap.resendBiomesForChunks(java.util.List.copyOf(touched));
+            }
+        });
         for (int a = -12; a <= 12; a++) {
             for (int b = -12; b <= 12; b++) {
                 for (int k = 0; k < 9; k++) {

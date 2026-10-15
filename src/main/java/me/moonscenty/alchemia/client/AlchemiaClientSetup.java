@@ -363,7 +363,7 @@ public class AlchemiaClientSetup {
         event.registerEntityRenderer(ModEntities.CULTIST_LEADER.get(), CultistLeaderRenderer::new);
         event.registerEntityRenderer(ModEntities.GREATER_CULTIST_PORTAL.get(), CultistPortalRenderer::new);
         event.registerEntityRenderer(ModEntities.TAINTACLE_GIANT.get(), context -> new TaintacleRenderer<>(context,
-                me.moonscenty.alchemia.client.legacy.LegacyAssets.TAINTACLE_GIANT, 14, 1.0F));
+                me.moonscenty.alchemia.client.legacy.LegacyAssets.TAINTACLE_GIANT, 14, 1.0F, 1.33F));
         event.registerEntityRenderer(ModEntities.FIRE_BAT.get(), FireBatRenderer::new);
         event.registerEntityRenderer(ModEntities.CULTIST_KNIGHT.get(), CultistRenderer::new);
         event.registerEntityRenderer(ModEntities.CULTIST_CLERIC.get(), CultistRenderer::new);

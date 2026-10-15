@@ -37,7 +37,7 @@ public class TaintedAnimalTests {
     private static <T extends net.minecraft.world.entity.Mob> T poisoned(GameTestHelper helper, EntityType<T> type) {
         helper.setBlock(AT.below(), Blocks.STONE);
         T creature = helper.spawnWithNoFreeWill(type, AT);
-        creature.addEffect(new MobEffectInstance(ModEffects.FLUX_FLU, 200, 0));
+        creature.addEffect(new MobEffectInstance(ModEffects.TAINT_POISON, 200, 0));
         return creature;
     }
 
@@ -109,7 +109,7 @@ public class TaintedAnimalTests {
         creeper.setSwelling(1);
         helper.runAfterDelay(40, () -> {
             helper.assertTrue(creeper.isRemoved(), "it went off");
-            helper.assertTrue(pig.hasEffect(ModEffects.FLUX_FLU), "the pig is poisoned");
+            helper.assertTrue(pig.hasEffect(ModEffects.TAINT_POISON), "the pig is poisoned");
             helper.assertBlockPresent(Blocks.STONE, AT.below());
             helper.succeed();
         });

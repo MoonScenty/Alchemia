@@ -169,6 +169,20 @@ public final class EldritchEffects {
                 .size(0.3F, 0.1F));
     }
 
+    /** A block arc from the server: from the middle of the block's top to the middle of what it strikes. */
+    public static void blockArc(me.moonscenty.alchemia.network.BlockArc arc) {
+        ClientLevel level = Minecraft.getInstance().level;
+        if (level == null) {
+            return;
+        }
+        net.minecraft.world.entity.Entity to = level.getEntity(arc.to());
+        if (to == null) {
+            return;
+        }
+        arc(level, arc.from().getX() + 0.5, arc.from().getY() + 0.1, arc.from().getZ() + 0.5, to.getX(),
+                to.getY() + to.getBbHeight() / 2.0, to.getZ(), arc.r(), arc.g(), arc.b());
+    }
+
     /** A crooked line of light from one point to another, gone in a moment. */
     public static void arc(ClientLevel level, double x, double y, double z, double tx, double ty, double tz,
             float r, float g, float b) {

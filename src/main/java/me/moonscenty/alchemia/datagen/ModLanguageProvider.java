@@ -1074,8 +1074,8 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                  "Any of the mod's armour and any bauble can be worked on the altar to hold one more point of shield: a diamond and salis mundus round it, one salis mundus more for every point it already holds, and essentia that doubles with every point. It can be done again and again, for as long as the essentia can be found.",
                  "이 모드의 갑옷이나 장신구라면 무엇이든 제단에서 보호막을 1 더 들게 할 수 있다. 둘레에 다이아몬드와 소금 문디를 놓되 이미 든 보호막마다 소금 문디를 하나씩 더 놓고, 에센시아는 1마다 두 배가 된다. 에센시아를 구할 수 있는 한 몇 번이고 거듭할 수 있다."},
                 {"verdant_heart", "Verdant Heart Band", "푸른 심장 반지",
-                 "A band that holds two hundred of life, and spends it once a second on whatever ails its wearer: twenty to lift withering, ten to lift poison, five to lift the flux flu. It cannot mend a wound. It is charged like a wand -- on a recharge pedestal, or by an amulet of vis -- out of earth and water in the aura.",
-                 "생명을 이백 담아 두었다가 1초마다 착용자를 괴롭히는 것에 쓰는 반지다. 시듦을 걷는 데 20, 독에 10, 플럭스 감기에 5. 상처를 낫게 하지는 못한다. 완드처럼 충전 받침대나 비스 부적으로 오라의 흙과 물에서 충전한다."},
+                 "A band that holds two hundred of life, and spends it once a second on whatever ails its wearer: twenty to lift withering, ten to lift poison, five to lift taint poison. It cannot mend a wound. It is charged like a wand -- on a recharge pedestal, or by an amulet of vis -- out of earth and water in the aura.",
+                 "생명을 이백 담아 두었다가 1초마다 착용자를 괴롭히는 것에 쓰는 반지다. 시듦을 걷는 데 20, 독에 10, 오염 중독에 5. 상처를 낫게 하지는 못한다. 완드처럼 충전 받침대나 비스 부적으로 오라의 흙과 물에서 충전한다."},
                 {"verdant_heart_lifegiver", "Lifegiver & Sustainer", "생명을 주는 것과 지탱하는 것",
                  "A verdant heart can be worked once more, into one of two things, not both. A lifegiver spends five to mend a point of its wearer's health. A sustainer spends one to give back breath to someone drowning, or else to feed someone hungry. The sustainer wants a triple meat treat, which is sugar and three meats.",
                  "푸른 심장은 한 번 더, 둘 중 하나로만 다듬을 수 있다. 생명을 주는 것은 5를 써서 착용자의 체력을 1 낫게 한다. 지탱하는 것은 1을 써서 물에 빠진 사람에게 숨을 돌려주거나, 그렇지 않으면 배고픈 사람을 먹인다. 지탱하는 것에는 설탕과 세 가지 고기로 만든 세 고기 간식이 든다."},
@@ -1250,6 +1250,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
             add("research." + Alchemia.MODID + "." + entry[0] + ".page", pick(entry[3], entry[4]));
         }
 
+        addEffect(ModEffects.TAINT_POISON, pick("Taint Poison", "오염 중독"));
         addEffect(ModEffects.FLUX_FLU, pick("Flux Flu", "플럭스 감기"));
         addEffect(ModEffects.FLUX_PHAGE, pick("Flux Phage", "플럭스 역병"));
         addEffect(ModEffects.UNNATURAL_HUNGER, pick("Unnatural Hunger", "부자연스러운 허기"));

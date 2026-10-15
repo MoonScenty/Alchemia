@@ -70,8 +70,8 @@ public class VerdantHeartItem extends BaubleItem {
             wearer.removeEffect(MobEffects.POISON);
             return;
         }
-        if (wearer.hasEffect(ModEffects.FLUX_FLU) && spend(stack, 5)) {
-            wearer.removeEffect(ModEffects.FLUX_FLU);
+        if (wearer.hasEffect(ModEffects.TAINT_POISON) && spend(stack, 5)) {
+            wearer.removeEffect(ModEffects.TAINT_POISON);
             return;
         }
         int kind = kind(stack);

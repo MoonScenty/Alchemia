@@ -5,14 +5,14 @@ import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
 
 /**
- * The flu the taint gives. A point of harm every forty ticks, and the gap halves with each level above the first,
+ * The poison the taint gives. A point of harm every forty ticks, and the gap halves with each level above the first,
  * so a bad case is a steady drain rather than a shock. It passes over the undead, who have nothing left to spoil.
  */
-public class FluxFluEffect extends MobEffect {
+public class TaintPoisonEffect extends MobEffect {
     private static final int PERIOD = 40;
     private static final float DOSE = 1.0F;
 
-    public FluxFluEffect(MobEffectCategory category, int color) {
+    public TaintPoisonEffect(MobEffectCategory category, int color) {
         super(category, color);
     }
 
