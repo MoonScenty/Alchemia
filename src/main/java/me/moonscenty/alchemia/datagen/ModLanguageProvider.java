@@ -644,6 +644,8 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         ModItems.PRIMAL_ARROWS.forEach((type, arrow) -> addItem(arrow, pick(arrows.get(type)[0], arrows.get(type)[1])));
         add("entity.alchemia.primal_arrow", pick("Primal Arrow", "원시 화살"));
         addItem(ModItems.BONE_BOW, pick("Bow of Bone", "뼈 활"));
+        addItem(ModItems.BOTTLE_TAINT, pick("Bottle of Taint", "오염 병"));
+        add("entity.alchemia.bottle_taint", pick("Bottled Taint", "병에 든 오염"));
         for (String kind : new String[] {"air_arrow", "fire_arrow", "order_arrow"}) {
             add("death.attack.alchemia." + kind, pick("%1$s was shot by a primal arrow",
                     "%1$s이(가) 원시 화살에 맞았다"));
@@ -1311,6 +1313,9 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                 {"warp", "Warp", "뒤틀림",
                  "Look too long into what should not be, and it begins looking back. The damage is not to the world but to the one studying it, and it does not undo itself with rest.",
                  "있어서는 안 될 것을 오래 들여다보면, 그것도 당신을 들여다보기 시작한다. 상하는 것은 세계가 아니라 그것을 연구하는 자이며, 쉰다고 해서 되돌아오지 않는다."},
+                {"bottle_taint", "Bottled Taint", "병에 든 오염",
+                 "Why would you want this? Cleaning taint is one thing, but spreading it? A phial of flux steeped in more flux and water concentrates the essence of taint into a bottle that need only be thrown. Where it breaks, everything living nearby is poisoned by the taint, and the ground about it goes over to tainted land with flux goo lying in it. Why you would want to do this is up to you.",
+                 "이걸 왜 원하겠는가? 오염을 치우는 것과 퍼뜨리는 것은 다른 일이다. 플럭스 약병을 플럭스와 물에 더 우려내면 오염의 정수가 병 하나에 모이고, 던지기만 하면 된다. 깨진 자리 가까이의 산 것은 모두 오염에 중독되고, 그 주변 땅은 오염된 땅으로 바뀌며 플럭스 끈적이가 고인다. 왜 그러고 싶은지는 당신이 정할 일이다."},
                 {"bone_bow", "Bone Bow", "뼈 활",
                  "Sticks and stones... A bow can be made of bone and string with entropy worked into its heart. It is drawn fully in half the time a bow takes, and looses by itself if held too long; the arrows it sends fly faster and hit harder, though never as a critical shot.",
                  "막대기와 돌멩이로... 뼈와 실로 활을 짜고 그 한가운데에 엔트로피를 불어넣을 수 있다. 활의 절반 시간이면 끝까지 당겨지고, 너무 오래 쥐고 있으면 저절로 쏜다. 쏘아 보낸 화살은 더 빠르게 날아 더 세게 맞힌다. 다만 치명타는 나지 않는다."},

@@ -493,6 +493,11 @@ public class ModResearchProvider {
                         .add(ModAspects.ENTROPY, 3),
                 List.of("arcane_workbench"), false, NodeShape.PLAIN, 2, "primal_arrow_air", "primal_arrow_fire",
                 "primal_arrow_water", "primal_arrow_earth", "primal_arrow_order", "primal_arrow_entropy");
+        // taint, bottled to be thrown
+        entry(context, "bottle_taint", ModResearch.ALCHEMY, ModItems.BOTTLE_TAINT, -4, 1,
+                AspectList.of(ModAspects.FLUX, 5).add(ModAspects.ENERGY, 3).add(ModAspects.ENTROPY, 3)
+                        .add(ModAspects.WATER, 1),
+                List.of("crucible"), false, NodeShape.PLAIN, 2, "bottle_taint");
         // a liquid nothing living survives
         entry(context, "liquid_death", ModResearch.ALCHEMY, ModItems.LIQUID_DEATH_BUCKET, -4, 3,
                 AspectList.of(ModAspects.DEATH, 5).add(ModAspects.ENTROPY, 5).add(ModAspects.WATER, 1),
@@ -628,7 +633,9 @@ public class ModResearchProvider {
             java.util.Map.entry("bioalchemic_mind", 3), java.util.Map.entry("seal_guard", 1),
             java.util.Map.entry("seal_butcher", 1), java.util.Map.entry("crimson", 3),
             java.util.Map.entry("oculus", 6), java.util.Map.entry("sinister_stone", 2),
-            java.util.Map.entry("focus_primal", 2), java.util.Map.entry("liquid_death", 3));
+            java.util.Map.entry("focus_primal", 2), java.util.Map.entry("liquid_death", 3),
+            // the original wrote two and then, a line later, one over it; the one is what it gave
+            java.util.Map.entry("bottle_taint", 1));
     /** Research learnt along with another: the Crimson Rites teach the minor eldritch lore too. */
     private static final java.util.Map<String, List<String>> SIBLINGS = java.util.Map.of(
             "crimson", List.of("eldritch_minor"));

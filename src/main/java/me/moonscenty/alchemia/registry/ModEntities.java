@@ -188,6 +188,16 @@ public class ModEntities {
                     .updateInterval(3)
                     .build("eldritch_autocaster"));
 
+    /** A bottle of taint, thrown. */
+    public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.entity.ThrownTaintBottle>> TAINT_BOTTLE =
+            ENTITIES.register("bottle_taint", () -> EntityType.Builder
+                    .<me.moonscenty.alchemia.entity.ThrownTaintBottle>of(
+                            me.moonscenty.alchemia.entity.ThrownTaintBottle::new, MobCategory.MISC)
+                    .sized(0.25F, 0.25F)
+                    .clientTrackingRange(4)
+                    .updateInterval(10)
+                    .build("bottle_taint"));
+
     /** A primal arrow in flight. */
     public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.entity.PrimalArrow>> PRIMAL_ARROW =
             ENTITIES.register("primal_arrow", () -> EntityType.Builder
