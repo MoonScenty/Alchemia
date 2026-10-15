@@ -1419,6 +1419,11 @@ public class ModRecipeProvider extends RecipeProvider {
                         'C', Ingredient.of(Items.CRAFTING_TABLE), 'W', Ingredient.of(ModBlocks.GREATWOOD.planks())),
                 " H ", "GCG", " W ");
 
+        // eight arrows round a shard, and the shard's primal bound into all eight
+        ModItems.PRIMAL_ARROWS.forEach((type, arrow) -> arcane(output, "primal_arrow_" + type.getName(),
+                "primal_arrows", new ItemStack(arrow.get(), 8), AspectList.of(type.aspect(), 25),
+                Map.of('A', Ingredient.of(Items.ARROW), 'S', shard(type)), "AAA", "ASA", "AAA"));
+
         infusion(output, "sinister_stone", Ingredient.of(Items.FLINT),
                 List.of(Ingredient.of(ModTags.Items.NITOR), shard(me.moonscenty.alchemia.block.CrystalType.ORDER),
                         Ingredient.of(ModItems.KNOWLEDGE_FRAGMENT),

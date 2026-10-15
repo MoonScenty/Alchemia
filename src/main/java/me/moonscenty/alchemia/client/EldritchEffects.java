@@ -159,6 +159,20 @@ public final class EldritchEffects {
         }
     }
 
+    /** The glow of a primal arrow's element about it as it flies, in the element's colour. */
+    public static void arrowGlow(net.minecraft.world.level.Level world, double x, double y, double z, int colour) {
+        if (!(world instanceof ClientLevel level)) {
+            return;
+        }
+        Minecraft.getInstance().particleEngine.add(new GenericParticle(level, x, y, z, 0.0, 0.0, 0.0,
+                LegacySheet.GLOW, 16)
+                .lasts(2)
+                .colour(((colour >> 16) & 0xFF) / 255.0F, ((colour >> 8) & 0xFF) / 255.0F, (colour & 0xFF) / 255.0F)
+                .opacity(0.9F, 0.6F)
+                .cells(WISP_CELLS, WISP_FRAMES, 1)
+                .size(0.25F, 0.25F));
+    }
+
     private static void spark(ClientLevel level, double x, double y, double z, float r, float g, float b) {
         Minecraft.getInstance().particleEngine.add(new GenericParticle(level, x, y, z, 0.0, 0.0, 0.0,
                 LegacySheet.GLOW, 16)

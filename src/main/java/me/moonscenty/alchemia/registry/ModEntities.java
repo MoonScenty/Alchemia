@@ -188,6 +188,17 @@ public class ModEntities {
                     .updateInterval(3)
                     .build("eldritch_autocaster"));
 
+    /** A primal arrow in flight. */
+    public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.entity.PrimalArrow>> PRIMAL_ARROW =
+            ENTITIES.register("primal_arrow", () -> EntityType.Builder
+                    .<me.moonscenty.alchemia.entity.PrimalArrow>of(me.moonscenty.alchemia.entity.PrimalArrow::new,
+                            MobCategory.MISC)
+                    .sized(0.5F, 0.5F)
+                    .eyeHeight(0.13F)
+                    .clientTrackingRange(4)
+                    .updateInterval(20)
+                    .build("primal_arrow"));
+
     /**
      * A bat that burns. Small, fire-proof, and followed at the original's distance; it moves too fast and too
      * often for anything slower than every third tick to keep up with.

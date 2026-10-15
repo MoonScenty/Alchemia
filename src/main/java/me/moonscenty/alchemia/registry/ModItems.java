@@ -107,6 +107,9 @@ public class ModItems {
             () -> new me.moonscenty.alchemia.item.AutocasterItem(new Item.Properties().stacksTo(1)));
 
     public static final Map<CrystalType, DeferredItem<Item>> SHARDS = registerShards();
+    /** The six primal arrows, one for each primal. */
+    public static final Map<CrystalType, DeferredItem<me.moonscenty.alchemia.item.PrimalArrowItem>> PRIMAL_ARROWS =
+            registerPrimalArrows();
     public static final DeferredItem<Item> BALANCED_SHARD = ITEMS.registerSimpleItem("balanced_shard");
 
     /**
@@ -722,6 +725,18 @@ public class ModItems {
             caps.put(metal, ITEMS.registerSimpleItem("wand_cap_" + metal + "_inert"));
         }
         return caps;
+    }
+
+    private static Map<CrystalType, DeferredItem<me.moonscenty.alchemia.item.PrimalArrowItem>> registerPrimalArrows() {
+        Map<CrystalType, DeferredItem<me.moonscenty.alchemia.item.PrimalArrowItem>> arrows =
+                new EnumMap<>(CrystalType.class);
+        for (CrystalType type : CrystalType.values()) {
+            if (type != CrystalType.FLUX) {
+                arrows.put(type, ITEMS.register("primal_arrow_" + type.getName(),
+                        () -> new me.moonscenty.alchemia.item.PrimalArrowItem(type, new Item.Properties())));
+            }
+        }
+        return Collections.unmodifiableMap(arrows);
     }
 
     private static Map<CrystalType, DeferredItem<Item>> registerShards() {

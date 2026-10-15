@@ -387,6 +387,30 @@
       "alchemia:terra": 1,
       "alchemia:vacuos": 1
     },
+    "alchemia:primal_arrow_air": {
+      "alchemia:aer": 1,
+      "alchemia:aversio": 1
+    },
+    "alchemia:primal_arrow_earth": {
+      "alchemia:aversio": 1,
+      "alchemia:terra": 1
+    },
+    "alchemia:primal_arrow_entropy": {
+      "alchemia:aversio": 1,
+      "alchemia:perditio": 1
+    },
+    "alchemia:primal_arrow_fire": {
+      "alchemia:aversio": 1,
+      "alchemia:ignis": 1
+    },
+    "alchemia:primal_arrow_order": {
+      "alchemia:aversio": 1,
+      "alchemia:ordo": 1
+    },
+    "alchemia:primal_arrow_water": {
+      "alchemia:aqua": 1,
+      "alchemia:aversio": 1
+    },
     "alchemia:primordial_pearl": {
       "alchemia:aer": 16,
       "alchemia:aqua": 16,
