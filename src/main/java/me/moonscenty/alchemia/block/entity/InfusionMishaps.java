@@ -32,6 +32,8 @@ import net.minecraft.world.phys.Vec3;
 public final class InfusionMishaps {
     /** How far a mishap reaches for somebody to trouble. */
     private static final double NEAR = 6.0;
+    /** How far the twist looks for somebody to look back at. */
+    private static final double WATCHED = 10.0;
     /** How hard the blast is, and how much it hurts. Neither breaks anything: the works is not the enemy. */
     private static final float BLAST = 1.8F;
     private static final float HURT = 3.0F;
@@ -112,10 +114,20 @@ public final class InfusionMishaps {
                 Level.ExplosionInteraction.NONE);
     }
 
-    /** Something looks back, and whoever was watching carries it away with them. */
+    /**
+     * Something looks back, at one of whoever is within ten blocks: a point of warp that sticks one time in four,
+     * otherwise two to five that pass. The original's.
+     */
     private static void twist(ServerLevel level, BlockPos pos) {
-        for (Player player : level.getEntitiesOfClass(Player.class, around(pos))) {
-            WarpHandler.add(player, WarpData.Kind.TEMPORARY, 1 + level.random.nextInt(2));
+        List<Player> watching = level.getEntitiesOfClass(Player.class, new AABB(pos).inflate(WATCHED));
+        if (watching.isEmpty()) {
+            return;
+        }
+        Player player = watching.get(level.random.nextInt(watching.size()));
+        if (level.random.nextInt(4) == 0) {
+            WarpHandler.add(player, WarpData.Kind.STICKY, 1);
+        } else {
+            WarpHandler.add(player, WarpData.Kind.TEMPORARY, 2 + level.random.nextInt(4));
         }
     }
 

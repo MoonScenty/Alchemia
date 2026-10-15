@@ -97,6 +97,8 @@ public class ModTags {
          * an add-on's focus into the pouch without it having to extend anything of ours.
          */
         public static final TagKey<Item> FOCI = mod("foci");
+        /** Things whose making leaves a point of sticking warp on whoever made them. */
+        public static final TagKey<Item> WARPS_WHEN_MADE = mod("warps_when_made");
 
         public static final TagKey<Item> SHARDS = mod("shards");
         public static final TagKey<Item> CLUSTERS = mod("clusters");

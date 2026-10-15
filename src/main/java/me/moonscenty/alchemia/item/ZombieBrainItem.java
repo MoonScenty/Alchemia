@@ -31,7 +31,7 @@ public class ZombieBrainItem extends Item {
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity eater) {
         if (!level.isClientSide && eater instanceof Player player) {
             if (level.random.nextFloat() < 0.1F) {
-                WarpHandler.add(player, WarpData.Kind.PERMANENT, 1);
+                WarpHandler.add(player, WarpData.Kind.STICKY, 1);
             } else {
                 WarpHandler.add(player, WarpData.Kind.TEMPORARY, 1 + level.random.nextInt(3));
             }

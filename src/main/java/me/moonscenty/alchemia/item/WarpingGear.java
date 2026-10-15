@@ -20,15 +20,35 @@ public interface WarpingGear {
     /** How much warp this carries while it is held or worn. */
     int warp(ItemStack stack, Player holder);
 
-    /** Everything the player is holding or wearing, added up. Trinkets will want adding when there are any. */
+    /** Everything the player is holding or wearing, baubles too, added up. */
     static int carried(Player holder) {
-        int total = 0;
+        java.util.List<ItemStack> counted = new java.util.ArrayList<>();
         for (EquipmentSlot slot : COUNTED) {
-            ItemStack stack = holder.getItemBySlot(slot);
-            if (stack.getItem() instanceof WarpingGear gear) {
-                total += gear.warp(stack, holder);
+            counted.add(holder.getItemBySlot(slot));
+        }
+        top.theillusivec4.curios.api.CuriosApi.getCuriosInventory(holder).ifPresent(curios -> {
+            var baubles = curios.getEquippedCurios();
+            for (int i = 0; i < baubles.getSlots(); i++) {
+                counted.add(baubles.getStackInSlot(i));
             }
+        });
+        int total = 0;
+        for (ItemStack stack : counted) {
+            total += of(stack, holder);
         }
         return total;
+    }
+
+    /** The warp one thing carries: its own, void metal's, and whatever the altar has worked into it. */
+    static int of(ItemStack stack, Player holder) {
+        if (stack.isEmpty()) {
+            return 0;
+        }
+        int warp = stack.getOrDefault(me.moonscenty.alchemia.registry.ModDataComponents.WARP.get(), 0)
+                + VoidGear.warp(stack);
+        if (stack.getItem() instanceof WarpingGear gear) {
+            warp += gear.warp(stack, holder);
+        }
+        return warp;
     }
 }

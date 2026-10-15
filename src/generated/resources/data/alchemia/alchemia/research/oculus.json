@@ -24,5 +24,6 @@
     "alchemia:tenebrae": 3
   },
   "row": 3,
-  "shape": "special"
+  "shape": "special",
+  "warp": 6
 }

@@ -207,7 +207,9 @@ public class CrucibleBlockEntity extends BlockEntity {
             CrucibleRecipe recipe = found.get().value();
             dissolved = recipe.taken(dissolved);
             water -= PER_CRAFT;
-            eject(level, pos, recipe.assemble(new CrucibleInput(one, dissolved), level.registryAccess()));
+            ItemStack made = recipe.assemble(new CrucibleInput(one, dissolved), level.registryAccess());
+            me.moonscenty.alchemia.player.CraftWarp.made(thrower, made);
+            eject(level, pos, made);
             changed();
             level.blockEvent(pos, getBlockState().getBlock(), CRAFTED, 0);
             return true;

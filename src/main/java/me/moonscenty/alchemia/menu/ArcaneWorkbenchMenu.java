@@ -248,6 +248,7 @@ public class ArcaneWorkbenchMenu extends AbstractContainerMenu {
         @Override
         public void onTake(Player taker, ItemStack stack) {
             stack.onCraftedBy(taker.level(), taker, stack.getCount());
+            me.moonscenty.alchemia.player.CraftWarp.made(taker, stack);
             craft(taker, stack);
         }
     }

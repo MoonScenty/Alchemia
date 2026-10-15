@@ -71,6 +71,16 @@ public class ModDataComponents {
                     .networkSynchronized(ByteBufCodecs.VAR_INT)
                     .build());
 
+    /**
+     * Warp worked into a thing by the altar, carried while it is held or worn on top of any it has of its own. Each
+     * infusion enchantment after the first has a chance of leaving a point behind, as the original's {@code TC.WARP}.
+     */
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> WARP =
+            COMPONENTS.register("warp", () -> DataComponentType.<Integer>builder()
+                    .persistent(Codec.INT)
+                    .networkSynchronized(ByteBufCodecs.VAR_INT)
+                    .build());
+
     /** What a brain in a jar has eaten, kept on the jar when it is picked up. */
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> STORED_XP =
             COMPONENTS.register("stored_xp", () -> DataComponentType.<Integer>builder()

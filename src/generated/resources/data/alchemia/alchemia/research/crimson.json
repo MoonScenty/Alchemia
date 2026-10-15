@@ -10,5 +10,9 @@
     }
   ],
   "row": 2,
-  "shape": "special"
+  "shape": "special",
+  "siblings": [
+    "alchemia:eldritch_minor"
+  ],
+  "warp": 3
 }
