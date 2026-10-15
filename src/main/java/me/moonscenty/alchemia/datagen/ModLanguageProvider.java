@@ -940,6 +940,11 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("note.alchemia.would_not_hold", pick("Nothing here to hold on to", "이어 붙일 것이 없다"));
         add("note.alchemia.claim", pick("Worked out. Read it back to learn %s.", "풀어냈다. 손에 들고 우클릭하면 %s을(를) 익한다."));
         add("note.alchemia.learned", pick("You work out %s.", "%s을(를) 알아냈다."));
+        add("warp.alchemia.gained.permanent", pick("You have gained permanent Warp!", "영구 뒤틀림을 얻었다!"));
+        add("warp.alchemia.gained.sticky", pick("You have gained Warp!", "뒤틀림을 얻었다!"));
+        add("warp.alchemia.gained.temporary", pick("You have gained temporary Warp!", "일시적 뒤틀림을 얻었다!"));
+        add("warp.alchemia.lost.permanent", pick("You have lost permanent Warp!", "영구 뒤틀림을 잃었다!"));
+        add("warp.alchemia.lost.sticky", pick("You have lost Warp!", "뒤틀림을 잃었다!"));
         add("note.alchemia.already_known", pick("You already know that.", "이미 알고 있다."));
         add("note.alchemia.no_ink", pick("Your scribing tools have run dry.", "필기구의 잉크가 말랐다."));
 

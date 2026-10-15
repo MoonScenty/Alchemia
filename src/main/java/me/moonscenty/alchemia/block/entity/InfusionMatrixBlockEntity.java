@@ -98,6 +98,8 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
     /** Whether the altar under it is built and the stones have been woken. */
     private boolean awake;
     private ResourceLocation working;
+    /** Who started the working under way, who the warp of making it falls on. Not saved. */
+    private java.util.UUID worker;
     private AspectList owed = AspectList.EMPTY;
     private List<BlockPos> ring = List.of();
     private int instability;
@@ -493,6 +495,7 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
 
         InfusionRecipe recipe = found.get().value();
         working = found.get().id();
+        worker = player != null ? player.getUUID() : null;
         reckon(level);
         owed = priced(recipe.essentiaFor(under.held()));
         ring = List.copyOf(holding);
@@ -612,7 +615,20 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
     /** The work is done: what was on the pedestal becomes what was being made. */
     private void finish(ServerLevel level, BlockPos pos, ArcanePedestalBlockEntity under, InfusionRecipe recipe) {
         // asked rather than read off the recipe: a working that enchants hands back the very thing it was given
-        under.hold(recipe.assemble(new InfusionInput(under.held(), List.of()), level.registryAccess()));
+        ItemStack before = under.held();
+        ItemStack made = recipe.assemble(new InfusionInput(before, List.of()), level.registryAccess());
+        // each working after the first on a thing has a chance in ten, per working already on it, of leaving warp
+        if (recipe.enchants().isPresent()) {
+            int already = me.moonscenty.alchemia.enchantment.InfusionEnchantments.on(before).size();
+            if (level.random.nextInt(10) < already) {
+                made.set(me.moonscenty.alchemia.registry.ModDataComponents.WARP.get(),
+                        made.getOrDefault(me.moonscenty.alchemia.registry.ModDataComponents.WARP.get(), 0) + 1);
+            }
+        }
+        under.hold(made);
+        if (worker != null) {
+            me.moonscenty.alchemia.player.CraftWarp.made(level.getPlayerByUUID(worker), made);
+        }
         level.playSound(null, pos, ModSounds.WAND.get(), SoundSource.BLOCKS, 0.5F, 1.0F);
         // and a puff off the pedestal, where the made thing now stands
         level.playSound(null, pos.below(UNDER), ModSounds.POOF.get(), SoundSource.BLOCKS, 0.4F,

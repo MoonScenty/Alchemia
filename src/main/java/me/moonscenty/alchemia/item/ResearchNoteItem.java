@@ -49,9 +49,7 @@ public class ResearchNoteItem extends Item {
                 server.displayClientMessage(Component.translatable("note.alchemia.already_known"), true);
                 return InteractionResultHolder.fail(held);
             }
-            server.setData(ModAttachments.KNOWLEDGE, knowledge.withResearch(note.research()));
-            server.displayClientMessage(Component.translatable("note.alchemia.learned",
-                    ResearchEntry.displayName(note.research())), false);
+            me.moonscenty.alchemia.research.ResearchCompletion.complete(server, note.research());
             level.playSound(null, server.blockPosition(), ModSounds.LEARN.get(), SoundSource.PLAYERS, 0.75F, 1.0F);
             held.shrink(1);
         }

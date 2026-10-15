@@ -5,9 +5,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import net.minecraft.core.GlobalPos;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 
 /**
@@ -18,7 +16,7 @@ import net.minecraft.world.phys.Vec3;
  * Only portals the client has loaded count, as in the original: a portal's block entity puts itself on the list
  * when it is loaded on the client and takes itself off when it goes.
  */
-public class SinisterStoneItem extends Item implements WarpingGear {
+public class SinisterStoneItem extends Item {
     /** Every portal the client has loaded, with the world it is in. Empty on a server. */
     public static final Set<GlobalPos> PORTALS = ConcurrentHashMap.newKeySet();
     /** How far a portal is felt along the line of sight, and how far off that line, in radians. */
@@ -56,11 +54,5 @@ public class SinisterStoneItem extends Item implements WarpingGear {
         }
         double length = to.length();
         return length > 0.0 && Math.acos(Math.min(1.0, along / length)) < CONE;
-    }
-
-    /** A point of warp while it is held, as the original laid on it. */
-    @Override
-    public int warp(ItemStack stack, Player holder) {
-        return 1;
     }
 }

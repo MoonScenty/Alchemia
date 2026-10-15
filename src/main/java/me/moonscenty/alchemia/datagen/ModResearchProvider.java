@@ -601,6 +601,22 @@ public class ModResearchProvider {
                 recipes);
     }
 
+    /**
+     * What learning a piece of research leaves behind, the original's numbers. The masks, the void cap and the
+     * staff core carried warp of their own in the original; here they are not research of their own, and the
+     * research they are under carried none, so it stays none.
+     */
+    private static final java.util.Map<String, Integer> WARP = java.util.Map.ofEntries(
+            java.util.Map.entry("focus_hellbat", 2), java.util.Map.entry("vampire_bats", 2),
+            java.util.Map.entry("infernal_furnace", 2), java.util.Map.entry("brain_jar", 3),
+            java.util.Map.entry("bioalchemic_mind", 3), java.util.Map.entry("seal_guard", 1),
+            java.util.Map.entry("seal_butcher", 1), java.util.Map.entry("crimson", 3),
+            java.util.Map.entry("oculus", 6), java.util.Map.entry("sinister_stone", 2),
+            java.util.Map.entry("focus_primal", 2));
+    /** Research learnt along with another: the Crimson Rites teach the minor eldritch lore too. */
+    private static final java.util.Map<String, List<String>> SIBLINGS = java.util.Map.of(
+            "crimson", List.of("eldritch_minor"));
+
     private static void register(BootstrapContext<ResearchEntry> context, String name,
             ResourceKey<ResearchCategory> category, ItemLike icon, int column, int row, AspectList requirements,
             List<String> parents, boolean autoUnlock, NodeShape shape, int complexity, boolean hidden,
@@ -610,6 +626,7 @@ public class ModResearchProvider {
                         BuiltInRegistries.ITEM.wrapAsHolder(icon.asItem()),
                         parents.stream().map(Alchemia::id).toList(),
                         pages(name, recipes),
-                        autoUnlock, shape, complexity, hidden));
+                        autoUnlock, shape, complexity, hidden, WARP.getOrDefault(name, 0),
+                        SIBLINGS.getOrDefault(name, List.of()).stream().map(Alchemia::id).toList()));
     }
 }

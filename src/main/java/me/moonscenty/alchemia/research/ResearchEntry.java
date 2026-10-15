@@ -28,6 +28,9 @@ import net.minecraft.world.item.ItemStack;
  * @param autoUnlock   true for the handful of entries a player simply starts with
  * @param shape        how much weight the node carries, which decides the plate it is drawn on
  * @param complexity   how hard the note is to work out, from 1 to 3
+ * @param hidden       not in the book until known, and never worked out on the table
+ * @param warp         what learning it leaves behind: half of it, rounded up, for good, and the rest sticking
+ * @param siblings     research learnt along with it, once whatever those need is known
  */
 public record ResearchEntry(
         ResourceKey<ResearchCategory> category,
@@ -40,7 +43,9 @@ public record ResearchEntry(
         boolean autoUnlock,
         NodeShape shape,
         int complexity,
-        boolean hidden) {
+        boolean hidden,
+        int warp,
+        List<ResourceLocation> siblings) {
 
     public static final Codec<ResearchEntry> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             ResourceKey.codec(ModResearch.CATEGORY_KEY).fieldOf("category").forGetter(ResearchEntry::category),
@@ -53,7 +58,9 @@ public record ResearchEntry(
             Codec.BOOL.optionalFieldOf("auto_unlock", false).forGetter(ResearchEntry::autoUnlock),
             NodeShape.CODEC.optionalFieldOf("shape", NodeShape.PLAIN).forGetter(ResearchEntry::shape),
             Codec.intRange(1, 3).optionalFieldOf("complexity", 1).forGetter(ResearchEntry::complexity),
-            Codec.BOOL.optionalFieldOf("hidden", false).forGetter(ResearchEntry::hidden))
+            Codec.BOOL.optionalFieldOf("hidden", false).forGetter(ResearchEntry::hidden),
+            Codec.intRange(0, 100).optionalFieldOf("warp", 0).forGetter(ResearchEntry::warp),
+            ResourceLocation.CODEC.listOf().optionalFieldOf("siblings", List.of()).forGetter(ResearchEntry::siblings))
             .apply(instance, ResearchEntry::new));
 
     /** The pages this player has earned the right to see, in order. */

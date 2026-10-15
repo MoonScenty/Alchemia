@@ -119,7 +119,10 @@ public class CultTests {
         player.setItemInHand(InteractionHand.MAIN_HAND, ModItems.CRIMSON_RITES.toStack());
         ModItems.CRIMSON_RITES.get().use(helper.getLevel(), player, InteractionHand.MAIN_HAND);
         helper.assertTrue(PlayerKnowledge.of(player).hasResearch(CrimsonRitesItem.RESEARCH), "the reader knows it");
-        helper.assertValueEqual(WarpData.of(player).of(WarpData.Kind.PERMANENT), 3, "and is marked for it");
+        helper.assertValueEqual(WarpData.of(player).of(WarpData.Kind.PERMANENT), 2, "and is marked for it");
+        helper.assertValueEqual(WarpData.of(player).of(WarpData.Kind.STICKY), 1, "with a point that sticks");
+        helper.assertTrue(PlayerKnowledge.of(player).hasResearch(me.moonscenty.alchemia.Alchemia.id("eldritch_minor")),
+                "and the minor eldritch lore along with it");
         helper.assertTrue(player.getMainHandItem().is(ModItems.CRIMSON_RITES.get()), "and the book is still there");
         helper.succeed();
     }

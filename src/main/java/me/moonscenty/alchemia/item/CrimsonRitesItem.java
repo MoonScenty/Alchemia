@@ -22,16 +22,13 @@ import net.minecraft.world.level.Level;
 
 /**
  * The Crimson Cult's book. Read, it teaches what little of the cult can be made out of it, and that leaves three
- * points of warp that do not go away. It is not used up by reading.
+ * points of warp, two of them for good. It is not used up by reading.
  * <p>
  * The research it teaches is hidden: it is in nobody's book until the book has been read, and no table can work it
- * out. The original also taught a second, the minor eldritch lore, along with it; that comes with the eldritch lore.
+ * out. It teaches a second along with it, the minor eldritch lore, as the original did.
  */
 public class CrimsonRitesItem extends Item {
     public static final ResourceLocation RESEARCH = Alchemia.id("crimson");
-    /** What reading it leaves behind. The original's. */
-    private static final int WARP = 3;
-
     public CrimsonRitesItem(Properties properties) {
         super(properties);
     }
@@ -46,11 +43,8 @@ public class CrimsonRitesItem extends Item {
                 server.displayClientMessage(Component.translatable("note.alchemia.already_known"), true);
                 return InteractionResultHolder.fail(held);
             }
-            server.setData(ModAttachments.KNOWLEDGE, knowledge.withResearch(RESEARCH));
-            WarpHandler.add(server, WarpData.Kind.PERMANENT, WARP);
-            server.giveExperiencePoints(5);
-            server.displayClientMessage(Component.translatable("note.alchemia.learned",
-                    ResearchEntry.displayName(RESEARCH)), false);
+            // its warp and the minor eldritch lore along with it come with the research
+            me.moonscenty.alchemia.research.ResearchCompletion.complete(server, RESEARCH);
             level.playSound(null, server.blockPosition(), me.moonscenty.alchemia.registry.ModSounds.LEARN.get(),
                     SoundSource.PLAYERS, 0.75F, 1.0F);
         }

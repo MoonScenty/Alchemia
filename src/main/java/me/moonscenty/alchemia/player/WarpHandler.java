@@ -83,17 +83,10 @@ public class WarpHandler {
         }
     }
 
-    /** Teaches a player a piece of research, and tells them, unless they knew it. */
+    /** Teaches a player a piece of research, with all that comes of learning it, unless they knew it. */
     public static void learn(net.minecraft.world.entity.player.Player player,
             net.minecraft.resources.ResourceLocation research) {
-        me.moonscenty.alchemia.player.PlayerKnowledge knowledge = me.moonscenty.alchemia.player.PlayerKnowledge
-                .of(player);
-        if (knowledge.hasResearch(research)) {
-            return;
-        }
-        player.setData(ModAttachments.KNOWLEDGE, knowledge.withResearch(research));
-        player.displayClientMessage(Component.translatable("note.alchemia.learned",
-                me.moonscenty.alchemia.research.ResearchEntry.displayName(research)), false);
+        me.moonscenty.alchemia.research.ResearchCompletion.complete(player, research);
     }
 
     /**
@@ -138,9 +131,18 @@ public class WarpHandler {
             return;
         }
         player.setData(ModAttachments.WARP, WarpData.of(player).add(kind, amount));
+        if (!(player instanceof ServerPlayer server)) {
+            return;
+        }
         // warp that settles in is heard settling
-        if (amount > 0 && kind != WarpData.Kind.TEMPORARY && player instanceof ServerPlayer server) {
+        if (amount > 0 && kind != WarpData.Kind.TEMPORARY) {
             hear(server, ModSounds.WHISPERS, player.getX(), player.getY(), player.getZ(), 0.5F, 1.0F);
+        }
+        // and told of; temporary warp wearing off is not worth a word
+        if (amount > 0 || kind != WarpData.Kind.TEMPORARY) {
+            server.displayClientMessage(Component.translatable("warp.alchemia." + (amount > 0 ? "gained." : "lost.")
+                    + kind.name().toLowerCase(java.util.Locale.ROOT)).withStyle(net.minecraft.ChatFormatting.DARK_PURPLE),
+                    false);
         }
     }
 
