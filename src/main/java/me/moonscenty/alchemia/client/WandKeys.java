@@ -43,6 +43,10 @@ public final class WandKeys {
     public static final KeyMapping TOOL_SETTING = new KeyMapping("key.alchemia.tool_setting",
             KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, InputConstants.KEY_G, CATEGORY);
 
+    /** The original's H: switches the thaumostatic harness on and off. */
+    public static final KeyMapping HOVER = new KeyMapping("key.alchemia.hover",
+            KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, InputConstants.KEY_H, CATEGORY);
+
     /** How long the key has to be held before the ring opens rather than the focus simply moving on. */
     private static final int HELD_FOR = 5;
 
@@ -55,6 +59,7 @@ public final class WandKeys {
     public static void register(RegisterKeyMappingsEvent event) {
         event.register(CHANGE_FOCUS);
         event.register(TOOL_SETTING);
+        event.register(HOVER);
     }
 
     /**
@@ -74,6 +79,9 @@ public final class WandKeys {
         drain(CHANGE_FOCUS);
         // counted before anything else looks at it: emptying the queue first is what kept this from ever firing
         boolean setting = drain(TOOL_SETTING);
+        if (drain(HOVER) && client.screen == null && !me.moonscenty.alchemia.item.Hover.worn(player).isEmpty()) {
+            PacketDistributor.sendToServer(new me.moonscenty.alchemia.network.ToggleHover());
+        }
         var inHand = player.getMainHandItem().getItem();
         if (setting && client.screen == null && (inHand instanceof WandItem
                 || inHand instanceof me.moonscenty.alchemia.item.tool.ElementalShovelItem)) {

@@ -14,8 +14,7 @@
     }
   ],
   "parents": [
-    "alchemia:infusion",
-    "alchemia:levitator"
+    "alchemia:thaumostatic_harness"
   ],
   "requirements": {
     "alchemia:aer": 3,

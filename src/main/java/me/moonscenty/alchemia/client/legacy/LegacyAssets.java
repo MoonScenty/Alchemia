@@ -56,6 +56,8 @@ public final class LegacyAssets {
     public static final String OBELISK_CAP_MESH = "models/legacy/obelisk_cap.obj";
     public static final String CRAB_VENT_MESH = "models/legacy/crabvent.obj";
     public static final String HEMIS_MESH = "models/legacy/hemis.obj";
+    /** The pack on the back of the thaumostatic harness. */
+    public static final String HARNESS_MESH = "models/legacy/hoverharness.obj";
     /** The eldritch guardian, which the original built in code. */
     public static final String ELDRITCH_GUARDIAN = "eldritch_guardian";
 
@@ -945,6 +947,13 @@ public final class LegacyAssets {
             all.add(item("primal_arrow_" + element, "primal_arrow_" + element, null));
         }
         all.add(item("bottle_taint", "bottle_taint", null));
+        // the thaumostatic harness: its picture, the sheet it is worn in, the pack on its back and the rings
+        all.add(item("thaumostatic_harness", "thaumostatic_harness", null));
+        all.add(LegacyAsset.of("textures/models/armor/hover_harness_layer_1.png")
+                .five("textures/models/armor/hoverharness.png"));
+        all.add(LegacyAsset.of(HARNESS_MESH).five("models/obj/hoverharness.obj"));
+        all.add(LegacyAsset.of("textures/entity/hover_harness_pack.png").five("textures/models/armor/hoverharness2.png"));
+        all.add(LegacyAsset.of("textures/entity/lightning_ring.png").five("textures/models/armor/lightningring.png"));
         for (String drawn : List.of("bone_bow", "bone_bow_0", "bone_bow_1", "bone_bow_2")) {
             all.add(item(drawn, drawn, null));
         }

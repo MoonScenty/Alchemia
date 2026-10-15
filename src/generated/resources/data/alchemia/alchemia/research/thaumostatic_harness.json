@@ -1,0 +1,28 @@
+{
+  "category": "alchemia:artifice",
+  "column": -3,
+  "complexity": 3,
+  "icon": "alchemia:thaumostatic_harness",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.thaumostatic_harness.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:thaumostatic_harness"
+    }
+  ],
+  "parents": [
+    "alchemia:levitator",
+    "alchemia:recharge_pedestal",
+    "alchemia:infusion"
+  ],
+  "requirements": {
+    "alchemia:aer": 6,
+    "alchemia:machina": 3,
+    "alchemia:volatus": 6
+  },
+  "row": -1,
+  "shape": "special"
+}

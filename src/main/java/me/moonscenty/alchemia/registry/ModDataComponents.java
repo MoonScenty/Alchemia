@@ -75,6 +75,20 @@ public class ModDataComponents {
      * Warp worked into a thing by the altar, carried while it is held or worn on top of any it has of its own. Each
      * infusion enchantment after the first has a chance of leaving a point behind, as the original's {@code TC.WARP}.
      */
+    /** What a thaumostatic harness has left to fly on, in ticks. */
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> HARNESS_FUEL =
+            COMPONENTS.register("harness_fuel", () -> DataComponentType.<Integer>builder()
+                    .persistent(Codec.INT)
+                    .networkSynchronized(ByteBufCodecs.VAR_INT)
+                    .build());
+
+    /** Whether a thaumostatic harness is switched on. */
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Boolean>> HOVERING =
+            COMPONENTS.register("hovering", () -> DataComponentType.<Boolean>builder()
+                    .persistent(Codec.BOOL)
+                    .networkSynchronized(ByteBufCodecs.BOOL)
+                    .build());
+
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> WARP =
             COMPONENTS.register("warp", () -> DataComponentType.<Integer>builder()
                     .persistent(Codec.INT)

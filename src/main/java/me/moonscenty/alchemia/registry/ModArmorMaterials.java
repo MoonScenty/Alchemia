@@ -65,6 +65,15 @@ public final class ModArmorMaterials {
                     List.of(new ArmorMaterial.Layer(Alchemia.id("goggles"))), 0.0F, 0.0F));
 
     /**
+     * The thaumostatic harness: the goggles' numbers, which were the original's for anything worn that was not meant
+     * to stop a blow, and brass to mend it with.
+     */
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> HARNESS =
+            MATERIALS.register("hover_harness", () -> new ArmorMaterial(stops(1, 3, 2, 1), 25,
+                    SoundEvents.ARMOR_EQUIP_IRON, () -> Ingredient.of(ModItems.BRASS_INGOT),
+                    List.of(new ArmorMaterial.Layer(Alchemia.id("hover_harness"))), 0.0F, 0.0F));
+
+    /**
      * The two robes. Each is two sheets, as leather is: the cloth, which takes the dye, and over it the trim, which
      * does not. The original drew both robes that way.
      * <p>

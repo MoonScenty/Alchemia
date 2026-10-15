@@ -37,6 +37,12 @@ public class ModNetwork {
         registrar.playToServer(ToolSetting.TYPE, ToolSetting.STREAM_CODEC, ModNetwork::onToolSetting);
         registrar.playToServer(ChooseFocus.TYPE, ChooseFocus.STREAM_CODEC, ModNetwork::onChooseFocus);
         registrar.playToServer(StartGolem.TYPE, StartGolem.STREAM_CODEC, ModNetwork::onStartGolem);
+        registrar.playToServer(ToggleHover.TYPE, ToggleHover.STREAM_CODEC, (payload, context) -> context.enqueueWork(
+                () -> {
+                    if (context.player() instanceof net.minecraft.server.level.ServerPlayer player) {
+                        me.moonscenty.alchemia.item.Hover.toggle(player);
+                    }
+                }));
         registrar.playToClient(ShieldRunes.TYPE, ShieldRunes.STREAM_CODEC, (payload, context) -> context.enqueueWork(
                 () -> me.moonscenty.alchemia.client.ShieldRunesRenderer.flare(payload.shielded(), payload.from())));
         registrar.playToClient(BlockArc.TYPE, BlockArc.STREAM_CODEC, (payload, context) -> context.enqueueWork(

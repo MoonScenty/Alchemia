@@ -1437,6 +1437,18 @@ public class ModRecipeProvider extends RecipeProvider {
                 "primal_arrows", new ItemStack(arrow.get(), 8), AspectList.of(type.aspect(), 25),
                 Map.of('A', Ingredient.of(Items.ARROW), 'S', shard(type)), "AAA", "ASA", "AAA"));
 
+        // a leather jerkin made into a harness that flies
+        infusion(output, "thaumostatic_harness", Ingredient.of(Items.LEATHER_CHESTPLATE),
+                List.of(shard(me.moonscenty.alchemia.block.CrystalType.AIR),
+                        shard(me.moonscenty.alchemia.block.CrystalType.AIR),
+                        Ingredient.of(ModBlocks.GREATWOOD.planks()), Ingredient.of(ModBlocks.GREATWOOD.planks()),
+                        Ingredient.of(ModItems.MORPHIC_RESONATOR), Ingredient.of(ModTags.Items.PLATES_BRASS),
+                        Ingredient.of(ModTags.Items.PLATES_BRASS), Ingredient.of(Tags.Items.INGOTS_IRON),
+                        Ingredient.of(Tags.Items.INGOTS_IRON)),
+                new ItemStack(ModItems.THAUMOSTATIC_HARNESS.get()),
+                AspectList.of(ModAspects.FLIGHT, 32).add(ModAspects.ENERGY, 32).add(ModAspects.MECHANISM, 32)
+                        .add(ModAspects.MOTION, 16), 6, "thaumostatic_harness");
+
         infusion(output, "sinister_stone", Ingredient.of(Items.FLINT),
                 List.of(Ingredient.of(ModTags.Items.NITOR), shard(me.moonscenty.alchemia.block.CrystalType.ORDER),
                         Ingredient.of(ModItems.KNOWLEDGE_FRAGMENT),
