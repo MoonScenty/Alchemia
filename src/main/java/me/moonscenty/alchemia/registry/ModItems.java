@@ -107,6 +107,9 @@ public class ModItems {
             () -> new me.moonscenty.alchemia.item.AutocasterItem(new Item.Properties().stacksTo(1)));
 
     public static final Map<CrystalType, DeferredItem<Item>> SHARDS = registerShards();
+    /** Taint in a bottle, to be thrown. */
+    public static final DeferredItem<me.moonscenty.alchemia.item.TaintBottleItem> BOTTLE_TAINT = ITEMS.register(
+            "bottle_taint", () -> new me.moonscenty.alchemia.item.TaintBottleItem(new Item.Properties().stacksTo(8)));
     /** The bow of bone: quick to draw, and its arrows fly faster and hit harder. */
     public static final DeferredItem<me.moonscenty.alchemia.item.BoneBowItem> BONE_BOW = ITEMS.register("bone_bow",
             () -> new me.moonscenty.alchemia.item.BoneBowItem(new Item.Properties().durability(512)));

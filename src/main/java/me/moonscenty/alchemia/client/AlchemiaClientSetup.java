@@ -374,6 +374,8 @@ public class AlchemiaClientSetup {
         event.registerBlockEntityRenderer(ModBlockEntities.CRAB_SPAWNER.get(), CrabSpawnerRenderer::new);
         event.registerEntityRenderer(ModEntities.AURA_NODE.get(), AuraNodeRenderer::new);
         event.registerEntityRenderer(ModEntities.PRIMAL_ARROW.get(), PrimalArrowRenderer::new);
+        event.registerEntityRenderer(ModEntities.TAINT_BOTTLE.get(),
+                net.minecraft.client.renderer.entity.ThrownItemRenderer::new);
         event.registerEntityRenderer(ModEntities.AUTOCASTER.get(), AutocasterRenderer::new);
         event.registerEntityRenderer(ModEntities.ELDRITCH_AUTOCASTER.get(), AutocasterRenderer::new);
         event.registerEntityRenderer(ModEntities.ELDRITCH_WARDEN.get(), EldritchWardenRenderer::new);

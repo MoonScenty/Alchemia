@@ -1322,6 +1322,12 @@ public class ModRecipeProvider extends RecipeProvider {
                 new ItemStack(ModItems.BRASS_INGOT.get()), "metallurgy");
 
         // flesh rendered down to tallow, and a blank seal steeped into each kind of control seal
+        // taint itself, in a bottle: a phial of flux steeped in more flux and water
+        crucible(output, "bottle_taint", net.neoforged.neoforge.common.crafting.DataComponentIngredient.of(false,
+                        me.moonscenty.alchemia.item.PhialItem.filled(new ItemStack(ModItems.PHIAL.get()),
+                                ModAspects.FLUX)),
+                AspectList.of(ModAspects.FLUX, 8).add(ModAspects.WATER, 8),
+                new ItemStack(ModItems.BOTTLE_TAINT.get()), "bottle_taint");
         // death itself, in a bucket
         crucible(output, "liquid_death", Ingredient.of(Items.BUCKET),
                 AspectList.of(ModAspects.DEATH, 32).add(ModAspects.CRYSTAL, 32).add(ModAspects.ENTROPY, 32),

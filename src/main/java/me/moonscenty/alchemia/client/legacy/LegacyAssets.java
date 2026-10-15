@@ -944,6 +944,7 @@ public final class LegacyAssets {
         for (String element : List.of("air", "fire", "water", "earth", "order", "entropy")) {
             all.add(item("primal_arrow_" + element, "primal_arrow_" + element, null));
         }
+        all.add(item("bottle_taint", "bottle_taint", null));
         for (String drawn : List.of("bone_bow", "bone_bow_0", "bone_bow_1", "bone_bow_2")) {
             all.add(item(drawn, drawn, null));
         }

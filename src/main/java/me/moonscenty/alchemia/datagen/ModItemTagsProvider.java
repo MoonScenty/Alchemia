@@ -32,7 +32,8 @@ public class ModItemTagsProvider extends ItemTagsProvider {
         tag(net.neoforged.neoforge.common.Tags.Items.TOOLS_BOW).add(ModItems.BONE_BOW.get());
         // the original's crafting warp: a point, sticking, for making any of these
         tag(ModTags.Items.WARPS_WHEN_MADE).add(ModItems.FOCI.get("hellbat").get(), ModItems.FOCI.get("primal").get(),
-                ModBlocks.BRAIN_JAR.get().asItem(), ModItems.SINISTER_STONE.get(), ModItems.LIQUID_DEATH_BUCKET.get());
+                ModBlocks.BRAIN_JAR.get().asItem(), ModItems.SINISTER_STONE.get(), ModItems.LIQUID_DEATH_BUCKET.get(),
+                ModItems.BOTTLE_TAINT.get());
         baubles();
         robes();
         // wolves will eat it, as the original's would

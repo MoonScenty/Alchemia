@@ -1,0 +1,27 @@
+{
+  "category": "alchemia:alchemy",
+  "column": -4,
+  "complexity": 2,
+  "icon": "alchemia:bottle_taint",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.bottle_taint.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:bottle_taint"
+    }
+  ],
+  "parents": [
+    "alchemia:crucible"
+  ],
+  "requirements": {
+    "alchemia:aqua": 1,
+    "alchemia:perditio": 3,
+    "alchemia:potentia": 3,
+    "alchemia:vitium": 5
+  },
+  "row": 1,
+  "warp": 1
+}

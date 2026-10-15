@@ -112,6 +112,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.RUNED_TABLET.get());
         basicItem(ModItems.SANITY_SOAP.get());
         ModItems.PRIMAL_ARROWS.values().forEach(arrow -> basicItem(arrow.get()));
+        basicItem(ModItems.BOTTLE_TAINT.get());
         // the bow of bone, held as a bow is and drawn through the original's three pictures: begun, past seven
         // ticks, and from thirteen on
         for (int stage = 0; stage < 3; stage++) {
