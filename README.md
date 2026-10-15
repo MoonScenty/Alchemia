@@ -18,7 +18,7 @@ Alchemia는 홀로 서는 모드가 아니라 Thaumcraft의 애드온입니다. 
 | **Thaumcraft 4** | Minecraft 1.7.10용, 예: `Thaumcraft-1.7.10-4.2.3.5.jar` |
 | **Thaumcraft 5** | Minecraft 1.8.9용, 예: `Thaumcraft-1.8.9-5.2.4.jar` |
 
-두 Thaumcraft jar를 게임 폴더의 `legacy/`(개발 중에는 `run/legacy/`)에 넣습니다. 파일 이름은 상관없습니다. **하나라도 없으면 게임이 시작 단계에서 멈춥니다.** 두 jar는 직접 구해야 하며, 저작권 문제로 이 저장소나 배포본에 포함하지 않습니다.
+두 Thaumcraft jar를 게임 폴더의 `legacy/`(개발 중에는 `run/legacy/`)에 넣습니다. 파일 이름은 상관없습니다. **하나라도 없으면 타이틀 화면 대신 안내 화면이 뜹니다.** 빠진 jar를 작성자의 CurseForge 페이지([Thaumcraft 4](https://www.curseforge.com/minecraft/mc-mods/thaumcraft/files/2227552), [Thaumcraft 5](https://www.curseforge.com/minecraft/mc-mods/thaumcraft/files/2287496))에서 받는 버튼과 `legacy` 폴더를 여는 버튼이 있습니다. 원본 라이선스는 작성자만 배포할 수 있게 하므로, 이 저장소나 배포본에 포함하지 않고 자동으로 내려받지도 않습니다.
 
 ## 진행 상황
 
