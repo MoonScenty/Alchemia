@@ -481,6 +481,10 @@ public class ModResearchProvider {
         entry(context, "tallow", ModResearch.ALCHEMY, ModItems.TALLOW, -2, 2,
                 AspectList.of(ModAspects.BEAST, 3).add(ModAspects.FIRE, 1), List.of("crucible"), false,
                 NodeShape.PLAIN, 1, "tallow", "tallow_candle");
+        // a bow of bone, quick to draw
+        entry(context, "bone_bow", ModResearch.ARTIFICE, ModItems.BONE_BOW, -4, -1,
+                AspectList.of(ModAspects.AVERSION, 3).add(ModAspects.FLIGHT, 3).add(ModAspects.UNDEAD, 3),
+                List.of("arcane_workbench"), false, NodeShape.PLAIN, 1, "bone_bow");
         // arrows with a primal bound into them
         entry(context, "primal_arrows", ModResearch.ARTIFICE,
                 ModItems.PRIMAL_ARROWS.get(CrystalType.FIRE), -4, 0,

@@ -1,0 +1,24 @@
+{
+  "category": "alchemia:artifice",
+  "column": -4,
+  "icon": "alchemia:bone_bow",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.bone_bow.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:bone_bow"
+    }
+  ],
+  "parents": [
+    "alchemia:arcane_workbench"
+  ],
+  "requirements": {
+    "alchemia:aversio": 3,
+    "alchemia:exanimis": 3,
+    "alchemia:volatus": 3
+  },
+  "row": -1
+}

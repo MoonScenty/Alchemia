@@ -112,6 +112,18 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.RUNED_TABLET.get());
         basicItem(ModItems.SANITY_SOAP.get());
         ModItems.PRIMAL_ARROWS.values().forEach(arrow -> basicItem(arrow.get()));
+        // the bow of bone, held as a bow is and drawn through the original's three pictures: begun, past seven
+        // ticks, and from thirteen on
+        for (int stage = 0; stage < 3; stage++) {
+            withExistingParent("bone_bow_pulling_" + stage, mcLoc("item/bow"))
+                    .texture("layer0", modLoc("item/bone_bow_" + stage));
+        }
+        var bow = withExistingParent("bone_bow", mcLoc("item/bow")).texture("layer0", modLoc("item/bone_bow"));
+        float[] from = {0.0F, 0.8F, 1.3F};
+        for (int stage = 0; stage < 3; stage++) {
+            bow.override().predicate(modLoc("pulling"), 1.0F).predicate(modLoc("pull"), from[stage])
+                    .model(new ModelFile.UncheckedModelFile(modLoc("item/bone_bow_pulling_" + stage))).end();
+        }
         // the lodestone lights while it is looked through towards a portal
         getBuilder("sinister_stone_on").parent(new ModelFile.UncheckedModelFile(mcLoc("item/generated")))
                 .texture("layer0", modLoc("item/sinister_stone_on"));

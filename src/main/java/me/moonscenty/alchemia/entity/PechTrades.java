@@ -33,7 +33,7 @@ import net.minecraft.world.level.Level;
  * the pech pays it out in lots of one to five, each lot a thing from its own list of that worth.
  *
  * <p>Each kind of pech keeps its own list, the original's. What this game does not have is left off -- the
- * stalker's bone bow, and enchanted books of the original's own enchantments -- and a lot nothing on
+ * enchanted books of the original's own enchantments -- and a lot nothing on
  * the list is worth is paid in the nearest worth there is.
  */
 public final class PechTrades {
@@ -164,6 +164,7 @@ public final class PechTrades {
         lots.add(item(3, Items.EXPERIENCE_BOTTLE));
         lots.add(item(3, Items.EXPERIENCE_BOTTLE));
         lots.add(item(3, ModItems.KNOWLEDGE_FRAGMENT.get()));
+        lots.add(item(4, ModItems.BONE_BOW.get()));
         lots.add(potion(3, Potions.LONG_INVISIBILITY));
         lots.add(potion(3, Potions.STRONG_REGENERATION));
         lots.add(item(3, Items.GOLDEN_APPLE));

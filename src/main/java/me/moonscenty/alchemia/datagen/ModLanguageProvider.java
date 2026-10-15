@@ -643,6 +643,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                 me.moonscenty.alchemia.block.CrystalType.ENTROPY, new String[] {"Entropy Arrow", "엔트로피 화살"});
         ModItems.PRIMAL_ARROWS.forEach((type, arrow) -> addItem(arrow, pick(arrows.get(type)[0], arrows.get(type)[1])));
         add("entity.alchemia.primal_arrow", pick("Primal Arrow", "원시 화살"));
+        addItem(ModItems.BONE_BOW, pick("Bow of Bone", "뼈 활"));
         for (String kind : new String[] {"air_arrow", "fire_arrow", "order_arrow"}) {
             add("death.attack.alchemia." + kind, pick("%1$s was shot by a primal arrow",
                     "%1$s이(가) 원시 화살에 맞았다"));
@@ -1310,6 +1311,9 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                 {"warp", "Warp", "뒤틀림",
                  "Look too long into what should not be, and it begins looking back. The damage is not to the world but to the one studying it, and it does not undo itself with rest.",
                  "있어서는 안 될 것을 오래 들여다보면, 그것도 당신을 들여다보기 시작한다. 상하는 것은 세계가 아니라 그것을 연구하는 자이며, 쉰다고 해서 되돌아오지 않는다."},
+                {"bone_bow", "Bone Bow", "뼈 활",
+                 "Sticks and stones... A bow can be made of bone and string with entropy worked into its heart. It is drawn fully in half the time a bow takes, and looses by itself if held too long; the arrows it sends fly faster and hit harder, though never as a critical shot.",
+                 "막대기와 돌멩이로... 뼈와 실로 활을 짜고 그 한가운데에 엔트로피를 불어넣을 수 있다. 활의 절반 시간이면 끝까지 당겨지고, 너무 오래 쥐고 있으면 저절로 쏜다. 쏘아 보낸 화살은 더 빠르게 날아 더 세게 맞힌다. 다만 치명타는 나지 않는다."},
                 {"primal_arrows", "Primal Arrows", "원시 화살",
                  "Arrows each bound with one primal, laid eight round a shard. Air arrows hurt as an arrow does but as magic, past any armour. Fire arrows burn and set their targets alight. Water arrows chill the target to the bone and slow it badly. Earth arrows simply hit a great deal harder, and knock back further. Order arrows hit a little less but past armour, and leave the target weak. Entropy arrows hit a little less and wither what they strike. A bow reaches for them before any other arrow. They cannot be picked up again, and Infinity spares one only a time in three.",
                  "화살마다 원시 하나를 묶은 것으로, 조각 하나에 화살 여덟을 둘러 만든다. 공기 화살은 화살만큼 다치게 하되 마법이라 어떤 갑옷도 막지 못한다. 불 화살은 불로 다치게 하고 맞은 것에 불을 붙인다. 물 화살은 뼛속까지 얼려 크게 느리게 한다. 흙 화살은 그저 훨씬 세게 맞히고 더 멀리 밀쳐 낸다. 질서 화살은 조금 약하지만 갑옷을 뚫고 맞은 것을 나약하게 한다. 엔트로피 화살은 조금 약하지만 맞은 것을 시들게 한다. 활은 다른 화살보다 이것을 먼저 집는다. 다시 주울 수 없고, 무한은 세 번에 한 번만 아껴 준다."},

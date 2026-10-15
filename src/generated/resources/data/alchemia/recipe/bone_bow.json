@@ -1,0 +1,28 @@
+{
+  "type": "alchemia:arcane_shaped",
+  "key": {
+    "B": {
+      "item": "minecraft:bone"
+    },
+    "E": {
+      "item": "alchemia:entropy_shard"
+    },
+    "S": {
+      "item": "minecraft:string"
+    }
+  },
+  "pattern": [
+    "SB ",
+    "SEB",
+    "SB "
+  ],
+  "research": "alchemia:bone_bow",
+  "result": {
+    "count": 1,
+    "id": "alchemia:bone_bow"
+  },
+  "vis": {
+    "alchemia:aer": 50,
+    "alchemia:perditio": 100
+  }
+}
