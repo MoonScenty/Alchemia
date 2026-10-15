@@ -571,6 +571,17 @@ public class ModBlocks {
                     .mapColor(MapColor.WOOD).strength(1.0F).sound(SoundType.WOOD).noCollission().noOcclusion()
                     .ignitedByLava()));
 
+    /** The essentia transfusers: one fills the jars in front of it from a pipe, the other empties them into one. */
+    public static final DeferredBlock<me.moonscenty.alchemia.block.TransfuserBlock> ESSENTIA_INPUT =
+            register("essentia_input", () -> new me.moonscenty.alchemia.block.TransfuserBlock(true, transfuser()));
+    public static final DeferredBlock<me.moonscenty.alchemia.block.TransfuserBlock> ESSENTIA_OUTPUT =
+            register("essentia_output", () -> new me.moonscenty.alchemia.block.TransfuserBlock(false, transfuser()));
+
+    private static BlockBehaviour.Properties transfuser() {
+        return BlockBehaviour.Properties.of().mapColor(MapColor.METAL).strength(1.0F, 10.0F).sound(SoundType.METAL)
+                .noOcclusion();
+    }
+
     /** A block of rotten flesh, packed nine to one. It squelches. */
     public static final DeferredBlock<Block> FLESH_BLOCK = register("flesh_block",
             () -> new Block(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_RED).strength(0.25F, 2.0F)

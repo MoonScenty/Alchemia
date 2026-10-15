@@ -688,6 +688,22 @@ public class ModBlockStateProvider extends BlockStateProvider {
         ModBlocks.TALLOW_CANDLES.forEach((dye, block) -> getVariantBuilder(block.get()).partialState()
                 .modelForState().modelFile(candle).rotationY(90 * (dye.getId() % 4)).addModel());
         horizontalBlock(ModBlocks.PATTERN_CRAFTER.get(), models().getExistingFile(modLoc("block/pattern_crafter")));
+        // the transfusers point out of the face they are set on, turned as the original's were
+        for (var transfuser : java.util.List.of(ModBlocks.ESSENTIA_INPUT, ModBlocks.ESSENTIA_OUTPUT)) {
+            ModelFile fitting = models().getExistingFile(modLoc("block/" + transfuser.getId().getPath()));
+            getVariantBuilder(transfuser.get()).forAllStates(state -> {
+                Direction facing = state.getValue(me.moonscenty.alchemia.block.TransfuserBlock.FACING);
+                int x = facing == Direction.DOWN ? 180 : facing.getAxis().isHorizontal() ? 90 : 0;
+                int y = switch (facing) {
+                    case EAST -> 90;
+                    case WEST -> 270;
+                    case SOUTH -> 180;
+                    default -> 0;
+                };
+                return ConfiguredModel.builder().modelFile(fitting).rotationX(x).rotationY(y).build();
+            });
+            simpleBlockItem(transfuser.get(), fitting);
+        }
         simpleBlockWithItem(ModBlocks.GLOWING_CRUSTED_STONE);
         simpleBlockWithItem(ModBlocks.POROUS_STONE);
         lootBlock(ModBlocks.LOOT_URN.get(), "loot_urn",

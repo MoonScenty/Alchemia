@@ -1437,6 +1437,18 @@ public class ModRecipeProvider extends RecipeProvider {
                 "primal_arrows", new ItemStack(arrow.get(), 8), AspectList.of(type.aspect(), 25),
                 Map.of('A', Ingredient.of(Items.ARROW), 'S', shard(type)), "AAA", "ASA", "AAA"));
 
+        // the transfusers: a dispenser to send, a hopper to take, on a pipe and a block of brass
+        for (boolean filling : new boolean[] {true, false}) {
+            var made = filling ? ModBlocks.ESSENTIA_INPUT : ModBlocks.ESSENTIA_OUTPUT;
+            arcane(output, made.getId().getPath(), "essentia_transport", new ItemStack(made.get()),
+                    AspectList.of(ModAspects.WATER, 75).add(ModAspects.AIR, 50).add(ModAspects.ORDER, 50),
+                    Map.of('B', Ingredient.of(ModTags.Items.INGOTS_BRASS),
+                            'Q', Ingredient.of(filling ? Items.DISPENSER : Items.HOPPER),
+                            'I', Ingredient.of(Tags.Items.INGOTS_IRON), 'P', Ingredient.of(ModBlocks.TUBE),
+                            'G', Ingredient.of(ModBlocks.BRASS_BLOCK)),
+                    "BQB", "IGI", "IPI");
+        }
+
         // a leather jerkin made into a harness that flies
         infusion(output, "thaumostatic_harness", Ingredient.of(Items.LEATHER_CHESTPLATE),
                 List.of(shard(me.moonscenty.alchemia.block.CrystalType.AIR),

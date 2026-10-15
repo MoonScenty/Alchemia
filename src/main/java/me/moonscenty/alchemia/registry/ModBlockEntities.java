@@ -304,6 +304,14 @@ public class ModBlockEntities {
                     .of(me.moonscenty.alchemia.block.entity.GolemPressBlockEntity::new, ModBlocks.GOLEM_PRESS.get())
                     .build(null));
 
+    /** An essentia transfuser, filling or emptying. */
+    public static final DeferredHolder<BlockEntityType<?>,
+            BlockEntityType<me.moonscenty.alchemia.block.entity.TransfuserBlockEntity>> TRANSFUSER =
+            BLOCK_ENTITIES.register("transfuser", () -> BlockEntityType.Builder
+                    .of(me.moonscenty.alchemia.block.entity.TransfuserBlockEntity::new,
+                            ModBlocks.ESSENTIA_INPUT.get(), ModBlocks.ESSENTIA_OUTPUT.get())
+                    .build(null));
+
     /** A pattern crafter: the pattern its dial is set to. */
     public static final DeferredHolder<BlockEntityType<?>,
             BlockEntityType<me.moonscenty.alchemia.block.entity.PatternCrafterBlockEntity>> PATTERN_CRAFTER =

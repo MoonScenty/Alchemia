@@ -1,0 +1,32 @@
+{
+  "category": "alchemia:alchemy",
+  "column": 7,
+  "complexity": 2,
+  "icon": "alchemia:essentia_input",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.essentia_transport.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:essentia_input"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:essentia_output"
+    }
+  ],
+  "parents": [
+    "alchemia:thaumatorium",
+    "alchemia:infusion"
+  ],
+  "requirements": {
+    "alchemia:aqua": 3,
+    "alchemia:aversio": 3,
+    "alchemia:desiderium": 3,
+    "alchemia:motus": 6,
+    "alchemia:permutatio": 3
+  },
+  "row": 9
+}

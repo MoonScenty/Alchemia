@@ -59,7 +59,8 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
                         ModBlocks.ARCANE_PILLAR.get());
 
         tag(BlockTags.MINEABLE_WITH_AXE).add(ModBlocks.LOOT_CRATE.get());
-        tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.CRAB_SPAWNER.get(), ModBlocks.PATTERN_CRAFTER.get());
+        tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.CRAB_SPAWNER.get(), ModBlocks.PATTERN_CRAFTER.get(),
+                ModBlocks.ESSENTIA_INPUT.get(), ModBlocks.ESSENTIA_OUTPUT.get());
         tag(BlockTags.MINEABLE_WITH_HOE).add(ModBlocks.FLESH_BLOCK.get());
         // nothing that breaks blocks breaks the Outer Lands' bedrock, its void, or a great hall's door
         tag(BlockTags.WITHER_IMMUNE).add(ModBlocks.ANCIENT_BEDROCK.get(), ModBlocks.VACUUM.get(),

@@ -1,0 +1,35 @@
+{
+  "type": "alchemia:arcane_shaped",
+  "key": {
+    "B": {
+      "tag": "c:ingots/brass"
+    },
+    "G": {
+      "item": "alchemia:brass_block"
+    },
+    "I": {
+      "tag": "c:ingots/iron"
+    },
+    "P": {
+      "item": "alchemia:tube"
+    },
+    "Q": {
+      "item": "minecraft:hopper"
+    }
+  },
+  "pattern": [
+    "BQB",
+    "IGI",
+    "IPI"
+  ],
+  "research": "alchemia:essentia_transport",
+  "result": {
+    "count": 1,
+    "id": "alchemia:essentia_output"
+  },
+  "vis": {
+    "alchemia:aer": 50,
+    "alchemia:aqua": 75,
+    "alchemia:ordo": 50
+  }
+}
