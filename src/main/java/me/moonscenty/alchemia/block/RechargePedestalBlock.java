@@ -3,7 +3,6 @@ package me.moonscenty.alchemia.block;
 import com.mojang.serialization.MapCodec;
 
 import me.moonscenty.alchemia.block.entity.RechargePedestalBlockEntity;
-import me.moonscenty.alchemia.item.WandItem;
 import me.moonscenty.alchemia.registry.ModBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
@@ -49,12 +48,12 @@ public class RechargePedestalBlock extends BaseEntityBlock {
         return CODEC;
     }
 
-    /** A wand in hand is set down on it, if there is nothing there already. */
+    /** A wand, or anything else that takes vis back, in hand is set down on it, if there is nothing there already. */
     @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
             Player player, InteractionHand hand, BlockHitResult hit) {
         if (!(level.getBlockEntity(pos) instanceof RechargePedestalBlockEntity pedestal)
-                || !pedestal.getItem(0).isEmpty() || !(stack.getItem() instanceof WandItem)) {
+                || !pedestal.getItem(0).isEmpty() || !me.moonscenty.alchemia.item.bauble.Recharging.chargeable(stack)) {
             return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         }
         if (!level.isClientSide) {

@@ -1,0 +1,26 @@
+{
+  "category": "alchemia:alchemy",
+  "column": -4,
+  "complexity": 2,
+  "icon": "alchemia:liquid_death_bucket",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.liquid_death.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:liquid_death"
+    }
+  ],
+  "parents": [
+    "alchemia:crucible"
+  ],
+  "requirements": {
+    "alchemia:aqua": 1,
+    "alchemia:mortuus": 5,
+    "alchemia:perditio": 5
+  },
+  "row": 3,
+  "warp": 3
+}

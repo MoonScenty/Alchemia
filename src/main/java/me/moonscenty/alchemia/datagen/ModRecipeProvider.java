@@ -353,8 +353,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 "LGL", "L L", "TGT");
 
         // the bench a focus is worked on. The original's shape and its hundred and fifty of each primal, with
-        // the charm of all six at its heart; worked stone stands for the stone table the original set into the
-        // bottom, which is a piece of furniture this mod does not have
+        // the charm of all six at its heart and the stone table set into the bottom
         arcane(output, "focal_manipulator", "focal_manipulator",
                 new ItemStack(ModBlocks.FOCAL_MANIPULATOR.get()),
                 AspectList.of(ModAspects.FIRE, 150).add(ModAspects.AIR, 150).add(ModAspects.ENTROPY, 150)
@@ -362,7 +361,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 Map.of('I', Ingredient.of(Items.IRON_INGOT),
                         'Q', Ingredient.of(ModBlocks.ARCANE_STONE.slab()),
                         'S', Ingredient.of(ModBlocks.ARCANE_STONE.block()),
-                        'T', Ingredient.of(ModBlocks.ARCANE_STONE_BRICKS.block()),
+                        'T', Ingredient.of(ModBlocks.STONE_TABLE),
                         'G', Ingredient.of(Items.GOLD_INGOT),
                         'P', Ingredient.of(ModItems.PRIMAL_CHARM)),
                 "IQI", "SPS", "GTG");
@@ -909,7 +908,8 @@ public class ModRecipeProvider extends RecipeProvider {
                 List.of(Ingredient.of(ModItems.SHARDS.get(CrystalType.AIR)),
                         Ingredient.of(ModItems.SHARDS.get(CrystalType.AIR)),
                         Ingredient.of(ModItems.ENCHANTED_FABRIC), Ingredient.of(ModItems.ENCHANTED_FABRIC),
-                        Ingredient.of(Items.FEATHER), Ingredient.of(Items.COD)),
+                        Ingredient.of(Items.FEATHER),
+                        Ingredient.of(Items.COD, Items.SALMON, Items.TROPICAL_FISH, Items.PUFFERFISH)),
                 new ItemStack(ModItems.TRAVELLER_BOOTS.get()),
                 AspectList.of(ModAspects.FLIGHT, 25).add(ModAspects.MOTION, 25), 1, "traveller_boots");
 
@@ -1148,37 +1148,36 @@ public class ModRecipeProvider extends RecipeProvider {
     /**
      * What an altar can put on a tool somebody already owns.
      * <p>
-     * The knowledge fragment the original laid on the ring is eldritch loot and there is none yet, so a written
-     * research note stands in its place: the same reading, come by the long way rather than found.
+     * Each ring has the knowledge fragment the original laid on it.
      */
     private void enchantments(RecipeOutput output) {
         enchantment(output, InfusionEnchantment.COLLECTOR,
                 AspectList.of(ModAspects.DESIRE, 16).add(ModAspects.WATER, 24),
-                List.of(Ingredient.of(ModItems.RESEARCH_NOTES),
+                List.of(Ingredient.of(ModItems.KNOWLEDGE_FRAGMENT),
                         Ingredient.of(Items.ENCHANTED_BOOK), Ingredient.of(Items.LEAD)));
         enchantment(output, InfusionEnchantment.DESTRUCTIVE,
                 AspectList.of(ModAspects.AVERSION, 48).add(ModAspects.ENTROPY, 64),
-                List.of(Ingredient.of(ModItems.RESEARCH_NOTES),
+                List.of(Ingredient.of(ModItems.KNOWLEDGE_FRAGMENT),
                         Ingredient.of(Items.ENCHANTED_BOOK), Ingredient.of(Items.TNT)));
         enchantment(output, InfusionEnchantment.BURROWING,
                 AspectList.of(ModAspects.SENSES, 24).add(ModAspects.EARTH, 32),
-                List.of(Ingredient.of(ModItems.RESEARCH_NOTES),
+                List.of(Ingredient.of(ModItems.KNOWLEDGE_FRAGMENT),
                         Ingredient.of(Items.ENCHANTED_BOOK), Ingredient.of(Items.RABBIT_FOOT)));
         enchantment(output, InfusionEnchantment.REFINING,
                 AspectList.of(ModAspects.ORDER, 16).add(ModAspects.EXCHANGE, 12),
-                List.of(Ingredient.of(ModItems.RESEARCH_NOTES),
+                List.of(Ingredient.of(ModItems.KNOWLEDGE_FRAGMENT),
                         Ingredient.of(Items.ENCHANTED_BOOK), Ingredient.of(ModItems.SALIS_MUNDUS)));
         enchantment(output, InfusionEnchantment.SOUNDING,
                 AspectList.of(ModAspects.SENSES, 8).add(ModAspects.FIRE, 12),
-                List.of(Ingredient.of(ModItems.RESEARCH_NOTES),
+                List.of(Ingredient.of(ModItems.KNOWLEDGE_FRAGMENT),
                         Ingredient.of(Items.ENCHANTED_BOOK), Ingredient.of(Items.MAP)));
         enchantment(output, InfusionEnchantment.ARCING,
                 AspectList.of(ModAspects.ENERGY, 8).add(ModAspects.AIR, 12),
-                List.of(Ingredient.of(ModItems.RESEARCH_NOTES),
+                List.of(Ingredient.of(ModItems.KNOWLEDGE_FRAGMENT),
                         Ingredient.of(Items.ENCHANTED_BOOK), Ingredient.of(Items.REDSTONE_BLOCK)));
         enchantment(output, InfusionEnchantment.ESSENCE,
                 AspectList.of(ModAspects.BEAST, 8).add(ModAspects.FLUX, 12),
-                List.of(Ingredient.of(ModItems.RESEARCH_NOTES),
+                List.of(Ingredient.of(ModItems.KNOWLEDGE_FRAGMENT),
                         Ingredient.of(Items.ENCHANTED_BOOK), Ingredient.of(ModItems.CRYSTALLIZED_ESSENCE)));
     }
 
@@ -1323,6 +1322,10 @@ public class ModRecipeProvider extends RecipeProvider {
                 new ItemStack(ModItems.BRASS_INGOT.get()), "metallurgy");
 
         // flesh rendered down to tallow, and a blank seal steeped into each kind of control seal
+        // death itself, in a bucket
+        crucible(output, "liquid_death", Ingredient.of(Items.BUCKET),
+                AspectList.of(ModAspects.DEATH, 32).add(ModAspects.CRYSTAL, 32).add(ModAspects.ENTROPY, 32),
+                new ItemStack(ModItems.LIQUID_DEATH_BUCKET.get()), "liquid_death");
         crucible(output, "tallow", Ingredient.of(Items.ROTTEN_FLESH), AspectList.of(ModAspects.FIRE, 1),
                 new ItemStack(ModItems.TALLOW.get()), "tallow");
         seal(output, "pickup", ModItems.SEAL_BLANK.get(), AspectList.of(ModAspects.DESIRE, 4), "seal_collect");

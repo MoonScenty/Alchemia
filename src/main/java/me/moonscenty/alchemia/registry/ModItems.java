@@ -534,8 +534,8 @@ public class ModItems {
      * Ten of each of the six.
      * <p>
      * The original asked ten plus a random even number up to eight, redrawn every fifth of a second, so the price
-     * shimmered on the tooltip and the wand paid a different bill each time. Only the ten is here. The wobble is
-     * something a wand pays, and nothing pays anything yet; it goes back in where the price is actually charged.
+     * shimmered on the tooltip and the wand paid a different bill each time. That is put on when the focus is asked
+     * for its price ({@code FocusItem.primalCost}); this is what it stands at for anything that reads it unasked.
      * <p>
      * The six are named one by one rather than asked for with {@code ModAspects.primals()}: that reads the aspect
      * registry, and this runs while the item registry is being filled, when the aspect registry is still empty.

@@ -42,7 +42,27 @@ public class FocusItem extends Item {
      */
     public Focus focus(ItemStack stack) {
         Focus tuned = FocusUpgrades.tuned(stack);
-        return tuned == null ? focus : tuned;
+        Focus found = tuned == null ? focus : tuned;
+        if (stack.is(me.moonscenty.alchemia.registry.ModItems.FOCI.get("primal").get())) {
+            return found.costing(primalCost(System.currentTimeMillis()));
+        }
+        return found;
+    }
+
+    /**
+     * What the primal focus asks this moment: ten and an even number up to eight more of each primal, drawn afresh
+     * every fifth of a second, so the price shimmers on the tooltip and every cast is billed what it is then. The
+     * original's draw, in its order, from the same kind of generator, so a client and a server agree within the
+     * fifth of a second.
+     */
+    public static AspectList primalCost(long millis) {
+        java.util.Random draw = new java.util.Random(millis / 200L);
+        return AspectList.of(me.moonscenty.alchemia.registry.ModAspects.WATER, 10 + draw.nextInt(5) * 2)
+                .add(me.moonscenty.alchemia.registry.ModAspects.AIR, 10 + draw.nextInt(5) * 2)
+                .add(me.moonscenty.alchemia.registry.ModAspects.EARTH, 10 + draw.nextInt(5) * 2)
+                .add(me.moonscenty.alchemia.registry.ModAspects.FIRE, 10 + draw.nextInt(5) * 2)
+                .add(me.moonscenty.alchemia.registry.ModAspects.ORDER, 10 + draw.nextInt(5) * 2)
+                .add(me.moonscenty.alchemia.registry.ModAspects.ENTROPY, 10 + draw.nextInt(5) * 2);
     }
 
     /** What it is before anybody has worked on it, which is what the upgrades are applied to. */

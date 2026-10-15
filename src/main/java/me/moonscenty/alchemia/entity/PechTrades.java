@@ -32,9 +32,9 @@ import net.minecraft.world.level.Level;
  * as much desire as there is in it, if there is more than one. A trade is worth what was offered, give or take, and
  * the pech pays it out in lots of one to five, each lot a thing from its own list of that worth.
  *
- * <p>Each kind of pech keeps its own list, the original's. What this game does not have yet is left off -- the
- * stalker's candles, primal arrows, bone bow and runic ring, the mage's amulet, and enchanted books of the original's
- * own enchantments -- and a lot nothing on the list is worth is paid in the nearest worth there is.
+ * <p>Each kind of pech keeps its own list, the original's. What this game does not have is left off -- the
+ * stalker's primal arrows and bone bow, and enchanted books of the original's own enchantments -- and a lot nothing on
+ * the list is worth is paid in the nearest worth there is.
  */
 public final class PechTrades {
     /** A lot: what it is worth, and how to make one. */
@@ -147,6 +147,12 @@ public final class PechTrades {
 
     private static List<Lot> stalker() {
         List<Lot> lots = new ArrayList<>();
+        // tallow candles, every colour but black, as the original counted them out
+        for (net.minecraft.world.item.DyeColor colour : net.minecraft.world.item.DyeColor.values()) {
+            if (colour != net.minecraft.world.item.DyeColor.BLACK) {
+                lots.add(item(1, me.moonscenty.alchemia.registry.ModBlocks.TALLOW_CANDLES.get(colour).get().asItem()));
+            }
+        }
         lots.add(item(2, Items.GHAST_TEAR));
         lots.add(potion(2, Potions.SWIFTNESS));
         lots.add(potion(2, Potions.STRENGTH));

@@ -12,7 +12,7 @@
   "research": "alchemia:infusion_enchantment",
   "ring": [
     {
-      "item": "alchemia:research_notes"
+      "item": "alchemia:knowledge_fragment"
     },
     {
       "item": "minecraft:enchanted_book"
