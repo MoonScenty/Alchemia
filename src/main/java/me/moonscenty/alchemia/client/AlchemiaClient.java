@@ -13,10 +13,19 @@ import net.neoforged.neoforge.data.loading.DatagenModLoader;
 @Mod(value = Alchemia.MODID, dist = Dist.CLIENT)
 public class AlchemiaClient {
     public AlchemiaClient(ModContainer container) {
-        // the game is drawn with the original's own pictures and models, so it does not start without both jars.
-        // Writing the data files draws nothing and needs neither
+        // the game is drawn with the original's own pictures and models, so without both jars it shows where to get
+        // them in place of its title, and goes no further. Writing the data files draws nothing and needs neither
         if (!DatagenModLoader.isRunningDataGen()) {
-            LegacyAssetImporter.requireJars();
+            java.util.Set<me.moonscenty.alchemia.client.legacy.LegacyEdition> missing =
+                    LegacyAssetImporter.missingJars();
+            if (!missing.isEmpty()) {
+                net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(
+                        (net.neoforged.neoforge.client.event.ScreenEvent.Opening event) -> {
+                            if (event.getNewScreen() instanceof net.minecraft.client.gui.screens.TitleScreen) {
+                                event.setNewScreen(new MissingJarsScreen(missing, LegacyAssetImporter.folder()));
+                            }
+                        });
+            }
         }
         container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
     }

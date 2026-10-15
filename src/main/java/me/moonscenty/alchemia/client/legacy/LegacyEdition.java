@@ -16,6 +16,22 @@ public enum LegacyEdition {
         this.minecraftVersion = minecraftVersion;
     }
 
+    /** The file the original's author put out for this release. */
+    public String fileName() {
+        return switch (this) {
+            case FOUR -> "Thaumcraft-1.7.10-4.2.3.5.jar";
+            case FIVE -> "Thaumcraft-1.8.9-5.2.4.jar";
+        };
+    }
+
+    /** Where the author put that file out: its page on CurseForge, where the player downloads it themselves. */
+    public String downloadPage() {
+        return switch (this) {
+            case FOUR -> "https://www.curseforge.com/minecraft/mc-mods/thaumcraft/files/2227552";
+            case FIVE -> "https://www.curseforge.com/minecraft/mc-mods/thaumcraft/files/2287496";
+        };
+    }
+
     /** Which jar this is, in words a player can go and find it by. */
     String describe() {
         return switch (this) {

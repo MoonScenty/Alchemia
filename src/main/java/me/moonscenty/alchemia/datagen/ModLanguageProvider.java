@@ -650,6 +650,13 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         addBlock(ModBlocks.ESSENTIA_OUTPUT, pick("Emptying Essentia Transfuser", "비우는 에센시아 수혈기"));
         add("item.alchemia.thaumostatic_harness.fuel", pick("Flight left: %s s", "남은 비행: %s초"));
         add("key.alchemia.hover", pick("Thaumostatic harness", "타우모스태틱 하네스"));
+        add("screen.alchemia.missing_jars.title", pick("Alchemia needs the original Thaumcraft",
+                "Alchemia에는 원본 Thaumcraft가 필요합니다"));
+        add("screen.alchemia.missing_jars.message", pick(
+                "Alchemia draws with the original Thaumcraft's pictures, models and sounds, read from its jars. Download the missing jars from the author's CurseForge page, put them in %s (any file name), and start the game again.",
+                "Alchemia는 원본 Thaumcraft jar에서 그림·모델·소리를 읽어 씁니다. 빠진 jar를 작성자의 CurseForge 페이지에서 받아 %s 폴더에 넣고(파일 이름은 상관없습니다) 게임을 다시 시작하세요."));
+        add("screen.alchemia.missing_jars.download", pick("Download %s (CurseForge)", "%s 받기 (CurseForge)"));
+        add("screen.alchemia.missing_jars.folder", pick("Open the legacy folder", "legacy 폴더 열기"));
         add("entity.alchemia.bottle_taint", pick("Bottled Taint", "병에 든 오염"));
         for (String kind : new String[] {"air_arrow", "fire_arrow", "order_arrow"}) {
             add("death.attack.alchemia." + kind, pick("%1$s was shot by a primal arrow",

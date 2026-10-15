@@ -36,8 +36,9 @@ import net.neoforged.neoforge.event.AddPackFindersEvent;
  * as a resource pack sitting above our own files.
  *
  * <p>The original is All Rights Reserved, so its pictures never go into this repository. The player brings the jar;
- * we only know where in it to look. Both releases are required: {@link #requireJars()} stops the game at start-up
- * without them. Our own pictures stay underneath, for anything the jars do not have.
+ * we only know where in it to look. Both releases are required: while {@link #missingJars()} finds one missing, the
+ * game shows where to download it instead of its title. Our own pictures stay underneath, for anything the jars do
+ * not have.
  *
  * <p>The import runs every time the pack list is rebuilt, so dropping a jar in and pressing F3+T is enough.
  */
@@ -183,15 +184,20 @@ public final class LegacyAssetImporter {
         return models;
     }
 
+    /** Where the jars go. */
+    public static Path folder() {
+        return FMLPaths.GAMEDIR.get().resolve(FOLDER);
+    }
+
     /**
-     * Stops the game before it gets going unless both releases of the original are in the folder. The mod draws with
-     * their pictures and models and is not meant to be played without them, so it is better to say so at once, with
-     * where they go, than to start with half of everything missing.
+     * Which releases of the original are not in the folder. The mod draws with their pictures and models and is not
+     * meant to be played without them; the game shows where to get them instead of its title while any is missing.
+     * The folder is made if it is not there, so a player can see where the jars go.
      *
      * <p>A jar is told apart by what it says it is inside, not by its name, as for the import itself.
      */
-    public static void requireJars() {
-        Path folder = FMLPaths.GAMEDIR.get().resolve(FOLDER);
+    public static Set<LegacyEdition> missingJars() {
+        Path folder = folder();
         Set<LegacyEdition> found = EnumSet.noneOf(LegacyEdition.class);
         if (Files.isDirectory(folder)) {
             Map<LegacyEdition, LegacyJar> jars = new EnumMap<>(LegacyEdition.class);
@@ -214,15 +220,11 @@ public final class LegacyAssetImporter {
         }
         Set<LegacyEdition> missing = EnumSet.allOf(LegacyEdition.class);
         missing.removeAll(found);
-        if (!missing.isEmpty()) {
-            StringBuilder wanted = new StringBuilder();
-            for (LegacyEdition edition : missing) {
-                wanted.append("\n  - ").append(edition.describe());
-            }
-            throw new IllegalStateException("Alchemia needs both jars of the original Thaumcraft in "
-                    + folder.toAbsolutePath() + ". Missing:" + wanted
-                    + "\nPut the jars in that folder (any file name) and start the game again.");
+        for (LegacyEdition edition : missing) {
+            Alchemia.LOGGER.warn("Missing the original's jar in {}: {}, from {}", folder.toAbsolutePath(),
+                    edition.describe(), edition.downloadPage());
         }
+        return missing;
     }
 
     private static void openJars(Path folder, Map<LegacyEdition, LegacyJar> jars) {
