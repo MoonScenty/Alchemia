@@ -118,7 +118,7 @@ public class ModResearchProvider {
         entry(context, "tube_filter", ModResearch.ALCHEMY, ModBlocks.TUBE_FILTER, 3, 6,
                 AspectList.of(ModAspects.WATER, 3).add(ModAspects.EXCHANGE, 6).add(ModAspects.ORDER, 3),
                 List.of("tubes"), false, NodeShape.PLAIN, 3,
-                "tube_filter", "tube_restrict", "tube_oneway", "tube_buffer");
+                "tube_filter", "tube_restrict", "tube_oneway", "tube_buffer", "alchemical_construct");
 
         // mirrors that pass things between them, a hand mirror that sends to one, and mirrors that pass essentia
         entry(context, "mirror", ModResearch.ARTIFICE, ModBlocks.MIRROR, -1, 9,
@@ -152,7 +152,7 @@ public class ModResearchProvider {
                 List.of("infusion"), false, NodeShape.PLAIN, 2, "brain_jar");
 
         // a crucible that works on its own, and the matrix that lets it keep more in mind
-        entry(context, "thaumatorium", ModResearch.ALCHEMY, ModBlocks.CRUCIBLE, 6, 8,
+        entry(context, "thaumatorium", ModResearch.ALCHEMY, ModBlocks.ALCHEMICAL_CONSTRUCT, 6, 8,
                 AspectList.of(ModAspects.WATER, 3).add(ModAspects.ENERGY, 6).add(ModAspects.EXCHANGE, 3)
                         .add(ModAspects.CRAFT, 3),
                 List.of("improved_distillation"), false, NodeShape.PLAIN, 3, "mnemonic_matrix");
@@ -177,7 +177,8 @@ public class ModResearchProvider {
                 List.of("distillation", "improved_distillation"), false, NodeShape.PLAIN, 1, "alchemium_smelter");
         entry(context, "void_smelter", ModResearch.ALCHEMY, ModBlocks.VOID_SMELTER, 2, 8,
                 AspectList.of(ModAspects.FIRE, 3).add(ModAspects.WATER, 3).add(ModAspects.CRAFT, 3),
-                List.of("alchemium_smelter", "void_metal"), false, NodeShape.PLAIN, 1, "void_smelter");
+                List.of("alchemium_smelter", "void_metal"), false, NodeShape.PLAIN, 1, "advanced_alchemical_construct",
+                "void_smelter");
 
         // the last of the caps hangs off this one, since void metal is the only thing it can be drawn from
         entry(context, "void_metal", ModResearch.ALCHEMY, ModItems.VOID_INGOT, -2, 4,

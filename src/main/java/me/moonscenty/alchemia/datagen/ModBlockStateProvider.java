@@ -681,6 +681,8 @@ public class ModBlockStateProvider extends BlockStateProvider {
         simpleBlockWithItem(ModBlocks.GLYPHED_STONE);
         simpleBlockWithItem(ModBlocks.ANCIENT_DOORWAY);
         simpleBlockWithItem(ModBlocks.CRUSTED_STONE);
+        simpleBlockWithItem(ModBlocks.ALCHEMICAL_CONSTRUCT);
+        simpleBlockWithItem(ModBlocks.ADVANCED_ALCHEMICAL_CONSTRUCT);
         simpleBlockWithItem(ModBlocks.FLESH_BLOCK.get(), models().cubeAll("flesh_block", modLoc("block/legacy/flesh")));
         // the original's one candle model for every colour, turned a quarter more for each so a row of them is not
         // a row of the same drips

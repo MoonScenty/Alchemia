@@ -38,11 +38,9 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 /**
- * One half of a thaumatorium: a crucible with two blocks of brass stacked on it, worked with a wand.
- * <p>
- * The original built it from two alchemical constructs, which there are none of here; it drew those as the brass
- * block is drawn, and that block stands in for them. The crucible stays as it is underneath and carries the heat.
- * Take away either half or the crucible and what is left falls back to brass. It faces the way the face clicked
+ * One half of a thaumatorium: a crucible with two alchemical constructs stacked on it, worked with a wand, as the
+ * original built it. The crucible stays as it is underneath and carries the heat. Take away either half or the
+ * crucible and what is left falls back to a construct. It faces the way the face clicked
  * faced, and that is where what it makes comes out.
  */
 public class ThaumatoriumBlock extends BaseEntityBlock {
@@ -105,7 +103,7 @@ public class ThaumatoriumBlock extends BaseEntityBlock {
         return InteractionResult.sidedSuccess(level.isClientSide);
     }
 
-    /** Falls back to brass when the other half or the crucible under it is gone. */
+    /** Falls back to a construct when the other half or the crucible under it is gone. */
     @Override
     protected BlockState updateShape(BlockState state, Direction direction, BlockState neighbour,
             LevelAccessor level, BlockPos pos, BlockPos neighbourPos) {
@@ -113,7 +111,7 @@ public class ThaumatoriumBlock extends BaseEntityBlock {
                 ? level.getBlockState(pos.below()).is(this)
                 : level.getBlockState(pos.above()).is(this)
                         && level.getBlockState(pos.below()).is(ModBlocks.CRUCIBLE.get());
-        return whole ? state : ModBlocks.BRASS_BLOCK.get().defaultBlockState();
+        return whole ? state : ModBlocks.ALCHEMICAL_CONSTRUCT.get().defaultBlockState();
     }
 
     @Override
@@ -138,7 +136,7 @@ public class ThaumatoriumBlock extends BaseEntityBlock {
     }
 
     /**
-     * Makes one out of a crucible with two blocks of brass on it, if the wand can pay and its bearer has worked out
+     * Makes one out of a crucible with two alchemical constructs on it, if the wand can pay and its bearer has worked out
      * how. Any of the three can be clicked, on any side but the top or bottom; the side clicked becomes the front.
      *
      * @return whether it was made
@@ -149,14 +147,14 @@ public class ThaumatoriumBlock extends BaseEntityBlock {
             return false;
         }
         BlockPos base;
-        if (brass(level, clicked.above()) && level.getBlockState(clicked.below()).is(ModBlocks.CRUCIBLE.get())
-                && brass(level, clicked)) {
+        if (construct(level, clicked.above()) && level.getBlockState(clicked.below()).is(ModBlocks.CRUCIBLE.get())
+                && construct(level, clicked)) {
             base = clicked;
-        } else if (brass(level, clicked.below()) && brass(level, clicked)
+        } else if (construct(level, clicked.below()) && construct(level, clicked)
                 && level.getBlockState(clicked.below(2)).is(ModBlocks.CRUCIBLE.get())) {
             base = clicked.below();
-        } else if (level.getBlockState(clicked).is(ModBlocks.CRUCIBLE.get()) && brass(level, clicked.above())
-                && brass(level, clicked.above(2))) {
+        } else if (level.getBlockState(clicked).is(ModBlocks.CRUCIBLE.get()) && construct(level, clicked.above())
+                && construct(level, clicked.above(2))) {
             base = clicked.above();
         } else {
             return false;
@@ -182,7 +180,7 @@ public class ThaumatoriumBlock extends BaseEntityBlock {
         return true;
     }
 
-    private static boolean brass(Level level, BlockPos pos) {
-        return level.getBlockState(pos).is(ModBlocks.BRASS_BLOCK.get());
+    private static boolean construct(Level level, BlockPos pos) {
+        return level.getBlockState(pos).is(ModBlocks.ALCHEMICAL_CONSTRUCT.get());
     }
 }

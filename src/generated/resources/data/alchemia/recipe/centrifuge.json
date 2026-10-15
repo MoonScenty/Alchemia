@@ -2,7 +2,7 @@
   "type": "alchemia:arcane_shaped",
   "key": {
     "C": {
-      "item": "alchemia:brass_block"
+      "item": "alchemia:alchemical_construct"
     },
     "P": {
       "item": "alchemia:brass_gear"

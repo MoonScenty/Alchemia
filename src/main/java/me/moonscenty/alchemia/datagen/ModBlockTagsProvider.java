@@ -33,7 +33,12 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         tag(ModTags.Blocks.STORAGE_BLOCKS_ALCHEMIUM).add(ModBlocks.ALCHEMIUM_BLOCK.get());
         tag(ModTags.Blocks.STORAGE_BLOCKS_BRASS).add(ModBlocks.BRASS_BLOCK.get());
         tag(Tags.Blocks.STORAGE_BLOCKS).addTag(ModTags.Blocks.STORAGE_BLOCKS_ALCHEMIUM).addTag(ModTags.Blocks.STORAGE_BLOCKS_BRASS);
-        tag(BlockTags.BEACON_BASE_BLOCKS).add(ModBlocks.ALCHEMIUM_BLOCK.get(), ModBlocks.BRASS_BLOCK.get());
+        tag(BlockTags.BEACON_BASE_BLOCKS).add(ModBlocks.ALCHEMIUM_BLOCK.get(), ModBlocks.BRASS_BLOCK.get(),
+                ModBlocks.ALCHEMICAL_CONSTRUCT.get(), ModBlocks.ADVANCED_ALCHEMICAL_CONSTRUCT.get());
+        tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.ALCHEMICAL_CONSTRUCT.get(),
+                ModBlocks.ADVANCED_ALCHEMICAL_CONSTRUCT.get());
+        tag(BlockTags.NEEDS_STONE_TOOL).add(ModBlocks.ALCHEMICAL_CONSTRUCT.get(),
+                ModBlocks.ADVANCED_ALCHEMICAL_CONSTRUCT.get());
 
         tag(BlockTags.MINEABLE_WITH_PICKAXE)
                 .addTag(ModTags.Blocks.STORAGE_BLOCKS_ALCHEMIUM)

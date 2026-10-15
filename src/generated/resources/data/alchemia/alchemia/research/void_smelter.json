@@ -9,6 +9,10 @@
     },
     {
       "type": "recipe",
+      "recipe": "alchemia:advanced_alchemical_construct"
+    },
+    {
+      "type": "recipe",
       "recipe": "alchemia:void_smelter"
     }
   ],

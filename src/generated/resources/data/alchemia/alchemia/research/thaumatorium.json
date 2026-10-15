@@ -2,7 +2,7 @@
   "category": "alchemia:alchemy",
   "column": 6,
   "complexity": 3,
-  "icon": "alchemia:crucible",
+  "icon": "alchemia:alchemical_construct",
   "pages": [
     {
       "type": "text",

@@ -1,0 +1,29 @@
+{
+  "type": "alchemia:arcane_shaped",
+  "key": {
+    "A": {
+      "item": "alchemia:alchemical_construct"
+    },
+    "P": {
+      "item": "alchemia:primordial_pearl"
+    },
+    "V": {
+      "item": "alchemia:void_ingot"
+    }
+  },
+  "pattern": [
+    "VAV",
+    "APA",
+    "VAV"
+  ],
+  "research": "alchemia:void_smelter",
+  "result": {
+    "count": 1,
+    "id": "alchemia:advanced_alchemical_construct"
+  },
+  "vis": {
+    "alchemia:aqua": 200,
+    "alchemia:ordo": 200,
+    "alchemia:terra": 200
+  }
+}

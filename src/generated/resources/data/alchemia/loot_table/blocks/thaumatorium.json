@@ -11,7 +11,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "alchemia:brass_block"
+          "name": "alchemia:alchemical_construct"
         }
       ],
       "rolls": 1.0

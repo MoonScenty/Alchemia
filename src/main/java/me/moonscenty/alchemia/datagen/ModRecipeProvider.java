@@ -680,21 +680,33 @@ public class ModRecipeProvider extends RecipeProvider {
                         'S', Ingredient.of(Tags.Items.COBBLESTONES)),
                 "BCB", "SFS", "SSS");
 
-        // the better smelters, and what goes against a smelter's sides. The original built the first two round an
-        // alchemical construct, which there is none of here; the brass block it was drawn as stands in for it, and
-        // for the advanced construct (a construct worked with a primordial pearl), a primal charm
+        // the better smelters, and what goes against a smelter's sides, built round an alchemical construct, and the
+        // void smelter round an advanced one, as the original built them
+        // the alchemical construct: iron round a greatwood heart, a pipe and two valves through it; and the advanced
+        // one, four constructs round a primordial pearl with void metal at the corners
+        arcane(output, "alchemical_construct", "distillation", new ItemStack(ModBlocks.ALCHEMICAL_CONSTRUCT.get()),
+                AspectList.of(ModAspects.WATER, 50).add(ModAspects.ORDER, 50),
+                Map.of('I', Ingredient.of(Tags.Items.INGOTS_IRON), 'V', Ingredient.of(ModBlocks.TUBE_VALVE),
+                        'T', Ingredient.of(ModBlocks.TUBE), 'W', Ingredient.of(ModBlocks.GREATWOOD.planks())),
+                "IVI", "TWT", "IVI");
+        arcane(output, "advanced_alchemical_construct", "void_smelter",
+                new ItemStack(ModBlocks.ADVANCED_ALCHEMICAL_CONSTRUCT.get()),
+                AspectList.of(ModAspects.WATER, 200).add(ModAspects.ORDER, 200).add(ModAspects.EARTH, 200),
+                Map.of('V', Ingredient.of(ModItems.VOID_INGOT), 'A', Ingredient.of(ModBlocks.ALCHEMICAL_CONSTRUCT),
+                        'P', Ingredient.of(ModItems.PRIMORDIAL_PEARL)),
+                "VAV", "APA", "VAV");
         arcane(output, "alchemium_smelter", "alchemium_smelter", new ItemStack(ModBlocks.ALCHEMIUM_SMELTER.get()),
                 AspectList.of(ModAspects.FIRE, 350).add(ModAspects.WATER, 350),
                 Map.of('B', Ingredient.of(ModItems.BRASS_PLATE),
                         'F', Ingredient.of(ModBlocks.ESSENTIA_SMELTER),
-                        'G', Ingredient.of(ModBlocks.BRASS_BLOCK),
+                        'G', Ingredient.of(ModBlocks.ALCHEMICAL_CONSTRUCT),
                         'I', Ingredient.of(ModItems.ALCHEMIUM_INGOT)),
                 "BFB", "IGI", "III");
         arcane(output, "void_smelter", "void_smelter", new ItemStack(ModBlocks.VOID_SMELTER.get()),
                 AspectList.of(ModAspects.FIRE, 750).add(ModAspects.WATER, 750),
                 Map.of('B', Ingredient.of(ModItems.BRASS_PLATE),
                         'F', Ingredient.of(ModBlocks.ALCHEMIUM_SMELTER),
-                        'G', Ingredient.of(ModItems.PRIMORDIAL_PEARL),
+                        'G', Ingredient.of(ModBlocks.ADVANCED_ALCHEMICAL_CONSTRUCT),
                         'I', Ingredient.of(ModItems.VOID_INGOT)),
                 "BFB", "IGI", "III");
         arcane(output, "arcane_bore_base", "arcane_bore", new ItemStack(ModBlocks.ARCANE_BORE_BASE.get()),
@@ -714,7 +726,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 AspectList.of(ModAspects.WATER, 100).add(ModAspects.ORDER, 100).add(ModAspects.ENTROPY, 100),
                 Map.of('T', Ingredient.of(ModBlocks.TUBE),
                         'R', Ingredient.of(ModItems.MORPHIC_RESONATOR),
-                        'C', Ingredient.of(ModBlocks.BRASS_BLOCK),
+                        'C', Ingredient.of(ModBlocks.ALCHEMICAL_CONSTRUCT),
                         'P', Ingredient.of(ModItems.BRASS_GEAR)),
                 " T ", "RCP", " T ");
         arcane(output, "crystallizer", "crystallizer", new ItemStack(ModBlocks.CRYSTALLIZER.get()),
@@ -722,7 +734,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 Map.of('I', Ingredient.of(Tags.Items.INGOTS_IRON),
                         'D', Ingredient.of(ModItems.BRASS_GEAR),
                         'Q', Ingredient.of(ModItems.BALANCED_SHARD),
-                        'C', Ingredient.of(ModBlocks.BRASS_BLOCK),
+                        'C', Ingredient.of(ModBlocks.ALCHEMICAL_CONSTRUCT),
                         'W', Ingredient.of(net.minecraft.tags.ItemTags.PLANKS),
                         'T', Ingredient.of(ModBlocks.TUBE)),
                 "IDI", "QCQ", "WTW");
@@ -731,7 +743,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 Map.of('W', Ingredient.of(ModBlocks.GREATWOOD.planks()),
                         'T', Ingredient.of(ModBlocks.TUBE_FILTER),
                         'R', Ingredient.of(ModItems.BRASS_PLATE),
-                        'G', Ingredient.of(ModBlocks.BRASS_BLOCK),
+                        'G', Ingredient.of(ModBlocks.ALCHEMICAL_CONSTRUCT),
                         'I', Ingredient.of(Tags.Items.INGOTS_IRON),
                         'B', Ingredient.of(ModBlocks.BELLOWS)),
                 "WTW", "RGR", "IBI");
@@ -740,7 +752,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 Map.of('I', Ingredient.of(Tags.Items.INGOTS_IRON),
                         'B', Ingredient.of(ModItems.BRASS_INGOT),
                         'M', Ingredient.of(ModItems.MORPHIC_RESONATOR),
-                        'G', Ingredient.of(ModBlocks.BRASS_BLOCK),
+                        'G', Ingredient.of(ModBlocks.ALCHEMICAL_CONSTRUCT),
                         'F', Ingredient.of(ModItems.FILTER)),
                 "IBI", "MGF", "IBI");
 
@@ -1445,7 +1457,7 @@ public class ModRecipeProvider extends RecipeProvider {
                     Map.of('B', Ingredient.of(ModTags.Items.INGOTS_BRASS),
                             'Q', Ingredient.of(filling ? Items.DISPENSER : Items.HOPPER),
                             'I', Ingredient.of(Tags.Items.INGOTS_IRON), 'P', Ingredient.of(ModBlocks.TUBE),
-                            'G', Ingredient.of(ModBlocks.BRASS_BLOCK)),
+                            'G', Ingredient.of(ModBlocks.ALCHEMICAL_CONSTRUCT)),
                     "BQB", "IGI", "IPI");
         }
 
