@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "level=0": {
+      "model": "alchemia:block/taint_dust_0"
+    },
+    "level=1": {
+      "model": "alchemia:block/taint_dust_1"
+    },
+    "level=2": {
+      "model": "alchemia:block/taint_dust_2"
+    },
+    "level=3": {
+      "model": "alchemia:block/taint_dust_3"
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/snow_height4",
+  "textures": {
+    "particle": "alchemia:block/legacy/taint_dust",
+    "texture": "alchemia:block/legacy/taint_dust"
+  }
+}

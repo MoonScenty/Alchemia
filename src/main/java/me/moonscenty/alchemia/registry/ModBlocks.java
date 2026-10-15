@@ -582,6 +582,12 @@ public class ModBlocks {
                 .noOcclusion();
     }
 
+    /** What is left where taint has died back: a dry heap that settles and weathers away. */
+    public static final DeferredBlock<me.moonscenty.alchemia.block.taint.TaintDustBlock> TAINT_DUST =
+            register("taint_dust", () -> new me.moonscenty.alchemia.block.taint.TaintDustBlock(
+                    BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PURPLE).strength(0.3F)
+                            .sound(SoundType.SAND).replaceable().randomTicks().noLootTable().noOcclusion()));
+
     /** A block of rotten flesh, packed nine to one. It squelches. */
     public static final DeferredBlock<Block> FLESH_BLOCK = register("flesh_block",
             () -> new Block(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_RED).strength(0.25F, 2.0F)

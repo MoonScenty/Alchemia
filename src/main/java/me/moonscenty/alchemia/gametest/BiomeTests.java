@@ -124,7 +124,7 @@ public class BiomeTests {
         }
         boolean healed = !landIs(helper, HERE, ModBiomes.TAINTED_LAND);
         putBack(helper, HERE);
-        helper.assertBlockPresent(Blocks.DIRT, HERE);
+        helper.assertBlockPresent(ModBlocks.TAINT_DUST.get(), HERE);
         helper.assertTrue(healed, "the land should no longer be tainted once the taint on it has died");
         helper.succeed();
     }

@@ -127,9 +127,9 @@ public class TaintTests {
         helper.succeed();
     }
 
-    /** Starved of flux, tainted soil goes back to being dirt. */
+    /** Starved of flux, tainted soil crumbles to taint dust, as the original's did. */
     @GameTest(template = TEMPLATE)
-    public static void starvedSoilTurnsBackToDirt(GameTestHelper helper) {
+    public static void starvedSoilCrumblesToDust(GameTestHelper helper) {
         flux(helper, 0);
         helper.setBlock(HERE, ModBlocks.TAINT_SOIL.get());
 
@@ -137,7 +137,7 @@ public class TaintTests {
         for (int i = 0; i < 100 && helper.getBlockState(HERE).is(ModBlocks.TAINT_SOIL.get()); i++) {
             helper.getBlockState(HERE).randomTick(helper.getLevel(), helper.absolutePos(HERE), random);
         }
-        helper.assertBlockPresent(Blocks.DIRT, HERE);
+        helper.assertBlockPresent(ModBlocks.TAINT_DUST.get(), HERE);
         helper.succeed();
     }
 

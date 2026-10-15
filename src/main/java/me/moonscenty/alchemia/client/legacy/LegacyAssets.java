@@ -947,6 +947,7 @@ public final class LegacyAssets {
             all.add(item("primal_arrow_" + element, "primal_arrow_" + element, null));
         }
         all.add(item("bottle_taint", "bottle_taint", null));
+        all.add(LegacyAsset.of("textures/block/legacy/taint_dust.png").five("textures/blocks/taint_dust.png"));
         // the essentia transfusers, both on the one picture
         for (String transfuser : List.of("essentia_input", "essentia_output")) {
             all.add(LegacyAsset.of("models/block/" + transfuser + ".json").five("models/block/" + transfuser + ".json")

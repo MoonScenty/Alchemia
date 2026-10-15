@@ -821,7 +821,7 @@ public final class MazeBuilder {
                     int dx = between(-3, 3);
                     int dz = between(-3, 3);
                     level.setBlock(new BlockPos(x + 8 + dx, y + 2 + q / 2, z + 8 + dz),
-                            ModBlocks.FLUX_GOO.get().defaultBlockState(), Block.UPDATE_CLIENTS);
+                            ModBlocks.TAINT_DUST.get().defaultBlockState(), Block.UPDATE_CLIENTS);
                 }
             }
             case 1 -> guardians(x, y, z);
