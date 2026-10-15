@@ -9,12 +9,12 @@ import me.moonscenty.alchemia.block.entity.JarBlockEntity;
 import me.moonscenty.alchemia.item.PhialItem;
 import me.moonscenty.alchemia.registry.ModDataComponents;
 import me.moonscenty.alchemia.registry.ModItems;
+import me.moonscenty.alchemia.registry.ModSounds;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -119,7 +119,7 @@ public class JarBlock extends BaseEntityBlock {
             if (!level.isClientSide) {
                 jar.brace(true);
                 stack.consume(1, player);
-                level.playSound(null, pos, SoundEvents.IRON_TRAPDOOR_CLOSE, SoundSource.BLOCKS, 0.5F, 1.4F);
+                level.playSound(null, pos, ModSounds.KEY.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
             }
             return ItemInteractionResult.sidedSuccess(level.isClientSide);
         }
@@ -137,7 +137,7 @@ public class JarBlock extends BaseEntityBlock {
                 level.setBlock(pos, level.getBlockState(pos)
                         .setValue(FACING, player.getDirection().getOpposite()), Block.UPDATE_ALL);
                 stack.consume(1, player);
-                level.playSound(null, pos, SoundEvents.BOOK_PAGE_TURN, SoundSource.BLOCKS, 0.7F, 1.0F);
+                level.playSound(null, pos, ModSounds.JAR.get(), SoundSource.BLOCKS, 0.4F, 1.0F);
             }
             return ItemInteractionResult.sidedSuccess(level.isClientSide);
         }
@@ -168,7 +168,7 @@ public class JarBlock extends BaseEntityBlock {
         if (player.isSecondaryUseActive() && jar.label().isPresent()) {
             popResource(level, pos, labelFor(jar.label().get()));
             jar.label(null);
-            level.playSound(null, pos, SoundEvents.BOOK_PAGE_TURN, SoundSource.BLOCKS, 0.7F, 0.8F);
+            level.playSound(null, pos, ModSounds.PAGE.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
             return InteractionResult.CONSUME;
         }
         player.displayClientMessage(jar.holding()

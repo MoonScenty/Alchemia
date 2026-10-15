@@ -9,10 +9,10 @@ import me.moonscenty.alchemia.player.PlayerKnowledge;
 import me.moonscenty.alchemia.registry.ModAspects;
 import me.moonscenty.alchemia.registry.ModBlockEntities;
 import me.moonscenty.alchemia.registry.ModBlocks;
+import me.moonscenty.alchemia.registry.ModSounds;
 import me.moonscenty.alchemia.Alchemia;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionResult;
@@ -173,7 +173,12 @@ public class ThaumatoriumBlock extends BaseEntityBlock {
         BlockState made = ModBlocks.THAUMATORIUM.get().defaultBlockState().setValue(FACING, side);
         level.setBlock(base, made, Block.UPDATE_CLIENTS);
         level.setBlock(base.above(), made.setValue(TOP, true), Block.UPDATE_ALL);
-        level.playSound(null, base, SoundEvents.ILLUSIONER_CAST_SPELL, SoundSource.BLOCKS, 1.0F, 1.0F);
+        level.playSound(null, base, ModSounds.WAND.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
+        // a puff off each of the two blocks it was made of
+        for (BlockPos puff : new BlockPos[] {base, base.above()}) {
+            level.playSound(null, puff, ModSounds.POOF.get(), SoundSource.BLOCKS, 0.4F,
+                    1.0F + (float) level.random.nextGaussian() * 0.05F);
+        }
         return true;
     }
 

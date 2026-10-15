@@ -281,5 +281,152 @@
     "sounds": [
       "alchemia:legacy/egdeath"
     ]
+  },
+  "poof": {
+    "subtitle": "subtitles.alchemia.poof",
+    "sounds": [
+      "alchemia:legacy/poof1",
+      "alchemia:legacy/poof2"
+    ]
+  },
+  "spill": {
+    "subtitle": "subtitles.alchemia.spill",
+    "sounds": [
+      "alchemia:legacy/spill"
+    ]
+  },
+  "bubble": {
+    "subtitle": "subtitles.alchemia.bubble",
+    "sounds": [
+      "alchemia:legacy/bubble1",
+      "alchemia:legacy/bubble2",
+      "alchemia:legacy/bubble3",
+      "alchemia:legacy/bubble4"
+    ]
+  },
+  "jar": {
+    "subtitle": "subtitles.alchemia.jar",
+    "sounds": [
+      "alchemia:legacy/jar1",
+      "alchemia:legacy/jar2",
+      "alchemia:legacy/jar3",
+      "alchemia:legacy/jar4"
+    ]
+  },
+  "page": {
+    "subtitle": "subtitles.alchemia.page",
+    "sounds": [
+      "alchemia:legacy/page1",
+      "alchemia:legacy/page2"
+    ]
+  },
+  "crystal": {
+    "subtitle": "subtitles.alchemia.crystal",
+    "sounds": [
+      "alchemia:legacy/crystal"
+    ]
+  },
+  "craftfail": {
+    "subtitle": "subtitles.alchemia.craftfail",
+    "sounds": [
+      "alchemia:legacy/craftfail"
+    ]
+  },
+  "cameraticks": {
+    "subtitle": "subtitles.alchemia.cameraticks",
+    "sounds": [
+      "alchemia:legacy/cameraticks"
+    ]
+  },
+  "squeek": {
+    "subtitle": "subtitles.alchemia.squeek",
+    "sounds": [
+      "alchemia:legacy/squeek1",
+      "alchemia:legacy/squeek2"
+    ]
+  },
+  "creak": {
+    "subtitle": "subtitles.alchemia.creak",
+    "sounds": [
+      "alchemia:legacy/creak1",
+      "alchemia:legacy/creak2"
+    ]
+  },
+  "rumble": {
+    "subtitle": "subtitles.alchemia.rumble",
+    "sounds": [
+      "alchemia:legacy/rumble"
+    ]
+  },
+  "fireloop": {
+    "subtitle": "subtitles.alchemia.fireloop",
+    "sounds": [
+      "alchemia:legacy/fireloop"
+    ]
+  },
+  "brain": {
+    "subtitle": "subtitles.alchemia.brain",
+    "sounds": [
+      "alchemia:legacy/brain1",
+      "alchemia:legacy/brain2",
+      "alchemia:legacy/brain3",
+      "alchemia:legacy/brain4"
+    ]
+  },
+  "infuserstart": {
+    "subtitle": "subtitles.alchemia.infuserstart",
+    "sounds": [
+      "alchemia:legacy/infuserstart"
+    ]
+  },
+  "infuser": {
+    "subtitle": "subtitles.alchemia.infuser",
+    "sounds": [
+      "alchemia:legacy/infuser"
+    ]
+  },
+  "hhon": {
+    "subtitle": "subtitles.alchemia.hhon",
+    "sounds": [
+      "alchemia:legacy/hhon"
+    ]
+  },
+  "hhoff": {
+    "subtitle": "subtitles.alchemia.hhoff",
+    "sounds": [
+      "alchemia:legacy/hhoff"
+    ]
+  },
+  "write": {
+    "subtitle": "subtitles.alchemia.write",
+    "sounds": [
+      "alchemia:legacy/write1",
+      "alchemia:legacy/write2"
+    ]
+  },
+  "erase": {
+    "subtitle": "subtitles.alchemia.erase",
+    "sounds": [
+      "alchemia:legacy/erase"
+    ]
+  },
+  "swing": {
+    "subtitle": "subtitles.alchemia.swing",
+    "sounds": [
+      "alchemia:legacy/swing1",
+      "alchemia:legacy/swing2"
+    ]
+  },
+  "heartbeat": {
+    "subtitle": "subtitles.alchemia.heartbeat",
+    "sounds": [
+      "alchemia:legacy/heartbeat"
+    ]
+  },
+  "whispers": {
+    "subtitle": "subtitles.alchemia.whispers",
+    "sounds": [
+      "alchemia:legacy/whispers"
+    ]
   }
 }

@@ -18,6 +18,7 @@ import me.moonscenty.alchemia.registry.ModAspects;
 import me.moonscenty.alchemia.registry.ModBlockEntities;
 import me.moonscenty.alchemia.registry.ModBlocks;
 import me.moonscenty.alchemia.registry.ModItems;
+import me.moonscenty.alchemia.registry.ModSounds;
 import me.moonscenty.alchemia.wand.FocusUpgrade;
 import me.moonscenty.alchemia.wand.FocusUpgrades;
 import net.minecraft.core.BlockPos;
@@ -33,6 +34,7 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
@@ -92,6 +94,8 @@ public class ArcaneBoreBlockEntity extends BlockEntity implements Container, Men
     private static final int SLOW = 4;
     /** The block events the client draws from: a block dug, and nothing more. */
     public static final int DUG = 99;
+    /** How long the rumble of the digging takes to come round again, in ticks: the original's 1.2 seconds. */
+    private static final int RUMBLES_EVERY = 24;
     private static final GameProfile BORE = new GameProfile(java.util.UUID.fromString(
             "6b0f6a16-5b6b-4d0e-8a10-6f3a6e0b0b0e"), "[Alchemia Bore]");
 
@@ -122,6 +126,8 @@ public class ArcaneBoreBlockEntity extends BlockEntity implements Container, Men
     private float spin;
     @Nullable
     private BlockPos lastDug;
+    /** Client side: when the rumble of the digging may next be heard, by the world clock. */
+    private long nextRumble;
 
     public ArcaneBoreBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.ARCANE_BORE.get(), pos, state);
@@ -199,6 +205,12 @@ public class ArcaneBoreBlockEntity extends BlockEntity implements Container, Men
             bore.spin += 10.0F;
         } else if (bore.spin % 90.0F != 0.0F) {
             bore.spin += Math.min(10.0F, 90.0F - bore.spin % 90.0F);
+        }
+        // the ground grumbling while it digs, a little over once a second, as the original's did
+        if (bore.working() && level.getGameTime() >= bore.nextRumble) {
+            level.playLocalSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, ModSounds.RUMBLE.get(),
+                    SoundSource.BLOCKS, 0.25F, 0.9F + level.random.nextFloat() * 0.2F, false);
+            bore.nextRumble = level.getGameTime() + RUMBLES_EVERY + level.random.nextInt(3);
         }
     }
 

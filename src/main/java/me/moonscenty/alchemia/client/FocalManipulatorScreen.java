@@ -9,11 +9,13 @@ import me.moonscenty.alchemia.aspect.Aspect;
 import me.moonscenty.alchemia.aspect.AspectList;
 import me.moonscenty.alchemia.block.entity.FocalManipulatorBlockEntity;
 import me.moonscenty.alchemia.menu.FocalManipulatorMenu;
+import me.moonscenty.alchemia.registry.ModSounds;
 import me.moonscenty.alchemia.wand.FocusUpgrade;
 import me.moonscenty.alchemia.wand.FocusUpgrades;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -188,15 +190,24 @@ public class FocalManipulatorScreen extends AbstractContainerScreen<FocalManipul
             for (int which = 0; which < offered.size(); which++) {
                 if (over(mouseX, mouseY, OFFERED_X + which * ICON, OFFERED_Y, ICON, ICON)) {
                     picked = offered.get(which) == picked ? null : offered.get(which);
+                    clack();
                     return true;
                 }
             }
             if (picked != null && over(mouseX, mouseY, BAR_X, BAR_Y, BAR_W, BAR_H)) {
                 begin();
+                clack();
                 return true;
             }
         }
         return super.mouseClicked(mouseX, mouseY, button);
+    }
+
+    /** The original's shutter clack, for every button on the bench. */
+    private void clack() {
+        if (minecraft != null) {
+            minecraft.getSoundManager().play(SimpleSoundInstance.forUI(ModSounds.CAMERA_CLACK.get(), 1.0F, 0.4F));
+        }
     }
 
     private void begin() {

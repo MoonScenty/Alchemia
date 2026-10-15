@@ -4,7 +4,7 @@ import com.mojang.serialization.MapCodec;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.sounds.SoundEvents;
+import me.moonscenty.alchemia.registry.ModSounds;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -120,7 +120,8 @@ public class ValveTubeBlock extends TubeBlock {
         if (level.getBlockEntity(pos) instanceof ValveTubeBlockEntity valve) {
             valve.worked(level.getGameTime());
         }
-        level.playSound(null, pos, SoundEvents.LEVER_CLICK, SoundSource.BLOCKS, 0.4F, open ? 0.6F : 0.5F);
+        level.playSound(null, pos, ModSounds.SQUEEK.get(), SoundSource.BLOCKS, 0.7F,
+                0.9F + level.random.nextFloat() * 0.2F);
     }
 
     @Override

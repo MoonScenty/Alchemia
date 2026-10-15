@@ -15,6 +15,7 @@ import me.moonscenty.alchemia.crafting.ModRecipes;
 import me.moonscenty.alchemia.player.PlayerKnowledge;
 import me.moonscenty.alchemia.registry.ModAspects;
 import me.moonscenty.alchemia.registry.ModBlockEntities;
+import me.moonscenty.alchemia.registry.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
@@ -24,7 +25,6 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -208,7 +208,6 @@ public class CrucibleBlockEntity extends BlockEntity {
             dissolved = recipe.taken(dissolved);
             water -= PER_CRAFT;
             eject(level, pos, recipe.assemble(new CrucibleInput(one, dissolved), level.registryAccess()));
-            level.playSound(null, pos, SoundEvents.BREWING_STAND_BREW, SoundSource.BLOCKS, 0.6F, 1.2F);
             changed();
             level.blockEvent(pos, getBlockState().getBlock(), CRAFTED, 0);
             return true;
@@ -219,7 +218,8 @@ public class CrucibleBlockEntity extends BlockEntity {
             return false;
         }
         dissolved = dissolved.add(made);
-        level.playSound(null, pos, SoundEvents.GENERIC_SPLASH, SoundSource.BLOCKS, 0.3F, 1.4F);
+        level.playSound(null, pos, ModSounds.BUBBLE.get(), SoundSource.BLOCKS, 0.2F,
+                1.0F + level.random.nextFloat() * 0.4F);
         changed();
         level.blockEvent(pos, getBlockState().getBlock(), BOIL_UP, 1);
         return true;

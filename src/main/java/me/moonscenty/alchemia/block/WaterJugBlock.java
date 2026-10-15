@@ -77,7 +77,7 @@ public class WaterJugBlock extends BaseEntityBlock {
             if (level.getBlockEntity(pos) instanceof WaterJugBlockEntity jug) {
                 jug.drawn(taken);
             }
-            level.playSound(null, pos, SoundEvents.BUCKET_FILL, SoundSource.BLOCKS, 0.33F,
+            level.playSound(null, pos, SoundEvents.GENERIC_SWIM, SoundSource.BLOCKS, 0.33F,
                     1.0F + (level.random.nextFloat() - level.random.nextFloat()) * 0.3F);
         }
         return ItemInteractionResult.sidedSuccess(level.isClientSide);

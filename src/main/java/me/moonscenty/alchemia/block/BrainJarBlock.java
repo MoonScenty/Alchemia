@@ -5,8 +5,8 @@ import com.mojang.serialization.MapCodec;
 import me.moonscenty.alchemia.block.entity.BrainJarBlockEntity;
 import me.moonscenty.alchemia.client.BrainJarEffects;
 import me.moonscenty.alchemia.registry.ModBlockEntities;
+import me.moonscenty.alchemia.registry.ModSounds;
 import net.minecraft.core.BlockPos;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
@@ -73,7 +73,7 @@ public class BrainJarBlock extends BaseEntityBlock {
             jar.shake(level);
             if (level.isClientSide) {
                 level.playLocalSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
-                        SoundEvents.GLASS_HIT, SoundSource.BLOCKS, 0.2F, 1.0F, false);
+                        ModSounds.JAR.get(), SoundSource.BLOCKS, 0.2F, 1.0F, false);
             }
         }
         return InteractionResult.sidedSuccess(level.isClientSide);

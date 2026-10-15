@@ -10,13 +10,14 @@ import me.moonscenty.alchemia.aspect.AspectList;
 import me.moonscenty.alchemia.block.entity.ThaumatoriumBlockEntity;
 import me.moonscenty.alchemia.crafting.CrucibleRecipe;
 import me.moonscenty.alchemia.menu.ThaumatoriumMenu;
+import me.moonscenty.alchemia.registry.ModSounds;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
@@ -178,36 +179,38 @@ public class ThaumatoriumScreen extends AbstractContainerScreen<ThaumatoriumMenu
             if (over(mouseX, mouseY, 112, 16, 16, 16) && it != null
                     && (it.recipes().size() < it.remembers() || it.recipes().contains(shown.id()))) {
                 minecraft.gameMode.handleInventoryButtonClick(menu.containerId, index);
-                click(1.0F);
+                click(ModSounds.HH_ON.get(), 0.3F);
                 return true;
             }
             if (over(mouseX, mouseY, 128, 16, 16, 8) && index > 0) {
                 index--;
                 firstAspect = 0;
-                click(1.6F);
+                click(ModSounds.CAMERA_CLACK.get(), 0.4F);
                 return true;
             }
             if (over(mouseX, mouseY, 128, 24, 16, 8) && index < offered.size() - 1) {
                 index++;
                 firstAspect = 0;
-                click(1.6F);
+                click(ModSounds.CAMERA_CLACK.get(), 0.4F);
                 return true;
             }
             if (aspects.size() > SHOWN && over(mouseX, mouseY, 32, 40, 8, 16) && firstAspect > 0) {
                 firstAspect--;
+                click(ModSounds.CAMERA_CLACK.get(), 0.4F);
                 return true;
             }
             if (aspects.size() > SHOWN && over(mouseX, mouseY, 136, 40, 8, 16)
                     && firstAspect < aspects.size() - 1) {
                 firstAspect++;
+                click(ModSounds.CAMERA_CLACK.get(), 0.4F);
                 return true;
             }
         }
         return super.mouseClicked(mouseX, mouseY, button);
     }
 
-    private void click(float pitch) {
-        minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK.value(), pitch, 0.4F));
+    private void click(SoundEvent sound, float volume) {
+        minecraft.getSoundManager().play(SimpleSoundInstance.forUI(sound, 1.0F, volume));
     }
 
     private boolean over(double mouseX, double mouseY, int x, int y, int width, int height) {

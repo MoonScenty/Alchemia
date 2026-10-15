@@ -14,6 +14,7 @@ import me.moonscenty.alchemia.essentia.EssentiaReach;
 import me.moonscenty.alchemia.player.PlayerKnowledge;
 import me.moonscenty.alchemia.registry.ModBlockEntities;
 import me.moonscenty.alchemia.registry.ModBlocks;
+import me.moonscenty.alchemia.registry.ModSounds;
 import me.moonscenty.alchemia.registry.ModTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -82,6 +83,8 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
     private static final int MISHAP = 500;
     /** No work is ever worse than this, however it is laid out. */
     public static final int WORST = 25;
+    /** How often the hum of a working comes round again, in ticks. The original's. */
+    private static final int HUMS_EVERY = 65;
 
     /**
      * How often a matrix that is awake looks around to see whether its altar is still standing.
@@ -113,6 +116,8 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
     private long woken;
     /** Ticks since it woke, for looking round at the altar now and then. */
     private int watch;
+    /** On the client: ticks since the working now under way began to hum, or -1 while there is none. */
+    private int humming = -1;
 
     public InfusionMatrixBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.INFUSION_MATRIX.get(), pos, state);
@@ -494,7 +499,7 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
         // what the recipe asks for, and what the altar around it is doing about that
         instability = Math.max(0, Math.min(WORST, recipe.instabilityFor(under.held()) + symmetry(level)));
         counter = 0;
-        level.playSound(null, worldPosition, SoundEvents.BEACON_ACTIVATE, SoundSource.BLOCKS, 0.7F, 1.6F);
+        level.playSound(null, worldPosition, ModSounds.CRAFT_START.get(), SoundSource.BLOCKS, 0.5F, 1.0F);
         changed();
         return true;
     }
@@ -524,6 +529,25 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
         }
         matrix.counter = 0;
         matrix.turn((ServerLevel) level, pos);
+    }
+
+    /**
+     * The hum of a working, on the client: the original's infuser winding up on the first tick of a working and
+     * droning on every {@link #HUMS_EVERY} ticks after, for as long as the synced working says it is at it.
+     */
+    public static void clientTick(Level level, BlockPos pos, BlockState state, InfusionMatrixBlockEntity matrix) {
+        if (!matrix.busy()) {
+            matrix.humming = -1;
+            return;
+        }
+        double x = pos.getX() + 0.5;
+        double y = pos.getY() + 0.5;
+        double z = pos.getZ() + 0.5;
+        if (++matrix.humming == 0) {
+            level.playLocalSound(x, y, z, ModSounds.INFUSER_START.get(), SoundSource.BLOCKS, 0.5F, 1.0F, false);
+        } else if (matrix.humming % HUMS_EVERY == 0) {
+            level.playLocalSound(x, y, z, ModSounds.INFUSER.get(), SoundSource.BLOCKS, 0.5F, 1.0F, false);
+        }
     }
 
     /** One turn of the work. */
@@ -589,13 +613,16 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
     private void finish(ServerLevel level, BlockPos pos, ArcanePedestalBlockEntity under, InfusionRecipe recipe) {
         // asked rather than read off the recipe: a working that enchants hands back the very thing it was given
         under.hold(recipe.assemble(new InfusionInput(under.held(), List.of()), level.registryAccess()));
-        level.playSound(null, pos, SoundEvents.BEACON_POWER_SELECT, SoundSource.BLOCKS, 1.0F, 1.0F);
+        level.playSound(null, pos, ModSounds.WAND.get(), SoundSource.BLOCKS, 0.5F, 1.0F);
+        // and a puff off the pedestal, where the made thing now stands
+        level.playSound(null, pos.below(UNDER), ModSounds.POOF.get(), SoundSource.BLOCKS, 0.4F,
+                1.0F + (float) level.random.nextGaussian() * 0.05F);
         stop();
     }
 
     /** The work has come apart: whatever was owed is simply lost. */
     private void fail(ServerLevel level, BlockPos pos) {
-        level.playSound(null, pos, SoundEvents.BEACON_DEACTIVATE, SoundSource.BLOCKS, 1.0F, 0.6F);
+        level.playSound(null, pos, ModSounds.CRAFT_FAIL.get(), SoundSource.BLOCKS, 1.0F, 0.6F);
         stop();
     }
 

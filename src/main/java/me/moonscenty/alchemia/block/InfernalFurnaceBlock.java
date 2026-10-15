@@ -10,9 +10,9 @@ import me.moonscenty.alchemia.player.PlayerKnowledge;
 import me.moonscenty.alchemia.registry.ModAspects;
 import me.moonscenty.alchemia.registry.ModBlockEntities;
 import me.moonscenty.alchemia.registry.ModBlocks;
+import me.moonscenty.alchemia.registry.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Containers;
 import net.minecraft.world.entity.Entity;
@@ -257,6 +257,6 @@ public class InfernalFurnaceBlock extends BaseEntityBlock {
         } finally {
             undoing = false;
         }
-        level.playSound(null, heart, SoundEvents.ILLUSIONER_CAST_SPELL, SoundSource.BLOCKS, 1.0F, 1.0F);
+        level.playSound(null, heart, ModSounds.WAND.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
     }
 }

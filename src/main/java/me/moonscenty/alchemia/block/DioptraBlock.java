@@ -5,10 +5,10 @@ import com.mojang.serialization.MapCodec;
 import me.moonscenty.alchemia.aura.ShardTuning;
 import me.moonscenty.alchemia.block.entity.DioptraBlockEntity;
 import me.moonscenty.alchemia.registry.ModBlockEntities;
+import me.moonscenty.alchemia.registry.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
@@ -106,7 +106,7 @@ public class DioptraBlock extends BaseEntityBlock {
             } else if (now == ShardTuning.BALANCED) {
                 player.displayClientMessage(Component.translatable("block.alchemia.dioptra.strongest"), true);
             }
-            level.playSound(null, pos, SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.BLOCKS, 0.5F, 1.0F);
+            level.playSound(null, pos, ModSounds.CRYSTAL.get(), SoundSource.BLOCKS, 0.5F, 1.0F);
         }
         return ItemInteractionResult.sidedSuccess(level.isClientSide);
     }

@@ -93,7 +93,8 @@ public class ArcanePedestalBlock extends BaseEntityBlock {
         }
         if (!level.isClientSide) {
             stand.hold(stack.split(1));
-            level.playSound(null, pos, SoundEvents.ITEM_FRAME_ADD_ITEM, SoundSource.BLOCKS, 0.7F, 1.0F);
+            level.playSound(null, pos, SoundEvents.ITEM_PICKUP, SoundSource.BLOCKS, 0.2F,
+                    ((level.random.nextFloat() - level.random.nextFloat()) * 0.7F + 1.0F) * 1.6F);
         }
         return ItemInteractionResult.sidedSuccess(level.isClientSide);
     }
@@ -113,7 +114,8 @@ public class ArcanePedestalBlock extends BaseEntityBlock {
         if (!player.getInventory().add(standing)) {
             player.drop(standing, false);
         }
-        level.playSound(null, pos, SoundEvents.ITEM_FRAME_REMOVE_ITEM, SoundSource.BLOCKS, 0.7F, 1.0F);
+        level.playSound(null, pos, SoundEvents.ITEM_PICKUP, SoundSource.BLOCKS, 0.2F,
+                ((level.random.nextFloat() - level.random.nextFloat()) * 0.7F + 1.0F) * 1.5F);
         return InteractionResult.CONSUME;
     }
 

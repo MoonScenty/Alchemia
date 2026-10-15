@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import me.moonscenty.alchemia.registry.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
@@ -214,7 +215,7 @@ public final class Excavation {
         level.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, block),
                 at.getX() + 0.5, at.getY() + 0.5, at.getZ() + 0.5, 3, 0.3, 0.3, 0.3, 0.0);
         if (since % RUMBLES_EVERY == 0) {
-            level.playSound(null, at, SoundEvents.STONE_HIT, SoundSource.PLAYERS, 0.3F, 0.6F);
+            level.playSound(null, at, ModSounds.RUMBLE.get(), SoundSource.PLAYERS, 0.3F, 1.0F);
         }
     }
 }

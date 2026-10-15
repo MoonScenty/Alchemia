@@ -1,9 +1,9 @@
 package me.moonscenty.alchemia.item;
 
+import me.moonscenty.alchemia.registry.ModSounds;
 import me.moonscenty.alchemia.research.ScanTarget;
 import me.moonscenty.alchemia.research.Scanning;
 import net.minecraft.network.chat.Component;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -38,6 +38,10 @@ public class AlchemometerItem extends Item {
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         player.startUsingItem(hand);
+        // the original's chirp, every time it is raised to look at something
+        if (!level.isClientSide) {
+            level.playSound(null, player.blockPosition(), ModSounds.SCAN.get(), SoundSource.PLAYERS, 0.5F, 1.0F);
+        }
         return InteractionResultHolder.consume(player.getItemInHand(hand));
     }
 
@@ -56,9 +60,10 @@ public class AlchemometerItem extends Item {
             player.displayClientMessage(Component.translatable("scan.alchemia.nothing_there"), true);
         } else {
             boolean learned = !Scanning.scan(player, target).isEmpty();
-            level.playSound(null, player.blockPosition(),
-                    learned ? SoundEvents.AMETHYST_BLOCK_CHIME : SoundEvents.ITEM_FRAME_ADD_ITEM,
-                    SoundSource.PLAYERS, 0.7F, learned ? 1.4F : 1.0F);
+            if (learned) {
+                level.playSound(null, player.blockPosition(), ModSounds.LEARN.get(), SoundSource.PLAYERS, 0.3F,
+                        1.0F + level.random.nextFloat() * 0.1F);
+            }
         }
         player.stopUsingItem();
         player.getCooldowns().addCooldown(this, 10);

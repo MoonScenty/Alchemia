@@ -6,6 +6,7 @@ import me.moonscenty.alchemia.aura.AuraHandler;
 import me.moonscenty.alchemia.item.FocusItem;
 import me.moonscenty.alchemia.menu.FocalManipulatorMenu;
 import me.moonscenty.alchemia.registry.ModBlockEntities;
+import me.moonscenty.alchemia.registry.ModSounds;
 import me.moonscenty.alchemia.wand.FocusUpgrade;
 import me.moonscenty.alchemia.wand.FocusUpgrades;
 import net.minecraft.core.BlockPos;
@@ -18,7 +19,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
@@ -89,7 +89,7 @@ public class FocalManipulatorBlockEntity extends BlockEntity implements Containe
         if (!asking.isCreative()) {
             asking.giveExperienceLevels(-levels);
         }
-        level.playSound(null, worldPosition, SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.BLOCKS, 0.5F, 1.2F);
+        level.playSound(null, worldPosition, ModSounds.CRAFT_START.get(), SoundSource.BLOCKS, 0.25F, 1.0F);
         changed();
         return true;
     }
@@ -122,14 +122,14 @@ public class FocalManipulatorBlockEntity extends BlockEntity implements Containe
     private void finish() {
         FocusUpgrades.apply(getItem(0), working);
         if (level != null) {
-            level.playSound(null, worldPosition, SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.BLOCKS, 1.0F, 0.8F);
+            level.playSound(null, worldPosition, ModSounds.WAND.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
         }
         clear();
     }
 
     private void giveUp() {
         if (level != null) {
-            level.playSound(null, worldPosition, SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, 0.33F, 1.0F);
+            level.playSound(null, worldPosition, ModSounds.CRAFT_FAIL.get(), SoundSource.BLOCKS, 0.33F, 1.0F);
         }
         clear();
     }

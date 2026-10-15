@@ -5,6 +5,7 @@ import com.mojang.serialization.MapCodec;
 import me.moonscenty.alchemia.aspect.Aspect;
 import me.moonscenty.alchemia.block.entity.InfusionMatrixBlockEntity;
 import me.moonscenty.alchemia.item.WandItem;
+import me.moonscenty.alchemia.registry.ModSounds;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -90,7 +91,9 @@ public class InfusionMatrixBlock extends BaseEntityBlock {
         switch (matrix.wake(player)) {
             case WOKEN -> {
                 say(player, "block.alchemia.infusion_matrix.woken");
-                level.playSound(null, pos, SoundEvents.BEACON_ACTIVATE, SoundSource.BLOCKS, 0.8F, 1.0F);
+                level.playSound(null, pos, ModSounds.WAND.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
+                level.playSound(null, pos, ModSounds.POOF.get(), SoundSource.BLOCKS, 0.4F,
+                        1.0F + (float) level.random.nextGaussian() * 0.05F);
             }
             case UNBUILT -> {
                 say(player, "block.alchemia.infusion_matrix.unbuilt");
@@ -168,7 +171,10 @@ public class InfusionMatrixBlock extends BaseEntityBlock {
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state,
             BlockEntityType<T> type) {
-        return level.isClientSide ? null
+        // the client only hums along while a working is under way
+        return level.isClientSide
+                ? createTickerHelper(type, me.moonscenty.alchemia.registry.ModBlockEntities.INFUSION_MATRIX.get(),
+                        InfusionMatrixBlockEntity::clientTick)
                 : createTickerHelper(type, me.moonscenty.alchemia.registry.ModBlockEntities.INFUSION_MATRIX.get(),
                         InfusionMatrixBlockEntity::tick);
     }

@@ -12,6 +12,7 @@ import me.moonscenty.alchemia.wand.FocusUpgrade;
 import me.moonscenty.alchemia.item.VisHolder;
 import me.moonscenty.alchemia.item.WandItem;
 import me.moonscenty.alchemia.registry.ModDataComponents;
+import me.moonscenty.alchemia.registry.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
@@ -267,12 +268,12 @@ public final class Swapping {
                 level.destroyBlock(at, false, caster);
             }
             level.setBlock(at, laying.defaultBlockState(), 3);
+            // as the original did for every square it swapped: the wand's flourish, and a puff where it went
+            level.playSound(null, caster.getX(), caster.getY(), caster.getZ(), ModSounds.WAND.get(),
+                    SoundSource.PLAYERS, 0.25F, 1.0F);
+            level.playSound(null, at, ModSounds.POOF.get(), SoundSource.BLOCKS, 0.4F,
+                    1.0F + (float) level.random.nextGaussian() * 0.05F);
             any = true;
-        }
-
-        if (any) {
-            level.playSound(null, where.get(0), laying.defaultBlockState().getSoundType().getPlaceSound(),
-                    SoundSource.BLOCKS, 0.6F, 1.0F);
         }
         return any;
     }

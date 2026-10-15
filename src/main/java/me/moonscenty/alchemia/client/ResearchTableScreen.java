@@ -18,6 +18,7 @@ import me.moonscenty.alchemia.aspect.Aspect;
 import me.moonscenty.alchemia.menu.ResearchTableMenu;
 import me.moonscenty.alchemia.network.MixAspects;
 import me.moonscenty.alchemia.network.PlaceAspect;
+import me.moonscenty.alchemia.registry.ModSounds;
 import me.moonscenty.alchemia.research.HexGrid;
 import me.moonscenty.alchemia.research.NoteSolving;
 import me.moonscenty.alchemia.research.ResearchEntry;
@@ -28,7 +29,7 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Inventory;
@@ -527,12 +528,12 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
 
         if (within(mouseX, mouseY, PREV_X, ARROW_Y, ARROW_W, ARROW_H) && page() > 0) {
             page--;
-            click();
+            click(ModSounds.KEY.get(), 0.3F, 1.0F);
             return true;
         }
         if (within(mouseX, mouseY, NEXT_X, ARROW_Y, ARROW_W, ARROW_H) && page() < lastPage()) {
             page++;
-            click();
+            click(ModSounds.KEY.get(), 0.3F, 1.0F);
             return true;
         }
 
@@ -540,7 +541,7 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
         for (int place = 0; place < shown.size(); place++) {
             if (over(mouseX, mouseY, poolX(place), poolY(place))) {
                 held = shown.get(place).equals(held) ? null : shown.get(place);
-                click();
+                pick();
                 return true;
             }
         }
@@ -548,12 +549,12 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
         // the dishes take whatever has been picked up, and give it back when clicked empty-handed
         if (over(mouseX, mouseY, leftPos + DISH_A_X, topPos + DISH_Y)) {
             dishA = held;
-            click();
+            pick();
             return true;
         }
         if (over(mouseX, mouseY, leftPos + DISH_B_X, topPos + DISH_Y)) {
             dishB = held;
-            click();
+            pick();
             return true;
         }
         if (within(mouseX, mouseY, MIX_X, MIX_Y, MIX_W, MIX_H)) {
@@ -561,7 +562,8 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
                 PacketDistributor.sendToServer(new MixAspects(id(dishA), id(dishB)));
                 dishA = null;
                 dishB = null;
-                click();
+                click(ModSounds.CAMERA_CLACK.get(), 0.4F, 1.0F);
+                click(ModSounds.HH_ON.get(), 0.3F, 1.0F);
             });
             return true;
         }
@@ -571,10 +573,12 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
             // the right button rubs a space out; the left writes whatever has been picked up
             if (button == 1) {
                 PacketDistributor.sendToServer(new PlaceAspect(at, Optional.empty()));
-                click();
+                click(ModSounds.HH_ON.get(), 0.3F, 1.0F);
+                click(ModSounds.ERASE.get(), 0.2F, 1.0F + random.nextFloat() * 0.1F);
             } else if (held != null) {
                 PacketDistributor.sendToServer(new PlaceAspect(at, Optional.of(id(held))));
-                click();
+                click(ModSounds.HH_ON.get(), 0.3F, 1.0F);
+                click(ModSounds.WRITE.get(), 0.2F, 1.0F);
             }
             return true;
         }
@@ -585,10 +589,19 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
         return aspect.value().id();
     }
 
-    private void click() {
+    /**
+     * The original's table had a noise for each thing done at it: a dial for the page arrows, brass letting go as
+     * an aspect is picked up, brass engaging and a shutter for a mix, and a quill writing or scraping on the note.
+     */
+    private void click(SoundEvent sound, float volume, float pitch) {
         if (minecraft != null && minecraft.player != null) {
-            minecraft.player.playSound(SoundEvents.BOOK_PAGE_TURN, 0.6F, 1.1F);
+            minecraft.player.playSound(sound, volume, pitch);
         }
+    }
+
+    /** An aspect picked up off the pool, or set into a dish. */
+    private void pick() {
+        click(ModSounds.HH_OFF.get(), 0.2F, 1.0F + random.nextFloat() * 0.1F);
     }
 
     // --- notes to the reader -----------------------------------------------

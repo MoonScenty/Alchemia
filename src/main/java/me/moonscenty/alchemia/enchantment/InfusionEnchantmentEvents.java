@@ -282,8 +282,9 @@ public final class InfusionEnchantmentEvents {
                     found.getX() + 0.5, found.getY() + 0.5, found.getZ() + 0.5, 1, 0.0, 0.0, 0.0, 0.0);
         }
         held.hurtAndBreak(TAP_COSTS, event.getEntity(), EquipmentSlot.MAINHAND);
-        level.playSound(null, tapped, net.minecraft.sounds.SoundEvents.AMETHYST_BLOCK_RESONATE,
-                net.minecraft.sounds.SoundSource.PLAYERS, 0.6F, 1.4F);
+        level.playSound(null, tapped.getX() + 0.5, tapped.getY() + 0.5, tapped.getZ() + 0.5,
+                me.moonscenty.alchemia.registry.ModSounds.WAND_FAIL.get(), net.minecraft.sounds.SoundSource.PLAYERS,
+                0.2F, 0.2F + level.random.nextFloat() * 0.2F);
     }
 
     // --- arcing ------------------------------------------------------------
@@ -328,6 +329,13 @@ public final class InfusionEnchantmentEvents {
             }
         } finally {
             arcing = false;
+        }
+        // the sweep of the blade, heard at what was struck, but only when it did reach anyone else
+        if (struck > 0) {
+            net.minecraft.world.entity.Entity target = event.getTarget();
+            player.level().playSound(null, target.getX(), target.getY(), target.getZ(),
+                    me.moonscenty.alchemia.registry.ModSounds.SWING.get(), net.minecraft.sounds.SoundSource.PLAYERS,
+                    1.0F, 0.9F + player.level().random.nextFloat() * 0.2F);
         }
     }
 

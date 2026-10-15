@@ -8,11 +8,11 @@ import me.moonscenty.alchemia.block.MirrorBlock;
 import me.moonscenty.alchemia.block.entity.MirrorBlockEntity;
 import me.moonscenty.alchemia.menu.HandMirrorMenu;
 import me.moonscenty.alchemia.registry.ModDataComponents;
+import me.moonscenty.alchemia.registry.ModSounds;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -46,7 +46,7 @@ public class HandMirrorItem extends Item {
         if (!level.isClientSide && context.getPlayer() != null) {
             context.getItemInHand().set(ModDataComponents.MIRROR_LINK.get(),
                     GlobalPos.of(level.dimension(), context.getClickedPos()));
-            level.playSound(null, context.getClickedPos(), SoundEvents.GLASS_PLACE, SoundSource.BLOCKS, 1.0F, 2.0F);
+            level.playSound(null, context.getClickedPos(), ModSounds.JAR.get(), SoundSource.BLOCKS, 1.0F, 2.0F);
             context.getPlayer().displayClientMessage(Component.translatable("item.alchemia.hand_mirror.linked")
                     .withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.ITALIC), true);
         }
@@ -90,7 +90,7 @@ public class HandMirrorItem extends Item {
     /** The mirror it was linked to is gone: the link is forgotten, and the holder told. */
     public static void broken(Level level, Player player, ItemStack mirror) {
         mirror.remove(ModDataComponents.MIRROR_LINK.get());
-        level.playSound(null, player.blockPosition(), SoundEvents.FIRE_EXTINGUISH, SoundSource.PLAYERS, 1.0F, 0.8F);
+        level.playSound(null, player.blockPosition(), ModSounds.ZAP.get(), SoundSource.PLAYERS, 1.0F, 0.8F);
         player.displayClientMessage(Component.translatable("item.alchemia.hand_mirror.error")
                 .withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.ITALIC), true);
     }

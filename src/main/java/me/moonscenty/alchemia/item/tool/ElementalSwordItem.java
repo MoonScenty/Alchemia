@@ -1,8 +1,8 @@
 package me.moonscenty.alchemia.item.tool;
 
+import me.moonscenty.alchemia.registry.ModSounds;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -89,8 +89,8 @@ public class ElementalSwordItem extends SwordItem {
             served.sendParticles(ParticleTypes.CLOUD, holder.getX(), holder.getY() + 0.1, holder.getZ(),
                     2, 0.6, 0.1, 0.6, 0.02);
             if (held % EVERY == 0) {
-                served.playSound(null, holder.getX(), holder.getY(), holder.getZ(), SoundEvents.ELYTRA_FLYING,
-                        SoundSource.PLAYERS, 0.3F, 1.4F + served.random.nextFloat() * 0.2F);
+                served.playSound(null, holder.getX(), holder.getY(), holder.getZ(), ModSounds.WIND.get(),
+                        SoundSource.PLAYERS, 0.5F, 0.9F + served.random.nextFloat() * 0.2F);
                 stack.hurtAndBreak(1, holder, LivingEntity.getSlotForHand(holder.getUsedItemHand()));
             }
         }

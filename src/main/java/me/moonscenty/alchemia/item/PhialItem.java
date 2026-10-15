@@ -94,7 +94,7 @@ public class PhialItem extends Item {
             back = filled(held, drawn.get());
         }
         swap(player, context.getHand(), held, back);
-        level.playSound(null, context.getClickedPos(), SoundEvents.BOTTLE_FILL, SoundSource.BLOCKS, 0.6F, 1.0F);
+        level.playSound(null, context.getClickedPos(), SoundEvents.GENERIC_SWIM, SoundSource.BLOCKS, 0.25F, 1.0F);
         return InteractionResult.CONSUME;
     }
 

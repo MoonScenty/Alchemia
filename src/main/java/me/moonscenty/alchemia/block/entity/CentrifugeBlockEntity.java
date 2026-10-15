@@ -12,6 +12,7 @@ import me.moonscenty.alchemia.block.TubeBlock;
 import me.moonscenty.alchemia.essentia.EssentiaHolder;
 import me.moonscenty.alchemia.registry.ModAspects;
 import me.moonscenty.alchemia.registry.ModBlockEntities;
+import me.moonscenty.alchemia.registry.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
@@ -21,6 +22,7 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -43,6 +45,8 @@ public class CentrifugeBlockEntity extends BlockEntity implements EssentiaHolder
     private static final float SPINS_UP = 2.0F;
     private static final float RUNS_DOWN = 0.5F;
     private static final float TOP_SPEED = 20.0F;
+    /** How far the rotor goes round between one heave of the pump and the next, in degrees. */
+    private static final float HALF_TURN = 180.0F;
 
     @Nullable
     private Holder<Aspect> in;
@@ -85,7 +89,13 @@ public class CentrifugeBlockEntity extends BlockEntity implements EssentiaHolder
         if ((centrifuge.in == null || powered) && centrifuge.speed > 0.0F) {
             centrifuge.speed = Math.max(0.0F, centrifuge.speed - RUNS_DOWN);
         }
+        float before = centrifuge.rotation;
         centrifuge.rotation += centrifuge.speed;
+        // the original's pump, heaving once every half turn for as long as the rotor goes round
+        if (centrifuge.speed > 0.0F && (int) (before / HALF_TURN) != (int) (centrifuge.rotation / HALF_TURN)) {
+            level.playLocalSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, ModSounds.PUMP.get(),
+                    SoundSource.BLOCKS, 1.0F, 1.0F, false);
+        }
     }
 
     /**

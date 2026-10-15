@@ -82,7 +82,7 @@ public class TaintedRabbit extends Rabbit implements TaintedMob {
         if (getVariant() == Variant.EVIL) {
             damage *= 2.0F;
         }
-        playSound(SoundEvents.RABBIT_ATTACK, 1.0F, (random.nextFloat() - random.nextFloat()) * 0.2F + 1.0F);
+        playSound(SoundEvents.SLIME_ATTACK, 1.0F, (random.nextFloat() - random.nextFloat()) * 0.2F + 1.0F);
         DamageSource source = damageSources().mobAttack(this);
         boolean hit = target.hurt(source, damage);
         if (hit) {

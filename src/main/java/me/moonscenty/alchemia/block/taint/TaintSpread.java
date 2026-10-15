@@ -6,11 +6,13 @@ import me.moonscenty.alchemia.aura.AuraHandler;
 import me.moonscenty.alchemia.aura.BiomePaint;
 import me.moonscenty.alchemia.registry.ModAspects;
 import me.moonscenty.alchemia.registry.ModBlocks;
+import me.moonscenty.alchemia.registry.ModSounds;
 import me.moonscenty.alchemia.registry.ModTags;
 import me.moonscenty.alchemia.worldgen.ModBiomes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelReader;
@@ -98,6 +100,9 @@ public final class TaintSpread {
             AuraHandler.drainAvailable(level, at, ModAspects.FLUX, 1);
         }
         level.setBlock(at, taint, Block.UPDATE_ALL);
+        // the faint creak of it taking root, as the original made
+        level.playSound(null, at, ModSounds.ROOTS.get(), SoundSource.BLOCKS, 0.1F,
+                0.9F + random.nextFloat() * 0.2F);
         spoil(level, at, true);
     }
 

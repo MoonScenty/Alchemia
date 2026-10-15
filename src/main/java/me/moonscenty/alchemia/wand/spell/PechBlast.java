@@ -3,9 +3,9 @@ package me.moonscenty.alchemia.wand.spell;
 import java.util.List;
 
 import me.moonscenty.alchemia.registry.ModEntities;
+import me.moonscenty.alchemia.registry.ModSounds;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -101,8 +101,8 @@ public class PechBlast extends ThrowableProjectile {
             return;
         }
         served.sendParticles(ParticleTypes.WITCH, getX(), getY(), getZ(), 24, 0.4, 0.4, 0.4, 0.1);
-        served.playSound(null, getX(), getY(), getZ(), SoundEvents.SPLASH_POTION_BREAK,
-                SoundSource.PLAYERS, 0.5F, 1.3F);
+        served.playSound(null, getX(), getY(), getZ(), ModSounds.POOF.get(),
+                SoundSource.PLAYERS, 0.4F, 1.0F + (float) served.random.nextGaussian() * 0.05F);
 
         Entity thrower = getOwner();
         List<LivingEntity> caught = served.getEntitiesOfClass(LivingEntity.class,

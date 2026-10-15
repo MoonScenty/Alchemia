@@ -953,6 +953,10 @@ public final class LegacyAssets {
         all.add(LegacyAsset.of("models/block/pattern_crafter_inv.json").five("models/block/pattern_crafter_inv.json")
                 .asModel("cutout"));
         all.add(LegacyAsset.of("sounds/legacy/key.ogg").five("sounds/key.ogg"));
+        // step 14D: the rest of the original's sounds that the code plays
+        for (String sound : List.of("poof1", "poof2", "spill", "bubble1", "bubble2", "bubble3", "bubble4", "jar1", "jar2", "jar3", "jar4", "page1", "page2", "crystal", "craftfail", "cameraticks", "squeek1", "squeek2", "creak1", "creak2", "rumble", "fireloop", "brain1", "brain2", "brain3", "brain4", "infuserstart", "infuser", "hhon", "hhoff", "write1", "write2", "erase", "swing1", "swing2", "heartbeat", "whispers")) {
+            all.add(LegacyAsset.of("sounds/legacy/" + sound + ".ogg").five("sounds/" + sound + ".ogg"));
+        }
     }
 
     private static void cult(List<LegacyAsset> all) {

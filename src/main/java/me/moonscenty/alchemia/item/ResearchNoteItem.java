@@ -3,6 +3,7 @@ package me.moonscenty.alchemia.item;
 import java.util.List;
 
 import me.moonscenty.alchemia.registry.ModDataComponents;
+import me.moonscenty.alchemia.registry.ModSounds;
 import me.moonscenty.alchemia.research.ResearchEntry;
 import me.moonscenty.alchemia.research.ResearchNote;
 import me.moonscenty.alchemia.player.ModAttachments;
@@ -10,7 +11,6 @@ import me.moonscenty.alchemia.player.PlayerKnowledge;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -52,7 +52,7 @@ public class ResearchNoteItem extends Item {
             server.setData(ModAttachments.KNOWLEDGE, knowledge.withResearch(note.research()));
             server.displayClientMessage(Component.translatable("note.alchemia.learned",
                     ResearchEntry.displayName(note.research())), false);
-            level.playSound(null, server.blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 0.6F, 1.4F);
+            level.playSound(null, server.blockPosition(), ModSounds.LEARN.get(), SoundSource.PLAYERS, 0.75F, 1.0F);
             held.shrink(1);
         }
         return InteractionResultHolder.sidedSuccess(held, level.isClientSide);

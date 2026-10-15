@@ -8,11 +8,13 @@ import me.moonscenty.alchemia.client.particle.BubbleParticle;
 import me.moonscenty.alchemia.client.particle.GenericParticle;
 import me.moonscenty.alchemia.client.particle.LegacySheet;
 import me.moonscenty.alchemia.client.particle.WispParticle;
+import me.moonscenty.alchemia.registry.ModSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -69,13 +71,16 @@ public final class CrucibleEffects {
 
     /**
      * Something went into the pot: it boils up, in the colours of what is in it. The harder the event, the higher
-     * the bubbles are pushed; the original pushed a spill five times harder than a dissolving.
+     * the bubbles are pushed; the original pushed a spill five times harder than a dissolving. Either way it
+     * slops.
      */
     public static void boil(Level level, BlockPos pos, CrucibleBlockEntity crucible, int strength) {
         if (!(level instanceof ClientLevel client)) {
             return;
         }
         RandomSource random = level.random;
+        client.playLocalSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, ModSounds.SPILL.get(),
+                SoundSource.BLOCKS, 0.2F, 1.0F, false);
         List<Holder<Aspect>> held = crucible.dissolved().sortedByAmount();
         double top = pos.getY() + 0.1 + crucible.surface();
         for (int call = 0; call < 10; call++) {
@@ -88,10 +93,17 @@ public final class CrucibleEffects {
         }
     }
 
-    /** A recipe came out of the pot: the original's purple puff, with its flourish, rising out of the top. */
+    /**
+     * A recipe came out of the pot: a slop, and the original's purple puff, with its flourish, rising out of the
+     * top.
+     */
     public static void crafted(Level level, BlockPos pos) {
         if (level instanceof ClientLevel client) {
+            client.playLocalSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, ModSounds.SPILL.get(),
+                    SoundSource.BLOCKS, 0.2F, 1.0F, false);
             bamf(client, pos.getX() + 0.5, pos.getY() + 1.25, pos.getZ() + 0.5, 0.5F, 0.1F, 0.6F, true, true);
+            client.playLocalSound(pos.getX() + 0.5, pos.getY() + 1.25, pos.getZ() + 0.5, ModSounds.POOF.get(),
+                    SoundSource.BLOCKS, 0.4F, 1.0F + (float) client.random.nextGaussian() * 0.05F, false);
         }
     }
 

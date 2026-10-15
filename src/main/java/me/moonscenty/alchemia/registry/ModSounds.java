@@ -88,6 +88,44 @@ public final class ModSounds {
     /** A brass dial clicking round. */
     public static final DeferredHolder<SoundEvent, SoundEvent> KEY = sound("key");
 
+    /** A puff of smoke: something made, or gone. */
+    public static final DeferredHolder<SoundEvent, SoundEvent> POOF = sound("poof");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SPILL = sound("spill");
+    public static final DeferredHolder<SoundEvent, SoundEvent> BUBBLE = sound("bubble");
+
+    /** Glass knocking on glass: jars, mirrors, the brain in its jar. */
+    public static final DeferredHolder<SoundEvent, SoundEvent> JAR = sound("jar");
+    public static final DeferredHolder<SoundEvent, SoundEvent> PAGE = sound("page");
+    public static final DeferredHolder<SoundEvent, SoundEvent> CRYSTAL = sound("crystal");
+
+    /** Something that was being made, given up. */
+    public static final DeferredHolder<SoundEvent, SoundEvent> CRAFT_FAIL = sound("craftfail");
+
+    /** A focus fitted, or taken off. */
+    public static final DeferredHolder<SoundEvent, SoundEvent> CAMERA_TICKS = sound("cameraticks");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SQUEEK = sound("squeek");
+    public static final DeferredHolder<SoundEvent, SoundEvent> CREAK = sound("creak");
+
+    /** Stone giving way: the excavation focus and the bore. */
+    public static final DeferredHolder<SoundEvent, SoundEvent> RUMBLE = sound("rumble");
+    public static final DeferredHolder<SoundEvent, SoundEvent> FIRE_LOOP = sound("fireloop");
+    public static final DeferredHolder<SoundEvent, SoundEvent> BRAIN = sound("brain");
+
+    /** An infusion starting, and humming along. */
+    public static final DeferredHolder<SoundEvent, SoundEvent> INFUSER_START = sound("infuserstart");
+    public static final DeferredHolder<SoundEvent, SoundEvent> INFUSER = sound("infuser");
+
+    /** The research table and the thaumatorium: brass engaging and letting go, a quill writing and scraping. */
+    public static final DeferredHolder<SoundEvent, SoundEvent> HH_ON = sound("hhon");
+    public static final DeferredHolder<SoundEvent, SoundEvent> HH_OFF = sound("hhoff");
+    public static final DeferredHolder<SoundEvent, SoundEvent> WRITE = sound("write");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ERASE = sound("erase");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SWING = sound("swing");
+
+    /** Warp: a heart pounding as it comes on, and whispers as it settles in. */
+    public static final DeferredHolder<SoundEvent, SoundEvent> HEARTBEAT = sound("heartbeat");
+    public static final DeferredHolder<SoundEvent, SoundEvent> WHISPERS = sound("whispers");
+
     private static DeferredHolder<SoundEvent, SoundEvent> sound(String name) {
         return SOUNDS.register(name, () -> SoundEvent.createVariableRangeEvent(Alchemia.id(name)));
     }

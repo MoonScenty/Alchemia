@@ -63,7 +63,7 @@ public final class Hole {
         if (!HoleBlockEntity.bore(level, face, holds, thick, in)) {
             return false;
         }
-        level.playSound(null, face, SoundEvents.ENDERMAN_TELEPORT, SoundSource.PLAYERS, 1.0F, 0.6F);
+        level.playSound(null, face, SoundEvents.ENDERMAN_TELEPORT, SoundSource.PLAYERS, 1.0F, 1.0F);
         return true;
     }
 
