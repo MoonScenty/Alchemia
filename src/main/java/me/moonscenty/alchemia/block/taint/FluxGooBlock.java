@@ -206,6 +206,12 @@ public class FluxGooBlock extends Block {
         }
         // thick enough to wade through, not to drown in
         entity.makeStuckInBlock(state, new Vec3(0.5, 0.35, 0.5));
+        // and it drains whoever wades in it: half a minute of vis exhaustion, worse the deeper it is
+        if (!level.isClientSide && entity instanceof net.minecraft.world.entity.LivingEntity living) {
+            living.addEffect(new net.minecraft.world.effect.MobEffectInstance(
+                    me.moonscenty.alchemia.player.effect.ModEffects.FLUX_FLU, 600, state.getValue(LEVEL) / 3, true,
+                    true));
+        }
     }
 
     @Override

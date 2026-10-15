@@ -67,16 +67,15 @@ public interface VisDiscount {
                 }
             }
         }
+        // vis exhaustion takes ten parts back per level, the worse of the flu and the phage
+        total -= me.moonscenty.alchemia.player.effect.ModEffects.exhaustion(wearer) * EXHAUSTED;
         return total;
     }
 
-    /**
-     * What share of an asking price actually gets paid: the cap's own rate, less what the bearer is wearing.
-     * <p>
-     * The original also took ten parts off per level of vis exhaustion, which is a thing that happens to somebody
-     * who has drawn too hard on the aura. There is no such affliction in this mod yet; when there is, it belongs
-     * here, where every price already passes through.
-     */
+    /** What each level of vis exhaustion takes back off the discount, in parts of a hundred. */
+    int EXHAUSTED = 10;
+
+    /** What share of an asking price actually gets paid: the cap's own rate, less what the bearer is wearing. */
     static float rate(float cap, Player wearer) {
         return Math.max(LEAST, cap - worn(wearer) / 100.0F);
     }

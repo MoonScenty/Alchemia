@@ -39,6 +39,8 @@ public class ModNetwork {
         registrar.playToServer(StartGolem.TYPE, StartGolem.STREAM_CODEC, ModNetwork::onStartGolem);
         registrar.playToClient(ShieldRunes.TYPE, ShieldRunes.STREAM_CODEC, (payload, context) -> context.enqueueWork(
                 () -> me.moonscenty.alchemia.client.ShieldRunesRenderer.flare(payload.shielded(), payload.from())));
+        registrar.playToClient(BlockArc.TYPE, BlockArc.STREAM_CODEC, (payload, context) -> context.enqueueWork(
+                () -> me.moonscenty.alchemia.client.EldritchEffects.blockArc(payload)));
         registrar.playToClient(Mist.TYPE, Mist.STREAM_CODEC, (payload, context) -> context.enqueueWork(
                 () -> me.moonscenty.alchemia.client.WarpFog.bring(payload.ticks(), payload.topUp())));
         registrar.playToClient(SyncSeal.TYPE, SyncSeal.STREAM_CODEC, (payload, context) -> context.enqueueWork(

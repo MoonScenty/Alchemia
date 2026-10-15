@@ -132,12 +132,13 @@ public class TaintSwarm extends Monster implements TaintedMob {
         }
     }
 
-    /** About where it is, never far over the ground. */
+    /** About where it is, never far over the ground, and never out of tainted land. */
     private void drift() {
         if (driftingTo != null && (!level().isEmptyBlock(driftingTo)
                 || driftingTo.getY() < level().getMinBuildHeight() + 1
                 || driftingTo.getY() > level().getHeight(Heightmap.Types.MOTION_BLOCKING, driftingTo.getX(),
-                        driftingTo.getZ()) + 2)) {
+                        driftingTo.getZ()) + 2
+                || !level().getBiome(driftingTo).is(me.moonscenty.alchemia.worldgen.ModBiomes.TAINTED_LAND))) {
             driftingTo = null;
         }
         if (driftingTo == null || random.nextInt(30) == 0 || driftingTo.distToCenterSqr(position()) < 4.0) {

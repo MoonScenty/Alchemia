@@ -2,6 +2,7 @@ package me.moonscenty.alchemia.entity.boss;
 
 import me.moonscenty.alchemia.block.BannerBlockEntity;
 import me.moonscenty.alchemia.block.LootBlock;
+import me.moonscenty.alchemia.network.BlockArc;
 import me.moonscenty.alchemia.entity.cult.Cultist;
 import me.moonscenty.alchemia.entity.cult.CultistCleric;
 import me.moonscenty.alchemia.entity.cult.CultistKnight;
@@ -83,6 +84,7 @@ public class GreaterCultistPortal extends CultistPortal {
                             case EAST -> 4;
                             default -> 0;
                         }, false);
+                        BlockArc.send(level, at, this, 0.5F + random.nextFloat() * 0.2F, 0.0F, 0.0F);
                         playSound(ModSounds.WAND_FAIL.get(), 1.0F, 1.0F);
                     }
                 }
@@ -97,6 +99,7 @@ public class GreaterCultistPortal extends CultistPortal {
                     int rarity = roll < 0.05F ? 2 : roll < 0.2F ? 1 : 0;
                     level.setBlock(at, ModBlocks.LOOT_CRATE.get().defaultBlockState()
                             .setValue(LootBlock.RARITY, rarity), Block.UPDATE_ALL);
+                    BlockArc.send(level, at, this, 0.5F + random.nextFloat() * 0.2F, 0.0F, 0.0F);
                     playSound(ModSounds.WAND_FAIL.get(), 1.0F, 1.0F);
                 }
             }

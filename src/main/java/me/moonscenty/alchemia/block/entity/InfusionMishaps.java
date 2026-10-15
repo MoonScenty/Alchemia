@@ -83,10 +83,20 @@ public final class InfusionMishaps {
         harm(level, pos);
     }
 
-    /** Whoever is standing too close gets some of it. */
+    /**
+     * Whoever is standing too close gets some of it, and, as in the original, half of them a dose of taint poison
+     * and the other half two minutes of vis exhaustion.
+     */
     private static void harm(ServerLevel level, BlockPos pos) {
         for (Player player : level.getEntitiesOfClass(Player.class, around(pos))) {
             player.hurt(level.damageSources().source(DamageTypes.MAGIC), HURT);
+            if (level.random.nextBoolean()) {
+                player.addEffect(new net.minecraft.world.effect.MobEffectInstance(
+                        me.moonscenty.alchemia.player.effect.ModEffects.TAINT_POISON, 120, 0, false, true));
+            } else {
+                player.addEffect(new net.minecraft.world.effect.MobEffectInstance(
+                        me.moonscenty.alchemia.player.effect.ModEffects.FLUX_FLU, 2400, 0, true, true));
+            }
         }
     }
 

@@ -36,7 +36,7 @@ public interface TaintedMob {
         Difficulty difficulty = biter.level().getDifficulty();
         int strength = difficulty == Difficulty.NORMAL ? 3 : difficulty == Difficulty.HARD ? 6 : 0;
         if (strength > 0 && biter.getRandom().nextInt(strength + 1) > 2) {
-            living.addEffect(new MobEffectInstance(ModEffects.FLUX_FLU, strength * 20, 0), biter);
+            living.addEffect(new MobEffectInstance(ModEffects.TAINT_POISON, strength * 20, 0), biter);
         }
     }
 

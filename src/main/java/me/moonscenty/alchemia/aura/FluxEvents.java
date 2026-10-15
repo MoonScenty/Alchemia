@@ -173,7 +173,7 @@ public final class FluxEvents {
 
         for (LivingEntity hit : level.getEntitiesOfClass(LivingEntity.class, new AABB(struck).inflate(BOLT_REACH, BOLT_REACH + 6.0, BOLT_REACH))) {
             hit.hurt(level.damageSources().lightningBolt(), BOLT_HARM);
-            hit.addEffect(new MobEffectInstance(ModEffects.FLUX_FLU, BOLT_FLU, 0, false, true));
+            hit.addEffect(new MobEffectInstance(ModEffects.TAINT_POISON, BOLT_FLU, 0, false, true));
         }
         if (level.getBlockState(struck).canBeReplaced() && level.getBlockState(struck).getFluidState().isEmpty()) {
             level.setBlock(struck, FluxGooBlock.of(ModBlocks.FLUX_GOO.get(), FluxGooBlock.FULL), Block.UPDATE_ALL);

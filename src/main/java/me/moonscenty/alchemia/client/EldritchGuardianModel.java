@@ -34,6 +34,8 @@ public class EldritchGuardianModel<T extends net.minecraft.world.entity.LivingEn
 
     private static int bakedFrom = -1;
     private static Map<String, ModelPart> parts = Map.of();
+    /** The eye under the hood, drawn only for the Warden, glowing. */
+    private static ModelPart eye;
     /** How much of it shows this frame, from the renderer. */
     float alpha = 1.0F;
 
@@ -46,6 +48,10 @@ public class EldritchGuardianModel<T extends net.minecraft.world.entity.LivingEn
         ModelPart hood = parts.get("Hood1");
         hood.yRot = headYaw * Mth.DEG_TO_RAD;
         hood.xRot = headPitch * Mth.DEG_TO_RAD;
+        if (eye != null) {
+            eye.yRot = hood.yRot;
+            eye.xRot = hood.xRot;
+        }
         parts.get("ArmL1").xRot = -1.0F - guardian.leftArmLift() + Mth.sin((age + 20.0F) / 10.0F) * 0.08F;
         parts.get("ArmR1").xRot = -1.0F - guardian.rightArmLift() + Mth.sin(age / 10.0F) * 0.08F;
         ModelPart c1 = parts.get("LegpanelC1");
@@ -81,6 +87,17 @@ public class EldritchGuardianModel<T extends net.minecraft.world.entity.LivingEn
         }
     }
 
+    /** The eye in the hood, a hair larger than the hood itself, as the original draws it over the Warden. */
+    void renderEye(PoseStack pose, VertexConsumer buffer, int light, int overlay) {
+        if (!refresh() || eye == null) {
+            return;
+        }
+        pose.pushPose();
+        pose.scale(1.01F, 1.01F, 1.01F);
+        eye.render(pose, buffer, light, overlay);
+        pose.popPose();
+    }
+
     /** Bakes the original's parts again whenever the import has changed what there is. */
     private static boolean refresh() {
         int generation = LegacyModels.generation();
@@ -93,6 +110,8 @@ public class EldritchGuardianModel<T extends net.minecraft.world.entity.LivingEn
                 }
             });
             parts = baked;
+            eye = LegacyModels.get(LegacyAssets.ELDRITCH_GUARDIAN)
+                    .map(model -> LegacyModelBaker.field(model, "HoodEye")).orElse(null);
         }
         return !parts.isEmpty();
     }

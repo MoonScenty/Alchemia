@@ -38,7 +38,7 @@ public final class TaintConversion {
     public static void onDeath(LivingDeathEvent event) {
         LivingEntity dead = event.getEntity();
         if (!(dead.level() instanceof ServerLevel level) || dead instanceof TaintedMob || dead instanceof AbstractGolem
-                || dead instanceof Autocaster || !dead.hasEffect(ModEffects.FLUX_FLU)) {
+                || dead instanceof Autocaster || !dead.hasEffect(ModEffects.TAINT_POISON)) {
             return;
         }
         Mob made = madeOver(level, dead);

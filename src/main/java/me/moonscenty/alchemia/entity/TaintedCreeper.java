@@ -146,7 +146,7 @@ public class TaintedCreeper extends Monster implements TaintedMob {
         for (LivingEntity near : level.getEntitiesOfClass(LivingEntity.class, new AABB(position(), position())
                 .inflate(POISONS))) {
             if (!(near instanceof TaintedMob) && !near.isInvertedHealAndHarm()) {
-                near.addEffect(new MobEffectInstance(ModEffects.FLUX_FLU, POISONED_FOR, 0, false, true), this);
+                near.addEffect(new MobEffectInstance(ModEffects.TAINT_POISON, POISONED_FOR, 0, false, true), this);
             }
         }
         BlockPos at = blockPosition();
