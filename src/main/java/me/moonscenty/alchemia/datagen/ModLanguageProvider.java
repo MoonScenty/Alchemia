@@ -647,6 +647,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         addItem(ModItems.BOTTLE_TAINT, pick("Bottle of Taint", "오염 병"));
         addItem(ModItems.THAUMOSTATIC_HARNESS, pick("Thaumostatic Harness", "타우모스태틱 하네스"));
         addBlock(ModBlocks.ESSENTIA_INPUT, pick("Filling Essentia Transfuser", "채우는 에센시아 수혈기"));
+        addBlock(ModBlocks.TAINT_DUST, pick("Degraded Taint Dust", "삭은 오염 먼지"));
         addBlock(ModBlocks.ESSENTIA_OUTPUT, pick("Emptying Essentia Transfuser", "비우는 에센시아 수혈기"));
         add("item.alchemia.thaumostatic_harness.fuel", pick("Flight left: %s s", "남은 비행: %s초"));
         add("key.alchemia.hover", pick("Thaumostatic harness", "타우모스태틱 하네스"));

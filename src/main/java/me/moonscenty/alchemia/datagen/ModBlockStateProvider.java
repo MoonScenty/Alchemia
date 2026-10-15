@@ -688,6 +688,17 @@ public class ModBlockStateProvider extends BlockStateProvider {
         ModBlocks.TALLOW_CANDLES.forEach((dye, block) -> getVariantBuilder(block.get()).partialState()
                 .modelForState().modelFile(candle).rotationY(90 * (dye.getId() % 4)).addModel());
         horizontalBlock(ModBlocks.PATTERN_CRAFTER.get(), models().getExistingFile(modLoc("block/pattern_crafter")));
+        // taint dust lies in four depths, a quarter block each, as snow does
+        ModelFile[] heaps = new ModelFile[4];
+        for (int depth = 0; depth < 3; depth++) {
+            heaps[depth] = models().withExistingParent("taint_dust_" + depth, mcLoc("block/snow_height" + 4 * (depth + 1)))
+                    .texture("texture", modLoc("block/legacy/taint_dust"))
+                    .texture("particle", modLoc("block/legacy/taint_dust"));
+        }
+        heaps[3] = models().cubeAll("taint_dust_3", modLoc("block/legacy/taint_dust"));
+        getVariantBuilder(ModBlocks.TAINT_DUST.get()).forAllStates(state -> ConfiguredModel.builder()
+                .modelFile(heaps[state.getValue(me.moonscenty.alchemia.block.taint.TaintDustBlock.LEVEL)]).build());
+        simpleBlockItem(ModBlocks.TAINT_DUST.get(), heaps[3]);
         // the transfusers point out of the face they are set on, turned as the original's were
         for (var transfuser : java.util.List.of(ModBlocks.ESSENTIA_INPUT, ModBlocks.ESSENTIA_OUTPUT)) {
             ModelFile fitting = models().getExistingFile(modLoc("block/" + transfuser.getId().getPath()));

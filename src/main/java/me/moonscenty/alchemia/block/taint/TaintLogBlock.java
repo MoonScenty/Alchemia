@@ -22,7 +22,8 @@ public class TaintLogBlock extends RotatedPillarBlock implements Tainted {
 
     @Override
     public void die(ServerLevel level, BlockPos pos, BlockState state) {
-        level.removeBlock(pos, false);
+        level.setBlock(pos, TaintDustBlock.of(me.moonscenty.alchemia.registry.ModBlocks.TAINT_DUST.get(),
+                TaintDustBlock.FULL), Block.UPDATE_ALL);
     }
 
     @Override

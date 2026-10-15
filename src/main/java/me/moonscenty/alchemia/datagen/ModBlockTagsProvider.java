@@ -62,6 +62,7 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.CRAB_SPAWNER.get(), ModBlocks.PATTERN_CRAFTER.get(),
                 ModBlocks.ESSENTIA_INPUT.get(), ModBlocks.ESSENTIA_OUTPUT.get());
         tag(BlockTags.MINEABLE_WITH_HOE).add(ModBlocks.FLESH_BLOCK.get());
+        tag(BlockTags.MINEABLE_WITH_SHOVEL).add(ModBlocks.TAINT_DUST.get());
         // nothing that breaks blocks breaks the Outer Lands' bedrock, its void, or a great hall's door
         tag(BlockTags.WITHER_IMMUNE).add(ModBlocks.ANCIENT_BEDROCK.get(), ModBlocks.VACUUM.get(),
                 ModBlocks.ELDRITCH_LOCK.get(), ModBlocks.ELDRITCH_DOOR.get());
