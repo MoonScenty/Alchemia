@@ -1,0 +1,28 @@
+{
+  "category": "alchemia:arcana",
+  "column": 5,
+  "complexity": 2,
+  "icon": "alchemia:focus_hole",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.focus_hole.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:focus_hole"
+    }
+  ],
+  "parents": [
+    "alchemia:focus_trade",
+    "alchemia:focus_excavation",
+    "alchemia:infusion"
+  ],
+  "requirements": {
+    "alchemia:aer": 3,
+    "alchemia:alienis": 6,
+    "alchemia:motus": 3,
+    "alchemia:perditio": 3
+  },
+  "row": 10
+}

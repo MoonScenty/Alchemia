@@ -1,0 +1,25 @@
+{
+  "category": "alchemia:arcana",
+  "column": 3,
+  "icon": "alchemia:focus_fire",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.focus_fire.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:focus_fire"
+    }
+  ],
+  "parents": [
+    "alchemia:wand"
+  ],
+  "requirements": {
+    "alchemia:aer": 3,
+    "alchemia:ignis": 6,
+    "alchemia:potentia": 3
+  },
+  "row": 7,
+  "shape": "major"
+}

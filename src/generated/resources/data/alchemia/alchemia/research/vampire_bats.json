@@ -1,0 +1,21 @@
+{
+  "category": "alchemia:arcana",
+  "column": 0,
+  "icon": "alchemia:focus_hellbat",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.vampire_bats.page"
+    }
+  ],
+  "parents": [
+    "alchemia:focus_hellbat",
+    "alchemia:focal_manipulator"
+  ],
+  "requirements": {
+    "alchemia:desiderium": 5,
+    "alchemia:potentia": 5,
+    "alchemia:victus": 5
+  },
+  "row": 8
+}

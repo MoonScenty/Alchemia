@@ -1,0 +1,26 @@
+{
+  "category": "alchemia:arcana",
+  "column": 3,
+  "complexity": 2,
+  "icon": "alchemia:focus_builder",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.focus_builder.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:focus_builder"
+    }
+  ],
+  "parents": [
+    "alchemia:focus_trade"
+  ],
+  "requirements": {
+    "alchemia:instrumentum": 6,
+    "alchemia:motus": 3,
+    "alchemia:ordo": 3,
+    "alchemia:terra": 3
+  },
+  "row": 10
+}

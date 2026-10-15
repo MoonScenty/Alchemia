@@ -1,0 +1,25 @@
+{
+  "category": "alchemia:arcana",
+  "column": 5,
+  "complexity": 2,
+  "icon": "alchemia:focus_excavation",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.focus_excavation.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:focus_excavation"
+    }
+  ],
+  "parents": [
+    "alchemia:focus_fire"
+  ],
+  "requirements": {
+    "alchemia:perditio": 3,
+    "alchemia:potentia": 3,
+    "alchemia:terra": 6
+  },
+  "row": 8
+}

@@ -1,0 +1,24 @@
+{
+  "category": "alchemia:arcana",
+  "column": 5,
+  "icon": "alchemia:focus_grapple",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.focus_grapple.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:focus_grapple"
+    }
+  ],
+  "parents": [
+    "alchemia:focus_shock"
+  ],
+  "requirements": {
+    "alchemia:aer": 3,
+    "alchemia:aqua": 3,
+    "alchemia:motus": 6
+  },
+  "row": 6
+}

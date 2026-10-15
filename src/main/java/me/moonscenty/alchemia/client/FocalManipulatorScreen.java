@@ -88,7 +88,7 @@ public class FocalManipulatorScreen extends AbstractContainerScreen<FocalManipul
 
     /** What the next rank of this focus offers, which is nothing at all while the bench is busy. */
     private List<FocusUpgrade> offered() {
-        return FocusUpgrades.offers(focus(), FocusUpgrades.nextRank(focus()));
+        return FocusUpgrades.offers(focus(), FocusUpgrades.nextRank(focus()), minecraft.player);
     }
 
     @Override

@@ -1,0 +1,32 @@
+{
+  "type": "alchemia:arcane_shaped",
+  "key": {
+    "#": {
+      "item": "alchemia:amber"
+    },
+    "C": {
+      "item": "alchemia:air_shard"
+    },
+    "E": {
+      "item": "alchemia:earth_shard"
+    },
+    "Q": {
+      "item": "minecraft:quartz"
+    }
+  },
+  "pattern": [
+    "CQE",
+    "Q#Q",
+    "EQC"
+  ],
+  "research": "alchemia:focus_builder",
+  "result": {
+    "count": 1,
+    "id": "alchemia:focus_builder"
+  },
+  "vis": {
+    "alchemia:aer": 50,
+    "alchemia:ordo": 75,
+    "alchemia:terra": 75
+  }
+}

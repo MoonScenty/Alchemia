@@ -187,6 +187,22 @@ public final class FocusUpgrades {
         return ranks == null ? List.of() : ranks.get(rank - 1);
     }
 
+    /**
+     * What a rank offers this one player: the same, less the vampire bats until they have studied them, the one
+     * upgrade the original kept behind a research.
+     */
+    public static List<FocusUpgrade> offers(ItemStack focus, int rank, net.minecraft.world.entity.player.Player who) {
+        List<FocusUpgrade> all = offers(focus, rank);
+        if (!all.contains(FocusUpgrade.VAMPIRE_BATS) || who == null || me.moonscenty.alchemia.player.PlayerKnowledge
+                .of(who).hasResearch(me.moonscenty.alchemia.Alchemia.id(VAMPIRE_RESEARCH))) {
+            return all;
+        }
+        return all.stream().filter(upgrade -> upgrade != FocusUpgrade.VAMPIRE_BATS).toList();
+    }
+
+    /** The research the vampire bats are kept behind. */
+    public static final String VAMPIRE_RESEARCH = "vampire_bats";
+
     /** Whether this focus would take this upgrade now, at whichever rank is next. */
     public static boolean takes(ItemStack focus, FocusUpgrade upgrade) {
         int rank = nextRank(focus);
