@@ -1419,6 +1419,13 @@ public class ModRecipeProvider extends RecipeProvider {
                         'C', Ingredient.of(Items.CRAFTING_TABLE), 'W', Ingredient.of(ModBlocks.GREATWOOD.planks())),
                 " H ", "GCG", " W ");
 
+        // bone and string, with entropy at the heart
+        arcane(output, "bone_bow", "bone_bow", new ItemStack(ModItems.BONE_BOW.get()),
+                AspectList.of(ModAspects.AIR, 50).add(ModAspects.ENTROPY, 100),
+                Map.of('S', Ingredient.of(Items.STRING), 'B', Ingredient.of(Items.BONE),
+                        'E', shard(me.moonscenty.alchemia.block.CrystalType.ENTROPY)),
+                "SB ", "SEB", "SB ");
+
         // eight arrows round a shard, and the shard's primal bound into all eight
         ModItems.PRIMAL_ARROWS.forEach((type, arrow) -> arcane(output, "primal_arrow_" + type.getName(),
                 "primal_arrows", new ItemStack(arrow.get(), 8), AspectList.of(type.aspect(), 25),

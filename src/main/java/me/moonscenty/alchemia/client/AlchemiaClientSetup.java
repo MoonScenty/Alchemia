@@ -128,6 +128,13 @@ public class AlchemiaClientSetup {
             ItemProperties.register(item, Alchemia.id("linked"), (stack, level, holder, seed) ->
                     stack.has(ModDataComponents.MIRROR_LINK.get()) ? 1 : 0);
         }
+        // the bow of bone bends as a bow does, in half the time
+        ItemProperties.register(ModItems.BONE_BOW.get(), Alchemia.id("pulling"), (stack, level, holder, seed) ->
+                holder != null && holder.isUsingItem() && holder.getUseItem() == stack ? 1 : 0);
+        ItemProperties.register(ModItems.BONE_BOW.get(), Alchemia.id("pull"), (stack, level, holder, seed) ->
+                holder == null || holder.getUseItem() != stack ? 0
+                        : (stack.getUseDuration(holder) - holder.getUseItemRemainingTicks())
+                                / (float) me.moonscenty.alchemia.item.BoneBowItem.FULL_DRAW);
         // the lodestone lights while its holder looks towards a portal
         ItemProperties.register(ModItems.SINISTER_STONE.get(), Alchemia.id("active"), (stack, level, holder, seed) ->
                 me.moonscenty.alchemia.item.SinisterStoneItem.feels(

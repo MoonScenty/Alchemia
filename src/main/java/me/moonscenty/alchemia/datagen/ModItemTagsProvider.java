@@ -26,6 +26,10 @@ public class ModItemTagsProvider extends ItemTagsProvider {
     protected void addTags(HolderLookup.Provider provider) {
         ModBlocks.NITOR.values().forEach(flame -> tag(ModTags.Items.NITOR).add(flame.get().asItem()));
         ModItems.FOCI.values().forEach(focus -> tag(ModTags.Items.FOCI).add(focus.get()));
+        // the bow of bone takes a bow's enchantments
+        tag(net.minecraft.tags.ItemTags.BOW_ENCHANTABLE).add(ModItems.BONE_BOW.get());
+        tag(net.minecraft.tags.ItemTags.DURABILITY_ENCHANTABLE).add(ModItems.BONE_BOW.get());
+        tag(net.neoforged.neoforge.common.Tags.Items.TOOLS_BOW).add(ModItems.BONE_BOW.get());
         // the original's crafting warp: a point, sticking, for making any of these
         tag(ModTags.Items.WARPS_WHEN_MADE).add(ModItems.FOCI.get("hellbat").get(), ModItems.FOCI.get("primal").get(),
                 ModBlocks.BRAIN_JAR.get().asItem(), ModItems.SINISTER_STONE.get(), ModItems.LIQUID_DEATH_BUCKET.get());

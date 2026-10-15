@@ -1,0 +1,29 @@
+{
+  "parent": "minecraft:item/bow",
+  "overrides": [
+    {
+      "model": "alchemia:item/bone_bow_pulling_0",
+      "predicate": {
+        "alchemia:pull": 0.0,
+        "alchemia:pulling": 1.0
+      }
+    },
+    {
+      "model": "alchemia:item/bone_bow_pulling_1",
+      "predicate": {
+        "alchemia:pull": 0.8,
+        "alchemia:pulling": 1.0
+      }
+    },
+    {
+      "model": "alchemia:item/bone_bow_pulling_2",
+      "predicate": {
+        "alchemia:pull": 1.3,
+        "alchemia:pulling": 1.0
+      }
+    }
+  ],
+  "textures": {
+    "layer0": "alchemia:item/bone_bow"
+  }
+}
