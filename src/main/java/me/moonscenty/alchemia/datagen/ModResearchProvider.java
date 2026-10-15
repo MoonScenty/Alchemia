@@ -480,7 +480,22 @@ public class ModResearchProvider {
         // flesh rendered to tallow in a crucible, which seals are made with
         entry(context, "tallow", ModResearch.ALCHEMY, ModItems.TALLOW, -2, 2,
                 AspectList.of(ModAspects.BEAST, 3).add(ModAspects.FIRE, 1), List.of("crucible"), false,
-                NodeShape.PLAIN, 1, "tallow");
+                NodeShape.PLAIN, 1, "tallow", "tallow_candle");
+        // soap that washes the mind, out of a block of flesh
+        entry(context, "sanity_soap", ModResearch.ALCHEMY, ModItems.SANITY_SOAP, -1, -1,
+                AspectList.of(ModAspects.MIND, 5).add(ModAspects.ORDER, 5).add(ModAspects.LIFE, 5)
+                        .add(ModAspects.ELDRITCH, 5),
+                List.of("bath_salts"), false, NodeShape.PLAIN, 1, "sanity_soap");
+        // a crafter that works on its own between two inventories
+        entry(context, "pattern_crafter", ModResearch.GOLEMANCY, ModBlocks.PATTERN_CRAFTER, 2, 2,
+                AspectList.of(ModAspects.EXCHANGE, 3).add(ModAspects.VOID, 3).add(ModAspects.CRAFT, 3)
+                        .add(ModAspects.MAN, 3),
+                List.of("clockwork_mind"), false, NodeShape.PLAIN, 1, "pattern_crafter");
+        // flint that lights when it is turned towards an eldritch portal
+        entry(context, "sinister_stone", ModResearch.ELDRITCH, ModItems.SINISTER_STONE, -1, 4,
+                AspectList.of(ModAspects.SENSES, 3).add(ModAspects.DARKNESS, 3).add(ModAspects.ELDRITCH, 3)
+                        .add(ModAspects.AURA, 3),
+                List.of("goggles", "infusion", "oculus"), false, NodeShape.PLAIN, 1, "sinister_stone");
         entry(context, "spa", ModResearch.ALCHEMY, ModBlocks.SPA, -2, 0,
                 AspectList.of(ModAspects.WATER, 3).add(ModAspects.MECHANISM, 3).add(ModAspects.ORDER, 3),
                 List.of("bath_salts"), false, NodeShape.PLAIN, 1, "spa");

@@ -109,6 +109,10 @@ public class ArcaneEarBlockEntity extends BlockEntity {
     public void raisePitch() {
         note = (note + 1) % NOTES;
         setChanged();
+        // goggles show the note it is tuned to, so whoever is watching has to know
+        if (level != null) {
+            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
+        }
     }
 
     /** Its note shown over it, and sounded, in its voice, if it is being tuned rather than answering. */
@@ -125,6 +129,14 @@ public class ArcaneEarBlockEntity extends BlockEntity {
         }
     }
 
+    /** The note of what is at a place, for goggles to show: a note block's or an ear's, or -1 if it has none. */
+    public static int noteAt(BlockState state, BlockEntity entity) {
+        if (state.getBlock() instanceof NoteBlock) {
+            return state.getValue(NoteBlock.NOTE);
+        }
+        return entity instanceof ArcaneEarBlockEntity ear ? ear.note() : -1;
+    }
+
     public int note() {
         return note;
     }
@@ -139,5 +151,15 @@ public class ArcaneEarBlockEntity extends BlockEntity {
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.saveAdditional(tag, registries);
         tag.putByte("note", (byte) note);
+    }
+
+    @Override
+    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
+        return saveWithoutMetadata(registries);
+    }
+
+    @Override
+    public net.minecraft.network.protocol.Packet<net.minecraft.network.protocol.game.ClientGamePacketListener> getUpdatePacket() {
+        return net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket.create(this);
     }
 }

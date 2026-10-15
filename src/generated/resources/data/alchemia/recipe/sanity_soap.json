@@ -1,0 +1,17 @@
+{
+  "type": "alchemia:crucible",
+  "aspects": {
+    "alchemia:alienis": 16,
+    "alchemia:cognitio": 16,
+    "alchemia:ordo": 16,
+    "alchemia:victus": 16
+  },
+  "catalyst": {
+    "item": "alchemia:flesh_block"
+  },
+  "research": "alchemia:sanity_soap",
+  "result": {
+    "count": 1,
+    "id": "alchemia:sanity_soap"
+  }
+}

@@ -85,6 +85,9 @@ public final class ModSounds {
     /** Something learnt off a page. */
     public static final DeferredHolder<SoundEvent, SoundEvent> LEARN = sound("learn");
 
+    /** A brass dial clicking round. */
+    public static final DeferredHolder<SoundEvent, SoundEvent> KEY = sound("key");
+
     private static DeferredHolder<SoundEvent, SoundEvent> sound(String name) {
         return SOUNDS.register(name, () -> SoundEvent.createVariableRangeEvent(Alchemia.id(name)));
     }

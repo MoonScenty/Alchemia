@@ -128,6 +128,10 @@ public class AlchemiaClientSetup {
             ItemProperties.register(item, Alchemia.id("linked"), (stack, level, holder, seed) ->
                     stack.has(ModDataComponents.MIRROR_LINK.get()) ? 1 : 0);
         }
+        // the lodestone lights while its holder looks towards a portal
+        ItemProperties.register(ModItems.SINISTER_STONE.get(), Alchemia.id("active"), (stack, level, holder, seed) ->
+                me.moonscenty.alchemia.item.SinisterStoneItem.feels(
+                        holder != null ? holder : Minecraft.getInstance().player) ? 1 : 0);
         ItemProperties.register(ModBlocks.JAR.get().asItem(), Alchemia.id("filled"),
                 (stack, level, holder, seed) -> stack.has(ModDataComponents.CONTENTS.get()) ? 1 : 0);
         for (var death : List.of(me.moonscenty.alchemia.registry.ModFluids.DEATH.get(),
@@ -153,6 +157,9 @@ public class AlchemiaClientSetup {
      */
     @SubscribeEvent
     public static void registerItemColours(RegisterColorHandlersEvent.Item event) {
+        // a tallow candle's wax is its dye's colour; the wick is not
+        ModBlocks.TALLOW_CANDLES.forEach((dye, candle) -> event.register((stack, tint) ->
+                tint == 0 ? FastColor.ARGB32.opaque(dye.getMapColor().col) : -1, candle.get()));
         event.register((stack, tint) -> tint == 0 ? named(stack) : PLAIN, ModItems.PHIAL.get());
         // an apprentice's ring takes its primal's colour
         ModItems.APPRENTICE_RINGS.values().forEach(ring -> event.register((stack, tint) ->
@@ -244,6 +251,8 @@ public class AlchemiaClientSetup {
      */
     @SubscribeEvent
     public static void registerBlockColours(RegisterColorHandlersEvent.Block event) {
+        ModBlocks.TALLOW_CANDLES.forEach((dye, candle) -> event.register((state, level, pos, tint) ->
+                tint == 0 ? dye.getMapColor().col : 0xFFFFFF, candle.get()));
         // a filter tube wears the colour of the one thing it lets by, which is the only way to read a run of pipe
         event.register((state, level, pos, tint) ->
                 level != null && pos != null && level.getBlockEntity(pos) instanceof FilterTubeBlockEntity filter
@@ -348,6 +357,7 @@ public class AlchemiaClientSetup {
     @SubscribeEvent
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerBlockEntityRenderer(ModBlockEntities.RESEARCH_TABLE.get(), ResearchTableRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.PATTERN_CRAFTER.get(), PatternCrafterRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.ELDRITCH_ALTAR.get(), EldritchCapRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.ELDRITCH_CAP.get(), EldritchCapRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.ELDRITCH_OBELISK.get(), EldritchObeliskRenderer::new);

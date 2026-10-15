@@ -257,6 +257,9 @@ public class ModDataMapProvider extends DataMapProvider {
                 ModBlocks.ANCIENT_ROCK, ModBlocks.ANCIENT_TILE)) {
             item(old, a(ModAspects.EARTH, 1).add(ModAspects.ELDRITCH, 1));
         }
+        // a candle is a light and a little of what it was rendered from
+        ModBlocks.TALLOW_CANDLES.values().forEach(candle ->
+                item(candle, a(ModAspects.LIGHT, 1).add(ModAspects.LIFE, 1)));
         item(ModBlocks.CRUSTED_STONE, a(ModAspects.EARTH, 1).add(ModAspects.ELDRITCH, 1).add(ModAspects.LIFE, 1));
         item(ModBlocks.GLOWING_CRUSTED_STONE,
                 a(ModAspects.EARTH, 1).add(ModAspects.ELDRITCH, 1).add(ModAspects.LIFE, 1).add(ModAspects.LIGHT, 1));

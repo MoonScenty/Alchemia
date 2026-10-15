@@ -1,0 +1,63 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    [
+      {
+        "item": "alchemia:white_tallow_candle"
+      },
+      {
+        "item": "alchemia:orange_tallow_candle"
+      },
+      {
+        "item": "alchemia:magenta_tallow_candle"
+      },
+      {
+        "item": "alchemia:light_blue_tallow_candle"
+      },
+      {
+        "item": "alchemia:yellow_tallow_candle"
+      },
+      {
+        "item": "alchemia:lime_tallow_candle"
+      },
+      {
+        "item": "alchemia:pink_tallow_candle"
+      },
+      {
+        "item": "alchemia:gray_tallow_candle"
+      },
+      {
+        "item": "alchemia:light_gray_tallow_candle"
+      },
+      {
+        "item": "alchemia:cyan_tallow_candle"
+      },
+      {
+        "item": "alchemia:purple_tallow_candle"
+      },
+      {
+        "item": "alchemia:blue_tallow_candle"
+      },
+      {
+        "item": "alchemia:brown_tallow_candle"
+      },
+      {
+        "item": "alchemia:green_tallow_candle"
+      },
+      {
+        "item": "alchemia:red_tallow_candle"
+      },
+      {
+        "item": "alchemia:black_tallow_candle"
+      }
+    ],
+    {
+      "item": "minecraft:bone_meal"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "alchemia:white_tallow_candle"
+  }
+}

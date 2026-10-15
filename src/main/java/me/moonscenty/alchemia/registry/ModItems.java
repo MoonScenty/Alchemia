@@ -394,6 +394,13 @@ public class ModItems {
     public static final DeferredItem<Item> BRASS_PLATE = ITEMS.registerSimpleItem("brass_plate");
     public static final DeferredItem<Item> IRON_PLATE = ITEMS.registerSimpleItem("iron_plate");
     public static final DeferredItem<Item> SALIS_MUNDUS = ITEMS.registerSimpleItem("salis_mundus");
+    /** Soap that washes the mind: temporary warp, and sometimes a point of the warp that sticks. */
+    public static final DeferredItem<me.moonscenty.alchemia.item.SanitySoapItem> SANITY_SOAP = ITEMS.register(
+            "sanity_soap", () -> new me.moonscenty.alchemia.item.SanitySoapItem(new Item.Properties()));
+    /** Flint that lights when it is looked through towards an eldritch portal. */
+    public static final DeferredItem<me.moonscenty.alchemia.item.SinisterStoneItem> SINISTER_STONE = ITEMS.register(
+            "sinister_stone", () -> new me.moonscenty.alchemia.item.SinisterStoneItem(new Item.Properties()
+                    .stacksTo(1).rarity(net.minecraft.world.item.Rarity.RARE)));
     /** Salts that turn still water they dissolve in to purifying fluid. */
     public static final DeferredItem<me.moonscenty.alchemia.item.BathSaltsItem> BATH_SALTS = ITEMS.register(
             "bath_salts", () -> new me.moonscenty.alchemia.item.BathSaltsItem(new Item.Properties()));

@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "enabled=false,facing=east": {
+      "model": "alchemia:block/pattern_crafter",
+      "y": 90
+    },
+    "enabled=false,facing=north": {
+      "model": "alchemia:block/pattern_crafter"
+    },
+    "enabled=false,facing=south": {
+      "model": "alchemia:block/pattern_crafter",
+      "y": 180
+    },
+    "enabled=false,facing=west": {
+      "model": "alchemia:block/pattern_crafter",
+      "y": 270
+    },
+    "enabled=true,facing=east": {
+      "model": "alchemia:block/pattern_crafter",
+      "y": 90
+    },
+    "enabled=true,facing=north": {
+      "model": "alchemia:block/pattern_crafter"
+    },
+    "enabled=true,facing=south": {
+      "model": "alchemia:block/pattern_crafter",
+      "y": 180
+    },
+    "enabled=true,facing=west": {
+      "model": "alchemia:block/pattern_crafter",
+      "y": 270
+    }
+  }
+}

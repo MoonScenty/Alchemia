@@ -571,6 +571,35 @@ public class ModBlocks {
                     .mapColor(MapColor.WOOD).strength(1.0F).sound(SoundType.WOOD).noCollission().noOcclusion()
                     .ignitedByLava()));
 
+    /** A block of rotten flesh, packed nine to one. It squelches. */
+    public static final DeferredBlock<Block> FLESH_BLOCK = register("flesh_block",
+            () -> new Block(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_RED).strength(0.25F, 2.0F)
+                    .sound(new net.neoforged.neoforge.common.util.DeferredSoundType(0.5F, 0.8F, ModSounds.GORE,
+                            ModSounds.GORE, ModSounds.GORE, ModSounds.GORE, ModSounds.GORE))));
+
+    /** Tallow candles, one for each dye, white first. */
+    public static final Map<net.minecraft.world.item.DyeColor, DeferredBlock<me.moonscenty.alchemia.block.TallowCandleBlock>>
+            TALLOW_CANDLES = registerCandles();
+
+    /** The arcane pattern crafter: from the inventory above, in a pattern, into the one below. */
+    public static final DeferredBlock<me.moonscenty.alchemia.block.PatternCrafterBlock> PATTERN_CRAFTER =
+            register("pattern_crafter", () -> new me.moonscenty.alchemia.block.PatternCrafterBlock(
+                    BlockBehaviour.Properties.of().mapColor(MapColor.METAL).strength(2.0F, 20.0F)
+                            .sound(SoundType.METAL).noOcclusion()));
+
+    private static Map<net.minecraft.world.item.DyeColor, DeferredBlock<me.moonscenty.alchemia.block.TallowCandleBlock>> registerCandles() {
+        Map<net.minecraft.world.item.DyeColor, DeferredBlock<me.moonscenty.alchemia.block.TallowCandleBlock>> made =
+                new EnumMap<>(net.minecraft.world.item.DyeColor.class);
+        for (net.minecraft.world.item.DyeColor colour : net.minecraft.world.item.DyeColor.values()) {
+            made.put(colour, register(colour.getSerializedName() + "_tallow_candle",
+                    () -> new me.moonscenty.alchemia.block.TallowCandleBlock(colour, BlockBehaviour.Properties.of()
+                            .mapColor(colour.getMapColor()).strength(0.1F).sound(SoundType.WOOL).noCollission()
+                            .noOcclusion().lightLevel(state -> 14).pushReaction(
+                                    net.minecraft.world.level.material.PushReaction.DESTROY))));
+        }
+        return Collections.unmodifiableMap(made);
+    }
+
     private static BlockBehaviour.Properties eldritch() {
         return BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLACK).strength(50.0F, 1200.0F)
                 .sound(SoundType.STONE).lightLevel(state -> 8).noOcclusion().noLootTable()

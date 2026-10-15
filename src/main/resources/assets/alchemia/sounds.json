@@ -93,6 +93,12 @@
       "alchemia:legacy/wind2"
     ]
   },
+  "key": {
+    "subtitle": "subtitles.alchemia.key",
+    "sounds": [
+      "alchemia:legacy/key"
+    ]
+  },
   "pump": {
     "subtitle": "subtitles.alchemia.pump",
     "sounds": [

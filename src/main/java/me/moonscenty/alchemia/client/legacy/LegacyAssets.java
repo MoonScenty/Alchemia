@@ -220,6 +220,7 @@ public final class LegacyAssets {
         gear(all);
         golems(all);
         cult(all);
+        leftovers(all);
         return List.copyOf(all);
     }
 
@@ -933,6 +934,27 @@ public final class LegacyAssets {
      * and its panel, the little pictures of every part and trait on that panel, the items, and the stone table.
      */
     /** Step 13B: the Crimson Cult, what it wears and carries, its portal and its sounds. */
+    /**
+     * Step 14C: what was left over. The soap and the lodestone's two faces; the candle's model, its wax (which
+     * flickers through eight frames) and its wick; the pattern crafter's model, its panels and the strip of patterns
+     * its window shows; and the dial's click.
+     */
+    private static void leftovers(List<LegacyAsset> all) {
+        all.add(item("sanity_soap", "sanity_soap", null));
+        all.add(item("sinister_stone", "sinister_stone", null));
+        all.add(item("sinister_stone_on", "sinister_stone_active", null));
+        all.add(LegacyAsset.of("models/block/candle.json").five("models/block/candle.json").asModel("cutout"));
+        for (String picture : List.of("candle", "candlestub", "pattern_crafter", "pattern_crafter_modes")) {
+            all.add(LegacyAsset.of("textures/block/legacy/" + picture + ".png")
+                    .five("textures/blocks/" + picture + ".png"));
+        }
+        all.add(LegacyAsset.of("models/block/pattern_crafter.json").five("models/block/pattern_crafter.json")
+                .asModel("cutout"));
+        all.add(LegacyAsset.of("models/block/pattern_crafter_inv.json").five("models/block/pattern_crafter_inv.json")
+                .asModel("cutout"));
+        all.add(LegacyAsset.of("sounds/legacy/key.ogg").five("sounds/key.ogg"));
+    }
+
     private static void cult(List<LegacyAsset> all) {
         all.add(LegacyAsset.of("textures/entity/cultist.png").five("textures/models/creature/cultist.png"));
         all.add(LegacyAsset.of("textures/entity/cultist_portal.png").five("textures/misc/cultist_portal.png"));
