@@ -646,6 +646,8 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         addItem(ModItems.BONE_BOW, pick("Bow of Bone", "뼈 활"));
         addItem(ModItems.BOTTLE_TAINT, pick("Bottle of Taint", "오염 병"));
         addItem(ModItems.THAUMOSTATIC_HARNESS, pick("Thaumostatic Harness", "타우모스태틱 하네스"));
+        addBlock(ModBlocks.ESSENTIA_INPUT, pick("Filling Essentia Transfuser", "채우는 에센시아 수혈기"));
+        addBlock(ModBlocks.ESSENTIA_OUTPUT, pick("Emptying Essentia Transfuser", "비우는 에센시아 수혈기"));
         add("item.alchemia.thaumostatic_harness.fuel", pick("Flight left: %s s", "남은 비행: %s초"));
         add("key.alchemia.hover", pick("Thaumostatic harness", "타우모스태틱 하네스"));
         add("entity.alchemia.bottle_taint", pick("Bottled Taint", "병에 든 오염"));
@@ -1316,6 +1318,9 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                 {"warp", "Warp", "뒤틀림",
                  "Look too long into what should not be, and it begins looking back. The damage is not to the world but to the one studying it, and it does not undo itself with rest.",
                  "있어서는 안 될 것을 오래 들여다보면, 그것도 당신을 들여다보기 시작한다. 상하는 것은 세계가 아니라 그것을 연구하는 자이며, 쉰다고 해서 되돌아오지 않는다."},
+                {"essentia_transport", "Essentia Transfusion", "에센시아 수혈",
+                 "Aerial essentia. An infusion draws essentia straight out of jars and through the air, and the matrix keeps it stable enough for the working. You have found how to move essentia the same way without it spoiling, in two fittings for a pipe. The filling transfuser takes whatever a pipe brings it and sends it to the jars within sixteen blocks in front of it, filling those that already hold something first. The emptying transfuser does the opposite, drawing from the jars in front of it whatever the pipe behind it asks for.",
+                 "공중의 에센시아. 주입은 단지에서 에센시아를 곧장 공중으로 끌어오고, 매트릭스가 그것을 작업할 만큼 안정시킨다. 같은 방식으로 에센시아를 상하게 하지 않고 옮기는 법을 알아내어, 관에 끼우는 장치 둘을 만들었다. 채우는 수혈기는 관이 가져오는 것을 앞쪽 16칸 안의 단지로 보내는데, 이미 무언가 든 단지부터 채운다. 비우는 수혈기는 그 반대로, 뒤의 관이 원하는 것을 앞쪽 단지에서 끌어온다."},
                 {"thaumostatic_harness", "Thaumostatic Harness", "타우모스태틱 하네스",
                  "Is it a bird? You have unlocked the secret of flight: a harness that anchors itself to the aura and lets you defy gravity. It runs on vis and has to be charged, at a recharge pedestal or by an amulet of vis; a point each of air and fire keeps it going a second, and it holds five minutes' worth. Press H while wearing it to switch it on and off; switched on, you fly as you would in creative. Sprinting while flying goes faster but burns three times the vis. Worn with a thaumostatic girdle, it flies at full speed. Even switched off, it softens a fall.",
                  "새인가? 비행의 비밀을 풀었다. 오라에 스스로를 붙들어 매어 중력을 거스르게 해 주는 하네스다. 비스로 움직이므로 충전 받침대나 비스 부적으로 채워야 한다. 공기와 불 한 점씩이면 1초를 날고, 5분 몫을 담아 둔다. 입은 채 H를 누르면 켜고 끈다. 켜면 크리에이티브처럼 날 수 있다. 날면서 달리면 빠르지만 비스를 세 배로 쓴다. 타우모스태틱 허리띠를 함께 차면 제 속도로 난다. 꺼져 있어도 떨어질 때 충격을 줄여 준다."},

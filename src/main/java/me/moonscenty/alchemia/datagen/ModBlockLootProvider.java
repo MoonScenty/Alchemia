@@ -137,6 +137,8 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
         dropSelf(ModBlocks.ARCANE_EAR.get());
         dropSelf(ModBlocks.FLESH_BLOCK.get());
         dropSelf(ModBlocks.PATTERN_CRAFTER.get());
+        dropSelf(ModBlocks.ESSENTIA_INPUT.get());
+        dropSelf(ModBlocks.ESSENTIA_OUTPUT.get());
         ModBlocks.TALLOW_CANDLES.values().forEach(candle -> dropSelf(candle.get()));
         dropSelf(ModBlocks.SPA.get());
         dropSelf(ModBlocks.RECHARGE_PEDESTAL.get());

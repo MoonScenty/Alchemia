@@ -481,6 +481,11 @@ public class ModResearchProvider {
         entry(context, "tallow", ModResearch.ALCHEMY, ModItems.TALLOW, -2, 2,
                 AspectList.of(ModAspects.BEAST, 3).add(ModAspects.FIRE, 1), List.of("crucible"), false,
                 NodeShape.PLAIN, 1, "tallow", "tallow_candle");
+        // essentia through the air, as an altar draws it, to and from the jars
+        entry(context, "essentia_transport", ModResearch.ALCHEMY, ModBlocks.ESSENTIA_INPUT, 7, 9,
+                AspectList.of(ModAspects.WATER, 3).add(ModAspects.MOTION, 6).add(ModAspects.EXCHANGE, 3)
+                        .add(ModAspects.DESIRE, 3).add(ModAspects.AVERSION, 3),
+                List.of("thaumatorium", "infusion"), false, NodeShape.PLAIN, 2, "essentia_input", "essentia_output");
         // flight, on vis
         entry(context, "thaumostatic_harness", ModResearch.ARTIFICE, ModItems.THAUMOSTATIC_HARNESS, -3, -1,
                 AspectList.of(ModAspects.FLIGHT, 6).add(ModAspects.AIR, 6).add(ModAspects.MECHANISM, 3),

@@ -947,6 +947,12 @@ public final class LegacyAssets {
             all.add(item("primal_arrow_" + element, "primal_arrow_" + element, null));
         }
         all.add(item("bottle_taint", "bottle_taint", null));
+        // the essentia transfusers, both on the one picture
+        for (String transfuser : List.of("essentia_input", "essentia_output")) {
+            all.add(LegacyAsset.of("models/block/" + transfuser + ".json").five("models/block/" + transfuser + ".json")
+                    .asModel("cutout"));
+        }
+        all.add(LegacyAsset.of("textures/block/legacy/essentia_input.png").five("textures/blocks/essentia_input.png"));
         // the thaumostatic harness: its picture, the sheet it is worn in, the pack on its back and the rings
         all.add(item("thaumostatic_harness", "thaumostatic_harness", null));
         all.add(LegacyAsset.of("textures/models/armor/hover_harness_layer_1.png")

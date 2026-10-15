@@ -61,6 +61,11 @@ public final class EssentiaReach {
      * Walked over the loaded chunks rather than block by block: a reach of twelve is twenty-five thousand blocks
      * and a handful of block entities, and asking the chunk which ones it has is the difference between the two.
      */
+    /** Everything that holds essentia within reach, nearest first, for anything else that reaches. */
+    public static List<BlockEntity> holders(Level level, BlockPos from, int range) {
+        return nearby(level, from, range);
+    }
+
     private static List<BlockEntity> nearby(Level level, BlockPos from, int range) {
         List<BlockEntity> found = new ArrayList<>();
         int reach = range * range;
