@@ -1,0 +1,27 @@
+{
+  "category": "alchemia:eldritch",
+  "column": -1,
+  "icon": "alchemia:sinister_stone",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.sinister_stone.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:sinister_stone"
+    }
+  ],
+  "parents": [
+    "alchemia:goggles",
+    "alchemia:infusion",
+    "alchemia:oculus"
+  ],
+  "requirements": {
+    "alchemia:alienis": 3,
+    "alchemia:auram": 3,
+    "alchemia:sensus": 3,
+    "alchemia:tenebrae": 3
+  },
+  "row": 4
+}

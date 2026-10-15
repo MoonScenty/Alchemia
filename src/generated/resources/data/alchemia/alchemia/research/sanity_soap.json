@@ -1,0 +1,25 @@
+{
+  "category": "alchemia:alchemy",
+  "column": -1,
+  "icon": "alchemia:sanity_soap",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.sanity_soap.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:sanity_soap"
+    }
+  ],
+  "parents": [
+    "alchemia:bath_salts"
+  ],
+  "requirements": {
+    "alchemia:alienis": 5,
+    "alchemia:cognitio": 5,
+    "alchemia:ordo": 5,
+    "alchemia:victus": 5
+  },
+  "row": -1
+}

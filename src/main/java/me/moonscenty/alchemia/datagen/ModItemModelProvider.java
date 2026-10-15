@@ -110,6 +110,15 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.LOOT_BAG_UNCOMMON.get());
         basicItem(ModItems.LOOT_BAG_RARE.get());
         basicItem(ModItems.RUNED_TABLET.get());
+        basicItem(ModItems.SANITY_SOAP.get());
+        // the lodestone lights while it is looked through towards a portal
+        getBuilder("sinister_stone_on").parent(new ModelFile.UncheckedModelFile(mcLoc("item/generated")))
+                .texture("layer0", modLoc("item/sinister_stone_on"));
+        basicItem(ModItems.SINISTER_STONE.get()).override().predicate(modLoc("active"), 1.0F)
+                .model(new ModelFile.UncheckedModelFile(modLoc("item/sinister_stone_on"))).end();
+        ModBlocks.TALLOW_CANDLES.values().forEach(candle ->
+                withExistingParent(candle.getId().getPath(), modLoc("block/candle")));
+        withExistingParent("pattern_crafter", modLoc("block/pattern_crafter_inv"));
         for (var bauble : java.util.List.of(ModItems.MUNDANE_AMULET, ModItems.MUNDANE_RING, ModItems.MUNDANE_BELT,
                 ModItems.FANCY_AMULET, ModItems.FANCY_RING, ModItems.FANCY_BELT, ModItems.RUNIC_AMULET,
                 ModItems.EMERGENCY_RUNIC_AMULET, ModItems.PROTECTION_RING, ModItems.RUNIC_RING,

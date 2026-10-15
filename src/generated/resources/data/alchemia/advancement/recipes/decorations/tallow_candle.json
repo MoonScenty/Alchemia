@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_tallow": {
+      "conditions": {
+        "items": [
+          {
+            "items": "alchemia:tallow"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "alchemia:tallow_candle"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_tallow"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "alchemia:tallow_candle"
+    ]
+  }
+}

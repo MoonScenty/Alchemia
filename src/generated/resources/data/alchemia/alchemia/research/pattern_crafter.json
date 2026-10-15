@@ -1,0 +1,25 @@
+{
+  "category": "alchemia:golemancy",
+  "column": 2,
+  "icon": "alchemia:pattern_crafter",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.pattern_crafter.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:pattern_crafter"
+    }
+  ],
+  "parents": [
+    "alchemia:clockwork_mind"
+  ],
+  "requirements": {
+    "alchemia:fabrico": 3,
+    "alchemia:humanus": 3,
+    "alchemia:permutatio": 3,
+    "alchemia:vacuos": 3
+  },
+  "row": 2
+}

@@ -63,7 +63,7 @@ public final class NodeSight {
     }
 
     /** Anything in the tag shows nodes just by being worn or carried, and so does a helm with goggles in it. */
-    private static boolean wearsLenses(Player player) {
+    static boolean wearsLenses(Player player) {
         for (EquipmentSlot slot : EquipmentSlot.values()) {
             if (reveals(player.getItemBySlot(slot))) {
                 return true;

@@ -304,6 +304,14 @@ public class ModBlockEntities {
                     .of(me.moonscenty.alchemia.block.entity.GolemPressBlockEntity::new, ModBlocks.GOLEM_PRESS.get())
                     .build(null));
 
+    /** A pattern crafter: the pattern its dial is set to. */
+    public static final DeferredHolder<BlockEntityType<?>,
+            BlockEntityType<me.moonscenty.alchemia.block.entity.PatternCrafterBlockEntity>> PATTERN_CRAFTER =
+            BLOCK_ENTITIES.register("pattern_crafter", () -> BlockEntityType.Builder
+                    .of(me.moonscenty.alchemia.block.entity.PatternCrafterBlockEntity::new,
+                            ModBlocks.PATTERN_CRAFTER.get())
+                    .build(null));
+
     private ModBlockEntities() {
     }
 }

@@ -632,6 +632,30 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("golem.alchemia.prop.provision.wl", pick("Ask for what is whitelisted", "허용 목록의 것을 청함"));
         add("entity.alchemia.golem_dart", pick("Golem Dart", "골렘 다트"));
         addItem(ModItems.TALLOW, pick("Magic Tallow", "마법 수지"));
+        addBlock(ModBlocks.FLESH_BLOCK, pick("Block of Flesh", "살덩이 블록"));
+        addItem(ModItems.SANITY_SOAP, pick("Sanitizing Soap", "정신 정화 비누"));
+        addItem(ModItems.SINISTER_STONE, pick("Sinister Lodestone", "불길한 자석"));
+        addBlock(ModBlocks.PATTERN_CRAFTER, pick("Arcane Pattern Crafter", "비전 문양 제작기"));
+        add("subtitles.alchemia.key", pick("Dial clicks", "다이얼이 딸깍인다"));
+        java.util.Map<net.minecraft.world.item.DyeColor, String[]> dyes = java.util.Map.ofEntries(
+                java.util.Map.entry(net.minecraft.world.item.DyeColor.WHITE, new String[] {"White", "흰색"}),
+                java.util.Map.entry(net.minecraft.world.item.DyeColor.ORANGE, new String[] {"Orange", "주황색"}),
+                java.util.Map.entry(net.minecraft.world.item.DyeColor.MAGENTA, new String[] {"Magenta", "자홍색"}),
+                java.util.Map.entry(net.minecraft.world.item.DyeColor.LIGHT_BLUE, new String[] {"Light Blue", "하늘색"}),
+                java.util.Map.entry(net.minecraft.world.item.DyeColor.YELLOW, new String[] {"Yellow", "노란색"}),
+                java.util.Map.entry(net.minecraft.world.item.DyeColor.LIME, new String[] {"Lime", "연두색"}),
+                java.util.Map.entry(net.minecraft.world.item.DyeColor.PINK, new String[] {"Pink", "분홍색"}),
+                java.util.Map.entry(net.minecraft.world.item.DyeColor.GRAY, new String[] {"Gray", "회색"}),
+                java.util.Map.entry(net.minecraft.world.item.DyeColor.LIGHT_GRAY, new String[] {"Light Gray", "회백색"}),
+                java.util.Map.entry(net.minecraft.world.item.DyeColor.CYAN, new String[] {"Cyan", "청록색"}),
+                java.util.Map.entry(net.minecraft.world.item.DyeColor.PURPLE, new String[] {"Purple", "보라색"}),
+                java.util.Map.entry(net.minecraft.world.item.DyeColor.BLUE, new String[] {"Blue", "파란색"}),
+                java.util.Map.entry(net.minecraft.world.item.DyeColor.BROWN, new String[] {"Brown", "갈색"}),
+                java.util.Map.entry(net.minecraft.world.item.DyeColor.GREEN, new String[] {"Green", "초록색"}),
+                java.util.Map.entry(net.minecraft.world.item.DyeColor.RED, new String[] {"Red", "빨간색"}),
+                java.util.Map.entry(net.minecraft.world.item.DyeColor.BLACK, new String[] {"Black", "검은색"}));
+        ModBlocks.TALLOW_CANDLES.forEach((dye, candle) -> addBlock(candle,
+                pick(dyes.get(dye)[0] + " Tallow Candle", dyes.get(dye)[1] + " 수지 양초")));
         addItem(ModItems.SEAL_BLANK, pick("Blank Seal", "빈 봉인"));
         addItem(ModItems.SEALS.get("pickup"), pick("Control Seal: Collect", "제어 봉인: 수집"));
         addItem(ModItems.SEALS.get("pickup_advanced"), pick("Advanced Control Seal: Collect", "상급 제어 봉인: 수집"));
@@ -1203,8 +1227,8 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                  "Arms ending in diamond-tipped grinders, driven by pistons. A golem with them is clumsy and hits hard, and can break most blocks.",
                  "피스톤으로 돌리는 다이아몬드 끝 분쇄기가 달린 팔이다. 이 팔을 단 골렘은 서투르고 세게 치며, 대부분의 블록을 부술 수 있다."},
                 {"tallow", "Magic Tallow", "마법 수지",
-                 "Rotten flesh stewed in a crucible with a little fire renders down to a clean, waxy tallow, which holds an arcane charge well. It is what control seals are made with.",
-                 "썩은 살점을 불을 조금 넣은 도가니에서 고면 깨끗한 밀랍 같은 수지가 된다. 비전의 기운을 잘 붙든다. 제어 봉인을 만드는 데 쓴다."},
+                 "Rotten flesh stewed in a crucible with a little fire renders down to a clean, waxy tallow, which holds an arcane charge well. It is what control seals are made with, and a wick of string set in two of it makes three candles, which a dye colours and bone meal bleaches again.",
+                 "썩은 살점을 불을 조금 넣은 도가니에서 고면 깨끗한 밀랍 같은 수지가 된다. 비전의 기운을 잘 붙든다. 제어 봉인을 만드는 데 쓰고, 실 심지를 수지 둘에 박으면 양초 셋이 된다. 염료로 물들이고 뼛가루로 다시 하얗게 한다."},
                 {"control_seals", "Golem Control Seals", "골렘 제어 봉인",
                  "Golems are given work with seals: clay and tallow worked with a red dye and a nitor, then steeped in a crucible into a seal that does one thing. Stuck to the face of a block, a seal offers tasks to any golem nearby that can do them, the nearest and most urgent first. Hold a seal, a golem or a golemancer's bell to see the seals about you, and crouch to see them through walls. Ring the bell at a seal to set it up: how urgent it is, whether only golems of one colour work it, whether only your own golems may, whether redstone stops it, and whatever else that kind of seal has. Ring it crouching to take the seal down.",
                  "골렘에게는 봉인으로 일을 준다. 점토와 수지에 붉은 염료와 니토르를 섞어 만든 빈 봉인을 도가니에서 우려 한 가지 일을 하는 봉인으로 만든다. 블록 면에 붙인 봉인은 그 일을 할 수 있는 근처 골렘에게 일감을 내놓고, 가깝고 급한 것부터 맡긴다. 봉인이나 골렘이나 골렘술사의 종을 들면 둘레의 봉인이 보이고, 웅크리면 벽 너머로도 보인다. 봉인에 종을 울리면 설정판이 열린다. 얼마나 급한지, 한 색 골렘만 일할지, 내 골렘만 일할지, 레드스톤에 멈출지, 그리고 그 봉인만의 설정을 고른다. 웅크리고 울리면 봉인을 떼어 낸다."},
@@ -1244,6 +1268,15 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                 {"warp", "Warp", "뒤틀림",
                  "Look too long into what should not be, and it begins looking back. The damage is not to the world but to the one studying it, and it does not undo itself with rest.",
                  "있어서는 안 될 것을 오래 들여다보면, 그것도 당신을 들여다보기 시작한다. 상하는 것은 세계가 아니라 그것을 연구하는 자이며, 쉰다고 해서 되돌아오지 않는다."},
+                {"sanity_soap", "Sanitizing Soap", "정신 정화 비누",
+                 "The body can be scrubbed clean, so why not the mind? A block of flesh steeped in a crucible with knowledge, the alien, order and life makes a soap. Hold it and wash for ten seconds: all temporary warp goes, and there is a small chance a point of the warp that sticks goes with it. Warp ward, or standing in purifying fluid while you wash, makes that much likelier. Warp that has been written into you for good is beyond any soap.",
+                 "몸을 씻을 수 있다면 정신이라고 못 씻을까. 살덩이 블록을 도가니에서 지식·이질·질서·생명과 함께 우려내면 비누가 된다. 들고 10초 동안 씻으면 일시적 뒤틀림이 모두 씻겨 나가고, 작은 확률로 들러붙은 뒤틀림도 1 줄어든다. 뒤틀림 방호를 받았거나 정화의 액체 속에 서서 씻으면 그 확률이 크게 오른다. 영원히 새겨진 뒤틀림은 어떤 비누로도 지워지지 않는다."},
+                {"pattern_crafter", "Arcane Pattern Crafter", "비전 문양 제작기",
+                 "Crafts that only ever need one kind of thing laid in a pattern, such as planks into sticks or nuggets into an ingot, can be left to a machine. Put an inventory above it and one below: it takes what it needs from the one above once a second, lays it out in the pattern its window shows, and puts whatever that makes into the one below. Click the brass dial on its face to choose the next pattern. A redstone signal stops it.",
+                 "판자를 막대로, 조각을 주괴로 만드는 것처럼 한 가지 재료만 문양대로 놓으면 되는 제작은 기계에 맡길 수 있다. 위아래에 보관함을 하나씩 두면, 1초마다 위 보관함에서 필요한 만큼 가져와 창에 보이는 문양대로 늘어놓고, 만들어진 것을 아래 보관함에 넣는다. 앞면의 황동 다이얼을 누르면 다음 문양으로 바뀐다. 레드스톤 신호를 받으면 멈춘다."},
+                {"sinister_stone", "Sinister Lodestone", "불길한 자석",
+                 "Studying the rite of the opening eye, you found that the place where the eye opens gives off a distinct energy even while it is shut. Flint infused with the right things lights up whenever it is pointed towards such a place, through stone and all. Its reach is limited, but the ritual stones are hard enough to find that it is worth carrying.",
+                 "눈이 열리는 의식을 연구하다가, 눈이 열리는 자리는 닫혀 있을 때도 뚜렷한 기운을 낸다는 것을 알아냈다. 알맞은 것을 주입한 부싯돌은 그런 자리를 향하면 돌벽 너머라도 빛난다. 닿는 거리에는 한계가 있지만, 의식의 돌을 찾기가 워낙 어려워 들고 다닐 만하다."},
         };
         for (String[] entry : research) {
             add("research." + Alchemia.MODID + "." + entry[0], pick(entry[1], entry[2]));

@@ -29,6 +29,25 @@ public class EldritchPortalBlockEntity extends BlockEntity {
         super(ModBlockEntities.ELDRITCH_PORTAL.get(), pos, state);
     }
 
+    /** A portal the client has loaded is one a sinister lodestone can feel, open or shut. */
+    @Override
+    public void onLoad() {
+        super.onLoad();
+        if (level != null && level.isClientSide) {
+            me.moonscenty.alchemia.item.SinisterStoneItem.PORTALS.add(
+                    net.minecraft.core.GlobalPos.of(level.dimension(), worldPosition));
+        }
+    }
+
+    @Override
+    public void setRemoved() {
+        super.setRemoved();
+        if (level != null && level.isClientSide) {
+            me.moonscenty.alchemia.item.SinisterStoneItem.PORTALS.remove(
+                    net.minecraft.core.GlobalPos.of(level.dimension(), worldPosition));
+        }
+    }
+
     public boolean isOpen() {
         return open;
     }

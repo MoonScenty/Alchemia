@@ -1,0 +1,32 @@
+{
+  "type": "alchemia:infusion",
+  "central": {
+    "item": "minecraft:flint"
+  },
+  "essentia": {
+    "alchemia:alienis": 8,
+    "alchemia:auram": 8,
+    "alchemia:sensus": 8,
+    "alchemia:tenebrae": 8
+  },
+  "instability": 5,
+  "research": "alchemia:sinister_stone",
+  "result": {
+    "count": 1,
+    "id": "alchemia:sinister_stone"
+  },
+  "ring": [
+    {
+      "tag": "alchemia:nitor"
+    },
+    {
+      "item": "alchemia:order_shard"
+    },
+    {
+      "item": "alchemia:knowledge_fragment"
+    },
+    {
+      "item": "alchemia:entropy_shard"
+    }
+  ]
+}

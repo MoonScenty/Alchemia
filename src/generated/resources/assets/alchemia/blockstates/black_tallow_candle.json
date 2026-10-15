@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "": {
+      "model": "alchemia:block/candle",
+      "y": 270
+    }
+  }
+}

@@ -178,8 +178,20 @@
       "alchemia:terra": 1,
       "alchemia:vitreus": 1
     },
+    "alchemia:black_tallow_candle": {
+      "alchemia:lux": 1,
+      "alchemia:victus": 1
+    },
+    "alchemia:blue_tallow_candle": {
+      "alchemia:lux": 1,
+      "alchemia:victus": 1
+    },
     "alchemia:brass_nugget": {
       "alchemia:metallum": 1
+    },
+    "alchemia:brown_tallow_candle": {
+      "alchemia:lux": 1,
+      "alchemia:victus": 1
     },
     "alchemia:cinderpearl": {
       "alchemia:auram": 1,
@@ -247,6 +259,10 @@
       "alchemia:terra": 1,
       "alchemia:victus": 1
     },
+    "alchemia:cyan_tallow_candle": {
+      "alchemia:lux": 1,
+      "alchemia:victus": 1
+    },
     "alchemia:earth_crystal": {
       "alchemia:terra": 4,
       "alchemia:vitreus": 2
@@ -311,6 +327,10 @@
       "alchemia:machina": 3,
       "alchemia:motus": 3
     },
+    "alchemia:gray_tallow_candle": {
+      "alchemia:lux": 1,
+      "alchemia:victus": 1
+    },
     "alchemia:greatwood_log": {
       "alchemia:herba": 3,
       "alchemia:victus": 1
@@ -318,6 +338,10 @@
     "alchemia:greatwood_sapling": {
       "alchemia:herba": 2,
       "alchemia:victus": 2
+    },
+    "alchemia:green_tallow_candle": {
+      "alchemia:lux": 1,
+      "alchemia:victus": 1
     },
     "alchemia:iron_cluster": {
       "alchemia:metallum": 6,
@@ -327,6 +351,26 @@
     "alchemia:knowledge_fragment": {
       "alchemia:cognitio": 8
     },
+    "alchemia:light_blue_tallow_candle": {
+      "alchemia:lux": 1,
+      "alchemia:victus": 1
+    },
+    "alchemia:light_gray_tallow_candle": {
+      "alchemia:lux": 1,
+      "alchemia:victus": 1
+    },
+    "alchemia:lime_tallow_candle": {
+      "alchemia:lux": 1,
+      "alchemia:victus": 1
+    },
+    "alchemia:magenta_tallow_candle": {
+      "alchemia:lux": 1,
+      "alchemia:victus": 1
+    },
+    "alchemia:orange_tallow_candle": {
+      "alchemia:lux": 1,
+      "alchemia:victus": 1
+    },
     "alchemia:order_crystal": {
       "alchemia:ordo": 4,
       "alchemia:vitreus": 2
@@ -334,6 +378,10 @@
     "alchemia:order_shard": {
       "alchemia:ordo": 2,
       "alchemia:vitreus": 1
+    },
+    "alchemia:pink_tallow_candle": {
+      "alchemia:lux": 1,
+      "alchemia:victus": 1
     },
     "alchemia:porous_stone": {
       "alchemia:terra": 1,
@@ -353,6 +401,10 @@
       "alchemia:potentia": 3,
       "alchemia:praemunio": 3
     },
+    "alchemia:purple_tallow_candle": {
+      "alchemia:lux": 1,
+      "alchemia:victus": 1
+    },
     "alchemia:quicksilver": {
       "alchemia:metallum": 3,
       "alchemia:mortuus": 1,
@@ -366,6 +418,10 @@
       "alchemia:mortuus": 1,
       "alchemia:permutatio": 2,
       "alchemia:terra": 1
+    },
+    "alchemia:red_tallow_candle": {
+      "alchemia:lux": 1,
+      "alchemia:victus": 1
     },
     "alchemia:salis_mundus": {
       "alchemia:potentia": 2,
@@ -413,8 +469,16 @@
       "alchemia:aqua": 2,
       "alchemia:vitreus": 1
     },
+    "alchemia:white_tallow_candle": {
+      "alchemia:lux": 1,
+      "alchemia:victus": 1
+    },
     "alchemia:wispy_essence": {
       "alchemia:auram": 1
+    },
+    "alchemia:yellow_tallow_candle": {
+      "alchemia:lux": 1,
+      "alchemia:victus": 1
     },
     "alchemia:zombie_brain": {
       "alchemia:cognitio": 4,

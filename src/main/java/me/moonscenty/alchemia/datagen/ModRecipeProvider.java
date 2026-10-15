@@ -1357,6 +1357,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 AspectList.of(ModAspects.ENERGY, 3).add(ModAspects.FIRE, 3).add(ModAspects.LIGHT, 3),
                 new ItemStack(ModBlocks.NITOR.get(DyeColor.WHITE).get(), NITOR_AT_A_TIME), "nitor");
         nitorDyes(output);
+        leftovers(output);
     }
 
     /** How many flames one boiling of glowstone makes. */
@@ -1368,6 +1369,61 @@ public class ModRecipeProvider extends RecipeProvider {
      * Any of the sixteen goes in and the dyed one comes out, so a flame can be changed its mind about rather than
      * boiled again. The white one is no more the original than the rest -- it is only the one the crucible makes.
      */
+    private Ingredient shard(me.moonscenty.alchemia.block.CrystalType type) {
+        return Ingredient.of(ModItems.SHARDS.get(type));
+    }
+
+    /**
+     * The odds and ends of step 14C, all the original's: flesh packed into a block and soap made of it, tallow
+     * candles and their dyeing, the pattern crafter, and the sinister lodestone.
+     */
+    private void leftovers(RecipeOutput output) {
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, ModBlocks.FLESH_BLOCK.get())
+                .define('F', Items.ROTTEN_FLESH).pattern("FFF").pattern("FFF").pattern("FFF")
+                .unlockedBy("has_flesh", has(Items.ROTTEN_FLESH)).save(output, Alchemia.id("flesh_block"));
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, Items.ROTTEN_FLESH, 9)
+                .requires(ModBlocks.FLESH_BLOCK.get())
+                .unlockedBy("has_flesh_block", has(ModBlocks.FLESH_BLOCK.get()))
+                .save(output, Alchemia.id("rotten_flesh_from_block"));
+        crucible(output, "sanity_soap", Ingredient.of(ModBlocks.FLESH_BLOCK.get()),
+                AspectList.of(ModAspects.MIND, 16).add(ModAspects.ELDRITCH, 16).add(ModAspects.ORDER, 16)
+                        .add(ModAspects.LIFE, 16),
+                new ItemStack(ModItems.SANITY_SOAP.get()), "sanity_soap");
+
+        // a string wick in two of tallow makes three white candles; a dye colours one, and bone meal bleaches any
+        var white = ModBlocks.TALLOW_CANDLES.get(DyeColor.WHITE).get();
+        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, white, 3)
+                .define('S', Items.STRING).define('T', ModItems.TALLOW.get()).pattern("S").pattern("T").pattern("T")
+                .unlockedBy("has_tallow", has(ModItems.TALLOW.get())).save(output, Alchemia.id("tallow_candle"));
+        for (DyeColor colour : DyeColor.values()) {
+            if (colour == DyeColor.WHITE) {
+                continue;
+            }
+            ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModBlocks.TALLOW_CANDLES.get(colour).get())
+                    .requires(white).requires(colour.getTag())
+                    .unlockedBy("has_candle", has(white))
+                    .save(output, Alchemia.id(colour.getSerializedName() + "_tallow_candle"));
+        }
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, white)
+                .requires(Ingredient.of(ModBlocks.TALLOW_CANDLES.values().stream()
+                        .map(candle -> new ItemStack(candle.get())))).requires(Items.BONE_MEAL)
+                .unlockedBy("has_candle", has(white)).save(output, Alchemia.id("white_tallow_candle_bleached"));
+
+        arcane(output, "pattern_crafter", "pattern_crafter", new ItemStack(ModBlocks.PATTERN_CRAFTER.get()),
+                AspectList.of(ModAspects.ORDER, 100).add(ModAspects.FIRE, 100).add(ModAspects.ENTROPY, 100),
+                Map.of('H', Ingredient.of(Items.HOPPER), 'G', Ingredient.of(ModItems.BRASS_GEAR),
+                        'C', Ingredient.of(Items.CRAFTING_TABLE), 'W', Ingredient.of(ModBlocks.GREATWOOD.planks())),
+                " H ", "GCG", " W ");
+
+        infusion(output, "sinister_stone", Ingredient.of(Items.FLINT),
+                List.of(Ingredient.of(ModTags.Items.NITOR), shard(me.moonscenty.alchemia.block.CrystalType.ORDER),
+                        Ingredient.of(ModItems.KNOWLEDGE_FRAGMENT),
+                        shard(me.moonscenty.alchemia.block.CrystalType.ENTROPY)),
+                new ItemStack(ModItems.SINISTER_STONE.get()),
+                AspectList.of(ModAspects.SENSES, 8).add(ModAspects.DARKNESS, 8).add(ModAspects.ELDRITCH, 8)
+                        .add(ModAspects.AURA, 8), 5, "sinister_stone");
+    }
+
     private void nitorDyes(RecipeOutput output) {
         for (DyeColor colour : DyeColor.values()) {
             ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, ModBlocks.NITOR.get(colour).get())

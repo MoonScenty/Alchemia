@@ -1,0 +1,14 @@
+{
+  "parent": "minecraft:item/generated",
+  "overrides": [
+    {
+      "model": "alchemia:item/sinister_stone_on",
+      "predicate": {
+        "alchemia:active": 1.0
+      }
+    }
+  ],
+  "textures": {
+    "layer0": "alchemia:item/sinister_stone"
+  }
+}
