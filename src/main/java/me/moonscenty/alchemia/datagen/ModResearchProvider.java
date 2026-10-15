@@ -481,6 +481,10 @@ public class ModResearchProvider {
         entry(context, "tallow", ModResearch.ALCHEMY, ModItems.TALLOW, -2, 2,
                 AspectList.of(ModAspects.BEAST, 3).add(ModAspects.FIRE, 1), List.of("crucible"), false,
                 NodeShape.PLAIN, 1, "tallow", "tallow_candle");
+        // a liquid nothing living survives
+        entry(context, "liquid_death", ModResearch.ALCHEMY, ModItems.LIQUID_DEATH_BUCKET, -4, 3,
+                AspectList.of(ModAspects.DEATH, 5).add(ModAspects.ENTROPY, 5).add(ModAspects.WATER, 1),
+                List.of("crucible"), false, NodeShape.PLAIN, 2, "liquid_death");
         // soap that washes the mind, out of a block of flesh
         entry(context, "sanity_soap", ModResearch.ALCHEMY, ModItems.SANITY_SOAP, -1, -1,
                 AspectList.of(ModAspects.MIND, 5).add(ModAspects.ORDER, 5).add(ModAspects.LIFE, 5)
@@ -612,7 +616,7 @@ public class ModResearchProvider {
             java.util.Map.entry("bioalchemic_mind", 3), java.util.Map.entry("seal_guard", 1),
             java.util.Map.entry("seal_butcher", 1), java.util.Map.entry("crimson", 3),
             java.util.Map.entry("oculus", 6), java.util.Map.entry("sinister_stone", 2),
-            java.util.Map.entry("focus_primal", 2));
+            java.util.Map.entry("focus_primal", 2), java.util.Map.entry("liquid_death", 3));
     /** Research learnt along with another: the Crimson Rites teach the minor eldritch lore too. */
     private static final java.util.Map<String, List<String>> SIBLINGS = java.util.Map.of(
             "crimson", List.of("eldritch_minor"));

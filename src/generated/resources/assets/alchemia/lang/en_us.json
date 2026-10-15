@@ -989,6 +989,8 @@
   "research.alchemia.known": "Worked out",
   "research.alchemia.levitator": "Arcane Levitator",
   "research.alchemia.levitator.page": "Not flight, but the next best thing. A levitator lifts whatever is in front of it -- things dropped, animals, you -- up to eight blocks, or as far as the first solid block. Crouch over one and you are let down slowly. Put on its side it pushes along instead, holding up what it pushes; put it down facing whichever way you like, crouching to turn it round. It burns aer from the aura while it is carrying anything, more the further it reaches: an empty hand on it steps its range through four, eight, sixteen and thirty-two blocks. A redstone signal stops it.",
+  "research.alchemia.liquid_death": "Liquid Death",
+  "research.alchemia.liquid_death.page": "For external use only. Death, crystal and entropy steeped together in a crucible and caught in a bucket make a liquid so toxic that almost nothing keeps it from dissolving flesh, bone and harder things. Nothing alive, or with any semblance of life, survives it. What essentia a creature held as it dissolved is said to settle out as crystals.",
   "research.alchemia.locked": "Something must come first",
   "research.alchemia.metallurgy": "Metallurgy",
   "research.alchemia.metallurgy.page": "Iron does not want to be anything else, and a crucible is how you argue with it. Steeped in earth and order it comes out alchemium; in energy and water, brass.",

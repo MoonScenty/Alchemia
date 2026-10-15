@@ -989,6 +989,8 @@
   "research.alchemia.known": "알아냄",
   "research.alchemia.levitator": "비전 부양기",
   "research.alchemia.levitator.page": "나는 것은 아니지만 그 다음쯤은 된다. 부양기는 앞에 있는 것 — 떨어진 물건, 동물, 당신 — 을 여덟 칸까지, 아니면 처음 막히는 블록까지 들어 올린다. 그 위에서 웅크리면 천천히 내려온다. 옆으로 눕히면 대신 밀어 보내고, 미는 동안 떠받친다. 어느 쪽으로든 놓을 수 있고, 웅크리고 놓으면 반대로 놓인다. 무엇을 나르는 동안 오라에서 공기를 태우고, 멀리 닿을수록 더 태운다. 빈손으로 누르면 범위가 넷, 여덟, 열여섯, 서른둘로 바뀐다. 레드스톤 신호가 들어오면 멈춘다.",
+  "research.alchemia.liquid_death": "액체 죽음",
+  "research.alchemia.liquid_death.page": "외용으로만 쓸 것. 죽음·결정·엔트로피를 도가니에서 함께 우려 양동이에 받으면, 살과 뼈와 그보다 단단한 것까지 녹여 버리는 지독한 액체가 된다. 살아 있는 것, 살아 있는 척이라도 하는 것은 아무것도 견디지 못한다. 녹아 버린 것이 지녔던 에센시아는 결정으로 가라앉는다고 한다.",
   "research.alchemia.locked": "먼저 알아내야 할 것이 있다",
   "research.alchemia.metallurgy": "야금",
   "research.alchemia.metallurgy.page": "철은 다른 것이 되기를 원하지 않으며, 도가니는 그와 다투는 방법이다. 땅과 질서에 담그면 알케미움으로, 힘과 물에 담그면 황동으로 나온다.",

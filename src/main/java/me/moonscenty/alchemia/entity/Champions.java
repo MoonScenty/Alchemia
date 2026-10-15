@@ -300,7 +300,9 @@ public final class Champions {
     @SubscribeEvent
     public static void died(LivingDropsEvent event) {
         LivingEntity dead = event.getEntity();
+        // a boss is made a champion for its strength, but leaves its own rare bag and nothing more, as the original
         if (!(dead.level() instanceof ServerLevel level) || !(dead instanceof Monster) || !isChampion(dead)
+                || dead instanceof me.moonscenty.alchemia.entity.boss.ThaumcraftBoss
                 || !event.isRecentlyHit() || event.getSource().getEntity() instanceof FakePlayer) {
             return;
         }

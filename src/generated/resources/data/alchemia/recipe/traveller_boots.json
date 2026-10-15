@@ -29,8 +29,19 @@
     {
       "item": "minecraft:feather"
     },
-    {
-      "item": "minecraft:cod"
-    }
+    [
+      {
+        "item": "minecraft:cod"
+      },
+      {
+        "item": "minecraft:salmon"
+      },
+      {
+        "item": "minecraft:tropical_fish"
+      },
+      {
+        "item": "minecraft:pufferfish"
+      }
+    ]
   ]
 }

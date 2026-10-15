@@ -1,0 +1,16 @@
+{
+  "type": "alchemia:crucible",
+  "aspects": {
+    "alchemia:mortuus": 32,
+    "alchemia:perditio": 32,
+    "alchemia:vitreus": 32
+  },
+  "catalyst": {
+    "item": "minecraft:bucket"
+  },
+  "research": "alchemia:liquid_death",
+  "result": {
+    "count": 1,
+    "id": "alchemia:liquid_death_bucket"
+  }
+}
