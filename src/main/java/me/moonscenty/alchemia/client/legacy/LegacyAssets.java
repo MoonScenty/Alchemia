@@ -1107,8 +1107,10 @@ public final class LegacyAssets {
 
         // metals
         all.add(block("alchemium_block", "thaumium_metal", "thaumiumblock"));
-        // the original called its brass block alchemical metal
-        all.add(block("brass_block", "alchemical_metal", null));
+        // the original's brass block, and its two alchemical constructs, which it called alchemical metal
+        all.add(block("brass_block", "base_brass", null));
+        all.add(block("alchemical_construct", "alchemical_metal", null));
+        all.add(block("advanced_alchemical_construct", "advanced_alchemical_metal", null));
         all.add(item("alchemium_ingot", "ingot_thaumium", "thaumiumingot"));
         all.add(item("brass_ingot", "ingot_brass", null));
         all.add(item("alchemium_nugget", "nugget_thaumium", "nuggetthaumium"));

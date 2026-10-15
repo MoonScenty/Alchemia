@@ -1,0 +1,31 @@
+{
+  "type": "alchemia:arcane_shaped",
+  "key": {
+    "I": {
+      "tag": "c:ingots/iron"
+    },
+    "T": {
+      "item": "alchemia:tube"
+    },
+    "V": {
+      "item": "alchemia:tube_valve"
+    },
+    "W": {
+      "item": "alchemia:greatwood_planks"
+    }
+  },
+  "pattern": [
+    "IVI",
+    "TWT",
+    "IVI"
+  ],
+  "research": "alchemia:distillation",
+  "result": {
+    "count": 1,
+    "id": "alchemia:alchemical_construct"
+  },
+  "vis": {
+    "alchemia:aqua": 50,
+    "alchemia:ordo": 50
+  }
+}

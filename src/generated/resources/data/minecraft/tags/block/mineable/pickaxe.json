@@ -1,5 +1,7 @@
 {
   "values": [
+    "alchemia:alchemical_construct",
+    "alchemia:advanced_alchemical_construct",
     "#c:storage_blocks/alchemium",
     "#c:storage_blocks/brass",
     "#c:ores/amber",

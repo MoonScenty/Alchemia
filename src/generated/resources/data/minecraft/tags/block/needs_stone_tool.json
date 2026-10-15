@@ -1,5 +1,7 @@
 {
   "values": [
+    "alchemia:alchemical_construct",
+    "alchemia:advanced_alchemical_construct",
     "#c:ores/amber",
     "#c:storage_blocks/alchemium",
     "#c:storage_blocks/brass",
@@ -8,6 +10,12 @@
     "alchemia:arcane_stone_slab",
     "alchemia:arcane_stone_bricks",
     "alchemia:arcane_stone_bricks_stairs",
-    "alchemia:arcane_stone_bricks_slab"
+    "alchemia:arcane_stone_bricks_slab",
+    "alchemia:ancient_stone",
+    "alchemia:ancient_stone_stairs",
+    "alchemia:ancient_stone_slab",
+    "alchemia:eldritch_stone",
+    "alchemia:eldritch_stone_stairs",
+    "alchemia:eldritch_stone_slab"
   ]
 }

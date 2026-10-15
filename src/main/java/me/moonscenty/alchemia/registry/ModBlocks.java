@@ -440,10 +440,33 @@ public class ModBlocks {
                     .air()
                     .pushReaction(net.minecraft.world.level.material.PushReaction.DESTROY)));
 
+    /**
+     * How hard the original's metal blocks were, and how well they stood a blast: 4, and 10 as 1.8 counted it, which
+     * tripled it on the way in and took a fifth on the way out -- the 6 an iron block has now.
+     */
+    private static final float METAL_HARDNESS = 4.0F;
+    private static final float METAL_RESISTANCE = 6.0F;
+
     public static final DeferredBlock<Block> ALCHEMIUM_BLOCK = register("alchemium_block",
-            () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).mapColor(MapColor.COLOR_PURPLE)));
+            () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).mapColor(MapColor.COLOR_PURPLE)
+                    .strength(METAL_HARDNESS, METAL_RESISTANCE)));
     public static final DeferredBlock<Block> BRASS_BLOCK = register("brass_block",
-            () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).mapColor(MapColor.GOLD)));
+            () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).mapColor(MapColor.GOLD)
+                    .strength(METAL_HARDNESS, METAL_RESISTANCE)));
+    /**
+     * The alchemical construct: iron, greatwood and pipe made into the casing the better essentia devices are built
+     * round, and two of them on a crucible make a thaumatorium. The advanced one is that, worked with void metal and a
+     * primordial pearl, at the heart of the void smelter. Both as hard as the original's, and good under a beacon.
+     */
+    public static final DeferredBlock<Block> ALCHEMICAL_CONSTRUCT = register("alchemical_construct",
+            () -> new Block(construct()));
+    public static final DeferredBlock<Block> ADVANCED_ALCHEMICAL_CONSTRUCT =
+            register("advanced_alchemical_construct", () -> new Block(construct()));
+
+    private static BlockBehaviour.Properties construct() {
+        return BlockBehaviour.Properties.of().mapColor(MapColor.METAL).strength(METAL_HARDNESS, METAL_RESISTANCE).sound(SoundType.METAL)
+                .requiresCorrectToolForDrops();
+    }
 
     // Silverwood glows faintly
     /** Grass in the magical forest that glimmers at night. */

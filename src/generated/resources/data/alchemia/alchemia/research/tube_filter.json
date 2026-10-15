@@ -23,6 +23,10 @@
     {
       "type": "recipe",
       "recipe": "alchemia:tube_buffer"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:alchemical_construct"
     }
   ],
   "parents": [

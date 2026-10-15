@@ -145,8 +145,8 @@ public class EssentiaDeviceTests {
         helper.setBlock(crucible.above(), made);
         helper.setBlock(crucible.above(2), made.setValue(me.moonscenty.alchemia.block.ThaumatoriumBlock.TOP, true));
         helper.setBlock(crucible, Blocks.AIR);
-        helper.assertBlockPresent(ModBlocks.BRASS_BLOCK.get(), crucible.above());
-        helper.assertBlockPresent(ModBlocks.BRASS_BLOCK.get(), crucible.above(2));
+        helper.assertBlockPresent(ModBlocks.ALCHEMICAL_CONSTRUCT.get(), crucible.above());
+        helper.assertBlockPresent(ModBlocks.ALCHEMICAL_CONSTRUCT.get(), crucible.above(2));
         helper.succeed();
     }
 

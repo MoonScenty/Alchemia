@@ -413,7 +413,7 @@ public class WandItem extends Item implements VisHolder {
             return InteractionResult.sidedSuccess(level.isClientSide);
         }
 
-        // a crucible with two blocks of brass on it, made into a thaumatorium if its maker knows how
+        // a crucible with two alchemical constructs on it, made into a thaumatorium if its maker knows how
         if (context.getPlayer() != null && me.moonscenty.alchemia.block.ThaumatoriumBlock.form(level, pos,
                 context.getClickedFace(), context.getPlayer(), context.getItemInHand())) {
             return InteractionResult.sidedSuccess(level.isClientSide);
