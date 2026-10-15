@@ -1,0 +1,27 @@
+{
+  "category": "alchemia:arcana",
+  "column": 1,
+  "complexity": 2,
+  "icon": "alchemia:focus_hellbat",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.focus_hellbat.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:focus_hellbat"
+    }
+  ],
+  "parents": [
+    "alchemia:focus_fire",
+    "alchemia:infusion"
+  ],
+  "requirements": {
+    "alchemia:bestia": 6,
+    "alchemia:ignis": 3,
+    "alchemia:motus": 3,
+    "alchemia:potentia": 3
+  },
+  "row": 7
+}

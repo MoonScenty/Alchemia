@@ -1,0 +1,29 @@
+{
+  "category": "alchemia:eldritch",
+  "column": 3,
+  "complexity": 2,
+  "icon": "alchemia:focus_primal",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.focus_primal.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:focus_primal"
+    }
+  ],
+  "parents": [
+    "alchemia:eldritch_minor"
+  ],
+  "requirements": {
+    "alchemia:aer": 6,
+    "alchemia:aqua": 6,
+    "alchemia:ignis": 6,
+    "alchemia:ordo": 6,
+    "alchemia:perditio": 6,
+    "alchemia:potentia": 6,
+    "alchemia:terra": 6
+  },
+  "row": 1
+}

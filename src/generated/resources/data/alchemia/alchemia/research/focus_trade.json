@@ -1,0 +1,25 @@
+{
+  "category": "alchemia:arcana",
+  "column": 4,
+  "complexity": 2,
+  "icon": "alchemia:focus_trade",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.focus_trade.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:focus_trade"
+    }
+  ],
+  "parents": [
+    "alchemia:focus_fire"
+  ],
+  "requirements": {
+    "alchemia:permutatio": 6,
+    "alchemia:potentia": 3,
+    "alchemia:terra": 3
+  },
+  "row": 9
+}

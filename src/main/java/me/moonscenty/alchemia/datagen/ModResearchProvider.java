@@ -496,6 +496,7 @@ public class ModResearchProvider {
                 AspectList.of(ModAspects.SENSES, 3).add(ModAspects.DARKNESS, 3).add(ModAspects.ELDRITCH, 3)
                         .add(ModAspects.AURA, 3),
                 List.of("goggles", "infusion", "oculus"), false, NodeShape.PLAIN, 1, "sinister_stone");
+        foci(context);
         entry(context, "spa", ModResearch.ALCHEMY, ModBlocks.SPA, -2, 0,
                 AspectList.of(ModAspects.WATER, 3).add(ModAspects.MECHANISM, 3).add(ModAspects.ORDER, 3),
                 List.of("bath_salts"), false, NodeShape.PLAIN, 1, "spa");
@@ -532,6 +533,50 @@ public class ModResearchProvider {
      * The write-up always opens with a passage, and any recipes named follow it one to a page. Splitting the passage
      * into several is a matter of adding keys here; nothing else has to change.
      */
+    /**
+     * The wand foci, each its own entry as the original had them, hung off the fire focus, which is the first a
+     * wand-bearer learns. The original kept them in a book of their own; here they sit under the focal manipulator
+     * at the foot of the arcana. Pech's curse and the vis shard have no entry, as they had none: one is had from
+     * pechs and the other from the Outer Lands' turrets.
+     */
+    private static void foci(BootstrapContext<ResearchEntry> context) {
+        focus(context, "fire", 3, 7, AspectList.of(ModAspects.FIRE, 6).add(ModAspects.AIR, 3)
+                .add(ModAspects.ENERGY, 3), List.of("wand"), 1);
+        focus(context, "shock", 4, 6, AspectList.of(ModAspects.AIR, 6).add(ModAspects.FIRE, 3)
+                .add(ModAspects.ENERGY, 3), List.of("focus_fire"), 1);
+        focus(context, "grapple", 5, 6, AspectList.of(ModAspects.MOTION, 6).add(ModAspects.AIR, 3)
+                .add(ModAspects.WATER, 3), List.of("focus_shock"), 1);
+        focus(context, "frost", 5, 7, AspectList.of(ModAspects.WATER, 6).add(ModAspects.COLD, 3)
+                .add(ModAspects.ENERGY, 3), List.of("focus_fire"), 1);
+        focus(context, "excavation", 5, 8, AspectList.of(ModAspects.EARTH, 6).add(ModAspects.ENTROPY, 3)
+                .add(ModAspects.ENERGY, 3), List.of("focus_fire"), 2);
+        focus(context, "trade", 4, 9, AspectList.of(ModAspects.EXCHANGE, 6).add(ModAspects.EARTH, 3)
+                .add(ModAspects.ENERGY, 3), List.of("focus_fire"), 2);
+        focus(context, "builder", 3, 10, AspectList.of(ModAspects.TOOL, 6).add(ModAspects.EARTH, 3)
+                .add(ModAspects.ORDER, 3).add(ModAspects.MOTION, 3), List.of("focus_trade"), 2);
+        focus(context, "hole", 5, 10, AspectList.of(ModAspects.MOTION, 3).add(ModAspects.ENTROPY, 3)
+                .add(ModAspects.ELDRITCH, 6).add(ModAspects.AIR, 3),
+                List.of("focus_trade", "focus_excavation", "infusion"), 2);
+        focus(context, "hellbat", 1, 7, AspectList.of(ModAspects.MOTION, 3).add(ModAspects.BEAST, 6)
+                .add(ModAspects.FIRE, 3).add(ModAspects.ENERGY, 3), List.of("focus_fire", "infusion"), 2);
+        // the one upgrade the original wrote up, and the only one it kept behind a research
+        entry(context, "vampire_bats", ModResearch.ARCANA, ModItems.FOCI.get("hellbat"), 0, 8,
+                AspectList.of(ModAspects.DESIRE, 5).add(ModAspects.LIFE, 5).add(ModAspects.ENERGY, 5),
+                List.of("focus_hellbat", "focal_manipulator"), false, NodeShape.PLAIN, 1);
+        // raw primal force, among the eldritch things it was always filed with
+        entry(context, "focus_primal", ModResearch.ELDRITCH, ModItems.FOCI.get("primal"), 3, 1,
+                AspectList.of(ModAspects.AIR, 6).add(ModAspects.WATER, 6).add(ModAspects.FIRE, 6)
+                        .add(ModAspects.EARTH, 6).add(ModAspects.ORDER, 6).add(ModAspects.ENTROPY, 6)
+                        .add(ModAspects.ENERGY, 6),
+                List.of("eldritch_minor"), false, NodeShape.PLAIN, 2, "focus_primal");
+    }
+
+    private static void focus(BootstrapContext<ResearchEntry> context, String name, int column, int row,
+            AspectList requirements, List<String> parents, int complexity) {
+        entry(context, "focus_" + name, ModResearch.ARCANA, ModItems.FOCI.get(name), column, row, requirements,
+                parents, false, name.equals("fire") ? NodeShape.MAJOR : NodeShape.PLAIN, complexity, "focus_" + name);
+    }
+
     private static List<ResearchPage> pages(String name, String... recipes) {
         List<ResearchPage> pages = new java.util.ArrayList<>();
         pages.add(new ResearchPage.Text("research." + Alchemia.MODID + "." + name + ".page"));

@@ -1,0 +1,24 @@
+{
+  "category": "alchemia:arcana",
+  "column": 5,
+  "icon": "alchemia:focus_frost",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.focus_frost.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:focus_frost"
+    }
+  ],
+  "parents": [
+    "alchemia:focus_fire"
+  ],
+  "requirements": {
+    "alchemia:aqua": 6,
+    "alchemia:gelum": 3,
+    "alchemia:potentia": 3
+  },
+  "row": 7
+}

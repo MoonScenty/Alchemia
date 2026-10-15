@@ -1,0 +1,29 @@
+{
+  "type": "alchemia:arcane_shaped",
+  "key": {
+    "#": {
+      "item": "alchemia:quicksilver"
+    },
+    "C": {
+      "item": "alchemia:balanced_shard"
+    },
+    "Q": {
+      "item": "minecraft:quartz"
+    }
+  },
+  "pattern": [
+    "CQC",
+    "Q#Q",
+    "CQC"
+  ],
+  "research": "alchemia:focus_trade",
+  "result": {
+    "count": 1,
+    "id": "alchemia:focus_trade"
+  },
+  "vis": {
+    "alchemia:ordo": 75,
+    "alchemia:perditio": 75,
+    "alchemia:terra": 50
+  }
+}

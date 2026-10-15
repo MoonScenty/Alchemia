@@ -1358,6 +1358,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 new ItemStack(ModBlocks.NITOR.get(DyeColor.WHITE).get(), NITOR_AT_A_TIME), "nitor");
         nitorDyes(output);
         leftovers(output);
+        foci(output);
     }
 
     /** How many flames one boiling of glowstone makes. */
@@ -1422,6 +1423,56 @@ public class ModRecipeProvider extends RecipeProvider {
                 new ItemStack(ModItems.SINISTER_STONE.get()),
                 AspectList.of(ModAspects.SENSES, 8).add(ModAspects.DARKNESS, 8).add(ModAspects.ELDRITCH, 8)
                         .add(ModAspects.AURA, 8), 5, "sinister_stone");
+    }
+
+    /**
+     * The wand foci, at the original's shapes and prices. Most are a thing at the heart of a ring of quartz with a
+     * shard in each corner; the two that bend space or call up the Nether are worked on the altar instead.
+     */
+    private void foci(RecipeOutput output) {
+        Ingredient quartz = Ingredient.of(Items.QUARTZ);
+        var air = shard(me.moonscenty.alchemia.block.CrystalType.AIR);
+        var earth = shard(me.moonscenty.alchemia.block.CrystalType.EARTH);
+        var fire = shard(me.moonscenty.alchemia.block.CrystalType.FIRE);
+        var water = shard(me.moonscenty.alchemia.block.CrystalType.WATER);
+        var entropy = shard(me.moonscenty.alchemia.block.CrystalType.ENTROPY);
+        focus(output, "fire", AspectList.of(ModAspects.FIRE, 100).add(ModAspects.ENTROPY, 50),
+                Map.of('C', fire, 'Q', quartz, '#', Ingredient.of(Items.FIRE_CHARGE)), "CQC", "Q#Q", "CQC");
+        focus(output, "shock", AspectList.of(ModAspects.AIR, 75).add(ModAspects.ORDER, 75).add(ModAspects.ENTROPY, 50),
+                Map.of('C', air, 'Q', quartz, '#', Ingredient.of(Items.POTATO)), "CQC", "Q#Q", "CQC");
+        focus(output, "frost", AspectList.of(ModAspects.WATER, 75).add(ModAspects.ORDER, 75)
+                        .add(ModAspects.ENTROPY, 50),
+                Map.of('C', water, 'Q', quartz, '#', Ingredient.of(Items.DIAMOND)), "CQC", "Q#Q", "CQC");
+        focus(output, "excavation", AspectList.of(ModAspects.EARTH, 75).add(ModAspects.ENTROPY, 75)
+                        .add(ModAspects.ORDER, 50),
+                Map.of('C', earth, 'Q', quartz, '#', Ingredient.of(Tags.Items.GEMS_EMERALD)), "CQC", "Q#Q", "CQC");
+        focus(output, "trade", AspectList.of(ModAspects.ORDER, 75).add(ModAspects.ENTROPY, 75).add(ModAspects.EARTH, 50),
+                Map.of('C', Ingredient.of(ModItems.BALANCED_SHARD), 'Q', quartz,
+                        '#', Ingredient.of(ModItems.QUICKSILVER)), "CQC", "Q#Q", "CQC");
+        focus(output, "builder", AspectList.of(ModAspects.ORDER, 75).add(ModAspects.AIR, 50).add(ModAspects.EARTH, 75),
+                Map.of('C', air, 'E', earth, 'Q', quartz, '#', Ingredient.of(ModItems.AMBER)), "CQE", "Q#Q", "EQC");
+        focus(output, "grapple", AspectList.of(ModAspects.AIR, 75).add(ModAspects.WATER, 75).add(ModAspects.ORDER, 50),
+                Map.of('A', air, 'W', water, 'Q', quartz, '#', Ingredient.of(Items.SLIME_BALL)), "AQW", "Q#Q", "WQA");
+        AspectList primals = AspectList.of(ModAspects.EARTH, 150).add(ModAspects.ENTROPY, 150)
+                .add(ModAspects.ORDER, 150).add(ModAspects.AIR, 150).add(ModAspects.FIRE, 150)
+                .add(ModAspects.WATER, 150);
+        focus(output, "primal", primals, Map.of('C', Ingredient.of(Items.DIAMOND), 'Q', quartz,
+                '#', Ingredient.of(ModItems.PRIMAL_CHARM)), "CQC", "Q#Q", "CQC");
+        infusion(output, "focus_hole", Ingredient.of(Items.ENDER_PEARL),
+                List.of(quartz, earth, quartz, air, quartz, entropy), new ItemStack(ModItems.FOCI.get("hole").get()),
+                AspectList.of(ModAspects.MOTION, 25).add(ModAspects.ELDRITCH, 10).add(ModAspects.EXCHANGE, 10)
+                        .add(ModAspects.ENTROPY, 25), 3, "focus_hole");
+        infusion(output, "focus_hellbat", Ingredient.of(Items.MAGMA_CREAM),
+                List.of(quartz, fire, quartz, air, quartz, entropy),
+                new ItemStack(ModItems.FOCI.get("hellbat").get()),
+                AspectList.of(ModAspects.FIRE, 25).add(ModAspects.AIR, 15).add(ModAspects.BEAST, 15)
+                        .add(ModAspects.ENTROPY, 25), 3, "focus_hellbat");
+    }
+
+    private void focus(RecipeOutput output, String name, AspectList cost, Map<Character, Ingredient> key,
+            String... pattern) {
+        arcane(output, "focus_" + name, "focus_" + name, new ItemStack(ModItems.FOCI.get(name).get()), cost, key,
+                pattern);
     }
 
     private void nitorDyes(RecipeOutput output) {

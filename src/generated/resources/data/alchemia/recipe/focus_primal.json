@@ -1,0 +1,32 @@
+{
+  "type": "alchemia:arcane_shaped",
+  "key": {
+    "#": {
+      "item": "alchemia:primal_charm"
+    },
+    "C": {
+      "item": "minecraft:diamond"
+    },
+    "Q": {
+      "item": "minecraft:quartz"
+    }
+  },
+  "pattern": [
+    "CQC",
+    "Q#Q",
+    "CQC"
+  ],
+  "research": "alchemia:focus_primal",
+  "result": {
+    "count": 1,
+    "id": "alchemia:focus_primal"
+  },
+  "vis": {
+    "alchemia:aer": 150,
+    "alchemia:aqua": 150,
+    "alchemia:ignis": 150,
+    "alchemia:ordo": 150,
+    "alchemia:perditio": 150,
+    "alchemia:terra": 150
+  }
+}

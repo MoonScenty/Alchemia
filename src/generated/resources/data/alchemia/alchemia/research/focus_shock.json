@@ -1,0 +1,24 @@
+{
+  "category": "alchemia:arcana",
+  "column": 4,
+  "icon": "alchemia:focus_shock",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.focus_shock.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:focus_shock"
+    }
+  ],
+  "parents": [
+    "alchemia:focus_fire"
+  ],
+  "requirements": {
+    "alchemia:aer": 6,
+    "alchemia:ignis": 3,
+    "alchemia:potentia": 3
+  },
+  "row": 6
+}

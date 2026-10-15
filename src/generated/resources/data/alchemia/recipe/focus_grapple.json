@@ -1,0 +1,32 @@
+{
+  "type": "alchemia:arcane_shaped",
+  "key": {
+    "#": {
+      "item": "minecraft:slime_ball"
+    },
+    "A": {
+      "item": "alchemia:air_shard"
+    },
+    "Q": {
+      "item": "minecraft:quartz"
+    },
+    "W": {
+      "item": "alchemia:water_shard"
+    }
+  },
+  "pattern": [
+    "AQW",
+    "Q#Q",
+    "WQA"
+  ],
+  "research": "alchemia:focus_grapple",
+  "result": {
+    "count": 1,
+    "id": "alchemia:focus_grapple"
+  },
+  "vis": {
+    "alchemia:aer": 75,
+    "alchemia:aqua": 75,
+    "alchemia:ordo": 50
+  }
+}

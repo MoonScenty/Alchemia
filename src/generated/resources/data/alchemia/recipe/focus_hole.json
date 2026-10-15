@@ -1,0 +1,38 @@
+{
+  "type": "alchemia:infusion",
+  "central": {
+    "item": "minecraft:ender_pearl"
+  },
+  "essentia": {
+    "alchemia:alienis": 10,
+    "alchemia:motus": 25,
+    "alchemia:perditio": 25,
+    "alchemia:permutatio": 10
+  },
+  "instability": 3,
+  "research": "alchemia:focus_hole",
+  "result": {
+    "count": 1,
+    "id": "alchemia:focus_hole"
+  },
+  "ring": [
+    {
+      "item": "minecraft:quartz"
+    },
+    {
+      "item": "alchemia:earth_shard"
+    },
+    {
+      "item": "minecraft:quartz"
+    },
+    {
+      "item": "alchemia:air_shard"
+    },
+    {
+      "item": "minecraft:quartz"
+    },
+    {
+      "item": "alchemia:entropy_shard"
+    }
+  ]
+}

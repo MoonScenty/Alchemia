@@ -73,7 +73,7 @@ public class FocalManipulatorBlockEntity extends BlockEntity implements Containe
             return false;
         }
         int next = FocusUpgrades.nextRank(getItem(0));
-        if (next < 1 || !FocusUpgrades.offers(getItem(0), next).contains(upgrade)) {
+        if (next < 1 || !FocusUpgrades.offers(getItem(0), next, asking).contains(upgrade)) {
             return false;
         }
         int levels = FocusUpgrades.levels(next);
