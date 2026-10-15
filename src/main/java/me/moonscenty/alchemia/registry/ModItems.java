@@ -107,6 +107,10 @@ public class ModItems {
             () -> new me.moonscenty.alchemia.item.AutocasterItem(new Item.Properties().stacksTo(1)));
 
     public static final Map<CrystalType, DeferredItem<Item>> SHARDS = registerShards();
+    /** A harness to fly with, on vis. */
+    public static final DeferredItem<me.moonscenty.alchemia.item.ThaumostaticHarnessItem> THAUMOSTATIC_HARNESS =
+            ITEMS.register("thaumostatic_harness",
+                    () -> new me.moonscenty.alchemia.item.ThaumostaticHarnessItem(new Item.Properties()));
     /** Taint in a bottle, to be thrown. */
     public static final DeferredItem<me.moonscenty.alchemia.item.TaintBottleItem> BOTTLE_TAINT = ITEMS.register(
             "bottle_taint", () -> new me.moonscenty.alchemia.item.TaintBottleItem(new Item.Properties().stacksTo(8)));

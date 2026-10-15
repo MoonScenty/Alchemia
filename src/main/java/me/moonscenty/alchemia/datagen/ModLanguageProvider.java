@@ -645,6 +645,9 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("entity.alchemia.primal_arrow", pick("Primal Arrow", "원시 화살"));
         addItem(ModItems.BONE_BOW, pick("Bow of Bone", "뼈 활"));
         addItem(ModItems.BOTTLE_TAINT, pick("Bottle of Taint", "오염 병"));
+        addItem(ModItems.THAUMOSTATIC_HARNESS, pick("Thaumostatic Harness", "타우모스태틱 하네스"));
+        add("item.alchemia.thaumostatic_harness.fuel", pick("Flight left: %s s", "남은 비행: %s초"));
+        add("key.alchemia.hover", pick("Thaumostatic harness", "타우모스태틱 하네스"));
         add("entity.alchemia.bottle_taint", pick("Bottled Taint", "병에 든 오염"));
         for (String kind : new String[] {"air_arrow", "fire_arrow", "order_arrow"}) {
             add("death.attack.alchemia." + kind, pick("%1$s was shot by a primal arrow",
@@ -1313,6 +1316,9 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                 {"warp", "Warp", "뒤틀림",
                  "Look too long into what should not be, and it begins looking back. The damage is not to the world but to the one studying it, and it does not undo itself with rest.",
                  "있어서는 안 될 것을 오래 들여다보면, 그것도 당신을 들여다보기 시작한다. 상하는 것은 세계가 아니라 그것을 연구하는 자이며, 쉰다고 해서 되돌아오지 않는다."},
+                {"thaumostatic_harness", "Thaumostatic Harness", "타우모스태틱 하네스",
+                 "Is it a bird? You have unlocked the secret of flight: a harness that anchors itself to the aura and lets you defy gravity. It runs on vis and has to be charged, at a recharge pedestal or by an amulet of vis; a point each of air and fire keeps it going a second, and it holds five minutes' worth. Press H while wearing it to switch it on and off; switched on, you fly as you would in creative. Sprinting while flying goes faster but burns three times the vis. Worn with a thaumostatic girdle, it flies at full speed. Even switched off, it softens a fall.",
+                 "새인가? 비행의 비밀을 풀었다. 오라에 스스로를 붙들어 매어 중력을 거스르게 해 주는 하네스다. 비스로 움직이므로 충전 받침대나 비스 부적으로 채워야 한다. 공기와 불 한 점씩이면 1초를 날고, 5분 몫을 담아 둔다. 입은 채 H를 누르면 켜고 끈다. 켜면 크리에이티브처럼 날 수 있다. 날면서 달리면 빠르지만 비스를 세 배로 쓴다. 타우모스태틱 허리띠를 함께 차면 제 속도로 난다. 꺼져 있어도 떨어질 때 충격을 줄여 준다."},
                 {"bottle_taint", "Bottled Taint", "병에 든 오염",
                  "Why would you want this? Cleaning taint is one thing, but spreading it? A phial of flux steeped in more flux and water concentrates the essence of taint into a bottle that need only be thrown. Where it breaks, everything living nearby is poisoned by the taint, and the ground about it goes over to tainted land with flux goo lying in it. Why you would want to do this is up to you.",
                  "이걸 왜 원하겠는가? 오염을 치우는 것과 퍼뜨리는 것은 다른 일이다. 플럭스 약병을 플럭스와 물에 더 우려내면 오염의 정수가 병 하나에 모이고, 던지기만 하면 된다. 깨진 자리 가까이의 산 것은 모두 오염에 중독되고, 그 주변 땅은 오염된 땅으로 바뀌며 플럭스 끈적이가 고인다. 왜 그러고 싶은지는 당신이 정할 일이다."},

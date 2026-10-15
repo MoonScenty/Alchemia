@@ -428,7 +428,7 @@ public class ModResearchProvider {
                 "verdant_heart_lifegiver", "verdant_heart_sustainer", "triple_meat_treat");
         entry(context, "thaumostatic_girdle", ModResearch.ARTIFICE, ModItems.THAUMOSTATIC_GIRDLE, -2, 0,
                 AspectList.of(ModAspects.FLIGHT, 6).add(ModAspects.AIR, 3).add(ModAspects.MOTION, 6),
-                List.of("infusion", "levitator"), false, NodeShape.PLAIN, 3, "thaumostatic_girdle");
+                List.of("thaumostatic_harness"), false, NodeShape.PLAIN, 3, "thaumostatic_girdle");
         entry(context, "vis_amulet", ModResearch.ARCANA, ModItems.VIS_AMULET, 7, 0,
                 AspectList.of(ModAspects.AURA, 3).add(ModAspects.ENERGY, 9).add(ModAspects.VOID, 3),
                 List.of("recharge_pedestal", "infusion"), false, NodeShape.PLAIN, 2, "vis_amulet");
@@ -481,6 +481,11 @@ public class ModResearchProvider {
         entry(context, "tallow", ModResearch.ALCHEMY, ModItems.TALLOW, -2, 2,
                 AspectList.of(ModAspects.BEAST, 3).add(ModAspects.FIRE, 1), List.of("crucible"), false,
                 NodeShape.PLAIN, 1, "tallow", "tallow_candle");
+        // flight, on vis
+        entry(context, "thaumostatic_harness", ModResearch.ARTIFICE, ModItems.THAUMOSTATIC_HARNESS, -3, -1,
+                AspectList.of(ModAspects.FLIGHT, 6).add(ModAspects.AIR, 6).add(ModAspects.MECHANISM, 3),
+                List.of("levitator", "recharge_pedestal", "infusion"), false, NodeShape.SPECIAL, 3,
+                "thaumostatic_harness");
         // a bow of bone, quick to draw
         entry(context, "bone_bow", ModResearch.ARTIFICE, ModItems.BONE_BOW, -4, -1,
                 AspectList.of(ModAspects.AVERSION, 3).add(ModAspects.FLIGHT, 3).add(ModAspects.UNDEAD, 3),

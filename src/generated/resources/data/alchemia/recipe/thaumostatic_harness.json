@@ -1,0 +1,47 @@
+{
+  "type": "alchemia:infusion",
+  "central": {
+    "item": "minecraft:leather_chestplate"
+  },
+  "essentia": {
+    "alchemia:machina": 32,
+    "alchemia:motus": 16,
+    "alchemia:potentia": 32,
+    "alchemia:volatus": 32
+  },
+  "instability": 6,
+  "research": "alchemia:thaumostatic_harness",
+  "result": {
+    "count": 1,
+    "id": "alchemia:thaumostatic_harness"
+  },
+  "ring": [
+    {
+      "item": "alchemia:air_shard"
+    },
+    {
+      "item": "alchemia:air_shard"
+    },
+    {
+      "item": "alchemia:greatwood_planks"
+    },
+    {
+      "item": "alchemia:greatwood_planks"
+    },
+    {
+      "item": "alchemia:morphic_resonator"
+    },
+    {
+      "tag": "c:plates/brass"
+    },
+    {
+      "tag": "c:plates/brass"
+    },
+    {
+      "tag": "c:ingots/iron"
+    },
+    {
+      "tag": "c:ingots/iron"
+    }
+  ]
+}
