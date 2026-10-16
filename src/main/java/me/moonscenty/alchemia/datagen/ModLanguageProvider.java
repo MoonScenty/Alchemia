@@ -1231,6 +1231,9 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                 {"redstone_relay", "Redstone Relay", "레드스톤 계전기",
                  "Redstone is known to dull magic; sent through a vis crystal, it can be made to do only as much of that as you like. The relay is put down and wired like a repeater, its output the end with the torch. It has two toggles. The one at the back sets how strong a signal it needs before it answers; the one beside the torch, how strong a signal it gives out when it does. Each steps from one to fifteen.",
                  "레드스톤이 마법을 무디게 한다는 것은 잘 알려져 있다. 비스 결정을 거쳐 보내면 그 무디게 하는 정도를 원하는 만큼만으로 맞출 수 있다. 계전기는 레드스톤 중계기처럼 놓고 잇는다. 횃불이 달린 쪽이 내보내는 쪽이다. 손잡이가 둘 있다. 뒤쪽 것은 얼마나 센 신호가 들어와야 답할지, 횃불 옆 것은 답할 때 얼마나 센 신호를 낼지를 정한다. 둘 다 1부터 15까지 바뀐다."},
+                {"barrier_stone", "Barrier Stone", "장벽석",
+                 "Arcane brick worked into a ward. A barrier stone raises an unseen wall over itself, two blocks high, that no creature will cross; players pass through it, and it keeps golems in or out as well. Anything jumping or flying over is pushed back. Lay them in an unbroken line between what you would keep safe and the world outside; it is not perfectly sure, but it keeps most common threats at bay. A redstone signal turns a stone off. Its runes tell how it is: purple while it holds something back, blue while a signal turns it off, red while something stands where its ward should be.",
+                 "비전 벽돌을 결계로 만든 것이다. 장벽석은 자기 위로 두 칸 높이의 보이지 않는 벽을 세우고, 어떤 생물도 그것을 넘지 못한다. 플레이어는 지나갈 수 있고, 골렘도 막는다. 뛰어넘거나 날아 넘으려는 것은 밀려난다. 지키려는 곳과 바깥 사이에 끊김 없이 한 줄로 깔아라. 완벽하지는 않지만 흔한 위협은 대부분 막는다. 레드스톤 신호를 받으면 꺼진다. 위의 룬이 상태를 알려 준다. 보라색은 무언가를 막는 중, 파란색은 신호로 꺼진 것, 빨간색은 결계 자리에 무언가 들어서 있는 것이다."},
                 {"arcane_ear", "Arcane Ear", "비전 귀",
                  "An ear that hears note blocks. Tune it as you would a note block, a click a semitone up; it listens in the voice of whatever it is fixed to, the way a note block plays in the voice of what it stands on. When a note block within sixty-four blocks plays its note, it gives a short, full redstone pulse, through what it is fixed to as well. It can be fixed to any face.",
                  "소리 블록을 듣는 귀다. 소리 블록처럼 누를 때마다 반음씩 올려 맞춘다. 소리 블록이 딛고 선 것의 음색으로 울리듯, 귀는 붙어 있는 것의 음색으로 듣는다. 64칸 안의 소리 블록이 그 음을 울리면 짧고 꽉 찬 레드스톤 신호를 낸다. 붙은 블록을 통해서도 낸다. 어느 면에나 붙일 수 있다."},
@@ -1609,6 +1612,8 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("block.alchemia.redstone_relay.in", pick("In: %s", "받는 세기: %s"));
         add("block.alchemia.redstone_relay.out", pick("Out: %s", "내는 세기: %s"));
         add("block.alchemia.arcane_ear", pick("Arcane Ear", "비전 귀"));
+        add("block.alchemia.barrier_stone", pick("Barrier Stone", "장벽석"));
+        add("block.alchemia.warding_aura", pick("Warding Aura", "보호 오라"));
         add("block.alchemia.spa", pick("Arcane Spa", "비전 스파"));
         add("block.alchemia.recharge_pedestal", pick("Recharge Pedestal", "재충전 받침대"));
         add("block.alchemia.aura_totem_push", pick("Aura Totem of Dispersal", "흩어 놓는 오라 토템"));

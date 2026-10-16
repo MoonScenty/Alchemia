@@ -265,6 +265,19 @@ public class ModBlocks {
             register("redstone_relay", () -> new me.moonscenty.alchemia.block.RedstoneRelayBlock(
                     BlockBehaviour.Properties.ofFullCopy(Blocks.REPEATER)));
 
+    /** A paving stone that wards the two blocks over it against any creature but a player. */
+    public static final DeferredBlock<me.moonscenty.alchemia.block.BarrierStoneBlock> BARRIER_STONE = register("barrier_stone",
+            () -> new me.moonscenty.alchemia.block.BarrierStoneBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.COLOR_BLACK)
+                    .sound(net.minecraft.world.level.block.SoundType.STONE)
+                    .strength(2.5F)));
+    /** The invisible ward a barrier stone raises over itself. */
+    public static final DeferredBlock<me.moonscenty.alchemia.block.WardingAuraBlock> WARDING_AURA = registerBlockOnly("warding_aura",
+            () -> new me.moonscenty.alchemia.block.WardingAuraBlock(BlockBehaviour.Properties.of().mapColor(MapColor.NONE)
+                    .noOcclusion().dynamicShape().noLootTable().replaceable().strength(0.0F)
+                    .pushReaction(net.minecraft.world.level.material.PushReaction.DESTROY)
+                    .isValidSpawn(Blocks::never)));
+
     /** A wooden ear that gives a signal when it hears its note played. */
     public static final DeferredBlock<me.moonscenty.alchemia.block.ArcaneEarBlock> ARCANE_EAR = register("arcane_ear",
             () -> new me.moonscenty.alchemia.block.ArcaneEarBlock(BlockBehaviour.Properties.of()

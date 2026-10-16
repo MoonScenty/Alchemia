@@ -1,0 +1,27 @@
+{
+  "type": "alchemia:arcane_shaped",
+  "key": {
+    "A": {
+      "item": "alchemia:fire_shard"
+    },
+    "B": {
+      "item": "alchemia:order_shard"
+    },
+    "S": {
+      "item": "alchemia:arcane_stone_bricks"
+    }
+  },
+  "pattern": [
+    "SAS",
+    "SBS"
+  ],
+  "research": "alchemia:barrier_stone",
+  "result": {
+    "count": 4,
+    "id": "alchemia:barrier_stone"
+  },
+  "vis": {
+    "alchemia:ignis": 50,
+    "alchemia:ordo": 50
+  }
+}

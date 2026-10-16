@@ -221,9 +221,10 @@ public final class NoteSolving {
         ResearchNote working = note;
         Set<HexGrid.Hex> chain = new HashSet<>();
         chain.add(pinned.getFirst().at());
+        Links links = Links.of(aspects);
 
         for (int index = 1; index < pinned.size(); index++) {
-            List<Placement> leg = cheapestRun(aspects, working, chain, pinned.get(index).at());
+            List<Placement> leg = cheapestRun(links, working, chain, pinned.get(index).at());
             if (leg == null) {
                 return Optional.empty();
             }
@@ -256,24 +257,54 @@ public final class NoteSolving {
     }
 
     /**
+     * A place in the search's queue and what it cost when it was queued. The cost travels with it so the queue's
+     * order never changes under it; a place found cheaper later is queued again and the dearer copy passed over.
+     */
+    private record Queued(Reached reached, int cost) {
+    }
+
+    /**
+     * Which aspects may follow which, and what each costs, worked out once for a whole solving rather than asked of
+     * every aspect at every step of the search.
+     */
+    private record Links(List<Holder<Aspect>> writable, Map<Aspect, List<Holder<Aspect>>> after,
+            Map<Aspect, Integer> cost) {
+        static Links of(Registry<Aspect> aspects) {
+            List<Holder<Aspect>> writable = aspects.holders()
+                    .map(holder -> (Holder<Aspect>) holder)
+                    .filter(holder -> primalCost(holder) != null)
+                    .toList();
+            Map<Aspect, List<Holder<Aspect>>> after = new HashMap<>();
+            Map<Aspect, Integer> cost = new HashMap<>();
+            for (Holder<Aspect> one : writable) {
+                cost.put(one.value(), primalCost(one).total());
+                after.put(one.value(), writable.stream().filter(other -> linked(one, other)).toList());
+            }
+            return new Links(writable, after, cost);
+        }
+    }
+
+    /** What may be written next to an aspect; worked out on the spot for one that cannot itself be written. */
+    private static List<Holder<Aspect>> following(Links links, Holder<Aspect> aspect) {
+        List<Holder<Aspect>> known = links.after().get(aspect.value());
+        return known != null ? known
+                : links.writable().stream().filter(other -> linked(aspect, other)).toList();
+    }
+
+    /**
      * The cheapest run of blank cells from anywhere on the chain to a pinned cell, every step holding to the one
      * before it. Searched over cell and aspect together and by cost rather than by length, so a long run of cheap
      * aspects is preferred to a short run of dear ones.
      */
-    private static List<Placement> cheapestRun(Registry<Aspect> aspects, ResearchNote note, Set<HexGrid.Hex> chain,
+    private static List<Placement> cheapestRun(Links links, ResearchNote note, Set<HexGrid.Hex> chain,
             HexGrid.Hex target) {
         Holder<Aspect> goal = note.cellAt(target).flatMap(ResearchNote.Cell::aspect).orElse(null);
         if (goal == null) {
             return null;
         }
-        List<Holder<Aspect>> writable = aspects.holders()
-                .map(holder -> (Holder<Aspect>) holder)
-                .filter(holder -> primalCost(holder) != null)
-                .toList();
-
         Map<Reached, Integer> best = new HashMap<>();
         Map<Reached, Reached> cameFrom = new HashMap<>();
-        PriorityQueue<Reached> queue = new PriorityQueue<>(Comparator.comparingInt(best::get));
+        PriorityQueue<Queued> queue = new PriorityQueue<>(Comparator.comparingInt(Queued::cost));
 
         for (HexGrid.Hex at : chain) {
             Holder<Aspect> held = note.cellAt(at).flatMap(ResearchNote.Cell::aspect).orElse(null);
@@ -281,13 +312,18 @@ public final class NoteSolving {
                 Reached start = new Reached(at, held);
                 best.put(start, 0);
                 cameFrom.put(start, null);
-                queue.add(start);
+                queue.add(new Queued(start, 0));
             }
         }
 
         while (!queue.isEmpty()) {
-            Reached here = queue.poll();
-            int spent = best.get(here);
+            Queued polled = queue.poll();
+            Reached here = polled.reached();
+            int spent = polled.cost();
+            if (spent > best.get(here)) {
+                // already gone over at a lower cost
+                continue;
+            }
             for (HexGrid.Hex next : here.at().neighbours()) {
                 ResearchNote.Cell cell = note.cellAt(next).orElse(null);
                 if (cell == null) {
@@ -303,16 +339,13 @@ public final class NoteSolving {
                 if (cell.pinned() || cell.aspect().isPresent()) {
                     continue;
                 }
-                for (Holder<Aspect> lay : writable) {
-                    if (!linked(here.aspect(), lay)) {
-                        continue;
-                    }
+                for (Holder<Aspect> lay : following(links, here.aspect())) {
                     Reached step = new Reached(next, lay);
-                    int cost = spent + primalCost(lay).total();
+                    int cost = spent + links.cost().get(lay.value());
                     if (cost < best.getOrDefault(step, Integer.MAX_VALUE)) {
                         best.put(step, cost);
                         cameFrom.put(step, here);
-                        queue.add(step);
+                        queue.add(new Queued(step, cost));
                     }
                 }
             }

@@ -142,6 +142,13 @@ public class ModBlockEntities {
                     .of(me.moonscenty.alchemia.block.entity.LevitatorBlockEntity::new, ModBlocks.LEVITATOR.get())
                     .build(null));
 
+    /** A barrier stone keeping its ward up. */
+    public static final DeferredHolder<BlockEntityType<?>,
+            BlockEntityType<me.moonscenty.alchemia.block.entity.BarrierStoneBlockEntity>> BARRIER_STONE =
+            BLOCK_ENTITIES.register("barrier_stone", () -> BlockEntityType.Builder
+                    .of(me.moonscenty.alchemia.block.entity.BarrierStoneBlockEntity::new, ModBlocks.BARRIER_STONE.get())
+                    .build(null));
+
     /** An arcane ear listening for its note. */
     public static final DeferredHolder<BlockEntityType<?>,
             BlockEntityType<me.moonscenty.alchemia.block.entity.ArcaneEarBlockEntity>> ARCANE_EAR =
