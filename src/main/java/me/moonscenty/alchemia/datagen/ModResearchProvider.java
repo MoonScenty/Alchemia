@@ -554,6 +554,9 @@ public class ModResearchProvider {
         entry(context, "barrier_stone", ModResearch.ARTIFICE, ModBlocks.BARRIER_STONE, 3, 3,
                 AspectList.of(ModAspects.EARTH, 3).add(ModAspects.ENTROPY, 3).add(ModAspects.MOTION, 3),
                 List.of("arcane_stone"), false, NodeShape.PLAIN, 1, "barrier_stone");
+        entry(context, "travel_stone", ModResearch.ARTIFICE, ModBlocks.TRAVEL_STONE, 4, 3,
+                AspectList.of(ModAspects.EARTH, 3).add(ModAspects.AIR, 3).add(ModAspects.MOTION, 3),
+                List.of("arcane_stone"), false, NodeShape.PLAIN, 1, "travel_stone");
         entry(context, "arcane_stone", ModResearch.ARTIFICE, ModBlocks.ARCANE_STONE.block(), 3, 2,
                 AspectList.of(ModAspects.EARTH, 4).add(ModAspects.AURA, 2).add(ModAspects.CRYSTAL, 2),
                 List.of("arcane_workbench"), false, NodeShape.PLAIN, 2, "arcane_stone",

@@ -64,7 +64,7 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
                         ModBlocks.ARCANE_PILLAR.get());
 
         tag(BlockTags.MINEABLE_WITH_AXE).add(ModBlocks.LOOT_CRATE.get());
-        tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.BARRIER_STONE.get());
+        tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.BARRIER_STONE.get(), ModBlocks.TRAVEL_STONE.get());
         tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.CRAB_SPAWNER.get(), ModBlocks.PATTERN_CRAFTER.get(),
                 ModBlocks.ESSENTIA_INPUT.get(), ModBlocks.ESSENTIA_OUTPUT.get());
         tag(BlockTags.MINEABLE_WITH_HOE).add(ModBlocks.FLESH_BLOCK.get());

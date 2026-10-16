@@ -271,6 +271,12 @@ public class ModBlocks {
                     .mapColor(MapColor.COLOR_BLACK)
                     .sound(net.minecraft.world.level.block.SoundType.STONE)
                     .strength(2.5F)));
+    /** A paving stone that hastens whatever walks across it. */
+    public static final DeferredBlock<me.moonscenty.alchemia.block.TravelStoneBlock> TRAVEL_STONE = register("travel_stone",
+            () -> new me.moonscenty.alchemia.block.TravelStoneBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.COLOR_BLACK)
+                    .sound(net.minecraft.world.level.block.SoundType.STONE)
+                    .strength(2.5F)));
     /** The invisible ward a barrier stone raises over itself. */
     public static final DeferredBlock<me.moonscenty.alchemia.block.WardingAuraBlock> WARDING_AURA = registerBlockOnly("warding_aura",
             () -> new me.moonscenty.alchemia.block.WardingAuraBlock(BlockBehaviour.Properties.of().mapColor(MapColor.NONE)

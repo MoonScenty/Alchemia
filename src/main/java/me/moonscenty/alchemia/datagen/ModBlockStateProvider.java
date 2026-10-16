@@ -273,6 +273,12 @@ public class ModBlockStateProvider extends BlockStateProvider {
                 .texture("particle", modLoc("block/barrier_stone"));
         simpleBlock(ModBlocks.BARRIER_STONE.get(), barrier);
         simpleBlockItem(ModBlocks.BARRIER_STONE.get(), barrier);
+        var travel = models().withExistingParent("travel_stone", mcLoc("block/farmland"))
+                .texture("dirt", modLoc("block/arcane_stone_bricks"))
+                .texture("top", modLoc("block/travel_stone"))
+                .texture("particle", modLoc("block/travel_stone"));
+        simpleBlock(ModBlocks.TRAVEL_STONE.get(), travel);
+        simpleBlockItem(ModBlocks.TRAVEL_STONE.get(), travel);
     }
 
     /** A furnace in every way the blockstate cares about: it faces somewhere, and it is lit or it is not. */

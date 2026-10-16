@@ -1,0 +1,27 @@
+{
+  "type": "alchemia:arcane_shaped",
+  "key": {
+    "A": {
+      "item": "alchemia:air_shard"
+    },
+    "B": {
+      "item": "alchemia:earth_shard"
+    },
+    "S": {
+      "item": "alchemia:arcane_stone_bricks"
+    }
+  },
+  "pattern": [
+    "SAS",
+    "SBS"
+  ],
+  "research": "alchemia:travel_stone",
+  "result": {
+    "count": 4,
+    "id": "alchemia:travel_stone"
+  },
+  "vis": {
+    "alchemia:aer": 50,
+    "alchemia:terra": 50
+  }
+}

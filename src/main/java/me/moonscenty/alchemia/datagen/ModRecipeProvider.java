@@ -455,6 +455,13 @@ public class ModRecipeProvider extends RecipeProvider {
                         'A', Ingredient.of(ModItems.SHARDS.get(CrystalType.FIRE)),
                         'B', Ingredient.of(ModItems.SHARDS.get(CrystalType.ORDER))),
                 "SAS", "SBS");
+        // and round an air and an earth shard, four paving stones of travel
+        arcane(output, "travel_stone", "travel_stone", new ItemStack(ModBlocks.TRAVEL_STONE.get(), 4),
+                AspectList.of(ModAspects.EARTH, 50).add(ModAspects.AIR, 50),
+                Map.of('S', Ingredient.of(ModBlocks.ARCANE_STONE_BRICKS.block()),
+                        'A', Ingredient.of(ModItems.SHARDS.get(CrystalType.AIR)),
+                        'B', Ingredient.of(ModItems.SHARDS.get(CrystalType.EARTH))),
+                "SAS", "SBS");
         arcane(output, "arcane_ear", "arcane_ear", new ItemStack(ModBlocks.ARCANE_EAR.get()),
                 AspectList.of(ModAspects.AIR, 10).add(ModAspects.ORDER, 5),
                 Map.of('P', Ingredient.of(ModItems.BRASS_PLATE),
