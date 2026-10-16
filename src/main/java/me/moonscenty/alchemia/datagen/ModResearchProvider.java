@@ -44,6 +44,9 @@ public class ModResearchProvider {
         entry(context, "aspects", ModResearch.BASICS, ModItems.ALCHEMOMETER, 0, 0,
                 AspectList.EMPTY, List.of(), true, NodeShape.MAJOR, 1);
 
+        // the original's own enchantments, known from the start
+        entry(context, "enchantments", ModResearch.BASICS, net.minecraft.world.item.Items.ENCHANTED_BOOK, -2, -1,
+                AspectList.EMPTY, List.of(), true, NodeShape.PLAIN, 1);
         entry(context, "amber", ModResearch.BASICS, ModItems.AMBER, -2, 1,
                 AspectList.of(ModAspects.CRYSTAL, 2).add(ModAspects.TRAP, 2), List.of("aspects"), false, NodeShape.PLAIN, 1, "amber_from_ore_smelting", "amber_block_from_amber");
         entry(context, "quicksilver", ModResearch.ALCHEMY, ModItems.QUICKSILVER, 0, 1,

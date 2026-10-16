@@ -46,6 +46,8 @@ public class DataGenerators {
                 existingFileHelper));
         generator.addProvider(event.includeServer(), new ModDamageTypeTagsProvider(output,
                 entries.getRegistryProvider(), existingFileHelper));
+        generator.addProvider(event.includeServer(), new ModEnchantmentTagsProvider(output,
+                entries.getRegistryProvider(), existingFileHelper));
         generator.addProvider(event.includeServer(), new ModDataMapProvider(output, lookupProvider));
         generator.addProvider(event.includeServer(), new ModCuriosProvider(output, existingFileHelper, lookupProvider));
         generator.addProvider(event.includeServer(), new LootTableProvider(output, Set.of(),

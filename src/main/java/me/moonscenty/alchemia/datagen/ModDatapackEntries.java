@@ -19,7 +19,8 @@ public class ModDatapackEntries {
             .add(NeoForgeRegistries.Keys.BIOME_MODIFIERS, ModWorldgen::bootstrapBiomeModifiers)
             .add(ModResearch.CATEGORY_KEY, ModResearchProvider::categories)
             .add(ModResearch.ENTRY_KEY, ModResearchProvider::entries)
-            .add(Registries.DAMAGE_TYPE, me.moonscenty.alchemia.registry.ModDamageTypes::bootstrap);
+            .add(Registries.DAMAGE_TYPE, me.moonscenty.alchemia.registry.ModDamageTypes::bootstrap)
+            .add(Registries.ENCHANTMENT, me.moonscenty.alchemia.enchantment.ModEnchantments::bootstrap);
 
     private ModDatapackEntries() {
     }

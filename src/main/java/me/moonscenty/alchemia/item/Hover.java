@@ -17,7 +17,7 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
  * <p>
  * Switched on, the harness lets its wearer fly as a creative player does, burning a tick of fuel each tick (three
  * while sprinting) and slowing them across the ground and through the air to a little over four fifths of their
- * speed -- all of it, with a thaumostatic girdle in the belt slot. Run dry, it switches off. Switched off, it still
+ * speed -- more with haste on it, all of it with a thaumostatic girdle in the belt slot. Run dry, it switches off. Switched off, it still
  * takes a quarter off a fall every tick it is worn. It does nothing for a creative player, who flies anyway.
  */
 @EventBusSubscriber(modid = Alchemia.MODID)
@@ -27,6 +27,7 @@ public final class Hover {
     /** How much of their speed a flier keeps, and what the girdle gives back. */
     private static final float DRAG = 0.825F;
     private static final float GIRDLE = 0.175F;
+    private static final float HASTE = 0.075F;
 
     private Hover() {
     }
@@ -104,7 +105,8 @@ public final class Hover {
 
     /** Slower on the harness than off it, unless the girdle makes it up; and a hum as it works. */
     private static void drag(Player player) {
-        float keep = DRAG;
+        // each level of haste on the harness takes some of the drag off
+        float keep = DRAG + HASTE * me.moonscenty.alchemia.enchantment.ModEnchantments.haste(player, worn(player));
         if (wearsGirdle(player)) {
             keep += GIRDLE;
         }

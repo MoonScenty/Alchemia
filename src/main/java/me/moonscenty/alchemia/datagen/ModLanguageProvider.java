@@ -648,6 +648,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         addItem(ModItems.THAUMOSTATIC_HARNESS, pick("Thaumostatic Harness", "타우모스태틱 하네스"));
         addBlock(ModBlocks.ESSENTIA_INPUT, pick("Filling Essentia Transfuser", "채우는 에센시아 수혈기"));
         addBlock(ModBlocks.TAINT_DUST, pick("Degraded Taint Dust", "삭은 오염 먼지"));
+        add("enchantment.alchemia.haste", pick("Haste", "서두름"));
         addBlock(ModBlocks.ALCHEMICAL_CONSTRUCT, pick("Alchemical Construct", "연금술 구조체"));
         addBlock(ModBlocks.ADVANCED_ALCHEMICAL_CONSTRUCT, pick("Advanced Alchemical Construct", "고급 연금술 구조체"));
         addBlock(ModBlocks.ESSENTIA_OUTPUT, pick("Emptying Essentia Transfuser", "비우는 에센시아 수혈기"));
@@ -1343,6 +1344,9 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                 {"primal_arrows", "Primal Arrows", "원시 화살",
                  "Arrows each bound with one primal, laid eight round a shard. Air arrows hurt as an arrow does but as magic, past any armour. Fire arrows burn and set their targets alight. Water arrows chill the target to the bone and slow it badly. Earth arrows simply hit a great deal harder, and knock back further. Order arrows hit a little less but past armour, and leave the target weak. Entropy arrows hit a little less and wither what they strike. A bow reaches for them before any other arrow. They cannot be picked up again, and Infinity spares one only a time in three.",
                  "화살마다 원시 하나를 묶은 것으로, 조각 하나에 화살 여덟을 둘러 만든다. 공기 화살은 화살만큼 다치게 하되 마법이라 어떤 갑옷도 막지 못한다. 불 화살은 불로 다치게 하고 맞은 것에 불을 붙인다. 물 화살은 뼛속까지 얼려 크게 느리게 한다. 흙 화살은 그저 훨씬 세게 맞히고 더 멀리 밀쳐 낸다. 질서 화살은 조금 약하지만 갑옷을 뚫고 맞은 것을 나약하게 한다. 엔트로피 화살은 조금 약하지만 맞은 것을 시들게 한다. 활은 다른 화살보다 이것을 먼저 집는다. 다시 주울 수 없고, 무한은 세 번에 한 번만 아껴 준다."},
+                {"enchantments", "Enchantments", "마법부여",
+                 "New enchantments, found at the enchanting table and in enchanted books. Haste goes on footwear of any kind and makes its wearer quicker on the ground; the higher its level, the quicker. On a thaumostatic harness it makes flying quicker instead.",
+                 "새 마법부여다. 마법부여대와 마법부여된 책에서 얻는다. 서두름은 어떤 신발에든 붙일 수 있고, 신은 사람을 땅에서 더 빠르게 한다. 단계가 높을수록 빠르다. 타우모스태틱 하네스에 붙이면 대신 나는 속도가 빨라진다."},
                 {"liquid_death", "Liquid Death", "액체 죽음",
                  "For external use only. Death, crystal and entropy steeped together in a crucible and caught in a bucket make a liquid so toxic that almost nothing keeps it from dissolving flesh, bone and harder things. Nothing alive, or with any semblance of life, survives it. What essentia a creature held as it dissolved is said to settle out as crystals.",
                  "외용으로만 쓸 것. 죽음·결정·엔트로피를 도가니에서 함께 우려 양동이에 받으면, 살과 뼈와 그보다 단단한 것까지 녹여 버리는 지독한 액체가 된다. 살아 있는 것, 살아 있는 척이라도 하는 것은 아무것도 견디지 못한다. 녹아 버린 것이 지녔던 에센시아는 결정으로 가라앉는다고 한다."},

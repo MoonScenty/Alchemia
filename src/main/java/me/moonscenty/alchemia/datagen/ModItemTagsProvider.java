@@ -26,6 +26,9 @@ public class ModItemTagsProvider extends ItemTagsProvider {
     protected void addTags(HolderLookup.Provider provider) {
         ModBlocks.NITOR.values().forEach(flame -> tag(ModTags.Items.NITOR).add(flame.get().asItem()));
         ModItems.FOCI.values().forEach(focus -> tag(ModTags.Items.FOCI).add(focus.get()));
+        // haste goes on any boots, and on the harness
+        tag(ModTags.Items.HASTE_ENCHANTABLE).addTag(net.minecraft.tags.ItemTags.FOOT_ARMOR)
+                .add(ModItems.THAUMOSTATIC_HARNESS.get());
         // the bow of bone takes a bow's enchantments
         tag(net.minecraft.tags.ItemTags.BOW_ENCHANTABLE).add(ModItems.BONE_BOW.get());
         tag(net.minecraft.tags.ItemTags.DURABILITY_ENCHANTABLE).add(ModItems.BONE_BOW.get());
