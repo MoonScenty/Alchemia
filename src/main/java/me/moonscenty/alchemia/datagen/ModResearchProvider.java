@@ -42,7 +42,8 @@ public class ModResearchProvider {
     public static void entries(BootstrapContext<ResearchEntry> context) {
         // where everything starts: the six primals are plain enough to see without help
         entry(context, "aspects", ModResearch.BASICS, ModItems.ALCHEMOMETER, 0, 0,
-                AspectList.EMPTY, List.of(), true, NodeShape.MAJOR, 1);
+                AspectList.EMPTY, List.of(), true, NodeShape.MAJOR, 1, "alchemometer", "wooden_table",
+                "scribing_tools", "scribing_tools_from_bottle", "scribing_tools_refill");
 
         // the original's own enchantments, known from the start
         entry(context, "enchantments", ModResearch.BASICS, net.minecraft.world.item.Items.ENCHANTED_BOOK, -2, -1,
@@ -69,7 +70,7 @@ public class ModResearchProvider {
                 AspectList.of(ModAspects.CRAFT, 4).add(ModAspects.AURA, 2), List.of("wand"), false, NodeShape.MAJOR, 2);
         entry(context, "charger", ModResearch.ARCANA, ModBlocks.ARCANE_WORKBENCH_CHARGER, 5, 2,
                 AspectList.of(ModAspects.AURA, 4).add(ModAspects.ENERGY, 4).add(ModAspects.CRYSTAL, 2),
-                List.of("arcane_workbench"), false, NodeShape.PLAIN, 2);
+                List.of("arcane_workbench"), false, NodeShape.PLAIN, 2, "arcane_workbench_charger");
 
         entry(context, "wand_cap_gold", ModResearch.ARCANA, ModItems.WAND_CAPS.get("gold"), 4, 3,
                 AspectList.of(ModAspects.METAL, 3).add(ModAspects.DESIRE, 3).add(ModAspects.TOOL, 3),
@@ -92,7 +93,9 @@ public class ModResearchProvider {
 
         entry(context, "crucible", ModResearch.ALCHEMY, ModBlocks.CRUCIBLE, 0, 2,
                 AspectList.of(ModAspects.WATER, 4).add(ModAspects.FIRE, 4).add(ModAspects.EXCHANGE, 2),
-                List.of("wand"), false, NodeShape.MAJOR, 2, "morphic_resonator");
+                List.of("wand"), false, NodeShape.MAJOR, 2, "morphic_resonator", "balanced_shard_from_air",
+                "balanced_shard_from_fire", "balanced_shard_from_water", "balanced_shard_from_earth",
+                "balanced_shard_from_order", "balanced_shard_from_entropy");
         entry(context, "metallurgy", ModResearch.ALCHEMY, ModItems.ALCHEMIUM_INGOT, -1, 3,
                 AspectList.of(ModAspects.METAL, 6).add(ModAspects.EXCHANGE, 4).add(ModAspects.FIRE, 2),
                 List.of("crucible"), false, NodeShape.PLAIN, 3,

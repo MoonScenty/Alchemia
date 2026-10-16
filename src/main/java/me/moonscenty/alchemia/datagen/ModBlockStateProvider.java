@@ -485,6 +485,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         simpleBlockItem(ModBlocks.AMBIENT_GRASS.get(), grass);
         // the stone table is the original's model; a golem press is drawn by its renderer, all of it
         simpleBlock(ModBlocks.STONE_TABLE.get(), models().getExistingFile(modLoc("block/table_stone")));
+        simpleBlockWithItem(ModBlocks.WOODEN_TABLE.get(), models().getExistingFile(modLoc("block/table_wood")));
         getVariantBuilder(ModBlocks.GOLEM_PRESS.get()).partialState().setModels(new ConfiguredModel(
                 models().getBuilder("golem_press").texture("particle", modLoc("block/legacy/base_stone"))));
         getVariantBuilder(ModBlocks.GOLEM_PRESS_PART.get()).partialState().setModels(new ConfiguredModel(

@@ -7,6 +7,26 @@
     {
       "type": "text",
       "key": "research.alchemia.aspects.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:alchemometer"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:wooden_table"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:scribing_tools"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:scribing_tools_from_bottle"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:scribing_tools_refill"
     }
   ],
   "row": 0,

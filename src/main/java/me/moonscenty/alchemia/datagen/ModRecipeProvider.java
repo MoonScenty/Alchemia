@@ -108,6 +108,29 @@ public class ModRecipeProvider extends RecipeProvider {
         gear(output, ModItems.BRASS_GEAR, ModTags.Items.NUGGETS_BRASS);
         gear(output, ModItems.VOID_GEAR, ModTags.Items.NUGGETS_VOID);
         // a stone table, which a golem press is built round
+        // the thaumaturge's first things, all the original's: a wooden table, the tools to write with and the
+        // alchemometer to look with
+        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, ModBlocks.WOODEN_TABLE.get())
+                .pattern("SSS").pattern("W W")
+                .define('S', net.minecraft.tags.ItemTags.WOODEN_SLABS).define('W', net.minecraft.tags.ItemTags.PLANKS)
+                .unlockedBy("has_planks", has(net.minecraft.tags.ItemTags.PLANKS)).save(output);
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.TOOLS, ModItems.SCRIBING_TOOLS.get())
+                .requires(net.neoforged.neoforge.common.crafting.DataComponentIngredient.of(true,
+                        net.minecraft.core.component.DataComponentPredicate.EMPTY, ModItems.PHIAL.get()))
+                .requires(Items.FEATHER).requires(Tags.Items.DYES_BLACK)
+                .unlockedBy("has_feather", has(Items.FEATHER)).save(output);
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.TOOLS, ModItems.SCRIBING_TOOLS.get())
+                .requires(Items.GLASS_BOTTLE).requires(Items.FEATHER).requires(Tags.Items.DYES_BLACK)
+                .unlockedBy("has_feather", has(Items.FEATHER)).save(output, Alchemia.id("scribing_tools_from_bottle"));
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.TOOLS, ModItems.SCRIBING_TOOLS.get())
+                .requires(ModItems.SCRIBING_TOOLS.get()).requires(Tags.Items.DYES_BLACK)
+                .unlockedBy("has_tools", has(ModItems.SCRIBING_TOOLS.get())).save(output, Alchemia.id("scribing_tools_refill"));
+        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ModItems.ALCHEMOMETER.get())
+                .pattern(" 1 ").pattern("IGI").pattern(" 1 ")
+                .define('I', Tags.Items.INGOTS_GOLD).define('G', Tags.Items.GLASS_BLOCKS_COLORLESS)
+                .define('1', ModTags.Items.SHARDS)
+                .unlockedBy("has_shard", has(ModTags.Items.SHARDS)).save(output);
+
         ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, ModBlocks.STONE_TABLE.get())
                 .pattern("SSS").pattern("W W")
                 .define('S', Items.STONE_SLAB)
@@ -462,6 +485,13 @@ public class ModRecipeProvider extends RecipeProvider {
                         'A', Ingredient.of(ModItems.SHARDS.get(CrystalType.AIR)),
                         'B', Ingredient.of(ModItems.SHARDS.get(CrystalType.EARTH))),
                 "SAS", "SBS");
+        // a balanced shard on two greatwood rods over iron feet
+        arcane(output, "arcane_workbench_charger", "charger", new ItemStack(ModBlocks.ARCANE_WORKBENCH_CHARGER.get()),
+                AspectList.of(ModAspects.FIRE, 100).add(ModAspects.ORDER, 100).add(ModAspects.AIR, 100),
+                Map.of('I', Ingredient.of(Tags.Items.INGOTS_IRON),
+                        'R', Ingredient.of(ModItems.BALANCED_SHARD),
+                        'W', Ingredient.of(ModItems.WAND_RODS.get("greatwood"))),
+                " R ", "W W", "I I");
         arcane(output, "arcane_ear", "arcane_ear", new ItemStack(ModBlocks.ARCANE_EAR.get()),
                 AspectList.of(ModAspects.AIR, 10).add(ModAspects.ORDER, 5),
                 Map.of('P', Ingredient.of(ModItems.BRASS_PLATE),
@@ -1337,6 +1367,20 @@ public class ModRecipeProvider extends RecipeProvider {
     }
 
     private void crucible(RecipeOutput output) {
+        // a balanced shard out of any primal shard, with two of each of the other five
+        for (CrystalType from : new CrystalType[] {CrystalType.AIR, CrystalType.FIRE, CrystalType.WATER,
+                CrystalType.EARTH, CrystalType.ORDER, CrystalType.ENTROPY}) {
+            AspectList others = AspectList.EMPTY;
+            for (CrystalType other : new CrystalType[] {CrystalType.AIR, CrystalType.FIRE, CrystalType.WATER,
+                    CrystalType.EARTH, CrystalType.ORDER, CrystalType.ENTROPY}) {
+                if (other != from) {
+                    others = others.add(other.aspect(), 2);
+                }
+            }
+            crucible(output, "balanced_shard_from_" + from.getName(),
+                    Ingredient.of(ModItems.SHARDS.get(from)), others, new ItemStack(ModItems.BALANCED_SHARD.get()),
+                    "crucible");
+        }
         crucible(output, "alchemium_ingot_from_iron", Ingredient.of(Tags.Items.INGOTS_IRON),
                 AspectList.of(ModAspects.EARTH, 2).add(ModAspects.ORDER, 2),
                 new ItemStack(ModItems.ALCHEMIUM_INGOT.get()), "metallurgy");

@@ -11,6 +11,30 @@
     {
       "type": "recipe",
       "recipe": "alchemia:morphic_resonator"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:balanced_shard_from_air"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:balanced_shard_from_fire"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:balanced_shard_from_water"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:balanced_shard_from_earth"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:balanced_shard_from_order"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:balanced_shard_from_entropy"
     }
   ],
   "parents": [

@@ -1,0 +1,29 @@
+{
+  "type": "alchemia:arcane_shaped",
+  "key": {
+    "I": {
+      "tag": "c:ingots/iron"
+    },
+    "R": {
+      "item": "alchemia:balanced_shard"
+    },
+    "W": {
+      "item": "alchemia:wand_rod_greatwood"
+    }
+  },
+  "pattern": [
+    " R ",
+    "W W",
+    "I I"
+  ],
+  "research": "alchemia:charger",
+  "result": {
+    "count": 1,
+    "id": "alchemia:arcane_workbench_charger"
+  },
+  "vis": {
+    "alchemia:aer": 100,
+    "alchemia:ignis": 100,
+    "alchemia:ordo": 100
+  }
+}

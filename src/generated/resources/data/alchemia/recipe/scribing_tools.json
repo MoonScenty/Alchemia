@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
+  "ingredients": [
+    {
+      "type": "neoforge:components",
+      "components": {},
+      "items": "alchemia:phial",
+      "strict": true
+    },
+    {
+      "item": "minecraft:feather"
+    },
+    {
+      "tag": "c:dyes/black"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "alchemia:scribing_tools"
+  }
+}

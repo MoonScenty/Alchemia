@@ -108,6 +108,7 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
                                 .otherwise(LootItem.lootTableItem(Blocks.NETHER_BRICKS))))));
         // the stone table gives itself; a golem press gives back what each part of it was made from
         dropSelf(ModBlocks.STONE_TABLE.get());
+        dropSelf(ModBlocks.WOODEN_TABLE.get());
         add(ModBlocks.AMBIENT_GRASS.get(), block -> createSingleItemTableWithSilkTouch(block, Blocks.DIRT));
         dropOther(ModBlocks.GOLEM_PRESS.get(), Blocks.PISTON);
         add(ModBlocks.GOLEM_PRESS_PART.get(), block -> {
