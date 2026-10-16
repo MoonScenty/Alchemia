@@ -83,8 +83,12 @@ public class TaintedAnimalTests {
     @GameTest(template = TEMPLATE)
     public static void aPoisonedZombieLeavesASlime(GameTestHelper helper) {
         var zombie = poisoned(helper, EntityType.ZOMBIE);
+        // a baby zombie would leave a smaller slime, and a neighbouring test's slime is not this one's
+        if (zombie instanceof net.minecraft.world.entity.monster.Zombie grown) {
+            grown.setBaby(false);
+        }
         zombie.kill();
-        var slimes = around(helper, AlchemicSlime.class);
+        var slimes = helper.getLevel().getEntitiesOfClass(AlchemicSlime.class, zombie.getBoundingBox().inflate(1.0));
         helper.assertTrue(slimes.size() == 1 && slimes.getFirst().getSize() == 3, "a slime of three");
         helper.succeed();
     }

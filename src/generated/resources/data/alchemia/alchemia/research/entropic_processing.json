@@ -1,0 +1,40 @@
+{
+  "category": "alchemia:alchemy",
+  "column": -3,
+  "icon": "minecraft:bone_meal",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.entropic_processing.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:bone_meal_from_bone"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:blaze_powder_from_blaze_rod"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:leather_from_rotten_flesh"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:string_from_wool"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:mycelium_from_dirt"
+    }
+  ],
+  "parents": [
+    "alchemia:tallow"
+  ],
+  "requirements": {
+    "alchemia:aqua": 3,
+    "alchemia:perditio": 6,
+    "alchemia:potentia": 3
+  },
+  "row": 0
+}

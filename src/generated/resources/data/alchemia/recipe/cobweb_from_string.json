@@ -1,0 +1,14 @@
+{
+  "type": "alchemia:crucible",
+  "aspects": {
+    "alchemia:vinculum": 2
+  },
+  "catalyst": {
+    "item": "minecraft:string"
+  },
+  "research": "alchemia:alchemical_manufacture",
+  "result": {
+    "count": 1,
+    "id": "minecraft:cobweb"
+  }
+}

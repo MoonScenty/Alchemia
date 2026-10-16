@@ -1,0 +1,15 @@
+{
+  "type": "alchemia:crucible",
+  "aspects": {
+    "alchemia:lux": 3,
+    "alchemia:sensus": 1
+  },
+  "catalyst": {
+    "tag": "c:dusts/glowstone"
+  },
+  "research": "alchemia:alchemical_duplication",
+  "result": {
+    "count": 2,
+    "id": "minecraft:glowstone_dust"
+  }
+}

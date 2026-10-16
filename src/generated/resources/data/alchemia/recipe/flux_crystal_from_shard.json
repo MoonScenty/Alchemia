@@ -1,0 +1,25 @@
+{
+  "type": "alchemia:infusion",
+  "central": {
+    "item": "alchemia:flux_shard"
+  },
+  "essentia": {
+    "alchemia:vinculum": 4,
+    "alchemia:vitium": 8,
+    "alchemia:vitreus": 8
+  },
+  "instability": 4,
+  "research": "alchemia:crystal_farmer",
+  "result": {
+    "count": 1,
+    "id": "alchemia:flux_crystal"
+  },
+  "ring": [
+    {
+      "item": "minecraft:wheat_seeds"
+    },
+    {
+      "item": "alchemia:salis_mundus"
+    }
+  ]
+}

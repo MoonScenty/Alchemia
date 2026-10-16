@@ -1,0 +1,15 @@
+{
+  "type": "alchemia:crucible",
+  "aspects": {
+    "alchemia:gelum": 1,
+    "alchemia:ordo": 1
+  },
+  "catalyst": {
+    "item": "minecraft:snow_block"
+  },
+  "research": "alchemia:alchemical_manufacture",
+  "result": {
+    "count": 1,
+    "id": "minecraft:ice"
+  }
+}

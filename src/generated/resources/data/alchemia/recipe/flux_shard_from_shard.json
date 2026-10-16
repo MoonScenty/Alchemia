@@ -1,0 +1,15 @@
+{
+  "type": "alchemia:crucible",
+  "aspects": {
+    "alchemia:perditio": 4,
+    "alchemia:vitium": 4
+  },
+  "catalyst": {
+    "tag": "alchemia:shards"
+  },
+  "research": "alchemia:taint_shard",
+  "result": {
+    "count": 1,
+    "id": "alchemia:flux_shard"
+  }
+}

@@ -14,7 +14,7 @@
     }
   ],
   "parents": [
-    "alchemia:crucible"
+    "alchemia:alchemical_manufacture"
   ],
   "requirements": {
     "alchemia:herba": 6,

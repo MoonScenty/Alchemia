@@ -1,0 +1,15 @@
+{
+  "type": "alchemia:crucible",
+  "aspects": {
+    "alchemia:metallum": 1,
+    "alchemia:ordo": 1
+  },
+  "catalyst": {
+    "tag": "c:ores/gold"
+  },
+  "research": "alchemia:pure_metal",
+  "result": {
+    "count": 1,
+    "id": "alchemia:gold_cluster"
+  }
+}

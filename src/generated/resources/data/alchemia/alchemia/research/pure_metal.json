@@ -1,0 +1,35 @@
+{
+  "category": "alchemia:alchemy",
+  "column": -2,
+  "icon": "alchemia:iron_cluster",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.pure_metal.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:iron_cluster_from_ore"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:gold_cluster_from_ore"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:copper_cluster_from_ore"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:cinnabar_cluster_from_ore"
+    }
+  ],
+  "parents": [
+    "alchemia:metallurgy"
+  ],
+  "requirements": {
+    "alchemia:metallum": 3,
+    "alchemia:ordo": 3
+  },
+  "row": 3
+}
