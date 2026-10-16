@@ -492,9 +492,14 @@ public class ModBlocks {
     public static final DeferredBlock<me.moonscenty.alchemia.block.AmbientGrassBlock> AMBIENT_GRASS =
             register("ambient_grass", () -> new me.moonscenty.alchemia.block.AmbientGrassBlock(
                     BlockBehaviour.Properties.ofFullCopy(Blocks.GRASS_BLOCK)));
+    /** A wooden table: what scribing tools make a research table of, and a wand an arcane workbench. */
+    public static final DeferredBlock<me.moonscenty.alchemia.block.WoodenTableBlock> WOODEN_TABLE = register("wooden_table",
+            () -> new me.moonscenty.alchemia.block.WoodenTableBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOD).sound(net.minecraft.world.level.block.SoundType.WOOD)
+                    .strength(2.0F).noOcclusion().ignitedByLava()));
     /** A stone table: a slab of stone on four legs, and the anvil's bench in a golem press. */
     public static final DeferredBlock<Block> STONE_TABLE = register("stone_table",
-            () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).noOcclusion()));
+            () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).strength(2.5F, 6.0F).noOcclusion()));
     /**
      * A golem press: its heart, where the piston was, and the four blocks round it that stand in for the bars,
      * the table, the anvil and the cauldron. Neither has an item; both are made where they stand.

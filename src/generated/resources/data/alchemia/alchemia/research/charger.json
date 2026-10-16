@@ -7,6 +7,10 @@
     {
       "type": "text",
       "key": "research.alchemia.charger.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:arcane_workbench_charger"
     }
   ],
   "parents": [

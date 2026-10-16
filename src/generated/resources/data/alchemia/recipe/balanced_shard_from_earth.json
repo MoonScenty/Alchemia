@@ -1,0 +1,18 @@
+{
+  "type": "alchemia:crucible",
+  "aspects": {
+    "alchemia:aer": 2,
+    "alchemia:aqua": 2,
+    "alchemia:ignis": 2,
+    "alchemia:ordo": 2,
+    "alchemia:perditio": 2
+  },
+  "catalyst": {
+    "item": "alchemia:earth_shard"
+  },
+  "research": "alchemia:crucible",
+  "result": {
+    "count": 1,
+    "id": "alchemia:balanced_shard"
+  }
+}

@@ -149,6 +149,7 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
                 ModBlocks.DIOPTRA.get());
         tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.ARCANE_LAMP.get(), ModBlocks.GROWTH_LAMP.get(),
                 ModBlocks.FERTILITY_LAMP.get(), ModBlocks.WATER_JUG.get());
+        tag(BlockTags.MINEABLE_WITH_AXE).add(ModBlocks.WOODEN_TABLE.get());
         tag(BlockTags.MINEABLE_WITH_AXE).add(ModBlocks.RESEARCH_TABLE.get(), ModBlocks.ARCANE_WORKBENCH.get(),
                 ModBlocks.ARCANE_WORKBENCH_CHARGER.get());
 

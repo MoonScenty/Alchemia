@@ -732,6 +732,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         addItem(ModItems.VISION_MODULE, pick("Vision Module", "시야 모듈"));
         addItem(ModItems.AGGRESSION_MODULE, pick("Aggression Module", "공격 모듈"));
         addBlock(ModBlocks.STONE_TABLE, pick("Stone Table", "돌 탁자"));
+        addBlock(ModBlocks.WOODEN_TABLE, pick("Wooden Table", "나무 탁자"));
         addBlock(ModBlocks.GOLEM_PRESS, pick("Golem Press", "골렘 프레스"));
         addBlock(ModBlocks.GOLEM_PRESS_PART, pick("Golem Press", "골렘 프레스"));
 
@@ -1019,8 +1020,8 @@ public abstract class ModLanguageProvider extends LanguageProvider {
 
         String[][] research = {
                 {"aspects", "Aspects", "상",
-                 "Everything is made of six primal essences and the things they combine into. An alchemometer will name them for you, one object at a time, and what it names is written down here as you go.",
-                 "모든 것은 여섯 가지 원시 정수와 그것들이 결합한 것으로 이루어져 있다. 알케모미터는 한 번에 하나씩 그것들의 이름을 알려주며, 알아낸 이름은 이곳에 차곡차곡 적힌다."},
+                 "Everything is made of six primal essences and the things they combine into. An alchemometer will name them for you, one object at a time, and what it names is written down here as you go. To work out what you have found, set scribing tools down on a wooden table: it becomes a research table.",
+                 "모든 것은 여섯 가지 원시 정수와 그것들이 결합한 것으로 이루어져 있다. 알케모미터는 한 번에 하나씩 그것들의 이름을 알려주며, 알아낸 이름은 이곳에 차곡차곡 적힌다. 알아낸 것을 연구하려면 나무 탁자에 필기구를 올려 두어라. 연구 탁자가 된다."},
                 {"amber", "Amber", "호박",
                  "Sap that hardened around something long ago, and held it there. It breaks out of the ore whole, and takes a polish that the stone around it never will.",
                  "오래전 무언가를 감싼 채 굳어버린 수액. 그것은 아직 갇혀 있다. 광석에서 통째로 떨어져 나오며, 주변의 돌은 결코 내지 못할 광택을 낸다."},
@@ -1040,8 +1041,8 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                  "A rod with a cap at each end, and nothing else. The caps let vis in and out; the rod decides how much of it will sit still. Held in a hand it fills itself from the air, slowly, wherever the aura has not been worked out.",
                  "양 끝에 캡을 씌운 막대, 그게 전부다. 캡은 비스가 드나드는 문이고, 막대는 얼마나 머무를지를 정한다. 손에 들고 있으면 오라가 마르지 않은 곳에서 천천히 스스로 찬다."},
                 {"arcane_workbench", "Arcane Workbench", "비전 작업대",
-                 "A bench with a cloth laid over it and a place to set a wand down. What is shaped here costs vis as well as materials, and the vis comes out of the wand — so the bench is only ever as good as what is lying on it.",
-                 "천을 덮고 완드를 놓을 자리를 낸 작업대. 여기서 만드는 것은 재료 말고도 비스를 먹으며, 그 비스는 완드에서 나온다. 그러니 작업대는 그 위에 놓인 것만큼만 쓸모가 있다."},
+                 "A bench with a cloth laid over it and a place to set a wand down. Lay a wand on a wooden table and it becomes one. What is shaped here costs vis as well as materials, and the vis comes out of the wand — so the bench is only ever as good as what is lying on it.",
+                 "천을 덮고 완드를 놓을 자리를 낸 작업대. 나무 탁자에 완드를 올려 두면 이것이 된다. 여기서 만드는 것은 재료 말고도 비스를 먹으며, 그 비스는 완드에서 나온다. 그러니 작업대는 그 위에 놓인 것만큼만 쓸모가 있다."},
                 {"charger", "Charger", "충전기",
                  "Four posts and a crystal, standing over a workbench. It fills the wand left below it and does nothing else — no faster than a hand would, but a hand has other work to do.",
                  "작업대 위에 세우는 기둥 넷과 결정 하나. 아래 놓인 완드를 채우는 것 말고는 아무것도 하지 않는다. 손에 쥐는 것보다 빠르지도 않지만, 손은 다른 일을 해야 한다."},
