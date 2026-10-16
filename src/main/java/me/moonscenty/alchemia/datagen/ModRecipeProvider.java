@@ -448,6 +448,13 @@ public class ModRecipeProvider extends RecipeProvider {
                         'C', Ingredient.of(ModItems.SHARDS.get(CrystalType.ORDER)),
                         'S', Ingredient.of(Items.SMOOTH_STONE_SLAB)),
                 "TGC", "SSS");
+        // four arcane bricks round a fire and an order shard make four barrier stones
+        arcane(output, "barrier_stone", "barrier_stone", new ItemStack(ModBlocks.BARRIER_STONE.get(), 4),
+                AspectList.of(ModAspects.FIRE, 50).add(ModAspects.ORDER, 50),
+                Map.of('S', Ingredient.of(ModBlocks.ARCANE_STONE_BRICKS.block()),
+                        'A', Ingredient.of(ModItems.SHARDS.get(CrystalType.FIRE)),
+                        'B', Ingredient.of(ModItems.SHARDS.get(CrystalType.ORDER))),
+                "SAS", "SBS");
         arcane(output, "arcane_ear", "arcane_ear", new ItemStack(ModBlocks.ARCANE_EAR.get()),
                 AspectList.of(ModAspects.AIR, 10).add(ModAspects.ORDER, 5),
                 Map.of('P', Ingredient.of(ModItems.BRASS_PLATE),

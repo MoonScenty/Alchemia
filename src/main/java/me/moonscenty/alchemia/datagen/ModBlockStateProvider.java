@@ -265,6 +265,14 @@ public class ModBlockStateProvider extends BlockStateProvider {
         outerStone();
         // a hole is the absence of a block, so there is nothing to draw and nothing to draw it with
         simpleBlock(ModBlocks.HOLE.get(), models().getExistingFile(mcLoc("block/air")));
+        simpleBlock(ModBlocks.WARDING_AURA.get(), models().getExistingFile(mcLoc("block/air")));
+        // the original's barrier stone: farmland's shape, its rune on top and arcane brick round the sides
+        var barrier = models().withExistingParent("barrier_stone", mcLoc("block/farmland"))
+                .texture("dirt", modLoc("block/arcane_stone_bricks"))
+                .texture("top", modLoc("block/barrier_stone"))
+                .texture("particle", modLoc("block/barrier_stone"));
+        simpleBlock(ModBlocks.BARRIER_STONE.get(), barrier);
+        simpleBlockItem(ModBlocks.BARRIER_STONE.get(), barrier);
     }
 
     /** A furnace in every way the blockstate cares about: it faces somewhere, and it is lit or it is not. */

@@ -1,0 +1,24 @@
+{
+  "category": "alchemia:artifice",
+  "column": 3,
+  "icon": "alchemia:barrier_stone",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.barrier_stone.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:barrier_stone"
+    }
+  ],
+  "parents": [
+    "alchemia:arcane_stone"
+  ],
+  "requirements": {
+    "alchemia:motus": 3,
+    "alchemia:perditio": 3,
+    "alchemia:terra": 3
+  },
+  "row": 3
+}

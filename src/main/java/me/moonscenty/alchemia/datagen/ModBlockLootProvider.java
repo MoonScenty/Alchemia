@@ -137,6 +137,7 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
         dropSelf(ModBlocks.LEVITATOR.get());
         dropSelf(ModBlocks.REDSTONE_RELAY.get());
         dropSelf(ModBlocks.ARCANE_EAR.get());
+        dropSelf(ModBlocks.BARRIER_STONE.get());
         dropSelf(ModBlocks.FLESH_BLOCK.get());
         dropSelf(ModBlocks.PATTERN_CRAFTER.get());
         dropSelf(ModBlocks.ESSENTIA_INPUT.get());
