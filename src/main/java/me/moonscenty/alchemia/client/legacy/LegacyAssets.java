@@ -1154,6 +1154,7 @@ public final class LegacyAssets {
         all.add(block("arcane_stone_3", "arcane_stone_3", null));
         all.add(block("arcane_stone_bricks", "arcane_brick_stone", "arcane_stone"));
         all.add(block("barrier_stone", "paving_stone_barrier", "paving_stone_warding"));
+        all.add(block("travel_stone", "paving_stone_travel", "paving_stone_travel"));
     }
 
     private static LegacyAsset shard(String name, Supplier<Aspect> aspect) {

@@ -1,0 +1,24 @@
+{
+  "category": "alchemia:artifice",
+  "column": 4,
+  "icon": "alchemia:travel_stone",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.travel_stone.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:travel_stone"
+    }
+  ],
+  "parents": [
+    "alchemia:arcane_stone"
+  ],
+  "requirements": {
+    "alchemia:aer": 3,
+    "alchemia:motus": 3,
+    "alchemia:terra": 3
+  },
+  "row": 3
+}
