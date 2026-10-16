@@ -71,6 +71,8 @@ public final class AspectBonuses {
         FROM_ENCHANTMENT.put(Enchantments.BREACH, ModAspects.AVERSION);
         FROM_ENCHANTMENT.put(Enchantments.DENSITY, ModAspects.AVERSION);
         FROM_ENCHANTMENT.put(Enchantments.WIND_BURST, ModAspects.AIR);
+        FROM_ENCHANTMENT.put(me.moonscenty.alchemia.enchantment.ModEnchantments.HASTE, ModAspects.MOTION);
+        FROM_ENCHANTMENT.put(me.moonscenty.alchemia.enchantment.ModEnchantments.REPAIR, ModAspects.TOOL);
     }
 
     private AspectBonuses() {

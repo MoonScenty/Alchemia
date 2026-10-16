@@ -32,9 +32,7 @@ import net.minecraft.world.level.Level;
  * as much desire as there is in it, if there is more than one. A trade is worth what was offered, give or take, and
  * the pech pays it out in lots of one to five, each lot a thing from its own list of that worth.
  *
- * <p>Each kind of pech keeps its own list, the original's. What this game does not have is left off -- the
- * the book of the original's repair enchantment -- and a lot nothing on
- * the list is worth is paid in the nearest worth there is.
+ * <p>Each kind of pech keeps its own list, the original's. A lot nothing on the list is worth is paid in the nearest worth there is.
  */
 public final class PechTrades {
     /** A lot: what it is worth, and how to make one. */
@@ -141,6 +139,7 @@ public final class PechTrades {
         lots.add(item(4, ModItems.ROBES.get("cloth_chest").get()));
         lots.add(item(4, ModItems.ROBES.get("cloth_legs").get()));
         lots.add(item(5, Items.ENCHANTED_GOLDEN_APPLE));
+        lots.add(book(5, me.moonscenty.alchemia.enchantment.ModEnchantments.REPAIR));
         lots.add(item(5, ModItems.FOCI.get("pech").get()));
         lots.add(item(5, ModItems.VIS_STONE.get()));
         return List.copyOf(lots);

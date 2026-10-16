@@ -99,6 +99,8 @@ public class ModTags {
         public static final TagKey<Item> FOCI = mod("foci");
         /** What haste goes on: boots of any kind, and the thaumostatic harness. */
         public static final TagKey<Item> HASTE_ENCHANTABLE = mod("enchantable/haste");
+        /** What repair goes on: the original's own tools, weapons and armour, the ones it called repairable. */
+        public static final TagKey<Item> REPAIR_ENCHANTABLE = mod("enchantable/repair");
         /** Things whose making leaves a point of sticking warp on whoever made them. */
         public static final TagKey<Item> WARPS_WHEN_MADE = mod("warps_when_made");
 

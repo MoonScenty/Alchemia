@@ -194,6 +194,12 @@ public class ArcaneBoreBlockEntity extends BlockEntity implements Container, Men
         if (bore.speedy < 1 && bore.powered < DRAWS) {
             bore.powered += AuraHandler.drainAvailable(level, pos, ModAspects.ENTROPY, DRAWS);
         }
+        // repair on the pickaxe mends it here as it would in a hand
+        if (level.getGameTime() % me.moonscenty.alchemia.enchantment.Repair.EVERY == 0
+                && me.moonscenty.alchemia.enchantment.Repair.mend(bore.contents.get(SLOT_PICK), level, pos,
+                        level.random)) {
+            bore.setChanged();
+        }
         if (bore.powered(level) && bore.ready() && level instanceof ServerLevel served) {
             bore.dig(served, base);
         }
