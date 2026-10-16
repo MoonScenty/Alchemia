@@ -1,0 +1,15 @@
+{
+  "type": "alchemia:crucible",
+  "aspects": {
+    "alchemia:aqua": 1,
+    "alchemia:terra": 1
+  },
+  "catalyst": {
+    "item": "minecraft:dirt"
+  },
+  "research": "alchemia:alchemical_manufacture",
+  "result": {
+    "count": 1,
+    "id": "minecraft:clay_ball"
+  }
+}

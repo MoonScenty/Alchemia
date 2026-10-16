@@ -1,0 +1,24 @@
+{
+  "category": "alchemia:alchemy",
+  "column": -4,
+  "icon": "alchemia:flux_shard",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.taint_shard.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:flux_shard_from_shard"
+    }
+  ],
+  "parents": [
+    "alchemia:entropic_processing"
+  ],
+  "requirements": {
+    "alchemia:auram": 3,
+    "alchemia:perditio": 5,
+    "alchemia:vitium": 5
+  },
+  "row": 0
+}

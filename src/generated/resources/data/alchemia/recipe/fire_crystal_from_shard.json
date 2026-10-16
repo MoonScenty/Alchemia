@@ -1,0 +1,24 @@
+{
+  "type": "alchemia:infusion",
+  "central": {
+    "item": "alchemia:fire_shard"
+  },
+  "essentia": {
+    "alchemia:ignis": 8,
+    "alchemia:vinculum": 4,
+    "alchemia:vitreus": 8
+  },
+  "research": "alchemia:crystal_farmer",
+  "result": {
+    "count": 1,
+    "id": "alchemia:fire_crystal"
+  },
+  "ring": [
+    {
+      "item": "minecraft:wheat_seeds"
+    },
+    {
+      "item": "alchemia:salis_mundus"
+    }
+  ]
+}

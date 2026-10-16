@@ -1,0 +1,28 @@
+{
+  "category": "alchemia:alchemy",
+  "column": -1,
+  "icon": "minecraft:gold_nugget",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.trans_metal.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:iron_nugget_transmutation"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:gold_nugget_transmutation"
+    }
+  ],
+  "parents": [
+    "alchemia:metallurgy"
+  ],
+  "requirements": {
+    "alchemia:metallum": 3,
+    "alchemia:permutatio": 3,
+    "alchemia:vitium": 3
+  },
+  "row": 4
+}

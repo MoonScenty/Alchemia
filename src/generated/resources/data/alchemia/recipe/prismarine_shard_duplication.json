@@ -1,0 +1,15 @@
+{
+  "type": "alchemia:crucible",
+  "aspects": {
+    "alchemia:aqua": 2,
+    "alchemia:terra": 1
+  },
+  "catalyst": {
+    "item": "minecraft:prismarine_shard"
+  },
+  "research": "alchemia:alchemical_duplication",
+  "result": {
+    "count": 2,
+    "id": "minecraft:prismarine_shard"
+  }
+}

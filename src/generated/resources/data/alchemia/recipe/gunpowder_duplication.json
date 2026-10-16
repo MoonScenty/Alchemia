@@ -1,0 +1,15 @@
+{
+  "type": "alchemia:crucible",
+  "aspects": {
+    "alchemia:ignis": 4,
+    "alchemia:perditio": 4
+  },
+  "catalyst": {
+    "item": "minecraft:gunpowder"
+  },
+  "research": "alchemia:alchemical_duplication",
+  "result": {
+    "count": 2,
+    "id": "minecraft:gunpowder"
+  }
+}

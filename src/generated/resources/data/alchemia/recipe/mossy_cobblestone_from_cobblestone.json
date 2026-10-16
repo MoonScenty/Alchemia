@@ -1,0 +1,14 @@
+{
+  "type": "alchemia:crucible",
+  "aspects": {
+    "alchemia:herba": 2
+  },
+  "catalyst": {
+    "item": "minecraft:cobblestone"
+  },
+  "research": "alchemia:alchemical_manufacture",
+  "result": {
+    "count": 1,
+    "id": "minecraft:mossy_cobblestone"
+  }
+}

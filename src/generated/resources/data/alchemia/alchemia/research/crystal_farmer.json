@@ -1,0 +1,54 @@
+{
+  "category": "alchemia:basics",
+  "column": 1,
+  "complexity": 2,
+  "icon": "alchemia:air_crystal",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.crystal_farmer.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:air_crystal_from_shard"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:fire_crystal_from_shard"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:water_crystal_from_shard"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:earth_crystal_from_shard"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:order_crystal_from_shard"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:entropy_crystal_from_shard"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:flux_crystal_from_shard"
+    }
+  ],
+  "parents": [
+    "alchemia:infusion"
+  ],
+  "requirements": {
+    "alchemia:aer": 3,
+    "alchemia:aqua": 3,
+    "alchemia:ignis": 3,
+    "alchemia:ordo": 3,
+    "alchemia:perditio": 3,
+    "alchemia:terra": 3,
+    "alchemia:vitium": 3,
+    "alchemia:vitreus": 3
+  },
+  "row": 1
+}

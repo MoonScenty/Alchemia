@@ -1,0 +1,14 @@
+{
+  "type": "alchemia:crucible",
+  "aspects": {
+    "alchemia:perditio": 1
+  },
+  "catalyst": {
+    "tag": "minecraft:wool"
+  },
+  "research": "alchemia:entropic_processing",
+  "result": {
+    "count": 4,
+    "id": "minecraft:string"
+  }
+}

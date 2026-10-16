@@ -1,0 +1,44 @@
+{
+  "category": "alchemia:alchemy",
+  "column": -3,
+  "icon": "minecraft:gunpowder",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.alchemical_duplication.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:gunpowder_duplication"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:slime_ball_duplication"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:glowstone_dust_duplication"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:ink_sac_duplication"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:prismarine_crystals_duplication"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:prismarine_shard_duplication"
+    }
+  ],
+  "parents": [
+    "alchemia:tallow"
+  ],
+  "requirements": {
+    "alchemia:aqua": 3,
+    "alchemia:desiderium": 6,
+    "alchemia:potentia": 3
+  },
+  "row": 1
+}

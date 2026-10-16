@@ -1,0 +1,44 @@
+{
+  "category": "alchemia:alchemy",
+  "column": -3,
+  "icon": "minecraft:clay_ball",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.alchemical_manufacture.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:clay_ball_from_dirt"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:cobweb_from_string"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:mossy_cobblestone_from_cobblestone"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:ice_from_snow"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:lava_bucket_from_bucket"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:grass_block_from_dirt"
+    }
+  ],
+  "parents": [
+    "alchemia:tallow"
+  ],
+  "requirements": {
+    "alchemia:aqua": 3,
+    "alchemia:fabrico": 6,
+    "alchemia:potentia": 3
+  },
+  "row": 3
+}

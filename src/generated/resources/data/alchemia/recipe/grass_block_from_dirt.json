@@ -1,0 +1,14 @@
+{
+  "type": "alchemia:crucible",
+  "aspects": {
+    "alchemia:herba": 1
+  },
+  "catalyst": {
+    "item": "minecraft:dirt"
+  },
+  "research": "alchemia:alchemical_manufacture",
+  "result": {
+    "count": 1,
+    "id": "minecraft:grass_block"
+  }
+}

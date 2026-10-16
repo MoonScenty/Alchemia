@@ -1,0 +1,15 @@
+{
+  "type": "alchemia:crucible",
+  "aspects": {
+    "alchemia:ignis": 4,
+    "alchemia:terra": 2
+  },
+  "catalyst": {
+    "item": "minecraft:bucket"
+  },
+  "research": "alchemia:alchemical_manufacture",
+  "result": {
+    "count": 1,
+    "id": "minecraft:lava_bucket"
+  }
+}

@@ -46,6 +46,14 @@ public class ModResearchProvider {
                 "scribing_tools", "scribing_tools_from_bottle", "scribing_tools_refill");
 
         // the original's own enchantments, known from the start
+        // shards grown into clusters that take root on stone
+        entry(context, "crystal_farmer", ModResearch.BASICS, ModBlocks.CRYSTALS.get(CrystalType.AIR), 1, 1,
+                AspectList.of(ModAspects.CRYSTAL, 3).add(ModAspects.FLUX, 3).add(ModAspects.AIR, 3)
+                        .add(ModAspects.FIRE, 3).add(ModAspects.WATER, 3).add(ModAspects.EARTH, 3)
+                        .add(ModAspects.ORDER, 3).add(ModAspects.ENTROPY, 3),
+                List.of("infusion"), false, NodeShape.PLAIN, 2, "air_crystal_from_shard", "fire_crystal_from_shard",
+                "water_crystal_from_shard", "earth_crystal_from_shard", "order_crystal_from_shard",
+                "entropy_crystal_from_shard", "flux_crystal_from_shard");
         entry(context, "enchantments", ModResearch.BASICS, net.minecraft.world.item.Items.ENCHANTED_BOOK, -2, -1,
                 AspectList.EMPTY, List.of(), true, NodeShape.PLAIN, 1);
         entry(context, "amber", ModResearch.BASICS, ModItems.AMBER, -2, 1,
@@ -114,9 +122,30 @@ public class ModResearchProvider {
         entry(context, "distillation", ModResearch.ALCHEMY, ModBlocks.ESSENTIA_SMELTER, 1, 4,
                 AspectList.of(ModAspects.FIRE, 4).add(ModAspects.WATER, 4).add(ModAspects.CRAFT, 4),
                 List.of("crucible"), false, NodeShape.MAJOR, 3, "filter", "essentia_smelter", "alembic");
+        // the original's three ways of working mundane things in the crucible, all after tallow
+        entry(context, "alchemical_duplication", ModResearch.ALCHEMY, net.minecraft.world.item.Items.GUNPOWDER, -3, 1,
+                AspectList.of(ModAspects.WATER, 3).add(ModAspects.DESIRE, 6).add(ModAspects.ENERGY, 3),
+                List.of("tallow"), false, NodeShape.PLAIN, 1, "gunpowder_duplication", "slime_ball_duplication", "glowstone_dust_duplication", "ink_sac_duplication", "prismarine_crystals_duplication", "prismarine_shard_duplication");
+        entry(context, "alchemical_manufacture", ModResearch.ALCHEMY, net.minecraft.world.item.Items.CLAY_BALL, -3, 3,
+                AspectList.of(ModAspects.WATER, 3).add(ModAspects.CRAFT, 6).add(ModAspects.ENERGY, 3),
+                List.of("tallow"), false, NodeShape.PLAIN, 1, "clay_ball_from_dirt", "cobweb_from_string", "mossy_cobblestone_from_cobblestone", "ice_from_snow", "lava_bucket_from_bucket", "grass_block_from_dirt");
+        entry(context, "entropic_processing", ModResearch.ALCHEMY, net.minecraft.world.item.Items.BONE_MEAL, -3, 0,
+                AspectList.of(ModAspects.WATER, 3).add(ModAspects.ENTROPY, 6).add(ModAspects.ENERGY, 3),
+                List.of("tallow"), false, NodeShape.PLAIN, 1, "bone_meal_from_bone", "blaze_powder_from_blaze_rod", "leather_from_rotten_flesh", "string_from_wool", "mycelium_from_dirt");
+        entry(context, "taint_shard", ModResearch.ALCHEMY, ModItems.SHARDS.get(CrystalType.FLUX), -4, 0,
+                AspectList.of(ModAspects.FLUX, 5).add(ModAspects.AURA, 3).add(ModAspects.ENTROPY, 5),
+                List.of("entropic_processing"), false, NodeShape.PLAIN, 1, "flux_shard_from_shard");
+        // ore made a cluster, and nuggets multiplied, both after metallurgy
+        entry(context, "pure_metal", ModResearch.ALCHEMY, ModItems.IRON_CLUSTER, -2, 3,
+                AspectList.of(ModAspects.METAL, 3).add(ModAspects.ORDER, 3),
+                List.of("metallurgy"), false, NodeShape.PLAIN, 1, "iron_cluster_from_ore", "gold_cluster_from_ore", "copper_cluster_from_ore", "cinnabar_cluster_from_ore");
+        entry(context, "trans_metal", ModResearch.ALCHEMY, net.minecraft.world.item.Items.GOLD_NUGGET, -1, 4,
+                AspectList.of(ModAspects.METAL, 3).add(ModAspects.EXCHANGE, 3).add(ModAspects.FLUX, 3),
+                List.of("metallurgy"), false, NodeShape.PLAIN, 1, "iron_nugget_transmutation", "gold_nugget_transmutation");
         entry(context, "ethereal_bloom", ModResearch.ALCHEMY, ModBlocks.ETHEREAL_BLOOM, -4, 2,
                 AspectList.of(ModAspects.LIGHT, 1).add(ModAspects.PLANT, 6).add(ModAspects.LIFE, 3)
-                        .add(ModAspects.FLUX, 6), List.of("crucible"), false, NodeShape.PLAIN, 2, "ethereal_bloom");
+                        .add(ModAspects.FLUX, 6), List.of("alchemical_manufacture"), false, NodeShape.PLAIN, 2,
+                "ethereal_bloom");
         entry(context, "jar_void", ModResearch.ALCHEMY, ModBlocks.VOID_JAR, 0, 6,
                 AspectList.of(ModAspects.WATER, 3).add(ModAspects.VOID, 6), List.of("jar_label"), false,
                 NodeShape.PLAIN, 1, "void_jar");

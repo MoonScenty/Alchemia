@@ -1,0 +1,15 @@
+{
+  "type": "alchemia:crucible",
+  "aspects": {
+    "alchemia:herba": 1,
+    "alchemia:perditio": 1
+  },
+  "catalyst": {
+    "item": "minecraft:dirt"
+  },
+  "research": "alchemia:entropic_processing",
+  "result": {
+    "count": 1,
+    "id": "minecraft:mycelium"
+  }
+}

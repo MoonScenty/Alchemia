@@ -1,0 +1,16 @@
+{
+  "type": "alchemia:crucible",
+  "aspects": {
+    "alchemia:desiderium": 1,
+    "alchemia:metallum": 2,
+    "alchemia:vitium": 1
+  },
+  "catalyst": {
+    "tag": "c:nuggets/gold"
+  },
+  "research": "alchemia:trans_metal",
+  "result": {
+    "count": 3,
+    "id": "minecraft:gold_nugget"
+  }
+}

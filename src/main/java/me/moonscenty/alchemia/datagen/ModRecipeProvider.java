@@ -1109,6 +1109,14 @@ public class ModRecipeProvider extends RecipeProvider {
                 4, "arcane_bore");
 
         // a warded jar with a zombie's brain in it
+        // the original's crystal farmer: a shard grown into a cluster to plant on stone
+        for (CrystalType type : CrystalType.values()) {
+            infusion(output, type.getName() + "_crystal_from_shard", Ingredient.of(ModItems.SHARDS.get(type)),
+                    List.of(Ingredient.of(Items.WHEAT_SEEDS), Ingredient.of(ModItems.SALIS_MUNDUS)),
+                    new ItemStack(ModBlocks.CRYSTALS.get(type).get()),
+                    AspectList.of(type.aspect(), 8).add(ModAspects.CRYSTAL, 8).add(ModAspects.TRAP, 4),
+                    type == CrystalType.FLUX ? 4 : 0, "crystal_farmer");
+        }
         infusion(output, "brain_jar", Ingredient.of(ModBlocks.JAR),
                 List.of(Ingredient.of(ModItems.ZOMBIE_BRAIN), Ingredient.of(Items.SPIDER_EYE),
                         Ingredient.of(Items.WATER_BUCKET), Ingredient.of(Items.SPIDER_EYE)),
@@ -1373,6 +1381,56 @@ public class ModRecipeProvider extends RecipeProvider {
     }
 
     private void crucible(RecipeOutput output) {
+        // the original's alchemical duplication, manufacture and entropic processing, metal purification and
+        // transmutation, and the taint shard
+        crucible(output, "gunpowder_duplication", Ingredient.of(Items.GUNPOWDER), AspectList.of(ModAspects.FIRE, 4).add(ModAspects.ENTROPY, 4),
+                new ItemStack(Items.GUNPOWDER, 2), "alchemical_duplication");
+        crucible(output, "slime_ball_duplication", Ingredient.of(Items.SLIME_BALL), AspectList.of(ModAspects.WATER, 2).add(ModAspects.LIFE, 1),
+                new ItemStack(Items.SLIME_BALL, 2), "alchemical_duplication");
+        crucible(output, "glowstone_dust_duplication", Ingredient.of(Tags.Items.DUSTS_GLOWSTONE), AspectList.of(ModAspects.LIGHT, 3).add(ModAspects.SENSES, 1),
+                new ItemStack(Items.GLOWSTONE_DUST, 2), "alchemical_duplication");
+        crucible(output, "ink_sac_duplication", Ingredient.of(Items.INK_SAC), AspectList.of(ModAspects.WATER, 2).add(ModAspects.SENSES, 2),
+                new ItemStack(Items.INK_SAC, 2), "alchemical_duplication");
+        crucible(output, "prismarine_crystals_duplication", Ingredient.of(Items.PRISMARINE_CRYSTALS), AspectList.of(ModAspects.WATER, 1).add(ModAspects.CRYSTAL, 2).add(ModAspects.LIGHT, 1),
+                new ItemStack(Items.PRISMARINE_CRYSTALS, 2), "alchemical_duplication");
+        crucible(output, "prismarine_shard_duplication", Ingredient.of(Items.PRISMARINE_SHARD), AspectList.of(ModAspects.WATER, 2).add(ModAspects.EARTH, 1),
+                new ItemStack(Items.PRISMARINE_SHARD, 2), "alchemical_duplication");
+        crucible(output, "clay_ball_from_dirt", Ingredient.of(Items.DIRT), AspectList.of(ModAspects.WATER, 1).add(ModAspects.EARTH, 1),
+                new ItemStack(Items.CLAY_BALL), "alchemical_manufacture");
+        crucible(output, "cobweb_from_string", Ingredient.of(Items.STRING), AspectList.of(ModAspects.TRAP, 2),
+                new ItemStack(Items.COBWEB), "alchemical_manufacture");
+        crucible(output, "mossy_cobblestone_from_cobblestone", Ingredient.of(Items.COBBLESTONE), AspectList.of(ModAspects.PLANT, 2),
+                new ItemStack(Items.MOSSY_COBBLESTONE), "alchemical_manufacture");
+        crucible(output, "ice_from_snow", Ingredient.of(Items.SNOW_BLOCK), AspectList.of(ModAspects.ORDER, 1).add(ModAspects.COLD, 1),
+                new ItemStack(Items.ICE), "alchemical_manufacture");
+        crucible(output, "lava_bucket_from_bucket", Ingredient.of(Items.BUCKET), AspectList.of(ModAspects.EARTH, 2).add(ModAspects.FIRE, 4),
+                new ItemStack(Items.LAVA_BUCKET), "alchemical_manufacture");
+        crucible(output, "grass_block_from_dirt", Ingredient.of(Items.DIRT), AspectList.of(ModAspects.PLANT, 1),
+                new ItemStack(Items.GRASS_BLOCK), "alchemical_manufacture");
+        crucible(output, "bone_meal_from_bone", Ingredient.of(Items.BONE), AspectList.of(ModAspects.ENTROPY, 1),
+                new ItemStack(Items.BONE_MEAL, 4), "entropic_processing");
+        crucible(output, "blaze_powder_from_blaze_rod", Ingredient.of(Items.BLAZE_ROD), AspectList.of(ModAspects.ENTROPY, 1),
+                new ItemStack(Items.BLAZE_POWDER, 3), "entropic_processing");
+        crucible(output, "leather_from_rotten_flesh", Ingredient.of(Items.ROTTEN_FLESH), AspectList.of(ModAspects.ENTROPY, 1).add(ModAspects.FIRE, 1),
+                new ItemStack(Items.LEATHER), "entropic_processing");
+        crucible(output, "string_from_wool", Ingredient.of(net.minecraft.tags.ItemTags.WOOL), AspectList.of(ModAspects.ENTROPY, 1),
+                new ItemStack(Items.STRING, 4), "entropic_processing");
+        crucible(output, "mycelium_from_dirt", Ingredient.of(Items.DIRT), AspectList.of(ModAspects.ENTROPY, 1).add(ModAspects.PLANT, 1),
+                new ItemStack(Items.MYCELIUM), "entropic_processing");
+        crucible(output, "iron_cluster_from_ore", Ingredient.of(Tags.Items.ORES_IRON), AspectList.of(ModAspects.METAL, 1).add(ModAspects.ORDER, 1),
+                new ItemStack(ModItems.IRON_CLUSTER.get()), "pure_metal");
+        crucible(output, "gold_cluster_from_ore", Ingredient.of(Tags.Items.ORES_GOLD), AspectList.of(ModAspects.METAL, 1).add(ModAspects.ORDER, 1),
+                new ItemStack(ModItems.GOLD_CLUSTER.get()), "pure_metal");
+        crucible(output, "copper_cluster_from_ore", Ingredient.of(Tags.Items.ORES_COPPER), AspectList.of(ModAspects.METAL, 1).add(ModAspects.ORDER, 1),
+                new ItemStack(ModItems.COPPER_CLUSTER.get()), "pure_metal");
+        crucible(output, "cinnabar_cluster_from_ore", Ingredient.of(ModTags.Items.ORES_CINNABAR), AspectList.of(ModAspects.METAL, 1).add(ModAspects.ORDER, 1),
+                new ItemStack(ModItems.CINNABAR_CLUSTER.get()), "pure_metal");
+        crucible(output, "iron_nugget_transmutation", Ingredient.of(Tags.Items.NUGGETS_IRON), AspectList.of(ModAspects.METAL, 2).add(ModAspects.FLUX, 1),
+                new ItemStack(Items.IRON_NUGGET, 3), "trans_metal");
+        crucible(output, "gold_nugget_transmutation", Ingredient.of(Tags.Items.NUGGETS_GOLD), AspectList.of(ModAspects.METAL, 2).add(ModAspects.DESIRE, 1).add(ModAspects.FLUX, 1),
+                new ItemStack(Items.GOLD_NUGGET, 3), "trans_metal");
+        crucible(output, "flux_shard_from_shard", Ingredient.of(ModTags.Items.SHARDS), AspectList.of(ModAspects.FLUX, 4).add(ModAspects.ENTROPY, 4),
+                new ItemStack(ModItems.SHARDS.get(CrystalType.FLUX).get()), "taint_shard");
         // shimmerleaf woken into an ethereal bloom
         crucible(output, "ethereal_bloom", Ingredient.of(ModBlocks.SHIMMERLEAF),
                 AspectList.of(ModAspects.LIGHT, 8).add(ModAspects.PLANT, 16).add(ModAspects.LIFE, 16)
