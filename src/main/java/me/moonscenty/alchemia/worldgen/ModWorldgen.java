@@ -67,6 +67,7 @@ public class ModWorldgen {
 
     public static final ResourceKey<ConfiguredFeature<?, ?>> GREATWOOD_TREE = configured("greatwood_tree");
     public static final ResourceKey<ConfiguredFeature<?, ?>> SILVERWOOD_TREE = configured("silverwood_tree");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> BIG_MAGIC_TREE = configured("big_magic_tree");
 
     public static final ResourceKey<PlacedFeature> GREATWOOD_TREE_PLACED = placed("greatwood_tree");
     public static final ResourceKey<PlacedFeature> SILVERWOOD_TREE_PLACED = placed("silverwood_tree");
@@ -148,6 +149,16 @@ public class ModWorldgen {
                         new NodeInTreeDecorator(0.3F, NodeType.PURE, 0.33F)))
                 .ignoreVines().build()));
 
+        // the original's big magic tree, the magical forest's own oak: the great oak's way of growing, but 11 to 22
+        // blocks to its crown where a great oak stands 5 to 16, and leaf balls three layers deep instead of four
+        context.register(BIG_MAGIC_TREE, new ConfiguredFeature<>(Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
+                BlockStateProvider.simple(Blocks.OAK_LOG),
+                new net.minecraft.world.level.levelgen.feature.trunkplacers.FancyTrunkPlacer(9, 11, 0),
+                BlockStateProvider.simple(Blocks.OAK_LEAVES),
+                new net.minecraft.world.level.levelgen.feature.foliageplacers.FancyFoliagePlacer(ConstantInt.of(2),
+                        ConstantInt.of(3), 3),
+                new TwoLayersFeatureSize(0, 0, 0, java.util.OptionalInt.of(4))).ignoreVines().build()));
+
         context.register(CINDERPEARL_PATCH, new ConfiguredFeature<>(Feature.FLOWER, FeatureUtils.simpleRandomPatchConfiguration(18,
                 PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK,
                         new SimpleBlockConfiguration(BlockStateProvider.simple(ModBlocks.CINDERPEARL.get()))))));
@@ -159,7 +170,7 @@ public class ModWorldgen {
                 NoneFeatureConfiguration.INSTANCE));
         context.register(MOUND, new ConfiguredFeature<>(ModFeatures.MOUND.get(), NoneFeatureConfiguration.INSTANCE));
 
-        // the magical forest's trees: mostly great oaks, one in ten of the rest a greatwood, one in fourteen of all a
+        // the magical forest's trees: mostly big magic trees, one in ten of the rest a greatwood, one in fourteen of all a
         // silverwood, each only where its sapling could stand
         HolderGetter<ConfiguredFeature<?, ?>> features = context.lookup(Registries.CONFIGURED_FEATURE);
         context.register(MAGICAL_FOREST_TREES, new ConfiguredFeature<>(Feature.RANDOM_SELECTOR,
@@ -173,7 +184,7 @@ public class ModWorldgen {
                                 PlacementUtils.filteredByBlockSurvival(ModBlocks.GREATWOOD.sapling().get())),
                                 13.0F / 140.0F)),
                         PlacementUtils.inlinePlaced(
-                                features.getOrThrow(TreeFeatures.FANCY_OAK),
+                                features.getOrThrow(BIG_MAGIC_TREE),
                                 PlacementUtils.filteredByBlockSurvival(Blocks.OAK_SAPLING)))));
         // huge mushrooms, brown or red
         context.register(MAGICAL_FOREST_MUSHROOMS, new ConfiguredFeature<>(Feature.RANDOM_BOOLEAN_SELECTOR,
