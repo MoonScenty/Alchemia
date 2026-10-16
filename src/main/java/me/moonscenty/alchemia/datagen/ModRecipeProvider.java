@@ -813,6 +813,12 @@ public class ModRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_glass", has(Tags.Items.GLASS_BLOCKS))
                 .save(output);
 
+        // obsidian over a jar over blaze powder, the original's
+        arcane(output, "void_jar", "jar_void", new ItemStack(ModBlocks.VOID_JAR.get()),
+                AspectList.of(ModAspects.WATER, 25).add(ModAspects.ENTROPY, 25),
+                Map.of('O', Ingredient.of(Items.OBSIDIAN), 'J', Ingredient.of(ModBlocks.JAR),
+                        'P', Ingredient.of(Items.BLAZE_POWDER)),
+                "O", "J", "P");
         arcane(output, "jar", "jar_label", new ItemStack(ModBlocks.JAR.get()),
                 AspectList.of(ModAspects.WATER, 5),
                 Map.of('G', Ingredient.of(Tags.Items.GLASS_PANES),
@@ -1367,6 +1373,11 @@ public class ModRecipeProvider extends RecipeProvider {
     }
 
     private void crucible(RecipeOutput output) {
+        // shimmerleaf woken into an ethereal bloom
+        crucible(output, "ethereal_bloom", Ingredient.of(ModBlocks.SHIMMERLEAF),
+                AspectList.of(ModAspects.LIGHT, 8).add(ModAspects.PLANT, 16).add(ModAspects.LIFE, 16)
+                        .add(ModAspects.FLUX, 16),
+                new ItemStack(ModBlocks.ETHEREAL_BLOOM.get()), "ethereal_bloom");
         // a balanced shard out of any primal shard, with two of each of the other five
         for (CrystalType from : new CrystalType[] {CrystalType.AIR, CrystalType.FIRE, CrystalType.WATER,
                 CrystalType.EARTH, CrystalType.ORDER, CrystalType.ENTROPY}) {

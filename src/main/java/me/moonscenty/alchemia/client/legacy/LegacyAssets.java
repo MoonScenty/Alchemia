@@ -525,6 +525,9 @@ public final class LegacyAssets {
             for (String kind : List.of("jar", "jar_labelled")) {
                 String path = "models/block/jar/" + kind + fill + ".json";
                 all.add(LegacyAsset.of(path).five("models/block/jar_normal.json").asModelOver(path));
+                // and the void jar's darker glass under the same liquid and label
+                all.add(LegacyAsset.of("models/block/void_jar/" + kind + fill + ".json")
+                        .five("models/block/jar_void.json").asModelOver(path));
             }
         }
         // the tubes: the original's mesh, and the one sheet every kind is cut from
@@ -537,7 +540,8 @@ public final class LegacyAssets {
                 "tube_buffer")) {
             all.add(LegacyAsset.of("textures/item/legacy/" + tube + ".png").five("textures/items/" + tube + ".png"));
         }
-        for (String face : List.of("jar_side", "jar_top", "jar_bottom", "animatedglow")) {
+        for (String face : List.of("jar_side", "jar_top", "jar_bottom", "jar_side_void", "jar_top_void",
+                "animatedglow")) {
             all.add(LegacyAsset.of("textures/block/legacy/" + face + ".png").five("textures/blocks/" + face + ".png"));
         }
         // the crucible is the original's model file, which names its pictures where the original kept them
@@ -1142,6 +1146,13 @@ public final class LegacyAssets {
 
         // the three plants
         all.add(block("shimmerleaf", "shimmerleaf", "shimmerleaf"));
+        // the ethereal bloom: its picture in the hand, and the sheets its renderer grows it from
+        all.add(block("ethereal_bloom", "bloom", null));
+        all.add(LegacyAsset.of("textures/entity/bloom_leaves.png").five("textures/models/bloom_leaves.png"));
+        all.add(LegacyAsset.of("textures/entity/bloom_stalk.png").five("textures/models/bloom_stalk.png"));
+        all.add(LegacyAsset.of("textures/entity/crystal_capacitor.png").five("textures/models/crystalcapacitor.png"));
+        all.add(LegacyAsset.of("textures/entity/bloom_glow.png").five("textures/misc/nodes.png")
+                .cropped(0, 6 * NODE_CELL, 32 * NODE_CELL, NODE_CELL));
         all.add(block("cinderpearl", "cinderpearl", "cinderpearl"));
         all.add(block("vishroom", "vishroom", "manashroom"));
 

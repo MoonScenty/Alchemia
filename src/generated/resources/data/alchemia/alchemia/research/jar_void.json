@@ -1,0 +1,23 @@
+{
+  "category": "alchemia:alchemy",
+  "column": 0,
+  "icon": "alchemia:void_jar",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.jar_void.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:void_jar"
+    }
+  ],
+  "parents": [
+    "alchemia:jar_label"
+  ],
+  "requirements": {
+    "alchemia:aqua": 3,
+    "alchemia:vacuos": 6
+  },
+  "row": 6
+}

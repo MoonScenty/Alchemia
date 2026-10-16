@@ -52,7 +52,7 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
                 .add(ModBlocks.ALCHEMIUM_SMELTER.get(), ModBlocks.VOID_SMELTER.get(), ModBlocks.SMELTER_AUX.get(),
                         ModBlocks.SMELTER_VENT.get())
                 .add(ModBlocks.CRUCIBLE.get(), ModBlocks.ESSENTIA_SMELTER.get(), ModBlocks.ALEMBIC.get(),
-                        ModBlocks.TUBE.get(), ModBlocks.JAR.get())
+                        ModBlocks.TUBE.get(), ModBlocks.JAR.get(), ModBlocks.VOID_JAR.get())
                 .add(ModBlocks.TUBE_VALVE.get(), ModBlocks.TUBE_ONEWAY.get(), ModBlocks.TUBE_RESTRICT.get(),
                         ModBlocks.TUBE_FILTER.get(), ModBlocks.TUBE_BUFFER.get())
                 .add(ModBlocks.ELDRITCH_ALTAR.get(), ModBlocks.ELDRITCH_CAP.get(), ModBlocks.ELDRITCH_OBELISK.get(),

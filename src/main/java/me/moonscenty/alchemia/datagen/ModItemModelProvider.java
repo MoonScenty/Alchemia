@@ -30,7 +30,11 @@ public class ModItemModelProvider extends ItemModelProvider {
         ModelFile fullJar = held("jar_filled", modLoc("block/jar/jar_4"));
         held("jar", modLoc("block/jar/jar"))
                 .override().predicate(Alchemia.id("filled"), 1).model(fullJar).end();
+        ModelFile fullVoidJar = held("void_jar_filled", modLoc("block/void_jar/jar_4"));
+        held("void_jar", modLoc("block/void_jar/jar"))
+                .override().predicate(Alchemia.id("filled"), 1).model(fullVoidJar).end();
         held("arcane_pedestal", modLoc("block/pedestal"));
+        withExistingParent("ethereal_bloom", mcLoc("item/generated")).texture("layer0", modLoc("block/ethereal_bloom"));
         // a mirror is its frame and its pane, the pane open once it remembers a partner
         for (String[] mirror : new String[][] {{"mirror", "mirrorframe"}, {"mirror_essentia", "mirrorframe2"}}) {
             ModelFile open = withExistingParent(mirror[0] + "_on", mcLoc("item/generated"))

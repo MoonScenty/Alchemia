@@ -1,0 +1,17 @@
+{
+  "type": "alchemia:crucible",
+  "aspects": {
+    "alchemia:herba": 16,
+    "alchemia:lux": 8,
+    "alchemia:victus": 16,
+    "alchemia:vitium": 16
+  },
+  "catalyst": {
+    "item": "alchemia:shimmerleaf"
+  },
+  "research": "alchemia:ethereal_bloom",
+  "result": {
+    "count": 1,
+    "id": "alchemia:ethereal_bloom"
+  }
+}

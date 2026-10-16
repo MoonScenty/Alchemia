@@ -72,10 +72,12 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
         dropSelf(ModBlocks.TUBE_FILTER.get());
         dropSelf(ModBlocks.TUBE_BUFFER.get());
         // a jar keeps what is in it and what is written on it when it is taken up off the floor
-        add(ModBlocks.JAR.get(), block -> createSingleItemTable(block).apply(
-                CopyComponentsFunction.copyComponents(CopyComponentsFunction.Source.BLOCK_ENTITY)
-                        .include(ModDataComponents.CONTENTS.get())
-                        .include(ModDataComponents.ESSENTIA.get())));
+        for (var jar : java.util.List.of(ModBlocks.JAR, ModBlocks.VOID_JAR)) {
+            add(jar.get(), block -> createSingleItemTable(block).apply(
+                    CopyComponentsFunction.copyComponents(CopyComponentsFunction.Source.BLOCK_ENTITY)
+                            .include(ModDataComponents.CONTENTS.get())
+                            .include(ModDataComponents.ESSENTIA.get())));
+        }
         // a brain in a jar keeps what it has eaten
         add(ModBlocks.BRAIN_JAR.get(), block -> createSingleItemTable(block).apply(
                 CopyComponentsFunction.copyComponents(CopyComponentsFunction.Source.BLOCK_ENTITY)
@@ -109,6 +111,7 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
         // the stone table gives itself; a golem press gives back what each part of it was made from
         dropSelf(ModBlocks.STONE_TABLE.get());
         dropSelf(ModBlocks.WOODEN_TABLE.get());
+        dropSelf(ModBlocks.ETHEREAL_BLOOM.get());
         add(ModBlocks.AMBIENT_GRASS.get(), block -> createSingleItemTableWithSilkTouch(block, Blocks.DIRT));
         dropOther(ModBlocks.GOLEM_PRESS.get(), Blocks.PISTON);
         add(ModBlocks.GOLEM_PRESS_PART.get(), block -> {

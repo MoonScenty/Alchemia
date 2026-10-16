@@ -168,6 +168,13 @@ public class ModBlocks {
                     .noOcclusion()),
             JarBlockItem::new);
 
+    /** A jar that takes more than it holds, and lets the rest go. */
+    public static final DeferredBlock<me.moonscenty.alchemia.block.VoidJarBlock> VOID_JAR = register("void_jar",
+            () -> new me.moonscenty.alchemia.block.VoidJarBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS)
+                    .mapColor(MapColor.NONE)
+                    .noOcclusion()),
+            JarBlockItem::new);
+
     public static final DeferredBlock<TubeBlock> TUBE = register("tube", () -> new TubeBlock(tubing()));
 
     /** Shut by a redstone signal, or by hand. */
@@ -729,6 +736,9 @@ public class ModBlocks {
     public static final DeferredBlock<CinderpearlBlock> CINDERPEARL = register("cinderpearl", () -> new CinderpearlBlock(plant(7)));
     public static final DeferredBlock<VishroomBlock> VISHROOM = register("vishroom", () -> new VishroomBlock(plant(6)));
     public static final List<DeferredBlock<? extends Block>> PLANTS = List.of(SHIMMERLEAF, CINDERPEARL, VISHROOM);
+    /** Shimmerleaf woken in a crucible: it puts the land about it back the way it was. */
+    public static final DeferredBlock<me.moonscenty.alchemia.block.EtherealBloomBlock> ETHEREAL_BLOOM = register("ethereal_bloom",
+            () -> new me.moonscenty.alchemia.block.EtherealBloomBlock(plant(12)));
 
     private static BlockBehaviour.Properties plant(int light) {
         return BlockBehaviour.Properties.ofFullCopy(Blocks.POPPY).lightLevel(state -> light);

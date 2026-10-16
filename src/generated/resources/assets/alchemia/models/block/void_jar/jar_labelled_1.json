@@ -1,0 +1,6 @@
+{
+  "parent": "alchemia:block/jar/jar_labelled_1",
+  "textures": {
+    "particle": "alchemia:block/legacy/jar_side_void"
+  }
+}

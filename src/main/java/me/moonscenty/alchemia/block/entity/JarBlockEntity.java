@@ -36,6 +36,8 @@ public class JarBlockEntity extends BlockEntity implements EssentiaHolder {
     public static final int CAPACITY = 64;
     /** How many heights the liquid is drawn at. */
     public static final int STEPS = 4;
+    /** One point a full void jar lets go in this many turns to flux. The original's odds. */
+    public static final int SPILLS_ONE_IN = 100;
 
     private Holder<Aspect> holding;
     private int amount;
@@ -90,10 +92,15 @@ public class JarBlockEntity extends BlockEntity implements EssentiaHolder {
         return holding == null ? AspectList.EMPTY : AspectList.of(holding, amount);
     }
 
-    /** A labelled jar takes what its label says and nothing else, full or empty. */
+    /** Whether this is a void jar, which takes more than it holds and lets the rest go. */
+    public boolean voids() {
+        return getBlockState().getBlock() instanceof me.moonscenty.alchemia.block.VoidJarBlock;
+    }
+
+    /** A labelled jar takes what its label says and nothing else, full or empty. A void jar takes it even full. */
     @Override
     public boolean wants(Holder<Aspect> aspect) {
-        if (amount >= CAPACITY) {
+        if (amount >= CAPACITY && !voids()) {
             return false;
         }
         return label != null ? label.value() == aspect.value() : holding == null || holding.value() == aspect.value();
@@ -103,6 +110,13 @@ public class JarBlockEntity extends BlockEntity implements EssentiaHolder {
     public boolean accept(Holder<Aspect> aspect) {
         if (!wants(aspect)) {
             return false;
+        }
+        if (amount >= CAPACITY) {
+            // a full void jar lets it go, one time in a hundred as a point of flux in the air
+            if (level instanceof ServerLevel served && served.random.nextInt(SPILLS_ONE_IN) == 0) {
+                AuraHandler.add(served, worldPosition, ModAspects.FLUX, 1);
+            }
+            return true;
         }
         holding = aspect;
         amount++;

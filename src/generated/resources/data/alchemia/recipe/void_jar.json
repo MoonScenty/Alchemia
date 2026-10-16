@@ -1,0 +1,28 @@
+{
+  "type": "alchemia:arcane_shaped",
+  "key": {
+    "J": {
+      "item": "alchemia:jar"
+    },
+    "O": {
+      "item": "minecraft:obsidian"
+    },
+    "P": {
+      "item": "minecraft:blaze_powder"
+    }
+  },
+  "pattern": [
+    "O",
+    "J",
+    "P"
+  ],
+  "research": "alchemia:jar_void",
+  "result": {
+    "count": 1,
+    "id": "alchemia:void_jar"
+  },
+  "vis": {
+    "alchemia:aqua": 25,
+    "alchemia:perditio": 25
+  }
+}

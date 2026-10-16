@@ -24,6 +24,7 @@
     "alchemia:alembic",
     "alchemia:tube",
     "alchemia:jar",
+    "alchemia:void_jar",
     "alchemia:tube_valve",
     "alchemia:tube_oneway",
     "alchemia:tube_restrict",
