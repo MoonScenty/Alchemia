@@ -146,6 +146,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.THAUMOSTATIC_GIRDLE.get());
         basicItem(ModItems.VERDANT_HEART.get());
         basicItem(ModItems.TRIPLE_MEAT_TREAT.get());
+        ModItems.MEAT_CHUNKS.values().forEach(chunk -> basicItem(chunk.get()));
         // the six apprentice's rings are the one band, coloured as their primal
         ModItems.APPRENTICE_RINGS.values().forEach(ring -> withExistingParent(ring.getId().getPath(),
                 mcLoc("item/generated")).texture("layer0", modLoc("item/apprentice_ring")));

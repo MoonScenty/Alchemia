@@ -172,6 +172,8 @@ public class ModDataMapProvider extends DataMapProvider {
         item(me.moonscenty.alchemia.registry.ModItems.ZOMBIE_BRAIN.get(),
                 a(ModAspects.LIFE, 2).add(ModAspects.MIND, 4).add(ModAspects.UNDEAD, 2));
         item(Items.EGG, a(ModAspects.LIFE, 1).add(ModAspects.BEAST, 1));
+        me.moonscenty.alchemia.registry.ModItems.MEAT_CHUNKS.values()
+                .forEach(chunk -> item(chunk.get(), a(ModAspects.LIFE, 1)));
         tag(ItemTags.WOOL, a(ModAspects.BEAST, 2).add(ModAspects.CRAFT, 1));
 
         // what grows

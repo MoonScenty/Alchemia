@@ -1,5 +1,10 @@
 {
   "values": [
-    "alchemia:zombie_brain"
+    "alchemia:zombie_brain",
+    "alchemia:beef_chunk",
+    "alchemia:chicken_chunk",
+    "alchemia:pork_chunk",
+    "alchemia:rabbit_chunk",
+    "alchemia:mutton_chunk"
   ]
 }

@@ -1089,6 +1089,11 @@ public final class LegacyAssets {
         all.add(item("quicksilver", "quicksilver", "quicksilver"));
         all.add(item("quicksilver_drop", "nugget_quicksilver", "nuggetquicksilver"));
         all.add(item("zombie_brain", "brain", "brain"));
+        for (String meat : new String[] {"beef", "chicken", "pork", "fish", "rabbit", "mutton"}) {
+            // the 1.7.10 release had the first four, as nuggets
+            boolean old = !meat.equals("rabbit") && !meat.equals("mutton");
+            all.add(item(meat + "_chunk", "chunk_" + meat, old ? "nugget" + meat : null));
+        }
         all.add(item("iron_cluster", "cluster_iron", "clusteriron"));
         all.add(item("gold_cluster", "cluster_gold", "clustergold"));
         all.add(item("copper_cluster", "cluster_copper", "clustercopper"));

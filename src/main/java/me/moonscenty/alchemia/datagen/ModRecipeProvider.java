@@ -553,12 +553,9 @@ public class ModRecipeProvider extends RecipeProvider {
                 .pattern(" L ").pattern("LGL").pattern(" I ")
                 .define('L', Items.LEATHER).define('G', Items.DIAMOND).define('I', Items.GOLD_INGOT)
                 .unlockedBy("has_input", has(Items.DIAMOND)).save(output);
-        // the original made its treat of three kinds of meat chunk, which this mod does not have; three cooked
-        // meats stand for them
-        ShapelessRecipeBuilder.shapeless(RecipeCategory.FOOD, ModItems.TRIPLE_MEAT_TREAT.get())
-                .requires(Items.SUGAR).requires(Items.COOKED_BEEF).requires(Items.COOKED_PORKCHOP)
-                .requires(Items.COOKED_CHICKEN)
-                .unlockedBy("has_input", has(Items.SUGAR)).save(output);
+        // a sugar and three different meat chunks, whichever three
+        SpecialRecipeBuilder.special(me.moonscenty.alchemia.crafting.TripleMeatTreatRecipe::new)
+                .save(output, Alchemia.id("triple_meat_treat").toString());
 
         Ingredient charm = Ingredient.of(ModItems.PRIMAL_CHARM);
         Ingredient amber = Ingredient.of(ModItems.AMBER);

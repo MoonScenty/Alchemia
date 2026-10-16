@@ -49,6 +49,12 @@ public class ModItemTagsProvider extends ItemTagsProvider {
         robes();
         // wolves will eat it, as the original's would
         tag(ItemTags.MEAT).add(ModItems.ZOMBIE_BRAIN.get());
+        // the meat chunks are meat to a wolf, all but the fish
+        ModItems.MEAT_CHUNKS.forEach((meat, chunk) -> {
+            if (!meat.equals("fish")) {
+                tag(ItemTags.MEAT).add(chunk.get());
+            }
+        });
         metalGear();
         tag(net.minecraft.tags.ItemTags.HEAD_ARMOR).add(ModItems.GOGGLES.get());
         tag(net.minecraft.tags.ItemTags.DURABILITY_ENCHANTABLE).add(ModItems.GOGGLES.get());
