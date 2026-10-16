@@ -92,6 +92,24 @@ public class WorldgenTests {
                 .forEach(AuraNode::discard);
     }
 
+    /** The magical forest's own oak: a great oak, but taller. */
+    @GameTest(template = TEMPLATE)
+    public static void bigMagicTreeGrowsTall(GameTestHelper helper) {
+        layGround(helper, 3);
+        place(helper, ModWorldgen.BIG_MAGIC_TREE);
+        helper.assertBlockPresent(Blocks.OAK_LOG, TREE_BASE);
+        int[] top = {0};
+        helper.forEveryBlockInStructure(pos -> {
+            if (helper.getBlockState(pos).is(Blocks.OAK_LEAVES)) {
+                top[0] = Math.max(top[0], pos.getY() - TREE_BASE.getY());
+            }
+        });
+        Alchemia.LOGGER.info("big magic tree: crown {} over its foot", top[0]);
+        helper.assertTrue(top[0] >= 9, "the crown should stand at least nine over the foot, stood " + top[0]);
+        helper.assertTrue(count(helper, Blocks.OAK_LEAVES) >= 60, "too few leaves");
+        helper.succeed();
+    }
+
     @GameTest(template = TEMPLATE)
     public static void cinderpearlPatchGrows(GameTestHelper helper) {
         for (int x = -8; x <= 8; x++) {
