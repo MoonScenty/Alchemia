@@ -33,7 +33,7 @@ import net.minecraft.world.level.Level;
  * the pech pays it out in lots of one to five, each lot a thing from its own list of that worth.
  *
  * <p>Each kind of pech keeps its own list, the original's. What this game does not have is left off -- the
- * enchanted books of the original's own enchantments -- and a lot nothing on
+ * the book of the original's repair enchantment -- and a lot nothing on
  * the list is worth is paid in the nearest worth there is.
  */
 public final class PechTrades {
@@ -133,6 +133,7 @@ public final class PechTrades {
         lots.add(potion(2, Potions.HEALING));
         lots.add(item(3, Items.EXPERIENCE_BOTTLE));
         lots.add(item(3, Items.EXPERIENCE_BOTTLE));
+        lots.add(book(3, me.moonscenty.alchemia.enchantment.ModEnchantments.HASTE));
         lots.add(item(3, Items.GOLDEN_APPLE));
         lots.add(potion(3, Potions.STRONG_REGENERATION));
         lots.add(potion(3, Potions.STRONG_HEALING));

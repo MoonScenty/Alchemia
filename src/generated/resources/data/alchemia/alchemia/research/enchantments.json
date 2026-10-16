@@ -1,0 +1,13 @@
+{
+  "auto_unlock": true,
+  "category": "alchemia:basics",
+  "column": -2,
+  "icon": "minecraft:enchanted_book",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.enchantments.page"
+    }
+  ],
+  "row": -1
+}
