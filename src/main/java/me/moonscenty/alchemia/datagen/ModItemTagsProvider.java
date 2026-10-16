@@ -29,6 +29,14 @@ public class ModItemTagsProvider extends ItemTagsProvider {
         // haste goes on any boots, and on the harness
         tag(ModTags.Items.HASTE_ENCHANTABLE).addTag(net.minecraft.tags.ItemTags.FOOT_ARMOR)
                 .add(ModItems.THAUMOSTATIC_HARNESS.get());
+        // repair goes on the original's own gear
+        var repairable = tag(ModTags.Items.REPAIR_ENCHANTABLE);
+        java.util.stream.Stream.of(ModItems.METAL_TOOLS, ModItems.ELEMENTAL_TOOLS, ModItems.METAL_ARMOUR,
+                        ModItems.ROBES, ModItems.FORTRESS, ModItems.CRIMSON)
+                .flatMap(made -> made.values().stream())
+                .forEach(item -> repairable.add(item.get()));
+        repairable.add(ModItems.PRIMAL_CRUSHER.get(), ModItems.GOGGLES.get(), ModItems.TRAVELLER_BOOTS.get(),
+                ModItems.THAUMOSTATIC_HARNESS.get(), ModItems.BONE_BOW.get(), ModItems.CRIMSON_BLADE.get());
         // the bow of bone takes a bow's enchantments
         tag(net.minecraft.tags.ItemTags.BOW_ENCHANTABLE).add(ModItems.BONE_BOW.get());
         tag(net.minecraft.tags.ItemTags.DURABILITY_ENCHANTABLE).add(ModItems.BONE_BOW.get());
