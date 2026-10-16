@@ -189,6 +189,9 @@ public class ModItems {
     /** What an angry zombie still had. Food of a sort, and warp. */
     public static final DeferredItem<me.moonscenty.alchemia.item.ZombieBrainItem> ZOMBIE_BRAIN =
             ITEMS.register("zombie_brain", () -> new me.moonscenty.alchemia.item.ZombieBrainItem(new Item.Properties()));
+    /** Meat chunks, by the meat they came off: what the infernal furnace throws out besides when it cooks meat. */
+    public static final Map<String, DeferredItem<me.moonscenty.alchemia.item.MeatChunkItem>> MEAT_CHUNKS =
+            registerMeatChunks();
     /** The original's eggs, all pink with the mob's own colour for the spots. */
     public static final DeferredItem<net.neoforged.neoforge.common.DeferredSpawnEggItem> ANGRY_ZOMBIE_SPAWN_EGG =
             ITEMS.register("angry_zombie_spawn_egg", () -> new net.neoforged.neoforge.common.DeferredSpawnEggItem(
@@ -568,6 +571,14 @@ public class ModItems {
      * <p>
      * The key is the item's own name, so that what is registered and what is asked for cannot drift apart.
      */
+    private static Map<String, DeferredItem<me.moonscenty.alchemia.item.MeatChunkItem>> registerMeatChunks() {
+        Map<String, DeferredItem<me.moonscenty.alchemia.item.MeatChunkItem>> made = new java.util.LinkedHashMap<>();
+        for (String meat : new String[] {"beef", "chicken", "pork", "fish", "rabbit", "mutton"}) {
+            made.put(meat, ITEMS.register(meat + "_chunk", me.moonscenty.alchemia.item.MeatChunkItem::new));
+        }
+        return made;
+    }
+
     private static Map<String, DeferredItem<RobeItem>> registerRobes() {
         Map<String, DeferredItem<RobeItem>> made = new java.util.LinkedHashMap<>();
         robe(made, "cloth_chest", ArmorItem.Type.CHESTPLATE, ModArmorMaterials.CLOTH,

@@ -838,6 +838,12 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("item.alchemia.vis_charge", pick("Vis charge: %s%%", "비스 충전: %s%%"));
         add("item.alchemia.runic_charge", pick("Runic shield +%s", "룬 보호막 +%s"));
         addItem(ModItems.TRIPLE_MEAT_TREAT, pick("Triple Meat Treat", "세 고기 간식"));
+        addItem(ModItems.MEAT_CHUNKS.get("beef"), pick("Beef Nugget", "소고기 조각"));
+        addItem(ModItems.MEAT_CHUNKS.get("chicken"), pick("Chicken Nugget", "닭고기 조각"));
+        addItem(ModItems.MEAT_CHUNKS.get("pork"), pick("Pork Nugget", "돼지고기 조각"));
+        addItem(ModItems.MEAT_CHUNKS.get("fish"), pick("Fish Nugget", "생선 조각"));
+        addItem(ModItems.MEAT_CHUNKS.get("rabbit"), pick("Rabbit Nugget", "토끼고기 조각"));
+        addItem(ModItems.MEAT_CHUNKS.get("mutton"), pick("Mutton Nugget", "양고기 조각"));
         add("jei.alchemia.instability", pick("Instability: %s", "불안정: %s"));
         add("subtitles.alchemia.runicshieldeffect", pick("Runic shield flares", "룬 보호막이 번쩍인다"));
         add("curios.identifier.necklace", pick("Amulet", "부적"));

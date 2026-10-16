@@ -197,8 +197,8 @@ public class InfernalFurnaceBlockEntity extends BlockEntity implements WorldlyCo
         level.addFreshEntity(item);
     }
 
-    /** The original's table of what comes out besides: a nugget off an ore or a cluster of it. */
-    private static ItemStack bonus(ItemStack input) {
+    /** The original's table of what comes out besides: a nugget off an ore or a cluster of it, a chunk off meat. */
+    public static ItemStack bonus(ItemStack input) {
         Item nugget = null;
         if (input.is(Tags.Items.ORES_IRON) || input.is(ModItems.IRON_CLUSTER.get())) {
             nugget = Items.IRON_NUGGET;
@@ -206,6 +206,18 @@ public class InfernalFurnaceBlockEntity extends BlockEntity implements WorldlyCo
             nugget = Items.GOLD_NUGGET;
         } else if (input.is(ModTags.Items.ORES_CINNABAR) || input.is(ModItems.CINNABAR_CLUSTER.get())) {
             nugget = ModItems.QUICKSILVER_DROP.get();
+        } else if (input.is(Items.BEEF)) {
+            nugget = ModItems.MEAT_CHUNKS.get("beef").get();
+        } else if (input.is(Items.CHICKEN)) {
+            nugget = ModItems.MEAT_CHUNKS.get("chicken").get();
+        } else if (input.is(Items.PORKCHOP)) {
+            nugget = ModItems.MEAT_CHUNKS.get("pork").get();
+        } else if (input.is(Tags.Items.FOODS_RAW_FISH)) {
+            nugget = ModItems.MEAT_CHUNKS.get("fish").get();
+        } else if (input.is(Items.RABBIT)) {
+            nugget = ModItems.MEAT_CHUNKS.get("rabbit").get();
+        } else if (input.is(Items.MUTTON)) {
+            nugget = ModItems.MEAT_CHUNKS.get("mutton").get();
         }
         return nugget == null ? ItemStack.EMPTY : new ItemStack(nugget);
     }

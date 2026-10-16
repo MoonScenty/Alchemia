@@ -178,6 +178,9 @@
       "alchemia:terra": 1,
       "alchemia:vitreus": 1
     },
+    "alchemia:beef_chunk": {
+      "alchemia:victus": 1
+    },
     "alchemia:black_tallow_candle": {
       "alchemia:lux": 1,
       "alchemia:victus": 1
@@ -191,6 +194,9 @@
     },
     "alchemia:brown_tallow_candle": {
       "alchemia:lux": 1,
+      "alchemia:victus": 1
+    },
+    "alchemia:chicken_chunk": {
       "alchemia:victus": 1
     },
     "alchemia:cinderpearl": {
@@ -297,6 +303,9 @@
       "alchemia:ignis": 2,
       "alchemia:vitreus": 1
     },
+    "alchemia:fish_chunk": {
+      "alchemia:victus": 1
+    },
     "alchemia:flux_crystal": {
       "alchemia:vitium": 4,
       "alchemia:vitreus": 2
@@ -367,6 +376,9 @@
       "alchemia:lux": 1,
       "alchemia:victus": 1
     },
+    "alchemia:mutton_chunk": {
+      "alchemia:victus": 1
+    },
     "alchemia:orange_tallow_candle": {
       "alchemia:lux": 1,
       "alchemia:victus": 1
@@ -381,6 +393,9 @@
     },
     "alchemia:pink_tallow_candle": {
       "alchemia:lux": 1,
+      "alchemia:victus": 1
+    },
+    "alchemia:pork_chunk": {
       "alchemia:victus": 1
     },
     "alchemia:porous_stone": {
@@ -436,6 +451,9 @@
     },
     "alchemia:quicksilver_drop": {
       "alchemia:metallum": 1
+    },
+    "alchemia:rabbit_chunk": {
+      "alchemia:victus": 1
     },
     "alchemia:raw_cinnabar": {
       "alchemia:metallum": 2,
