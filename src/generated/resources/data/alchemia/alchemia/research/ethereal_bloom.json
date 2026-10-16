@@ -1,0 +1,26 @@
+{
+  "category": "alchemia:alchemy",
+  "column": -4,
+  "complexity": 2,
+  "icon": "alchemia:ethereal_bloom",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.ethereal_bloom.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:ethereal_bloom"
+    }
+  ],
+  "parents": [
+    "alchemia:crucible"
+  ],
+  "requirements": {
+    "alchemia:herba": 6,
+    "alchemia:lux": 1,
+    "alchemia:victus": 3,
+    "alchemia:vitium": 6
+  },
+  "row": 2
+}

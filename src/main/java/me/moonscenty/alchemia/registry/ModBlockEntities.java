@@ -263,9 +263,16 @@ public class ModBlockEntities {
                     .of(BufferTubeBlockEntity::new, ModBlocks.TUBE_BUFFER.get())
                     .build(null));
 
+    /** An ethereal bloom, sweeping the land about it clean. */
+    public static final DeferredHolder<BlockEntityType<?>,
+            BlockEntityType<me.moonscenty.alchemia.block.entity.EtherealBloomBlockEntity>> ETHEREAL_BLOOM =
+            BLOCK_ENTITIES.register("ethereal_bloom", () -> BlockEntityType.Builder
+                    .of(me.moonscenty.alchemia.block.entity.EtherealBloomBlockEntity::new, ModBlocks.ETHEREAL_BLOOM.get())
+                    .build(null));
+
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<JarBlockEntity>> JAR =
             BLOCK_ENTITIES.register("jar", () -> BlockEntityType.Builder
-                    .of(JarBlockEntity::new, ModBlocks.JAR.get())
+                    .of(JarBlockEntity::new, ModBlocks.JAR.get(), ModBlocks.VOID_JAR.get())
                     .build(null));
 
     /** The eldritch ring's altar, capstones, obelisk and the way above the altar; and banners. */

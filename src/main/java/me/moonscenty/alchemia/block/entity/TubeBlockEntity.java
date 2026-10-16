@@ -99,6 +99,10 @@ public class TubeBlockEntity extends BlockEntity {
             if (sink instanceof BufferTubeBlockEntity && route.from() instanceof BufferTubeBlockEntity) {
                 continue;
             }
+            // nor does a void jar drink other jars dry: the original's drew too weakly to take from one
+            if (sink instanceof JarBlockEntity jar && jar.voids() && route.from() instanceof JarBlockEntity) {
+                continue;
+            }
             if (turns % (route.waits() + 1) != 0) {
                 continue;
             }

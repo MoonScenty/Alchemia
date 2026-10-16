@@ -139,8 +139,10 @@ public class AlchemiaClientSetup {
         ItemProperties.register(ModItems.SINISTER_STONE.get(), Alchemia.id("active"), (stack, level, holder, seed) ->
                 me.moonscenty.alchemia.item.SinisterStoneItem.feels(
                         holder != null ? holder : Minecraft.getInstance().player) ? 1 : 0);
-        ItemProperties.register(ModBlocks.JAR.get().asItem(), Alchemia.id("filled"),
-                (stack, level, holder, seed) -> stack.has(ModDataComponents.CONTENTS.get()) ? 1 : 0);
+        for (var jar : List.of(ModBlocks.JAR, ModBlocks.VOID_JAR)) {
+            ItemProperties.register(jar.get().asItem(), Alchemia.id("filled"),
+                    (stack, level, holder, seed) -> stack.has(ModDataComponents.CONTENTS.get()) ? 1 : 0);
+        }
         for (var death : List.of(me.moonscenty.alchemia.registry.ModFluids.DEATH.get(),
                 me.moonscenty.alchemia.registry.ModFluids.FLOWING_DEATH.get())) {
             net.minecraft.client.renderer.ItemBlockRenderTypes.setRenderLayer(death,
@@ -195,7 +197,8 @@ public class AlchemiaClientSetup {
         event.register((stack, tint) -> tint == 0 ? named(stack) : PLAIN, ModItems.WISPY_ESSENCE.get());
         event.register((stack, tint) -> tint == 1 ? named(stack) : PLAIN, ModItems.JAR_LABEL.get());
         // the liquid standing in a jar held in the hand, in the colour of whatever it is
-        event.register((stack, tint) -> tint == 0 ? inside(stack) : PLAIN, ModBlocks.JAR.get().asItem());
+        event.register((stack, tint) -> tint == 0 ? inside(stack) : PLAIN, ModBlocks.JAR.get().asItem(),
+                ModBlocks.VOID_JAR.get().asItem());
         // a vis crystal in the hand is the original's grey cluster, coloured by its aspect
         ModBlocks.CRYSTALS.forEach((type, crystal) -> event.register(
                 (stack, tint) -> tint == 0 ? 0xFF000000 | type.aspect().value().color() : PLAIN, crystal.get().asItem()));
@@ -282,7 +285,7 @@ public class AlchemiaClientSetup {
                 level != null && pos != null && level.getBlockEntity(pos) instanceof JarBlockEntity jar
                         ? (tint == 1 ? jar.label().map(aspect -> aspect.value().color()).orElse(0xFFFFFF)
                                      : jar.colour())
-                        : 0xFFFFFF, ModBlocks.JAR.get());
+                        : 0xFFFFFF, ModBlocks.JAR.get(), ModBlocks.VOID_JAR.get());
 
         // the original's crystal is grey and takes its aspect's colour
         ModBlocks.CRYSTALS.forEach((type, crystal) -> event.register(
@@ -327,7 +330,7 @@ public class AlchemiaClientSetup {
                 me.moonscenty.alchemia.registry.ModFluids.PURIFYING_TYPE.get());
         event.registerFluidType(LiquidDeathLook.INSTANCE, me.moonscenty.alchemia.registry.ModFluids.DEATH_TYPE.get());
         event.registerBlock(PlainBreakParticles.INSTANCE,
-                ModBlocks.CRUCIBLE.get(), ModBlocks.JAR.get(), ModBlocks.TUBE_FILTER.get());
+                ModBlocks.CRUCIBLE.get(), ModBlocks.JAR.get(), ModBlocks.VOID_JAR.get(), ModBlocks.TUBE_FILTER.get());
         // robes in the original's violet until dyed; the void robe on the original's model when its jar is there
         ModItems.CRIMSON.values().forEach(piece -> {
             switch (piece.get().kind()) {
@@ -384,6 +387,9 @@ public class AlchemiaClientSetup {
         event.registerBlockEntityRenderer(ModBlockEntities.CRAB_SPAWNER.get(), CrabSpawnerRenderer::new);
         event.registerEntityRenderer(ModEntities.AURA_NODE.get(), AuraNodeRenderer::new);
         event.registerEntityRenderer(ModEntities.PRIMAL_ARROW.get(), PrimalArrowRenderer::new);
+        // the original drew nothing of it but its smoke and sparks
+        event.registerEntityRenderer(ModEntities.ALUMENTUM.get(),
+                net.minecraft.client.renderer.entity.NoopRenderer::new);
         event.registerEntityRenderer(ModEntities.TAINT_BOTTLE.get(),
                 net.minecraft.client.renderer.entity.ThrownItemRenderer::new);
         event.registerEntityRenderer(ModEntities.AUTOCASTER.get(), AutocasterRenderer::new);
@@ -453,6 +459,7 @@ public class AlchemiaClientSetup {
         event.registerBlockEntityRenderer(ModBlockEntities.ARCANE_BORE.get(), ArcaneBoreRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.ARCANE_BORE_BASE.get(), ArcaneBoreBaseRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.BRAIN_JAR.get(), BrainJarRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.ETHEREAL_BLOOM.get(), EtherealBloomRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.THAUMATORIUM.get(), ThaumatoriumRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.CRYSTALLIZER.get(), CrystallizerRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.HUNGRY_CHEST.get(), HungryChestRenderer::new);

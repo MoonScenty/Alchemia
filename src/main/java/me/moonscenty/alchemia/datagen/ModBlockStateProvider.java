@@ -226,12 +226,25 @@ public class ModBlockStateProvider extends BlockStateProvider {
      * jar is turned. An unlabelled jar is turned too, and nobody can tell.
      */
     private void jar() {
-        getVariantBuilder(ModBlocks.JAR.get()).forAllStates(state -> {
+        // the void jar's models are the warded jar's, and the original's void glass is laid under them by the
+        // importer; without it the void jar is drawn as the plain one
+        for (String fill : List.of("", "_1", "_2", "_3", "_4")) {
+            for (String kind : List.of("jar", "jar_labelled")) {
+                models().withExistingParent("block/void_jar/" + kind + fill, modLoc("block/jar/" + kind + fill))
+                        .texture("particle", modLoc("block/legacy/jar_side_void"));
+            }
+        }
+        jar(ModBlocks.JAR.get(), "jar");
+        jar(ModBlocks.VOID_JAR.get(), "void_jar");
+    }
+
+    private void jar(JarBlock jar, String folder) {
+        getVariantBuilder(jar).forAllStates(state -> {
             int fill = state.getValue(JarBlock.FILL);
             String label = state.getValue(JarBlock.LABELLED) ? "jar_labelled" : "jar";
             return ConfiguredModel.builder()
                     .modelFile(models().getExistingFile(
-                            modLoc("block/jar/" + label + (fill == 0 ? "" : "_" + fill))))
+                            modLoc("block/" + folder + "/" + label + (fill == 0 ? "" : "_" + fill))))
                     // the label is drawn facing north, so every other bearing is that far round from it
                     .rotationY(((int) state.getValue(JarBlock.FACING).toYRot() + 180) % 360)
                     .build();
@@ -265,6 +278,9 @@ public class ModBlockStateProvider extends BlockStateProvider {
         outerStone();
         // a hole is the absence of a block, so there is nothing to draw and nothing to draw it with
         simpleBlock(ModBlocks.HOLE.get(), models().getExistingFile(mcLoc("block/air")));
+        // the bloom is drawn by its renderer; the block model only gives what it breaks into
+        simpleBlock(ModBlocks.ETHEREAL_BLOOM.get(), models().getBuilder("ethereal_bloom")
+                .texture("particle", modLoc("block/ethereal_bloom")));
         simpleBlock(ModBlocks.WARDING_AURA.get(), models().getExistingFile(mcLoc("block/air")));
         // the original's barrier stone: farmland's shape, its rune on top and arcane brick round the sides
         var barrier = models().withExistingParent("barrier_stone", mcLoc("block/farmland"))

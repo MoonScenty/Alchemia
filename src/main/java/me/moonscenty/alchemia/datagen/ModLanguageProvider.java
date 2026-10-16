@@ -766,6 +766,9 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("block.alchemia.tube_buffer.empty", pick("Empty", "비어 있다"));
         add("block.alchemia.tube_buffer.holding", pick("%s — %s / %s", "%s — %s / %s"));
         addBlock(ModBlocks.JAR, pick("Warded Jar", "봉인된 단지"));
+        addBlock(ModBlocks.VOID_JAR, pick("Void Jar", "공허 단지"));
+        addBlock(ModBlocks.ETHEREAL_BLOOM, pick("Ethereal Bloom", "에테르 꽃"));
+        add("entity.alchemia.alumentum", pick("Alumentum", "알루멘텀"));
         addBlock(ModBlocks.ARCANE_PEDESTAL, pick("Arcane Pedestal", "비전 받침대"));
         addBlock(ModBlocks.ANCIENT_PEDESTAL, pick("Ancient Pedestal", "고대 받침대"));
         addBlock(ModBlocks.ELDRITCH_ALTAR, pick("Eldritch Altar", "엘드리치 제단"));
@@ -1104,8 +1107,8 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                  "A seed steeped in darkness stops being a seed, and what it becomes, steeped again in metal, sets as an ingot. It will not set at all without a point of flux in the water: the metal wants something wrong in it. What is drawn from it gives back a third of every working, and the caps drawn from it are the last a wand will ever want.",
                  "어둠에 담근 씨앗은 씨앗이기를 그만두고, 그렇게 된 것을 다시 금속에 담그면 주괴로 굳는다. 물에 플럭스가 한 점 없으면 아예 굳지 않는다. 이 금속은 제 안에 잘못된 것을 원한다. 여기서 뽑아낸 캡은 일할 때마다 셋에 하나를 돌려주며, 완드가 바랄 마지막 캡이다."},
                 {"alumentum", "Alumentum", "알루멘툼",
-                 "Coal that has been round again. What comes out of the water holds four times the fire it went in with, and in an essentia smelter it does one thing more: the work goes a fifth quicker while it lasts. A slow furnace is the price of a smelter, and this is the one thing that can be spent against it.",
-                 "한 번 더 돌린 석탄이다. 물에서 나온 것은 들어갈 때의 네 배를 품고 있고, 에센시아 제련로에서는 한 가지를 더 한다 — 타는 동안 일이 5분의 1만큼 빨라진다. 느린 것이 제련로의 값인데, 그 값에 맞설 수 있는 것이 이것 하나다."},
+                 "Coal that has been round again. What comes out of the water holds four times the fire it went in with, and in an essentia smelter it does one thing more: the work goes a fifth quicker while it lasts. A slow furnace is the price of a smelter, and this is the one thing that can be spent against it. Thrown, it goes off where it lands; a dispenser will throw it too.",
+                 "한 번 더 돌린 석탄이다. 물에서 나온 것은 들어갈 때의 네 배를 품고 있고, 에센시아 제련로에서는 한 가지를 더 한다 — 타는 동안 일이 5분의 1만큼 빨라진다. 느린 것이 제련로의 값인데, 그 값에 맞설 수 있는 것이 이것 하나다. 던지면 떨어진 곳에서 터진다. 디스펜서로도 던질 수 있다."},
                 {"nitor", "Nitor", "니토르",
                  "Light with nothing burning under it. It never goes out and never wants feeding, which is worth the glowstone it costs, and it hangs wherever it is put -- floor, wall, ceiling, open air. A flame that needed something to stand on would be a torch. A dye put to one changes its colour and nothing else; there are sixteen and none is the original.",
                  "밑에서 타는 것이 없는 불빛이다. 꺼지지 않고 먹일 것도 없으니 발광석 값을 한다. 바닥이든 벽이든 천장이든 허공이든 놓은 자리에 그대로 걸린다. 받칠 것이 있어야 하는 불꽃은 횃불이다. 염료를 대면 색만 바뀐다. 열여섯 가지가 있고 그중 원래 것은 없다."},
@@ -1361,6 +1364,12 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                 {"enchantments", "Enchantments", "마법부여",
                  "New enchantments, found at the enchanting table and in enchanted books. Haste goes on footwear of any kind and makes its wearer quicker on the ground; the higher its level, the quicker. On a thaumostatic harness it makes flying quicker instead. Repair goes on the tools, weapons and armour of thaumaturgy, and mends them, a little every few seconds while they are worn or in the hotbar, by drawing on the aura about them. It will not go with unbreaking.",
                  "새 마법부여다. 마법부여대와 마법부여된 책에서 얻는다. 서두름은 어떤 신발에든 붙일 수 있고, 신은 사람을 땅에서 더 빠르게 한다. 단계가 높을수록 빠르다. 타우모스태틱 하네스에 붙이면 대신 나는 속도가 빨라진다. 수리는 마법학의 도구·무기·갑옷에 붙는다. 입거나 핫바에 두면 몇 초마다 주변 오라를 끌어 조금씩 고친다. 내구성과는 함께 붙지 않는다."},
+                {"ethereal_bloom", "Ethereal Bloom", "에테르 꽃",
+                 "Shimmerleaf is overshadowed by the silverwood it grows beside, but it has a purifying nature of its own that lies dormant. Woken in a crucible, it becomes an ethereal bloom, which slowly but surely puts land corrupted by magic back the way it was, taint included: few tainted growths survive long outside their own land. It purifies only what its light falls on, out to about eight blocks.",
+                 "반짝잎은 곁에 자라는 은빛나무에 가려지지만, 잠들어 있는 정화의 성질을 지녔다. 도가니에서 깨우면 에테르 꽃이 되어, 마법으로 더럽혀진 땅을 느리지만 확실하게 원래대로 되돌린다. 오염도 마찬가지다. 오염된 생장물은 제 땅을 벗어나면 오래 버티지 못한다. 빛이 닿는 곳, 약 8칸까지만 정화한다."},
+                {"jar_void", "Void Jar", "공허 단지",
+                 "A warded jar with obsidian and blaze powder worked into it. It holds what any jar holds, but when it is full it goes on taking essentia all the same and lets what will not fit go into the void, now and then leaving a little flux in the air. Put one at the end of a pipe run to keep it moving. It will not draw from other jars.",
+                 "흑요석과 블레이즈 가루를 넣어 만든 봉인된 단지다. 다른 단지만큼 담지만, 가득 차도 에센시아를 계속 받아 들어가지 않는 것을 공허로 흘려보낸다. 그때 이따금 공기에 플럭스가 조금 남는다. 관 끝에 두면 관이 막히지 않는다. 다른 단지에서는 끌어오지 않는다."},
                 {"liquid_death", "Liquid Death", "액체 죽음",
                  "For external use only. Death, crystal and entropy steeped together in a crucible and caught in a bucket make a liquid so toxic that almost nothing keeps it from dissolving flesh, bone and harder things. Nothing alive, or with any semblance of life, survives it. What essentia a creature held as it dissolved is said to settle out as crystals.",
                  "외용으로만 쓸 것. 죽음·결정·엔트로피를 도가니에서 함께 우려 양동이에 받으면, 살과 뼈와 그보다 단단한 것까지 녹여 버리는 지독한 액체가 된다. 살아 있는 것, 살아 있는 척이라도 하는 것은 아무것도 견디지 못한다. 녹아 버린 것이 지녔던 에센시아는 결정으로 가라앉는다고 한다."},

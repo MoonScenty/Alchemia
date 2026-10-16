@@ -114,6 +114,12 @@ public class ModResearchProvider {
         entry(context, "distillation", ModResearch.ALCHEMY, ModBlocks.ESSENTIA_SMELTER, 1, 4,
                 AspectList.of(ModAspects.FIRE, 4).add(ModAspects.WATER, 4).add(ModAspects.CRAFT, 4),
                 List.of("crucible"), false, NodeShape.MAJOR, 3, "filter", "essentia_smelter", "alembic");
+        entry(context, "ethereal_bloom", ModResearch.ALCHEMY, ModBlocks.ETHEREAL_BLOOM, -4, 2,
+                AspectList.of(ModAspects.LIGHT, 1).add(ModAspects.PLANT, 6).add(ModAspects.LIFE, 3)
+                        .add(ModAspects.FLUX, 6), List.of("crucible"), false, NodeShape.PLAIN, 2, "ethereal_bloom");
+        entry(context, "jar_void", ModResearch.ALCHEMY, ModBlocks.VOID_JAR, 0, 6,
+                AspectList.of(ModAspects.WATER, 3).add(ModAspects.VOID, 6), List.of("jar_label"), false,
+                NodeShape.PLAIN, 1, "void_jar");
         entry(context, "jar_label", ModResearch.ALCHEMY, ModBlocks.JAR, 0, 5,
                 AspectList.of(ModAspects.CRYSTAL, 4).add(ModAspects.VOID, 4).add(ModAspects.TRAP, 2),
                 List.of("distillation"), false, NodeShape.PLAIN, 2,

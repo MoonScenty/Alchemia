@@ -188,6 +188,16 @@ public class ModEntities {
                     .updateInterval(3)
                     .build("eldritch_autocaster"));
 
+    /** A lump of alumentum, thrown. */
+    public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.entity.ThrownAlumentum>> ALUMENTUM =
+            ENTITIES.register("alumentum", () -> EntityType.Builder
+                    .<me.moonscenty.alchemia.entity.ThrownAlumentum>of(
+                            me.moonscenty.alchemia.entity.ThrownAlumentum::new, MobCategory.MISC)
+                    .sized(0.25F, 0.25F)
+                    .clientTrackingRange(4)
+                    .updateInterval(10)
+                    .build("alumentum"));
+
     /** A bottle of taint, thrown. */
     public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.entity.ThrownTaintBottle>> TAINT_BOTTLE =
             ENTITIES.register("bottle_taint", () -> EntityType.Builder

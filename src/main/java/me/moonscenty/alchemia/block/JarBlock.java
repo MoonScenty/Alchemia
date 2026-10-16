@@ -70,7 +70,7 @@ public class JarBlock extends BaseEntityBlock {
     }
 
     @Override
-    protected MapCodec<JarBlock> codec() {
+    protected MapCodec<? extends JarBlock> codec() {
         return CODEC;
     }
 
