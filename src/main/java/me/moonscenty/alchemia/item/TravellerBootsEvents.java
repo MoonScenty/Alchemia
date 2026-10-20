@@ -12,12 +12,14 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 /**
  * What a pair of traveller's boots does every tick to whoever is walking in them.
  * <p>
- * Three things, and each of them answers to what the wearer is doing rather than merely to the boots being on,
+ * Three things a tick, and each of them answers to what the wearer is doing rather than merely to the boots being on,
  * which is why none of them is an attribute. The push comes only when walking forward and only on the ground;
  * the hold in the air comes only when there is no ground; and the softened landing comes only while falling.
  * <p>
  * The original hung these on a hook that ran for each piece of armour worn. This version of the game has no
  * such hook for players, so the wearer is asked once a tick instead and the boots are looked for by hand.
+ * <p>
+ * And a jump in them goes higher, as the original's did.
  */
 @EventBusSubscriber(modid = Alchemia.MODID)
 public final class TravellerBootsEvents {
@@ -26,10 +28,24 @@ public final class TravellerBootsEvents {
     private static final float WADING = 4.0F;
     /** What the wearer steers with in the air. A falling player normally has a fifth of this. */
     private static final float IN_AIR = 0.05F;
+    /** How much higher a jump goes in them. The original's. */
+    public static final double JUMPS = 0.275;
     /** How much of a fall is forgotten each tick of it. */
     private static final float FALLS_LESS = 0.25F;
 
     private TravellerBootsEvents() {
+    }
+
+    @SubscribeEvent
+    public static void onJump(net.neoforged.neoforge.event.entity.living.LivingEvent.LivingJumpEvent event) {
+        jumped(event.getEntity());
+    }
+
+    /** A jump in them, apart from the event so that it can be put to a player directly. */
+    public static void jumped(net.minecraft.world.entity.LivingEntity jumper) {
+        if (jumper instanceof Player && jumper.getItemBySlot(EquipmentSlot.FEET).is(ModItems.TRAVELLER_BOOTS.get())) {
+            jumper.setDeltaMovement(jumper.getDeltaMovement().add(0.0, JUMPS, 0.0));
+        }
     }
 
     @SubscribeEvent

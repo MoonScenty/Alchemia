@@ -105,4 +105,21 @@ public class TravellerBootsTests {
                 "and standing still they push nothing");
         helper.succeed();
     }
+
+    /** A jump in them goes higher, the original's quarter block and a little more; in other boots it does not. */
+    @GameTest(template = TEMPLATE)
+    public static void aJumpInThemGoesHigher(GameTestHelper helper) {
+        var jumper = helper.makeMockPlayer(GameType.SURVIVAL);
+        jumper.setItemSlot(EquipmentSlot.FEET, new ItemStack(ModItems.TRAVELLER_BOOTS.get()));
+        jumper.setDeltaMovement(net.minecraft.world.phys.Vec3.ZERO);
+        TravellerBootsEvents.jumped(jumper);
+        helper.assertValueEqual(jumper.getDeltaMovement().y, TravellerBootsEvents.JUMPS, "lifted the more");
+
+        var bare = helper.makeMockPlayer(GameType.SURVIVAL);
+        bare.setItemSlot(EquipmentSlot.FEET, new ItemStack(Items.LEATHER_BOOTS));
+        bare.setDeltaMovement(net.minecraft.world.phys.Vec3.ZERO);
+        TravellerBootsEvents.jumped(bare);
+        helper.assertValueEqual(bare.getDeltaMovement().y, 0.0, "other boots do nothing");
+        helper.succeed();
+    }
 }
