@@ -66,7 +66,11 @@ public class WarpHandler {
         // the heart pounds before anything else happens, and only the one it is happening to hears it
         hear(player, ModSounds.HEARTBEAT, player.getX(), player.getY(), player.getZ(), 1.0F, 1.0F);
         int severity = severityOf(warp, gear);
-        inflict(player, severity, random.nextInt(Math.max(1, severity)));
+        // a grinning devil on the helm takes the edge off; what comes to nothing is nothing, as in the original
+        int roll = random.nextInt(Math.max(1, severity)) - me.moonscenty.alchemia.item.FortressMasks.easing(player);
+        if (roll > 0) {
+            inflict(player, severity, roll);
+        }
         epiphany(player, warp.permanent() + warp.sticky());
     }
 
