@@ -1,6 +1,7 @@
 {
   "category": "alchemia:eldritch",
   "column": -2,
+  "hidden": true,
   "icon": "alchemia:eldritch_eye",
   "pages": [
     {

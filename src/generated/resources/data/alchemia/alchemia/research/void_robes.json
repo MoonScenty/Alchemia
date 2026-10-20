@@ -2,6 +2,7 @@
   "category": "alchemia:artifice",
   "column": 8,
   "complexity": 3,
+  "hidden": true,
   "icon": "alchemia:void_robe_chest",
   "pages": [
     {

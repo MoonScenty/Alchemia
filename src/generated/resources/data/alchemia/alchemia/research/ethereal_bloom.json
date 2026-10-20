@@ -1,7 +1,11 @@
 {
   "category": "alchemia:alchemy",
+  "clues": [
+    "alchemia:vitium"
+  ],
   "column": -4,
   "complexity": 2,
+  "hidden": true,
   "icon": "alchemia:ethereal_bloom",
   "pages": [
     {

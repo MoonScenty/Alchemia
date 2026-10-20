@@ -1,5 +1,8 @@
 {
   "category": "alchemia:golemancy",
+  "clues": [
+    "alchemia:fabrico"
+  ],
   "column": 2,
   "icon": "alchemia:pattern_crafter",
   "pages": [

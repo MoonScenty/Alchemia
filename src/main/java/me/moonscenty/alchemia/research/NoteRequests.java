@@ -54,8 +54,8 @@ public final class NoteRequests {
      */
     public static boolean isReady(PlayerKnowledge knowledge, ResourceLocation id, ResearchEntry entry) {
         return !knowledge.hasResearch(id)
-                && !entry.hidden()
-                && entry.isAvailableTo(knowledge::hasResearch)
+                && !entry.onlyGiven()
+                && entry.isAvailableTo(knowledge)
                 && entry.missingFor(knowledge::knows).isEmpty();
     }
 

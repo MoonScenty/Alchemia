@@ -1,7 +1,11 @@
 {
   "category": "alchemia:alchemy",
+  "clues": [
+    "alchemia:clue/bath_salts"
+  ],
   "column": -1,
   "complexity": 2,
+  "hidden": true,
   "icon": "alchemia:bath_salts",
   "pages": [
     {
@@ -14,7 +18,7 @@
     }
   ],
   "parents": [
-    "alchemia:crucible"
+    "alchemia:alchemical_manufacture"
   ],
   "requirements": {
     "alchemia:auram": 3,

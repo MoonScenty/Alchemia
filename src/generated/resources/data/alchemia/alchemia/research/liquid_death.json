@@ -1,7 +1,11 @@
 {
   "category": "alchemia:alchemy",
+  "clues": [
+    "alchemia:mortuus"
+  ],
   "column": -4,
   "complexity": 2,
+  "hidden": true,
   "icon": "alchemia:liquid_death_bucket",
   "pages": [
     {
@@ -14,7 +18,7 @@
     }
   ],
   "parents": [
-    "alchemia:crucible"
+    "alchemia:entropic_processing"
   ],
   "requirements": {
     "alchemia:aqua": 1,

@@ -2,6 +2,7 @@
   "category": "alchemia:arcana",
   "column": 5,
   "complexity": 2,
+  "hidden": true,
   "icon": "alchemia:focus_hole",
   "pages": [
     {

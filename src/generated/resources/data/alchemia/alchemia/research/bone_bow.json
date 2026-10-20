@@ -1,6 +1,11 @@
 {
   "category": "alchemia:artifice",
+  "clues": [
+    "alchemia:clue/bone",
+    "alchemia:clue/bow"
+  ],
   "column": -4,
+  "hidden": true,
   "icon": "alchemia:bone_bow",
   "pages": [
     {

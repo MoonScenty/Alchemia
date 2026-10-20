@@ -2,6 +2,7 @@
   "category": "alchemia:eldritch",
   "column": 1,
   "complexity": 2,
+  "hidden": true,
   "icon": "alchemia:primal_crusher",
   "pages": [
     {

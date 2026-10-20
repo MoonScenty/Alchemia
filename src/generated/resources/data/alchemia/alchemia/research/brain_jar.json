@@ -1,7 +1,11 @@
 {
   "category": "alchemia:artifice",
+  "clues": [
+    "alchemia:clue/brain"
+  ],
   "column": -2,
   "complexity": 2,
+  "hidden": true,
   "icon": "alchemia:brain_jar",
   "pages": [
     {

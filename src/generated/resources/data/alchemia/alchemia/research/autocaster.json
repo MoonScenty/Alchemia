@@ -1,7 +1,11 @@
 {
   "category": "alchemia:golemancy",
+  "clues": [
+    "alchemia:clue/dispenser"
+  ],
   "column": 1,
   "complexity": 2,
+  "hidden": true,
   "icon": "alchemia:autocaster",
   "pages": [
     {

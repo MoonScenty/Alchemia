@@ -75,6 +75,14 @@ public class WarpHandler {
      * eldritch lore behind it; past fifty, the major. The original's thresholds.
      */
     public static void epiphany(net.minecraft.world.entity.player.Player player, int lasting) {
+        // past ten, the headaches want something done about them: the bath salts' clue
+        net.minecraft.resources.ResourceLocation salts = me.moonscenty.alchemia.Alchemia.id("bath_salts");
+        if (lasting > 10 && !PlayerKnowledge.of(player).hasResearch(salts)
+                && !PlayerKnowledge.of(player).hasResearch(me.moonscenty.alchemia.research.Clues.BATH_SALTS)) {
+            player.displayClientMessage(net.minecraft.network.chat.Component.translatable("warp.alchemia.headaches")
+                    .withStyle(net.minecraft.ChatFormatting.DARK_PURPLE, net.minecraft.ChatFormatting.ITALIC), false);
+            me.moonscenty.alchemia.research.Clues.give(player, me.moonscenty.alchemia.research.Clues.BATH_SALTS);
+        }
         if (lasting > 25) {
             learn(player, me.moonscenty.alchemia.Alchemia.id("eldritch_minor"));
         }

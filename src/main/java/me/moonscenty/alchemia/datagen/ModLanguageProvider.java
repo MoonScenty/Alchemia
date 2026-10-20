@@ -767,6 +767,13 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("block.alchemia.tube_buffer.holding", pick("%s — %s / %s", "%s — %s / %s"));
         addBlock(ModBlocks.JAR, pick("Warded Jar", "봉인된 단지"));
         addBlock(ModBlocks.VOID_JAR, pick("Void Jar", "공허 단지"));
+        add("research.alchemia.clue", pick("You have discovered something that could aid future research",
+                "앞으로의 연구에 도움이 될 무언가를 발견했다"));
+        add("research.alchemia.needs_knowledge", pick("Needs practical knowledge of %s", "%s에 대한 실제 지식이 필요하다"));
+        add("research.alchemia.needs_clue", pick("Something is still to be found out in the world",
+                "세상에서 아직 알아내야 할 것이 있다"));
+        add("warp.alchemia.headaches", pick("Surely there must be a way to stop these headaches?",
+                "이 끔찍한 두통을 멈출 방법이 있지 않을까?"));
         addBlock(ModBlocks.ETHEREAL_BLOOM, pick("Ethereal Bloom", "에테르 꽃"));
         add("entity.alchemia.alumentum", pick("Alumentum", "알루멘텀"));
         addBlock(ModBlocks.ARCANE_PEDESTAL, pick("Arcane Pedestal", "비전 받침대"));

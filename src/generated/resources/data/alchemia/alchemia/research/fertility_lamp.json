@@ -1,7 +1,12 @@
 {
   "category": "alchemia:artifice",
+  "clues": [
+    "alchemia:victus",
+    "alchemia:desiderium"
+  ],
   "column": 1,
   "complexity": 2,
+  "hidden": true,
   "icon": "alchemia:fertility_lamp",
   "pages": [
     {

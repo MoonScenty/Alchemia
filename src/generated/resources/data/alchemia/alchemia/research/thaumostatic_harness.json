@@ -1,7 +1,11 @@
 {
   "category": "alchemia:artifice",
+  "clues": [
+    "alchemia:volatus"
+  ],
   "column": -3,
   "complexity": 3,
+  "hidden": true,
   "icon": "alchemia:thaumostatic_harness",
   "pages": [
     {

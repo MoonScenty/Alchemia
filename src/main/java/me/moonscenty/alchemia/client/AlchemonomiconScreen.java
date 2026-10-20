@@ -211,14 +211,14 @@ public class AlchemonomiconScreen extends Screen {
             if (!research.category().equals(openCategory)) {
                 continue;
             }
-            if (!research.isShownTo(knowledge::hasResearch, entry.getKey().location())) {
+            if (!research.isShownTo(knowledge, entry.getKey().location())) {
                 continue;
             }
             float[] colour = lineColour(research, entry.getKey().location(), knowledge);
             for (ResourceLocation parentId : research.parents()) {
                 ResearchEntry parent = entries.get(parentId);
                 if (parent != null && parent.category().equals(openCategory)
-                        && parent.isShownTo(knowledge::hasResearch, parentId)) {
+                        && parent.isShownTo(knowledge, parentId)) {
                     drawLine(graphics, research.column(), research.row(), parent.column(), parent.row(), colour);
                 }
             }
@@ -236,7 +236,7 @@ public class AlchemonomiconScreen extends Screen {
                 continue;
             }
             ResourceLocation id = entry.getKey().location();
-            if (!research.isShownTo(knowledge::hasResearch, id)) {
+            if (!research.isShownTo(knowledge, id)) {
                 continue;
             }
             int x = research.column() * GRID;
@@ -284,7 +284,7 @@ public class AlchemonomiconScreen extends Screen {
         if (knowledge.hasResearch(id)) {
             return new float[] {0.6F, 0.6F, 0.7F};
         }
-        if (research.isAvailableTo(knowledge::hasResearch)) {
+        if (research.isAvailableTo(knowledge)) {
             return new float[] {0.25F, 0.25F, 0.3F};
         }
         return new float[] {0.1F, 0.1F, 0.15F};
@@ -301,7 +301,7 @@ public class AlchemonomiconScreen extends Screen {
         float bright;
         if (knowledge.hasResearch(id)) {
             bright = 1F;
-        } else if (research.isAvailableTo(knowledge::hasResearch)) {
+        } else if (research.isAvailableTo(knowledge)) {
             double phase = (Util.getMillis() % 600L) / 600.0 * Math.PI * 2.0;
             bright = (float) (Math.sin(phase) * 0.25 + 0.75);
         } else {
@@ -467,8 +467,21 @@ public class AlchemonomiconScreen extends Screen {
         if (knowledge.hasResearch(id)) {
             lines.add(Component.translatable("research.alchemia.known").withStyle(ChatFormatting.GREEN));
             lines.add(Component.translatable("research.alchemia.open").withStyle(ChatFormatting.DARK_GRAY));
-        } else if (!research.isAvailableTo(knowledge::hasResearch)) {
+        } else if (!research.parents().stream().allMatch(knowledge::hasResearch)) {
             lines.add(Component.translatable("research.alchemia.locked").withStyle(ChatFormatting.DARK_GRAY));
+        } else if (!research.cluesMet(knowledge)) {
+            // what is still to be found out in the world: the aspects by name, anything else only as a hint
+            List<Component> aspects = research.clues().stream()
+                    .filter(clue -> !me.moonscenty.alchemia.research.Clues.met(knowledge, clue))
+                    .flatMap(clue -> me.moonscenty.alchemia.registry.ModAspects.REGISTRY.getOptional(clue).stream())
+                    .map(aspect -> (Component) aspect.displayName()).toList();
+            if (!aspects.isEmpty()) {
+                lines.add(Component.translatable("research.alchemia.needs_knowledge",
+                        aspects.stream().reduce((a, b) -> Component.empty().append(a).append(", ").append(b))
+                                .orElse(Component.empty())).withStyle(ChatFormatting.DARK_PURPLE));
+            } else {
+                lines.add(Component.translatable("research.alchemia.needs_clue").withStyle(ChatFormatting.DARK_PURPLE));
+            }
         } else {
             research.missingFor(knowledge::knows).ifPresentOrElse(
                     missing -> lines.add(Component.translatable("research.alchemia.needs", names(missing))

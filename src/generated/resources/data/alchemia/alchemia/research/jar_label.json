@@ -2,6 +2,7 @@
   "category": "alchemia:alchemy",
   "column": 0,
   "complexity": 2,
+  "hidden": true,
   "icon": "alchemia:jar",
   "pages": [
     {

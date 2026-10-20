@@ -1,7 +1,11 @@
 {
   "category": "alchemia:artifice",
+  "clues": [
+    "alchemia:clue/teleport"
+  ],
   "column": -1,
   "complexity": 2,
+  "hidden": true,
   "icon": "alchemia:mirror",
   "pages": [
     {

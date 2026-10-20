@@ -108,7 +108,7 @@ public class ResearchTests {
         PlayerKnowledge fresh = PlayerKnowledge.fresh();
 
         boolean anyOpen = entries.entrySet().stream()
-                .anyMatch(entry -> entry.getValue().isAvailableTo(fresh::hasResearch));
+                .anyMatch(entry -> entry.getValue().isAvailableTo(fresh));
         helper.assertTrue(anyOpen, "a brand new player should have at least one entry open to them");
         helper.succeed();
     }

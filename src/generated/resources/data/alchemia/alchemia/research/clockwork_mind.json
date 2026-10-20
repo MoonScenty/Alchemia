@@ -1,6 +1,7 @@
 {
   "category": "alchemia:golemancy",
   "column": 0,
+  "hidden": true,
   "icon": "alchemia:clockwork_mind",
   "pages": [
     {

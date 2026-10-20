@@ -2,6 +2,7 @@
   "category": "alchemia:golemancy",
   "column": -6,
   "complexity": 3,
+  "hidden": true,
   "icon": "alchemia:levitator",
   "pages": [
     {

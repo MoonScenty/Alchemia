@@ -1,5 +1,8 @@
 {
   "category": "alchemia:artifice",
+  "clues": [
+    "alchemia:volatus"
+  ],
   "column": -1,
   "icon": "alchemia:levitator",
   "pages": [

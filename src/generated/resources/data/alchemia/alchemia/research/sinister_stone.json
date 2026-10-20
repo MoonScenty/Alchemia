@@ -1,6 +1,7 @@
 {
   "category": "alchemia:eldritch",
   "column": -1,
+  "hidden": true,
   "icon": "alchemia:sinister_stone",
   "pages": [
     {

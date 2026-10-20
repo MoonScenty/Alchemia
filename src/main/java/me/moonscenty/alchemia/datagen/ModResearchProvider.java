@@ -518,7 +518,7 @@ public class ModResearchProvider {
         entry(context, "bath_salts", ModResearch.ALCHEMY, ModItems.BATH_SALTS, -1, 1,
                 AspectList.of(ModAspects.MIND, 3).add(ModAspects.AURA, 3).add(ModAspects.ORDER, 3)
                         .add(ModAspects.LIFE, 3),
-                List.of("crucible"), false, NodeShape.PLAIN, 2, "bath_salts");
+                List.of("alchemical_manufacture"), false, NodeShape.PLAIN, 2, "bath_salts");
         // flesh rendered to tallow in a crucible, which seals are made with
         entry(context, "tallow", ModResearch.ALCHEMY, ModItems.TALLOW, -2, 2,
                 AspectList.of(ModAspects.BEAST, 3).add(ModAspects.FIRE, 1), List.of("crucible"), false,
@@ -549,11 +549,11 @@ public class ModResearchProvider {
         entry(context, "bottle_taint", ModResearch.ALCHEMY, ModItems.BOTTLE_TAINT, -4, 1,
                 AspectList.of(ModAspects.FLUX, 5).add(ModAspects.ENERGY, 3).add(ModAspects.ENTROPY, 3)
                         .add(ModAspects.WATER, 1),
-                List.of("crucible"), false, NodeShape.PLAIN, 2, "bottle_taint");
+                List.of("entropic_processing"), false, NodeShape.PLAIN, 2, "bottle_taint");
         // a liquid nothing living survives
         entry(context, "liquid_death", ModResearch.ALCHEMY, ModItems.LIQUID_DEATH_BUCKET, -4, 3,
                 AspectList.of(ModAspects.DEATH, 5).add(ModAspects.ENTROPY, 5).add(ModAspects.WATER, 1),
-                List.of("crucible"), false, NodeShape.PLAIN, 2, "liquid_death");
+                List.of("entropic_processing"), false, NodeShape.PLAIN, 2, "liquid_death");
         // soap that washes the mind, out of a block of flesh
         entry(context, "sanity_soap", ModResearch.ALCHEMY, ModItems.SANITY_SOAP, -1, -1,
                 AspectList.of(ModAspects.MIND, 5).add(ModAspects.ORDER, 5).add(ModAspects.LIFE, 5)
@@ -694,6 +694,42 @@ public class ModResearchProvider {
             java.util.Map.entry("focus_primal", 2), java.util.Map.entry("liquid_death", 3),
             // the original wrote two and then, a line later, one over it; the one is what it gave
             java.util.Map.entry("bottle_taint", 1));
+    /**
+     * The original's hidden research: out of the book until what it waits on, research and clues, is all there.
+     */
+    private static final java.util.Set<String> CONCEALED = java.util.Set.of("focus_hole", "focus_hellbat",
+            "thaumostatic_harness", "infusion_boost", "mirror", "growth_lamp", "fertility_lamp", "bone_bow",
+            "primal_arrows", "brain_jar", "liquid_death", "bottle_taint", "taint_shard", "ethereal_bloom",
+            "bath_salts", "jar_label", "clockwork_mind", "bioalchemic_mind", "control_seals", "golem_flyer",
+            "autocaster", "crystal_farmer", "oculus", "sinister_stone", "primal_crusher", "void_robes",
+            "focus_primal");
+
+    /**
+     * What each waits on finding out in the world first, the original's {@code !}- and {@code @}-parents: an aspect
+     * by name, or a clue under {@code clue/}. Some of these gate research that is in the book from the start.
+     */
+    private static final java.util.Map<String, List<String>> CLUES = java.util.Map.ofEntries(
+            java.util.Map.entry("focus_hellbat", List.of("clue/bat")),
+            java.util.Map.entry("thaumostatic_harness", List.of("volatus")),
+            java.util.Map.entry("mirror", List.of("clue/teleport")),
+            java.util.Map.entry("growth_lamp", List.of("herba")),
+            java.util.Map.entry("fertility_lamp", List.of("victus", "desiderium")),
+            java.util.Map.entry("bone_bow", List.of("clue/bone", "clue/bow")),
+            java.util.Map.entry("primal_arrows", List.of("clue/arrow")),
+            java.util.Map.entry("brain_jar", List.of("clue/brain")),
+            java.util.Map.entry("liquid_death", List.of("mortuus")),
+            java.util.Map.entry("bottle_taint", List.of("vitium")),
+            java.util.Map.entry("taint_shard", List.of("vitium", "clue/taint_shard")),
+            java.util.Map.entry("ethereal_bloom", List.of("vitium")),
+            java.util.Map.entry("bath_salts", List.of("clue/bath_salts")),
+            java.util.Map.entry("bioalchemic_mind", List.of("clue/brain")),
+            java.util.Map.entry("autocaster", List.of("clue/dispenser")),
+            java.util.Map.entry("crystal_farmer", List.of("vitreus")),
+            java.util.Map.entry("levitator", List.of("volatus")),
+            java.util.Map.entry("arcane_lamp", List.of("lux")),
+            java.util.Map.entry("fortress_armour", List.of("praemunio")),
+            java.util.Map.entry("pattern_crafter", List.of("fabrico")));
+
     /** Research learnt along with another: the Crimson Rites teach the minor eldritch lore too. */
     private static final java.util.Map<String, List<String>> SIBLINGS = java.util.Map.of(
             "crimson", List.of("eldritch_minor"));
@@ -707,7 +743,8 @@ public class ModResearchProvider {
                         BuiltInRegistries.ITEM.wrapAsHolder(icon.asItem()),
                         parents.stream().map(Alchemia::id).toList(),
                         pages(name, recipes),
-                        autoUnlock, shape, complexity, hidden, WARP.getOrDefault(name, 0),
-                        SIBLINGS.getOrDefault(name, List.of()).stream().map(Alchemia::id).toList()));
+                        autoUnlock, shape, complexity, hidden || CONCEALED.contains(name), WARP.getOrDefault(name, 0),
+                        SIBLINGS.getOrDefault(name, List.of()).stream().map(Alchemia::id).toList(),
+                        CLUES.getOrDefault(name, List.of()).stream().map(Alchemia::id).toList()));
     }
 }

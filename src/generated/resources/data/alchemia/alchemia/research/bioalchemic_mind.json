@@ -1,7 +1,11 @@
 {
   "category": "alchemia:golemancy",
+  "clues": [
+    "alchemia:clue/brain"
+  ],
   "column": 0,
   "complexity": 2,
+  "hidden": true,
   "icon": "alchemia:bioalchemic_mind",
   "pages": [
     {

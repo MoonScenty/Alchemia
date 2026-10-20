@@ -1,7 +1,11 @@
 {
   "category": "alchemia:arcana",
+  "clues": [
+    "alchemia:clue/bat"
+  ],
   "column": 1,
   "complexity": 2,
+  "hidden": true,
   "icon": "alchemia:focus_hellbat",
   "pages": [
     {

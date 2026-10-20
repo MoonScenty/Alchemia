@@ -1,6 +1,7 @@
 {
   "category": "alchemia:golemancy",
   "column": -2,
+  "hidden": true,
   "icon": "alchemia:seal_blank",
   "pages": [
     {

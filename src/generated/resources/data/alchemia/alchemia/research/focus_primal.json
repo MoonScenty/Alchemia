@@ -2,6 +2,7 @@
   "category": "alchemia:eldritch",
   "column": 3,
   "complexity": 2,
+  "hidden": true,
   "icon": "alchemia:focus_primal",
   "pages": [
     {

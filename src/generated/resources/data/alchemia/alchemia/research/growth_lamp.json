@@ -1,7 +1,11 @@
 {
   "category": "alchemia:artifice",
+  "clues": [
+    "alchemia:herba"
+  ],
   "column": -1,
   "complexity": 2,
+  "hidden": true,
   "icon": "alchemia:growth_lamp",
   "pages": [
     {

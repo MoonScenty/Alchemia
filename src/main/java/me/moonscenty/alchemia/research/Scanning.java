@@ -12,6 +12,7 @@ import me.moonscenty.alchemia.player.PlayerKnowledge;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
@@ -55,7 +56,8 @@ public final class Scanning {
     /** Whether there is anything left to learn from this, so the scanner can say so before the player bothers. */
     public static boolean hasAnythingToTeach(Player player, ScanTarget target) {
         PlayerKnowledge knowledge = PlayerKnowledge.of(player);
-        return target.aspects().sortedByName().stream().anyMatch(aspect -> !knowledge.knows(aspect));
+        return target.aspects().sortedByName().stream().anyMatch(aspect -> !knowledge.knows(aspect))
+                || !Clues.newIn(knowledge, target).isEmpty();
     }
 
     /**
@@ -77,7 +79,12 @@ public final class Scanning {
         if (!learned.isEmpty()) {
             player.setData(ModAttachments.KNOWLEDGE, before.withAspects(learned));
         }
-        report(player, target, aspects, learned);
+        // and anything this thing is a clue to, found as the original found it
+        List<ResourceLocation> clues = Clues.newIn(before, target);
+        if (clues.isEmpty() || !learned.isEmpty()) {
+            report(player, target, aspects, learned);
+        }
+        clues.forEach(clue -> Clues.give(player, clue));
         return learned;
     }
 

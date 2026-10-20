@@ -1,7 +1,11 @@
 {
   "category": "alchemia:basics",
+  "clues": [
+    "alchemia:vitreus"
+  ],
   "column": 1,
   "complexity": 2,
+  "hidden": true,
   "icon": "alchemia:air_crystal",
   "pages": [
     {

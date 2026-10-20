@@ -2,6 +2,7 @@
   "category": "alchemia:artifice",
   "column": 5,
   "complexity": 3,
+  "hidden": true,
   "icon": "alchemia:infusion_speed_stone",
   "pages": [
     {

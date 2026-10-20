@@ -1,7 +1,11 @@
 {
   "category": "alchemia:artifice",
+  "clues": [
+    "alchemia:clue/arrow"
+  ],
   "column": -4,
   "complexity": 2,
+  "hidden": true,
   "icon": "alchemia:primal_arrow_fire",
   "pages": [
     {

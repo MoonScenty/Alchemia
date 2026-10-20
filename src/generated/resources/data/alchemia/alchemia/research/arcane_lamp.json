@@ -1,5 +1,8 @@
 {
   "category": "alchemia:artifice",
+  "clues": [
+    "alchemia:lux"
+  ],
   "column": 0,
   "icon": "alchemia:arcane_lamp",
   "pages": [
