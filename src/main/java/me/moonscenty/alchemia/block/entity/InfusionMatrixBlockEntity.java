@@ -42,9 +42,11 @@ import net.minecraft.world.level.block.state.BlockState;
 /**
  * The working of an infusion: what is being made, what is still owed for it, and how badly it wants to go wrong.
  * <p>
- * A turn of the work is twenty ticks. On each turn it drinks a point of every essentia still owed out of the jars
- * standing round it, and once nothing is owed it eats the ring a thing at a time. When the ring is bare the thing
- * on the pedestal beneath is replaced by what was being made.
+ * A step of the work is half a cycle, ten ticks on a bare altar, the original's. On each step it drinks a single point
+ * of essentia out of the jars standing round it, and once nothing is owed it eats the ring a thing at a time, each
+ * thing taking six steps and leaving its container behind. A thing missing from the ring stalls it: the work wants
+ * more essentia for the wait and grows shakier. Take the thing on the pedestal beneath away, or put something else
+ * there, and the whole working comes apart. When the ring is eaten the thing beneath becomes what was being made.
  * <p>
  * It is slow on purpose. An infusion is meant to be something you stand and watch, partly because watching is the
  * only warning you get that it is about to go wrong.
@@ -79,7 +81,9 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
     private static final int JARS = 12;
     /** How far under the matrix the thing being worked on stands. */
     private static final int UNDER = 2;
-    /** One turn in this many goes wrong, per point of instability. */
+    /** How many steps it takes to eat one thing off the ring. The original's. */
+    private static final int EATS_FOR = 5;
+    /** One step in this many goes wrong, per point of instability. */
     private static final int MISHAP = 500;
     /** No work is ever worse than this, however it is laid out. */
     public static final int WORST = 25;
@@ -103,6 +107,14 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
     private AspectList owed = AspectList.EMPTY;
     private List<BlockPos> ring = List.of();
     private int instability;
+    /** What was on the pedestal beneath when the working began, and what the recipe itself added to the shake. */
+    private ItemStack central = ItemStack.EMPTY;
+    private int recipeShake;
+    /** What is still to be eaten off the ring, and how far through eating the current thing it is. */
+    private List<ItemStack> remaining = List.of();
+    private int eating;
+    /** The aspects the working was asked for, any of which it may want more of while it waits. */
+    private List<ResourceLocation> asked = List.of();
     /** How long this working's turns are and what it is paying, read off the altar when the work began. */
     private int cycle = CYCLE;
     private int cost = FULL_COST;
@@ -498,9 +510,15 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
         worker = player != null ? player.getUUID() : null;
         reckon(level);
         owed = priced(recipe.essentiaFor(under.held()));
+        asked = owed.sortedByName().stream().map(aspect -> aspect.value().id()).toList();
         ring = List.copyOf(holding);
-        // what the recipe asks for, and what the altar around it is doing about that
-        instability = Math.max(0, Math.min(WORST, recipe.instabilityFor(under.held()) + symmetry(level)));
+        central = under.held().copy();
+        remaining = standing.stream().map(ItemStack::copy).toList();
+        eating = 0;
+        // what the recipe asks for, and what the altar around it is doing about that; the original set it down
+        // as it came and only held it under the worst once it began to grow
+        recipeShake = recipe.instabilityFor(under.held());
+        instability = recipeShake + symmetry(level);
         counter = 0;
         level.playSound(null, worldPosition, ModSounds.CRAFT_START.get(), SoundSource.BLOCKS, 0.5F, 1.0F);
         changed();
@@ -527,7 +545,7 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
         if (!matrix.busy()) {
             return;
         }
-        if (++matrix.counter < matrix.cycle) {
+        if (++matrix.counter < Math.max(1, matrix.cycle / 2)) {
             return;
         }
         matrix.counter = 0;
@@ -553,63 +571,100 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
         }
     }
 
-    /** One turn of the work. */
+    /** One step of the work, the original's {@code craftCycle}. */
     private void turn(ServerLevel level, BlockPos pos) {
         ArcanePedestalBlockEntity under = stand(level, pos.below(UNDER));
         InfusionRecipe recipe = recipe(level);
-        if (recipe == null || under == null || under.held().isEmpty()) {
+        // the thing being worked on has to still be there, and still be the same thing
+        boolean valid = recipe != null && under != null && !under.held().isEmpty()
+                && ItemStack.isSameItemSameComponents(under.held(), central);
+        if (!valid || instability > 0 && level.random.nextInt(MISHAP) <= instability) {
+            InfusionMishaps.strike(level, pos);
+            if (valid) {
+                // something went wrong this step, and that is all the step does
+                return;
+            }
+        }
+        if (!valid) {
             fail(level, pos);
             return;
-        }
-        if (instability > 0 && level.random.nextInt(MISHAP) <= instability) {
-            InfusionMishaps.strike(level, pos, this, ring);
         }
 
         if (!owed.isEmpty()) {
             drink(level, pos);
             return;
         }
-        if (eat(level)) {
+        if (remaining.isEmpty()) {
+            finish(level, pos, under, recipe);
             return;
         }
-        finish(level, pos, under, recipe);
-    }
-
-    /** Takes a point of everything still owed out of the jars within reach. */
-    private void drink(ServerLevel level, BlockPos pos) {
-        AspectList left = owed;
-        for (Holder<Aspect> aspect : owed.sortedByAmount()) {
-            BlockPos from = EssentiaReach.drain(level, pos, aspect, JARS);
-            if (from != null) {
-                left = left.reduce(aspect, 1);
-                EssentiaReach.thread(level, from, pos, aspect.value().color());
-            }
-        }
-        if (left != owed) {
-            owed = left;
-            changed();
-        }
+        eat(level);
     }
 
     /**
-     * Eats one thing off the ring.
-     *
-     * @return whether there was anything left to eat
+     * Takes a single point of whatever is still owed out of the jars within reach. Every aspect that cannot be found
+     * has a small chance of shaking the work a little more, and more so the shakier the recipe was to begin with.
      */
-    private boolean eat(ServerLevel level) {
-        for (BlockPos at : ring) {
-            ArcanePedestalBlockEntity stand = stand(level, at);
-            if (stand == null || stand.held().isEmpty()) {
-                continue;
+    private void drink(ServerLevel level, BlockPos pos) {
+        for (Holder<Aspect> aspect : owed.sortedByAmount()) {
+            BlockPos from = EssentiaReach.drainForInfusion(level, pos, aspect, JARS);
+            if (from != null) {
+                owed = owed.reduce(aspect, 1);
+                EssentiaReach.thread(level, from, pos, aspect.value().color());
+                changed();
+                return;
             }
-            ItemStack eaten = stand.held();
-            stand.hold(ItemStack.EMPTY);
-            EssentiaReach.thread(level, at, worldPosition, 0xC8B4FF);
-            level.playSound(null, at, SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.BLOCKS, 0.6F,
-                    1.2F + level.random.nextFloat() * 0.3F);
-            return !eaten.isEmpty();
+            if (level.random.nextInt(Math.max(1, 100 - recipeShake * 3)) == 0) {
+                shake();
+            }
         }
-        return false;
+        changed();
+    }
+
+    /**
+     * Eats the ring, a thing at a time and six steps to a thing, each off whichever pedestal holds it now. A thing
+     * the ring is missing holds the work up: the original asked for a little more essentia while it waited, one of
+     * whatever it had been asked for, and let the wait shake it.
+     */
+    private void eat(ServerLevel level) {
+        List<BlockPos> stands = around(level, worldPosition);
+        for (int index = 0; index < remaining.size(); index++) {
+            ItemStack wanted = remaining.get(index);
+            for (BlockPos at : stands) {
+                ArcanePedestalBlockEntity stand = stand(level, at);
+                if (stand == null || !ItemStack.isSameItemSameComponents(stand.held(), wanted)) {
+                    continue;
+                }
+                if (eating == 0) {
+                    eating = EATS_FOR;
+                    EssentiaReach.thread(level, at, worldPosition, 0xC8B4FF);
+                } else if (eating-- <= 1) {
+                    ItemStack left = stand.held().getCraftingRemainingItem();
+                    stand.hold(left.isEmpty() ? ItemStack.EMPTY : left.copy());
+                    List<ItemStack> rest = new ArrayList<>(remaining);
+                    rest.remove(index);
+                    remaining = List.copyOf(rest);
+                    level.playSound(null, at, SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.BLOCKS, 0.6F,
+                            1.2F + level.random.nextFloat() * 0.3F);
+                }
+                changed();
+                return;
+            }
+            if (!asked.isEmpty() && level.random.nextInt(1 + index) == 0) {
+                ResourceLocation more = asked.get(level.random.nextInt(asked.size()));
+                me.moonscenty.alchemia.registry.ModAspects.REGISTRY.getHolder(more)
+                        .ifPresent(aspect -> owed = owed.add(aspect, 1));
+                if (level.random.nextInt(Math.max(1, 50 - recipeShake * 2)) == 0) {
+                    shake();
+                }
+                changed();
+            }
+        }
+    }
+
+    /** A little shakier, never past the worst. */
+    private void shake() {
+        instability = Math.min(WORST, instability + 1);
     }
 
     /** The work is done: what was on the pedestal becomes what was being made. */
@@ -647,6 +702,11 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
         working = null;
         owed = AspectList.EMPTY;
         ring = List.of();
+        central = ItemStack.EMPTY;
+        remaining = List.of();
+        asked = List.of();
+        eating = 0;
+        recipeShake = 0;
         instability = 0;
         counter = 0;
         // an idle altar keeps no bargain; the next working reads the stones again for itself
@@ -674,9 +734,9 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
         changed();
     }
 
-    /** Made worse by something going wrong, which makes the next thing going wrong likelier. */
-    public void worsen() {
-        instability = Math.min(WORST, instability + 1);
+    /** Steadied all the way, for a test that wants a working to run without anything going wrong. */
+    public void steady() {
+        instability = 0;
         changed();
     }
 
@@ -740,6 +800,20 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
                 .parse(registries.createSerializationContext(NbtOps.INSTANCE), tag.get("owed"))
                 .result().orElse(AspectList.EMPTY);
         instability = tag.getInt("instability");
+        recipeShake = tag.getInt("recipe_shake");
+        eating = tag.getInt("eating");
+        var context = registries.createSerializationContext(NbtOps.INSTANCE);
+        central = tag.contains("central")
+                ? ItemStack.CODEC.parse(context, tag.get("central")).result().orElse(ItemStack.EMPTY)
+                : ItemStack.EMPTY;
+        remaining = tag.contains("remaining")
+                ? ItemStack.CODEC.listOf().parse(context, tag.get("remaining")).result().map(List::copyOf).orElse(List.of())
+                : List.of();
+        List<ResourceLocation> wanted = new ArrayList<>();
+        for (var name : tag.getList("asked", net.minecraft.nbt.Tag.TAG_STRING)) {
+            wanted.add(ResourceLocation.parse(name.getAsString()));
+        }
+        asked = List.copyOf(wanted);
         cycle = tag.contains("cycle") ? tag.getInt("cycle") : CYCLE;
         cost = tag.contains("cost") ? tag.getInt("cost") : FULL_COST;
         woken = tag.getLong("woken");
@@ -763,6 +837,19 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
                 .encodeStart(registries.createSerializationContext(NbtOps.INSTANCE), owed)
                 .result().ifPresent(written -> tag.put("owed", written));
         tag.putInt("instability", instability);
+        tag.putInt("recipe_shake", recipeShake);
+        tag.putInt("eating", eating);
+        var context = registries.createSerializationContext(NbtOps.INSTANCE);
+        if (!central.isEmpty()) {
+            ItemStack.CODEC.encodeStart(context, central).result().ifPresent(written -> tag.put("central", written));
+        }
+        if (!remaining.isEmpty()) {
+            ItemStack.CODEC.listOf().encodeStart(context, remaining).result()
+                    .ifPresent(written -> tag.put("remaining", written));
+        }
+        net.minecraft.nbt.ListTag names = new net.minecraft.nbt.ListTag();
+        asked.forEach(name -> names.add(net.minecraft.nbt.StringTag.valueOf(name.toString())));
+        tag.put("asked", names);
         tag.putInt("cycle", cycle);
         tag.putInt("cost", cost);
         tag.putLong("woken", woken);

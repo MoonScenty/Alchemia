@@ -44,6 +44,30 @@ public final class EssentiaReach {
         return null;
     }
 
+    /**
+     * Takes a point of an aspect for an infusion, the original's way: out of a jar or an essentia mirror within a box
+     * reaching so far each way, nearest first. Nothing else an altar stands among -- alembics, smelters, pipes -- is
+     * drunk from.
+     *
+     * @return where it came from, or null if nothing in reach had any
+     */
+    public static BlockPos drainForInfusion(Level level, BlockPos from, Holder<Aspect> aspect, int range) {
+        for (BlockEntity holding : nearby(level, from, range * 2)) {
+            BlockPos at = holding.getBlockPos();
+            if (Math.abs(at.getX() - from.getX()) > range || Math.abs(at.getY() - from.getY()) > range
+                    || Math.abs(at.getZ() - from.getZ()) > range) {
+                continue;
+            }
+            if ((holding instanceof me.moonscenty.alchemia.block.entity.JarBlockEntity
+                    || holding instanceof me.moonscenty.alchemia.block.entity.MirrorBlockEntity)
+                    && holding instanceof EssentiaHolder holder && holder.held().get(aspect) > 0
+                    && holder.release(aspect)) {
+                return at;
+            }
+        }
+        return null;
+    }
+
     /** How much of an aspect is standing within reach, for telling somebody why the work has stopped. */
     public static int within(Level level, BlockPos from, Holder<Aspect> aspect, int range) {
         int found = 0;

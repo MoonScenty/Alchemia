@@ -278,8 +278,10 @@ public class InfusionTests {
         Player player = scholar(helper);
         matrix.wake(player);
         matrix.start(player);
+        // nothing going wrong along the way, which in the original could leave the ring a thing short
+        matrix.steady();
 
-        // twelve of one essentia is the longest part, and then a turn apiece for the two things on the ring
+        // a step for each of the twenty-four points of essentia, six for each thing on the ring, one to finish
         run(helper, matrix, 20);
 
         ArcanePedestalBlockEntity under =
@@ -430,6 +432,57 @@ public class InfusionTests {
         ((me.moonscenty.alchemia.block.taint.TaintGroundBlock) ModBlocks.TAINT_ROCK.get()).die(helper.getLevel(),
                 helper.absolutePos(at), helper.getBlockState(at));
         helper.assertBlockPresent(ModBlocks.POROUS_STONE.get(), at);
+        helper.succeed();
+    }
+
+    /**
+     * The ring has to stay laid out to the end. Take what is on it away once the essentia is drunk and the work does
+     * not finish: it waits, wanting more for the wait, as the original's did.
+     */
+    @GameTest(template = TEMPLATE, timeoutTicks = 600)
+    public static void theRingMustStayToTheEnd(GameTestHelper helper) {
+        InfusionMatrixBlockEntity matrix = laidOut(helper);
+        Player player = scholar(helper);
+        matrix.wake(player);
+        matrix.start(player);
+        matrix.steady();
+        run(helper, matrix, 12);
+        stand(helper, MATRIX.offset(2, -2, 0), ItemStack.EMPTY);
+        stand(helper, MATRIX.offset(-2, -2, 0), ItemStack.EMPTY);
+        matrix.steady();
+        run(helper, matrix, 12);
+
+        ArcanePedestalBlockEntity under =
+                (ArcanePedestalBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(MATRIX.below(2)));
+        helper.assertTrue(under.held().is(Items.OBSIDIAN), "nothing was made without the ring");
+        helper.assertTrue(matrix.busy(), "and the work is still waiting on it");
+        helper.succeed();
+    }
+
+    /** Put something else on the pedestal beneath mid-working and the working comes apart. */
+    @GameTest(template = TEMPLATE)
+    public static void swappingTheWorkEndsIt(GameTestHelper helper) {
+        InfusionMatrixBlockEntity matrix = laidOut(helper);
+        Player player = scholar(helper);
+        matrix.wake(player);
+        matrix.start(player);
+        stand(helper, MATRIX.below(2), new ItemStack(Items.STONE));
+        run(helper, matrix, 1);
+        helper.assertTrue(!matrix.busy(), "a different thing is not the working's to finish");
+        helper.succeed();
+    }
+
+    /** An infusion enchantment costs more the more is already worked into the tool, the original's way. */
+    @GameTest(template = TEMPLATE)
+    public static void enchantingCostsMoreOnAWorkedTool(GameTestHelper helper) {
+        var recipe = (me.moonscenty.alchemia.crafting.InfusionRecipe) helper.getLevel().getRecipeManager()
+                .byKey(Alchemia.id("infusion_enchantment_collector")).orElseThrow().value();
+        ItemStack plain = new ItemStack(Items.IRON_PICKAXE);
+        ItemStack worked = me.moonscenty.alchemia.enchantment.InfusionEnchantments.raised(plain.copy(),
+                me.moonscenty.alchemia.enchantment.InfusionEnchantment.REFINING);
+        helper.assertValueEqual(recipe.essentiaFor(plain).get(ModAspects.DESIRE), 16, "the plain price");
+        helper.assertValueEqual(recipe.essentiaFor(worked).get(ModAspects.DESIRE), (int) (16 * 1.33F),
+                "a third again for one other enchantment");
         helper.succeed();
     }
 }

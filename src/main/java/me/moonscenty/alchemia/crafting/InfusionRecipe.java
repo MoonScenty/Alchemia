@@ -75,6 +75,21 @@ public record InfusionRecipe(Ingredient central, List<Ingredient> ring, ItemStac
 
     /** The essentia this asks to work this thing: augmentation's doubles with every point already there. */
     public AspectList essentiaFor(ItemStack central) {
+        if (enchants.isPresent()) {
+            // the original's: the level being worked, and a third again for every other enchantment already on it
+            var on = me.moonscenty.alchemia.enchantment.InfusionEnchantments.on(central);
+            int others = on.size() - (on.containsKey(enchants.get()) ? 1 : 0);
+            float times = me.moonscenty.alchemia.enchantment.InfusionEnchantments.level(central, enchants.get()) + 1
+                    + others * 0.33F;
+            AspectList scaled = AspectList.EMPTY;
+            for (var aspect : essentia.sortedByName()) {
+                int amount = (int) (essentia.get(aspect) * times);
+                if (amount > 0) {
+                    scaled = scaled.add(aspect, amount);
+                }
+            }
+            return scaled;
+        }
         if (!augments) {
             return essentia;
         }
