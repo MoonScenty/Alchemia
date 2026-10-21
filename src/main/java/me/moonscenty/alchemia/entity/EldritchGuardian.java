@@ -1,9 +1,13 @@
 package me.moonscenty.alchemia.entity;
 
+import javax.annotation.Nullable;
+
+import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.entity.cult.Cultist;
 import me.moonscenty.alchemia.entity.cult.CultistKnight;
 import me.moonscenty.alchemia.item.WispyEssenceItem;
 import me.moonscenty.alchemia.network.Mist;
+import me.moonscenty.alchemia.outer.OuterLands;
 import me.moonscenty.alchemia.player.WarpData;
 import me.moonscenty.alchemia.player.WarpHandler;
 import me.moonscenty.alchemia.registry.ModAspects;
@@ -14,11 +18,13 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -26,6 +32,9 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
@@ -140,6 +149,58 @@ public class EldritchGuardian extends Monster implements RangedAttackMob, Eldrit
             amount /= 2.0F;
         }
         return super.hurt(source, amount);
+    }
+
+    // --- the Outer Lands' ward -------------------------------------------------
+
+    /** How often its ward mends a point, in ticks, while nothing is hurting it. */
+    public static final int WARD_MENDS_EVERY = 25;
+    private static final ResourceLocation WARD = Alchemia.id("outer_lands_ward");
+
+    /** In the Outer Lands it is warded, the original's: half its health more, worn as absorption. */
+    public boolean warded() {
+        return level().dimension() == OuterLands.LEVEL;
+    }
+
+    /** How much its ward holds: half its health before anything else was added. */
+    public int ward() {
+        return (int) getAttribute(Attributes.MAX_HEALTH).getBaseValue() / 2;
+    }
+
+    private void makeRoomForWard() {
+        AttributeInstance room = getAttribute(Attributes.MAX_ABSORPTION);
+        if (room != null && !room.hasModifier(WARD)) {
+            room.addPermanentModifier(new AttributeModifier(WARD, ward(), AttributeModifier.Operation.ADD_VALUE));
+        }
+    }
+
+    /** It arrives with the ward whole. */
+    @Override
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason,
+            @Nullable SpawnGroupData data) {
+        SpawnGroupData spawned = super.finalizeSpawn(level, difficulty, reason, data);
+        if (warded()) {
+            putOnWard();
+        }
+        return spawned;
+    }
+
+    /** Gives it the whole ward at once. */
+    public void putOnWard() {
+        makeRoomForWard();
+        setAbsorptionAmount(getAbsorptionAmount() + ward());
+    }
+
+    /** And mends it a point at a time while it is not being hurt. */
+    @Override
+    protected void customServerAiStep() {
+        super.customServerAiStep();
+        if (warded() && invulnerableTime <= 0 && tickCount % WARD_MENDS_EVERY == 0) {
+            makeRoomForWard();
+            if (getAbsorptionAmount() < ward()) {
+                setAbsorptionAmount(getAbsorptionAmount() + 1.0F);
+            }
+        }
     }
 
     @Override

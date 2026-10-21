@@ -114,4 +114,21 @@ public class OuterLandsTests {
                 "on a tiled floor");
         helper.succeed();
     }
+
+    /** A guardian is warded only in the Outer Lands, and there it wears half its health as absorption. */
+    @GameTest(template = TEMPLATE)
+    public static void aGuardianIsWardedOnlyInTheOuterLands(GameTestHelper helper) {
+        var difficulty = new net.minecraft.world.DifficultyInstance(net.minecraft.world.Difficulty.NORMAL, 0L, 0L, 0.0F);
+        var home = me.moonscenty.alchemia.registry.ModEntities.ELDRITCH_GUARDIAN.get().create(helper.getLevel());
+        home.moveTo(helper.absolutePos(new BlockPos(4, 2, 4)), 0.0F, 0.0F);
+        home.finalizeSpawn(helper.getLevel(), difficulty, net.minecraft.world.entity.MobSpawnType.STRUCTURE, null);
+        helper.assertValueEqual(home.getAbsorptionAmount(), 0.0F, "no ward at home");
+
+        helper.assertFalse(home.warded(), "home is not the Outer Lands");
+        // the test server has no Outer Lands to spawn one in, so the ward it would get there is put on by hand
+        home.putOnWard();
+        helper.assertValueEqual(home.getAbsorptionAmount(), (float) home.ward(), "half its health as a ward");
+        helper.assertTrue(home.ward() > 0, "which is something");
+        helper.succeed();
+    }
 }
