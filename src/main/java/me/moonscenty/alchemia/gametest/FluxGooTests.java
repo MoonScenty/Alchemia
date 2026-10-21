@@ -123,8 +123,14 @@ public class FluxGooTests {
         helper.succeed();
     }
 
-    /** Lightning is what starts a patch in the open: it leaves a full puddle where it lands. */
-    @GameTest(template = TEMPLATE)
+    /**
+     * Lightning is what starts a patch in the open: it leaves a full puddle where it lands.
+     * <p>
+     * Its tries clear away every cloud and creature for forty blocks round, since a cloud keeps lightning off for
+     * thirty-two and a creature draws the bolt. Forty blocks reaches into the tests laid out beside it, so it runs in
+     * a batch of its own: once it shared one with the taint bottle's test and took that test's pig away.
+     */
+    @GameTest(template = TEMPLATE, batch = "flux_lightning")
     public static void lightningLeavesAPuddle(GameTestHelper helper) {
         flux(helper, BASE * 4);
         helper.setBlock(HERE.below(), Blocks.STONE);
