@@ -1141,6 +1141,7 @@ python tools/remap_srg.py MCP-919/conf decompiled/thaumcraft src/thaumcraft
   - [x] **원본 jar를 mods 폴더에서 읽기** (2026-10-21). `legacy` 폴더를 없애고, 원본 jar 둘을 다른 모드와 같이 `mods` 폴더에 넣게 했다. FML은 `mcmod.info`만 있는 옛 Forge jar를 "Skipping jar ... old version of Minecraft Forge" 경고 한 줄로 건너뛰고 서버는 그대로 뜬다(게임 테스트 서버로 확인). 임포터는 `mods`의 jar를 모두 열어 보되 원본이 아닌 것은 조용히 넘어간다. 없을 때의 안내 화면 문구와 버튼도 `mods` 폴더로 바꿨다. 언덕을 원본 jar의 바이트코드에서 읽는 `MoundLayout`도 `mods`에서 찾고, 열리지 않는 다른 jar는 건너뛴다. 클라이언트는 시작할 때 이 두 jar에 대한 경고 화면을 띄워 게임이 멈추므로, 오류가 없고 경고가 모두 원본 jar에 대한 것이면 그 화면을 건너뛴다(`OriginalJarWarnings`, 게임 창으로 확인). 모드 설명·리소스팩 설명·주석의 `legacy/`도 `mods/`로 고쳤다.
   - [x] **공허 도구의 나약함** (2026-10-21). 원본 `ItemVoidPickaxe/Axe/Shovel/Hoe.onLeftClickEntity`대로, 공허 곡괭이·도끼·삽·괭이를 든 플레이어가 생물을 휘두르면(왼쪽 클릭) 나약함 4초를 건다. 맞았는지가 아니라 휘두른 것으로 친다. 플레이어에게는 서버의 PvP가 켜져 있을 때만. 공허 검은 그대로 맞은 것에 3초다.
   - [x] **공허 로브 두건으로 노드 보기** (2026-10-21). 원본 `ItemVoidRobeArmor`의 두건은 `showNodes`·`showIngamePopups`를 켰다. 두건을 `alchemia:reveals` 태그에 넣어, 쓰면 고글처럼 오라 노드와 비전 귀의 음이 보인다. 공허 로브 연구 글에 덧붙였다.
+  - [x] **주민 동전** (2026-10-21). 원본 `EntityEvents.livingDrops`대로, 주민이 죽으면 (1+약탈)/10 확률로 동전을 하나 떨군다. 플레이어가 죽인 것이 아니어도 된다.
 
 ## 미결 사항
 
