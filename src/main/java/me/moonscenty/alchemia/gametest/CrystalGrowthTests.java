@@ -132,4 +132,33 @@ public class CrystalGrowthTests {
         helper.assertTrue(last >= 1, "but even the last should get past its seed size");
         helper.succeed();
     }
+
+    /** A wand plucks a shard off a crystal, a size at a time, but only for a crystal farmer. */
+    @GameTest(template = TEMPLATE)
+    public static void aWandPlucksAShard(GameTestHelper helper) {
+        helper.setBlock(ROCK, Blocks.STONE);
+        helper.setBlock(CRYSTAL, crystal(1, 1));
+        var player = helper.makeMockPlayer(net.minecraft.world.level.GameType.SURVIVAL);
+        player.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, me.moonscenty.alchemia.item.WandItem.of(
+                me.moonscenty.alchemia.registry.ModWandParts.SILVERWOOD, me.moonscenty.alchemia.registry.ModWandParts.GOLD));
+        BlockPos at = helper.absolutePos(CRYSTAL);
+        Runnable pluck = () -> helper.getLevel().getBlockState(at).useItemOn(player.getMainHandItem(), helper.getLevel(),
+                player, net.minecraft.world.InteractionHand.MAIN_HAND,
+                new net.minecraft.world.phys.BlockHitResult(net.minecraft.world.phys.Vec3.atCenterOf(at), Direction.UP, at,
+                        false));
+        var shard = me.moonscenty.alchemia.registry.ModItems.SHARDS.get(CrystalType.AIR).get();
+
+        pluck.run();
+        helper.assertValueEqual(helper.getBlockState(CRYSTAL).getValue(CrystalBlock.AGE), 1,
+                "not without knowing how");
+        player.setData(me.moonscenty.alchemia.player.ModAttachments.KNOWLEDGE,
+                me.moonscenty.alchemia.player.PlayerKnowledge.of(player).withResearch(Alchemia.id("crystal_farmer")));
+        pluck.run();
+        helper.assertValueEqual(helper.getBlockState(CRYSTAL).getValue(CrystalBlock.AGE), 0, "it shrinks a size");
+        helper.assertValueEqual(player.getInventory().countItem(shard), 1, "for a shard");
+        pluck.run();
+        helper.assertBlockNotPresent(ModBlocks.CRYSTALS.get(CrystalType.AIR).get(), CRYSTAL);
+        helper.assertValueEqual(player.getInventory().countItem(shard), 2, "the smallest goes altogether, for one more");
+        helper.succeed();
+    }
 }

@@ -953,7 +953,7 @@
   "research.alchemia.crucible": "도가니",
   "research.alchemia.crucible.page": "불 위에 올려 둔 물 냄비. 떨어뜨린 것은 무엇이든 제 본바탕으로 풀어지고, 물에 알맞은 것들이 떠 있게 되면 마지막 하나를 던져 넣어 전부를 새것으로 끓여낸다.",
   "research.alchemia.crystal_farmer": "결정 농사",
-  "research.alchemia.crystal_farmer.page": "비스 조각을 돌 위에 심을 수 있는 비스 결정으로 바꾸는 법을 찾았다. 조각 하나에 씨앗과 살리스 문두스로 키운다.",
+  "research.alchemia.crystal_farmer.page": "비스 조각을 돌 위에 심을 수 있는 비스 결정으로 바꾸는 법을 찾았다. 조각 하나에 씨앗과 살리스 문두스로 키운다. 결정을 완드로 누르면 조각을 하나 딸 수 있는데, 결정이 한 단계 작아지고 가장 작으면 아예 없어진다.",
   "research.alchemia.crystallizer": "에센시아 결정화",
   "research.alchemia.crystallizer.page": "뒤로 관을 통해 들어온 에센시아를 한 점씩 결정으로 굳혀 반대쪽 끝으로 내보낸다. 그쪽에 상자가 있으면 거기에, 없으면 바닥에 떨군다. 어느 상이든 된다. 공기 중의 흙을 네 점씩 끌어다 쓰고, 공기에 흙이 없으면 그저 기다린다. 레드스톤 신호가 멈춘다.",
   "research.alchemia.dioptra": "연금 디옵트라",

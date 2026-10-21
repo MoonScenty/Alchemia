@@ -3,12 +3,21 @@ package me.moonscenty.alchemia.block;
 import java.util.EnumMap;
 import java.util.Map;
 
+import me.moonscenty.alchemia.Alchemia;
+import me.moonscenty.alchemia.item.WandItem;
+import me.moonscenty.alchemia.player.PlayerKnowledge;
+import me.moonscenty.alchemia.registry.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
@@ -22,8 +31,10 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
@@ -58,6 +69,33 @@ public class CrystalBlock extends Block implements SimpleWaterloggedBlock {
 
     public CrystalType getType() {
         return type;
+    }
+
+    /**
+     * A wand plucks a shard off it, for whoever knows how to farm them, the original's
+     * {@code BlockCrystal.onWandRightClick}: it shrinks a size, or goes altogether if it was as small as it gets.
+     */
+    @Override
+    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
+            Player player, InteractionHand hand, BlockHitResult hit) {
+        if (!(stack.getItem() instanceof WandItem)
+                || !PlayerKnowledge.of(player).hasResearch(Alchemia.id("crystal_farmer"))) {
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        }
+        if (!level.isClientSide) {
+            level.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(state));
+            int age = state.getValue(AGE);
+            if (age > 0) {
+                level.setBlock(pos, state.setValue(AGE, age - 1), Block.UPDATE_ALL);
+            } else {
+                level.removeBlock(pos, false);
+            }
+            ItemStack shard = new ItemStack(ModItems.SHARDS.get(type).get());
+            if (!player.getInventory().add(shard)) {
+                player.drop(shard, false);
+            }
+        }
+        return ItemInteractionResult.sidedSuccess(level.isClientSide);
     }
 
     public static int getLightLevel(BlockState state) {
