@@ -987,6 +987,8 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("node_type.alchemia.unstable", pick("Unstable Node", "불안정한 노드"));
         add("node_type.alchemia.astral", pick("Astral Node", "천상의 노드"));
         add("note.alchemia.no_such_mix", pick("These two make nothing", "이 둘로는 아무것도 만들어지지 않는다"));
+        add("note.alchemia.spend_fragment", pick("Click to consume a fragment and add 1 of each primal",
+                "눌러서 조각 하나를 쓰고 원시 상을 하나씩 더한다"));
         add("note.alchemia.pinned", pick("Pinned by the subject", "주제가 고정한 자리"));
         add("note.alchemia.would_hold", pick("This would hold", "여기라면 이어진다"));
         add("note.alchemia.would_not_hold", pick("Nothing here to hold on to", "이어 붙일 것이 없다"));
@@ -1389,6 +1391,12 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                 {"trans_metal", "Metal Transmutation", "금속 변환",
                  "You have found a way to multiply metals by steeping nuggets of them in metallum and other aspects.",
                  "금속 조각을 메탈룸과 다른 상에 담가 금속을 불리는 법을 찾았다."},
+                {"researcher1", "Research Expertise", "연구 숙련",
+                 "You have become more efficient at performing research. Whenever you remove an aspect that you placed in a hex, there is a 25% chance that you will regain the research point. You are also able to see what aspects you need to combine to create an aspect you are hovering over. Lastly it gives you the ability to consume a knowledge fragment to add one point to each primal.",
+                 "연구가 한결 능숙해졌다. 칸에 놓았던 상을 지우면 25% 확률로 그 점을 돌려받는다. 상 위에 마우스를 올리면 그것을 만드는 데 섞을 두 상이 보인다. 마지막으로 지식의 조각 하나를 써서 원시 상을 하나씩 더할 수 있다."},
+                {"researcher2", "Research Mastery", "연구 통달",
+                 "You have become even more efficient at performing research. Whenever you remove an aspect that you placed in a hex, there is a 50% chance that you will regain the research point. Additionally there is a 10% chance that whenever you place an aspect that it will not cost any research points to do so. Lastly you are able to combine aspects in the research table by shift-clicking on the aspect you wish to create. If you have enough of the component aspects they will automatically combine to create the clicked aspect.",
+                 "연구가 더욱 능숙해졌다. 칸에 놓았던 상을 지우면 50% 확률로 그 점을 돌려받는다. 상을 놓을 때 10% 확률로 점이 들지 않는다. 마지막으로 연구 탁자에서 만들고 싶은 상을 Shift를 누른 채 누르면, 섞을 두 상이 넉넉할 때 저절로 섞여 그 상이 만들어진다."},
                 {"crystal_farmer", "Crystal Farmer", "결정 농사",
                  "You have found how to turn vis shards into vis crystals that can be planted on stone, each grown from a shard with seeds and salis mundus. A wand will also pluck a shard from a crystal, taking it down a size, or away altogether if it is as small as it gets.",
                  "비스 조각을 돌 위에 심을 수 있는 비스 결정으로 바꾸는 법을 찾았다. 조각 하나에 씨앗과 살리스 문두스로 키운다. 결정을 완드로 누르면 조각을 하나 딸 수 있는데, 결정이 한 단계 작아지고 가장 작으면 아예 없어진다."},

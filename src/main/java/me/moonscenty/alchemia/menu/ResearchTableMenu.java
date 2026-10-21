@@ -2,18 +2,24 @@ package me.moonscenty.alchemia.menu;
 
 import java.util.Optional;
 
+import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.aspect.Aspect;
+import me.moonscenty.alchemia.aspect.AspectList;
 import me.moonscenty.alchemia.block.entity.ResearchTableBlockEntity;
 import me.moonscenty.alchemia.item.ResearchNoteItem;
 import me.moonscenty.alchemia.registry.ModAspects;
 import me.moonscenty.alchemia.registry.ModBlocks;
+import me.moonscenty.alchemia.player.PlayerKnowledge;
 import me.moonscenty.alchemia.registry.ModDataComponents;
+import me.moonscenty.alchemia.registry.ModItems;
 import me.moonscenty.alchemia.registry.ModMenus;
 import me.moonscenty.alchemia.registry.ModSounds;
 import me.moonscenty.alchemia.research.HexGrid;
 import me.moonscenty.alchemia.research.NoteSolving;
 import me.moonscenty.alchemia.research.ResearchNote;
 import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
@@ -97,8 +103,19 @@ public class ResearchTableMenu extends AbstractContainerMenu {
         return !tools.isEmpty() && tools.getDamageValue() < tools.getMaxDamage() - 1;
     }
 
+    /** The original's research expertise and mastery, which make the table kinder to whoever has them. */
+    public static final ResourceLocation RESEARCHER_1 = Alchemia.id("researcher1");
+    public static final ResourceLocation RESEARCHER_2 = Alchemia.id("researcher2");
+
+    public static boolean knows(Player player, ResourceLocation research) {
+        return PlayerKnowledge.of(player).hasResearch(research);
+    }
+
     /**
      * Lays an aspect down, or lifts one back off. Runs on the server: the client only says where it clicked.
+     * <p>
+     * The original's researcher perks are here: with mastery a point laid down is free one time in ten, and a point
+     * rubbed out comes back one time in four with expertise or one in two with mastery.
      */
     public void place(Player player, HexGrid.Hex at, Optional<Holder<Aspect>> aspect) {
         ResearchNote note = note();
@@ -109,7 +126,15 @@ public class ResearchTableMenu extends AbstractContainerMenu {
             return;
         }
 
+        Optional<Holder<Aspect>> was = note.cellAt(at).flatMap(ResearchNote.Cell::aspect);
         ResearchNote written = NoteSolving.place(note, at, aspect);
+        float luck = player.getRandom().nextFloat();
+        if (aspect.isPresent() && knows(player, RESEARCHER_2) && luck < 0.1F) {
+            written = giveBack(player, written, aspect.get());
+        } else if (aspect.isEmpty() && was.isPresent()
+                && (knows(player, RESEARCHER_2) && luck < 0.5F || knows(player, RESEARCHER_1) && luck < 0.25F)) {
+            written = giveBack(player, written, was.get());
+        }
         if (NoteSolving.isSolved(written)) {
             written = NoteSolving.settle(written);
             // the table's own sound of a thing worked out, heard by everyone standing round it
@@ -117,6 +142,38 @@ public class ResearchTableMenu extends AbstractContainerMenu {
                     1.0F, 1.0F));
         }
         write(written);
+    }
+
+    /** A point put back on the sheet, with the little chime the original gave it. */
+    private ResearchNote giveBack(Player player, ResearchNote note, Holder<Aspect> aspect) {
+        player.level().playSound(null, player.getX(), player.getY(), player.getZ(),
+                SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 0.2F,
+                0.9F + player.getRandom().nextFloat() * 0.2F);
+        return new ResearchNote(note.research(), note.budget().add(aspect, 1), note.cells(), note.complete());
+    }
+
+    /**
+     * With research expertise, a knowledge fragment carried can be spent on the note for a point of every primal,
+     * the original's fifth button.
+     */
+    public void spendFragment(Player player) {
+        ResearchNote note = note();
+        if (note == null || note.complete() || !hasInk() || !knows(player, RESEARCHER_1)) {
+            return;
+        }
+        Inventory inventory = player.getInventory();
+        for (int slot = 0; slot < inventory.getContainerSize(); slot++) {
+            ItemStack stack = inventory.getItem(slot);
+            if (stack.is(ModItems.KNOWLEDGE_FRAGMENT.get())) {
+                AspectList budget = note.budget();
+                for (Holder<Aspect> primal : ModAspects.primals()) {
+                    budget = budget.add(primal, 1);
+                }
+                write(new ResearchNote(note.research(), budget, note.cells(), note.complete()));
+                stack.shrink(1);
+                return;
+            }
+        }
     }
 
     /** Mixes two of what is on the sheet into the one thing they make between them. */

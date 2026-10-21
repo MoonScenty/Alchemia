@@ -33,6 +33,7 @@ public class ModNetwork {
         registrar.playToServer(RequestNote.TYPE, RequestNote.STREAM_CODEC, ModNetwork::onRequestNote);
         registrar.playToServer(PlaceAspect.TYPE, PlaceAspect.STREAM_CODEC, ModNetwork::onPlaceAspect);
         registrar.playToServer(MixAspects.TYPE, MixAspects.STREAM_CODEC, ModNetwork::onMixAspects);
+        registrar.playToServer(SpendFragment.TYPE, SpendFragment.STREAM_CODEC, ModNetwork::onSpendFragment);
         registrar.playToServer(ChangeFocus.TYPE, ChangeFocus.STREAM_CODEC, ModNetwork::onChangeFocus);
         registrar.playToServer(ToolSetting.TYPE, ToolSetting.STREAM_CODEC, ModNetwork::onToolSetting);
         registrar.playToServer(ChooseFocus.TYPE, ChooseFocus.STREAM_CODEC, ModNetwork::onChooseFocus);
@@ -143,6 +144,15 @@ public class ModNetwork {
                     && player.containerMenu instanceof ResearchTableMenu table) {
                 aspect(payload.one()).ifPresent(one ->
                         aspect(payload.other()).ifPresent(other -> table.mix(player, one, other)));
+            }
+        });
+    }
+
+    private static void onSpendFragment(SpendFragment payload, IPayloadContext context) {
+        context.enqueueWork(() -> {
+            if (context.player() instanceof ServerPlayer player
+                    && player.containerMenu instanceof ResearchTableMenu table) {
+                table.spendFragment(player);
             }
         });
     }

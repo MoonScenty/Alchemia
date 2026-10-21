@@ -1,0 +1,24 @@
+{
+  "category": "alchemia:basics",
+  "column": 3,
+  "complexity": 2,
+  "icon": "alchemia:knowledge_fragment",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.researcher2.page"
+    }
+  ],
+  "parents": [
+    "alchemia:researcher1"
+  ],
+  "requirements": {
+    "alchemia:cognitio": 6,
+    "alchemia:ordo": 3,
+    "alchemia:potentia": 3,
+    "alchemia:sensus": 3
+  },
+  "row": 3,
+  "shape": "special",
+  "warp": 1
+}

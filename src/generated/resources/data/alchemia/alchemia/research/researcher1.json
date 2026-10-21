@@ -1,0 +1,20 @@
+{
+  "category": "alchemia:basics",
+  "column": 4,
+  "icon": "alchemia:scribing_tools",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.researcher1.page"
+    }
+  ],
+  "parents": [
+    "alchemia:aspects"
+  ],
+  "requirements": {
+    "alchemia:cognitio": 3,
+    "alchemia:ordo": 3,
+    "alchemia:sensus": 3
+  },
+  "row": 1
+}

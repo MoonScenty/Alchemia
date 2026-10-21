@@ -54,6 +54,14 @@ public class ModResearchProvider {
                 List.of("infusion"), false, NodeShape.PLAIN, 2, "air_crystal_from_shard", "fire_crystal_from_shard",
                 "water_crystal_from_shard", "earth_crystal_from_shard", "order_crystal_from_shard",
                 "entropy_crystal_from_shard", "flux_crystal_from_shard");
+        // the table grows kinder to whoever has done enough at it
+        entry(context, "researcher1", ModResearch.BASICS, ModItems.SCRIBING_TOOLS, 4, 1,
+                AspectList.of(ModAspects.MIND, 3).add(ModAspects.SENSES, 3).add(ModAspects.ORDER, 3),
+                List.of("aspects"), false, NodeShape.PLAIN, 1);
+        entry(context, "researcher2", ModResearch.BASICS, ModItems.KNOWLEDGE_FRAGMENT, 3, 3,
+                AspectList.of(ModAspects.MIND, 6).add(ModAspects.ORDER, 3).add(ModAspects.SENSES, 3)
+                        .add(ModAspects.ENERGY, 3),
+                List.of("researcher1"), false, NodeShape.SPECIAL, 2);
         entry(context, "enchantments", ModResearch.BASICS, net.minecraft.world.item.Items.ENCHANTED_BOOK, -2, -1,
                 AspectList.EMPTY, List.of(), true, NodeShape.PLAIN, 1);
         entry(context, "amber", ModResearch.BASICS, ModItems.AMBER, -2, 1,
@@ -693,7 +701,7 @@ public class ModResearchProvider {
             java.util.Map.entry("oculus", 6), java.util.Map.entry("sinister_stone", 2),
             java.util.Map.entry("focus_primal", 2), java.util.Map.entry("liquid_death", 3),
             // the original wrote two and then, a line later, one over it; the one is what it gave
-            java.util.Map.entry("bottle_taint", 1));
+            java.util.Map.entry("bottle_taint", 1), java.util.Map.entry("researcher2", 1));
     /**
      * The original's hidden research: out of the book until what it waits on, research and clues, is all there.
      */

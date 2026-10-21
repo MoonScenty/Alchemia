@@ -16,8 +16,10 @@ import com.mojang.math.Axis;
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.aspect.Aspect;
 import me.moonscenty.alchemia.menu.ResearchTableMenu;
+import me.moonscenty.alchemia.registry.ModItems;
 import me.moonscenty.alchemia.network.MixAspects;
 import me.moonscenty.alchemia.network.PlaceAspect;
+import me.moonscenty.alchemia.network.SpendFragment;
 import me.moonscenty.alchemia.registry.ModSounds;
 import me.moonscenty.alchemia.research.HexGrid;
 import me.moonscenty.alchemia.research.NoteSolving;
@@ -29,6 +31,7 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -106,6 +109,11 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
 
     private static final int ICON = 16;
 
+    // The knowledge fragment the original drew at the top of the rack for a researcher carrying one, and its box.
+    private static final int FRAGMENT_X = 40;
+    private static final int FRAGMENT_Y = 6;
+    private static final int FRAGMENT_SIZE = 20;
+
     // The script that settles on the parchment. It says nothing: it is there so the sheet looks written on rather
     // than blank. Sixteen letters, as many as the original's strip has, each drawn small and turned on its side.
     private static final int LETTERS = 16;
@@ -157,6 +165,7 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
         drawBoard(graphics, mouseX, mouseY, partialTick);
         drawPool(graphics);
         drawButtons(graphics, mouseX, mouseY);
+        drawFragment(graphics, partialTick);
         drawDishes(graphics);
         renderTooltip(graphics, mouseX, mouseY);
     }
@@ -464,6 +473,48 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
         }
     }
 
+    /** Whether the reader has done this research, as far as this side has heard. */
+    private boolean knows(ResourceLocation research) {
+        return minecraft != null && minecraft.player != null
+                && ResearchTableMenu.knows(minecraft.player, research);
+    }
+
+    /** Whether the fragment is there to be spent: research expertise, a note in hand and a fragment carried. */
+    private boolean fragmentOffered() {
+        ResearchNote note = menu.note();
+        return note != null && !note.complete() && knows(ResearchTableMenu.RESEARCHER_1)
+                && minecraft.player.getInventory().contains(new ItemStack(ModItems.KNOWLEDGE_FRAGMENT.get()));
+    }
+
+    /** The fragment, swelling and shrinking a little as the original's did. */
+    private void drawFragment(GuiGraphics graphics, float partialTick) {
+        if (!fragmentOffered()) {
+            return;
+        }
+        float swell = 1.0F + net.minecraft.util.Mth.sin((minecraft.player.tickCount + partialTick) / 4.0F) * 0.2F;
+        graphics.pose().pushPose();
+        graphics.pose().translate(leftPos + FRAGMENT_X + FRAGMENT_SIZE / 2.0F + 1,
+                topPos + FRAGMENT_Y + FRAGMENT_SIZE / 2.0F + 2, 0);
+        graphics.pose().scale(swell, swell, 1.0F);
+        graphics.renderItem(new ItemStack(ModItems.KNOWLEDGE_FRAGMENT.get()), -8, -8);
+        graphics.pose().popPose();
+    }
+
+    /** With research expertise, a compound's two parts are shown beside its name. */
+    private void drawParts(GuiGraphics graphics, Holder<Aspect> aspect, int mouseX, int mouseY) {
+        if (!knows(ResearchTableMenu.RESEARCHER_1)) {
+            return;
+        }
+        aspect.value().components().ifPresent(parts -> {
+            graphics.pose().pushPose();
+            graphics.pose().translate(0, 0, 500);
+            for (int part = 0; part < parts.size(); part++) {
+                drawAspect(graphics, parts.get(part), mouseX + 8 + part * 18, mouseY + 8, 1F);
+            }
+            graphics.pose().popPose();
+        });
+    }
+
     /** Whether the pointer is over a box given in panel coordinates. */
     private boolean within(double mouseX, double mouseY, int x, int y, int wide, int tall) {
         return mouseX >= leftPos + x && mouseX < leftPos + x + wide
@@ -537,9 +588,20 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
             return true;
         }
 
+        if (within(mouseX, mouseY, FRAGMENT_X, FRAGMENT_Y, FRAGMENT_SIZE, FRAGMENT_SIZE) && fragmentOffered()) {
+            PacketDistributor.sendToServer(new SpendFragment());
+            click(ModSounds.CAMERA_CLACK.get(), 0.4F, 1.0F);
+            return true;
+        }
+
         List<Holder<Aspect>> shown = shown();
         for (int place = 0; place < shown.size(); place++) {
             if (over(mouseX, mouseY, poolX(place), poolY(place))) {
+                // with research mastery, a shifted click makes one more of it out of its parts, if they are there
+                if (hasShiftDown() && knows(ResearchTableMenu.RESEARCHER_2)
+                        && makeFromParts(note, shown.get(place))) {
+                    return true;
+                }
                 held = shown.get(place).equals(held) ? null : shown.get(place);
                 pick();
                 return true;
@@ -585,6 +647,18 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
         return super.mouseClicked(mouseX, mouseY, button);
     }
 
+    /** Asks for one of this mixed out of its two parts, when the sheet holds both. */
+    private boolean makeFromParts(ResearchNote note, Holder<Aspect> aspect) {
+        List<Holder<Aspect>> parts = aspect.value().components().orElse(List.of());
+        if (parts.size() != 2 || note.budget().get(parts.get(0)) <= 0 || note.budget().get(parts.get(1)) <= 0) {
+            return false;
+        }
+        PacketDistributor.sendToServer(new MixAspects(id(parts.get(0)), id(parts.get(1))));
+        click(ModSounds.CAMERA_CLACK.get(), 0.4F, 1.0F);
+        click(ModSounds.HH_ON.get(), 0.3F, 1.0F);
+        return true;
+    }
+
     private static ResourceLocation id(Holder<Aspect> aspect) {
         return aspect.value().id();
     }
@@ -615,6 +689,8 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
                 List<Component> lines = describeCell(note, at);
                 if (!lines.isEmpty()) {
                     graphics.renderComponentTooltip(font, lines, mouseX, mouseY);
+                    note.cellAt(at).flatMap(ResearchNote.Cell::aspect)
+                            .ifPresent(aspect -> drawParts(graphics, aspect, mouseX, mouseY));
                     return;
                 }
             }
@@ -623,8 +699,13 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
             for (int place = 0; place < shown.size(); place++) {
                 if (over(mouseX, mouseY, poolX(place), poolY(place))) {
                     graphics.renderTooltip(font, shown.get(place).value().displayName(), mouseX, mouseY);
+                    drawParts(graphics, shown.get(place), mouseX, mouseY);
                     return;
                 }
+            }
+            if (within(mouseX, mouseY, FRAGMENT_X, FRAGMENT_Y, FRAGMENT_SIZE, FRAGMENT_SIZE) && fragmentOffered()) {
+                graphics.renderTooltip(font, Component.translatable("note.alchemia.spend_fragment"), mouseX, mouseY);
+                return;
             }
             // what the two dishes would make between them, read off the button that would make it
             if (within(mouseX, mouseY, MIX_X, MIX_Y, MIX_W, MIX_H)) {
