@@ -16,6 +16,8 @@ public class AlchemiaClient {
         // the game is drawn with the original's own pictures and models, so without both jars it shows where to get
         // them in place of its title, and goes no further. Writing the data files draws nothing and needs neither
         if (!DatagenModLoader.isRunningDataGen()) {
+            // the loader warns about the original's jars sitting in the mods folder; that is where they belong
+            net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(OriginalJarWarnings::onOpening);
             java.util.Set<me.moonscenty.alchemia.client.legacy.LegacyEdition> missing =
                     LegacyAssetImporter.missingJars();
             if (!missing.isEmpty()) {

@@ -15,7 +15,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
 /**
- * What the game shows instead of its title when a jar of the original is not in the {@code legacy} folder: which
+ * What the game shows instead of its title when a jar of the original is not in the {@code mods} folder: which
  * one is wanted, a way to its download page on CurseForge, the folder to put it in, and the way out. The mod draws
  * with the original's pictures and models, so there is nothing to play until both are there.
  * <p>

@@ -40,8 +40,8 @@ import net.neoforged.fml.loading.FMLPaths;
  *
  * <p>The original wrote its mound down as some two and a half thousand calls of {@code setBlockState}, one per block,
  * split over two methods because one was too long. There is nothing to read but that code, and writing its numbers
- * down here would be copying the original. Instead this walks those two methods' bytecode in the jar in
- * {@code legacy/}, the same way the original's models are read, and keeps what each call would have put where: a
+ * down here would be copying the original. Instead this walks those two methods' bytecode in the jar in the
+ * {@code mods} folder, the same way the original's models are read, and keeps what each call would have put where: a
  * tiny stack machine that knows constants, adding and taking away, a new {@code BlockPos}, a block from
  * {@code Blocks} and its state, and the call that sets it. Anything else empties the stack, so the checks before
  * and the treasure after (which this mod writes out itself, as logic) leave nothing behind.
@@ -53,7 +53,6 @@ import net.neoforged.fml.loading.FMLPaths;
  */
 public final class MoundLayout {
     private static final Logger LOGGER = LogUtils.getLogger();
-    private static final String FOLDER = "legacy";
     private static final String CLASS = "thaumcraft/common/lib/world/objects/WorldGenMound";
     /** The whole of it is in the first method and the second it hands on to, in that order. */
     private static final List<String> METHODS = List.of("func_180709_b", "generate2");
@@ -102,14 +101,14 @@ public final class MoundLayout {
         return chest;
     }
 
-    /** The mound, or nothing when there is no Thaumcraft 5 jar in {@code legacy/} or it could not be read. */
+    /** The mound, or nothing when there is no Thaumcraft 5 jar in {@code mods} or it could not be read. */
     public static Optional<MoundLayout> get() {
         Optional<MoundLayout> found = loaded;
         if (found == null) {
             synchronized (MoundLayout.class) {
                 found = loaded;
                 if (found == null) {
-                    found = load(FMLPaths.GAMEDIR.get().resolve(FOLDER));
+                    found = load(FMLPaths.MODSDIR.get());
                     loaded = found;
                 }
             }
@@ -124,7 +123,14 @@ public final class MoundLayout {
         }
         try (Stream<Path> files = Files.list(folder)) {
             for (Path jar : files.filter(path -> path.toString().endsWith(".jar")).sorted().toList()) {
-                Optional<byte[]> bytes = readClass(jar);
+                // every other mod is in the same folder; one that will not open is simply not the one wanted
+                Optional<byte[]> bytes;
+                try {
+                    bytes = readClass(jar);
+                } catch (IOException e) {
+                    LOGGER.debug("Could not open {}", jar.getFileName(), e);
+                    continue;
+                }
                 if (bytes.isPresent()) {
                     MoundLayout layout = read(bytes.get());
                     LOGGER.info("Read the mound from {}: {} blocks", jar.getFileName(), layout.blocks.size());

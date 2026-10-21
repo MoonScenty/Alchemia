@@ -32,8 +32,11 @@ import net.neoforged.fml.loading.FMLPaths;
 import net.neoforged.neoforge.event.AddPackFindersEvent;
 
 /**
- * Reads the original's jars from {@code <game folder>/legacy/} and offers what {@link LegacyAssets} asks for
+ * Reads the original's jars from the game's {@code mods} folder and offers what {@link LegacyAssets} asks for
  * as a resource pack sitting above our own files.
+ *
+ * <p>The jars go in {@code mods} beside this mod because that is where a player puts mods. The loader sees that they
+ * are for an old Forge, says so in the log and passes over them; nothing of them is loaded but what is read here.
  *
  * <p>The original is All Rights Reserved, so its pictures never go into this repository. The player brings the jar;
  * we only know where in it to look. Both releases are required: while {@link #missingJars()} finds one missing, the
@@ -44,7 +47,6 @@ import net.neoforged.neoforge.event.AddPackFindersEvent;
  */
 @EventBusSubscriber(modid = Alchemia.MODID, value = Dist.CLIENT)
 public final class LegacyAssetImporter {
-    public static final String FOLDER = "legacy";
     private static final String PACK_ID = Alchemia.MODID + "/legacy";
     /**
      * Stands in for a missing {@code .mcmeta}. The game looks for a picture's metadata in the pack that served it and
@@ -62,7 +64,7 @@ public final class LegacyAssetImporter {
             return;
         }
         event.addRepositorySource(packs -> {
-            Map<String, byte[]> files = importAll(FMLPaths.GAMEDIR.get().resolve(FOLDER));
+            Map<String, byte[]> files = importAll(folder());
             if (files.isEmpty()) {
                 return;
             }
@@ -184,9 +186,23 @@ public final class LegacyAssetImporter {
         return models;
     }
 
-    /** Where the jars go. */
+    /** Whether a file is one of the original's jars, either release, told by what it says it is inside. */
+    public static boolean isOriginal(Path path) {
+        try {
+            Optional<LegacyJar> opened = LegacyJar.open(path);
+            if (opened.isPresent()) {
+                opened.get().close();
+                return true;
+            }
+        } catch (IOException e) {
+            Alchemia.LOGGER.debug("Could not open {}", path, e);
+        }
+        return false;
+    }
+
+    /** Where the jars go: the mods folder, with every other mod. */
     public static Path folder() {
-        return FMLPaths.GAMEDIR.get().resolve(FOLDER);
+        return FMLPaths.MODSDIR.get();
     }
 
     /**
@@ -239,7 +255,8 @@ public final class LegacyAssetImporter {
             try {
                 Optional<LegacyJar> opened = LegacyJar.open(path);
                 if (opened.isEmpty()) {
-                    Alchemia.LOGGER.warn("{} is not a jar of the original we can read; skipped", path.getFileName());
+                    // every other mod in the folder, which is no business of ours
+                    Alchemia.LOGGER.debug("{} is not a jar of the original; skipped", path.getFileName());
                     continue;
                 }
                 LegacyJar jar = opened.get();

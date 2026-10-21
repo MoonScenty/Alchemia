@@ -6,9 +6,9 @@ Thaumcraft 5.2.4 (MC 1.8.9)의 기능을 Minecraft 1.21.1 / NeoForge 21.1 로 �
 
 - 원본 코드를 복사하거나 줄 단위로 옮기지 않는다. 디컴파일 소스는 **기능·수치·동작을 확인하는 용도**로만 읽고, 구현은 1.21.1 방식으로 새로 작성한다.
 - 원본의 텍스처·모델·사운드·문서 텍스트도 저장소에 넣지 않는다 (Thaumcraft는 All Rights Reserved).
-- **원본 에셋은 플레이어의 jar에서 읽어 온다.** 게임 폴더의 `legacy/`에 Thaumcraft 4(1.7.10)와 5(1.8.9) jar를 두면 `client/legacy/`가 실행 중에 필요한 것만 꺼내 내장 리소스팩으로 내준다. 디스크에 풀어 놓지 않는다. 개발 중에는 `run/legacy/`이고 `run/`은 이미 `.gitignore`에 있다.
+- **원본 에셋은 플레이어의 jar에서 읽어 온다.** 게임의 `mods/` 폴더에 Thaumcraft 4(1.7.10)와 5(1.8.9) jar를 두면 `client/legacy/`가 실행 중에 필요한 것만 꺼내 내장 리소스팩으로 내준다. 디스크에 풀어 놓지 않는다. 개발 중에는 `run/mods/`이고 `run/`은 이미 `.gitignore`에 있다. FML은 두 jar를 옛 Forge용이라며 건너뛰고(`ModDiscoverer`의 경고 한 줄) 아무것도 불러오지 않는다. 클라이언트는 그 경고를 시작할 때 화면(`LoadingErrorScreen`)으로도 띄우는데, 오류가 없고 경고가 모두 원본 jar에 대한 것이면 `OriginalJarWarnings`가 그 화면을 건너뛴다(화면의 비공개 필드를 이름으로 읽으므로 NeoForge가 바뀌면 다시 볼 것). 2026-10-21까지는 따로 둔 `legacy/` 폴더였다.
   - 무엇을 어디서 꺼낼지는 `LegacyAssets`에 단계별로 적는다. 우리 파일 경로 하나에 원본 경로를 TC5, TC4 순으로 적고, 먼저 찾은 쪽을 쓴다.
-  - **두 jar는 실행 필수다**(2026-10-10). 클라이언트는 시작할 때(`AlchemiaClient` → `LegacyAssetImporter.missingJars()`) 둘 다 있는지 보고, 하나라도 없으면 타이틀 화면 대신 `MissingJarsScreen`을 띄운다(2026-10-15부터). 빠진 jar의 CurseForge 다운로드 페이지(바닐라 링크 확인 창을 거친다), `legacy` 폴더 열기, 게임 종료 버튼이 있고 Esc로 닫히지 않는다. 원본 라이선스상 배포는 작성자만 할 수 있으므로 자동으로 내려받지 않는다. jar는 이름이 아니라 안의 `mcmod.info` 버전으로 가린다. 데이터 생성(`runData`)과 게임 테스트 서버는 그림을 쓰지 않으므로 검사하지 않는다.
+  - **두 jar는 실행 필수다**(2026-10-10). 클라이언트는 시작할 때(`AlchemiaClient` → `LegacyAssetImporter.missingJars()`) 둘 다 있는지 보고, 하나라도 없으면 타이틀 화면 대신 `MissingJarsScreen`을 띄운다(2026-10-15부터). 빠진 jar의 CurseForge 다운로드 페이지(바닐라 링크 확인 창을 거친다), `mods` 폴더 열기, 게임 종료 버튼이 있고 Esc로 닫히지 않는다. 원본 라이선스상 배포는 작성자만 할 수 있으므로 자동으로 내려받지 않는다. jar는 이름이 아니라 안의 `mcmod.info` 버전으로 가린다. 데이터 생성(`runData`)과 게임 테스트 서버는 그림을 쓰지 않으므로 검사하지 않는다.
   - **저장소에는 대체 그림·모델을 두지 않는다**(2026-10-10 정리). 원본에 있는 것은 전부 jar에서 오고, 렌더러에도 "jar가 없으면" 갈래가 없다. 저장소에 남는 것은 원본에 없는 것(심층암 광석, 노드 배치기 등)과, 원본 그림을 입히는 모양 일부(단지의 액체·라벨, 관 화살표, 작업대)뿐이다.
   - 블록·아이템 모델 파일은 원본 그림 경로(`block/legacy/…`, `item/legacy/…`)를 그대로 쓴다. datagen은 jar 없이 돌므로 `DataGenerators.knowImported`가 `LegacyAssets`의 대상 경로를 "있는 파일"로 알려 준다. 새 원본 그림을 모델에서 쓰려면 `LegacyAssets`에 먼저 적는다.
   - 원본이 회색 그림에 코드로 색을 입혔으면(`getColorFromItemStack`, `colorMultiplier`) `.tinted()`로 색을 구워 넣는다. 색은 jar 안의 클래스를 `javap -c`로 열어 확인한다.

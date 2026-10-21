@@ -31,7 +31,7 @@ public class MoundTests {
     @GameTest(template = TEMPLATE)
     public static void theMoundIsReadFromTheJar(GameTestHelper helper) {
         MoundLayout layout = MoundLayout.get().orElse(null);
-        helper.assertTrue(layout != null, "the jar in legacy/ has a mound");
+        helper.assertTrue(layout != null, "the jar in mods/ has a mound");
         helper.assertTrue(layout.blocks().size() > 2000, "it has its blocks: " + layout.blocks().size());
         helper.assertTrue(layout.chest().equals(new BlockPos(10, 1, 9)), "the chest is in the chamber");
         helper.assertTrue(layout.spawners().equals(List.of(new BlockPos(4, 5, 4), new BlockPos(4, 5, 14))),

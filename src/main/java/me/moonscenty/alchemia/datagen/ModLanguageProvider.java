@@ -558,7 +558,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("alchemia.configuration.section.alchemia.common.toml.title", pick("Alchemia Configs", "Alchemia 설정"));
         add("pack.alchemia.legacy.title", pick("Original Thaumcraft Assets", "원본 Thaumcraft 에셋"));
         add("pack.alchemia.legacy.description",
-                pick("Read from the jars in legacy/", "legacy/ 안의 jar에서 읽어 옴"));
+                pick("Read from the original jars in mods/", "mods/ 안의 원본 jar에서 읽어 옴"));
 
         addBlock(ModBlocks.AMBER_ORE, pick("Amber Ore", "호박 광석"));
         addBlock(ModBlocks.DEEPSLATE_AMBER_ORE, pick("Deepslate Amber Ore", "심층암 호박 광석"));
@@ -658,10 +658,10 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("screen.alchemia.missing_jars.title", pick("Alchemia needs the original Thaumcraft",
                 "Alchemia에는 원본 Thaumcraft가 필요합니다"));
         add("screen.alchemia.missing_jars.message", pick(
-                "Alchemia draws with the original Thaumcraft's pictures, models and sounds, read from its jars. Download the missing jars from the author's CurseForge page, put them in %s (any file name), and start the game again.",
-                "Alchemia는 원본 Thaumcraft jar에서 그림·모델·소리를 읽어 씁니다. 빠진 jar를 작성자의 CurseForge 페이지에서 받아 %s 폴더에 넣고(파일 이름은 상관없습니다) 게임을 다시 시작하세요."));
+                "Alchemia draws with the original Thaumcraft's pictures, models and sounds, read from its jars. Download the missing jars from the author's CurseForge page, put them in the mods folder, %s (any file name; the game will not load them as mods, only Alchemia reads them), and start the game again.",
+                "Alchemia는 원본 Thaumcraft jar에서 그림·모델·소리를 읽어 씁니다. 빠진 jar를 작성자의 CurseForge 페이지에서 받아 mods 폴더(%s)에 넣고(파일 이름은 상관없습니다. 게임은 모드로 불러오지 않고 Alchemia만 읽습니다) 게임을 다시 시작하세요."));
         add("screen.alchemia.missing_jars.download", pick("Download %s (CurseForge)", "%s 받기 (CurseForge)"));
-        add("screen.alchemia.missing_jars.folder", pick("Open the legacy folder", "legacy 폴더 열기"));
+        add("screen.alchemia.missing_jars.folder", pick("Open the mods folder", "mods 폴더 열기"));
         add("entity.alchemia.bottle_taint", pick("Bottled Taint", "병에 든 오염"));
         for (String kind : new String[] {"air_arrow", "fire_arrow", "order_arrow"}) {
             add("death.attack.alchemia." + kind, pick("%1$s was shot by a primal arrow",

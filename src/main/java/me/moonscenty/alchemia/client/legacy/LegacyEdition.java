@@ -3,7 +3,7 @@ package me.moonscenty.alchemia.client.legacy;
 import java.util.Optional;
 
 /**
- * Which release of the original a jar in {@code legacy/} is. The two keep their pictures under different
+ * Which release of the original a jar in {@code mods/} is. The two keep their pictures under different
  * names (4 wrote {@code thaumiumingot}, 5 wrote {@code ingot_thaumium}), so a mapping has to say which one it means.
  */
 public enum LegacyEdition {

@@ -10,7 +10,7 @@ authors="MoonScenty"
 credits="Aspect icons by Lorc (game-icons.net, CC BY 3.0)"
 description='''
 An addon for Thaumcraft that gets it running on Minecraft 1.21.1.
-Needs the player's own Thaumcraft 4 (1.7.10) and Thaumcraft 5 (1.8.9) jars in the game folder's legacy/ folder:
+Needs the player's own Thaumcraft 4 (1.7.10) and Thaumcraft 5 (1.8.9) jars in the mods folder:
 the gameplay follows Thaumcraft 5.2.4, and the pictures, models and sounds are read from the two jars.
 '''
 
