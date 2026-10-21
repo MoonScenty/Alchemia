@@ -2,6 +2,9 @@ package me.moonscenty.alchemia.entity;
 
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.AlchemiaConfig;
+import me.moonscenty.alchemia.outer.Cell;
+import me.moonscenty.alchemia.outer.Labyrinth;
+import me.moonscenty.alchemia.outer.OuterLands;
 import me.moonscenty.alchemia.player.ModAttachments;
 import me.moonscenty.alchemia.player.WarpData;
 import me.moonscenty.alchemia.player.WarpHandler;
@@ -45,9 +48,10 @@ import net.neoforged.neoforge.event.tick.EntityTickEvent;
  * <h3>Who becomes one</h3>
  * Every monster on the list ({@code alchemia:champion_candidates}) is rolled once, the first time it is in a world,
  * and never again. A roll of a hundred has to come out at nought or below: so one in a hundred on normal, three on
- * hard, none on easy, two more in the Nether, the End or somewhere spooky. Nothing with less than ten health is ever
- * made one. With champions turned off in the config the roll starts two higher, which leaves only those last few
- * places.
+ * hard, none on easy, two more in the Nether, the End or somewhere spooky, three more in the Outer Lands and ten more
+ * in a maze's key room or library. A taintacle has one more, an inhabited zombie two. Nothing with less than ten
+ * health is ever made one. With champions turned off in the config the roll starts two higher, the dangerous rooms
+ * count three and the kinds count nothing, which leaves only those few places.
  *
  * <h3>What one is</h3>
  * A hundred more health (of which it gets twenty-five at once, not all), three times the bite, a name that says what
@@ -102,8 +106,19 @@ public final class Champions {
     }
 
     private static void roll(Monster mob) {
+        int roll = mob.getRandom().nextInt(100) + offset(mob);
+        if (mob.getType().is(ModTags.Entities.CHAMPION_CANDIDATES) && roll <= 0
+                && mob.getAttribute(Attributes.MAX_HEALTH).getBaseValue() >= 10.0) {
+            make(mob, ChampionModifier.values()[mob.getRandom().nextInt(ChampionModifier.values().length)]);
+        } else {
+            mob.setData(ModAttachments.CHAMPION, ORDINARY);
+        }
+    }
+
+    /** What is added to the roll of a hundred for this mob where it stands: below nought, the likelier. */
+    public static int offset(Monster mob) {
         boolean on = AlchemiaConfig.CHAMPION_MOBS.get();
-        int roll = mob.getRandom().nextInt(100);
+        int roll = 0;
         Difficulty difficulty = mob.level().getDifficulty();
         if (difficulty == Difficulty.EASY || !on) {
             roll += 2;
@@ -115,12 +130,34 @@ public final class Champions {
         if (biome.is(BiomeTags.IS_NETHER) || biome.is(BiomeTags.IS_END) || biome.is(Tags.Biomes.IS_SPOOKY)) {
             roll -= on ? 2 : 1;
         }
-        if (mob.getType().is(ModTags.Entities.CHAMPION_CANDIDATES) && roll <= 0
-                && mob.getAttribute(Attributes.MAX_HEALTH).getBaseValue() >= 10.0) {
-            make(mob, ChampionModifier.values()[mob.getRandom().nextInt(ChampionModifier.values().length)]);
-        } else {
-            mob.setData(ModAttachments.CHAMPION, ORDINARY);
+        if (mob.level().dimension() == OuterLands.LEVEL) {
+            roll -= 3;
+            if (dangerous(mob)) {
+                roll -= on ? 10 : 3;
+            }
         }
+        if (on) {
+            roll -= kindBonus(mob);
+        }
+        return roll;
+    }
+
+    /** In a maze's key room or library, the original's {@code isDangerousLocation}. */
+    private static boolean dangerous(Monster mob) {
+        if (mob.level().getServer() == null) {
+            return false;
+        }
+        Cell cell = Labyrinth.of(mob.level().getServer()).get(mob.blockPosition().getX() >> 4,
+                mob.blockPosition().getZ() >> 4);
+        return cell != null && (cell.feature == Cell.KEY_ROOM || cell.feature == Cell.LIBRARY);
+    }
+
+    /** How much likelier some kinds are, the original's champion whitelist weights less one. */
+    private static int kindBonus(Monster mob) {
+        if (mob instanceof InhabitedZombie) {
+            return 2;
+        }
+        return mob instanceof Taintacle ? 1 : 0;
     }
 
     /** A boss is a champion of something always, and gets only what that kind of champion adds. */

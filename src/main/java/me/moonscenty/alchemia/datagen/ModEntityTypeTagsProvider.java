@@ -28,7 +28,8 @@ public class ModEntityTypeTagsProvider extends EntityTypeTagsProvider {
                         EntityType.BOGGED, EntityType.WITCH)
                 .add(ModEntities.CULTIST_KNIGHT.get(), ModEntities.CULTIST_CLERIC.get())
                 .add(ModEntities.ELDRITCH_CRAB.get(), ModEntities.INHABITED_ZOMBIE.get())
-                .add(ModEntities.ANGRY_ZOMBIE.get(), ModEntities.FURIOUS_ZOMBIE.get(), ModEntities.TAINTACLE.get());
+                .add(ModEntities.ANGRY_ZOMBIE.get(), ModEntities.FURIOUS_ZOMBIE.get(), ModEntities.TAINTACLE.get())
+                .add(ModEntities.PECH.get());
 
         // a crawler is a grub, and bane of arthropods knows it
         tag(EntityTypeTags.ARTHROPOD).add(ModEntities.TAINT_CRAWLER.get(), ModEntities.ELDRITCH_CRAB.get());
