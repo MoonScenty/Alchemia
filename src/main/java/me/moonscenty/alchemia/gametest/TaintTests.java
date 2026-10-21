@@ -261,4 +261,21 @@ public class TaintTests {
         zombie.discard();
         helper.succeed();
     }
+
+    /** The taint's poison does its own creatures good: a crawler that has it is healed, where a pig is hurt. */
+    @GameTest(template = TEMPLATE)
+    public static void taintPoisonHealsTheTaintsOwn(GameTestHelper helper) {
+        var poison = me.moonscenty.alchemia.player.effect.ModEffects.TAINT_POISON;
+        var crawler = helper.spawnWithNoFreeWill(me.moonscenty.alchemia.registry.ModEntities.TAINT_CRAWLER.get(),
+                new BlockPos(3, 2, 3));
+        var pig = helper.spawnWithNoFreeWill(net.minecraft.world.entity.EntityType.PIG, new BlockPos(6, 2, 6));
+        crawler.setHealth(crawler.getMaxHealth() / 2);
+        float crawlerWas = crawler.getHealth();
+        float pigWas = pig.getHealth();
+        poison.value().applyEffectTick(crawler, 0);
+        poison.value().applyEffectTick(pig, 0);
+        helper.assertTrue(crawler.getHealth() > crawlerWas, "the crawler was healed");
+        helper.assertTrue(pig.getHealth() < pigWas, "the pig was hurt");
+        helper.succeed();
+    }
 }

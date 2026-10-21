@@ -7,6 +7,7 @@ import me.moonscenty.alchemia.essentia.EssentiaHolder;
 import me.moonscenty.alchemia.registry.ModAspects;
 import me.moonscenty.alchemia.registry.ModBlockEntities;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -15,7 +16,6 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
 /**
@@ -25,12 +25,18 @@ import net.minecraft.world.level.block.state.BlockState;
  * beside it, and anything further along the run can draw the lot back out again. What it will not do is take from
  * another buffer: two of them side by side would otherwise pass one point back and forth for ever without a thing
  * being moved anywhere.
+ * <p>
+ * Each side can be choked with a crouching wand, the original's {@code chokedSides}: open, choked or shut, in that
+ * turn. A choked side still fills it but bellows do not hurry it through there; a shut one does not fill it at all,
+ * though what is in it can still be drawn back out that way.
  */
 public class BufferTubeBlockEntity extends TubeBlockEntity implements EssentiaHolder {
     /** How much it keeps, counted across everything in it. */
     public static final int CAPACITY = 8;
 
     private AspectList held = AspectList.EMPTY;
+    /** How choked each side is: 0 open, 1 choked, 2 shut. */
+    private final byte[] choked = new byte[6];
 
     public BufferTubeBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.TUBE_BUFFER.get(), pos, state);
@@ -66,6 +72,26 @@ public class BufferTubeBlockEntity extends TubeBlockEntity implements EssentiaHo
         return true;
     }
 
+    public int choked(Direction side) {
+        return choked[side.ordinal()];
+    }
+
+    /** One turn further round: open, choked, shut, open again. */
+    public void choke(Direction side) {
+        choked[side.ordinal()] = (byte) ((choked[side.ordinal()] + 1) % 3);
+        changed();
+    }
+
+    @Override
+    protected boolean drawsThrough(Direction side) {
+        return choked[side.ordinal()] < 2;
+    }
+
+    @Override
+    protected boolean blownThrough(Direction side) {
+        return choked[side.ordinal()] == 0;
+    }
+
     /** What a broken buffer lets go: the little it was keeping, into the air. */
     public void spill() {
         if (level instanceof ServerLevel served && !held.isEmpty()) {
@@ -74,19 +100,16 @@ public class BufferTubeBlockEntity extends TubeBlockEntity implements EssentiaHo
         held = AspectList.EMPTY;
     }
 
-    private void changed() {
-        setChanged();
-        if (level != null && !level.isClientSide) {
-            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
-        }
-    }
-
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
         held = AspectList.CODEC
                 .parse(registries.createSerializationContext(NbtOps.INSTANCE), tag.get("held"))
                 .result().orElse(AspectList.EMPTY);
+        byte[] read = tag.getByteArray("choke");
+        for (int side = 0; side < choked.length; side++) {
+            choked[side] = side < read.length ? read[side] : 0;
+        }
     }
 
     @Override
@@ -95,6 +118,7 @@ public class BufferTubeBlockEntity extends TubeBlockEntity implements EssentiaHo
         AspectList.CODEC
                 .encodeStart(registries.createSerializationContext(NbtOps.INSTANCE), held)
                 .result().ifPresent(written -> tag.put("held", written));
+        tag.putByteArray("choke", choked.clone());
     }
 
     @Override

@@ -63,7 +63,7 @@ public class FilterTubeBlock extends TubeBlock {
             Player player, InteractionHand hand, BlockHitResult hit) {
         Optional<Holder<Aspect>> aspect = PhialItem.inside(stack).or(() -> crystallised(stack));
         if (aspect.isEmpty() || !(level.getBlockEntity(pos) instanceof FilterTubeBlockEntity filter)) {
-            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+            return super.useItemOn(stack, state, level, pos, player, hand, hit);
         }
         if (!level.isClientSide) {
             filter.only(aspect.get());

@@ -7,8 +7,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Predicate;
 
 import me.moonscenty.alchemia.aspect.Aspect;
+import me.moonscenty.alchemia.block.BellowsBlock;
 import me.moonscenty.alchemia.block.TubeBlock;
 import me.moonscenty.alchemia.essentia.EssentiaHolder;
 import me.moonscenty.alchemia.registry.ModBlockEntities;
@@ -16,11 +18,19 @@ import me.moonscenty.alchemia.registry.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.client.model.data.ModelData;
+import net.neoforged.neoforge.client.model.data.ModelProperty;
 
 /**
  * Moves one point of essentia along a run of pipe, now and then.
@@ -33,6 +43,9 @@ import net.minecraft.world.level.block.state.BlockState;
  * The walk back is where the odd kinds of pipe have their say. Every tube along the way is asked whether anything
  * gets through it at all, whether it insists on one aspect, and whether it wants the run to wait a turn. What comes
  * back decides which sources the pull may take from, and when.
+ * <p>
+ * Any side can be shut with a wand, the original's {@code openSides}: nothing passes a shut side, and the arm is not
+ * drawn, though it can still be clicked to open it again.
  */
 public class TubeBlockEntity extends BlockEntity {
     /** How often a point moves, in ticks. */
@@ -42,7 +55,12 @@ public class TubeBlockEntity extends BlockEntity {
     /** One point moved in this many makes the pipe creak. The original's odds. */
     private static final int CREAKS_ONE_IN = 100;
 
+    /** The model's word for which sides are shut, one bit to a side in the game's order. */
+    public static final ModelProperty<Integer> SHUT = new ModelProperty<>();
+
     private int counter;
+    /** Which sides are shut, one bit to a side. */
+    private int shut;
     /** How many turns this tube has taken. A run held up along the way only moves on some of them. */
     private long turns;
 
@@ -63,23 +81,47 @@ public class TubeBlockEntity extends BlockEntity {
         tube.pull(level, pos, state);
     }
 
+    public boolean shut(Direction side) {
+        return (shut & 1 << side.ordinal()) != 0;
+    }
+
+    public void shut(Direction side, boolean closed) {
+        shut = closed ? shut | 1 << side.ordinal() : shut & ~(1 << side.ordinal());
+        changed();
+    }
+
+    /** Whether this tube, as a vessel, may fill itself through that side. Only a buffer is ever particular. */
+    protected boolean drawsThrough(Direction side) {
+        return true;
+    }
+
+    /** Whether bellows blowing on this tube make it pull harder through that side. Only a buffer's do. */
+    protected boolean blownThrough(Direction side) {
+        return false;
+    }
+
     /** Finds something this tube can fill, and something along the pipe that will fill it. */
     private void pull(Level level, BlockPos pos, BlockState state) {
         if (!(state.getBlock() instanceof TubeBlock)) {
             return;
         }
         // a buffer is a length of pipe that is also a vessel, so the first thing it fills is itself
-        if (this instanceof EssentiaHolder self && draw(level, pos, self, null)) {
+        if (this instanceof EssentiaHolder self && draw(level, pos, self, null, this::drawsThrough)) {
+            // and bellows blowing on it make it pull that much harder, as the original's suction did
+            int bellows = BellowsBlock.blowingOn(level, pos, Direction.values());
+            for (int more = 0; more < bellows; more++) {
+                draw(level, pos, self, null, this::blownThrough);
+            }
             return;
         }
         for (Direction side : Direction.values()) {
-            if (state.getValue(TubeBlock.SIDES.get(side)) != TubeBlock.Link.BLOCK) {
+            if (shut(side) || state.getValue(TubeBlock.SIDES.get(side)) != TubeBlock.Link.BLOCK) {
                 continue;
             }
             if (level.getBlockEntity(pos.relative(side)) instanceof EssentiaHolder sink
                     && sink.reachableFrom(side.getOpposite())
                     && sink.takesFrom(side.getOpposite())
-                    && draw(level, pos, sink, side)) {
+                    && draw(level, pos, sink, side, any -> true)) {
                 return;
             }
         }
@@ -89,10 +131,12 @@ public class TubeBlockEntity extends BlockEntity {
      * Moves one point into the given vessel if anything up the pipe will part with one.
      *
      * @param into the side of this tube the vessel sits on, or null when the vessel is this tube itself
+     * @param through which sides of this tube the essentia may come in by
      */
-    private boolean draw(Level level, BlockPos pos, EssentiaHolder sink, Direction into) {
+    private boolean draw(Level level, BlockPos pos, EssentiaHolder sink, Direction into,
+            Predicate<Direction> through) {
         for (Route route : upstreamOf(level, pos, into)) {
-            if (route.from() == sink) {
+            if (route.from() == sink || !through.test(route.via())) {
                 continue;
             }
             // a buffer standing on essentia is not somewhere for another buffer to move it to
@@ -128,16 +172,16 @@ public class TubeBlockEntity extends BlockEntity {
         return false;
     }
 
-    /** One tube the walk has reached, and what the way back from it allows. */
-    private record Step(BlockPos at, Direction out, Holder<Aspect> only, int waits) {
+    /** One tube the walk has reached, what the way back from it allows, and which side of the first it left by. */
+    private record Step(BlockPos at, Direction out, Holder<Aspect> only, int waits, Direction via) {
     }
 
     /** A tube the walk has been at, reached from a particular side. */
     private record Seen(BlockPos at, Direction out) {
     }
 
-    /** Something the pipe can draw from, with what the way there allows. */
-    private record Route(EssentiaHolder from, Holder<Aspect> only, int waits) {
+    /** Something the pipe can draw from, with what the way there allows and which side of the first it is by. */
+    private record Route(EssentiaHolder from, Holder<Aspect> only, int waits, Direction via) {
     }
 
     /**
@@ -153,7 +197,7 @@ public class TubeBlockEntity extends BlockEntity {
         Deque<Step> todo = new ArrayDeque<>();
         List<Route> found = new ArrayList<>();
         seen.add(new Seen(start, out));
-        todo.add(new Step(start, out, null, 0));
+        todo.add(new Step(start, out, null, 0, null));
 
         while (!todo.isEmpty() && seen.size() <= REACH) {
             Step step = todo.removeFirst();
@@ -175,25 +219,30 @@ public class TubeBlockEntity extends BlockEntity {
 
             // a buffer standing in the run is itself something to draw from
             if (!step.at().equals(start) && level.getBlockEntity(step.at()) instanceof EssentiaHolder holder) {
-                found.add(new Route(holder, only, waits));
+                found.add(new Route(holder, only, waits, step.via()));
             }
 
+            TubeBlockEntity here = level.getBlockEntity(step.at()) instanceof TubeBlockEntity at ? at : null;
             for (Direction side : Direction.values()) {
-                if (side == step.out() || !tube.passes(state, side, step.out())) {
+                if (side == step.out() || !tube.passes(state, side, step.out())
+                        || here != null && here.shut(side)) {
                     continue;
                 }
                 BlockPos next = step.at().relative(side);
+                Direction via = step.via() != null ? step.via() : side;
                 switch (state.getValue(TubeBlock.SIDES.get(side))) {
                     case TUBE -> {
-                        if (seen.add(new Seen(next, side.getOpposite()))) {
-                            todo.add(new Step(next, side.getOpposite(), only, waits));
+                        boolean shutThere = level.getBlockEntity(next) instanceof TubeBlockEntity there
+                                && there.shut(side.getOpposite());
+                        if (!shutThere && seen.add(new Seen(next, side.getOpposite()))) {
+                            todo.add(new Step(next, side.getOpposite(), only, waits, via));
                         }
                     }
                     case BLOCK -> {
                         if (level.getBlockEntity(next) instanceof EssentiaHolder holder
                                 && holder.reachableFrom(side.getOpposite())
                                 && holder.givesTo(side.getOpposite())) {
-                            found.add(new Route(holder, only, waits));
+                            found.add(new Route(holder, only, waits, via));
                         }
                     }
                     default -> {
@@ -202,5 +251,46 @@ public class TubeBlockEntity extends BlockEntity {
             }
         }
         return found;
+    }
+
+    protected void changed() {
+        setChanged();
+        if (level != null && !level.isClientSide) {
+            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
+        }
+    }
+
+    @Override
+    public ModelData getModelData() {
+        return ModelData.builder().with(SHUT, shut).build();
+    }
+
+    @Override
+    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.loadAdditional(tag, registries);
+        shut = tag.getInt("shut");
+        // a side shut or opened changes the picture, which is made from the model data and so needs asking again
+        if (level != null && level.isClientSide) {
+            requestModelDataUpdate();
+            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_IMMEDIATE);
+        }
+    }
+
+    @Override
+    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.saveAdditional(tag, registries);
+        if (shut != 0) {
+            tag.putInt("shut", shut);
+        }
+    }
+
+    @Override
+    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
+        return saveWithoutMetadata(registries);
+    }
+
+    @Override
+    public Packet<ClientGamePacketListener> getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
     }
 }

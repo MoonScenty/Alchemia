@@ -90,7 +90,9 @@ public class LegacyTubeModel extends BakedModelWrapper<BakedModel> {
                 joined |= 1 << way.ordinal();
             }
         }
-        int sides = joined;
+        // a side shut with a wand is not drawn, the original's openSides
+        Integer shut = data.get(me.moonscenty.alchemia.block.entity.TubeBlockEntity.SHUT);
+        int sides = shut == null ? joined : joined & ~shut;
         kept.addAll(BAKED.computeIfAbsent(kind.ordinal() << 6 | sides, key -> bake(mesh, kind, sides)));
         return kept;
     }

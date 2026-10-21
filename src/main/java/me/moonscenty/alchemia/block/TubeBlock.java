@@ -4,15 +4,25 @@ import java.util.EnumMap;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.annotation.Nullable;
+
 import com.mojang.serialization.MapCodec;
 
 import me.moonscenty.alchemia.aspect.Aspect;
+import me.moonscenty.alchemia.block.entity.BufferTubeBlockEntity;
 import me.moonscenty.alchemia.block.entity.TubeBlockEntity;
 import me.moonscenty.alchemia.essentia.EssentiaHolder;
+import me.moonscenty.alchemia.item.WandItem;
+import me.moonscenty.alchemia.registry.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -26,6 +36,8 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -62,6 +74,8 @@ public class TubeBlock extends BaseEntityBlock {
 
     /** The bare middle, and one arm out of it per side. */
     private static final VoxelShape CORE = Block.box(6, 6, 6, 10, 10, 10);
+    /** How far the middle reaches out from the centre; a click further out than that is on an arm. */
+    private static final double MIDDLE_REACH = 2.0 / 16.0;
     private static final Map<Direction, VoxelShape> ARMS = arms();
 
     private static Map<Direction, EnumProperty<Link>> sides() {
@@ -155,6 +169,53 @@ public class TubeBlock extends BaseEntityBlock {
         if (joined != state) {
             level.setBlock(pos, joined, Block.UPDATE_CLIENTS);
         }
+    }
+
+    /**
+     * A wand on one of its arms shuts that side or opens it again, the original's {@code TileTube.onWandRightClick},
+     * and the tube on the far side of the joint goes with it. Crouching, a buffer's arm is choked a turn further
+     * instead. A wand on the middle is left to whatever else the tube does when clicked.
+     */
+    @Override
+    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
+            Player player, InteractionHand hand, BlockHitResult hit) {
+        Direction arm = armAt(state, pos, hit.getLocation());
+        if (!(stack.getItem() instanceof WandItem) || arm == null
+                || !(level.getBlockEntity(pos) instanceof TubeBlockEntity tube)) {
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        }
+        if (!level.isClientSide) {
+            if (player.isSecondaryUseActive() && tube instanceof BufferTubeBlockEntity buffer) {
+                buffer.choke(arm);
+                level.playSound(null, pos, ModSounds.SQUEEK.get(), SoundSource.BLOCKS, 0.6F,
+                        2.0F + level.random.nextFloat() * 0.2F);
+            } else {
+                boolean closed = !tube.shut(arm);
+                tube.shut(arm, closed);
+                if (level.getBlockEntity(pos.relative(arm)) instanceof TubeBlockEntity other) {
+                    other.shut(arm.getOpposite(), closed);
+                }
+                level.playSound(null, pos, ModSounds.TOOL.get(), SoundSource.BLOCKS, 0.5F,
+                        0.9F + level.random.nextFloat() * 0.2F);
+            }
+        }
+        return ItemInteractionResult.sidedSuccess(level.isClientSide);
+    }
+
+    /** Which arm a click landed on, or null for the middle or for a side with no arm. */
+    @Nullable
+    public static Direction armAt(BlockState state, BlockPos pos, Vec3 hit) {
+        double x = hit.x - pos.getX() - 0.5;
+        double y = hit.y - pos.getY() - 0.5;
+        double z = hit.z - pos.getZ() - 0.5;
+        double out = Math.max(Math.abs(x), Math.max(Math.abs(y), Math.abs(z)));
+        if (out <= MIDDLE_REACH + 1.0E-4) {
+            return null;
+        }
+        Direction arm = out == Math.abs(x) ? (x > 0 ? Direction.EAST : Direction.WEST)
+                : out == Math.abs(y) ? (y > 0 ? Direction.UP : Direction.DOWN)
+                : z > 0 ? Direction.SOUTH : Direction.NORTH;
+        return state.getValue(SIDES.get(arm)) == Link.NONE ? null : arm;
     }
 
     /**
