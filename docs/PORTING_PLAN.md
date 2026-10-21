@@ -1142,6 +1142,7 @@ python tools/remap_srg.py MCP-919/conf decompiled/thaumcraft src/thaumcraft
   - [x] **공허 도구의 나약함** (2026-10-21). 원본 `ItemVoidPickaxe/Axe/Shovel/Hoe.onLeftClickEntity`대로, 공허 곡괭이·도끼·삽·괭이를 든 플레이어가 생물을 휘두르면(왼쪽 클릭) 나약함 4초를 건다. 맞았는지가 아니라 휘두른 것으로 친다. 플레이어에게는 서버의 PvP가 켜져 있을 때만. 공허 검은 그대로 맞은 것에 3초다.
   - [x] **공허 로브 두건으로 노드 보기** (2026-10-21). 원본 `ItemVoidRobeArmor`의 두건은 `showNodes`·`showIngamePopups`를 켰다. 두건을 `alchemia:reveals` 태그에 넣어, 쓰면 고글처럼 오라 노드와 비전 귀의 음이 보인다. 공허 로브 연구 글에 덧붙였다.
   - [x] **주민 동전** (2026-10-21). 원본 `EntityEvents.livingDrops`대로, 주민이 죽으면 (1+약탈)/10 확률로 동전을 하나 떨군다. 플레이어가 죽인 것이 아니어도 된다.
+  - [x] **오염 땅을 밟으면 오염 독** (2026-10-21). 원본 `BlockTaint.onEntityWalking`대로, 오염된 흙·껍질·바위·간헐천을 밟는 살아 있는 것(언데드 제외)에게 걸음마다 1/750 확률로 오염 독 10초. 오염 덩굴손 쪽은 이미 있었다.
 
 ## 미결 사항
 

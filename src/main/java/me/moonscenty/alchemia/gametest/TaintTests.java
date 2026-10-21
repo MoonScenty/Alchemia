@@ -236,4 +236,29 @@ public class TaintTests {
         helper.assertBlockPresent(Blocks.AIR, HERE);
         helper.succeed();
     }
+
+    /**
+     * Walking on tainted ground now and then poisons what walks: one step in seven hundred and fifty. Ten thousand
+     * steps make missing it a fault rather than bad luck. The undead walk it untouched.
+     */
+    @GameTest(template = TEMPLATE)
+    public static void walkingOnTaintedGroundPoisons(GameTestHelper helper) {
+        BlockPos ground = new BlockPos(4, 1, 4);
+        helper.setBlock(ground, ModBlocks.TAINT_SOIL.get());
+        BlockPos at = helper.absolutePos(ground);
+        var state = helper.getLevel().getBlockState(at);
+        var pig = helper.spawnWithNoFreeWill(net.minecraft.world.entity.EntityType.PIG, ground.above());
+        var zombie = helper.spawnWithNoFreeWill(net.minecraft.world.entity.EntityType.ZOMBIE, ground.above());
+        for (int step = 0; step < 10000; step++) {
+            state.getBlock().stepOn(helper.getLevel(), at, state, pig);
+            state.getBlock().stepOn(helper.getLevel(), at, state, zombie);
+        }
+        helper.assertTrue(pig.hasEffect(me.moonscenty.alchemia.player.effect.ModEffects.TAINT_POISON),
+                "the pig was poisoned");
+        helper.assertFalse(zombie.hasEffect(me.moonscenty.alchemia.player.effect.ModEffects.TAINT_POISON),
+                "the zombie was not");
+        pig.discard();
+        zombie.discard();
+        helper.succeed();
+    }
 }

@@ -57,6 +57,27 @@ public class TaintGroundBlock extends Block implements Tainted {
         return kind;
     }
 
+    /** One step in this many on tainted ground poisons whatever living thing took it, as the original's did. */
+    public static final int POISONS_ONE_IN = 750;
+    /** How long the poison lasts, in ticks. The original's. */
+    public static final int POISONS_FOR = 200;
+
+    /** Walking on it is a chance of taint poison, for anything living that is not undead. */
+    @Override
+    public void stepOn(Level level, BlockPos pos, BlockState state, net.minecraft.world.entity.Entity entity) {
+        if (!level.isClientSide && entity instanceof net.minecraft.world.entity.LivingEntity living
+                && !living.isInvertedHealAndHarm() && level.random.nextInt(POISONS_ONE_IN) == 0) {
+            poison(living);
+        }
+        super.stepOn(level, pos, state, entity);
+    }
+
+    /** The poison a step on tainted ground gives. */
+    public static void poison(net.minecraft.world.entity.LivingEntity living) {
+        living.addEffect(new net.minecraft.world.effect.MobEffectInstance(
+                me.moonscenty.alchemia.player.effect.ModEffects.TAINT_POISON, POISONS_FOR, 0, false, true));
+    }
+
     @Override
     public void die(ServerLevel level, BlockPos pos, BlockState state) {
         level.setBlock(pos, switch (kind) {
