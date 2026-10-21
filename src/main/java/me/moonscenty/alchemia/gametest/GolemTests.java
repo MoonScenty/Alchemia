@@ -6,6 +6,7 @@ import java.util.Set;
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.block.GolemPressBlock;
 import me.moonscenty.alchemia.block.entity.GolemPressBlockEntity;
+import me.moonscenty.alchemia.entity.OwnedDeaths;
 import me.moonscenty.alchemia.golem.Golem;
 import me.moonscenty.alchemia.golem.GolemDesign;
 import me.moonscenty.alchemia.golem.GolemParts;
@@ -240,5 +241,19 @@ public class GolemTests {
         helper.assertTrue(maker.getInventory().isEmpty(), "and has taken everything");
         helper.onEachTick(() -> press.accept(ModAspects.MECHANISM));
         helper.succeedWhen(() -> helper.assertTrue(press.getItem(0).is(ModItems.GOLEM.get()), "a golem came out"));
+    }
+
+    /** A golem with a name tells its owner how it died; one without a name does not. */
+    @GameTest(template = TEMPLATE)
+    public static void aNamedGolemTellsItsOwnerOfItsDeath(GameTestHelper helper) {
+        Player owner = helper.makeMockPlayer(GameType.SURVIVAL);
+        Golem golem = golem(helper, owner, GolemDesign.BASIC);
+        helper.assertFalse(OwnedDeaths.tells(golem), "a golem with no name tells nobody");
+        golem.setCustomName(net.minecraft.network.chat.Component.literal("Clank"));
+        helper.assertTrue(OwnedDeaths.tells(golem), "a named golem tells");
+        golem.hurt(helper.getLevel().damageSources().generic(), 1000.0F);
+        helper.assertTrue(golem.getCombatTracker().getDeathMessage().getString().contains("Clank"),
+                "the message names it");
+        helper.succeed();
     }
 }

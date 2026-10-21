@@ -601,6 +601,7 @@ public class Golem extends PathfinderMob implements OwnableEntity, net.minecraft
     @Override
     public void die(DamageSource cause) {
         giveUpTask();
+        me.moonscenty.alchemia.entity.OwnedDeaths.tell(this);
         super.die(cause);
         if (!level().isClientSide) {
             dropCarried();

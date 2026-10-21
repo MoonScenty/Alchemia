@@ -391,6 +391,7 @@ public class Autocaster extends PathfinderMob implements OwnableEntity, Containe
     /** Whatever was in it falls out, which is the only reason anybody would break one open. */
     @Override
     public void die(DamageSource cause) {
+        OwnedDeaths.tell(this);
         super.die(cause);
         if (!level().isClientSide) {
             dropFocus();
