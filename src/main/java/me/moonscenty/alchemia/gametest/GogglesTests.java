@@ -28,6 +28,8 @@ public class GogglesTests {
     public static void nodesAreSeenThroughThem(GameTestHelper helper) {
         helper.assertTrue(new ItemStack(ModItems.GOGGLES.get()).is(ModTags.Items.REVEALS),
                 "an aura node can be seen through them");
+        helper.assertTrue(new ItemStack(ModItems.ROBES.get("void_robe_helm").get()).is(ModTags.Items.REVEALS),
+                "the void robe's hood sees what the goggles see");
         helper.assertFalse(new ItemStack(Items.IRON_HELMET).is(ModTags.Items.REVEALS),
                 "and not through an iron helmet");
         helper.succeed();

@@ -74,7 +74,8 @@ public class ModItemTagsProvider extends ItemTagsProvider {
         copy(Tags.Blocks.ORE_RATES_DENSE, Tags.Items.ORE_RATES_DENSE);
 
         // what an aura node can be seen through. The sight reads this and nothing else
-        tag(ModTags.Items.REVEALS).add(ModItems.GOGGLES.get());
+        // the goggles, and the void robe's hood, which the original let see what the goggles see
+        tag(ModTags.Items.REVEALS).add(ModItems.GOGGLES.get(), ModItems.ROBES.get("void_robe_helm").get());
 
         tag(ModTags.Items.GEMS_AMBER).add(ModItems.AMBER.get());
         tag(ModTags.Items.GEMS_QUICKSILVER).add(ModItems.QUICKSILVER.get());
