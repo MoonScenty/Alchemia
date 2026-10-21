@@ -375,6 +375,8 @@ public class InfusionTests {
         matrix.wake(player);
         helper.assertValueEqual(matrix.wake(player), InfusionMatrixBlockEntity.Woken.STARTED,
                 "the altar took the casting and the salis round it");
+        // three on the ring is lopsided; nothing may be thrown off it, or the working waits for ever
+        matrix.steady();
 
         run(helper, matrix, 40);
         ArcanePedestalBlockEntity under =

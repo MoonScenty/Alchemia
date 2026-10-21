@@ -26,6 +26,8 @@ public final class VoidGear {
     public static final int MENDS_EVERY = 20;
     /** How long the sword's weakness lasts. */
     public static final int WEAKENS_FOR = 60;
+    /** How long the void pickaxe, axe, shovel and hoe weaken what they are swung at, in ticks. The original's. */
+    public static final int TOOLS_WEAKEN_FOR = 80;
 
     private VoidGear() {
     }
@@ -84,5 +86,32 @@ public final class VoidGear {
             return;
         }
         target.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, WEAKENS_FOR), attacker);
+    }
+
+    /**
+     * The void pickaxe, axe, shovel and hoe weaken whatever living thing they are swung at, as the original's did on
+     * the swing itself rather than on the blow: four seconds of it, and another player only where the server lets
+     * players hurt each other.
+     */
+    @SubscribeEvent
+    public static void swung(net.neoforged.neoforge.event.entity.player.AttackEntityEvent event) {
+        swungAt(event.getEntity(), event.getTarget());
+    }
+
+    /** A swing at something, apart from the event so that it can be put to a player directly. */
+    public static void swungAt(Player swinger, net.minecraft.world.entity.Entity target) {
+        if (swinger.level().isClientSide || !(target instanceof LivingEntity living)) {
+            return;
+        }
+        ItemStack held = swinger.getMainHandItem();
+        boolean tool = java.util.stream.Stream.of("void_pickaxe", "void_axe", "void_shovel", "void_hoe")
+                .anyMatch(name -> held.is(ModItems.METAL_TOOLS.get(name).get()));
+        if (!tool) {
+            return;
+        }
+        if (living instanceof Player && (swinger.getServer() == null || !swinger.getServer().isPvpAllowed())) {
+            return;
+        }
+        living.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, TOOLS_WEAKEN_FOR), swinger);
     }
 }

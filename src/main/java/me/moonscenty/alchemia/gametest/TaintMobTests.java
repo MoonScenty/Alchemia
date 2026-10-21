@@ -80,12 +80,15 @@ public class TaintMobTests {
         Taintacle onTaint = helper.spawnWithNoFreeWill(ModEntities.TAINTACLE.get(), rooted);
         Taintacle offTaint = helper.spawnWithNoFreeWill(ModEntities.TAINTACLE.get(), stranded);
         Vec3 was = onTaint.position();
+        // either may have risen a champion, which is not whole to begin with, so each is held to how it began
+        float onAtFirst = onTaint.getHealth();
+        float offAtFirst = offTaint.getHealth();
         onTaint.setDeltaMovement(1.0, 0.0, 1.0);
         helper.runAfterDelay(45, () -> {
             helper.assertTrue(Math.abs(onTaint.getX() - was.x) < 0.01 && Math.abs(onTaint.getZ() - was.z) < 0.01,
                     "it does not move");
-            helper.assertValueEqual(onTaint.getHealth(), onTaint.getMaxHealth(), "on the taint it is whole");
-            helper.assertTrue(offTaint.getHealth() < offTaint.getMaxHealth(), "off it, it withers");
+            helper.assertTrue(onTaint.getHealth() >= onAtFirst, "on the taint it does not wither");
+            helper.assertTrue(offTaint.getHealth() < offAtFirst, "off it, it withers");
             helper.succeed();
         });
     }
