@@ -239,4 +239,25 @@ public class DistilleryTests {
         helper.assertTrue(!recipe.matches(blank, helper.getLevel()), "a blank one is nothing to work on");
         helper.succeed();
     }
+
+    /** Crouching with nothing in hand tips an alembic out: what it held goes into the air as flux. */
+    @GameTest(template = TEMPLATE)
+    public static void crouchingTipsAnAlembicOut(GameTestHelper helper) {
+        helper.setBlock(START, ModBlocks.ALEMBIC.get());
+        AlembicBlockEntity alembic = (AlembicBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(START));
+        for (int one = 0; one < 5; one++) {
+            alembic.accept(ModAspects.WATER);
+        }
+        net.minecraft.core.BlockPos here = helper.absolutePos(START);
+        int before = me.moonscenty.alchemia.aura.AuraHandler.get(helper.getLevel(), here, ModAspects.FLUX);
+        net.minecraft.world.entity.player.Player player = helper.makeMockPlayer(net.minecraft.world.level.GameType.SURVIVAL);
+        helper.useBlock(START, player);
+        helper.assertValueEqual(alembic.amount(), 5, "a plain click only reads it");
+        player.setShiftKeyDown(true);
+        helper.useBlock(START, player);
+        helper.assertTrue(alembic.isEmpty(), "crouching tips it out");
+        helper.assertValueEqual(me.moonscenty.alchemia.aura.AuraHandler.get(helper.getLevel(), here, ModAspects.FLUX),
+                before + 5, "into the air as flux");
+        helper.succeed();
+    }
 }

@@ -3,10 +3,13 @@ package me.moonscenty.alchemia.block;
 import com.mojang.serialization.MapCodec;
 
 import me.moonscenty.alchemia.block.entity.AlembicBlockEntity;
+import me.moonscenty.alchemia.registry.ModSounds;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -121,7 +124,10 @@ public class AlembicBlock extends BaseEntityBlock {
         return state.rotate(mirror.getRotation(state.getValue(FACING)));
     }
 
-    /** Says what has been caught, since there is nowhere else to read it. */
+    /**
+     * Says what has been caught, since there is nowhere else to read it. Crouching, it is tipped out instead, the
+     * original's {@code BlockAlembic.onBlockActivated}: whatever was in it goes into the air as flux.
+     */
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player,
             BlockHitResult hit) {
@@ -133,6 +139,16 @@ public class AlembicBlock extends BaseEntityBlock {
         // with a sentence about its contents is a jar the phial can never be used on.
         if (!player.getMainHandItem().isEmpty()) {
             return InteractionResult.PASS;
+        }
+        if (player.isShiftKeyDown()) {
+            if (level.isClientSide) {
+                return InteractionResult.SUCCESS;
+            }
+            level.playSound(null, pos, ModSounds.JAR.get(), SoundSource.BLOCKS, 0.4F, 1.0F);
+            level.playSound(null, pos, SoundEvents.GENERIC_SWIM, SoundSource.BLOCKS, 0.5F,
+                    1.0F + (level.random.nextFloat() - level.random.nextFloat()) * 0.3F);
+            alembic.pourOut();
+            return InteractionResult.CONSUME;
         }
         if (level.isClientSide) {
             return InteractionResult.SUCCESS;

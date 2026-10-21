@@ -1144,6 +1144,7 @@ python tools/remap_srg.py MCP-919/conf decompiled/thaumcraft src/thaumcraft
   - [x] **주민 동전** (2026-10-21). 원본 `EntityEvents.livingDrops`대로, 주민이 죽으면 (1+약탈)/10 확률로 동전을 하나 떨군다. 플레이어가 죽인 것이 아니어도 된다.
   - [x] **오염 땅을 밟으면 오염 독** (2026-10-21). 원본 `BlockTaint.onEntityWalking`대로, 오염된 흙·껍질·바위·간헐천을 밟는 살아 있는 것(언데드 제외)에게 걸음마다 1/750 확률로 오염 독 10초. 오염 덩굴손 쪽은 이미 있었다.
   - [x] **이름 붙은 골렘의 죽음 알림** (2026-10-21). 원본 `EntityOwnedConstruct.onDeath`대로, 이름이 붙은 골렘이나 자동 시전기가 죽으면 주인에게 죽음 메시지를 보낸다. `showDeathMessages` 규칙이 켜져 있고 주인이 접속해 있을 때만.
+  - [x] **증류기 웅크려 비우기** (2026-10-21). 원본 `BlockAlembic.onBlockActivated`대로, 웅크린 빈손으로 증류기를 누르면 담긴 에센시아를 모두 플럭스로 공기에 쏟는다(단지 소리와 물 튀는 소리). 그냥 누르면 지금처럼 내용물을 알려 준다. 라벨 필터는 포트 증류기에 없어 뺐다.
 
 ## 미결 사항
 

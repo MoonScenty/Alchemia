@@ -89,6 +89,12 @@ public class AlembicBlockEntity extends BlockEntity implements EssentiaHolder {
         return true;
     }
 
+    /** Tipped out on purpose, the same as breaking it but with the alembic left standing. */
+    public void pourOut() {
+        spill();
+        changed();
+    }
+
     /** What a broken vessel lets go: all of it, into the air. */
     public void spill() {
         if (level instanceof ServerLevel served && amount > 0) {
