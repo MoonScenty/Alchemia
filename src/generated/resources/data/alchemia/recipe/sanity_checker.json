@@ -1,0 +1,28 @@
+{
+  "type": "alchemia:infusion",
+  "central": {
+    "item": "alchemia:alchemometer"
+  },
+  "essentia": {
+    "alchemia:alienis": 8,
+    "alchemia:cognitio": 24,
+    "alchemia:sensus": 24
+  },
+  "instability": 4,
+  "research": "alchemia:sanity_check",
+  "result": {
+    "count": 1,
+    "id": "alchemia:sanity_checker"
+  },
+  "ring": [
+    {
+      "item": "alchemia:mirrored_glass"
+    },
+    {
+      "item": "alchemia:zombie_brain"
+    },
+    {
+      "item": "alchemia:morphic_resonator"
+    }
+  ]
+}

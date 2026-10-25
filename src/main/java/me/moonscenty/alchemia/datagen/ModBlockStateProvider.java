@@ -43,6 +43,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
         simpleBlockWithItem(ModBlocks.ALCHEMIUM_BLOCK);
         simpleBlockWithItem(ModBlocks.BRASS_BLOCK);
+        simpleBlockWithItem(ModBlocks.VOID_METAL_BLOCK);
 
         ModBlocks.WOODS.forEach(this::wood);
 

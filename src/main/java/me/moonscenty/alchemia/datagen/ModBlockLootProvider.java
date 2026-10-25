@@ -44,6 +44,7 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
         add(ModBlocks.DEEPSLATE_CINNABAR_ORE.get(), block -> createOreDrop(block, ModItems.RAW_CINNABAR.get()));
 
         dropSelf(ModBlocks.ALCHEMIUM_BLOCK.get());
+        dropSelf(ModBlocks.VOID_METAL_BLOCK.get());
         dropSelf(ModBlocks.BRASS_BLOCK.get());
 
         for (WoodSet wood : ModBlocks.WOODS) {

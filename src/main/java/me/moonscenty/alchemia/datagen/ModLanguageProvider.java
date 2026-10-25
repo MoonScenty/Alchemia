@@ -309,6 +309,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("subtitles.alchemia.pech.trade", pick("Pech chatters", "페크가 재잘댄다"));
         add("subtitles.alchemia.pech.dice", pick("Bones rattle", "뼈 주사위가 구른다"));
         add("subtitles.alchemia.coins", pick("Coins jingle", "동전이 짤랑거린다"));
+        add("subtitles.alchemia.alembicknock", pick("Resonator knocks", "공명기가 두드린다"));
         add("subtitles.alchemia.urnbreak", pick("Urn shatters", "항아리가 깨진다"));
         String[][] champions = {{"bold", "Bold", "대담한"}, {"spine", "Spined", "가시 돋친"},
                 {"armor", "Armored", "무장한"}, {"mighty", "Mighty", "강력한"}, {"grim", "Grim", "음산한"},
@@ -581,6 +582,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
 
         addBlock(ModBlocks.ALCHEMIUM_BLOCK, pick("Block of Alchemium", "알케미움 블록"));
         addBlock(ModBlocks.BRASS_BLOCK, pick("Block of Brass", "황동 블록"));
+        addBlock(ModBlocks.VOID_METAL_BLOCK, pick("Block of Void Metal", "공허 금속 블록"));
         addItem(ModItems.ALCHEMIUM_INGOT, pick("Alchemium Ingot", "알케미움 주괴"));
         addItem(ModItems.BRASS_INGOT, pick("Brass Ingot", "황동 주괴"));
         addItem(ModItems.ALCHEMIUM_NUGGET, pick("Alchemium Nugget", "알케미움 조각"));
@@ -745,6 +747,12 @@ public abstract class ModLanguageProvider extends LanguageProvider {
 
 
         addItem(ModItems.ALCHEMOMETER, pick("Alchemometer", "알케모미터"));
+        addItem(ModItems.ESSENTIA_RESONATOR, pick("Essentia Resonator", "에센시아 공명기"));
+        add("item.alchemia.essentia_resonator.contains", pick("Holds %s %s", "%2$s %1$s 담김"));
+        add("item.alchemia.essentia_resonator.draws", pick("Draws %s", "당기는 것: %s"));
+        add("item.alchemia.essentia_resonator.anything", pick("any essentia", "모든 에센시아"));
+        add("item.alchemia.essentia_resonator.nothing", pick("nothing", "없음"));
+        addItem(ModItems.SANITY_CHECKER, pick("Sanity Checker", "정신 검사기"));
         addItem(ModItems.NODE_PLACER, pick("Node Placer", "노드 배치기"));
         add("item.alchemia.creative_only", pick("Creative only", "크리에이티브 전용"));
         addBlock(ModBlocks.RESEARCH_TABLE, pick("Research Table", "연구 탁자"));
@@ -1107,8 +1115,8 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                  "Essentia will not sit in the open. A warded jar holds sixty-four of one kind and refuses the rest; a label tells it which kind before there is any, so a shelf can be laid out empty and filled later. A brace lets a jar be filled and never emptied.",
                  "에센시아는 열린 데에 머물지 않는다. 봉인된 단지는 한 가지를 예순넷까지 담고 나머지는 받지 않는다. 라벨은 아직 아무것도 없을 때 무엇을 담을지 미리 일러 주니, 선반을 빈 채로 먼저 늘어놓고 나중에 채울 수 있다. 고정대를 물리면 채우기만 되고 비울 수는 없다."},
                 {"tubes", "Essentia Tubes", "에센시아 관",
-                 "Brass pipe with glass in the middle of it. The far end does the pulling rather than the near one, so a run fills whatever still has room instead of whatever it reached first. A valve on the line shuts it, by hand or by redstone.",
-                 "가운데에 유리를 끼운 황동 관. 당기는 쪽은 보내는 끝이 아니라 받는 끝이다. 그래서 한 줄기는 먼저 닿은 곳이 아니라 아직 자리가 남은 곳을 채운다. 줄기에 밸브를 물리면 손으로도 레드스톤으로도 막을 수 있다."},
+                 "Brass pipe with glass in the middle of it. The far end does the pulling rather than the near one, so a run fills whatever still has room instead of whatever it reached first. A valve on the line shuts it, by hand or by redstone. An essentia resonator held to a vessel or a length of pipe tells what is in it and what it draws through that side.",
+                 "가운데에 유리를 끼운 황동 관. 당기는 쪽은 보내는 끝이 아니라 받는 끝이다. 그래서 한 줄기는 먼저 닿은 곳이 아니라 아직 자리가 남은 곳을 채운다. 줄기에 밸브를 물리면 손으로도 레드스톤으로도 막을 수 있다. 에센시아 공명기를 그릇이나 관에 대면 그 안에 무엇이 들었고 그쪽 면으로 무엇을 당기는지 알려 준다."},
                 {"tube_filter", "Sorting the Flow", "흐름 가려 쓰기",
                  "Four ways of telling a length of pipe what to do with what passes through it: let one thing by and turn the rest back, let it by one way only, let it by half as fast, or keep a little in hand for when the works wants it.",
                  "관에게 지나가는 것을 어찌하라 이를 방법 넷. 하나만 지나가게 하고 나머지는 돌려보내거나, 한쪽으로만 내보내거나, 절반만 흘리거나, 공방이 찾을 때를 대비해 조금 쥐고 있게 하거나."},
@@ -1415,6 +1423,9 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                 {"pattern_crafter", "Arcane Pattern Crafter", "비전 문양 제작기",
                  "Crafts that only ever need one kind of thing laid in a pattern, such as planks into sticks or nuggets into an ingot, can be left to a machine. Put an inventory above it and one below: it takes what it needs from the one above once a second, lays it out in the pattern its window shows, and puts whatever that makes into the one below. Click the brass dial on its face to choose the next pattern. A redstone signal stops it.",
                  "판자를 막대로, 조각을 주괴로 만드는 것처럼 한 가지 재료만 문양대로 놓으면 되는 제작은 기계에 맡길 수 있다. 위아래에 보관함을 하나씩 두면, 1초마다 위 보관함에서 필요한 만큼 가져와 창에 보이는 문양대로 늘어놓고, 만들어진 것을 아래 보관함에 넣는다. 앞면의 황동 다이얼을 누르면 다음 문양으로 바뀐다. 레드스톤 신호를 받으면 멈춘다."},
+                {"sanity_check", "Sanity Check", "정신 검사",
+                 "There has been a good deal going on in your head lately, and it would be as well to look in and see that all is still in order. An alchemometer turned inwards, with a brain and a mirror to look through, shows how much warp has settled on the mind while it is held: the part that passes off, the part that clings, and the part that will never leave.",
+                 "요즘 머릿속이 꽤 어수선했으니 한번 들여다보고 모든 것이 아직 괜찮은지 확인해 두는 편이 좋겠다. 두뇌와 거울을 달아 안쪽을 향하게 한 알케모미터를 손에 들면, 정신에 얼마나 뒤틀림이 쌓였는지 보여 준다. 지나갈 것, 들러붙은 것, 영영 떠나지 않을 것을 나누어서."},
                 {"sinister_stone", "Sinister Lodestone", "불길한 자석",
                  "Studying the rite of the opening eye, you found that the place where the eye opens gives off a distinct energy even while it is shut. Flint infused with the right things lights up whenever it is pointed towards such a place, through stone and all. Its reach is limited, but the ritual stones are hard enough to find that it is worth carrying.",
                  "눈이 열리는 의식을 연구하다가, 눈이 열리는 자리는 닫혀 있을 때도 뚜렷한 기운을 낸다는 것을 알아냈다. 알맞은 것을 주입한 부싯돌은 그런 자리를 향하면 돌벽 너머라도 빛난다. 닿는 거리에는 한계가 있지만, 의식의 돌을 찾기가 워낙 어려워 들고 다닐 만하다."},

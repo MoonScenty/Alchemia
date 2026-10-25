@@ -1,0 +1,28 @@
+{
+  "type": "alchemia:arcane_shaped",
+  "key": {
+    "I": {
+      "tag": "c:ingots/iron"
+    },
+    "N": {
+      "tag": "c:gems/quartz"
+    },
+    "S": {
+      "tag": "c:rods/wooden"
+    }
+  },
+  "pattern": [
+    "I I",
+    "INI",
+    " S "
+  ],
+  "research": "alchemia:tubes",
+  "result": {
+    "count": 1,
+    "id": "alchemia:essentia_resonator"
+  },
+  "vis": {
+    "alchemia:aer": 5,
+    "alchemia:aqua": 5
+  }
+}

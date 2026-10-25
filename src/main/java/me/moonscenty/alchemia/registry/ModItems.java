@@ -394,6 +394,13 @@ public class ModItems {
                     new Item.Properties().stacksTo(1).rarity(net.minecraft.world.item.Rarity.UNCOMMON)));
     /** Glass and brass round a shard of flux, which takes whatever shape is pressed on it. */
     public static final DeferredItem<Item> MORPHIC_RESONATOR = ITEMS.registerSimpleItem("morphic_resonator");
+    /** Sounds a vessel or a pipe for what is in it and what it draws. */
+    public static final DeferredItem<me.moonscenty.alchemia.item.EssentiaResonatorItem> ESSENTIA_RESONATOR =
+            ITEMS.register("essentia_resonator", () -> new me.moonscenty.alchemia.item.EssentiaResonatorItem(
+                    new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON)));
+    /** Held, shows how much warp is on the mind; see {@code SanityOverlay}. */
+    public static final DeferredItem<Item> SANITY_CHECKER = ITEMS.register("sanity_checker",
+            () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON)));
     /** A mind of gears and a comparator under glass. Enough to follow one rule without being told twice. */
     public static final DeferredItem<Item> CLOCKWORK_MIND = ITEMS.registerSimpleItem("clockwork_mind");
     /** The clockwork mind with a brain grown into it, which can be told to choose. */

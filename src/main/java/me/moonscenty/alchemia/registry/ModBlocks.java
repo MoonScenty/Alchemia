@@ -479,6 +479,9 @@ public class ModBlocks {
     public static final DeferredBlock<Block> BRASS_BLOCK = register("brass_block",
             () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).mapColor(MapColor.GOLD)
                     .strength(METAL_HARDNESS, METAL_RESISTANCE)));
+    public static final DeferredBlock<Block> VOID_METAL_BLOCK = register("void_metal_block",
+            () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).mapColor(MapColor.COLOR_BLACK)
+                    .strength(METAL_HARDNESS, METAL_RESISTANCE)));
     /**
      * The alchemical construct: iron, greatwood and pipe made into the casing the better essentia devices are built
      * round, and two of them on a crucible make a thaumatorium. The advanced one is that, worked with void metal and a

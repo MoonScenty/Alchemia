@@ -115,6 +115,8 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.LOOT_BAG_RARE.get());
         basicItem(ModItems.RUNED_TABLET.get());
         basicItem(ModItems.SANITY_SOAP.get());
+        basicItem(ModItems.ESSENTIA_RESONATOR.get());
+        basicItem(ModItems.SANITY_CHECKER.get());
         ModItems.PRIMAL_ARROWS.values().forEach(arrow -> basicItem(arrow.get()));
         basicItem(ModItems.BOTTLE_TAINT.get());
         basicItem(ModItems.THAUMOSTATIC_HARNESS.get());

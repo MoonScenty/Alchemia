@@ -1,6 +1,8 @@
 {
   "values": [
     "alchemia:arcane_stone_stairs",
-    "alchemia:arcane_stone_bricks_stairs"
+    "alchemia:arcane_stone_bricks_stairs",
+    "alchemia:ancient_stone_stairs",
+    "alchemia:eldritch_stone_stairs"
   ]
 }

@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "alchemia:block/void_metal_block"
+    }
+  }
+}

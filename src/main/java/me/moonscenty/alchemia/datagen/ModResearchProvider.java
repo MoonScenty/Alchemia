@@ -163,7 +163,7 @@ public class ModResearchProvider {
                 "jar", "phial", "jar_label", "jar_brace");
         entry(context, "tubes", ModResearch.ALCHEMY, ModBlocks.TUBE, 2, 5,
                 AspectList.of(ModAspects.WATER, 3).add(ModAspects.EXCHANGE, 6),
-                List.of("distillation"), false, NodeShape.PLAIN, 2, "tube", "tube_valve");
+                List.of("distillation"), false, NodeShape.PLAIN, 2, "tube", "tube_valve", "essentia_resonator");
         entry(context, "tube_filter", ModResearch.ALCHEMY, ModBlocks.TUBE_FILTER, 3, 6,
                 AspectList.of(ModAspects.WATER, 3).add(ModAspects.EXCHANGE, 6).add(ModAspects.ORDER, 3),
                 List.of("tubes"), false, NodeShape.PLAIN, 3,
@@ -573,6 +573,9 @@ public class ModResearchProvider {
                         .add(ModAspects.MAN, 3),
                 List.of("clockwork_mind"), false, NodeShape.PLAIN, 1, "pattern_crafter");
         // flint that lights when it is turned towards an eldritch portal
+        entry(context, "sanity_check", ModResearch.ELDRITCH, ModItems.SANITY_CHECKER, 3, -1,
+                AspectList.of(ModAspects.MIND, 5).add(ModAspects.ELDRITCH, 3).add(ModAspects.SENSES, 5),
+                List.of("eldritch_minor", "infusion"), false, NodeShape.PLAIN, 1, "sanity_checker");
         entry(context, "sinister_stone", ModResearch.ELDRITCH, ModItems.SINISTER_STONE, -1, 4,
                 AspectList.of(ModAspects.SENSES, 3).add(ModAspects.DARKNESS, 3).add(ModAspects.ELDRITCH, 3)
                         .add(ModAspects.AURA, 3),

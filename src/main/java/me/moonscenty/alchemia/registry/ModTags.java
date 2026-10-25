@@ -45,6 +45,7 @@ public class ModTags {
         public static final TagKey<Block> STORAGE_BLOCKS_AMBER = common("storage_blocks/amber");
         public static final TagKey<Block> STORAGE_BLOCKS_ALCHEMIUM = common("storage_blocks/alchemium");
         public static final TagKey<Block> STORAGE_BLOCKS_BRASS = common("storage_blocks/brass");
+        public static final TagKey<Block> STORAGE_BLOCKS_VOID = common("storage_blocks/void");
 
         private static TagKey<Block> mod(String path) {
             return TagKey.create(Registries.BLOCK, Alchemia.id(path));
@@ -116,6 +117,7 @@ public class ModTags {
         public static final TagKey<Item> STORAGE_BLOCKS_AMBER = common("storage_blocks/amber");
         public static final TagKey<Item> STORAGE_BLOCKS_ALCHEMIUM = common("storage_blocks/alchemium");
         public static final TagKey<Item> STORAGE_BLOCKS_BRASS = common("storage_blocks/brass");
+        public static final TagKey<Item> STORAGE_BLOCKS_VOID = common("storage_blocks/void");
         public static final TagKey<Item> INGOTS_ALCHEMIUM = common("ingots/alchemium");
         public static final TagKey<Item> INGOTS_BRASS = common("ingots/brass");
         public static final TagKey<Item> NUGGETS_ALCHEMIUM = common("nuggets/alchemium");

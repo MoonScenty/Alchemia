@@ -5,6 +5,7 @@
     "#c:ores/amber",
     "#c:storage_blocks/alchemium",
     "#c:storage_blocks/brass",
+    "#c:storage_blocks/void",
     "alchemia:arcane_stone",
     "alchemia:arcane_stone_stairs",
     "alchemia:arcane_stone_slab",

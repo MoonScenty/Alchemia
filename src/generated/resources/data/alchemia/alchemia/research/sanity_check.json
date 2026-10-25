@@ -1,0 +1,25 @@
+{
+  "category": "alchemia:eldritch",
+  "column": 3,
+  "icon": "alchemia:sanity_checker",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.sanity_check.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:sanity_checker"
+    }
+  ],
+  "parents": [
+    "alchemia:eldritch_minor",
+    "alchemia:infusion"
+  ],
+  "requirements": {
+    "alchemia:alienis": 3,
+    "alchemia:cognitio": 5,
+    "alchemia:sensus": 5
+  },
+  "row": -1
+}

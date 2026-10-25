@@ -85,6 +85,7 @@ public class ModItemTagsProvider extends ItemTagsProvider {
 
         copy(ModTags.Blocks.STORAGE_BLOCKS_ALCHEMIUM, ModTags.Items.STORAGE_BLOCKS_ALCHEMIUM);
         copy(ModTags.Blocks.STORAGE_BLOCKS_BRASS, ModTags.Items.STORAGE_BLOCKS_BRASS);
+        copy(ModTags.Blocks.STORAGE_BLOCKS_VOID, ModTags.Items.STORAGE_BLOCKS_VOID);
         copy(Tags.Blocks.STORAGE_BLOCKS, Tags.Items.STORAGE_BLOCKS);
 
         tag(ModTags.Items.INGOTS_ALCHEMIUM).add(ModItems.ALCHEMIUM_INGOT.get());

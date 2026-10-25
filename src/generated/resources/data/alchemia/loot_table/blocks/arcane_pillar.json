@@ -5,6 +5,13 @@
       "bonus_rolls": 0.0,
       "conditions": [
         {
+          "block": "alchemia:arcane_pillar",
+          "condition": "minecraft:block_state_property",
+          "properties": {
+            "kind": "normal"
+          }
+        },
+        {
           "condition": "minecraft:survives_explosion"
         }
       ],
@@ -12,6 +19,50 @@
         {
           "type": "minecraft:item",
           "name": "alchemia:arcane_stone"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "block": "alchemia:arcane_pillar",
+          "condition": "minecraft:block_state_property",
+          "properties": {
+            "kind": "ancient"
+          }
+        },
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "alchemia:ancient_stone"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "block": "alchemia:arcane_pillar",
+          "condition": "minecraft:block_state_property",
+          "properties": {
+            "kind": "eldritch"
+          }
+        },
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "alchemia:eldritch_stone"
         }
       ],
       "rolls": 1.0

@@ -2,6 +2,7 @@
   "values": [
     "alchemia:alchemium_block",
     "alchemia:brass_block",
+    "alchemia:void_metal_block",
     "alchemia:alchemical_construct",
     "alchemia:advanced_alchemical_construct",
     "alchemia:amber_block",

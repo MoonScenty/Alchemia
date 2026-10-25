@@ -947,6 +947,12 @@ public final class LegacyAssets {
      */
     private static void leftovers(List<LegacyAsset> all) {
         all.add(item("sanity_soap", "sanity_soap", null));
+        // the essentia resonator and its knock; the sanity checker and the sheet its gauge is drawn from
+        all.add(item("essentia_resonator", "resonator", null));
+        all.add(LegacyAsset.of("sounds/legacy/alembicknock.ogg").five("sounds/alembicknock.ogg"));
+        all.add(item("sanity_checker", "sanity_checker", null));
+        all.add(LegacyAsset.of("textures/gui/hud.png").five("textures/gui/hud.png"));
+        all.add(block("void_metal_block", "void_metal", null));
         for (String element : List.of("air", "fire", "water", "earth", "order", "entropy")) {
             all.add(item("primal_arrow_" + element, "primal_arrow_" + element, null));
         }

@@ -99,6 +99,18 @@ public class ModRecipeProvider extends RecipeProvider {
         compress(output, ModItems.BRASS_NUGGET, ModTags.Items.NUGGETS_BRASS, ModItems.BRASS_INGOT, ModTags.Items.INGOTS_BRASS);
         compress(output, ModItems.BRASS_INGOT, ModTags.Items.INGOTS_BRASS, ModBlocks.BRASS_BLOCK, ModTags.Items.STORAGE_BLOCKS_BRASS);
         compress(output, ModItems.QUICKSILVER_DROP, ModTags.Items.NUGGETS_QUICKSILVER, ModItems.QUICKSILVER, ModTags.Items.GEMS_QUICKSILVER);
+        compress(output, ModItems.VOID_INGOT, ModTags.Items.INGOTS_VOID, ModBlocks.VOID_METAL_BLOCK,
+                ModTags.Items.STORAGE_BLOCKS_VOID);
+        // nine of the pechs' coins are worth a gold ingot, and one melts down to a nugget, as the original had it
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, Items.GOLD_INGOT)
+                .pattern("###").pattern("###").pattern("###")
+                .define('#', ModItems.COIN)
+                .unlockedBy("has_coin", has(ModItems.COIN))
+                .save(output, Alchemia.id("gold_ingot_from_coins"));
+        SimpleCookingRecipeBuilder.smelting(Ingredient.of(ModItems.COIN), RecipeCategory.MISC, Items.GOLD_NUGGET,
+                        0.0F, 200)
+                .unlockedBy("has_coin", has(ModItems.COIN))
+                .save(output, Alchemia.id("gold_nugget_from_smelting_coin"));
 
         plate(output, ModItems.ALCHEMIUM_PLATE, ModTags.Items.INGOTS_ALCHEMIUM);
         plate(output, ModItems.BRASS_PLATE, ModTags.Items.INGOTS_BRASS);
@@ -855,6 +867,13 @@ public class ModRecipeProvider extends RecipeProvider {
                         'Q', Ingredient.of(ModTags.Items.NUGGETS_QUICKSILVER)),
                 " Q ", "IGI", " B ");
 
+        arcane(output, "essentia_resonator", "tubes", new ItemStack(ModItems.ESSENTIA_RESONATOR.get()),
+                AspectList.of(ModAspects.WATER, 5).add(ModAspects.AIR, 5),
+                Map.of('I', Ingredient.of(Tags.Items.INGOTS_IRON),
+                        'N', Ingredient.of(Tags.Items.GEMS_QUARTZ),
+                        'S', Ingredient.of(Tags.Items.RODS_WOODEN)),
+                "I I", "INI", " S ");
+
         shapeless(output, "tube_valve", "tubes", new ItemStack(ModBlocks.TUBE_VALVE.get()),
                 AspectList.of(ModAspects.WATER, 5).add(ModAspects.ORDER, 5),
                 Ingredient.of(ModBlocks.TUBE), Ingredient.of(Items.LEVER));
@@ -1604,6 +1623,12 @@ public class ModRecipeProvider extends RecipeProvider {
                 new ItemStack(ModItems.SINISTER_STONE.get()),
                 AspectList.of(ModAspects.SENSES, 8).add(ModAspects.DARKNESS, 8).add(ModAspects.ELDRITCH, 8)
                         .add(ModAspects.AURA, 8), 5, "sinister_stone");
+        infusion(output, "sanity_checker", Ingredient.of(ModItems.ALCHEMOMETER),
+                List.of(Ingredient.of(ModItems.MIRRORED_GLASS), Ingredient.of(ModItems.ZOMBIE_BRAIN),
+                        Ingredient.of(ModItems.MORPHIC_RESONATOR)),
+                new ItemStack(ModItems.SANITY_CHECKER.get()),
+                AspectList.of(ModAspects.MIND, 24).add(ModAspects.SENSES, 24).add(ModAspects.ELDRITCH, 8), 4,
+                "sanity_check");
     }
 
     /**

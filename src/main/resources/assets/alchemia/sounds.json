@@ -68,6 +68,12 @@
       "alchemia:legacy/pech_dice"
     ]
   },
+  "alembicknock": {
+    "subtitle": "subtitles.alchemia.alembicknock",
+    "sounds": [
+      "alchemia:legacy/alembicknock"
+    ]
+  },
   "coins": {
     "subtitle": "subtitles.alchemia.coins",
     "sounds": [

@@ -95,6 +95,8 @@ public final class ModSounds {
 
     /** Glass knocking on glass: jars, mirrors, the brain in its jar. */
     public static final DeferredHolder<SoundEvent, SoundEvent> JAR = sound("jar");
+    /** A knuckle on an alembic: the essentia resonator sounding something out. */
+    public static final DeferredHolder<SoundEvent, SoundEvent> ALEMBIC_KNOCK = sound("alembicknock");
     public static final DeferredHolder<SoundEvent, SoundEvent> PAGE = sound("page");
     public static final DeferredHolder<SoundEvent, SoundEvent> CRYSTAL = sound("crystal");
 
