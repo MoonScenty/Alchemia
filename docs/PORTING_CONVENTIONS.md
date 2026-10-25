@@ -30,7 +30,8 @@ Thaumcraft 5.2.4 (MC 1.8.9)의 기능을 Minecraft 1.21.1 / NeoForge 21.1 로 �
   - OreDictionary → 태그
   - TESR/GL 직접 호출 → BlockEntityRenderer + RenderType/VertexConsumer
   - Baubles 의존 → 자체 슬롯 없이 시작, 필요 시 Curios 선택적 연동
-- 포팅 순서와 진행 상황은 [PORTING_PLAN.md](PORTING_PLAN.md)에 기록한다.
+- 포팅 순서와 진행 상황은 [PORTING_PLAN.md](PORTING_PLAN.md)에 기록한다. 단계마다 "원본과 다른 점"과 "남은 것"을 적는다.
+- 원본과 어긋난 점은 [AUDIT_TC5.md](AUDIT_TC5.md)에 모은다. 남은 것만 본문에 두고, 고친 것은 진행 표(날짜·커밋)와 맨 아래 "고친 것"으로 옮긴다. 계획서에 원본과 다른 채로 남은 코드를 적을 때는 "대조 문서 3절"로 이어 둔다.
 
 ## 참고 자료 (저장소 밖)
 
@@ -48,7 +49,8 @@ Thaumcraft 5.2.4 (MC 1.8.9)의 기능을 Minecraft 1.21.1 / NeoForge 21.1 로 �
 - `ResourceLocation`은 `Alchemia.id("path")`로 만든다.
 - 모델·블록스테이트·루트테이블·레시피·태그·lang은 가능하면 datagen(`./gradlew runData`)으로 생성한다.
 - 번역은 `datagen/ModLanguageProvider`에서 `pick(영어, 한국어)`로 두 언어를 한 줄에 같이 적는다. lang JSON을 직접 만들지 않는다.
-- `src/generated/resources`는 커밋한다. 블록·아이템을 추가하면 `runData`를 다시 돌린다.
+- `src/generated/resources`는 커밋한다. 블록·아이템뿐 아니라 datagen이 읽는 코드(레시피·연구·태그·루트·모델·lang)를 바꾸면 **무엇이든** `runData`를 다시 돌리고 생성 파일을 같은 커밋에 넣는다. 빠뜨리면 코드와 생성 파일이 어긋난 채로 남는다(2026-10-25에 비전 기둥 떨굼·계단 태그 등이 그렇게 빠져 있었다).
+- 한 묶음을 마치면 `build` → `runData` → `runGameTestServer`가 모두 통과한 뒤 커밋한다. 커밋 제목은 한국어로 한 일을 짧게("… 추가", "… 구현"), 자세한 것은 본문에 줄마다 적는다.
 - 텍스처 생성 스크립트와 원본 PNG는 `Desktop/thaumref/tools`, `Desktop/thaumref/textures`에 둔다 (저장소에는 결과 PNG만).
 
 ## 명령
