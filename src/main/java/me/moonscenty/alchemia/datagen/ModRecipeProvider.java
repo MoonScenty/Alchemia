@@ -326,6 +326,8 @@ public class ModRecipeProvider extends RecipeProvider {
 
         SpecialRecipeBuilder.special(category -> ArcaneWandRecipe.INSTANCE)
                 .save(output, Alchemia.id("arcane_wand").toString());
+        SpecialRecipeBuilder.special(category -> me.moonscenty.alchemia.crafting.ArcaneSceptreRecipe.INSTANCE)
+                .save(output, Alchemia.id("arcane_sceptre").toString());
     }
 
     /**

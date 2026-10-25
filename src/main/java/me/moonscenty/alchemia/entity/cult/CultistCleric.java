@@ -166,7 +166,7 @@ public class CultistCleric extends Cultist implements RangedAttackMob {
         goalSelector.addGoal(0, new FloatGoal(this));
         goalSelector.addGoal(1, new AltarFocus(this));
         goalSelector.addGoal(2, new Casting(this));
-        goalSelector.addGoal(3, new CultistKnight.QuickMelee(this));
+        goalSelector.addGoal(3, new me.moonscenty.alchemia.entity.QuickMeleeGoal(this, 1.0, false));
         goalSelector.addGoal(5, new OpenDoorGoal(this, true));
         goalSelector.addGoal(6, new MoveTowardsRestrictionGoal(this, 0.8));
         goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 0.8));

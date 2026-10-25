@@ -122,7 +122,7 @@ public class ArcaneWorkbenchMenu extends AbstractContainerMenu {
 
     /** What the work on the grid would cost. */
     public AspectList cost() {
-        return matching().map(found -> found.value().cost()).orElse(AspectList.EMPTY);
+        return matching().map(found -> found.value().cost(grid())).orElse(AspectList.EMPTY);
     }
 
     /** Whether the research behind a recipe has been done. A recipe with no research named is open to anyone. */
@@ -149,7 +149,7 @@ public class ArcaneWorkbenchMenu extends AbstractContainerMenu {
         }
         ItemStack made = matching()
                 .filter(found -> known(found.value()))
-                .filter(found -> VisHolder.canPay(wand(), found.value().cost(), player,
+                .filter(found -> VisHolder.canPay(wand(), found.value().cost(grid()), player,
                         VisHolder.Spending.CRAFTING))
                 .map(found -> found.value().assemble(grid(), player.level().registryAccess()))
                 .orElse(ItemStack.EMPTY);
@@ -169,8 +169,9 @@ public class ArcaneWorkbenchMenu extends AbstractContainerMenu {
     private void craft(Player taker, ItemStack made) {
         matching().ifPresent(found -> {
             VisHolder holder = VisHolder.of(wand());
-            if (holder != null && !found.value().cost().isEmpty()) {
-                holder.take(wand(), found.value().cost(), taker, VisHolder.Spending.CRAFTING);
+            AspectList price = found.value().cost(grid());
+            if (holder != null && !price.isEmpty()) {
+                holder.take(wand(), price, taker, VisHolder.Spending.CRAFTING);
             }
         });
         for (int slot = 0; slot < ArcaneWorkbenchBlockEntity.GRID; slot++) {

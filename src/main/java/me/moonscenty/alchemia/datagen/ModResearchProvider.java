@@ -306,6 +306,12 @@ public class ModResearchProvider {
                 "infusion_enchantment_burrowing", "infusion_enchantment_refining", "infusion_enchantment_sounding",
                 "infusion_enchantment_arcing", "infusion_enchantment_essence");
 
+        // a wand with a crossbar, which holds more and makes everything cheaper, and costs a great deal to make
+        entry(context, "sceptre", ModResearch.ARCANA, ModItems.PRIMAL_CHARM, 7, 5,
+                AspectList.of(ModAspects.TOOL, 6).add(ModAspects.CRAFT, 6).add(ModAspects.PLANT, 6)
+                        .add(ModAspects.ENERGY, 9),
+                List.of("wand_rods"), false, NodeShape.PLAIN, 3, "arcane_sceptre");
+
         // the staves: a greatwood staff first, then the six primal ones, and a silverwood staff for the patient
         entry(context, "staff_greatwood", ModResearch.ARCANA, ModItems.WAND_RODS.get("greatwood_staff"), 9, 5,
                 AspectList.of(ModAspects.TOOL, 3).add(ModAspects.PLANT, 6).add(ModAspects.ENERGY, 3),

@@ -942,6 +942,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("item.alchemia.wand", pick("Wand", "완드"));
         add("item.alchemia.wand.named", pick("%s Capped %s Wand", "%s 씌운 %s 완드"));
         add("item.alchemia.staff.named", pick("%s Capped %s Staff", "%s 씌운 %s 지팡이"));
+        add("item.alchemia.sceptre.named", pick("%s Capped %s Sceptre", "%s 씌운 %s 셉터"));
         add("item.alchemia.wand.vis", pick("%s %s / %s", "%s %s / %s"));
         add("item.alchemia.wand.charge", pick("Draws %s faster", "%s만큼 빨리 채워짐"));
         add("item.alchemia.wand.discount", pick("Spends %s%% more", "%s%% 더 씀"));
@@ -1095,6 +1096,9 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                 {"wand_cap_alchemium", "Alchemium Caps", "알케미움 캡",
                  "Metal that has been taught what it is for. A tenth of every working comes back, which is the first time a cap has given anything rather than taken it.",
                  "무엇에 쓰이는지를 배운 금속. 일할 때마다 열에 하나가 되돌아온다. 캡이 가져가는 대신 내어준 것은 이번이 처음이다."},
+                {"sceptre", "Sceptres", "셉터",
+                 "A wand with a crossbar of the same metal as its caps, and a primal charm where the bar crosses the shaft. It holds half as much again as the wand it was built on and makes everything it pays for a tenth cheaper, at the bench as much as through a focus. It is not cheap to make: the bench asks ten times the cost of the cap times the cost of the rod, of every primal. A staff core will not take a crossbar.",
+                 "캡과 같은 금속으로 가로대를 대고, 가로대가 자루와 만나는 자리에 원시 부적을 박은 완드다. 바탕이 된 완드보다 절반을 더 담고, 무엇을 치르든 열에 하나만큼 싸게 치른다. 포커스로 일할 때나 작업대에서나 마찬가지다. 만들기는 싸지 않다. 작업대가 캡 값에 막대 값을 곱한 것의 열 배를 원시 상마다 받는다. 지팡이 심에는 가로대를 댈 수 없다."},
                 {"staff_greatwood", "Staves", "지팡이",
                  "Two rods joined end to end with a primal charm to hold them true make a staff core, and caps on that make a staff. A staff holds half as much again as a wand of the same wood, works whatever focus is on it a tenth cheaper, and is heavy enough to club something with. It is too long to lie on a workbench, so a wand is still wanted for that.",
                  "막대 둘을 끝과 끝으로 잇고 원시 부적으로 곧게 잡으면 지팡이 심이 되고, 거기에 캡을 씌우면 지팡이가 된다. 지팡이는 같은 나무의 완드보다 절반을 더 담고, 끼운 포커스를 열에 하나만큼 싸게 부리며, 무언가를 후려칠 만큼 묵직하다. 작업대에 눕히기에는 너무 길어서 그 일에는 여전히 완드가 필요하다."},

@@ -31,6 +31,8 @@ public class ModRecipes {
 
     public static final DeferredHolder<RecipeSerializer<?>, ArcaneWandRecipe.Serializer> ARCANE_WAND =
             SERIALIZERS.register("arcane_wand", ArcaneWandRecipe.Serializer::new);
+    public static final DeferredHolder<RecipeSerializer<?>, ArcaneSceptreRecipe.Serializer> ARCANE_SCEPTRE =
+            SERIALIZERS.register("arcane_sceptre", ArcaneSceptreRecipe.Serializer::new);
 
     /** Writing a jar label, and rubbing one out. A plain bench recipe, not an arcane one. */
     public static final DeferredHolder<RecipeSerializer<?>, SimpleCraftingRecipeSerializer<LabelRecipe>> JAR_LABEL =

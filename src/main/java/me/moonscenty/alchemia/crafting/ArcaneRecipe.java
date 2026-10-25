@@ -19,6 +19,11 @@ public interface ArcaneRecipe extends Recipe<CraftingInput> {
     /** What the work costs, in primal aspects. An empty list is a recipe anyone can make with an empty wand. */
     AspectList cost();
 
+    /** What this particular grid costs. The same as {@link #cost()} unless what is on the grid sets the price. */
+    default AspectList cost(net.minecraft.world.item.crafting.CraftingInput input) {
+        return cost();
+    }
+
     /** The research that has to be finished first, if any. */
     Optional<ResourceLocation> research();
 

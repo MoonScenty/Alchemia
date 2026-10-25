@@ -43,7 +43,6 @@ import net.minecraft.world.entity.ai.control.FlyingMoveControl;
 import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
-import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
@@ -235,7 +234,7 @@ public class Golem extends PathfinderMob implements OwnableEntity, net.minecraft
                 goalSelector.addGoal(1, new net.minecraft.world.entity.ai.goal.RangedAttackGoal(this, 1.0, 20, 25,
                         16.0F));
             }
-            goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.15, false));
+            goalSelector.addGoal(2, new me.moonscenty.alchemia.entity.QuickMeleeGoal(this, 1.15, false));
             if (following()) {
                 targetSelector.addGoal(1, new GolemGoals.DefendOwner(this));
                 targetSelector.addGoal(2, new GolemGoals.AidOwner(this));

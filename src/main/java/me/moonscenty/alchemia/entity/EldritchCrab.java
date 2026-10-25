@@ -93,7 +93,7 @@ public class EldritchCrab extends Monster implements EldritchMob {
     protected void registerGoals() {
         goalSelector.addGoal(0, new FloatGoal(this));
         goalSelector.addGoal(2, new LeapAtTargetGoal(this, 0.63F));
-        goalSelector.addGoal(3, new CultistKnight.QuickMelee(this));
+        goalSelector.addGoal(3, new QuickMeleeGoal(this, 1.0, false));
         goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 0.8));
         goalSelector.addGoal(8, new RandomLookAroundGoal(this));
         targetSelector.addGoal(1, new HurtByTargetGoal(this).setAlertOthers());

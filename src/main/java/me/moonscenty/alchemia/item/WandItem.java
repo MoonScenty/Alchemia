@@ -102,6 +102,17 @@ public class WandItem extends Item implements VisHolder {
         }
     }
 
+    /** Whether this wand has a crossbar: a sceptre, which holds half as much again and makes all its work cheaper. */
+    public static boolean isSceptre(ItemStack stack) {
+        return stack.getItem() instanceof WandItem && stack.has(ModDataComponents.SCEPTRE.get());
+    }
+
+    public static ItemStack sceptre(Holder<WandRod> rod, Holder<WandCap> cap) {
+        ItemStack sceptre = of(rod, cap);
+        sceptre.set(ModDataComponents.SCEPTRE.get(), net.minecraft.util.Unit.INSTANCE);
+        return sceptre;
+    }
+
     public static ItemStack of(Holder<WandRod> rod, Holder<WandCap> cap) {
         ItemStack wand = new ItemStack(ModItems.WAND.get());
         wand.set(ModDataComponents.WAND_ROD.get(), rod);
@@ -111,7 +122,8 @@ public class WandItem extends Item implements VisHolder {
 
     /** How much of one primal the wand holds at most, in whole vis. */
     public static int capacity(ItemStack stack) {
-        return rod(stack).capacity();
+        // a sceptre's crossbar holds half as much again, the original's
+        return isSceptre(stack) ? rod(stack).capacity() * 3 / 2 : rod(stack).capacity();
     }
 
     /** What is in the wand, in hundredths. */
@@ -168,6 +180,10 @@ public class WandItem extends Item implements VisHolder {
      */
     private static float rate(ItemStack stack, Player player, Spending why, Holder<Aspect> aspect) {
         float rate = VisDiscount.rate(cap(stack).discount(), player, aspect);
+        // a sceptre makes everything a tenth cheaper, at the bench as much as through a focus
+        if (isSceptre(stack)) {
+            rate -= THRIFT;
+        }
         if (why == Spending.WORKING) {
             rate -= FocusUpgrades.level(focus(stack), FocusUpgrade.FRUGAL) * THRIFT;
             // and a staff works its focus a tenth cheaper again
@@ -455,7 +471,9 @@ public class WandItem extends Item implements VisHolder {
 
     @Override
     public Component getName(ItemStack stack) {
-        return Component.translatable(isStaff(stack) ? "item.alchemia.staff.named" : "item.alchemia.wand.named",
+        String kind = isStaff(stack) ? "item.alchemia.staff.named"
+                : isSceptre(stack) ? "item.alchemia.sceptre.named" : "item.alchemia.wand.named";
+        return Component.translatable(kind,
                 cap(stack).displayName(), rod(stack).displayName());
     }
 

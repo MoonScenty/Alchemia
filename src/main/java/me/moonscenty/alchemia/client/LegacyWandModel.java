@@ -45,7 +45,7 @@ import net.neoforged.neoforge.client.model.pipeline.QuadBakingVertexConsumer;
  * whatever the wand in hand is made of. The mesh is drawn at four fifths about its middle, which is the length a
  * wand is held at.
  * <p>
- * The original's mesh also has a crossbar for a sceptre, which is not drawn since our wands are never sceptres; a
+ * The original's mesh also has a crossbar, drawn in the cap's metal on a sceptre and left off everything else; a
  * focus fitted to the wand sits on its tip, in the focus's own picture, as the original drew it. A wand on a staff core
  * is a staff, built on the original's longer staff mesh and held and shown as {@link #STAFF} says.
  */
@@ -96,11 +96,13 @@ public class LegacyWandModel extends BakedModelWrapper<BakedModel> {
         ItemStack focus = WandItem.focus(stack);
         String tip = focus.isEmpty() ? "" : BuiltInRegistries.ITEM.getKey(focus.getItem()).getPath();
         ResourceLocation rodLook = WandItem.rod(stack).texture();
-        return BUILT.computeIfAbsent(rod.getPath() + "/" + cap.getPath() + "/" + tip,
-                key -> new Built(bake(mesh, rodLook, cap.getPath(), tip), ours));
+        boolean crossbar = WandItem.isSceptre(stack);
+        return BUILT.computeIfAbsent(rod.getPath() + "/" + cap.getPath() + "/" + tip + (crossbar ? "/sceptre" : ""),
+                key -> new Built(bake(mesh, rodLook, cap.getPath(), tip, crossbar), ours));
     }
 
-    private static List<BakedQuad> bake(LegacyMesh mesh, ResourceLocation rod, String cap, String tip) {
+    private static List<BakedQuad> bake(LegacyMesh mesh, ResourceLocation rod, String cap, String tip,
+            boolean crossbar) {
         var atlas = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS);
         TextureAtlasSprite rodSprite = atlas.apply(rod);
         TextureAtlasSprite capSprite = atlas.apply(Alchemia.id("item/wand/cap_" + cap));
@@ -108,6 +110,9 @@ public class LegacyWandModel extends BakedModelWrapper<BakedModel> {
         add(quads, mesh, "rod", rodSprite);
         add(quads, mesh, "cap1", capSprite);
         add(quads, mesh, "cap2", capSprite);
+        if (crossbar) {
+            add(quads, mesh, "crossbar", capSprite);
+        }
         if (!tip.isEmpty()) {
             add(quads, mesh, "focus", atlas.apply(Alchemia.id("item/wand/" + tip)));
         }

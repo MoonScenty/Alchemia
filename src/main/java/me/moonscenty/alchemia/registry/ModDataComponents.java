@@ -156,6 +156,13 @@ public class ModDataComponents {
                     .networkSynchronized(ItemContainerContents.STREAM_CODEC)
                     .build());
 
+    /** Marks a wand with a crossbar: a sceptre. Nothing else about it, so it carries nothing. */
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<net.minecraft.util.Unit>> SCEPTRE =
+            COMPONENTS.register("sceptre", () -> DataComponentType.<net.minecraft.util.Unit>builder()
+                    .persistent(net.minecraft.util.Unit.CODEC)
+                    .networkSynchronized(net.minecraft.network.codec.StreamCodec.unit(net.minecraft.util.Unit.INSTANCE))
+                    .build());
+
     /** The eighteen squares of a focus pouch, kept on the item so that a pouch in a chest is still full. */
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<ItemContainerContents>> POUCH_CONTENTS =
             COMPONENTS.register("pouch_contents", () -> DataComponentType.<ItemContainerContents>builder()

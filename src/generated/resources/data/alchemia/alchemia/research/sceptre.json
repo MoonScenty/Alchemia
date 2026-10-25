@@ -1,0 +1,26 @@
+{
+  "category": "alchemia:arcana",
+  "column": 7,
+  "complexity": 3,
+  "icon": "alchemia:primal_charm",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.sceptre.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:arcane_sceptre"
+    }
+  ],
+  "parents": [
+    "alchemia:wand_rods"
+  ],
+  "requirements": {
+    "alchemia:fabrico": 6,
+    "alchemia:herba": 6,
+    "alchemia:instrumentum": 6,
+    "alchemia:potentia": 9
+  },
+  "row": 5
+}

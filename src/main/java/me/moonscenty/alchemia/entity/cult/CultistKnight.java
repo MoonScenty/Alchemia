@@ -10,7 +10,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
-import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.MoveTowardsRestrictionGoal;
 import net.minecraft.world.entity.ai.goal.OpenDoorGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
@@ -45,7 +44,7 @@ public class CultistKnight extends Cultist {
     @Override
     protected void registerGoals() {
         goalSelector.addGoal(0, new FloatGoal(this));
-        goalSelector.addGoal(3, new QuickMelee(this));
+        goalSelector.addGoal(3, new me.moonscenty.alchemia.entity.QuickMeleeGoal(this, 1.0, false));
         goalSelector.addGoal(5, new OpenDoorGoal(this, true));
         goalSelector.addGoal(6, new MoveTowardsRestrictionGoal(this, 0.8));
         goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 0.8));
@@ -83,18 +82,6 @@ public class CultistKnight extends Cultist {
                     (int) (5.0F + hardness * random.nextInt(18)), level.registryAccess(),
                     level.registryAccess().registryOrThrow(net.minecraft.core.registries.Registries.ENCHANTMENT)
                             .getTag(net.minecraft.tags.EnchantmentTags.ON_MOB_SPAWN_EQUIPMENT)));
-        }
-    }
-
-    /** A melee goal that swings every half second, as the original's did, where the game's swings every second. */
-    public static class QuickMelee extends MeleeAttackGoal {
-        public QuickMelee(net.minecraft.world.entity.PathfinderMob mob) {
-            super(mob, 1.0, false);
-        }
-
-        @Override
-        protected int getAttackInterval() {
-            return adjustedTickDelay(10);
         }
     }
 }

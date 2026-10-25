@@ -49,7 +49,6 @@ import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
-import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.MoveTowardsRestrictionGoal;
 import net.minecraft.world.entity.ai.goal.OpenDoorGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
@@ -132,7 +131,7 @@ public class Pech extends Monster implements RangedAttackMob, OwnAspects {
 
     private final RangedAttackGoal shooting = new RangedAttackGoal(this, 0.6, 20, 50, 15.0F);
     private final RangedAttackGoal blasting = new RangedAttackGoal(this, 0.6, 20, 30, 15.0F);
-    private final MeleeAttackGoal hitting = new MeleeAttackGoal(this, 0.6, false);
+    private final QuickMeleeGoal hitting = new QuickMeleeGoal(this, 0.6, false);
     private final AvoidEntityGoal<Player> shying = new AvoidEntityGoal<>(this, Player.class, 8.0F, 0.5, 0.6);
 
     public Pech(EntityType<? extends Pech> type, Level level) {

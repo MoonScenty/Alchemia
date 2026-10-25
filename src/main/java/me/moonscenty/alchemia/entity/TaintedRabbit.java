@@ -14,7 +14,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
-import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
@@ -51,7 +50,7 @@ public class TaintedRabbit extends Rabbit implements TaintedMob {
     @Override
     protected void registerGoals() {
         goalSelector.addGoal(1, new FloatGoal(this));
-        goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.4, false));
+        goalSelector.addGoal(2, new QuickMeleeGoal(this, 1.4, false));
         goalSelector.addGoal(5, new RandomStrollGoal(this, 0.6));
         goalSelector.addGoal(11, new LookAtPlayerGoal(this, Player.class, 10.0F));
         targetSelector.addGoal(0, new HurtByTargetGoal(this));

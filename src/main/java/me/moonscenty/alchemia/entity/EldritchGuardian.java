@@ -123,7 +123,7 @@ public class EldritchGuardian extends Monster implements RangedAttackMob, Eldrit
     protected void registerGoals() {
         goalSelector.addGoal(0, new FloatGoal(this));
         goalSelector.addGoal(2, new Casting(this));
-        goalSelector.addGoal(3, new CultistKnight.QuickMelee(this));
+        goalSelector.addGoal(3, new QuickMeleeGoal(this, 1.0, false));
         goalSelector.addGoal(5, new MoveTowardsRestrictionGoal(this, 0.8));
         goalSelector.addGoal(7, new RandomStrollGoal(this, 1.0));
         goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));

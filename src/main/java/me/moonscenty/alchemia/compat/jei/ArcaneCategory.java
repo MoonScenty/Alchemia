@@ -77,6 +77,10 @@ public class ArcaneCategory implements IRecipeCategory<RecipeHolder<ArcaneRecipe
             wand(builder);
             return;
         }
+        if (recipe instanceof me.moonscenty.alchemia.crafting.ArcaneSceptreRecipe) {
+            sceptre(builder);
+            return;
+        }
         List<Ingredient> ingredients = recipe.getIngredients();
         int width = recipe instanceof ArcaneShapedRecipe shaped ? shaped.pattern().width() : 3;
         if (recipe instanceof ArcaneShapelessRecipe) {
@@ -88,6 +92,41 @@ public class ArcaneCategory implements IRecipeCategory<RecipeHolder<ArcaneRecipe
         }
         builder.addSlot(RecipeIngredientRole.OUTPUT, 95, 19).setStandardSlotBackground()
                 .addItemStack(recipe.getResultItem(Minecraft.getInstance().level.registryAccess()));
+    }
+
+    /** Every rod but the staff cores with every cap, cycling together, and the charm at the corner. */
+    private static void sceptre(IRecipeLayoutBuilder builder) {
+        List<ItemStack> caps = new ArrayList<>();
+        List<ItemStack> rods = new ArrayList<>();
+        List<ItemStack> sceptres = new ArrayList<>();
+        List<ItemStack> sticks = new ArrayList<>(List.of(new ItemStack(net.minecraft.world.item.Items.STICK)));
+        sticks.addAll(ModItems.WAND_RODS.values().stream().map(rod -> new ItemStack(rod.get())).toList());
+        for (ItemStack rod : sticks) {
+            var rodPart = WandParts.rodOf(rod);
+            for (var capItem : ModItems.WAND_CAPS.values()) {
+                ItemStack cap = new ItemStack(capItem.get());
+                var capPart = WandParts.capOf(cap);
+                if (rodPart == null || capPart == null || rodPart.value().staff()) {
+                    continue;
+                }
+                caps.add(cap);
+                rods.add(rod);
+                sceptres.add(WandItem.sceptre(rodPart, capPart));
+            }
+        }
+        IRecipeSlotBuilder top = builder.addSlot(RecipeIngredientRole.INPUT, 19, 1).setStandardSlotBackground()
+                .addItemStacks(caps);
+        builder.addSlot(RecipeIngredientRole.INPUT, 37, 1).setStandardSlotBackground()
+                .addItemStack(new ItemStack(ModItems.PRIMAL_CHARM.get()));
+        IRecipeSlotBuilder rod = builder.addSlot(RecipeIngredientRole.INPUT, 19, 19).setStandardSlotBackground()
+                .addItemStacks(rods);
+        IRecipeSlotBuilder side = builder.addSlot(RecipeIngredientRole.INPUT, 37, 19).setStandardSlotBackground()
+                .addItemStacks(caps);
+        IRecipeSlotBuilder low = builder.addSlot(RecipeIngredientRole.INPUT, 1, 37).setStandardSlotBackground()
+                .addItemStacks(caps);
+        IRecipeSlotBuilder made = builder.addSlot(RecipeIngredientRole.OUTPUT, 95, 19).setStandardSlotBackground()
+                .addItemStacks(sceptres);
+        builder.createFocusLink(top, rod, side, low, made);
     }
 
     /** Every rod with every cap, cycling together. */
