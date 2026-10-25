@@ -62,10 +62,24 @@ public class CrucibleBlockEntity extends BlockEntity {
     /** A hot pot boils away what is in it this often, in ticks, whether or not it is full. */
     private static final int BOILS_OFF = 100;
 
+    /**
+     * How long since the pot last boiled something off. It starts behind, and the original set it further back
+     * whenever something went in -- a long way after a piece of work, less after something melted -- so a pot being
+     * worked boils off less than one left standing.
+     */
+    private static final int STARTS_AT = -100;
+    private static final int AFTER_WORK = -250;
+    private static final int AFTER_MELT = -150;
+    /** One touch in this many scalds whatever is standing in a hot pot, for a point of fire. */
+    private static final int SCALDS_EVERY = 10;
+    /** What the pot marks its own work with, so it does not take back in what it has just made. */
+    public static final String MADE_HERE = "alchemia.crucible_made";
+
     private int water;
     private int heat;
     private AspectList dissolved = AspectList.EMPTY;
-    private int counter;
+    private int counter = STARTS_AT;
+    private int touches;
 
     /** The event that tells the client the pot boiled up, with how hard as its data. */
     private static final int BOIL_UP = 2;
@@ -148,12 +162,14 @@ public class CrucibleBlockEntity extends BlockEntity {
         crucible.warm(served, pos);
         if (crucible.working()) {
             crucible.swallow(served, pos);
-            if (crucible.counter++ >= BOILS_OFF) {
-                crucible.counter = 0;
-                crucible.spill(served, pos, 1);
-            }
         }
-        while (crucible.dissolved.total() > CAPACITY) {
+        // running over loses a point a tick, as the original's did, rather than everything over the brim at once
+        if (crucible.dissolved.total() > CAPACITY) {
+            crucible.spill(served, pos, 1);
+        }
+        crucible.counter = Math.min(crucible.counter + 1, BOILS_OFF);
+        if (crucible.counter >= BOILS_OFF && crucible.working()) {
+            crucible.counter = 0;
             crucible.spill(served, pos, 1);
         }
     }
@@ -173,58 +189,114 @@ public class CrucibleBlockEntity extends BlockEntity {
     }
 
     /**
-     * Takes in whatever has fallen into the pot, one piece at a time.
-     * <p>
-     * A piece that finishes a recipe is spent on it; anything else comes apart into what it is made of. Either way
-     * it is used up, so dropping a stack in feeds it in one by one rather than all at once.
+     * Takes in whatever has fallen into the pot, a whole stack at once as the original did: each piece in turn
+     * either finishes a recipe or comes apart into what it is made of, until the stack is gone or the rest of it is
+     * something the pot cannot take. What the pot made itself is left be.
      */
     private void swallow(ServerLevel level, BlockPos pos) {
         AABB inside = new AABB(pos).deflate(0.15, 0.0, 0.15).contract(0.0, 0.4, 0.0);
         for (ItemEntity item : level.getEntitiesOfClass(ItemEntity.class, inside)) {
-            if (item.isRemoved() || item.getItem().isEmpty()) {
+            if (item.isRemoved() || item.getItem().isEmpty() || item.getPersistentData().getBoolean(MADE_HERE)) {
                 continue;
             }
             ItemStack stack = item.getItem();
-            if (!take(level, pos, stack.copyWithCount(1), item.getOwner() instanceof Player player ? player : null)) {
+            int left = put(level, pos, stack, item.getOwner() instanceof Player player ? player : null);
+            if (left == stack.getCount()) {
                 continue;
             }
-            stack.shrink(1);
-            if (stack.isEmpty()) {
+            if (left <= 0) {
                 item.discard();
             } else {
+                stack.setCount(left);
                 item.setItem(stack);
             }
-            return;
         }
     }
 
-    /** One thing into the pot. False if the pot could not take it at all. */
-    private boolean take(ServerLevel level, BlockPos pos, ItemStack one, Player thrower) {
+    /**
+     * One thing put in by hand, the original's right click on the pot with something other than a wand.
+     *
+     * @return whether the pot took it
+     */
+    public boolean putByHand(ItemStack held, Player player) {
+        return level instanceof ServerLevel served && working()
+                && put(served, worldPosition, held.copyWithCount(1), player) == 0;
+    }
+
+    /**
+     * Puts in as much of a stack as the pot will take, a piece at a time, and says how many are left. The pot
+     * bubbles once for whatever melted and puffs once for whatever was made, however many pieces it was.
+     */
+    private int put(ServerLevel level, BlockPos pos, ItemStack stack, Player thrower) {
+        int left = stack.getCount();
+        boolean melted = false;
+        boolean crafted = false;
+        while (left > 0) {
+            Taken taken = take(level, pos, stack.copyWithCount(1), thrower);
+            if (taken == Taken.NOTHING) {
+                break;
+            }
+            crafted |= taken == Taken.CRAFTED;
+            melted |= taken == Taken.MELTED;
+            left--;
+        }
+        if (melted) {
+            level.playSound(null, pos, ModSounds.BUBBLE.get(), SoundSource.BLOCKS, 0.2F,
+                    1.0F + level.random.nextFloat() * 0.4F);
+            level.blockEvent(pos, getBlockState().getBlock(), BOIL_UP, 1);
+        }
+        if (crafted) {
+            level.blockEvent(pos, getBlockState().getBlock(), CRAFTED, 0);
+        }
+        if (melted || crafted) {
+            changed();
+        }
+        return left;
+    }
+
+    private enum Taken {
+        CRAFTED, MELTED, NOTHING
+    }
+
+    /**
+     * One thing into the pot. A recipe wants only that there be some water left, and drinks its fifty or whatever
+     * there is, as the original's did.
+     */
+    private Taken take(ServerLevel level, BlockPos pos, ItemStack one, Player thrower) {
         Optional<RecipeHolder<CrucibleRecipe>> found = level.getRecipeManager()
                 .getRecipeFor(ModRecipes.CRUCIBLE.get(), new CrucibleInput(one, dissolved), level);
 
-        if (found.isPresent() && known(found.get().value(), thrower) && water >= PER_CRAFT) {
+        if (found.isPresent() && known(found.get().value(), thrower) && water > 0) {
             CrucibleRecipe recipe = found.get().value();
             dissolved = recipe.taken(dissolved);
-            water -= PER_CRAFT;
+            water = Math.max(0, water - PER_CRAFT);
             ItemStack made = recipe.assemble(new CrucibleInput(one, dissolved), level.registryAccess());
             me.moonscenty.alchemia.player.CraftWarp.made(thrower, made);
             eject(level, pos, made);
-            changed();
-            level.blockEvent(pos, getBlockState().getBlock(), CRAFTED, 0);
-            return true;
+            counter = AFTER_WORK;
+            return Taken.CRAFTED;
         }
 
         AspectList made = Aspects.of(one);
         if (made.isEmpty()) {
-            return false;
+            return Taken.NOTHING;
         }
         dissolved = dissolved.add(made);
-        level.playSound(null, pos, ModSounds.BUBBLE.get(), SoundSource.BLOCKS, 0.2F,
-                1.0F + level.random.nextFloat() * 0.4F);
-        changed();
-        level.blockEvent(pos, getBlockState().getBlock(), BOIL_UP, 1);
-        return true;
+        counter = AFTER_MELT;
+        return Taken.MELTED;
+    }
+
+    /**
+     * Something alive standing in a hot pot: one touch in ten scalds it for a point of fire damage, with a hiss.
+     */
+    public void touched(net.minecraft.world.entity.LivingEntity living) {
+        if (!(level instanceof ServerLevel served) || !working() || ++touches < SCALDS_EVERY) {
+            return;
+        }
+        touches = 0;
+        living.hurt(served.damageSources().inFire(), 1.0F);
+        served.playSound(null, worldPosition, net.minecraft.sounds.SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS,
+                0.4F, 2.0F + served.random.nextFloat() * 0.4F);
     }
 
     private boolean known(CrucibleRecipe recipe, Player thrower) {
@@ -236,6 +308,7 @@ public class CrucibleBlockEntity extends BlockEntity {
     private static void eject(ServerLevel level, BlockPos pos, ItemStack made) {
         ItemEntity out = new ItemEntity(level, pos.getX() + 0.5, pos.getY() + 1.2, pos.getZ() + 0.5, made);
         out.setDeltaMovement(0.0, 0.15, 0.0);
+        out.getPersistentData().putBoolean(MADE_HERE, true);
         level.addFreshEntity(out);
     }
 

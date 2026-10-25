@@ -129,6 +129,16 @@ public class CrucibleBlock extends BaseEntityBlock {
             return ItemInteractionResult.sidedSuccess(level.isClientSide);
         }
 
+        // anything else held out over the top of a working pot goes in, one at a time, as the original's did
+        if (!held.isEmpty() && !player.isSecondaryUseActive() && hit.getDirection() == net.minecraft.core.Direction.UP
+                && !(held.getItem() instanceof me.moonscenty.alchemia.item.WandItem) && !held.is(Items.BUCKET)
+                && crucible.working()) {
+            if (!level.isClientSide && crucible.putByHand(held, player) && !player.getAbilities().instabuild) {
+                held.shrink(1);
+            }
+            return ItemInteractionResult.sidedSuccess(level.isClientSide);
+        }
+
         if (held.is(Items.BUCKET) && filled == FULL) {
             if (!level.isClientSide) {
                 crucible.drain();
@@ -142,6 +152,15 @@ public class CrucibleBlock extends BaseEntityBlock {
         }
 
         return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+    }
+
+    /** Whatever is alive and standing in a hot pot is scalded now and then. */
+    @Override
+    protected void entityInside(BlockState state, Level level, BlockPos pos, net.minecraft.world.entity.Entity entity) {
+        if (!level.isClientSide && entity instanceof net.minecraft.world.entity.LivingEntity living
+                && level.getBlockEntity(pos) instanceof CrucibleBlockEntity crucible) {
+            crucible.touched(living);
+        }
     }
 
     /** Rain fills a pot left out in it, a level at a time, the way a cauldron does. */

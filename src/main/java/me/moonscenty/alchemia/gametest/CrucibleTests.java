@@ -14,6 +14,10 @@ import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.GameType;
+import me.moonscenty.alchemia.player.ModAttachments;
+import me.moonscenty.alchemia.player.PlayerKnowledge;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
@@ -71,21 +75,16 @@ public class CrucibleTests {
         helper.succeed();
     }
 
-    /** Things thrown into a hot pot come apart into what they are made of, one at a time. */
+    /** Things thrown into a hot pot come apart into what they are made of, the whole stack at once. */
     @GameTest(template = TEMPLATE)
     public static void itTakesThingsApart(GameTestHelper helper) {
         CrucibleBlockEntity crucible = lit(helper);
         helper.assertTrue(crucible.working(), "the pot came up to heat");
 
-        drop(helper, new ItemStack(Items.IRON_INGOT, 2));
+        drop(helper, new ItemStack(Items.IRON_INGOT, 3));
         run(helper, crucible, 1);
-        int once = crucible.dissolved().total();
-        helper.assertTrue(once > 0, "the first ingot came apart");
-        helper.assertValueEqual(once, Aspects.of(new ItemStack(Items.IRON_INGOT)).total(),
-                "one ingot at a time, not the whole stack");
-
-        run(helper, crucible, 1);
-        helper.assertValueEqual(crucible.dissolved().total(), once * 2, "and then the second");
+        helper.assertValueEqual(crucible.dissolved().total(), 3 * Aspects.of(new ItemStack(Items.IRON_INGOT)).total(),
+                "all three ingots came apart together, as the original took a stack");
         helper.succeed();
     }
 
@@ -99,14 +98,17 @@ public class CrucibleTests {
         BlockPos at = helper.absolutePos(WHERE);
         int before = AuraHandler.get(helper.getLevel(), at, ModAspects.FLUX);
 
-        // enough iron to push it well past what the pot holds
-        for (int ingots = 0; ingots < 40; ingots++) {
-            drop(helper, new ItemStack(Items.IRON_INGOT));
-            run(helper, crucible, 1);
-        }
+        // enough iron to push it well past what the pot holds, all at once
+        drop(helper, new ItemStack(Items.IRON_INGOT, 40));
+        run(helper, crucible, 1);
+        int over = crucible.dissolved().total();
+        helper.assertTrue(over > CrucibleBlockEntity.CAPACITY + 1, "it should be over the brim, at " + over);
 
+        run(helper, crucible, 1);
+        helper.assertValueEqual(crucible.dissolved().total(), over - 1, "running over loses a point a tick");
+        run(helper, crucible, over);
         helper.assertTrue(crucible.dissolved().total() <= CrucibleBlockEntity.CAPACITY,
-                "the pot holds no more than it holds");
+                "until the pot holds no more than it holds");
         helper.assertTrue(AuraHandler.get(helper.getLevel(), at, ModAspects.FLUX) > before,
                 "what ran over went into the air");
         helper.succeed();
@@ -127,6 +129,49 @@ public class CrucibleTests {
         helper.setBlock(WHERE, Blocks.AIR);
         helper.assertValueEqual(AuraHandler.get(helper.getLevel(), at, ModAspects.FLUX), before + held,
                 "all of it went into the air");
+        helper.succeed();
+    }
+
+    /**
+     * A recipe wants only a little water left, and drinks what there is. What it makes is thrown up out of the pot
+     * and is not taken back in when it falls. Things can be put in by hand as well as thrown.
+     */
+    @GameTest(template = TEMPLATE, timeoutTicks = 200)
+    public static void aLittleWaterStillWorksAndTheWorkIsLeftBe(GameTestHelper helper) {
+        helper.setBlock(WHERE.below(), Blocks.LAVA);
+        helper.setBlock(WHERE, ModBlocks.CRUCIBLE.get());
+        CrucibleBlockEntity crucible =
+                (CrucibleBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(WHERE));
+        crucible.pour(10, true);
+        run(helper, crucible, 220);
+        helper.assertTrue(crucible.working(), "ten water is enough to come up to heat");
+
+        Player maker = helper.makeMockPlayer(GameType.SURVIVAL);
+        maker.setData(ModAttachments.KNOWLEDGE, PlayerKnowledge.of(maker).withResearch(Alchemia.id("tallow")));
+        helper.assertTrue(crucible.putByHand(new ItemStack(Items.COAL), maker), "coal goes in by hand");
+        helper.assertTrue(crucible.putByHand(new ItemStack(Items.ROTTEN_FLESH), maker), "and so does the flesh");
+        helper.assertValueEqual(crucible.water(), 0, "the work drank what water there was");
+
+        helper.runAfterDelay(60, () -> {
+            var made = helper.getLevel().getEntitiesOfClass(ItemEntity.class, helper.getBounds().inflate(2.0),
+                    item -> item.getItem().is(ModItems.TALLOW.get()));
+            helper.assertFalse(made.isEmpty(), "the tallow should still be about, not melted back down");
+            helper.succeed();
+        });
+    }
+
+    /** Something alive standing in a hot pot is scalded one touch in ten. */
+    @GameTest(template = TEMPLATE)
+    public static void aHotPotScalds(GameTestHelper helper) {
+        CrucibleBlockEntity crucible = lit(helper);
+        var zombie = helper.spawn(net.minecraft.world.entity.EntityType.ZOMBIE, WHERE.above(3));
+        float whole = zombie.getHealth();
+        for (int touch = 0; touch < 9; touch++) {
+            crucible.touched(zombie);
+        }
+        helper.assertValueEqual(zombie.getHealth(), whole, "nine touches are nothing");
+        crucible.touched(zombie);
+        helper.assertTrue(zombie.getHealth() < whole, "the tenth scalds");
         helper.succeed();
     }
 
