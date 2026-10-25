@@ -57,6 +57,8 @@ public class WandItem extends Item implements VisHolder {
     private static final int DRAWS_EVERY = 5;
     /** What one rank of thrift takes off a working, as a share of the bill. The original's tenth. */
     private static final float THRIFT = 0.1F;
+    /** What a staff adds to a blow. */
+    private static final double STAFF_HITS = 6.0;
 
     /** A trickling rod fills itself only this far, as a share of what the rod holds. */
     private static final float TRICKLES_TO = 0.5F;
@@ -72,6 +74,11 @@ public class WandItem extends Item implements VisHolder {
     public static WandRod rod(ItemStack stack) {
         Holder<WandRod> rod = stack.get(ModDataComponents.WAND_ROD.get());
         return rod == null ? ModWandParts.WOOD.get() : rod.value();
+    }
+
+    /** Whether this wand is built on a staff core: a staff, which a workbench will not take. */
+    public static boolean isStaff(ItemStack stack) {
+        return stack.getItem() instanceof WandItem && rod(stack).staff();
     }
 
     public static WandCap cap(ItemStack stack) {
@@ -163,6 +170,10 @@ public class WandItem extends Item implements VisHolder {
         float rate = VisDiscount.rate(cap(stack).discount(), player, aspect);
         if (why == Spending.WORKING) {
             rate -= FocusUpgrades.level(focus(stack), FocusUpgrade.FRUGAL) * THRIFT;
+            // and a staff works its focus a tenth cheaper again
+            if (rod(stack).staff()) {
+                rate -= THRIFT;
+            }
         }
         return Math.max(VisDiscount.LEAST, rate);
     }
@@ -269,11 +280,12 @@ public class WandItem extends Item implements VisHolder {
 
     /** A rod that makes its own vis tops itself up, to halfway and no further. */
     private static void trickle(ItemStack stack, Player player) {
-        rod(stack).trickle().ifPresent(aspect -> {
-            if (fine(stack).get(aspect) < capacity(stack) * FINE * TRICKLES_TO) {
-                put(stack, aspect, FINE);
-            }
-        });
+        // one point at a time, of one of the primals the rod makes that is still under half
+        java.util.List<Holder<Aspect>> low = rod(stack).trickles().stream()
+                .filter(aspect -> fine(stack).get(aspect) < capacity(stack) * FINE * TRICKLES_TO).toList();
+        if (!low.isEmpty()) {
+            put(stack, low.get(player.getRandom().nextInt(low.size())), FINE);
+        }
     }
 
     // --- letting it off -----------------------------------------------------
@@ -443,8 +455,23 @@ public class WandItem extends Item implements VisHolder {
 
     @Override
     public Component getName(ItemStack stack) {
-        return Component.translatable("item.alchemia.wand.named",
+        return Component.translatable(isStaff(stack) ? "item.alchemia.staff.named" : "item.alchemia.wand.named",
                 cap(stack).displayName(), rod(stack).displayName());
+    }
+
+    /** A staff is long and heavy enough to club something with, the original's six points over a fist. */
+    @Override
+    public net.minecraft.world.item.component.ItemAttributeModifiers getDefaultAttributeModifiers(ItemStack stack) {
+        if (!isStaff(stack)) {
+            return super.getDefaultAttributeModifiers(stack);
+        }
+        return net.minecraft.world.item.component.ItemAttributeModifiers.builder()
+                .add(net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_DAMAGE,
+                        new net.minecraft.world.entity.ai.attributes.AttributeModifier(BASE_ATTACK_DAMAGE_ID,
+                                STAFF_HITS, net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation
+                                        .ADD_VALUE),
+                        net.minecraft.world.entity.EquipmentSlotGroup.MAINHAND)
+                .build();
     }
 
     @Override

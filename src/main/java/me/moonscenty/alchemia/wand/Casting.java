@@ -61,7 +61,14 @@ public final class Casting {
      * focus on it, which is also what a spell with nothing to read should do nothing about.
      */
     public static int worked(ItemStack wand, FocusUpgrade upgrade) {
-        return FocusUpgrades.level(WandItem.focus(wand), upgrade);
+        ItemStack focus = WandItem.focus(wand);
+        int level = FocusUpgrades.level(focus, upgrade);
+        // the primal staff lends whatever is fitted to it a step of potency
+        if (upgrade == FocusUpgrade.POTENCY && !focus.isEmpty() && wand.getItem() instanceof WandItem
+                && WandItem.rod(wand).potent()) {
+            level++;
+        }
+        return level;
     }
 
     /** Whether the focus on this wand carries one at all. */

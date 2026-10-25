@@ -1,0 +1,36 @@
+{
+  "category": "alchemia:eldritch",
+  "clues": [
+    "alchemia:staff_silverwood",
+    "alchemia:staves_primal"
+  ],
+  "column": 6,
+  "complexity": 3,
+  "hidden": true,
+  "icon": "alchemia:wand_rod_primal_staff",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.staff_primal.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:wand_rod_primal_staff"
+    }
+  ],
+  "parents": [
+    "alchemia:focus_primal"
+  ],
+  "requirements": {
+    "alchemia:aer": 9,
+    "alchemia:aqua": 9,
+    "alchemia:ignis": 9,
+    "alchemia:instrumentum": 9,
+    "alchemia:ordo": 9,
+    "alchemia:perditio": 9,
+    "alchemia:potentia": 12,
+    "alchemia:terra": 9
+  },
+  "row": 2,
+  "warp": 3
+}

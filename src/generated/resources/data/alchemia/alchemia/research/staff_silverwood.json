@@ -1,0 +1,26 @@
+{
+  "category": "alchemia:arcana",
+  "column": 9,
+  "complexity": 3,
+  "icon": "alchemia:wand_rod_silverwood_staff",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.staff_silverwood.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:wand_rod_silverwood_staff"
+    }
+  ],
+  "parents": [
+    "alchemia:wand_rods",
+    "alchemia:staff_greatwood"
+  ],
+  "requirements": {
+    "alchemia:herba": 6,
+    "alchemia:instrumentum": 6,
+    "alchemia:potentia": 9
+  },
+  "row": 6
+}

@@ -111,6 +111,8 @@ public class AlchemiaClientSetup {
     public static void registerExtraModels(ModelEvent.RegisterAdditional event) {
         // the quill stood in the research table's inkwell
         event.register(ResearchTableRenderer.QUILL);
+        // how a staff is held and shown, which the wand model borrows for one
+        event.register(LegacyWandModel.STAFF);
     }
 
     /** Tells the book how to open itself, which only the client knows how to do. */

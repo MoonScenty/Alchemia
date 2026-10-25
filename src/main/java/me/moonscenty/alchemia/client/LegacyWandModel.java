@@ -24,6 +24,7 @@ import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -45,12 +46,15 @@ import net.neoforged.neoforge.client.model.pipeline.QuadBakingVertexConsumer;
  * wand is held at.
  * <p>
  * The original's mesh also has a crossbar for a sceptre, which is not drawn since our wands are never sceptres; a
- * focus fitted to the wand sits on its tip, in the focus's own picture, as the original drew it.
+ * focus fitted to the wand sits on its tip, in the focus's own picture, as the original drew it. A wand on a staff core
+ * is a staff, built on the original's longer staff mesh and held and shown as {@link #STAFF} says.
  */
 public class LegacyWandModel extends BakedModelWrapper<BakedModel> {
     /** How much smaller the mesh is drawn, and about where. */
     private static final float SCALE = 0.8F;
     private static final float MIDDLE = 0.5F;
+    /** How a staff is held and shown, which differs from a wand only in how small it is drawn in a slot. */
+    public static final ModelResourceLocation STAFF = ModelResourceLocation.standalone(Alchemia.id("item/staff"));
 
     /** Built wands by rod and cap, for as long as the import that built them lasts. */
     private static final Map<String, BakedModel> BUILT = new ConcurrentHashMap<>();
@@ -64,8 +68,11 @@ public class LegacyWandModel extends BakedModelWrapper<BakedModel> {
             @Override
             public BakedModel resolve(BakedModel model, ItemStack stack, @Nullable ClientLevel level,
                     @Nullable LivingEntity holder, int seed) {
-                LegacyMesh mesh = LegacyModels.mesh(LegacyAssets.WAND_MESH).orElse(null);
-                return mesh == null ? ours : built(mesh, stack, ours);
+                boolean staff = WandItem.isStaff(stack);
+                LegacyMesh mesh = LegacyModels.mesh(staff ? LegacyAssets.STAFF_MESH : LegacyAssets.WAND_MESH)
+                        .orElse(null);
+                BakedModel held = staff ? Minecraft.getInstance().getModelManager().getModel(STAFF) : ours;
+                return mesh == null ? ours : built(mesh, stack, held);
             }
         };
     }
@@ -88,13 +95,14 @@ public class LegacyWandModel extends BakedModelWrapper<BakedModel> {
         }
         ItemStack focus = WandItem.focus(stack);
         String tip = focus.isEmpty() ? "" : BuiltInRegistries.ITEM.getKey(focus.getItem()).getPath();
+        ResourceLocation rodLook = WandItem.rod(stack).texture();
         return BUILT.computeIfAbsent(rod.getPath() + "/" + cap.getPath() + "/" + tip,
-                key -> new Built(bake(mesh, rod.getPath(), cap.getPath(), tip), ours));
+                key -> new Built(bake(mesh, rodLook, cap.getPath(), tip), ours));
     }
 
-    private static List<BakedQuad> bake(LegacyMesh mesh, String rod, String cap, String tip) {
+    private static List<BakedQuad> bake(LegacyMesh mesh, ResourceLocation rod, String cap, String tip) {
         var atlas = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS);
-        TextureAtlasSprite rodSprite = atlas.apply(Alchemia.id("item/wand/rod_" + rod));
+        TextureAtlasSprite rodSprite = atlas.apply(rod);
         TextureAtlasSprite capSprite = atlas.apply(Alchemia.id("item/wand/cap_" + cap));
         List<BakedQuad> quads = new ArrayList<>();
         add(quads, mesh, "rod", rodSprite);

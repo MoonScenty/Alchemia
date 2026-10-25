@@ -1,0 +1,25 @@
+{
+  "type": "alchemia:arcane_shaped",
+  "key": {
+    "G": {
+      "item": "alchemia:wand_rod_ice"
+    },
+    "S": {
+      "item": "alchemia:primal_charm"
+    }
+  },
+  "pattern": [
+    "  S",
+    " G ",
+    "G  "
+  ],
+  "research": "alchemia:staves_primal",
+  "result": {
+    "count": 1,
+    "id": "alchemia:wand_rod_ice_staff"
+  },
+  "vis": {
+    "alchemia:aqua": 56,
+    "alchemia:ordo": 56
+  }
+}

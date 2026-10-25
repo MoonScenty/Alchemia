@@ -1,0 +1,24 @@
+{
+  "category": "alchemia:arcana",
+  "column": 9,
+  "icon": "alchemia:wand_rod_greatwood_staff",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.staff_greatwood.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:wand_rod_greatwood_staff"
+    }
+  ],
+  "parents": [
+    "alchemia:wand_rods"
+  ],
+  "requirements": {
+    "alchemia:herba": 6,
+    "alchemia:instrumentum": 3,
+    "alchemia:potentia": 3
+  },
+  "row": 5
+}

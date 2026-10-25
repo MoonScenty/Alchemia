@@ -1,0 +1,118 @@
+{
+  "display": {
+    "firstperson_lefthand": {
+      "rotation": [
+        0,
+        90,
+        20
+      ],
+      "scale": [
+        0.68,
+        0.68,
+        0.68
+      ],
+      "translation": [
+        1.13,
+        3.2,
+        1.13
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        0,
+        -90,
+        -20
+      ],
+      "scale": [
+        0.68,
+        0.68,
+        0.68
+      ],
+      "translation": [
+        1.13,
+        3.2,
+        1.13
+      ]
+    },
+    "fixed": {
+      "rotation": [
+        0,
+        0,
+        -45
+      ],
+      "scale": [
+        0.7,
+        0.7,
+        0.7
+      ]
+    },
+    "ground": {
+      "scale": [
+        0.5,
+        0.5,
+        0.5
+      ],
+      "translation": [
+        0,
+        2,
+        0
+      ]
+    },
+    "gui": {
+      "rotation": [
+        0,
+        45,
+        -45
+      ],
+      "scale": [
+        0.63,
+        0.63,
+        0.63
+      ]
+    },
+    "head": {
+      "translation": [
+        0,
+        13,
+        7
+      ]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [
+        0,
+        90,
+        -10
+      ],
+      "scale": [
+        0.85,
+        0.85,
+        0.85
+      ],
+      "translation": [
+        0,
+        3.5,
+        1.5
+      ]
+    },
+    "thirdperson_righthand": {
+      "rotation": [
+        0,
+        -90,
+        10
+      ],
+      "scale": [
+        0.85,
+        0.85,
+        0.85
+      ],
+      "translation": [
+        0,
+        3.5,
+        1.5
+      ]
+    }
+  },
+  "textures": {
+    "particle": "alchemia:item/wand/rod_greatwood"
+  }
+}

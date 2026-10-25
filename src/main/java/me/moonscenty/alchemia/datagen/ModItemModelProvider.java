@@ -271,6 +271,16 @@ public class ModItemModelProvider extends ItemModelProvider {
         held(wand, ItemDisplayContext.FIRST_PERSON_RIGHT_HAND, 0, -90, -20, 1.13F, 3.2F, 1.13F, 0.68F);
         held(wand, ItemDisplayContext.FIRST_PERSON_LEFT_HAND, 0, 90, 20, 1.13F, 3.2F, 1.13F, 0.68F);
         held(wand, ItemDisplayContext.HEAD, 0, 0, 0, 0, 13, 7, 1.0F);
+        // a staff is held as a wand is; its picture in a slot is smaller, as the original's was, to fit it in
+        var staff = getBuilder("staff").texture("particle", modLoc("item/wand/rod_greatwood"));
+        held(staff, ItemDisplayContext.GUI, 0, 45, -45, 0, 0, 0, 0.63F);
+        held(staff, ItemDisplayContext.GROUND, 0, 0, 0, 0, 2, 0, 0.5F);
+        held(staff, ItemDisplayContext.FIXED, 0, 0, -45, 0, 0, 0, 0.7F);
+        held(staff, ItemDisplayContext.THIRD_PERSON_RIGHT_HAND, 0, -90, 10, 0, 3.5F, 1.5F, 0.85F);
+        held(staff, ItemDisplayContext.THIRD_PERSON_LEFT_HAND, 0, 90, -10, 0, 3.5F, 1.5F, 0.85F);
+        held(staff, ItemDisplayContext.FIRST_PERSON_RIGHT_HAND, 0, -90, -20, 1.13F, 3.2F, 1.13F, 0.68F);
+        held(staff, ItemDisplayContext.FIRST_PERSON_LEFT_HAND, 0, 90, 20, 1.13F, 3.2F, 1.13F, 0.68F);
+        held(staff, ItemDisplayContext.HEAD, 0, 0, 0, 0, 13, 7, 1.0F);
 
         for (String cap : CAPS) {
             withExistingParent("wand_cap_" + cap, mcLoc("item/generated"))
@@ -363,6 +373,11 @@ public class ModItemModelProvider extends ItemModelProvider {
         for (int rod = 1; rod < RODS.length; rod++) {
             withExistingParent("wand_rod_" + RODS[rod], mcLoc("item/handheld"))
                     .texture("layer0", modLoc("item/wand/rod_" + RODS[rod] + "_mat"));
+        }
+        for (String stuff : new String[] {"greatwood", "silverwood", "reed", "obsidian", "blaze", "ice", "quartz",
+                "bone", "primal"}) {
+            withExistingParent("wand_rod_" + stuff + "_staff", mcLoc("item/handheld"))
+                    .texture("layer0", modLoc("item/wand/staff_rod_" + stuff));
         }
     }
 

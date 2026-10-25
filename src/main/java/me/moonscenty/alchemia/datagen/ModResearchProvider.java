@@ -306,6 +306,21 @@ public class ModResearchProvider {
                 "infusion_enchantment_burrowing", "infusion_enchantment_refining", "infusion_enchantment_sounding",
                 "infusion_enchantment_arcing", "infusion_enchantment_essence");
 
+        // the staves: a greatwood staff first, then the six primal ones, and a silverwood staff for the patient
+        entry(context, "staff_greatwood", ModResearch.ARCANA, ModItems.WAND_RODS.get("greatwood_staff"), 9, 5,
+                AspectList.of(ModAspects.TOOL, 3).add(ModAspects.PLANT, 6).add(ModAspects.ENERGY, 3),
+                List.of("wand_rods"), false, NodeShape.PLAIN, 1, "wand_rod_greatwood_staff");
+        entry(context, "staves_primal", ModResearch.ARCANA, ModItems.WAND_RODS.get("blaze_staff"), 10, 4,
+                AspectList.of(ModAspects.TOOL, 3).add(ModAspects.AIR, 6).add(ModAspects.FIRE, 6)
+                        .add(ModAspects.EARTH, 6).add(ModAspects.WATER, 6).add(ModAspects.ORDER, 6)
+                        .add(ModAspects.ENTROPY, 6).add(ModAspects.ENERGY, 3),
+                List.of("wand_rods", "staff_greatwood", "infusion"), false, NodeShape.PLAIN, 3,
+                "wand_rod_reed_staff", "wand_rod_blaze_staff", "wand_rod_obsidian_staff", "wand_rod_ice_staff",
+                "wand_rod_quartz_staff", "wand_rod_bone_staff");
+        entry(context, "staff_silverwood", ModResearch.ARCANA, ModItems.WAND_RODS.get("silverwood_staff"), 9, 6,
+                AspectList.of(ModAspects.TOOL, 6).add(ModAspects.PLANT, 6).add(ModAspects.ENERGY, 9),
+                List.of("wand_rods", "staff_greatwood"), false, NodeShape.PLAIN, 3, "wand_rod_silverwood_staff");
+
         entry(context, "wand_rods", ModResearch.ARCANA, ModItems.WAND_RODS.get("silverwood"), 8, 4,
                 AspectList.of(ModAspects.TOOL, 6).add(ModAspects.AURA, 6).add(ModAspects.ENERGY, 6),
                 List.of("infusion", "silverwood"), false, NodeShape.PLAIN, 3,
@@ -674,6 +689,12 @@ public class ModResearchProvider {
                 AspectList.of(ModAspects.DESIRE, 5).add(ModAspects.LIFE, 5).add(ModAspects.ENERGY, 5),
                 List.of("focus_hellbat", "focal_manipulator"), false, NodeShape.PLAIN, 1);
         // raw primal force, among the eldritch things it was always filed with
+        // the primal staff, which wants every other staff known before it shows, and costs some peace of mind
+        entry(context, "staff_primal", ModResearch.ELDRITCH, ModItems.WAND_RODS.get("primal_staff"), 6, 2,
+                AspectList.of(ModAspects.AIR, 9).add(ModAspects.EARTH, 9).add(ModAspects.FIRE, 9)
+                        .add(ModAspects.WATER, 9).add(ModAspects.ORDER, 9).add(ModAspects.ENTROPY, 9)
+                        .add(ModAspects.TOOL, 9).add(ModAspects.ENERGY, 12),
+                List.of("focus_primal"), false, NodeShape.PLAIN, 3, "wand_rod_primal_staff");
         entry(context, "focus_primal", ModResearch.ELDRITCH, ModItems.FOCI.get("primal"), 3, 1,
                 AspectList.of(ModAspects.AIR, 6).add(ModAspects.WATER, 6).add(ModAspects.FIRE, 6)
                         .add(ModAspects.EARTH, 6).add(ModAspects.ORDER, 6).add(ModAspects.ENTROPY, 6)
@@ -726,7 +747,7 @@ public class ModResearchProvider {
             java.util.Map.entry("focus_primal", 2), java.util.Map.entry("liquid_death", 3),
             // the original wrote two and then, a line later, one over it; the one is what it gave
             java.util.Map.entry("bottle_taint", 1), java.util.Map.entry("researcher2", 1),
-            java.util.Map.entry("node_magnet", 3));
+            java.util.Map.entry("node_magnet", 3), java.util.Map.entry("staff_primal", 3));
     /**
      * The original's hidden research: out of the book until what it waits on, research and clues, is all there.
      */
@@ -735,7 +756,7 @@ public class ModResearchProvider {
             "primal_arrows", "brain_jar", "liquid_death", "bottle_taint", "taint_shard", "ethereal_bloom",
             "bath_salts", "jar_label", "clockwork_mind", "bioalchemic_mind", "control_seals", "golem_flyer",
             "autocaster", "crystal_farmer", "oculus", "sinister_stone", "primal_crusher", "void_robes",
-            "focus_primal", "basic_turret", "node_magnet");
+            "focus_primal", "basic_turret", "node_magnet", "staff_primal");
 
     /**
      * What each waits on finding out in the world first, the original's {@code !}- and {@code @}-parents: an aspect
@@ -758,6 +779,7 @@ public class ModResearchProvider {
             java.util.Map.entry("bioalchemic_mind", List.of("clue/brain")),
             java.util.Map.entry("autocaster", List.of("clue/dispenser")),
             java.util.Map.entry("basic_turret", List.of("clue/dispenser")),
+            java.util.Map.entry("staff_primal", List.of("staff_silverwood", "staves_primal")),
             java.util.Map.entry("crystal_farmer", List.of("vitreus")),
             java.util.Map.entry("levitator", List.of("volatus")),
             java.util.Map.entry("arcane_lamp", List.of("lux")),

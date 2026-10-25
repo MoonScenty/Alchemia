@@ -1,0 +1,24 @@
+{
+  "type": "alchemia:arcane_shaped",
+  "key": {
+    "G": {
+      "item": "alchemia:wand_rod_greatwood"
+    },
+    "S": {
+      "item": "alchemia:primal_charm"
+    }
+  },
+  "pattern": [
+    "  S",
+    " G ",
+    "G  "
+  ],
+  "research": "alchemia:staff_greatwood",
+  "result": {
+    "count": 1,
+    "id": "alchemia:wand_rod_greatwood_staff"
+  },
+  "vis": {
+    "alchemia:ordo": 64
+  }
+}

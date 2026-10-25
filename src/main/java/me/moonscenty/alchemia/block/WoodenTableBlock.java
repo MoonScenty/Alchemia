@@ -29,7 +29,7 @@ public class WoodenTableBlock extends Block {
     protected ItemInteractionResult useItemOn(ItemStack held, BlockState state, Level level, BlockPos pos,
             Player player, InteractionHand hand, BlockHitResult hit) {
         boolean tools = held.is(ModItems.SCRIBING_TOOLS.get());
-        boolean wand = held.getItem() instanceof WandItem;
+        boolean wand = held.getItem() instanceof WandItem && !WandItem.isStaff(held);
         if (!tools && !wand) {
             return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         }

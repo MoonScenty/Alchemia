@@ -49,6 +49,26 @@ public class ModWandParts {
     public static final DeferredHolder<WandRod, WandRod> BONE =
             ROD_ENTRIES.register("bone", () -> WandRod.trickling(375, 6, ModAspects.ENTROPY));
 
+    // the staff cores: longer rods that hold half as much again, the original's numbers
+    public static final DeferredHolder<WandRod, WandRod> GREATWOOD_STAFF =
+            ROD_ENTRIES.register("greatwood_staff", () -> WandRod.staff("greatwood", 375, 8));
+    public static final DeferredHolder<WandRod, WandRod> SILVERWOOD_STAFF =
+            ROD_ENTRIES.register("silverwood_staff", () -> WandRod.staff("silverwood", 750, 24));
+    public static final DeferredHolder<WandRod, WandRod> REED_STAFF = ROD_ENTRIES.register("reed_staff",
+            () -> WandRod.tricklingStaff("reed", 500, 14, ModAspects.AIR));
+    public static final DeferredHolder<WandRod, WandRod> OBSIDIAN_STAFF = ROD_ENTRIES.register("obsidian_staff",
+            () -> WandRod.tricklingStaff("obsidian", 500, 14, ModAspects.EARTH));
+    public static final DeferredHolder<WandRod, WandRod> BLAZE_STAFF = ROD_ENTRIES.register("blaze_staff",
+            () -> WandRod.tricklingStaff("blaze", 500, 14, ModAspects.FIRE));
+    public static final DeferredHolder<WandRod, WandRod> ICE_STAFF = ROD_ENTRIES.register("ice_staff",
+            () -> WandRod.tricklingStaff("ice", 500, 14, ModAspects.WATER));
+    public static final DeferredHolder<WandRod, WandRod> QUARTZ_STAFF = ROD_ENTRIES.register("quartz_staff",
+            () -> WandRod.tricklingStaff("quartz", 500, 14, ModAspects.ORDER));
+    public static final DeferredHolder<WandRod, WandRod> BONE_STAFF = ROD_ENTRIES.register("bone_staff",
+            () -> WandRod.tricklingStaff("bone", 500, 14, ModAspects.ENTROPY));
+    public static final DeferredHolder<WandRod, WandRod> PRIMAL_STAFF =
+            ROD_ENTRIES.register("primal_staff", () -> WandRod.primalStaff(750, 28));
+
     // --- caps ---------------------------------------------------------------------------------------------
 
     /** Cheap, and it shows: everything costs a tenth more. */

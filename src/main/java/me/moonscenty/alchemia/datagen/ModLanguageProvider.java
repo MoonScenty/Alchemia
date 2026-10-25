@@ -941,6 +941,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         // the wand and the pieces it is put together from
         add("item.alchemia.wand", pick("Wand", "완드"));
         add("item.alchemia.wand.named", pick("%s Capped %s Wand", "%s 씌운 %s 완드"));
+        add("item.alchemia.staff.named", pick("%s Capped %s Staff", "%s 씌운 %s 지팡이"));
         add("item.alchemia.wand.vis", pick("%s %s / %s", "%s %s / %s"));
         add("item.alchemia.wand.charge", pick("Draws %s faster", "%s만큼 빨리 채워짐"));
         add("item.alchemia.wand.discount", pick("Spends %s%% more", "%s%% 더 씀"));
@@ -960,6 +961,14 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         addWandRod("ice", "Ice", "얼음");
         addWandRod("quartz", "Quartz", "석영");
         addWandRod("bone", "Bone", "뼈");
+        for (String[] staff : new String[][] {{"greatwood", "Greatwood", "거대나무"},
+                {"silverwood", "Silverwood", "은빛나무"}, {"reed", "Reed", "갈대"}, {"obsidian", "Obsidian", "흑요석"},
+                {"blaze", "Blaze", "블레이즈"}, {"ice", "Ice", "얼음"}, {"quartz", "Quartz", "석영"},
+                {"bone", "Bone", "뼈"}, {"primal", "Primal", "원시"}}) {
+            add("wand_rod.alchemia." + staff[0] + "_staff", pick(staff[1], staff[2]));
+            add("item.alchemia.wand_rod_" + staff[0] + "_staff",
+                    pick(staff[1] + " Staff Core", staff[2] + " 지팡이 심"));
+        }
         addWandCap("iron", "Iron", "철");
         addWandCap("gold", "Gold", "금");
         addWandCap("brass", "Brass", "황동");
@@ -1086,6 +1095,18 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                 {"wand_cap_alchemium", "Alchemium Caps", "알케미움 캡",
                  "Metal that has been taught what it is for. A tenth of every working comes back, which is the first time a cap has given anything rather than taken it.",
                  "무엇에 쓰이는지를 배운 금속. 일할 때마다 열에 하나가 되돌아온다. 캡이 가져가는 대신 내어준 것은 이번이 처음이다."},
+                {"staff_greatwood", "Staves", "지팡이",
+                 "Two rods joined end to end with a primal charm to hold them true make a staff core, and caps on that make a staff. A staff holds half as much again as a wand of the same wood, works whatever focus is on it a tenth cheaper, and is heavy enough to club something with. It is too long to lie on a workbench, so a wand is still wanted for that.",
+                 "막대 둘을 끝과 끝으로 잇고 원시 부적으로 곧게 잡으면 지팡이 심이 되고, 거기에 캡을 씌우면 지팡이가 된다. 지팡이는 같은 나무의 완드보다 절반을 더 담고, 끼운 포커스를 열에 하나만큼 싸게 부리며, 무언가를 후려칠 만큼 묵직하다. 작업대에 눕히기에는 너무 길어서 그 일에는 여전히 완드가 필요하다."},
+                {"staves_primal", "Primal Staves", "원시 지팡이",
+                 "The six rods that make a primal of their own can be made into staves the same way, and go on making it: up to half of what the staff holds, a little at a time.",
+                 "제 원시 상을 스스로 만드는 여섯 막대도 같은 방법으로 지팡이로 만들 수 있고, 지팡이가 되어서도 계속 만들어 낸다. 지팡이가 담는 양의 절반까지, 조금씩."},
+                {"staff_silverwood", "Silverwood Staff", "은빛나무 지팡이",
+                 "Silverwood takes to being a staff as it took to being a rod: a silverwood staff holds three times what a greatwood rod will.",
+                 "은빛나무는 막대가 될 때처럼 지팡이가 되는 것도 잘 받아들인다. 은빛나무 지팡이는 거대나무 막대의 세 배를 담는다."},
+                {"staff_primal", "Primal Staff", "원시 지팡이 심",
+                 "A silverwood rod ringed on the altar with a rod of every primal and two primal charms becomes something more than any of them. A staff on this core makes all six primals of its own, one at a time, and whatever focus is fitted to it works a step harder than it was made to. Knowing how to make it leaves a mark.",
+                 "제단 위에서 은빛나무 막대를 모든 원시 상의 막대와 원시 부적 둘로 둘러싸면 그 어느 것보다 나은 것이 된다. 이 심으로 만든 지팡이는 여섯 원시 상을 모두 스스로 하나씩 만들어 내고, 끼운 포커스는 만들어진 것보다 한 단계 세게 일한다. 만드는 법을 아는 것만으로도 흔적이 남는다."},
                 {"wand_rod_greatwood", "Greatwood Rods", "거대나무 막대",
                  "Cut from a tree that grew slowly and held on to it. A greatwood rod carries two and a half times what a stick will, which is the difference between working and stopping to wait.",
                  "느리게 자라며 그것을 품어온 나무에서 잘라낸다. 거대나무 막대는 막대기의 두 배 반을 담는다. 일을 계속하느냐 기다리느냐의 차이다."},

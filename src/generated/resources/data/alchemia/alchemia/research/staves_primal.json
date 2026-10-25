@@ -1,0 +1,52 @@
+{
+  "category": "alchemia:arcana",
+  "column": 10,
+  "complexity": 3,
+  "icon": "alchemia:wand_rod_blaze_staff",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.staves_primal.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:wand_rod_reed_staff"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:wand_rod_blaze_staff"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:wand_rod_obsidian_staff"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:wand_rod_ice_staff"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:wand_rod_quartz_staff"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:wand_rod_bone_staff"
+    }
+  ],
+  "parents": [
+    "alchemia:wand_rods",
+    "alchemia:staff_greatwood",
+    "alchemia:infusion"
+  ],
+  "requirements": {
+    "alchemia:aer": 6,
+    "alchemia:aqua": 6,
+    "alchemia:ignis": 6,
+    "alchemia:instrumentum": 3,
+    "alchemia:ordo": 6,
+    "alchemia:perditio": 6,
+    "alchemia:potentia": 3,
+    "alchemia:terra": 6
+  },
+  "row": 4
+}

@@ -513,6 +513,13 @@ public class ModItems {
                 "blaze", "ice", "quartz", "bone"}) {
             rods.put(stuff, ITEMS.registerSimpleItem("wand_rod_" + stuff));
         }
+        // and the staff cores, the primal one rare as the original had it
+        for (String stuff : new String[] {"greatwood", "silverwood", "reed", "obsidian", "blaze", "ice", "quartz",
+                "bone"}) {
+            rods.put(stuff + "_staff", ITEMS.registerSimpleItem("wand_rod_" + stuff + "_staff"));
+        }
+        rods.put("primal_staff", ITEMS.registerSimpleItem("wand_rod_primal_staff",
+                new Item.Properties().rarity(Rarity.UNCOMMON)));
         return rods;
     }
 

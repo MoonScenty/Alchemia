@@ -1,0 +1,47 @@
+{
+  "type": "alchemia:infusion",
+  "central": {
+    "item": "alchemia:wand_rod_silverwood"
+  },
+  "essentia": {
+    "alchemia:aer": 28,
+    "alchemia:aqua": 28,
+    "alchemia:ignis": 28,
+    "alchemia:ordo": 28,
+    "alchemia:perditio": 28,
+    "alchemia:potentia": 56,
+    "alchemia:terra": 28
+  },
+  "instability": 8,
+  "research": "alchemia:staff_primal",
+  "result": {
+    "count": 1,
+    "id": "alchemia:wand_rod_primal_staff"
+  },
+  "ring": [
+    {
+      "item": "alchemia:primal_charm"
+    },
+    {
+      "item": "alchemia:wand_rod_obsidian"
+    },
+    {
+      "item": "alchemia:wand_rod_blaze"
+    },
+    {
+      "item": "alchemia:wand_rod_ice"
+    },
+    {
+      "item": "alchemia:primal_charm"
+    },
+    {
+      "item": "alchemia:wand_rod_quartz"
+    },
+    {
+      "item": "alchemia:wand_rod_bone"
+    },
+    {
+      "item": "alchemia:wand_rod_reed"
+    }
+  ]
+}

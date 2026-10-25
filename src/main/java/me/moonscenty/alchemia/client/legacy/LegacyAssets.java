@@ -101,6 +101,8 @@ public final class LegacyAssets {
 
     /** The wand: a rod, a cap at either end, and room for a sceptre's crossbar and a focus. */
     public static final String WAND_MESH = "models/legacy/wand.obj";
+    /** The staff: the wand's parts on a longer shaft. */
+    public static final String STAFF_MESH = "models/legacy/staff.obj";
 
     /** The autocaster: its bracket, the ball that aims and the focus inside, which the original kept as one OBJ. */
     public static final String TURRET_MESH = "models/legacy/turret.obj";
@@ -420,6 +422,13 @@ public final class LegacyAssets {
         }
         // the plain wooden rod has no loose picture, only the stuff
         all.add(wandPart("rod_wood", "rod_wood_mat"));
+        // a staff core's loose picture, and the primal staff's own stuff, which has no wand of its own
+        for (String rod : List.of("greatwood", "silverwood", "obsidian", "ice", "quartz", "reed", "blaze", "bone",
+                "primal")) {
+            all.add(wandPart("staff_rod_" + rod, "staff_rod_" + rod));
+        }
+        all.add(wandPart("rod_primal", "rod_primal_mat"));
+        all.add(LegacyAsset.of(STAFF_MESH).five("models/obj/staff.obj"));
 
         for (String focus : List.of("builder", "excavation", "fire", "frost", "grapple", "hellbat", "pech", "primal",
                 "shard", "shock", "trade")) {

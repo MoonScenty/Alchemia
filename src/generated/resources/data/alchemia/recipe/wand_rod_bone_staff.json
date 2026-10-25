@@ -1,0 +1,25 @@
+{
+  "type": "alchemia:arcane_shaped",
+  "key": {
+    "G": {
+      "item": "alchemia:wand_rod_bone"
+    },
+    "S": {
+      "item": "alchemia:primal_charm"
+    }
+  },
+  "pattern": [
+    "  S",
+    " G ",
+    "G  "
+  ],
+  "research": "alchemia:staves_primal",
+  "result": {
+    "count": 1,
+    "id": "alchemia:wand_rod_bone_staff"
+  },
+  "vis": {
+    "alchemia:ordo": 56,
+    "alchemia:perditio": 56
+  }
+}

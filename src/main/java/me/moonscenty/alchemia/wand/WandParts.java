@@ -44,6 +44,15 @@ public final class WandParts {
             rods.put(ModItems.WAND_RODS.get("ice").get(), ModWandParts.ICE);
             rods.put(ModItems.WAND_RODS.get("quartz").get(), ModWandParts.QUARTZ);
             rods.put(ModItems.WAND_RODS.get("bone").get(), ModWandParts.BONE);
+            rods.put(ModItems.WAND_RODS.get("greatwood_staff").get(), ModWandParts.GREATWOOD_STAFF);
+            rods.put(ModItems.WAND_RODS.get("silverwood_staff").get(), ModWandParts.SILVERWOOD_STAFF);
+            rods.put(ModItems.WAND_RODS.get("reed_staff").get(), ModWandParts.REED_STAFF);
+            rods.put(ModItems.WAND_RODS.get("obsidian_staff").get(), ModWandParts.OBSIDIAN_STAFF);
+            rods.put(ModItems.WAND_RODS.get("blaze_staff").get(), ModWandParts.BLAZE_STAFF);
+            rods.put(ModItems.WAND_RODS.get("ice_staff").get(), ModWandParts.ICE_STAFF);
+            rods.put(ModItems.WAND_RODS.get("quartz_staff").get(), ModWandParts.QUARTZ_STAFF);
+            rods.put(ModItems.WAND_RODS.get("bone_staff").get(), ModWandParts.BONE_STAFF);
+            rods.put(ModItems.WAND_RODS.get("primal_staff").get(), ModWandParts.PRIMAL_STAFF);
         }
         return rods;
     }

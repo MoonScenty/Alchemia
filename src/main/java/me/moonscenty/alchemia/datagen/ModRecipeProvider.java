@@ -242,6 +242,14 @@ public class ModRecipeProvider extends RecipeProvider {
     }
 
     /** Nine small items pack into one big item and back. */
+    /** Two rods laid corner to corner with a primal charm at the top: a staff core of the same stuff. */
+    private void staffCore(RecipeOutput output, String stuff, String research, AspectList cost) {
+        arcane(output, "wand_rod_" + stuff + "_staff", research,
+                new ItemStack(ModItems.WAND_RODS.get(stuff + "_staff").get()), cost,
+                Map.of('S', Ingredient.of(ModItems.PRIMAL_CHARM), 'G', Ingredient.of(ModItems.WAND_RODS.get(stuff))),
+                "  S", " G ", "G  ");
+    }
+
     private static void compress(RecipeOutput output, ItemLike small, TagKey<Item> smallTag, ItemLike big, TagKey<Item> bigTag) {
         String smallName = BuiltInRegistries.ITEM.getKey(small.asItem()).getPath();
         String bigName = BuiltInRegistries.ITEM.getKey(big.asItem()).getPath();
@@ -344,6 +352,16 @@ public class ModRecipeProvider extends RecipeProvider {
         arcane(output, "wand_rod_greatwood", new ItemStack(ModItems.WAND_RODS.get("greatwood").get()),
                 AspectList.of(ModAspects.ENTROPY, 24),
                 Map.of('G', Ingredient.of(ModBlocks.GREATWOOD.log())), " G", "G ");
+
+        // a staff core is two rods of a kind and a primal charm, the original's price
+        staffCore(output, "greatwood", "staff_greatwood", AspectList.of(ModAspects.ORDER, 8 * 8));
+        staffCore(output, "silverwood", "staff_silverwood", AspectList.of(ModAspects.ORDER, 24 * 8));
+        for (String[] primal : new String[][] {{"reed", "air"}, {"obsidian", "earth"}, {"blaze", "fire"},
+                {"ice", "water"}, {"quartz", "order"}, {"bone", "entropy"}}) {
+            var element = me.moonscenty.alchemia.block.CrystalType.valueOf(primal[1].toUpperCase()).aspect();
+            staffCore(output, primal[0], "staves_primal",
+                    AspectList.of(ModAspects.ORDER, 14 * 4).add(element, 14 * 4));
+        }
 
         arcane(output, "arcane_stone", new ItemStack(ModBlocks.ARCANE_STONE.block(), 9),
                 AspectList.of(ModAspects.EARTH, 5).add(ModAspects.FIRE, 5),
@@ -980,6 +998,19 @@ public class ModRecipeProvider extends RecipeProvider {
         }
         infusion(output, "wand_rod_silverwood", Ingredient.of(ModBlocks.SILVERWOOD.log()), around,
                 new ItemStack(ModItems.WAND_RODS.get("silverwood").get()), evenly, 5, "wand_rods");
+
+        // the primal staff: a silverwood rod ringed with a rod of every primal and two primal charms
+        AspectList eachPrimal = AspectList.EMPTY;
+        for (var primal : ModAspects.primals()) {
+            eachPrimal = eachPrimal.add(primal, 28);
+        }
+        infusion(output, "wand_rod_primal_staff", Ingredient.of(ModItems.WAND_RODS.get("silverwood")),
+                List.of(Ingredient.of(ModItems.PRIMAL_CHARM), Ingredient.of(ModItems.WAND_RODS.get("obsidian")),
+                        Ingredient.of(ModItems.WAND_RODS.get("blaze")), Ingredient.of(ModItems.WAND_RODS.get("ice")),
+                        Ingredient.of(ModItems.PRIMAL_CHARM), Ingredient.of(ModItems.WAND_RODS.get("quartz")),
+                        Ingredient.of(ModItems.WAND_RODS.get("bone")), Ingredient.of(ModItems.WAND_RODS.get("reed"))),
+                new ItemStack(ModItems.WAND_RODS.get("primal_staff").get()),
+                eachPrimal.add(ModAspects.ENERGY, 56), 8, "staff_primal");
 
         // boots for walking, made of ordinary boots and the things that go fast
         infusion(output, "traveller_boots", Ingredient.of(Items.LEATHER_BOOTS),

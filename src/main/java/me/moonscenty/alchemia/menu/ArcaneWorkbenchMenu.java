@@ -81,7 +81,7 @@ public class ArcaneWorkbenchMenu extends AbstractContainerMenu {
         addSlot(new Slot(bench, ArcaneWorkbenchBlockEntity.SLOT_WAND, WAND_X, WAND_Y) {
             @Override
             public boolean mayPlace(ItemStack stack) {
-                return VisHolder.of(stack) != null;
+                return VisHolder.of(stack) != null && !me.moonscenty.alchemia.item.WandItem.isStaff(stack);
             }
 
             @Override
