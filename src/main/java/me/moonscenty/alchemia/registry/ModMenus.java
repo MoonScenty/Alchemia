@@ -66,6 +66,11 @@ public class ModMenus {
             MENUS.register("autocaster",
                     () -> IMenuTypeExtension.create(AutocasterMenu::new));
 
+    /** Carries which crossbow was opened, since it is an entity and not a place. */
+    public static final DeferredHolder<MenuType<?>, MenuType<me.moonscenty.alchemia.menu.CrossbowMenu>>
+            AUTOMATED_CROSSBOW = MENUS.register("automated_crossbow",
+                    () -> IMenuTypeExtension.create(me.moonscenty.alchemia.menu.CrossbowMenu::new));
+
     /** Carries which bench was opened, since the focus stays on the bench rather than in a hand. */
     public static final DeferredHolder<MenuType<?>, MenuType<me.moonscenty.alchemia.menu.FocalManipulatorMenu>>
             FOCAL_MANIPULATOR = MENUS.register("focal_manipulator",

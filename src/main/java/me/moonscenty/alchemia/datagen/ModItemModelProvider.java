@@ -350,6 +350,9 @@ public class ModItemModelProvider extends ItemModelProvider {
         }
         withExistingParent("autocaster", mcLoc("item/generated"))
                 .texture("layer0", modLoc("item/legacy/autocaster"));
+        for (String placer : java.util.List.of("automated_crossbow", "advanced_automated_crossbow", "node_magnet")) {
+            withExistingParent(placer, mcLoc("item/generated")).texture("layer0", modLoc("item/legacy/" + placer));
+        }
 
         // one picture apiece, all drawn as one set by tools/gen_foci.py
         ModItems.FOCI.keySet().forEach(name -> withExistingParent("focus_" + name, mcLoc("item/generated"))

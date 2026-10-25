@@ -357,6 +357,18 @@ public class ModResearchProvider {
                         .add(ModAspects.MIND, 3).add(ModAspects.AURA, 3),
                 List.of("bioalchemic_mind", "infusion", "wand"), false, NodeShape.MAJOR, 2, "autocaster");
 
+        // a crossbow with a clockwork mind to aim it, found out by looking hard at a dispenser; and the same plated,
+        // with a better mind
+        entry(context, "basic_turret", ModResearch.GOLEMANCY, ModItems.AUTOMATED_CROSSBOW, 3, 3,
+                AspectList.of(ModAspects.MECHANISM, 3).add(ModAspects.AVERSION, 3).add(ModAspects.SENSES, 3)
+                        .add(ModAspects.MIND, 3),
+                List.of("clockwork_mind"), false, NodeShape.PLAIN, 1, "automated_crossbow");
+        entry(context, "advanced_turret", ModResearch.GOLEMANCY, ModItems.ADVANCED_AUTOMATED_CROSSBOW, 3, 5,
+                AspectList.of(ModAspects.MECHANISM, 3).add(ModAspects.AVERSION, 3).add(ModAspects.SENSES, 3)
+                        .add(ModAspects.MIND, 3),
+                List.of("bioalchemic_mind", "basic_turret"), false, NodeShape.PLAIN, 2,
+                "advanced_automated_crossbow");
+
         // the made minds golemancy is built on: gears under glass, and the same with a brain grown into it
         entry(context, "clockwork_mind", ModResearch.GOLEMANCY, ModItems.CLOCKWORK_MIND, 0, 3,
                 AspectList.of(ModAspects.MECHANISM, 3).add(ModAspects.MIND, 3).add(ModAspects.SENSES, 3)
@@ -498,6 +510,14 @@ public class ModResearchProvider {
         entry(context, "water_jug", ModResearch.ALCHEMY, ModBlocks.WATER_JUG, 1, 2,
                 AspectList.of(ModAspects.WATER, 6).add(ModAspects.EARTH, 3).add(ModAspects.CRAFT, 3),
                 List.of("crucible", "infusion"), false, NodeShape.PLAIN, 1, "water_jug");
+
+        // a magnet that drags nodes about, which only shows itself to somebody who can hold a node still, grow
+        // crystals and make a mind, and which costs its maker some peace of mind
+        entry(context, "node_magnet", ModResearch.ARCANA, ModItems.NODE_MAGNET, 10, 0,
+                AspectList.of(ModAspects.AURA, 6).add(ModAspects.MOTION, 6).add(ModAspects.MECHANISM, 3)
+                        .add(ModAspects.DESIRE, 8),
+                List.of("aura_totem_pole_pure", "bioalchemic_mind", "crystal_farmer"), false, NodeShape.SPECIAL, 3,
+                "node_magnet");
 
         // totems that move the aura about, and the pole that steadies them
         entry(context, "aura_totem", ModResearch.ARCANA, ModBlocks.AURA_TOTEM_PUSH, 8, 1,
@@ -673,6 +693,7 @@ public class ModResearchProvider {
         for (String recipe : recipes) {
             pages.add(new ResearchPage.Recipe(Alchemia.id(recipe)));
         }
+        pages.addAll(LATER_PAGES.getOrDefault(name, List.of()));
         return List.copyOf(pages);
     }
 
@@ -704,7 +725,8 @@ public class ModResearchProvider {
             java.util.Map.entry("oculus", 6), java.util.Map.entry("sinister_stone", 2),
             java.util.Map.entry("focus_primal", 2), java.util.Map.entry("liquid_death", 3),
             // the original wrote two and then, a line later, one over it; the one is what it gave
-            java.util.Map.entry("bottle_taint", 1), java.util.Map.entry("researcher2", 1));
+            java.util.Map.entry("bottle_taint", 1), java.util.Map.entry("researcher2", 1),
+            java.util.Map.entry("node_magnet", 3));
     /**
      * The original's hidden research: out of the book until what it waits on, research and clues, is all there.
      */
@@ -713,7 +735,7 @@ public class ModResearchProvider {
             "primal_arrows", "brain_jar", "liquid_death", "bottle_taint", "taint_shard", "ethereal_bloom",
             "bath_salts", "jar_label", "clockwork_mind", "bioalchemic_mind", "control_seals", "golem_flyer",
             "autocaster", "crystal_farmer", "oculus", "sinister_stone", "primal_crusher", "void_robes",
-            "focus_primal");
+            "focus_primal", "basic_turret", "node_magnet");
 
     /**
      * What each waits on finding out in the world first, the original's {@code !}- and {@code @}-parents: an aspect
@@ -735,11 +757,17 @@ public class ModResearchProvider {
             java.util.Map.entry("bath_salts", List.of("clue/bath_salts")),
             java.util.Map.entry("bioalchemic_mind", List.of("clue/brain")),
             java.util.Map.entry("autocaster", List.of("clue/dispenser")),
+            java.util.Map.entry("basic_turret", List.of("clue/dispenser")),
             java.util.Map.entry("crystal_farmer", List.of("vitreus")),
             java.util.Map.entry("levitator", List.of("volatus")),
             java.util.Map.entry("arcane_lamp", List.of("lux")),
             java.util.Map.entry("fortress_armour", List.of("praemunio")),
             java.util.Map.entry("pattern_crafter", List.of("fabrico")));
+
+    /** Pages that turn up in an entry only once something has been found out: the node magnet's warning. */
+    private static final java.util.Map<String, List<ResearchPage>> LATER_PAGES = java.util.Map.of(
+            "node_magnet", List.of(new ResearchPage.Text("research.alchemia.node_magnet.danger",
+                    java.util.Optional.of(Alchemia.id("clue/node_magnet_danger")))));
 
     /** Research learnt along with another: the Crimson Rites teach the minor eldritch lore too. */
     private static final java.util.Map<String, List<String>> SIBLINGS = java.util.Map.of(

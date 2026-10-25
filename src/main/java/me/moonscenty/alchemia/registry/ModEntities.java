@@ -150,6 +150,27 @@ public class ModEntities {
                     .noSummon()
                     .build("autocaster"));
 
+    /** Constructs on tripods: the two automated crossbows and the node magnet. The original's sizes. */
+    public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.entity.AutomatedCrossbow>>
+            AUTOMATED_CROSSBOW = ENTITIES.register("automated_crossbow", () -> EntityType.Builder
+                    .<me.moonscenty.alchemia.entity.AutomatedCrossbow>of(
+                            me.moonscenty.alchemia.entity.AutomatedCrossbow::new, MobCategory.MISC)
+                    .sized(0.95F, 1.25F).eyeHeight(0.825F).clientTrackingRange(10).noSummon()
+                    .build("automated_crossbow"));
+    public static final DeferredHolder<EntityType<?>,
+            EntityType<me.moonscenty.alchemia.entity.AdvancedAutomatedCrossbow>> ADVANCED_AUTOMATED_CROSSBOW =
+            ENTITIES.register("advanced_automated_crossbow", () -> EntityType.Builder
+                    .<me.moonscenty.alchemia.entity.AdvancedAutomatedCrossbow>of(
+                            me.moonscenty.alchemia.entity.AdvancedAutomatedCrossbow::new, MobCategory.MISC)
+                    .sized(0.95F, 1.5F).eyeHeight(1.0F).clientTrackingRange(10).noSummon()
+                    .build("advanced_automated_crossbow"));
+    public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.entity.NodeMagnet>>
+            NODE_MAGNET = ENTITIES.register("node_magnet", () -> EntityType.Builder
+                    .<me.moonscenty.alchemia.entity.NodeMagnet>of(
+                            me.moonscenty.alchemia.entity.NodeMagnet::new, MobCategory.MISC)
+                    .sized(0.9F, 0.9F).eyeHeight(0.8125F).clientTrackingRange(10).noSummon()
+                    .build("node_magnet"));
+
     /** The great halls' bosses. */
     public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.entity.boss.EldritchWarden>> ELDRITCH_WARDEN =
             ENTITIES.register("eldritch_warden", () -> EntityType.Builder
@@ -478,6 +499,10 @@ public class ModEntities {
     /** What anything alive needs before the game will make one. */
     public static void attributes(EntityAttributeCreationEvent event) {
         event.put(AUTOCASTER.get(), Autocaster.attributes().build());
+        event.put(AUTOMATED_CROSSBOW.get(), me.moonscenty.alchemia.entity.AutomatedCrossbow.attributes().build());
+        event.put(ADVANCED_AUTOMATED_CROSSBOW.get(),
+                me.moonscenty.alchemia.entity.AdvancedAutomatedCrossbow.attributes().build());
+        event.put(NODE_MAGNET.get(), me.moonscenty.alchemia.entity.NodeMagnet.attributes().build());
         event.put(ELDRITCH_AUTOCASTER.get(), me.moonscenty.alchemia.entity.EldritchAutocaster.attributes().build());
         event.put(ELDRITCH_WARDEN.get(), me.moonscenty.alchemia.entity.boss.EldritchWarden.attributes().build());
         event.put(ELDRITCH_GOLEM.get(), me.moonscenty.alchemia.entity.boss.EldritchGolem.attributes().build());

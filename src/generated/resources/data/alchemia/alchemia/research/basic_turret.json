@@ -1,0 +1,29 @@
+{
+  "category": "alchemia:golemancy",
+  "clues": [
+    "alchemia:clue/dispenser"
+  ],
+  "column": 3,
+  "hidden": true,
+  "icon": "alchemia:automated_crossbow",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.basic_turret.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:automated_crossbow"
+    }
+  ],
+  "parents": [
+    "alchemia:clockwork_mind"
+  ],
+  "requirements": {
+    "alchemia:aversio": 3,
+    "alchemia:cognitio": 3,
+    "alchemia:machina": 3,
+    "alchemia:sensus": 3
+  },
+  "row": 3
+}

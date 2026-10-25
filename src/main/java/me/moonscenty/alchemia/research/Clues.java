@@ -41,6 +41,8 @@ public final class Clues {
     public static final ResourceLocation BRAIN = clue("brain");
     public static final ResourceLocation TAINT_SHARD = clue("taint_shard");
     public static final ResourceLocation DISPENSER = clue("dispenser");
+    /** What setting a node magnet down teaches its owner about the monsters round about: {@code !NODEMAGNETDANGER}. */
+    public static final ResourceLocation NODE_MAGNET_DANGER = clue("node_magnet_danger");
     /** The headaches of warp, which want something to soothe them: the original's {@code @BATHSALTS}. */
     public static final ResourceLocation BATH_SALTS = clue("bath_salts");
 

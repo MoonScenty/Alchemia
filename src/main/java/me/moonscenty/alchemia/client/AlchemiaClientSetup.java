@@ -244,6 +244,7 @@ public class AlchemiaClientSetup {
         event.register(ModMenus.THAUMATORIUM.get(), ThaumatoriumScreen::new);
         event.register(ModMenus.FOCUS_POUCH.get(), FocusPouchScreen::new);
         event.register(ModMenus.AUTOCASTER.get(), AutocasterScreen::new);
+        event.register(ModMenus.AUTOMATED_CROSSBOW.get(), CrossbowScreen::new);
         event.register(ModMenus.FOCAL_MANIPULATOR.get(), FocalManipulatorScreen::new);
         event.register(ModMenus.SPA.get(), SpaScreen::new);
         event.register(ModMenus.AURA_TOTEM.get(), AuraTotemScreen::new);
@@ -393,6 +394,9 @@ public class AlchemiaClientSetup {
         event.registerEntityRenderer(ModEntities.TAINT_BOTTLE.get(),
                 net.minecraft.client.renderer.entity.ThrownItemRenderer::new);
         event.registerEntityRenderer(ModEntities.AUTOCASTER.get(), AutocasterRenderer::new);
+        event.registerEntityRenderer(ModEntities.AUTOMATED_CROSSBOW.get(), ConstructRenderers.Basic::new);
+        event.registerEntityRenderer(ModEntities.ADVANCED_AUTOMATED_CROSSBOW.get(), ConstructRenderers.Advanced::new);
+        event.registerEntityRenderer(ModEntities.NODE_MAGNET.get(), ConstructRenderers.Magnet::new);
         event.registerEntityRenderer(ModEntities.ELDRITCH_AUTOCASTER.get(), AutocasterRenderer::new);
         event.registerEntityRenderer(ModEntities.ELDRITCH_WARDEN.get(), EldritchWardenRenderer::new);
         event.registerEntityRenderer(ModEntities.ELDRITCH_GOLEM.get(), EldritchGolemRenderer::new);

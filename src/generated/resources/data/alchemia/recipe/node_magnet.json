@@ -1,0 +1,52 @@
+{
+  "type": "alchemia:infusion",
+  "central": {
+    "item": "alchemia:morphic_resonator"
+  },
+  "essentia": {
+    "alchemia:auram": 64,
+    "alchemia:machina": 16,
+    "alchemia:motus": 32
+  },
+  "instability": 4,
+  "research": "alchemia:node_magnet",
+  "result": {
+    "count": 1,
+    "id": "alchemia:node_magnet"
+  },
+  "ring": [
+    {
+      "item": "alchemia:brass_gear"
+    },
+    {
+      "item": "alchemia:brass_plate"
+    },
+    {
+      "tag": "c:storage_blocks/iron"
+    },
+    {
+      "item": "alchemia:bioalchemic_mind"
+    },
+    {
+      "item": "alchemia:greatwood_planks"
+    },
+    {
+      "item": "alchemia:air_crystal"
+    },
+    {
+      "item": "alchemia:fire_crystal"
+    },
+    {
+      "item": "alchemia:water_crystal"
+    },
+    {
+      "item": "alchemia:earth_crystal"
+    },
+    {
+      "item": "alchemia:order_crystal"
+    },
+    {
+      "item": "alchemia:entropy_crystal"
+    }
+  ]
+}

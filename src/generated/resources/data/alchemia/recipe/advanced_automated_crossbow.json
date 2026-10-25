@@ -1,0 +1,35 @@
+{
+  "type": "alchemia:arcane_shaped",
+  "key": {
+    "B": {
+      "item": "alchemia:brass_plate"
+    },
+    "G": {
+      "item": "alchemia:brass_gear"
+    },
+    "M": {
+      "item": "alchemia:bioalchemic_mind"
+    },
+    "P": {
+      "item": "alchemia:iron_plate"
+    },
+    "T": {
+      "item": "alchemia:automated_crossbow"
+    }
+  },
+  "pattern": [
+    "PMP",
+    "PTP",
+    "BGB"
+  ],
+  "research": "alchemia:advanced_turret",
+  "result": {
+    "count": 1,
+    "id": "alchemia:advanced_automated_crossbow"
+  },
+  "vis": {
+    "alchemia:aer": 75,
+    "alchemia:ignis": 50,
+    "alchemia:ordo": 125
+  }
+}

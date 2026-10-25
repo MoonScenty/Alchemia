@@ -322,6 +322,17 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("item.alchemia.autocaster.note",
                 pick("Fires a fitted focus on its own", "끼운 포커스를 혼자 쏜다"));
         add("entity.alchemia.autocaster.not_yours", pick("Not yours", "남의 것이다"));
+        addItem(ModItems.AUTOMATED_CROSSBOW, pick("Automated Crossbow", "자동 쇠뇌"));
+        addItem(ModItems.ADVANCED_AUTOMATED_CROSSBOW, pick("Advanced Automated Crossbow", "상급 자동 쇠뇌"));
+        addItem(ModItems.NODE_MAGNET, pick("Node Magnet", "노드 자석"));
+        addEntityType(me.moonscenty.alchemia.registry.ModEntities.AUTOMATED_CROSSBOW,
+                pick("Automated Crossbow", "자동 쇠뇌"));
+        addEntityType(me.moonscenty.alchemia.registry.ModEntities.ADVANCED_AUTOMATED_CROSSBOW,
+                pick("Advanced Automated Crossbow", "상급 자동 쇠뇌"));
+        addEntityType(me.moonscenty.alchemia.registry.ModEntities.NODE_MAGNET, pick("Node Magnet", "노드 자석"));
+        add("research.alchemia.node_magnet.danger", pick(
+                "Warning! The moment you set the magnet down you notice it gives off an all but silent hum that sets your teeth on edge. Grunts and howls answer it from the dark. It seems monsters find the noise unbearable and will come from far and wide to put a stop to it. It would be wise to keep it guarded.",
+                "경고! 자석을 내려놓는 순간, 거의 들리지 않으면서도 이를 시리게 하는 웅웅거림을 낸다는 것을 알아차린다. 어둠 속에서 으르렁대고 울부짖는 소리가 답한다. 몬스터들은 이 소리를 견디지 못해 멀리서도 몰려와 멈추려 드는 것 같다. 지켜 두는 편이 현명하겠다."));
         // golems: what they are called, what they say, and every trait and part the press shows
         add("entity.alchemia.golem", pick("Golem", "골렘"));
         add("entity.alchemia.golem.not_yours", pick("This does not belong to you", "당신의 것이 아니다"));
@@ -1285,6 +1296,15 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                 {"arcane_bore", "Arcane Bore", "비전 굴착기",
                  "A machine that carries an excavation focus further than any wand, and without anyone standing over it. It goes directly above or below its base; point it with a wand and give it a redstone signal, and it eats a tunnel out the way it faces, sixty-four blocks deep, sweeping a spiral as it goes. It wants an excavation focus in its left slot and any pickaxe in its right: whatever is worked into either -- force, efficiency, widening, treasure, fortune, silk touch, dowsing -- goes into what it mines. The pickaxe wears a point a block, and the bore stops while it has one left. Everything mined comes out of the base's nozzle, into a container there if there is one; a wand on the base turns the nozzle. Entropy piped into the base drives it fast, twenty blocks a point; without it, it draws entropy out of the air, a block a point and far slower.",
                  "완드로는 닿지 않는 데까지, 지켜보는 사람 없이도 발굴 포커스를 부리는 기계다. 받침 바로 위나 아래에 놓는다. 완드로 방향을 잡고 레드스톤 신호를 주면 바라보는 쪽으로 나선을 그리며 예순네 칸 깊이의 굴을 판다. 왼쪽 칸에 발굴 포커스를, 오른쪽 칸에 아무 곡괭이나 넣는다. 둘에 깃든 것 — 힘, 효율, 넓히기, 보물, 행운, 섬세한 손길, 탐광 — 이 캐는 것에 그대로 들어간다. 곡괭이는 한 칸마다 한 점씩 닳고, 한 점 남으면 굴착기가 멈춘다. 캔 것은 모두 받침의 주둥이로 나온다. 거기 상자가 있으면 상자로. 받침을 완드로 치면 주둥이가 돈다. 받침에 관으로 혼돈을 넣으면 한 점에 스무 칸을 빠르게 판다. 없으면 공기에서 혼돈을 끌어 쓰는데, 한 점에 한 칸이고 훨씬 느리다."},
+                {"basic_turret", "Automated Crossbow", "자동 쇠뇌",
+                 "A crossbow given a clockwork mind of its own, on a tripod to stand it up: set it down and it shoots at any monster it sees within twenty-four blocks. It cannot load itself, so open it and give it arrows, plain or primal; or stand it on a dispenser facing up and it takes a whole stack from that whenever it runs dry. Its owner takes it down again with a wand.",
+                 "태엽 정신을 넣은 쇠뇌를 삼각대에 세웠다. 내려놓으면 스물네 칸 안에 보이는 몬스터를 쏜다. 스스로 장전하지는 못하니 열어서 보통 화살이나 원시 화살을 넣어 주어야 한다. 위를 향한 디스펜서 위에 세우면 화살이 떨어질 때마다 거기서 한 묶음씩 가져간다. 주인은 완드로 다시 거둘 수 있다."},
+                {"advanced_turret", "Advanced Automated Crossbow", "상급 자동 쇠뇌",
+                 "Much like the basic one, with a few differences that matter. Iron plating makes it far sturdier and harder to shove about, a better loading mechanism has it shoot more often, and a bioalchemic mind lets it be told what to shoot at: animals, monsters, people, and whether its owner's own count. People only where the server allows people to fight.",
+                 "기본 쇠뇌와 거의 같지만 중요한 차이가 몇 있다. 철판을 둘러 훨씬 튼튼하고 잘 밀리지 않으며, 장전 장치가 나아 더 자주 쏜다. 생체연금 정신 덕에 무엇을 쏠지 정해 줄 수 있다. 동물, 몬스터, 사람, 그리고 주인 편도 쏠지. 사람은 서버가 사람끼리 싸움을 허락할 때만 쏜다."},
+                {"node_magnet", "Node Attraction", "노드 끌기",
+                 "Steering the aura is one thing; moving a node would put vis where it is wanted, when it is wanted. The magnet finds the nearest node within thirty-two blocks that nothing is holding still and draws it in, the bigger the node the slower, until it is a block away. It runs on vis it draws a little at a time from the air, and now and then the strain shakes loose a wisp or a point of flux. It is fragile: a knock or a fall will shatter it. Its owner takes it up again with a wand.",
+                 "오라를 다루는 것과 노드를 옮기는 것은 다른 일이다. 노드를 옮길 수 있다면 비스를 원하는 곳에 원하는 때에 둘 수 있다. 자석은 서른두 칸 안에서 붙잡혀 있지 않은 가장 가까운 노드를 찾아, 큰 노드일수록 느리게, 한 칸 거리까지 끌어온다. 공기에서 조금씩 비스를 빨아들여 움직이고, 이따금 무리가 걸려 위습이나 플럭스 한 점이 떨어져 나온다. 연약해서 세게 부딪히거나 떨어지면 부서진다. 주인은 완드로 다시 거둘 수 있다."},
                 {"autocaster", "Autocaster", "자동 시전기",
                  "A focus on a bracket, with enough of a mind in it to pick something and point itself at it. It is not a thaumaturge: it draws its own vis out of the air a drop at a time, holds a hundred of each primal at most, and nothing worn or carried makes a working any cheaper for it. Seven of the twelve foci are worth aiming at a thing, and those are the seven it will take. It goes against any face -- floor, wall or ceiling -- and it is told what to mind: animals, monsters, people, and whatever is already yours. A wand clicked against it takes it back down, focus and all.",
                  "받침대에 얹은 포커스다. 무엇을 고르고 그쪽으로 제 몸을 돌릴 만큼의 생각이 들어 있다. 마법사는 아니다. 제 비스를 공기에서 한 방울씩 길어 올리고, 원시마다 백까지만 담으며, 무엇을 걸쳤든 들었든 값이 싸지는 일은 없다. 열둘 중 일곱만이 무언가를 겨눌 값어치가 있고, 받아 주는 것도 그 일곱이다. 바닥이든 벽이든 천장이든 어느 면에나 붙으며, 무엇을 노릴지 일러 줄 수 있다 — 동물, 몹, 사람, 그리고 이미 제 편인 것. 완드로 치면 포커스째 도로 떼어 낸다."},

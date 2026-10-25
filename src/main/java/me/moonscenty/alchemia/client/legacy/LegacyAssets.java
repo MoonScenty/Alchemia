@@ -104,6 +104,9 @@ public final class LegacyAssets {
 
     /** The autocaster: its bracket, the ball that aims and the focus inside, which the original kept as one OBJ. */
     public static final String TURRET_MESH = "models/legacy/turret.obj";
+    /** The advanced automated crossbow, and the hemisphere a node magnet's ripples are drawn on. */
+    public static final String CROSSBOW_ADVANCED_MESH = "models/legacy/crossbow_advanced.obj";
+    public static final String HEMISPHERE_MESH = "models/legacy/hemis.obj";
 
     /** The alembic, from Thaumcraft 4: its pot, panel, legs and the two tubes it can stand on. */
     public static final String ALEMBIC_MESH = "models/legacy/alembic.obj";
@@ -115,6 +118,9 @@ public final class LegacyAssets {
     public static final String VALVE = "valve";
     /** The firebat, which the original built in code: the old bat's shape. */
     public static final String FIREBAT = "firebat";
+    /** The automated crossbow and the node magnet, which the original built in code on the same tripod. */
+    public static final String CROSSBOW = "crossbow";
+    public static final String NODE_MAGNET = "node_magnet";
     /** The pech, which the original built in code on a biped: jaw, pack and all. */
     public static final String PECH = "pech";
     /** The taintacle, which the original built in code as a chain of segments: ten long, and six for a tendril. */
@@ -159,6 +165,10 @@ public final class LegacyAssets {
                     "thaumcraft/client/renderers/models/block/ModelTubeValve", "()V"))),
             Map.entry(FIREBAT, List.of(new LegacyModelSource(LegacyEdition.FIVE,
                     "thaumcraft/client/renderers/models/entity/ModelFireBat", "()V"))),
+            Map.entry(CROSSBOW, List.of(new LegacyModelSource(LegacyEdition.FIVE,
+                    "thaumcraft/client/renderers/models/entity/ModelCrossbow", "()V"))),
+            Map.entry(NODE_MAGNET, List.of(new LegacyModelSource(LegacyEdition.FIVE,
+                    "thaumcraft/client/renderers/models/entity/ModelNodeMagnet", "()V"))),
             Map.entry(PECH, List.of(new LegacyModelSource(LegacyEdition.FIVE,
                     "thaumcraft/client/renderers/models/entity/ModelPech", "()V"))),
             Map.entry(TAINTACLE, List.of(new LegacyModelSource(LegacyEdition.FIVE,
@@ -497,6 +507,28 @@ public final class LegacyAssets {
                 .five("textures/models/focus_turret_eldritch.png"));
         all.add(LegacyAsset.of("textures/gui/autocaster.png").five("textures/gui/gui_turret_focus.png"));
         all.add(LegacyAsset.of("textures/item/legacy/autocaster.png").five("textures/items/turret_focus.png"));
+        // the two automated crossbows and the node magnet: their sheets, meshes, panels and pictures in a hand, and
+        // the ripples a magnet sends out, fifteen frames on a hemisphere
+        all.add(LegacyAsset.of("textures/entity/automated_crossbow.png").five("textures/models/crossbow.png")
+                .forModel(CROSSBOW));
+        all.add(LegacyAsset.of(CROSSBOW_ADVANCED_MESH).five("models/obj/crossbow_advanced.obj"));
+        all.add(LegacyAsset.of("textures/entity/advanced_automated_crossbow.png")
+                .five("textures/models/crossbow_advanced.png"));
+        all.add(LegacyAsset.of("textures/entity/node_magnet.png").five("textures/models/nodemagnet.png")
+                .forModel(NODE_MAGNET));
+        all.add(LegacyAsset.of(HEMISPHERE_MESH).five("models/obj/hemis.obj"));
+        for (int frame = 1; frame <= 15; frame++) {
+            all.add(LegacyAsset.of("textures/entity/ripple" + frame + ".png")
+                    .five("textures/models/ripple" + frame + ".png"));
+        }
+        all.add(LegacyAsset.of("textures/gui/automated_crossbow.png").five("textures/gui/gui_turret_basic.png"));
+        all.add(LegacyAsset.of("textures/gui/advanced_automated_crossbow.png")
+                .five("textures/gui/gui_turret_advanced.png"));
+        for (String[] placer : new String[][] {{"automated_crossbow", "turret_basic"},
+                {"advanced_automated_crossbow", "turret_advanced"}, {"node_magnet", "turret_magnet"}}) {
+            all.add(LegacyAsset.of("textures/item/legacy/" + placer[0] + ".png")
+                    .five("textures/items/" + placer[1] + ".png"));
+        }
 
         // the firebat Nine Hells lets off, in its two skins, both laid out for the original's model
         for (String skin : List.of("firebat", "vampirebat")) {

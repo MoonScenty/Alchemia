@@ -1174,6 +1174,35 @@ public class ModRecipeProvider extends RecipeProvider {
                 JUG_UNSTABLE, "water_jug");
 
         // the autocaster: seven things round a made mind, as the original had it
+        // the automated crossbows, at the original's shapes and prices
+        arcane(output, "automated_crossbow", "basic_turret", new ItemStack(ModItems.AUTOMATED_CROSSBOW.get()),
+                AspectList.of(ModAspects.FIRE, 50).add(ModAspects.AIR, 100).add(ModAspects.ORDER, 50),
+                Map.of('B', Ingredient.of(Items.BOW), 'G', Ingredient.of(ModItems.BRASS_GEAR),
+                        'I', Ingredient.of(Tags.Items.INGOTS_IRON), 'W', Ingredient.of(ModBlocks.GREATWOOD.planks()),
+                        'M', Ingredient.of(ModItems.CLOCKWORK_MIND), 'S', Ingredient.of(Tags.Items.RODS_WOODEN)),
+                "BGI", "WMW", "S S");
+        arcane(output, "advanced_automated_crossbow", "advanced_turret",
+                new ItemStack(ModItems.ADVANCED_AUTOMATED_CROSSBOW.get()),
+                AspectList.of(ModAspects.FIRE, 50).add(ModAspects.AIR, 75).add(ModAspects.ORDER, 125),
+                Map.of('P', Ingredient.of(ModItems.IRON_PLATE), 'M', Ingredient.of(ModItems.BIOALCHEMIC_MIND),
+                        'T', Ingredient.of(ModItems.AUTOMATED_CROSSBOW), 'B', Ingredient.of(ModItems.BRASS_PLATE),
+                        'G', Ingredient.of(ModItems.BRASS_GEAR)),
+                "PMP", "PTP", "BGB");
+        // the node magnet: a morphic resonator ringed with a crystal of every primal and the works to drive it
+        infusion(output, "node_magnet", Ingredient.of(ModItems.MORPHIC_RESONATOR),
+                List.of(Ingredient.of(ModItems.BRASS_GEAR), Ingredient.of(ModItems.BRASS_PLATE),
+                        Ingredient.of(Tags.Items.STORAGE_BLOCKS_IRON), Ingredient.of(ModItems.BIOALCHEMIC_MIND),
+                        Ingredient.of(ModBlocks.GREATWOOD.planks()),
+                        Ingredient.of(ModBlocks.CRYSTALS.get(me.moonscenty.alchemia.block.CrystalType.AIR)),
+                        Ingredient.of(ModBlocks.CRYSTALS.get(me.moonscenty.alchemia.block.CrystalType.FIRE)),
+                        Ingredient.of(ModBlocks.CRYSTALS.get(me.moonscenty.alchemia.block.CrystalType.WATER)),
+                        Ingredient.of(ModBlocks.CRYSTALS.get(me.moonscenty.alchemia.block.CrystalType.EARTH)),
+                        Ingredient.of(ModBlocks.CRYSTALS.get(me.moonscenty.alchemia.block.CrystalType.ORDER)),
+                        Ingredient.of(ModBlocks.CRYSTALS.get(me.moonscenty.alchemia.block.CrystalType.ENTROPY))),
+                new ItemStack(ModItems.NODE_MAGNET.get()),
+                AspectList.of(ModAspects.MECHANISM, 16).add(ModAspects.MOTION, 32).add(ModAspects.AURA, 64), 4,
+                "node_magnet");
+
         infusion(output, "autocaster", Ingredient.of(ModItems.BIOALCHEMIC_MIND),
                 List.of(Ingredient.of(ModItems.BALANCED_SHARD), Ingredient.of(ModItems.MORPHIC_RESONATOR),
                         Ingredient.of(ModBlocks.GREATWOOD.planks()), Ingredient.of(ModBlocks.GREATWOOD.planks()),

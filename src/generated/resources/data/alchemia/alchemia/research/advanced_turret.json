@@ -1,0 +1,27 @@
+{
+  "category": "alchemia:golemancy",
+  "column": 3,
+  "complexity": 2,
+  "icon": "alchemia:advanced_automated_crossbow",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.advanced_turret.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:advanced_automated_crossbow"
+    }
+  ],
+  "parents": [
+    "alchemia:bioalchemic_mind",
+    "alchemia:basic_turret"
+  ],
+  "requirements": {
+    "alchemia:aversio": 3,
+    "alchemia:cognitio": 3,
+    "alchemia:machina": 3,
+    "alchemia:sensus": 3
+  },
+  "row": 5
+}

@@ -105,6 +105,16 @@ public class ModItems {
     /** A turret folded up: a focus, a bracket and enough mind to point one at something. */
     public static final DeferredItem<Item> AUTOCASTER = ITEMS.register("autocaster",
             () -> new me.moonscenty.alchemia.item.AutocasterItem(new Item.Properties().stacksTo(1)));
+    /** The constructs that stand on tripods, folded up to carry. */
+    public static final DeferredItem<Item> AUTOMATED_CROSSBOW = ITEMS.register("automated_crossbow",
+            () -> new me.moonscenty.alchemia.item.ConstructItem(ModEntities.AUTOMATED_CROSSBOW,
+                    new Item.Properties().stacksTo(1)));
+    public static final DeferredItem<Item> ADVANCED_AUTOMATED_CROSSBOW = ITEMS.register(
+            "advanced_automated_crossbow", () -> new me.moonscenty.alchemia.item.ConstructItem(
+                    ModEntities.ADVANCED_AUTOMATED_CROSSBOW, new Item.Properties().stacksTo(1)));
+    public static final DeferredItem<Item> NODE_MAGNET = ITEMS.register("node_magnet",
+            () -> new me.moonscenty.alchemia.item.ConstructItem(ModEntities.NODE_MAGNET,
+                    new Item.Properties().stacksTo(1)));
 
     public static final Map<CrystalType, DeferredItem<Item>> SHARDS = registerShards();
     /** A harness to fly with, on vis. */

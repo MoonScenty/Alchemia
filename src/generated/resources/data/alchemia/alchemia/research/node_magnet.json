@@ -1,0 +1,36 @@
+{
+  "category": "alchemia:arcana",
+  "column": 10,
+  "complexity": 3,
+  "hidden": true,
+  "icon": "alchemia:node_magnet",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.node_magnet.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:node_magnet"
+    },
+    {
+      "type": "text",
+      "gate": "alchemia:clue/node_magnet_danger",
+      "key": "research.alchemia.node_magnet.danger"
+    }
+  ],
+  "parents": [
+    "alchemia:aura_totem_pole_pure",
+    "alchemia:bioalchemic_mind",
+    "alchemia:crystal_farmer"
+  ],
+  "requirements": {
+    "alchemia:auram": 6,
+    "alchemia:desiderium": 8,
+    "alchemia:machina": 3,
+    "alchemia:motus": 6
+  },
+  "row": 0,
+  "shape": "special",
+  "warp": 3
+}
