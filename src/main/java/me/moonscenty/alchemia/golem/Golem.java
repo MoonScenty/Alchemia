@@ -14,7 +14,6 @@ import me.moonscenty.alchemia.registry.ModDataComponents;
 import me.moonscenty.alchemia.registry.ModItems;
 import me.moonscenty.alchemia.registry.ModSounds;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
@@ -53,8 +52,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.Vec3;
@@ -156,10 +153,6 @@ public class Golem extends PathfinderMob implements OwnableEntity, net.minecraft
         refresh();
     }
 
-    public int rankXp() {
-        return rankXp;
-    }
-
     /**
      * Sets it down for the first time, as the golem item does: whose it is, what it is, and where home is.
      */
@@ -236,8 +229,8 @@ public class Golem extends PathfinderMob implements OwnableEntity, net.minecraft
             }
             goalSelector.addGoal(2, new me.moonscenty.alchemia.entity.QuickMeleeGoal(this, 1.15, false));
             if (following()) {
-                targetSelector.addGoal(1, new GolemGoals.DefendOwner(this));
-                targetSelector.addGoal(2, new GolemGoals.AidOwner(this));
+                targetSelector.addGoal(1, new GolemGoals.OwnersFight(this, true));
+                targetSelector.addGoal(2, new GolemGoals.OwnersFight(this, false));
             }
             targetSelector.addGoal(3, new HurtByTargetGoal(this));
         }
@@ -611,10 +604,7 @@ public class Golem extends PathfinderMob implements OwnableEntity, net.minecraft
     @Override
     protected void dropCustomDeathLoot(ServerLevel level, DamageSource source, boolean recentlyHit) {
         super.dropCustomDeathLoot(level, source, recentlyHit);
-        int looting = source.getEntity() instanceof LivingEntity killer
-                ? EnchantmentHelper.getEnchantmentLevel(level.registryAccess().registryOrThrow(Registries.ENCHANTMENT)
-                        .getHolderOrThrow(Enchantments.LOOTING), killer)
-                : 0;
+        int looting = me.moonscenty.alchemia.entity.Looting.of(source);
         float chance = 0.3F + looting * 0.15F;
         for (ItemStack part : design.components()) {
             if (random.nextFloat() < chance) {

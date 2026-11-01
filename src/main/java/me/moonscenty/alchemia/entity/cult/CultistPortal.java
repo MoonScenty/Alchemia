@@ -2,7 +2,6 @@ package me.moonscenty.alchemia.entity.cult;
 
 import me.moonscenty.alchemia.registry.ModEntities;
 import me.moonscenty.alchemia.registry.ModSounds;
-import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -14,6 +13,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -121,15 +121,29 @@ public class CultistPortal extends Monster {
 
     /** One more of the cult, and the toll it takes. */
     public void letThrough(ServerLevel level) {
-        Cultist cultist = random.nextFloat() > 0.33F ? new CultistKnight(level) : new CultistCleric(level);
-        cultist.moveTo(getX() + random.nextFloat() - random.nextFloat(), getY() + 0.25,
-                getZ() + random.nextFloat() - random.nextFloat(), random.nextFloat() * 360.0F, 0.0F);
-        cultist.finalizeSpawn(level, level.getCurrentDifficultyAt(cultist.blockPosition()), MobSpawnType.MOB_SUMMONED,
-                null);
-        level.addFreshEntity(cultist);
-        cultist.spawnAnim();
-        cultist.playSound(ModSounds.WAND_FAIL.get(), 1.0F, 1.0F);
+        bringThrough(level, newCultist(level));
         hurt(damageSources().fellOutOfWorld(), 5 + random.nextInt(5));
+    }
+
+    /** Two knights to each cleric. */
+    protected Cultist newCultist(ServerLevel level) {
+        return random.nextFloat() > 0.33F ? new CultistKnight(level) : new CultistCleric(level);
+    }
+
+    /** Sets one down beside the portal, ready for a fight, with a puff and a crack. */
+    protected void bringThrough(ServerLevel level, Mob arrival) {
+        arrival.moveTo(getX() + random.nextFloat() - random.nextFloat(), getY() + 0.25,
+                getZ() + random.nextFloat() - random.nextFloat(), random.nextFloat() * 360.0F, 0.0F);
+        arrival.finalizeSpawn(level, level.getCurrentDifficultyAt(arrival.blockPosition()), MobSpawnType.MOB_SUMMONED,
+                null);
+        settle(arrival);
+        level.addFreshEntity(arrival);
+        arrival.spawnAnim();
+        arrival.playSound(ModSounds.WAND_FAIL.get(), 1.0F, 1.0F);
+    }
+
+    /** Anything more done to one just through, before it is let loose. */
+    protected void settle(Mob arrival) {
     }
 
     @Override

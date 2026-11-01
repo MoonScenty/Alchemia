@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 
 import me.moonscenty.alchemia.block.BannerBlockEntity;
 import me.moonscenty.alchemia.block.eldritch.EldritchAltarBlockEntity;
+import me.moonscenty.alchemia.outer.OuterBlocks;
 import me.moonscenty.alchemia.registry.ModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
@@ -60,10 +61,7 @@ public class EldritchRingFeature extends Feature<NoneFeatureConfiguration> {
         set(level, o, ModBlocks.ELDRITCH_STONE.block().get().defaultBlockState());
         set(level, o.above(), ModBlocks.ELDRITCH_ALTAR.get().defaultBlockState());
         set(level, o.above(2), ModBlocks.ELDRITCH_PORTAL.get().defaultBlockState());
-        set(level, o.above(3), ModBlocks.ELDRITCH_OBELISK.get().defaultBlockState());
-        for (int up = 4; up <= 7; up++) {
-            set(level, o.above(up), ModBlocks.ELDRITCH_OBELISK_BODY.get().defaultBlockState());
-        }
+        OuterBlocks.obelisk(o.above(3), (at, state) -> set(level, at, state));
         int kind = random.nextInt(10);
         if (level.getBlockEntity(o.above()) instanceof EldritchAltarBlockEntity altar) {
             if (kind >= 1 && kind <= 4) {

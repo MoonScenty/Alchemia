@@ -1,10 +1,10 @@
 package me.moonscenty.alchemia.entity.cult;
 
+import me.moonscenty.alchemia.entity.Home;
+import me.moonscenty.alchemia.entity.Looting;
 import me.moonscenty.alchemia.item.CrimsonRitesItem;
 import me.moonscenty.alchemia.player.PlayerKnowledge;
 import me.moonscenty.alchemia.registry.ModItems;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.DifficultyInstance;
@@ -13,6 +13,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -23,8 +24,6 @@ import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
@@ -106,11 +105,7 @@ public abstract class Cultist extends Monster {
     @Override
     protected void dropCustomDeathLoot(ServerLevel level, DamageSource source, boolean recentlyHit) {
         super.dropCustomDeathLoot(level, source, recentlyHit);
-        int looting = 0;
-        if (source.getEntity() instanceof LivingEntity killer) {
-            looting = EnchantmentHelper.getEnchantmentLevel(level.registryAccess()
-                    .registryOrThrow(Registries.ENCHANTMENT).getHolderOrThrow(Enchantments.LOOTING), killer);
-        }
+        int looting = Looting.of(source);
         int roll = random.nextInt(10);
         if (roll <= 1) {
             spawnAtLocation(new ItemStack(ModItems.VOID_SEED.get()), 1.5F);
@@ -148,22 +143,13 @@ public abstract class Cultist extends Monster {
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
-        if (hasRestriction()) {
-            BlockPos home = getRestrictCenter();
-            tag.putInt("HomeD", (int) getRestrictRadius());
-            tag.putInt("HomeX", home.getX());
-            tag.putInt("HomeY", home.getY());
-            tag.putInt("HomeZ", home.getZ());
-        }
+        Home.save(this, tag);
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
-        if (tag.contains("HomeD")) {
-            restrictTo(new BlockPos(tag.getInt("HomeX"), tag.getInt("HomeY"), tag.getInt("HomeZ")),
-                    tag.getInt("HomeD"));
-        }
+        Home.load(this, tag);
     }
 
     /**
@@ -191,17 +177,25 @@ public abstract class Cultist extends Monster {
             targetMob = attacker;
             lastHurtAt = mob.getLastHurtByMobTimestamp();
             unseenMemoryTicks = 300;
-            AABB reach = new AABB(mob.blockPosition()).inflate(CALLS_ACROSS, CALLS_UP, CALLS_ACROSS);
-            for (Cultist other : mob.level().getEntitiesOfClass(Cultist.class, reach)) {
-                if (other != mob && other.getTarget() == null && !other.isAlliedTo(attacker)) {
-                    if (other instanceof CultistCleric cleric && cleric.isRitualist()) {
-                        cleric.calledOn(attacker);
-                    } else {
-                        other.setTarget(attacker);
-                    }
+            callTheCult(mob, attacker, CALLS_ACROSS, CALLS_UP);
+            super.start();
+        }
+    }
+
+    /**
+     * Sets every cultist in reach that has nothing better to do on the attacker. A cleric at its rite is only called
+     * on, and may or may not come.
+     */
+    public static void callTheCult(Mob caller, LivingEntity attacker, double across, double up) {
+        AABB reach = new AABB(caller.blockPosition()).inflate(across, up, across);
+        for (Cultist other : caller.level().getEntitiesOfClass(Cultist.class, reach)) {
+            if (other != caller && other.getTarget() == null && !other.isAlliedTo(attacker)) {
+                if (other instanceof CultistCleric cleric && cleric.isRitualist()) {
+                    cleric.calledOn(attacker);
+                } else {
+                    other.setTarget(attacker);
                 }
             }
-            super.start();
         }
     }
 }

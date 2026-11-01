@@ -344,12 +344,7 @@ public final class Champions {
             return;
         }
         ExperienceOrb.award(level, dead.position(), 5 + dead.getRandom().nextInt(3));
-        int looting = 0;
-        if (event.getSource().getEntity() instanceof LivingEntity killer) {
-            looting = net.minecraft.world.item.enchantment.EnchantmentHelper.getEnchantmentLevel(level.registryAccess()
-                    .registryOrThrow(net.minecraft.core.registries.Registries.ENCHANTMENT)
-                    .getHolderOrThrow(net.minecraft.world.item.enchantment.Enchantments.LOOTING), killer);
-        }
+        int looting = Looting.of(event.getSource());
         event.getDrops().add(new net.minecraft.world.entity.item.ItemEntity(level, dead.getX(), dead.getEyeY(),
                 dead.getZ(), me.moonscenty.alchemia.item.LootBagItem.forChampion(dead.getRandom(), looting)));
     }

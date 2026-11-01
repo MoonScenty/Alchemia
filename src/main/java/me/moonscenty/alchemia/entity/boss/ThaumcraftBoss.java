@@ -1,13 +1,14 @@
 package me.moonscenty.alchemia.entity.boss;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import me.moonscenty.alchemia.entity.ChampionModifier;
 import me.moonscenty.alchemia.entity.Champions;
 import me.moonscenty.alchemia.entity.EldritchMob;
+import me.moonscenty.alchemia.entity.Home;
 import me.moonscenty.alchemia.registry.ModItems;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -67,6 +68,9 @@ public abstract class ThaumcraftBoss extends Monster {
     /** While above nought it is waking: untouchable, still, and not to be pushed. Seen on both sides. */
     private static final EntityDataAccessor<Integer> WAKING = SynchedEntityData.defineId(ThaumcraftBoss.class,
             EntityDataSerializers.INT);
+    /** Which of {@link #titles()} it goes by. */
+    private static final EntityDataAccessor<Byte> TITLE = SynchedEntityData.defineId(ThaumcraftBoss.class,
+            EntityDataSerializers.BYTE);
     private final ServerBossEvent bar = new ServerBossEvent(Component.empty(), BossEvent.BossBarColor.PURPLE,
             BossEvent.BossBarOverlay.PROGRESS);
 
@@ -87,6 +91,7 @@ public abstract class ThaumcraftBoss extends Monster {
         super.defineSynchedData(builder);
         builder.define(ANGER, 0);
         builder.define(WAKING, 0);
+        builder.define(TITLE, (byte) 0);
     }
 
     public int anger() {
@@ -108,6 +113,17 @@ public abstract class ThaumcraftBoss extends Monster {
     /** What it is called: set once it is known what it is a champion of. */
     public abstract Component title(ChampionModifier modifier);
 
+    /** The names its kind may go by, one picked as it comes into the world; none for a kind with no names. */
+    protected List<String> titles() {
+        return List.of();
+    }
+
+    /** The name it was given out of {@link #titles()}. */
+    protected String titled() {
+        List<String> titles = titles();
+        return titles.get(entityData.get(TITLE) % titles.size());
+    }
+
     public void name() {
         ChampionModifier modifier = Champions.modifier(this);
         if (modifier != null) {
@@ -118,6 +134,9 @@ public abstract class ThaumcraftBoss extends Monster {
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason,
             SpawnGroupData data) {
+        if (!titles().isEmpty()) {
+            entityData.set(TITLE, (byte) random.nextInt(titles().size()));
+        }
         restrictTo(blockPosition(), 24);
         name();
         return data;
@@ -329,22 +348,15 @@ public abstract class ThaumcraftBoss extends Monster {
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
-        if (hasRestriction()) {
-            BlockPos home = getRestrictCenter();
-            tag.putInt("HomeD", (int) getRestrictRadius());
-            tag.putInt("HomeX", home.getX());
-            tag.putInt("HomeY", home.getY());
-            tag.putInt("HomeZ", home.getZ());
-        }
+        Home.save(this, tag);
+        tag.putByte("title", entityData.get(TITLE));
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
-        if (tag.contains("HomeD")) {
-            restrictTo(new BlockPos(tag.getInt("HomeX"), tag.getInt("HomeY"), tag.getInt("HomeZ")),
-                    tag.getInt("HomeD"));
-        }
+        Home.load(this, tag);
+        entityData.set(TITLE, tag.getByte("title"));
         if (hasCustomName()) {
             bar.setName(getDisplayName());
         }

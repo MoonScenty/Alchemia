@@ -3,8 +3,8 @@ package me.moonscenty.alchemia.entity;
 import javax.annotation.Nullable;
 
 import me.moonscenty.alchemia.Alchemia;
+import me.moonscenty.alchemia.entity.boss.LongRangeAttackGoal;
 import me.moonscenty.alchemia.entity.cult.Cultist;
-import me.moonscenty.alchemia.entity.cult.CultistKnight;
 import me.moonscenty.alchemia.item.WispyEssenceItem;
 import me.moonscenty.alchemia.network.Mist;
 import me.moonscenty.alchemia.outer.OuterLands;
@@ -16,7 +16,6 @@ import me.moonscenty.alchemia.registry.ModItems;
 import me.moonscenty.alchemia.registry.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -42,15 +41,12 @@ import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.MoveTowardsRestrictionGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
-import net.minecraft.world.entity.ai.goal.RangedAttackGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
@@ -122,7 +118,8 @@ public class EldritchGuardian extends Monster implements RangedAttackMob, Eldrit
     @Override
     protected void registerGoals() {
         goalSelector.addGoal(0, new FloatGoal(this));
-        goalSelector.addGoal(2, new Casting(this));
+        // casts from further off than eight blocks; nearer, it strikes
+        goalSelector.addGoal(2, LongRangeAttackGoal.toStart(this, 8.0, 1.0, 20, 40, 24.0F));
         goalSelector.addGoal(3, new QuickMeleeGoal(this, 1.0, false));
         goalSelector.addGoal(5, new MoveTowardsRestrictionGoal(this, 0.8));
         goalSelector.addGoal(7, new RandomStrollGoal(this, 1.0));
@@ -279,11 +276,7 @@ public class EldritchGuardian extends Monster implements RangedAttackMob, Eldrit
         if (random.nextBoolean()) {
             spawnAtLocation(WispyEssenceItem.of(ModAspects.ELDRITCH), 1.0F);
         }
-        int looting = 0;
-        if (source.getEntity() instanceof LivingEntity killer) {
-            looting = EnchantmentHelper.getEnchantmentLevel(level.registryAccess()
-                    .registryOrThrow(Registries.ENCHANTMENT).getHolderOrThrow(Enchantments.LOOTING), killer);
-        }
+        int looting = Looting.of(source);
         if (random.nextInt(10) <= looting / 2.0F) {
             spawnAtLocation(new ItemStack(ModItems.ELDRITCH_EYE.get()));
         }
@@ -316,44 +309,12 @@ public class EldritchGuardian extends Monster implements RangedAttackMob, Eldrit
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
-        if (hasRestriction()) {
-            BlockPos home = getRestrictCenter();
-            tag.putInt("HomeD", (int) getRestrictRadius());
-            tag.putInt("HomeX", home.getX());
-            tag.putInt("HomeY", home.getY());
-            tag.putInt("HomeZ", home.getZ());
-        }
+        Home.save(this, tag);
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
-        if (tag.contains("HomeD")) {
-            restrictTo(new BlockPos(tag.getInt("HomeX"), tag.getInt("HomeY"), tag.getInt("HomeZ")),
-                    tag.getInt("HomeD"));
-        }
-    }
-
-    /** Casts from further off than eight blocks; nearer, it strikes. */
-    static class Casting extends RangedAttackGoal {
-        private final EldritchGuardian guardian;
-
-        Casting(EldritchGuardian guardian) {
-            super(guardian, 1.0, 20, 40, 24.0F);
-            this.guardian = guardian;
-        }
-
-        @Override
-        public boolean canUse() {
-            if (!super.canUse()) {
-                return false;
-            }
-            LivingEntity target = guardian.getTarget();
-            if (target == null || !target.isAlive()) {
-                guardian.setTarget(null);
-                return false;
-            }
-            return guardian.distanceToSqr(target.getX(), target.getBoundingBox().minY, target.getZ()) >= 64.0;
-        }
+        Home.load(this, tag);
     }
 }

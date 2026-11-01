@@ -2,7 +2,6 @@ package me.moonscenty.alchemia.entity;
 
 import me.moonscenty.alchemia.registry.ModEntities;
 import me.moonscenty.alchemia.registry.ModItems;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
@@ -22,7 +21,6 @@ import net.minecraft.world.entity.animal.Rabbit;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 
 /**
@@ -107,10 +105,7 @@ public class TaintedRabbit extends Rabbit implements TaintedMob {
     @Override
     protected void dropCustomDeathLoot(ServerLevel level, DamageSource source, boolean recentlyHit) {
         super.dropCustomDeathLoot(level, source, recentlyHit);
-        int looting = source.getEntity() instanceof LivingEntity killer
-                ? EnchantmentHelper.getEnchantmentLevel(level.registryAccess().registryOrThrow(Registries.ENCHANTMENT)
-                        .getHolderOrThrow(Enchantments.LOOTING), killer)
-                : 0;
+        int looting = Looting.of(source);
         int goo = random.nextInt(2) + random.nextInt(1 + looting);
         for (int bit = 0; bit < goo; bit++) {
             spawnAtLocation(new ItemStack(ModItems.TAINTED_GOO.get()));

@@ -12,12 +12,26 @@ import net.minecraft.world.entity.monster.RangedAttackMob;
 public class LongRangeAttackGoal extends RangedAttackGoal {
     private final Mob mob;
     private final double nearest;
+    /** Whether the distance is only checked before it starts, so a mark that closes in mid-chase is still shot at. */
+    private final boolean onlyToStart;
 
     public <T extends Mob & RangedAttackMob> LongRangeAttackGoal(T mob, double nearest, double speed, int fastest,
             int slowest, float range) {
+        this(mob, nearest, false, speed, fastest, slowest, range);
+    }
+
+    private <T extends Mob & RangedAttackMob> LongRangeAttackGoal(T mob, double nearest, boolean onlyToStart,
+            double speed, int fastest, int slowest, float range) {
         super(mob, speed, fastest, slowest, range);
         this.mob = mob;
         this.nearest = nearest;
+        this.onlyToStart = onlyToStart;
+    }
+
+    /** One that keeps on while it is still closing in, even once the mark is nearer than it would start at. */
+    public static <T extends Mob & RangedAttackMob> LongRangeAttackGoal toStart(T mob, double nearest, double speed,
+            int fastest, int slowest, float range) {
+        return new LongRangeAttackGoal(mob, nearest, true, speed, fastest, slowest, range);
     }
 
     private boolean farEnough() {
@@ -39,6 +53,6 @@ public class LongRangeAttackGoal extends RangedAttackGoal {
 
     @Override
     public boolean canContinueToUse() {
-        return super.canContinueToUse() && farEnough();
+        return super.canContinueToUse() && (onlyToStart || farEnough());
     }
 }

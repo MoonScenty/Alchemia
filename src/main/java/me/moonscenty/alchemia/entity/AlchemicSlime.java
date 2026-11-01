@@ -6,7 +6,6 @@ import me.moonscenty.alchemia.registry.ModSounds;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
@@ -18,7 +17,6 @@ import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 
 /**
@@ -182,10 +180,7 @@ public class AlchemicSlime extends Slime implements TaintedMob {
         if (getSize() <= 1) {
             return;
         }
-        int looting = source.getEntity() instanceof LivingEntity killer
-                ? EnchantmentHelper.getEnchantmentLevel(level.registryAccess().registryOrThrow(Registries.ENCHANTMENT)
-                        .getHolderOrThrow(Enchantments.LOOTING), killer)
-                : 0;
+        int looting = Looting.of(source);
         int goo = random.nextInt(3) + (looting > 0 ? random.nextInt(looting + 1) : 0);
         for (int bit = 0; bit < goo; bit++) {
             spawnAtLocation(new ItemStack(ModItems.TAINTED_GOO.get()));

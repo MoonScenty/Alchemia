@@ -182,10 +182,7 @@ public class HarvestSeal extends Seal {
         }
         boolean carrying = golem.isCarrying(replant.seed);
         if (!carrying && toggle(PROVISION)) {
-            SealEntity seal = Seals.get(golem.level(), task.seal());
-            if (seal != null) {
-                Provisioning.request(golem.level(), seal, replant.seed);
-            }
+            Provisioning.request(golem.level(), task, replant.seed);
         }
         return carrying;
     }

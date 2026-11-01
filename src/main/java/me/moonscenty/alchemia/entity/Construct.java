@@ -1,15 +1,16 @@
 package me.moonscenty.alchemia.entity;
 
+import java.util.Objects;
 import java.util.UUID;
 
 import me.moonscenty.alchemia.item.WandItem;
 import me.moonscenty.alchemia.registry.ModSounds;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -19,27 +20,35 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.OwnableEntity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
 /**
- * Something somebody built and set down, the original's {@code EntityOwnedConstruct}: an automated crossbow, a node
- * magnet. It belongs to whoever put it there, fights on their side, never wanders off or despawns, clacks like a
- * camera, and is taken down again by its owner with a wand, which hands back the thing it was set down from.
- * <p>
- * The autocaster came first and is its own class; this is for the ones that came after it.
+ * Something somebody built and set down, the original's {@code EntityOwnedConstruct}: an autocaster, an automated
+ * crossbow, a node magnet. It belongs to whoever put it there, fights on their side, never wanders off or despawns,
+ * clacks like a camera, and is taken down again by its owner with a wand, which hands back the thing it was set down
+ * from.
  */
 public abstract class Construct extends PathfinderMob implements OwnableEntity {
     /** Whose it is, written as a string the way the game writes a tamed animal's. */
     private static final EntityDataAccessor<String> OWNER =
             SynchedEntityData.defineId(Construct.class, EntityDataSerializers.STRING);
+    /** The four things a turret may be told to mind, one to a bit, so the screen can read them all at once. */
+    private static final EntityDataAccessor<Byte> MINDS =
+            SynchedEntityData.defineId(Construct.class, EntityDataSerializers.BYTE);
+
+    /** The bits in {@link #MINDS}, in the order the original's four buttons stood in. */
+    public static final int ANIMALS = 0;
+    public static final int MONSTERS = 1;
+    public static final int PLAYERS = 2;
+    public static final int FRIENDS = 3;
+
     /** How often it clacks, the original's. */
     private static final int CLACKS_EVERY = 240;
     /** What looting adds to the odds of each part surviving it being broken, the original's. */
@@ -57,6 +66,7 @@ public abstract class Construct extends PathfinderMob implements OwnableEntity {
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
         builder.define(OWNER, "");
+        builder.define(MINDS, (byte) 0);
     }
 
     /** The thing it folds back up into when its owner takes it down. */
@@ -105,13 +115,61 @@ public abstract class Construct extends PathfinderMob implements OwnableEntity {
         return owner != null ? owner.getTeam() : super.getTeam();
     }
 
+    // --- what it is told to shoot at ---------------------------------------
+
+    public boolean minds(int what) {
+        return (entityData.get(MINDS) & 1 << what) != 0;
+    }
+
+    /** Says what to mind, and forgets whatever it was aiming at, since it may no longer be fair game. */
+    public void mind(int what, boolean on) {
+        byte minds = entityData.get(MINDS);
+        entityData.set(MINDS, (byte) (on ? minds | 1 << what : minds & ~(1 << what)));
+        setTarget(null);
+    }
+
+    /**
+     * Whether this is something it has been told to mind: a monster, something alive that is not one, a person.
+     * What is its owner's is passed over unless it has been set against friends.
+     */
+    public boolean worthShooting(LivingEntity other) {
+        boolean friendly = minds(FRIENDS);
+        if (other instanceof Player player) {
+            if (!minds(PLAYERS) || player.isCreative() || player.isSpectator()) {
+                return false;
+            }
+            return player.getUUID().equals(getOwnerUUID()) ? friendly : shootsStrangers();
+        }
+        boolean monster = other.getType().getCategory() == MobCategory.MONSTER;
+        if (!minds(monster ? MONSTERS : ANIMALS)) {
+            return false;
+        }
+        if (other instanceof OwnableEntity owned && Objects.equals(owned.getOwnerUUID(), getOwnerUUID())) {
+            return friendly;
+        }
+        return true;
+    }
+
+    /** Whether a person who is not its owner is fair game, once it minds people at all. */
+    protected boolean shootsStrangers() {
+        return true;
+    }
+
+    /** Whether the server lets people fight each other. */
+    protected boolean pvp() {
+        MinecraftServer server = level().getServer();
+        return server != null && server.isPvpAllowed();
+    }
+
+    // --- being handled -----------------------------------------------------
+
     /**
      * A wand takes it down; anything else is {@link #opened}. Only for whoever put it there: somebody else's is
      * somebody else's, and saying so is kinder than letting them find out.
      */
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
-        if (player.isSecondaryUseActive() || player.getItemInHand(hand).is(net.minecraft.world.item.Items.NAME_TAG)) {
+        if (letsHandle(player, hand)) {
             return super.mobInteract(player, hand);
         }
         if (level().isClientSide || isRemoved()) {
@@ -122,14 +180,28 @@ public abstract class Construct extends PathfinderMob implements OwnableEntity {
             return InteractionResult.CONSUME;
         }
         if (player.getItemInHand(hand).getItem() instanceof WandItem) {
-            playSound(ModSounds.ZAP.get(), 1.0F, 1.0F);
-            emptyOut();
-            spawnAtLocation(folded(), 0.5F);
-            discard();
-            player.swing(hand, true);
+            takeDown(player, hand);
             return InteractionResult.CONSUME;
         }
         return opened(player);
+    }
+
+    /** Whether a click is left to the game's own handling: crouching, or a name tag. */
+    protected boolean letsHandle(Player player, InteractionHand hand) {
+        return player.isSecondaryUseActive() || player.getItemInHand(hand).is(net.minecraft.world.item.Items.NAME_TAG);
+    }
+
+    protected void takeDown(Player player, InteractionHand hand) {
+        playSound(ModSounds.ZAP.get(), 1.0F, 1.0F);
+        foldUp();
+        player.swing(hand, true);
+    }
+
+    /** Off where it stood and back into a hand: what it carried, and the thing itself. */
+    protected final void foldUp() {
+        emptyOut();
+        spawnAtLocation(folded(), 0.5F);
+        discard();
     }
 
     /** What an owner's empty hand does to it. */
@@ -155,11 +227,7 @@ public abstract class Construct extends PathfinderMob implements OwnableEntity {
     @Override
     protected void dropCustomDeathLoot(ServerLevel level, DamageSource cause, boolean recentlyHit) {
         super.dropCustomDeathLoot(level, cause, recentlyHit);
-        looting = cause.getEntity() instanceof LivingEntity killer
-                ? EnchantmentHelper.getEnchantmentLevel(
-                        level.registryAccess().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.LOOTING),
-                        killer)
-                : 0;
+        looting = Looting.of(cause);
         salvage();
     }
 
@@ -168,9 +236,14 @@ public abstract class Construct extends PathfinderMob implements OwnableEntity {
 
     /** One part of it, at the odds the original gave, a little better for every level of looting. */
     protected void salvage(ItemLike part, float chance) {
-        if (getRandom().nextFloat() < chance + looting * LOOTING_HELPS) {
+        if (salvaged(chance)) {
             spawnAtLocation(new ItemStack(part), 0.5F);
         }
+    }
+
+    /** Whether one part survives, at these odds and whatever looting adds. */
+    protected boolean salvaged(float chance) {
+        return getRandom().nextFloat() < chance + looting * LOOTING_HELPS;
     }
 
     // --- how it takes a knock ----------------------------------------------
@@ -193,6 +266,20 @@ public abstract class Construct extends PathfinderMob implements OwnableEntity {
         super.move(type, new Vec3(by.x * slides(), by.y, by.z * slides()));
     }
 
+    /** Whether a knock may lift it off the ground; a tripod only slides. */
+    protected boolean hops() {
+        return true;
+    }
+
+    @Override
+    public void knockback(double strength, double x, double z) {
+        super.knockback(strength, x, z);
+        Vec3 moving = getDeltaMovement();
+        if (!hops() && moving.y > 0.1) {
+            setDeltaMovement(moving.x, 0.1, moving.z);
+        }
+    }
+
     @Override
     public boolean isPushable() {
         return false;
@@ -213,10 +300,14 @@ public abstract class Construct extends PathfinderMob implements OwnableEntity {
         return 90;
     }
 
-    /** It never needs air. */
+    /** Whether it runs out of air under water like anything alive. */
+    protected boolean breathes() {
+        return false;
+    }
+
     @Override
     protected int decreaseAirSupply(int air) {
-        return air;
+        return breathes() ? super.decreaseAirSupply(air) : air;
     }
 
     // --- what it sounds like -----------------------------------------------
@@ -252,11 +343,13 @@ public abstract class Construct extends PathfinderMob implements OwnableEntity {
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
         tag.putString("owner", entityData.get(OWNER));
+        tag.putByte("minds", entityData.get(MINDS));
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         entityData.set(OWNER, tag.getString("owner"));
+        entityData.set(MINDS, tag.getByte("minds"));
     }
 }

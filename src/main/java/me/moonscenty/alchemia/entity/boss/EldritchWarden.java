@@ -13,11 +13,7 @@ import me.moonscenty.alchemia.player.WarpHandler;
 import me.moonscenty.alchemia.registry.ModBlocks;
 import me.moonscenty.alchemia.registry.ModSounds;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -61,8 +57,6 @@ import net.minecraft.world.level.block.Block;
  * thirteen to twenty seconds. Drowning and withering do nothing to it.
  */
 public class EldritchWarden extends ThaumcraftBoss implements RangedAttackMob, EldritchMob, ArmLifting {
-    private static final EntityDataAccessor<Byte> TITLE = SynchedEntityData.defineId(EldritchWarden.class,
-            EntityDataSerializers.BYTE);
     public static final List<String> TITLES = List.of("Aphoom-Zhah", "Basatan", "Chaugnar Faugn", "Mnomquah",
             "Nyogtha", "Oorn", "Shaikorth", "Rhan-Tegoth", "Rhogog", "Shudde M'ell", "Vulthoom", "Yag-Kosha",
             "Yibb-Tstll", "Zathog", "Zushakon");
@@ -105,22 +99,20 @@ public class EldritchWarden extends ThaumcraftBoss implements RangedAttackMob, E
     }
 
     @Override
-    protected void defineSynchedData(SynchedEntityData.Builder builder) {
-        super.defineSynchedData(builder);
-        builder.define(TITLE, (byte) 0);
+    protected List<String> titles() {
+        return TITLES;
     }
 
     @Override
     public Component title(ChampionModifier modifier) {
-        return Component.translatable("entity.alchemia.eldritch_warden.titled",
-                TITLES.get(entityData.get(TITLE) % TITLES.size()), Component.translatable(modifier.translationKey()));
+        return Component.translatable("entity.alchemia.eldritch_warden.titled", titled(),
+                Component.translatable(modifier.translationKey()));
     }
 
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason,
             SpawnGroupData data) {
         setSpawnTimer(RISING);
-        entityData.set(TITLE, (byte) random.nextInt(TITLES.size()));
         setAbsorptionAmount(getAbsorptionAmount() + shield());
         return super.finalizeSpawn(level, difficulty, reason, data);
     }
@@ -311,17 +303,5 @@ public class EldritchWarden extends ThaumcraftBoss implements RangedAttackMob, E
     @Override
     public int getAmbientSoundInterval() {
         return 500;
-    }
-
-    @Override
-    public void addAdditionalSaveData(CompoundTag tag) {
-        super.addAdditionalSaveData(tag);
-        tag.putByte("title", entityData.get(TITLE));
-    }
-
-    @Override
-    public void readAdditionalSaveData(CompoundTag tag) {
-        super.readAdditionalSaveData(tag);
-        entityData.set(TITLE, tag.getByte("title"));
     }
 }

@@ -1,11 +1,9 @@
 package me.moonscenty.alchemia.entity;
 
 import me.moonscenty.alchemia.entity.cult.Cultist;
-import me.moonscenty.alchemia.entity.cult.CultistKnight;
 import me.moonscenty.alchemia.registry.ModEntities;
 import me.moonscenty.alchemia.registry.ModItems;
 import me.moonscenty.alchemia.registry.ModSounds;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -37,8 +35,6 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
@@ -206,11 +202,7 @@ public class EldritchCrab extends Monster implements EldritchMob {
     @Override
     protected void dropCustomDeathLoot(ServerLevel level, DamageSource source, boolean recentlyHit) {
         super.dropCustomDeathLoot(level, source, recentlyHit);
-        int looting = 0;
-        if (source.getEntity() instanceof LivingEntity killer) {
-            looting = EnchantmentHelper.getEnchantmentLevel(level.registryAccess()
-                    .registryOrThrow(Registries.ENCHANTMENT).getHolderOrThrow(Enchantments.LOOTING), killer);
-        }
+        int looting = Looting.of(source);
         if (recentlyHit && (random.nextInt(3) == 0 || random.nextInt(1 + looting) > 0)) {
             spawnAtLocation(Items.ENDER_PEARL);
         }

@@ -26,13 +26,13 @@ import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
 
+import me.moonscenty.alchemia.outer.OuterBlocks;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LadderBlock;
-import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.Half;
 import net.neoforged.fml.loading.FMLPaths;
 
 /**
@@ -298,23 +298,11 @@ public final class MoundLayout {
                 case 3 -> Blocks.CHISELED_STONE_BRICKS.defaultBlockState();
                 default -> Blocks.STONE_BRICKS.defaultBlockState();
             };
-            case "field_150446_ar" -> stairs(Math.max(meta, 0));
+            case "field_150446_ar" -> OuterBlocks.stairs(Blocks.COBBLESTONE_STAIRS, Math.max(meta, 0));
             case "field_150468_ap" -> Blocks.LADDER.defaultBlockState()
                     .setValue(LadderBlock.FACING, horizontal(meta, Direction.NORTH));
             default -> null;
         };
-    }
-
-    /** 1.8.9's stairs: the low two bits the way they face (east, west, south, north), the third upside down. */
-    private static BlockState stairs(int meta) {
-        Direction facing = switch (meta & 3) {
-            case 0 -> Direction.EAST;
-            case 1 -> Direction.WEST;
-            case 2 -> Direction.SOUTH;
-            default -> Direction.NORTH;
-        };
-        return Blocks.COBBLESTONE_STAIRS.defaultBlockState().setValue(StairBlock.FACING, facing)
-                .setValue(StairBlock.HALF, (meta & 4) != 0 ? Half.TOP : Half.BOTTOM);
     }
 
     /** A facing from its old number, which is this game's own; up or down was taken as the fallback. */

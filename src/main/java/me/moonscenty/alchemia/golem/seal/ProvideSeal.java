@@ -12,9 +12,6 @@ import me.moonscenty.alchemia.golem.task.Tasks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.items.IItemHandler;
@@ -79,28 +76,14 @@ public class ProvideSeal extends Seal {
         IItemHandler container = Matching.container(level, at.pos(), at.face());
         if (container != null) {
             Provisioning.Request request = fetching.get(task.id());
-            ItemStack stack = request == null ? null : request.stack().copy();
-            if (stack != null && toggle(SINGLE)) {
-                stack.setCount(1);
-            }
-            if (stack != null && toggle(LEAVE)) {
-                int there = Matching.count(container, stack, Matching.Rule.STRICT);
-                if (there <= stack.getCount()) {
-                    stack = stack.copyWithCount(there - 1);
+            if (request != null) {
+                ItemStack stack = request.stack().copy();
+                if (toggle(SINGLE)) {
+                    stack.setCount(1);
                 }
-            }
-            if (stack != null && !stack.isEmpty() && golem.canCarry(stack)) {
-                ItemStack left = golem.hold(Matching.extract(container, stack.copy(), Matching.Rule.STRICT));
-                if (!left.isEmpty()) {
-                    ItemStack back = Matching.insert(container, left);
-                    if (!back.isEmpty()) {
-                        golem.spawnAtLocation(back, 0.25F);
-                    }
+                if (takeOut(level, golem, container, stack, Matching.Rule.STRICT, toggle(LEAVE))) {
+                    golem.addRankXp(1);
                 }
-                level.playSound(null, golem, SoundEvents.ITEM_PICKUP, SoundSource.NEUTRAL, 0.125F,
-                        ((level.random.nextFloat() - level.random.nextFloat()) * 0.7F + 1.0F) * 2.0F);
-                golem.addRankXp(1);
-                golem.swing(InteractionHand.MAIN_HAND);
             }
             fetching.remove(task.id());
         }

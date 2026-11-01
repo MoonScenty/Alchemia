@@ -12,9 +12,6 @@ import me.moonscenty.alchemia.golem.task.Tasks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.items.IItemHandler;
@@ -87,23 +84,8 @@ public class EmptySeal extends Seal {
         IItemHandler container = Matching.container(level, at.pos(), at.face());
         if (container != null) {
             ItemStack stack = wanted.get(task.id());
-            if (stack != null && toggle(LEAVE)) {
-                int there = Matching.count(container, stack, rule());
-                if (there <= stack.getCount()) {
-                    stack = stack.copyWithCount(there - 1);
-                }
-            }
-            if (stack != null && !stack.isEmpty() && golem.canCarry(stack)) {
-                ItemStack left = golem.hold(Matching.extract(container, stack.copy(), rule()));
-                if (!left.isEmpty()) {
-                    ItemStack back = Matching.insert(container, left);
-                    if (!back.isEmpty()) {
-                        golem.spawnAtLocation(back, 0.25F);
-                    }
-                }
-                level.playSound(null, golem, SoundEvents.ITEM_PICKUP, SoundSource.NEUTRAL, 0.125F,
-                        ((level.random.nextFloat() - level.random.nextFloat()) * 0.7F + 1.0F) * 2.0F);
-                golem.swing(InteractionHand.MAIN_HAND);
+            if (stack != null) {
+                takeOut(level, golem, container, stack, rule(), toggle(LEAVE));
             }
             wanted.remove(task.id());
             turn++;

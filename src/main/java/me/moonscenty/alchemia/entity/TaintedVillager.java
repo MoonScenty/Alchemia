@@ -58,11 +58,7 @@ public class TaintedVillager extends TaintedBeast {
     protected void dropCustomDeathLoot(ServerLevel level, DamageSource source, boolean recentlyHit) {
         super.dropCustomDeathLoot(level, source, recentlyHit);
         spawnAtLocation(TaintedMob.gooOrTendril(random, 1.0F / 3.0F), getBbHeight() / 2.0F);
-        int looting = source.getEntity() instanceof net.minecraft.world.entity.LivingEntity killer
-                ? net.minecraft.world.item.enchantment.EnchantmentHelper.getEnchantmentLevel(level.registryAccess()
-                        .registryOrThrow(net.minecraft.core.registries.Registries.ENCHANTMENT)
-                        .getHolderOrThrow(net.minecraft.world.item.enchantment.Enchantments.LOOTING), killer)
-                : 0;
+        int looting = Looting.of(source);
         if (random.nextInt(8) < 1 + looting) {
             spawnAtLocation(new net.minecraft.world.item.ItemStack(me.moonscenty.alchemia.registry.ModItems.COIN.get()),
                     1.5F);

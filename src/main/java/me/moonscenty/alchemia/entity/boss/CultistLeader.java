@@ -4,15 +4,9 @@ import java.util.List;
 
 import me.moonscenty.alchemia.entity.ChampionModifier;
 import me.moonscenty.alchemia.entity.cult.Cultist;
-import me.moonscenty.alchemia.entity.cult.CultistCleric;
 import me.moonscenty.alchemia.entity.cult.GolemOrb;
 import me.moonscenty.alchemia.registry.ModItems;
-import me.moonscenty.alchemia.registry.ModSounds;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
@@ -52,8 +46,6 @@ import net.minecraft.world.phys.AABB;
  * at its rite may break off to come. It leaves no pearls -- the portal does -- only a bag of rare loot.
  */
 public class CultistLeader extends ThaumcraftBoss implements RangedAttackMob {
-    private static final EntityDataAccessor<Byte> TITLE = SynchedEntityData.defineId(CultistLeader.class,
-            EntityDataSerializers.BYTE);
     public static final List<String> TITLES = List.of("Alberic", "Anselm", "Bastian", "Beturian", "Chabier",
             "Chorache", "Chuse", "Dodorol", "Ebardo", "Ferrando", "Fertus", "Guillen", "Larpe", "Obano", "Zelipe");
 
@@ -83,15 +75,14 @@ public class CultistLeader extends ThaumcraftBoss implements RangedAttackMob {
     }
 
     @Override
-    protected void defineSynchedData(SynchedEntityData.Builder builder) {
-        super.defineSynchedData(builder);
-        builder.define(TITLE, (byte) 0);
+    protected List<String> titles() {
+        return TITLES;
     }
 
     @Override
     public Component title(ChampionModifier modifier) {
-        return Component.translatable("entity.alchemia.cultist_leader.titled",
-                TITLES.get(entityData.get(TITLE) % TITLES.size()), Component.translatable(modifier.translationKey()));
+        return Component.translatable("entity.alchemia.cultist_leader.titled", titled(),
+                Component.translatable(modifier.translationKey()));
     }
 
     @Override
@@ -109,7 +100,6 @@ public class CultistLeader extends ThaumcraftBoss implements RangedAttackMob {
                     random, getMainHandItem(), (int) (7.0F + clamped * random.nextInt(22)),
                     level.registryAccess(), java.util.Optional.empty()));
         }
-        entityData.set(TITLE, (byte) random.nextInt(TITLES.size()));
         return super.finalizeSpawn(level, difficulty, reason, data);
     }
 
@@ -141,14 +131,7 @@ public class CultistLeader extends ThaumcraftBoss implements RangedAttackMob {
         swing(InteractionHand.MAIN_HAND);
         getLookControl().setLookAt(target.getX(), target.getBoundingBox().minY + target.getBbHeight() / 2.0,
                 target.getZ(), 30.0F, 30.0F);
-        GolemOrb orb = new GolemOrb(level(), this, target, true);
-        double dx = target.getX() - getX();
-        double dy = target.getBoundingBox().minY + target.getBbHeight() / 2.0 - (getY() + getBbHeight() / 2.0);
-        double dz = target.getZ() - getZ();
-        orb.shoot(dx, dy + 2.0, dz, 0.66F, 3.0F);
-        orb.setPos(orb.getX() + orb.getDeltaMovement().x / 2.0, orb.getY(), orb.getZ() + orb.getDeltaMovement().z / 2.0);
-        playSound(ModSounds.EG_ATTACK.get(), 1.0F, 1.0F + random.nextFloat() * 0.1F);
-        level().addFreshEntity(orb);
+        GolemOrb.lob(this, target);
     }
 
     @Override
@@ -165,18 +148,6 @@ public class CultistLeader extends ThaumcraftBoss implements RangedAttackMob {
         }
     }
 
-    @Override
-    public void addAdditionalSaveData(CompoundTag tag) {
-        super.addAdditionalSaveData(tag);
-        tag.putByte("title", entityData.get(TITLE));
-    }
-
-    @Override
-    public void readAdditionalSaveData(CompoundTag tag) {
-        super.readAdditionalSaveData(tag);
-        entityData.set(TITLE, tag.getByte("title"));
-    }
-
     /** Turns on whatever hurt it and calls the cult within twice its sight -- clerics at their rite now and then. */
     private static class CallsTheCult extends HurtByTargetGoal {
         CallsTheCult(CultistLeader leader) {
@@ -190,17 +161,7 @@ public class CultistLeader extends ThaumcraftBoss implements RangedAttackMob {
             if (attacker == null) {
                 return;
             }
-            double reach = mob.getAttributeValue(Attributes.FOLLOW_RANGE) * 2.0;
-            for (Cultist other : mob.level().getEntitiesOfClass(Cultist.class,
-                    new AABB(mob.blockPosition()).inflate(reach, 10.0, reach))) {
-                if (other.getTarget() == null && !other.isAlliedTo(attacker)) {
-                    if (other instanceof CultistCleric cleric && cleric.isRitualist()) {
-                        cleric.calledOn(attacker);
-                    } else {
-                        other.setTarget(attacker);
-                    }
-                }
-            }
+            Cultist.callTheCult(mob, attacker, mob.getAttributeValue(Attributes.FOLLOW_RANGE) * 2.0, 10.0);
         }
     }
 }

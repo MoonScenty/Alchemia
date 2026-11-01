@@ -1,5 +1,6 @@
 package me.moonscenty.alchemia.entity.cult;
 
+import me.moonscenty.alchemia.entity.boss.LongRangeAttackGoal;
 import me.moonscenty.alchemia.registry.ModEntities;
 import me.moonscenty.alchemia.registry.ModItems;
 import me.moonscenty.alchemia.registry.ModSounds;
@@ -17,7 +18,6 @@ import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.MoveTowardsRestrictionGoal;
 import net.minecraft.world.entity.ai.goal.OpenDoorGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.RangedAttackGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.RangedAttackMob;
@@ -165,7 +165,8 @@ public class CultistCleric extends Cultist implements RangedAttackMob {
     protected void registerGoals() {
         goalSelector.addGoal(0, new FloatGoal(this));
         goalSelector.addGoal(1, new AltarFocus(this));
-        goalSelector.addGoal(2, new Casting(this));
+        // casts from further off than two blocks; nearer, the hands are quicker
+        goalSelector.addGoal(2, LongRangeAttackGoal.toStart(this, 2.0, 1.0, 20, 40, 24.0F));
         goalSelector.addGoal(3, new me.moonscenty.alchemia.entity.QuickMeleeGoal(this, 1.0, false));
         goalSelector.addGoal(5, new OpenDoorGoal(this, true));
         goalSelector.addGoal(6, new MoveTowardsRestrictionGoal(this, 0.8));
@@ -193,12 +194,7 @@ public class CultistCleric extends Cultist implements RangedAttackMob {
         double dz = target.getZ() - getZ();
         swing(InteractionHand.MAIN_HAND);
         if (random.nextFloat() > 0.66F) {
-            GolemOrb orb = new GolemOrb(level(), this, target, true);
-            orb.setPos(orb.getX() + orb.getDeltaMovement().x / 2.0, orb.getY(),
-                    orb.getZ() + orb.getDeltaMovement().z / 2.0);
-            orb.shoot(dx, dy + 2.0, dz, 0.66F, 3.0F);
-            playSound(ModSounds.EG_ATTACK.get(), 1.0F, 1.0F + random.nextFloat() * 0.1F);
-            level().addFreshEntity(orb);
+            GolemOrb.lob(this, target);
         } else {
             float spread = (float) Math.sqrt(distance) * 0.5F;
             level().levelEvent(null, LevelEvent.SOUND_BLAZE_FIREBALL, blockPosition(), 0);
@@ -249,29 +245,6 @@ public class CultistCleric extends Cultist implements RangedAttackMob {
                             instanceof me.moonscenty.alchemia.block.eldritch.EldritchAltarBlockEntity)) {
                 cleric.setRitualist(false);
             }
-        }
-    }
-
-    /** Casts from further off than two blocks; nearer, the hands are quicker. */
-    static class Casting extends RangedAttackGoal {
-        private final CultistCleric cleric;
-
-        Casting(CultistCleric cleric) {
-            super(cleric, 1.0, 20, 40, 24.0F);
-            this.cleric = cleric;
-        }
-
-        @Override
-        public boolean canUse() {
-            if (!super.canUse()) {
-                return false;
-            }
-            LivingEntity target = cleric.getTarget();
-            if (target == null || !target.isAlive()) {
-                cleric.setTarget(null);
-                return false;
-            }
-            return cleric.distanceToSqr(target.getX(), target.getBoundingBox().minY, target.getZ()) >= 4.0;
         }
     }
 }

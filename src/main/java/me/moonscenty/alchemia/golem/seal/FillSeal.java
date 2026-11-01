@@ -10,9 +10,6 @@ import me.moonscenty.alchemia.golem.task.Tasks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -89,7 +86,7 @@ public class FillSeal extends Seal {
                 if (limit > 0) {
                     ItemStack given = golem.drop(match.stack().copyWithCount(limit));
                     golem.hold(Matching.insert(container, given));
-                    pop(level, golem);
+                    handled(level, golem, 1.0F);
                     golem.addRankXp(1);
                 }
             } else {
@@ -101,18 +98,12 @@ public class FillSeal extends Seal {
                             at.pos().getY() + 0.5 + face.getStepY(), at.pos().getZ() + 0.5 + face.getStepZ(), given);
                     dropped.setDeltaMovement(dropped.getDeltaMovement().multiply(0.2, 0.5, 0.2));
                     level.addFreshEntity(dropped);
-                    pop(level, golem);
+                    handled(level, golem, 1.0F);
                 }
             }
         }
         task.setSuspended(true);
         return true;
-    }
-
-    private static void pop(ServerLevel level, Golem golem) {
-        level.playSound(null, golem, SoundEvents.ITEM_PICKUP, SoundSource.NEUTRAL, 0.125F,
-                (level.random.nextFloat() - level.random.nextFloat()) * 0.7F + 1.0F);
-        golem.swing(InteractionHand.MAIN_HAND);
     }
 
     @Override

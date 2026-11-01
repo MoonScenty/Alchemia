@@ -2,13 +2,9 @@ package me.moonscenty.alchemia.entity;
 
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.registry.ModItems;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.enchantment.Enchantments;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingDropsEvent;
@@ -29,11 +25,7 @@ public final class ZombieBrains {
                 || zombie.level().isClientSide || !event.isRecentlyHit()) {
             return;
         }
-        int looting = 0;
-        if (event.getSource().getEntity() instanceof LivingEntity killer) {
-            looting = EnchantmentHelper.getEnchantmentLevel(zombie.level().registryAccess()
-                    .registryOrThrow(Registries.ENCHANTMENT).getHolderOrThrow(Enchantments.LOOTING), killer);
-        }
+        int looting = Looting.of(event.getSource());
         if (zombie.getRandom().nextInt(10) - looting < 1) {
             event.getDrops().add(new ItemEntity(zombie.level(), zombie.getX(), zombie.getEyeY(), zombie.getZ(),
                     new ItemStack(ModItems.ZOMBIE_BRAIN.get())));

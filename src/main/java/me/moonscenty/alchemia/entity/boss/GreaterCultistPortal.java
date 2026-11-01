@@ -4,8 +4,6 @@ import me.moonscenty.alchemia.block.BannerBlockEntity;
 import me.moonscenty.alchemia.block.LootBlock;
 import me.moonscenty.alchemia.network.BlockArc;
 import me.moonscenty.alchemia.entity.cult.Cultist;
-import me.moonscenty.alchemia.entity.cult.CultistCleric;
-import me.moonscenty.alchemia.entity.cult.CultistKnight;
 import me.moonscenty.alchemia.entity.cult.CultistPortal;
 import me.moonscenty.alchemia.registry.ModBlocks;
 import me.moonscenty.alchemia.registry.ModEntities;
@@ -19,7 +17,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
@@ -133,15 +131,7 @@ public class GreaterCultistPortal extends CultistPortal {
 
     @Override
     public void letThrough(ServerLevel level) {
-        Cultist cultist = random.nextFloat() > 0.33F ? new CultistKnight(level) : new CultistCleric(level);
-        cultist.moveTo(getX() + random.nextFloat() - random.nextFloat(), getY() + 0.25,
-                getZ() + random.nextFloat() - random.nextFloat(), random.nextFloat() * 360.0F, 0.0F);
-        cultist.finalizeSpawn(level, level.getCurrentDifficultyAt(cultist.blockPosition()), MobSpawnType.MOB_SUMMONED,
-                null);
-        cultist.restrictTo(blockPosition(), 32);
-        level.addFreshEntity(cultist);
-        cultist.spawnAnim();
-        cultist.playSound(ModSounds.WAND_FAIL.get(), 1.0F, 1.0F);
+        bringThrough(level, newCultist(level));
         if (stage > PRAETOR) {
             hurt(damageSources().fellOutOfWorld(), 5 + random.nextInt(5));
         }
@@ -149,17 +139,14 @@ public class GreaterCultistPortal extends CultistPortal {
 
     private void praetor(ServerLevel level) {
         CultistLeader leader = ModEntities.CULTIST_LEADER.get().create(level);
-        if (leader == null) {
-            return;
+        if (leader != null) {
+            bringThrough(level, leader);
         }
-        leader.moveTo(getX() + random.nextFloat() - random.nextFloat(), getY() + 0.25,
-                getZ() + random.nextFloat() - random.nextFloat(), random.nextFloat() * 360.0F, 0.0F);
-        leader.finalizeSpawn(level, level.getCurrentDifficultyAt(leader.blockPosition()), MobSpawnType.MOB_SUMMONED,
-                null);
-        leader.restrictTo(blockPosition(), 32);
-        level.addFreshEntity(leader);
-        leader.spawnAnim();
-        leader.playSound(ModSounds.WAND_FAIL.get(), 1.0F, 1.0F);
+    }
+
+    @Override
+    protected void settle(Mob arrival) {
+        arrival.restrictTo(blockPosition(), 32);
     }
 
     @Override

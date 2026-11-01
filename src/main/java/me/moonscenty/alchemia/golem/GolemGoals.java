@@ -161,16 +161,27 @@ public final class GolemGoals {
         }
     }
 
-    /** Turns on whatever has just hurt its owner. */
-    public static class DefendOwner extends TargetGoal {
+    /** Turns on whatever has just hurt its owner, or joins in on whatever its owner has just struck. */
+    public static class OwnersFight extends TargetGoal {
         private final Golem golem;
-        private LivingEntity attacker;
+        /** Whether it goes for what hurt its owner, rather than what its owner hurt. */
+        private final boolean defends;
+        private LivingEntity other;
         private int seen;
 
-        public DefendOwner(Golem golem) {
+        public OwnersFight(Golem golem, boolean defends) {
             super(golem, false);
             this.golem = golem;
+            this.defends = defends;
             setFlags(EnumSet.of(Flag.TARGET));
+        }
+
+        private LivingEntity other(LivingEntity owner) {
+            return defends ? owner.getLastHurtByMob() : owner.getLastHurtMob();
+        }
+
+        private int when(LivingEntity owner) {
+            return defends ? owner.getLastHurtByMobTimestamp() : owner.getLastHurtMobTimestamp();
         }
 
         @Override
@@ -179,49 +190,16 @@ public final class GolemGoals {
             if (owner == null) {
                 return false;
             }
-            attacker = owner.getLastHurtByMob();
-            return owner.getLastHurtByMobTimestamp() != seen && canAttack(attacker, TargetingConditions.DEFAULT);
+            other = other(owner);
+            return when(owner) != seen && canAttack(other, TargetingConditions.DEFAULT);
         }
 
         @Override
         public void start() {
-            mob.setTarget(attacker);
+            mob.setTarget(other);
             LivingEntity owner = golem.getOwner();
             if (owner != null) {
-                seen = owner.getLastHurtByMobTimestamp();
-            }
-            super.start();
-        }
-    }
-
-    /** Joins in on whatever its owner has just struck. */
-    public static class AidOwner extends TargetGoal {
-        private final Golem golem;
-        private LivingEntity struck;
-        private int seen;
-
-        public AidOwner(Golem golem) {
-            super(golem, false);
-            this.golem = golem;
-            setFlags(EnumSet.of(Flag.TARGET));
-        }
-
-        @Override
-        public boolean canUse() {
-            LivingEntity owner = golem.getOwner();
-            if (owner == null) {
-                return false;
-            }
-            struck = owner.getLastHurtMob();
-            return owner.getLastHurtMobTimestamp() != seen && canAttack(struck, TargetingConditions.DEFAULT);
-        }
-
-        @Override
-        public void start() {
-            mob.setTarget(struck);
-            LivingEntity owner = golem.getOwner();
-            if (owner != null) {
-                seen = owner.getLastHurtMobTimestamp();
+                seen = when(owner);
             }
             super.start();
         }
@@ -472,18 +450,22 @@ public final class GolemGoals {
                 if (there != null && there.isAlive() && mayDo(task) && golem.isWithinRestriction(there.blockPosition())
                         && reachable(there)) {
                     take(task);
-                    float half = there.getBbWidth() / 2.0F;
-                    reach = 3.5 + half * half;
+                    reach = near(there);
                     return true;
                 }
             }
             return false;
         }
 
+        /** How near, squared, it must be to work on it: further for a wider thing. */
+        private static double near(Entity there) {
+            float half = there.getBbWidth() / 2.0F;
+            return 3.5 + half * half;
+        }
+
         /** Whether it is close already, or can find a way to near enough it. */
         private boolean reachable(Entity there) {
-            float half = there.getBbWidth() / 2.0F;
-            double near = 3.5 + half * half;
+            double near = near(there);
             if (golem.distanceToSqr(there) < near) {
                 return true;
             }

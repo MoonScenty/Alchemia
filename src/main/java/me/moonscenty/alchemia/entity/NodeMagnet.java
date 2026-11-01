@@ -208,12 +208,8 @@ public class NodeMagnet extends Construct {
     // --- how fragile it is -------------------------------------------------
 
     @Override
-    public void knockback(double strength, double x, double z) {
-        super.knockback(strength, x, z);
-        Vec3 moving = getDeltaMovement();
-        if (moving.y > 0.1) {
-            setDeltaMovement(moving.x, 0.1, moving.z);
-        }
+    protected boolean hops() {
+        return false;
     }
 
     /** Moving at all is a risk to it, and moving fast breaks it outright. */

@@ -20,7 +20,6 @@ import me.moonscenty.alchemia.wand.spell.PechBlast;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -66,8 +65,6 @@ import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.NameTagItem;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
@@ -581,10 +578,7 @@ public class Pech extends Monster implements RangedAttackMob, OwnAspects {
 
     @Override
     protected void dropCustomDeathLoot(ServerLevel level, DamageSource source, boolean recentlyHit) {
-        int looting = source.getEntity() instanceof LivingEntity killer
-                ? EnchantmentHelper.getEnchantmentLevel(level.registryAccess().registryOrThrow(Registries.ENCHANTMENT)
-                        .getHolderOrThrow(Enchantments.LOOTING), killer)
-                : 0;
+        int looting = Looting.of(source);
         for (int slot = 0; slot < PACK; slot++) {
             ItemStack held = pack.get(slot);
             if (!held.isEmpty() && random.nextFloat() < 0.33F) {

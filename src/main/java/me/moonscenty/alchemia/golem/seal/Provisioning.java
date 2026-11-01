@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import me.moonscenty.alchemia.golem.task.Task;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -34,6 +35,14 @@ public final class Provisioning {
             if (list.stream().noneMatch(asked::same)) {
                 list.add(asked);
             }
+        }
+    }
+
+    /** Puts in for a full stack of a thing on behalf of the seal a task is for, if that seal is still there. */
+    public static void request(Level level, Task task, ItemStack stack) {
+        SealEntity seal = Seals.get(level, task.seal());
+        if (seal != null) {
+            request(level, seal, stack);
         }
     }
 

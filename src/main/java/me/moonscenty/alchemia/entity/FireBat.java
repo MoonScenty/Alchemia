@@ -8,7 +8,6 @@ import me.moonscenty.alchemia.client.FireBatEffects;
 import me.moonscenty.alchemia.registry.ModEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -30,8 +29,6 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.state.BlockState;
@@ -438,8 +435,7 @@ public class FireBat extends Monster {
         }
         int count = random.nextInt(3);
         if (source.getEntity() instanceof LivingEntity killer) {
-            count += random.nextInt(1 + EnchantmentHelper.getEnchantmentLevel(level.registryAccess()
-                    .registryOrThrow(Registries.ENCHANTMENT).getHolderOrThrow(Enchantments.LOOTING), killer));
+            count += random.nextInt(1 + Looting.of(killer));
         }
         if (count > 0) {
             spawnAtLocation(new ItemStack(Items.GUNPOWDER, count));

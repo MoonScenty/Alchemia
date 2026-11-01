@@ -1,6 +1,5 @@
 package me.moonscenty.alchemia.golem.seal;
 
-import java.util.Arrays;
 import java.util.List;
 
 import me.moonscenty.alchemia.Alchemia;
@@ -16,8 +15,12 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.items.IItemHandler;
 
 /**
  * What a seal does: how it finds work for golems, and what a golem does when it gets there.
@@ -131,8 +134,39 @@ public abstract class Seal {
         return false;
     }
 
-    public boolean hasCategory(int category) {
-        return Arrays.stream(categories()).anyMatch(each -> each == category);
+    // --- handling things -------------------------------------------------------------------------------------
+
+    /** The pop of a golem taking or giving something, and its arm going out for it. */
+    protected static void handled(ServerLevel level, Golem golem, float pitch) {
+        level.playSound(null, golem, SoundEvents.ITEM_PICKUP, SoundSource.NEUTRAL, 0.125F,
+                ((level.random.nextFloat() - level.random.nextFloat()) * 0.7F + 1.0F) * pitch);
+        golem.swing(InteractionHand.MAIN_HAND);
+    }
+
+    /**
+     * Takes up to so much of a thing out of a container into the golem's hands, leaving one behind if asked; what it
+     * cannot hold goes back. Says whether it took any.
+     */
+    protected static boolean takeOut(ServerLevel level, Golem golem, IItemHandler container, ItemStack stack,
+            Matching.Rule rule, boolean leaveOne) {
+        if (leaveOne) {
+            int there = Matching.count(container, stack, rule);
+            if (there <= stack.getCount()) {
+                stack = stack.copyWithCount(there - 1);
+            }
+        }
+        if (stack.isEmpty() || !golem.canCarry(stack)) {
+            return false;
+        }
+        ItemStack left = golem.hold(Matching.extract(container, stack.copy(), rule));
+        if (!left.isEmpty()) {
+            ItemStack back = Matching.insert(container, left);
+            if (!back.isEmpty()) {
+                golem.spawnAtLocation(back, 0.25F);
+            }
+        }
+        handled(level, golem, 2.0F);
+        return true;
     }
 
     // --- the filter -----------------------------------------------------------------------------------------

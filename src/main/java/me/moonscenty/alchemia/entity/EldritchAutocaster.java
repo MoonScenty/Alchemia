@@ -7,13 +7,10 @@ import me.moonscenty.alchemia.registry.ModEntities;
 import me.moonscenty.alchemia.registry.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -23,8 +20,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 
@@ -78,7 +73,7 @@ public class EldritchAutocaster extends Autocaster implements EldritchMob {
     }
 
     @Override
-    protected boolean worthShooting(LivingEntity other) {
+    public boolean worthShooting(LivingEntity other) {
         if (other instanceof EldritchMob || other.getType().is(EntityTypeTags.UNDEAD)) {
             return false;
         }
@@ -101,20 +96,14 @@ public class EldritchAutocaster extends Autocaster implements EldritchMob {
     }
 
     @Override
-    protected void dropCustomDeathLoot(ServerLevel level, DamageSource cause, boolean recentlyHit) {
-        int looting = 0;
-        if (cause.getEntity() instanceof LivingEntity killer) {
-            looting = EnchantmentHelper.getEnchantmentLevel(level.registryAccess()
-                    .registryOrThrow(Registries.ENCHANTMENT).getHolderOrThrow(Enchantments.LOOTING), killer);
-        }
-        float bonus = 0.15F * looting;
-        if (getRandom().nextFloat() < 0.3F + bonus) {
+    protected void salvage() {
+        if (salvaged(0.3F)) {
             spawnAtLocation(new ItemStack(ModItems.ZOMBIE_BRAIN.get()), 0.5F);
         }
-        if (getRandom().nextFloat() < 0.3F + bonus) {
+        if (salvaged(0.3F)) {
             spawnAtLocation(new ItemStack(ModItems.VOID_INGOT.get(), 2), 0.5F);
         }
-        if (getRandom().nextFloat() < 0.15F + bonus && !getMainHandItem().isEmpty()) {
+        if (salvaged(0.15F) && !getMainHandItem().isEmpty()) {
             spawnAtLocation(getMainHandItem().copy(), 0.0F);
         }
         setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);

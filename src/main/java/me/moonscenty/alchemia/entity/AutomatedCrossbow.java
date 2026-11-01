@@ -10,10 +10,7 @@ import me.moonscenty.alchemia.registry.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -46,7 +43,7 @@ import net.minecraft.world.phys.Vec3;
  * Its owner opens it to load it, with arrows or primal arrows. Stood on a dispenser that faces up, it reloads itself
  * from it whenever it runs dry, taking a whole stack at a time.
  */
-public class AutomatedCrossbow extends Construct implements RangedAttackMob, Container, MenuProvider {
+public class AutomatedCrossbow extends ConstructWithSlot implements RangedAttackMob {
     /** What it is worth hitting, and how hard that is. The original's numbers. */
     private static final double LIVES = 30.0;
     private static final double SEES = 24.0;
@@ -67,7 +64,6 @@ public class AutomatedCrossbow extends Construct implements RangedAttackMob, Con
     public AutomatedCrossbow(EntityType<? extends AutomatedCrossbow> type, Level level) {
         super(type, level);
         xpReward = 0;
-        setDropChance(EquipmentSlot.MAINHAND, 0.0F);
     }
 
     /** Set down on the block at a position, facing nowhere in particular. */
@@ -111,14 +107,9 @@ public class AutomatedCrossbow extends Construct implements RangedAttackMob, Con
         return PLATING;
     }
 
-    /** The tripod slides only a little, and does not hop. */
     @Override
-    public void knockback(double strength, double x, double z) {
-        super.knockback(strength, x, z);
-        Vec3 moving = getDeltaMovement();
-        if (moving.y > 0.1) {
-            setDeltaMovement(moving.x, 0.1, moving.z);
-        }
+    protected boolean hops() {
+        return false;
     }
 
     // --- shooting ----------------------------------------------------------
@@ -225,12 +216,6 @@ public class AutomatedCrossbow extends Construct implements RangedAttackMob, Con
     // --- opening it --------------------------------------------------------
 
     @Override
-    protected InteractionResult opened(Player player) {
-        player.openMenu(this, buffer -> buffer.writeVarInt(getId()));
-        return InteractionResult.CONSUME;
-    }
-
-    @Override
     protected void emptyOut() {
         if (!getMainHandItem().isEmpty()) {
             spawnAtLocation(getMainHandItem(), 0.5F);
@@ -249,54 +234,6 @@ public class AutomatedCrossbow extends Construct implements RangedAttackMob, Con
     @Override
     public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
         return new CrossbowMenu(id, inventory, this);
-    }
-
-    @Override
-    public int getContainerSize() {
-        return 1;
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return getMainHandItem().isEmpty();
-    }
-
-    @Override
-    public ItemStack getItem(int slot) {
-        return slot == 0 ? getMainHandItem() : ItemStack.EMPTY;
-    }
-
-    @Override
-    public ItemStack removeItem(int slot, int count) {
-        return getItem(slot).split(count);
-    }
-
-    @Override
-    public ItemStack removeItemNoUpdate(int slot) {
-        ItemStack held = getItem(slot);
-        setItem(slot, ItemStack.EMPTY);
-        return held;
-    }
-
-    @Override
-    public void setItem(int slot, ItemStack stack) {
-        if (slot == 0) {
-            setItemSlot(EquipmentSlot.MAINHAND, stack);
-        }
-    }
-
-    @Override
-    public void setChanged() {
-    }
-
-    @Override
-    public boolean stillValid(Player player) {
-        return isAlive() && owns(player) && player.distanceToSqr(this) < 64.0;
-    }
-
-    @Override
-    public void clearContent() {
-        setItem(0, ItemStack.EMPTY);
     }
 
     /** The two kinds are told apart by their registry, and the basic one comes from here. */

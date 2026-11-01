@@ -42,6 +42,19 @@ public class GolemOrb extends ThrowableProjectile {
         entityData.set(RED, red);
     }
 
+    /** A red one lobbed high at a target, set off half its first step along the way so it clears the thrower. */
+    public static void lob(LivingEntity thrower, LivingEntity target) {
+        GolemOrb orb = new GolemOrb(thrower.level(), thrower, target, true);
+        double dx = target.getX() - thrower.getX();
+        double dy = target.getBoundingBox().minY + target.getBbHeight() / 2.0
+                - (thrower.getY() + thrower.getBbHeight() / 2.0);
+        double dz = target.getZ() - thrower.getZ();
+        orb.shoot(dx, dy + 2.0, dz, 0.66F, 3.0F);
+        orb.setPos(orb.getX() + orb.getDeltaMovement().x / 2.0, orb.getY(), orb.getZ() + orb.getDeltaMovement().z / 2.0);
+        thrower.playSound(ModSounds.EG_ATTACK.get(), 1.0F, 1.0F + thrower.getRandom().nextFloat() * 0.1F);
+        thrower.level().addFreshEntity(orb);
+    }
+
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         builder.define(TARGET, -1);

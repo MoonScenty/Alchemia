@@ -14,8 +14,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
@@ -46,10 +44,16 @@ public class PickupSeal extends Seal {
 
     @Override
     public void tick(ServerLevel level, SealEntity seal) {
+        Map<Integer, Integer> chased = chased(level);
+        if (delay % 100 == 0) {
+            chased.values().removeIf(id -> {
+                Entity there = level.getEntity(id);
+                return there == null || !there.isAlive();
+            });
+        }
         if (delay++ % 20 != 0) {
             return;
         }
-        Map<Integer, Integer> chased = chased(level);
         for (ItemEntity item : level.getEntitiesOfClass(ItemEntity.class, seal.bounds())) {
             if (item.onGround() && !item.hasPickUpDelay() && !item.getItem().isEmpty()
                     && !chased.containsValue(item.getId())
@@ -60,12 +64,6 @@ public class PickupSeal extends Seal {
                 Tasks.add(level, task);
                 break;
             }
-        }
-        if (delay % 100 != 0) {
-            chased.values().removeIf(id -> {
-                Entity there = level.getEntity(id);
-                return there == null || !there.isAlive();
-            });
         }
     }
 
@@ -86,9 +84,7 @@ public class PickupSeal extends Seal {
             } else {
                 item.setItem(left);
             }
-            level.playSound(null, golem, SoundEvents.ITEM_PICKUP, SoundSource.NEUTRAL, 0.125F,
-                    ((level.random.nextFloat() - level.random.nextFloat()) * 0.7F + 1.0F) * 2.0F);
-            golem.swing(net.minecraft.world.InteractionHand.MAIN_HAND);
+            handled(level, golem, 2.0F);
         }
         task.setSuspended(true);
         chased(level).remove(task.id());

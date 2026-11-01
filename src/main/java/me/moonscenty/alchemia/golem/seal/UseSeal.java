@@ -131,10 +131,7 @@ public class UseSeal extends Seal {
         boolean found = Matching.firstAllowed(filter(), blacklist(), Arrays.asList(golem.carrying()), rule())
                 .found();
         if (!found && toggle(PROVISION) && !blacklist() && !filter().get(0).isEmpty()) {
-            SealEntity seal = Seals.get(golem.level(), task.seal());
-            if (seal != null) {
-                Provisioning.request(golem.level(), seal, filter().get(0));
-            }
+            Provisioning.request(golem.level(), task, filter().get(0));
         }
         return found;
     }

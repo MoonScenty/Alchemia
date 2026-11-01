@@ -13,7 +13,6 @@ import me.moonscenty.alchemia.block.eldritch.AncientBedrockBlock;
 import me.moonscenty.alchemia.block.eldritch.CrabSpawnerBlockEntity;
 import me.moonscenty.alchemia.block.eldritch.EldritchLockBlockEntity;
 import me.moonscenty.alchemia.block.entity.ArcanePedestalBlockEntity;
-import me.moonscenty.alchemia.block.taint.TaintFibreBlock;
 import me.moonscenty.alchemia.entity.Champions;
 import me.moonscenty.alchemia.entity.EldritchGuardian;
 import me.moonscenty.alchemia.entity.cult.CultistPortal;
@@ -32,7 +31,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.block.state.properties.SlabType;
 
 /**
@@ -172,18 +170,6 @@ public final class MazeBuilder {
                 .setValue(net.minecraft.world.level.block.SlabBlock.TYPE, top ? SlabType.TOP : SlabType.BOTTOM);
     }
 
-    /** The original's stairs by their old number: the low bits which way (east, west, south, north), four upside down. */
-    private static BlockState stairs(int meta) {
-        Direction facing = switch (meta & 3) {
-            case 0 -> Direction.EAST;
-            case 1 -> Direction.WEST;
-            case 2 -> Direction.SOUTH;
-            default -> Direction.NORTH;
-        };
-        return ModBlocks.ANCIENT_STONE.stairs().get().defaultBlockState().setValue(StairBlock.FACING, facing)
-                .setValue(StairBlock.HALF, (meta & 4) != 0 ? Half.TOP : Half.BOTTOM);
-    }
-
     /** The stone of the Outer Lands, any of it: what the decorations must touch to grow. */
     private static boolean isStone(BlockState state) {
         return state.is(ModBlocks.ANCIENT_STONE.block().get()) || state.is(ModBlocks.ANCIENT_ROCK.get())
@@ -241,13 +227,13 @@ public final class MazeBuilder {
                     state = tile();
                 }
             }
-            case STAIRS -> state = stairs(switch (dir) {
+            case STAIRS -> state = OuterBlocks.ancientStairs(switch (dir) {
                 case NORTH -> 3;
                 case SOUTH -> 2;
                 case WEST -> 1;
                 default -> 0;
             });
-            case STAIRS_HIGH -> state = stairs(switch (dir) {
+            case STAIRS_HIGH -> state = OuterBlocks.ancientStairs(switch (dir) {
                 case NORTH -> 7;
                 case SOUTH -> 6;
                 case WEST -> 5;
@@ -257,16 +243,16 @@ public final class MazeBuilder {
                 if (world.nextFloat() < 0.005F) {
                     decoUrn.add(pos);
                 }
-                state = stairs(dir.getAxis() == Direction.Axis.Z ? 1 : 3);
+                state = OuterBlocks.ancientStairs(dir.getAxis() == Direction.Axis.Z ? 1 : 3);
             }
             case CORNER_LOW_RIGHT -> {
                 if (world.nextFloat() < 0.005F) {
                     decoUrn.add(pos);
                 }
-                state = stairs(dir.getAxis() == Direction.Axis.Z ? 0 : 2);
+                state = OuterBlocks.ancientStairs(dir.getAxis() == Direction.Axis.Z ? 0 : 2);
             }
-            case CORNER_HIGH_LEFT -> state = stairs(dir.getAxis() == Direction.Axis.Z ? 5 : 7);
-            case CORNER_HIGH_RIGHT -> state = stairs(dir.getAxis() == Direction.Axis.Z ? 4 : 6);
+            case CORNER_HIGH_LEFT -> state = OuterBlocks.ancientStairs(dir.getAxis() == Direction.Axis.Z ? 5 : 7);
+            case CORNER_HIGH_RIGHT -> state = OuterBlocks.ancientStairs(dir.getAxis() == Direction.Axis.Z ? 4 : 6);
             case GLOW -> state = ModBlocks.GLOWING_CRUSTED_STONE.get().defaultBlockState();
             default -> {
             }
@@ -304,10 +290,7 @@ public final class MazeBuilder {
     }
 
     private void obelisk(BlockPos pos) {
-        set(pos, ModBlocks.ELDRITCH_OBELISK.get().defaultBlockState());
-        for (int up = 1; up <= 4; up++) {
-            set(pos.above(up), ModBlocks.ELDRITCH_OBELISK_BODY.get().defaultBlockState());
-        }
+        OuterBlocks.obelisk(pos, this::set);
     }
 
     // --- what grows on it ----------------------------------------------------
@@ -394,16 +377,6 @@ public final class MazeBuilder {
             BlockPos next = pos.relative(side);
             if (!level.getBlockState(next).isSolidRender(level, next)
                     && level.getBlockState(pos.relative(side.getOpposite())).is(ModBlocks.VACUUM.get())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private boolean nextToSolid(BlockPos pos) {
-        for (Direction side : SIDES) {
-            BlockPos next = pos.relative(side);
-            if (level.getBlockState(next).isFaceSturdy(level, next, side.getOpposite())) {
                 return true;
             }
         }
@@ -753,11 +726,8 @@ public final class MazeBuilder {
             for (int w = -4; w <= 4; w++) {
                 for (int h = -3; h <= 3; h++) {
                     for (int j = -4; j <= 4; j++) {
-                        BlockPos at = new BlockPos(x + 8 + w, y + 4 + h, z + 8 + j);
-                        if (level.isEmptyBlock(at) && nextToSolid(at) && random.nextInt(3) != 0) {
-                            level.setBlock(at, TaintFibreBlock.fitted(level, at,
-                                    ModBlocks.TAINT_FIBRE.get().defaultBlockState()), Block.UPDATE_CLIENTS);
-                        }
+                        OuterBlocks.fibre(level, new BlockPos(x + 8 + w, y + 4 + h, z + 8 + j), random::nextInt,
+                                Block.UPDATE_CLIENTS);
                     }
                 }
             }

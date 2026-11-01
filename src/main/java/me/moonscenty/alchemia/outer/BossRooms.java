@@ -1,7 +1,6 @@
 package me.moonscenty.alchemia.outer;
 
 import me.moonscenty.alchemia.block.LootBlock;
-import me.moonscenty.alchemia.block.taint.TaintFibreBlock;
 import me.moonscenty.alchemia.entity.Champions;
 import me.moonscenty.alchemia.entity.Taintacle;
 import me.moonscenty.alchemia.entity.boss.EldritchGolem;
@@ -16,7 +15,6 @@ import me.moonscenty.alchemia.registry.ModAspects;
 import me.moonscenty.alchemia.registry.ModBlocks;
 import me.moonscenty.alchemia.registry.ModEntities;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
@@ -28,9 +26,7 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SlabBlock;
-import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.block.state.properties.SlabType;
 
 /**
@@ -124,28 +120,15 @@ public final class BossRooms {
         for (int a = 0; a <= 2; a++) {
             for (int b = 0; b <= 2; b++) {
                 int meta = THRONE[a][b];
-                BlockState state = meta < 0 ? ModBlocks.GLOWING_CRUSTED_STONE.get().defaultBlockState() : stairs(meta);
+                BlockState state = meta < 0 ? ModBlocks.GLOWING_CRUSTED_STONE.get().defaultBlockState()
+                        : OuterBlocks.ancientStairs(meta);
                 level.setBlock(new BlockPos(x - 1 + b, y, z - 1 + a), state, Block.UPDATE_ALL);
             }
         }
     }
 
-    private static BlockState stairs(int meta) {
-        Direction facing = switch (meta & 3) {
-            case 0 -> Direction.EAST;
-            case 1 -> Direction.WEST;
-            case 2 -> Direction.SOUTH;
-            default -> Direction.NORTH;
-        };
-        return ModBlocks.ANCIENT_STONE.stairs().get().defaultBlockState().setValue(StairBlock.FACING, facing)
-                .setValue(StairBlock.HALF, (meta & 4) != 0 ? Half.TOP : Half.BOTTOM);
-    }
-
     private static void obelisk(ServerLevel level, BlockPos at) {
-        level.setBlock(at, ModBlocks.ELDRITCH_OBELISK.get().defaultBlockState(), Block.UPDATE_ALL);
-        for (int up = 1; up <= 4; up++) {
-            level.setBlock(at.above(up), ModBlocks.ELDRITCH_OBELISK_BODY.get().defaultBlockState(), Block.UPDATE_ALL);
-        }
+        OuterBlocks.obelisk(at, (pos, state) -> level.setBlock(pos, state, Block.UPDATE_ALL));
     }
 
     private static BlockState loot(boolean crate, int rarity) {
@@ -311,11 +294,7 @@ public final class BossRooms {
         for (int a = -12; a <= 12; a++) {
             for (int b = -12; b <= 12; b++) {
                 for (int k = 0; k < 9; k++) {
-                    BlockPos at = new BlockPos(x + b, y + 2 + k, z + a);
-                    if (level.isEmptyBlock(at) && nextToSolid(level, at) && random.nextInt(3) != 0) {
-                        level.setBlock(at, TaintFibreBlock.fitted(level, at,
-                                ModBlocks.TAINT_FIBRE.get().defaultBlockState()), Block.UPDATE_ALL);
-                    }
+                    OuterBlocks.fibre(level, new BlockPos(x + b, y + 2 + k, z + a), random::nextInt, Block.UPDATE_ALL);
                 }
                 if (random.nextFloat() < 0.15F) {
                     level.setBlock(new BlockPos(x + b, y + 2, z + a), ModBlocks.TAINT_SOIL.get().defaultBlockState(),
@@ -362,16 +341,6 @@ public final class BossRooms {
             tentacle.setPersistenceRequired();
         }
         level.addFreshEntity(tentacle);
-    }
-
-    private static boolean nextToSolid(ServerLevel level, BlockPos pos) {
-        for (Direction side : Direction.values()) {
-            BlockPos next = pos.relative(side);
-            if (level.getBlockState(next).isFaceSturdy(level, next, side.getOpposite())) {
-                return true;
-            }
-        }
-        return false;
     }
 
 }

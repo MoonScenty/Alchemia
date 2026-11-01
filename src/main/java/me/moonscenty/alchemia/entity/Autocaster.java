@@ -1,6 +1,6 @@
 package me.moonscenty.alchemia.entity;
 
-import java.util.UUID;
+import java.util.Objects;
 
 import me.moonscenty.alchemia.aspect.Aspect;
 import me.moonscenty.alchemia.aspect.AspectList;
@@ -15,27 +15,23 @@ import me.moonscenty.alchemia.registry.ModItems;
 import me.moonscenty.alchemia.registry.ModWandParts;
 import me.moonscenty.alchemia.wand.Casting;
 import me.moonscenty.alchemia.wand.Focus;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.world.Container;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.MenuProvider;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.OwnableEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
@@ -58,22 +54,10 @@ import net.minecraft.world.phys.Vec3;
  * <p>It cannot move and cannot be pushed. It sits on whichever face it was put against, turns its head, and is
  * taken down again by clicking it with a wand.
  */
-public class Autocaster extends PathfinderMob implements OwnableEntity, Container, MenuProvider {
-    /** Whose it is. Written as a string the way the game writes a tamed animal's. */
-    private static final EntityDataAccessor<String> OWNER =
-            SynchedEntityData.defineId(Autocaster.class, EntityDataSerializers.STRING);
+public class Autocaster extends ConstructWithSlot {
     /** Which face it is stuck to, which is the only thing that settles how it is drawn. */
     private static final EntityDataAccessor<Direction> FACING =
             SynchedEntityData.defineId(Autocaster.class, EntityDataSerializers.DIRECTION);
-    /** The four things it may be told to mind, one to a bit, so the screen can read them all at once. */
-    private static final EntityDataAccessor<Byte> MINDS =
-            SynchedEntityData.defineId(Autocaster.class, EntityDataSerializers.BYTE);
-
-    /** The bits in {@link #MINDS}, in the order the original's four buttons stood in. */
-    public static final int ANIMALS = 0;
-    public static final int MONSTERS = 1;
-    public static final int PLAYERS = 2;
-    public static final int FRIENDS = 3;
 
     /** How much of any one primal it will hold, and how much the aura hands it at a time. */
     public static final int HOLDS = 100;
@@ -81,7 +65,6 @@ public class Autocaster extends PathfinderMob implements OwnableEntity, Containe
     /** How often it draws a drop out of the air, and how often it knits itself back together, in ticks. */
     private static final int DRAWS_EVERY = 4;
     private static final int MENDS_EVERY = 40;
-    private static final float MENDS = 1.0F;
 
     /** What it is worth hitting, and how hard that is. The original's numbers. */
     private static final double LIVES = 50.0;
@@ -105,9 +88,7 @@ public class Autocaster extends PathfinderMob implements OwnableEntity, Containe
 
     public Autocaster(EntityType<? extends Autocaster> type, Level level) {
         super(type, level);
-        setPersistenceRequired();
         xpReward = 6;
-        setDropChance(EquipmentSlot.MAINHAND, 0.0F);
     }
 
     /** Put against a face, which is where it stays. */
@@ -140,9 +121,17 @@ public class Autocaster extends PathfinderMob implements OwnableEntity, Containe
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
-        builder.define(OWNER, "");
         builder.define(FACING, Direction.UP);
-        builder.define(MINDS, (byte) 0);
+    }
+
+    @Override
+    protected ItemStack folded() {
+        return new ItemStack(ModItems.AUTOCASTER.get());
+    }
+
+    @Override
+    protected int mendsEvery() {
+        return MENDS_EVERY;
     }
 
     // --- what it does with its time ---------------------------------------------------------------------
@@ -162,24 +151,15 @@ public class Autocaster extends PathfinderMob implements OwnableEntity, Containe
         }
     }
 
-    /**
-     * Drawing breath, mending, and shooting.
-     * <p>
-     * The body is set to the head, because a turret has no body to speak of and what draws it wants one angle
-     * for the ball rather than two.
-     */
+    /** Drawing breath and shooting. */
     @Override
     public void tick() {
         super.tick();
         if (level().isClientSide) {
             return;
         }
-        setYRot(yHeadRot);
         if (tickCount % DRAWS_EVERY == 0) {
             drawBreath();
-        }
-        if (tickCount % MENDS_EVERY == 0) {
-            heal(MENDS);
         }
         if (waits > 0) {
             waits--;
@@ -310,91 +290,35 @@ public class Autocaster extends PathfinderMob implements OwnableEntity, Containe
     // --- what it is pointed at --------------------------------------------------------------------------
 
     /**
-     * Whether this is something it has been told to mind.
-     * <p>
-     * The three kinds are the game's own: a monster, something alive that is not one, and a person. What is
-     * already its owner's is passed over unless it has been set against friends, which is how the original let
-     * somebody build a trap for themselves on purpose.
+     * What the turret rules make of it, except that another autocaster is fair game only when set against
+     * friends and not its owner's.
      */
-    protected boolean worthShooting(LivingEntity other) {
-        boolean friendly = minds(FRIENDS);
-        if (other instanceof Player player) {
-            if (!minds(PLAYERS) || player.isCreative() || player.isSpectator()) {
-                return false;
-            }
-            return friendly || !player.getUUID().equals(getOwnerUUID());
-        }
+    @Override
+    public boolean worthShooting(LivingEntity other) {
         if (other instanceof Autocaster theirs) {
-            return friendly && !java.util.Objects.equals(theirs.getOwnerUUID(), getOwnerUUID());
+            return minds(FRIENDS) && !Objects.equals(theirs.getOwnerUUID(), getOwnerUUID());
         }
-        boolean monster = other.getType().getCategory() == MobCategory.MONSTER;
-        if (!minds(monster ? MONSTERS : ANIMALS)) {
-            return false;
-        }
-        if (other instanceof OwnableEntity owned && java.util.Objects.equals(owned.getOwnerUUID(), getOwnerUUID())) {
-            return friendly;
-        }
-        return true;
-    }
-
-    public boolean minds(int what) {
-        return (entityData.get(MINDS) & 1 << what) != 0;
-    }
-
-    /** Says what to mind, and forgets whatever it was aiming at, since it may no longer be fair game. */
-    public void mind(int what, boolean on) {
-        byte minds = entityData.get(MINDS);
-        entityData.set(MINDS, (byte) (on ? minds | 1 << what : minds & ~(1 << what)));
-        setTarget(null);
+        return super.worthShooting(other);
     }
 
     // --- being handled ----------------------------------------------------------------------------------
 
-    /**
-     * A wand takes it down; an empty hand opens it.
-     * <p>
-     * Only for whoever put it there. Somebody else's turret is somebody else's, and saying so is friendlier than
-     * letting them find out by taking it off the wall.
-     */
     @Override
-    public InteractionResult mobInteract(Player player, InteractionHand hand) {
-        if (level().isClientSide || isRemoved()) {
-            return InteractionResult.sidedSuccess(level().isClientSide);
-        }
-        if (!owns(player)) {
-            player.displayClientMessage(Component.translatable("entity.alchemia.autocaster.not_yours"), true);
-            return InteractionResult.CONSUME;
-        }
-        if (player.getItemInHand(hand).getItem() instanceof WandItem) {
-            takeDown();
-            player.swing(hand);
-            return InteractionResult.CONSUME;
-        }
-        player.openMenu(this, buffer -> buffer.writeVarInt(getId()));
-        return InteractionResult.CONSUME;
+    protected boolean letsHandle(Player player, InteractionHand hand) {
+        return false;
     }
 
-    /** Off the wall and back into a hand: the focus, and the thing itself. */
-    private void takeDown() {
-        dropFocus();
-        spawnAtLocation(new ItemStack(ModItems.AUTOCASTER.get()), 0.5F);
-        discard();
+    @Override
+    protected void takeDown(Player player, InteractionHand hand) {
+        foldUp();
+        player.swing(hand);
     }
 
-    private void dropFocus() {
+    @Override
+    protected void emptyOut() {
         if (!getMainHandItem().isEmpty()) {
             spawnAtLocation(getMainHandItem(), 0.0F);
             setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
-        }
-    }
-
-    /** Whatever was in it falls out, which is the only reason anybody would break one open. */
-    @Override
-    public void die(DamageSource cause) {
-        OwnedDeaths.tell(this);
-        super.die(cause);
-        if (!level().isClientSide) {
-            dropFocus();
         }
     }
 
@@ -405,26 +329,11 @@ public class Autocaster extends PathfinderMob implements OwnableEntity, Containe
      * original gave back.
      */
     @Override
-    protected void dropCustomDeathLoot(ServerLevel level, DamageSource cause, boolean recentlyHit) {
-        super.dropCustomDeathLoot(level, cause, recentlyHit);
+    protected void salvage() {
         salvage(ModItems.BIOALCHEMIC_MIND.get(), MIND_SALVAGED);
         salvage(ModItems.BRASS_GEAR.get(), SALVAGED);
         salvage(ModBlocks.GREATWOOD.planks().get(), SALVAGED);
         salvage(ModBlocks.GREATWOOD.planks().get(), SALVAGED);
-    }
-
-    private void salvage(net.minecraft.world.level.ItemLike part, float chance) {
-        if (getRandom().nextFloat() < chance) {
-            spawnAtLocation(new ItemStack(part), 0.5F);
-        }
-    }
-
-    /** A blow knocks it off true, so a thing being shot at can at least put the aim out. */
-    @Override
-    public boolean hurt(DamageSource source, float amount) {
-        setYRot((float) (getYRot() + getRandom().nextGaussian() * 45.0));
-        setXRot((float) (getXRot() + getRandom().nextGaussian() * 20.0));
-        return super.hurt(source, amount);
     }
 
     // --- a thing bolted to a wall -----------------------------------------------------------------------
@@ -434,35 +343,18 @@ public class Autocaster extends PathfinderMob implements OwnableEntity, Containe
     }
 
     @Override
-    public boolean isPushable() {
-        return false;
+    protected double slides() {
+        return 1.0;
     }
 
     @Override
-    protected void doPush(net.minecraft.world.entity.Entity other) {
-    }
-
-    /**
-     * How steeply it may aim.
-     * <p>
-     * The original wrote twenty here and meant something else by it: its look helper stepped the pitch twenty
-     * degrees a tick towards wherever it was pointing, so twenty was a speed. This game's look control throws
-     * the pitch away every tick and builds it again from level, so the same number would be a ceiling, and a
-     * turret that cannot look more than twenty degrees down is a turret anything can walk under.
-     */
-    @Override
-    public int getMaxHeadXRot() {
-        return 90;
+    protected boolean breathes() {
+        return true;
     }
 
     @Override
     public int getArmorValue() {
         return PLATING;
-    }
-
-    @Override
-    public boolean canBeLeashed() {
-        return false;
     }
 
     public Direction getFacing() {
@@ -473,36 +365,26 @@ public class Autocaster extends PathfinderMob implements OwnableEntity, Containe
         entityData.set(FACING, face);
     }
 
-    // --- whose it is ------------------------------------------------------------------------------------
+    // --- what it sounds like: the game's own, not the constructs' clack ---------------------------------
 
     @Override
-    public UUID getOwnerUUID() {
-        String written = entityData.get(OWNER);
-        try {
-            return written.isEmpty() ? null : UUID.fromString(written);
-        } catch (IllegalArgumentException malformed) {
-            return null;
-        }
+    protected SoundEvent getAmbientSound() {
+        return null;
     }
 
-    public void setOwner(UUID owner) {
-        entityData.set(OWNER, owner == null ? "" : owner.toString());
-    }
-
-    public boolean owns(Player player) {
-        return getOwnerUUID() == null || player.getUUID().equals(getOwnerUUID());
-    }
-
-    /** It fights on its owner's side, so its owner's team is its team. */
     @Override
-    public net.minecraft.world.scores.PlayerTeam getTeam() {
-        LivingEntity owner = getOwner();
-        return owner != null ? owner.getTeam() : super.getTeam();
+    protected SoundEvent getHurtSound(DamageSource source) {
+        return SoundEvents.GENERIC_HURT;
+    }
+
+    @Override
+    protected SoundEvent getDeathSound() {
+        return SoundEvents.GENERIC_DEATH;
     }
 
     // --- the one slot it has ----------------------------------------------------------------------------
 
-    /** The focus goes in the hand, which is where a mob's one held thing lives and where it syncs from. */
+    /** The focus goes in the hand. */
     public FocusItem fitted() {
         return getMainHandItem().getItem() instanceof FocusItem focus ? focus : null;
     }
@@ -517,45 +399,6 @@ public class Autocaster extends PathfinderMob implements OwnableEntity, Containe
     public static boolean takes(ItemStack stack) {
         return stack.isEmpty()
                 || stack.getItem() instanceof FocusItem focus && focus.focus(stack).turret() != null;
-    }
-
-    @Override
-    public int getContainerSize() {
-        return 1;
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return getMainHandItem().isEmpty();
-    }
-
-    @Override
-    public ItemStack getItem(int slot) {
-        return slot == 0 ? getMainHandItem() : ItemStack.EMPTY;
-    }
-
-    @Override
-    public ItemStack removeItem(int slot, int count) {
-        ItemStack taken = getItem(slot).split(count);
-        if (!taken.isEmpty()) {
-            setChanged();
-        }
-        return taken;
-    }
-
-    @Override
-    public ItemStack removeItemNoUpdate(int slot) {
-        ItemStack held = getItem(slot);
-        setItem(slot, ItemStack.EMPTY);
-        return held;
-    }
-
-    @Override
-    public void setItem(int slot, ItemStack stack) {
-        if (slot == 0) {
-            setItemSlot(EquipmentSlot.MAINHAND, stack);
-            setChanged();
-        }
     }
 
     /**
@@ -575,16 +418,6 @@ public class Autocaster extends PathfinderMob implements OwnableEntity, Containe
     }
 
     @Override
-    public boolean stillValid(Player player) {
-        return isAlive() && owns(player) && player.distanceToSqr(this) < 64.0;
-    }
-
-    @Override
-    public void clearContent() {
-        setItem(0, ItemStack.EMPTY);
-    }
-
-    @Override
     public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
         return new AutocasterMenu(id, inventory, this);
     }
@@ -595,8 +428,6 @@ public class Autocaster extends PathfinderMob implements OwnableEntity, Containe
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
         tag.putByte("face", (byte) getFacing().ordinal());
-        tag.putByte("minds", entityData.get(MINDS));
-        tag.putString("owner", entityData.get(OWNER));
         AspectList.CODEC.encodeStart(registryAccess().createSerializationContext(NbtOps.INSTANCE), vis)
                 .result().ifPresent(written -> tag.put("vis", written));
     }
@@ -605,8 +436,6 @@ public class Autocaster extends PathfinderMob implements OwnableEntity, Containe
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         setFacing(Direction.from3DDataValue(tag.getByte("face")));
-        entityData.set(MINDS, tag.getByte("minds"));
-        entityData.set(OWNER, tag.getString("owner"));
         vis = AspectList.CODEC
                 .parse(registryAccess().createSerializationContext(NbtOps.INSTANCE), tag.get("vis"))
                 .result().orElse(AspectList.EMPTY);
