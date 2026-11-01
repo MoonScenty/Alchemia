@@ -15,12 +15,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 
-/**
- * A finite layer in a few depths that falls, and runs downhill a depth at a time until it lies level: flux goo and
- * taint dust.
- */
 public abstract class SettlingLayerBlock extends Block {
-    /** A layer only spreads to a neighbour two or more depths lower. */
     private static final int STEP = 2;
 
     private final int settlesEvery;
@@ -31,10 +26,8 @@ public abstract class SettlingLayerBlock extends Block {
         registerDefaultState(stateDefinition.any().setValue(depthProperty(), full()));
     }
 
-    /** The depth property. A static constant of the subclass: it is asked for while the block is being built. */
     protected abstract IntegerProperty depthProperty();
 
-    /** The deepest it gets, a whole block. */
     protected abstract int full();
 
     protected BlockState withDepth(int depth) {
@@ -63,7 +56,6 @@ public abstract class SettlingLayerBlock extends Block {
         settle(state, level, pos, random);
     }
 
-    /** Down if it can, else a depth sideways to the lowest neighbour two or more below it. */
     protected void settle(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         int depth = state.getValue(depthProperty());
 
@@ -108,7 +100,6 @@ public abstract class SettlingLayerBlock extends Block {
         shrink(level, pos, state, 1);
     }
 
-    /** A depth counted so that open ground reads as one lower than the thinnest layer. */
     private int depthAt(LevelReader level, BlockPos pos) {
         BlockState there = level.getBlockState(pos);
         if (there.is(this)) {
@@ -122,7 +113,6 @@ public abstract class SettlingLayerBlock extends Block {
         return (there.isAir() || there.canBeReplaced()) && there.getFluidState().isEmpty();
     }
 
-    /** Takes some depth off, and takes the layer away when there is none left to take. */
     private void shrink(ServerLevel level, BlockPos pos, BlockState state, int by) {
         int left = state.getValue(depthProperty()) - by;
         if (left < 0) {

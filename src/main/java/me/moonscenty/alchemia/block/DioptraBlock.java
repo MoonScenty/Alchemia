@@ -28,18 +28,8 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
 
-/**
- * A dioptra: a block of arcane stone with a crystal set in its top, which draws a map of the aura round it in the air
- * over itself.
- *
- * <p>The crystal is a vis shard, put in by hand, and which shard it is says what the map shows: one primal, or flux,
- * or -- for a balanced shard -- whichever primal is strongest in each chunk. The map is thirteen chunks across, its
- * own chunk in the middle, and each chunk stands as high as the aura there is strong. A comparator reads how strong
- * it is in its own chunk. A redstone signal puts it out.
- */
 public class DioptraBlock extends BaseEntityBlock {
     public static final MapCodec<DioptraBlock> CODEC = simpleCodec(DioptraBlock::new);
-    /** Drawing its map, which it does unless a redstone signal is holding it. */
     public static final BooleanProperty ENABLED = BlockStateProperties.ENABLED;
 
     public DioptraBlock(Properties properties) {
@@ -72,12 +62,7 @@ public class DioptraBlock extends BaseEntityBlock {
         super.neighborChanged(state, level, pos, from, fromPos, moving);
     }
 
-    /**
-     * A click on the crystal on top: the shard in it comes out, and the one in hand, if there is one, goes in.
-     * <p>
-     * <b>Different from the original</b>, which knew the crystal by its own small box above the block. Here the
-     * whole top face is the crystal.
-     */
+    // the whole top face counts as the crystal (original used a small hitbox)
     @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
             Player player, InteractionHand hand, BlockHitResult hit) {
@@ -111,7 +96,6 @@ public class DioptraBlock extends BaseEntityBlock {
         return ItemInteractionResult.sidedSuccess(level.isClientSide);
     }
 
-    /** The shard comes out with it when it is broken. */
     @Override
     protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState replacement, boolean moving) {
         if (!state.is(replacement.getBlock()) && level.getBlockEntity(pos) instanceof DioptraBlockEntity dioptra) {

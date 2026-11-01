@@ -15,10 +15,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/**
- * A pipe is worth laying only if it knows what it is plugged into and actually carries something along its length.
- * The first is what the model is built out of; the second is the whole point.
- */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class TubeTests {
@@ -30,7 +26,6 @@ public class TubeTests {
         return (AlembicBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(at));
     }
 
-    /** A run of pipe from one spot to another, laid along the x axis. */
     private static void pipe(GameTestHelper helper, BlockPos from, int length) {
         for (int step = 0; step < length; step++) {
             helper.setBlock(from.east(step), ModBlocks.TUBE.get());
@@ -45,7 +40,6 @@ public class TubeTests {
         }
     }
 
-    /** Each side of a tube knows whether it is up against another tube, something worth reaching into, or air. */
     @GameTest(template = TEMPLATE)
     public static void itKnowsWhatItIsPluggedInto(GameTestHelper helper) {
         alembic(helper, START);
@@ -66,11 +60,6 @@ public class TubeTests {
         helper.succeed();
     }
 
-    /**
-     * Essentia crosses a run of pipe from a full vessel to an empty one.
-     * <p>
-     * Four tubes between them, so this is not two things happening to touch: it has to be carried.
-     */
     @GameTest(template = TEMPLATE)
     public static void itCarriesAlongTheRun(GameTestHelper helper) {
         AlembicBlockEntity from = alembic(helper, START);
@@ -83,7 +72,6 @@ public class TubeTests {
         helper.assertValueEqual(from.amount(), 6, "the first vessel was filled");
         helper.assertTrue(to.isEmpty(), "and the far one was not");
 
-        // the tube beside the empty vessel is the one that pulls
         run(helper, START.east(4), 60);
 
         helper.assertTrue(!to.isEmpty(), "something reached the far end");
@@ -93,7 +81,6 @@ public class TubeTests {
         helper.succeed();
     }
 
-    /** A pipe with nowhere to put anything does not quietly swallow it. */
     @GameTest(template = TEMPLATE)
     public static void aPipeToNowhereTakesNothing(GameTestHelper helper) {
         AlembicBlockEntity from = alembic(helper, START);
@@ -105,12 +92,6 @@ public class TubeTests {
         helper.succeed();
     }
 
-    /**
-     * A jar takes a pipe on its lid and nowhere else.
-     * <p>
-     * A tube beside one sees glass and treats it as nothing at all, so a wall of jars has to be piped along the
-     * top rather than threaded through.
-     */
     @GameTest(template = TEMPLATE)
     public static void aJarIsOnlyOpenAtTheTop(GameTestHelper helper) {
         helper.setBlock(START, ModBlocks.JAR.get());
@@ -126,7 +107,6 @@ public class TubeTests {
         helper.succeed();
     }
 
-    /** Essentia carried down a pipe and into a jar through its lid. */
     @GameTest(template = TEMPLATE)
     public static void aJarFillsThroughItsLid(GameTestHelper helper) {
         AlembicBlockEntity from = alembic(helper, START);

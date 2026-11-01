@@ -23,26 +23,14 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-/**
- * A redstone relay: a repeater with two toggles on it, one for how strong a signal it takes to set it off and one
- * for how strong a signal it gives when it is.
- *
- * <p>It is put down and wired as a repeater is, its output the end with the torch on it, and it answers a tenth of a
- * second after its input changes. The toggle at the back sets the least it answers to; the one beside the torch, what
- * it gives out. Each steps from one to fifteen and round again.
- */
 public class RedstoneRelayBlock extends DiodeBlock {
     public static final MapCodec<RedstoneRelayBlock> CODEC = simpleCodec(RedstoneRelayBlock::new);
-    /** The least signal it answers to, and what it gives when it does. */
     public static final IntegerProperty IN = IntegerProperty.create("in", 1, 15);
     public static final IntegerProperty OUT = IntegerProperty.create("out", 1, 15);
-    /** How long it takes to answer, in ticks. The original's. */
+    // original's value
     private static final int DELAY = 2;
 
-    /**
-     * Where the toggles are, across the top: how far toward the input (positive) or the output, and how far to the
-     * input's right hand (positive) or left, from the middle. The original's.
-     */
+    // {toward input (+) / output, toward input's right (+) / left} offsets from centre; original's values
     private static final double[] OUT_TOGGLE = {-0.4375, -0.0625, 0.0625, 0.4375};
     private static final double[] IN_TOGGLE = {0.0625, 0.4375, -0.1875, 0.1875};
 
@@ -62,7 +50,6 @@ public class RedstoneRelayBlock extends DiodeBlock {
         builder.add(FACING, POWERED, IN, OUT);
     }
 
-    /** As a repeater is put down, its output away from whoever puts it down; crouching turns it round. */
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         Direction looking = context.getHorizontalDirection();
@@ -85,13 +72,11 @@ public class RedstoneRelayBlock extends DiodeBlock {
         return state.getValue(OUT);
     }
 
-    /** Wire runs into it only at its two ends, as into a repeater. */
     @Override
     public boolean canConnectRedstone(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
         return direction != null && direction.getAxis() == state.getValue(FACING).getAxis();
     }
 
-    /** A toggle clicked on steps on; anywhere else, the click goes on to whatever is in hand. */
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player,
             BlockHitResult hit) {
@@ -126,7 +111,6 @@ public class RedstoneRelayBlock extends DiodeBlock {
         return toward >= toggle[0] && toward <= toggle[1] && across >= toggle[2] && across <= toggle[3];
     }
 
-    /** The slab, with the two toggles standing on it so that a click finds them. */
     @Override
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         Direction facing = state.getValue(FACING);

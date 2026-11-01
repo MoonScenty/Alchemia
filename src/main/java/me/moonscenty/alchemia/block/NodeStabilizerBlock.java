@@ -17,16 +17,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-/**
- * Holds a node still.
- * <p>
- * A node over one of these stops drifting, stops being drawn to its neighbours and cannot be dragged away, which is
- * what makes it safe to build anything around. Feeding it redstone lets go of it again.
- */
 public class NodeStabilizerBlock extends BaseEntityBlock {
     public static final MapCodec<NodeStabilizerBlock> CODEC = simpleCodec(NodeStabilizerBlock::new);
 
-    // the model is a full square base with a pyramid on it, twelve sixteenths tall
     private static final VoxelShape SHAPE = Block.box(0, 0, 0, 16, 12, 16);
 
     public NodeStabilizerBlock(Properties properties) {
@@ -53,7 +46,6 @@ public class NodeStabilizerBlock extends BaseEntityBlock {
         return new NodeStabilizerBlockEntity(pos, state);
     }
 
-    /** It reaches for a node every tick, on both sides: the server to hold it, the client to draw the arms. */
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state,
             BlockEntityType<T> type) {

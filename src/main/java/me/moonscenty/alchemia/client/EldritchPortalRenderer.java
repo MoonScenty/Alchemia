@@ -16,10 +16,6 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 
-/**
- * The way to the Outer Lands as the original drew it: a sixteen-frame swirl turned to face whoever looks, opening out
- * over a second and a half once the eye is opened. Shut, it is not drawn at all.
- */
 public class EldritchPortalRenderer implements BlockEntityRenderer<EldritchPortalBlockEntity> {
     private static final ResourceLocation SHEET = Alchemia.id("textures/entity/eldritch_portal.png");
     private static final int FRAMES = 16;

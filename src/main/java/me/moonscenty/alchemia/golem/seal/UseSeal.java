@@ -20,12 +20,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.util.FakePlayer;
 
-/**
- * Use: a deft, smart golem carrying something its filter lets by uses it on the block the seal is on, through the
- * face it is on, as a player would: a right click, or a left click if set to. It can be set to use an empty hand,
- * to click as if crouching, to work only where the block has gone, and to ask providing seals for its first
- * whitelisted thing when the golem has none. Whatever the click leaves in the hand comes back to the golem.
- */
 public class UseSeal extends Seal {
     private static final int LEFT = 4;
     private static final int EMPTY = 5;
@@ -43,7 +37,6 @@ public class UseSeal extends Seal {
         this.delay = java.util.concurrent.ThreadLocalRandom.current().nextInt(49);
     }
 
-    /** A quarter second at a time, one task open at the block, if the block is there (or gone, if set so). */
     @Override
     public void tick(ServerLevel level, SealEntity seal) {
         if (delay++ % 5 != 0) {
@@ -99,14 +92,12 @@ public class UseSeal extends Seal {
         return true;
     }
 
-    /** Whether nothing stands where a block would go. */
     private static boolean room(Level level, BlockItem item, BlockPos pos) {
         AABB box = item.getBlock().defaultBlockState().getCollisionShape(level, pos).isEmpty() ? null
                 : item.getBlock().defaultBlockState().getCollisionShape(level, pos).bounds().move(pos);
         return box == null || level.getEntities(null, box).isEmpty();
     }
 
-    /** Everything the stand-in player is left holding goes back to the golem, or falls at its feet. */
     private static void giveBack(FakePlayer hands, Golem golem) {
         for (int slot = 0; slot < hands.getInventory().getContainerSize(); slot++) {
             ItemStack stack = hands.getInventory().getItem(slot);
@@ -122,7 +113,6 @@ public class UseSeal extends Seal {
         hands.setShiftKeyDown(false);
     }
 
-    /** A golem must carry something to use, unless an empty hand will do; set to, it asks for some. */
     @Override
     public boolean canGolemPerform(Golem golem, Task task) {
         if (toggle(EMPTY_HAND)) {

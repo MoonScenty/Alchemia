@@ -26,35 +26,18 @@ import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.BlockDropsEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
 
-/**
- * What the two workings an altar can put on a tool actually do.
- * <p>
- * Both hang off the moment a block's drops are settled, which is the one place where what was broken, who broke
- * it and what they were holding are all still to hand.
- * <p>
- * Both are off while the one holding the tool is crouching. That is the original's rule and it is the only
- * control either of them has: a tool that always takes nine blocks is a tool that cannot take one.
- */
 @EventBusSubscriber(modid = Alchemia.MODID)
 public final class InfusionEnchantmentEvents {
-    /** Which face of a block a player last struck, so that the eight round it can be worked out. */
     private static final java.util.Map<java.util.UUID, Direction> STRUCK = new java.util.HashMap<>();
-    /** Stops the eight blocks a destructive tool takes from each taking eight of their own. */
+    // re-entrancy guards, so the extra blocks and blows don't trigger the effect again
     private static boolean spreading;
-    /** The same, for a tool that follows a seam: the block it reaches for must not reach again. */
     private static boolean burrowing;
-    /** And again for a blow that carries: the blows it carries must not each carry blows of their own. */
     private static boolean arcing;
 
     private InfusionEnchantmentEvents() {
     }
 
-    /**
-     * Which face was struck, remembered from the click.
-     * <p>
-     * By the time the drops are settled the hit is over and nothing in that event says which way the player was
-     * facing the block. The original kept the same note for the same reason.
-     */
+    // the drops event doesn't say which face was hit, so remember it from the click
     @SubscribeEvent
     public static void onStruck(PlayerInteractEvent.LeftClickBlock event) {
         if (event.getHand() == InteractionHand.MAIN_HAND) {
@@ -64,13 +47,12 @@ public final class InfusionEnchantmentEvents {
 
     @SubscribeEvent
     public static void onBroken(BlockDropsEvent event) {
-        // the sneak key rather than the crouching pose: the original asked the same question, and a player
-        // holding shift in a two-block gap is still asking for one block
+        // the shift key rather than the crouching pose, so a player in a two-block gap still gets one block
         if (!(event.getBreaker() instanceof Player player) || player.isShiftKeyDown()) {
             return;
         }
         ItemStack held = player.getMainHandItem();
-        // refined first, so that whatever is collected or left lying is already the cluster
+        // refine first so collected or dropped items are already clusters
         if (InfusionEnchantments.has(held, InfusionEnchantment.REFINING)
                 && held.isCorrectToolForDrops(event.getState())) {
             refine(event, InfusionEnchantments.level(held, InfusionEnchantment.REFINING));
@@ -83,15 +65,9 @@ public final class InfusionEnchantmentEvents {
         }
     }
 
-    /** How likely a piece of ore is to come up refined, for each step of the working past the first. */
+    // chance per level; original's value
     private static final float REFINES = 0.125F;
 
-    /**
-     * Ore comes up as a cluster, now and then.
-     * <p>
-     * An eighth of the time at the first step and an eighth more for each step after, as the original counted
-     * it. Each piece is rolled for on its own, so a block that drops two can come up as one of each.
-     */
     private static void refine(BlockDropsEvent event, int level) {
         float chance = (1 + level) * REFINES;
         boolean any = false;
@@ -109,13 +85,6 @@ public final class InfusionEnchantmentEvents {
         }
     }
 
-    /**
-     * What was broken goes to the one who broke it.
-     * <p>
-     * The original made the drops fly after the player and be picked up on the way. This puts them in hand
-     * directly, which comes to the same thing a second sooner; what will not fit falls where it was, because a
-     * full bag is not a reason to lose the stone.
-     */
     private static void collect(BlockDropsEvent event, Player player) {
         List<ItemEntity> left = new ArrayList<>();
         for (ItemEntity dropped : event.getDrops()) {
@@ -128,12 +97,6 @@ public final class InfusionEnchantmentEvents {
         event.getDrops().addAll(left);
     }
 
-    /**
-     * The eight blocks round the one struck go with it.
-     * <p>
-     * Eight on the face that was struck, so a wall comes down as a wall and a floor as a floor, and only where
-     * the tool would have served for them anyway -- a pickaxe does not fell the log beside the stone.
-     */
     private static void spread(net.minecraft.world.level.Level level, BlockPos struck, Player player, ItemStack held) {
         if (spreading || !(level instanceof ServerLevel server)) {
             return;
@@ -143,7 +106,6 @@ public final class InfusionEnchantmentEvents {
         try {
             for (BlockPos beside : around(struck, face)) {
                 BlockState there = server.getBlockState(beside);
-                // unbreakable stone is unbreakable, and a pickaxe does not fell the log standing in it
                 if (there.isAir() || there.getDestroySpeed(server, beside) < 0.0F
                         || !held.isCorrectToolForDrops(there)) {
                     continue;
@@ -156,21 +118,12 @@ public final class InfusionEnchantmentEvents {
         }
     }
 
-    // --- burrowing ---------------------------------------------------------
-
-    /** How far a vein is followed, and how far a trunk: a tree is worth reaching further into than a seam. */
+    // how far each step may stray from the struck block; trunks reach further than seams
     private static final int SEAM_REACH = 1;
     private static final int TRUNK_REACH = 2;
-    /** No flood fill runs past this many blocks, however big the thing turns out to be. */
     private static final int FOLLOWS_AT_MOST = 128;
 
-    /**
-     * A vein or a trunk comes apart from its far end.
-     * <p>
-     * Strike the bottom of a trunk and the top log falls; strike it again and the next one down falls. What is
-     * being paid for is not speed -- it is the same number of swings -- but that a tree comes down on its own
-     * rather than being climbed, and a seam is followed without the stone round it being dug out.
-     */
+    // breaks the furthest joined block of the same kind instead of the struck one
     @SubscribeEvent
     public static void onBurrowing(BlockEvent.BreakEvent event) {
         if (burrowing || event.getPlayer().isShiftKeyDown()) {
@@ -203,13 +156,7 @@ public final class InfusionEnchantmentEvents {
         }
     }
 
-    /**
-     * The block of the same kind that is joined to this one and stands furthest from it.
-     * <p>
-     * Joined rather than merely nearby, so a second seam behind a wall of stone is left where it is. The reach
-     * is how far each step may wander from the block struck, not how many steps there may be -- a trunk is
-     * followed up, a seam only into its own corner.
-     */
+    // joined only; reach limits distance from the start, not the number of steps
     private static BlockPos furthest(net.minecraft.world.level.Level level, BlockPos from, Block kind, int reach) {
         java.util.Set<BlockPos> seen = new java.util.HashSet<>();
         java.util.Deque<BlockPos> todo = new java.util.ArrayDeque<>();
@@ -241,19 +188,9 @@ public final class InfusionEnchantmentEvents {
         return best;
     }
 
-    // --- sounding ----------------------------------------------------------
-
-    /** How far the tapping carries, per step it has been taken to, and what one tap wears off the tool. */
     private static final int HEARS_PER_RANK = 4;
     private static final int TAP_COSTS = 5;
 
-    /**
-     * Tapping stone with it shows what is behind the stone.
-     * <p>
-     * For a moment only, and it wears the tool five times what a swing does, so it is a thing to do at a
-     * junction rather than every step of a tunnel. What it shows is drawn where the ore is, not on the face of
-     * the wall: a player should come away knowing which way to dig, not merely that there is something.
-     */
     @SubscribeEvent
     public static void onSounding(PlayerInteractEvent.RightClickBlock event) {
         if (event.getHand() != InteractionHand.MAIN_HAND || event.getEntity().isShiftKeyDown()) {
@@ -275,8 +212,7 @@ public final class InfusionEnchantmentEvents {
             if (!level.getBlockState(found).is(Tags.Blocks.ORES)) {
                 continue;
             }
-            // shown to the one who tapped and to nobody else: it is their tool that heard it. The marks spread out
-            // from the struck block a block a tick, as the original's did
+            // only the tapping player sees the marks; they spread one block per tick, as in the original
             int waits = Mth.floor(Math.sqrt(tapped.distSqr(found)));
             level.sendParticles(listener, new MarkOptions(waits), true,
                     found.getX() + 0.5, found.getY() + 0.5, found.getZ() + 0.5, 1, 0.0, 0.0, 0.0, 0.0);
@@ -287,18 +223,9 @@ public final class InfusionEnchantmentEvents {
                 0.2F, 0.2F + level.random.nextFloat() * 0.2F);
     }
 
-    // --- arcing ------------------------------------------------------------
-
-    /** How far a blow reaches past what it landed on, per step, and how many others it may reach. */
     private static final double ARCS_PER_RANK = 1.0;
     private static final double ARCS_AT_ALL = 1.5;
 
-    /**
-     * A blow lands on what is standing about as well as on what was struck.
-     * <p>
-     * As many others as the working has been taken steps, and no more, so a crowd is thinned rather than felled.
-     * Nothing tame is struck and nobody else is, which is the difference between a weapon and a hazard.
-     */
     @SubscribeEvent
     public static void onArcing(net.neoforged.neoforge.event.entity.player.AttackEntityEvent event) {
         Player player = event.getEntity();
@@ -330,7 +257,6 @@ public final class InfusionEnchantmentEvents {
         } finally {
             arcing = false;
         }
-        // the sweep of the blade, heard at what was struck, but only when it did reach anyone else
         if (struck > 0) {
             net.minecraft.world.entity.Entity target = event.getTarget();
             player.level().playSound(null, target.getX(), target.getY(), target.getZ(),
@@ -339,21 +265,8 @@ public final class InfusionEnchantmentEvents {
         }
     }
 
-    // --- essence -----------------------------------------------------------
-
-    /** How often a working of this takes hold at all, out of five, and how many points it takes when it does. */
     private static final int ESSENCE_IN_FIVE = 5;
 
-    /**
-     * What is killed gives up a little of what it was made of.
-     * <p>
-     * Not all of it and not every time: the chance of getting anything at all rises with how far the working has
-     * been taken, and what comes out is drawn from what the creature reads as. A wolf gives beast and flesh; it
-     * does not give whatever the holder wanted.
-     * <p>
-     * This is the one way of getting essentia that does not want a smelter, which is why it is the dearest of
-     * these to have put on and gives so little at a time.
-     */
     @SubscribeEvent
     public static void onEssence(net.neoforged.neoforge.event.entity.living.LivingDropsEvent event) {
         if (!(event.getSource().getEntity() instanceof Player player)) {
@@ -380,13 +293,12 @@ public final class InfusionEnchantmentEvents {
         }
     }
 
-    /** How far apart two spots are, counting a diagonal step as one step. */
+    // Chebyshev distance
     private static int stepsAway(BlockPos one, BlockPos other) {
         return Math.max(Math.abs(one.getX() - other.getX()),
                 Math.max(Math.abs(one.getY() - other.getY()), Math.abs(one.getZ() - other.getZ())));
     }
 
-    /** The eight squares round one, on the plane of the face that was struck. */
     private static List<BlockPos> around(BlockPos struck, Direction face) {
         List<BlockPos> all = new ArrayList<>();
         for (int one = -1; one <= 1; one++) {

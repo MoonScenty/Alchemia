@@ -20,17 +20,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 
-/**
- * A lamp of fertility at work: now and then bringing two animals of a kind together.
- *
- * <p>It burns victus, drawn through the face it hangs from, and holds up to four points. Every fifteen seconds,
- * if it has more than one, it looks round seven blocks for two grown animals of the same kind that are neither
- * young nor already courting, and sets them to it, at two points the pair.
- *
- * <p>It will not crowd a pen. Where there are already more than seven of a kind it leaves them be.
- */
 public class FertilityLampBlockEntity extends BlockEntity implements EssentiaHolder {
-    /** How much it holds, how often it works, how far it looks, and how many is a crowd. The original's numbers. */
+    // original's values
     private static final int HOLDS = 4;
     private static final int EVERY = 300;
     private static final int REACHES = 7;
@@ -55,7 +46,6 @@ public class FertilityLampBlockEntity extends BlockEntity implements EssentiaHol
         }
     }
 
-    /** Two of a kind, grown and willing, set to courting. */
     public void matchmake(Level level) {
         List<Animal> near = level.getEntitiesOfClass(Animal.class,
                 new AABB(worldPosition).inflate(REACHES));
@@ -88,8 +78,6 @@ public class FertilityLampBlockEntity extends BlockEntity implements EssentiaHol
         return animal.getAge() == 0 && !animal.isInLove() && animal.canFallInLove();
     }
 
-    // --- being fed ----------------------------------------------------------------------------------------------
-
     @Override
     public AspectList held() {
         return charges > 0 ? AspectList.of(ModAspects.LIFE, charges) : AspectList.EMPTY;
@@ -110,7 +98,6 @@ public class FertilityLampBlockEntity extends BlockEntity implements EssentiaHol
         return true;
     }
 
-    /** Fed only through the face it hangs from. */
     @Override
     public boolean reachableFrom(Direction side) {
         return side == getBlockState().getValue(LampBlock.FACING);

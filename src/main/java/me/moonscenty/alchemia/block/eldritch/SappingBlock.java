@@ -17,11 +17,6 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-/**
- * Sapping: what the Eldritch Warden leaves where it walks and spreads in rings about itself. It cannot be seen or
- * touched, only felt -- anything living that is not of the Outer Lands and is not withering already withers, slows
- * and starves in it for two seconds. It goes on its own.
- */
 public class SappingBlock extends Block {
     public SappingBlock(Properties properties) {
         super(properties);

@@ -15,16 +15,8 @@ import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FlowingFluid;
 
-/**
- * Purifying fluid standing in the world.
- *
- * <p>A player who steps into a still pool of it, and is not warded already, comes out warded against warp, and the
- * pool is used up. The ward lasts a long while for someone barely touched by warp and less the more deeply it has
- * set in: the original's two hundred thousand ticks over the square root of the lasting warp, at most some
- * twenty-seven minutes.
- */
 public class PurifyingFluidBlock extends LiquidBlock {
-    /** The original's numbers: what the ward is worth at no warp, and the most it is ever given for. */
+    // original's values: ward ticks = WORTH / sqrt(permanent warp), capped
     private static final int WORTH = 200_000;
     private static final int LONGEST = 32_000;
 
@@ -38,21 +30,19 @@ public class PurifyingFluidBlock extends LiquidBlock {
                 && !player.hasEffect(ModEffects.WARP_WARD)) {
             player.addEffect(new MobEffectInstance(ModEffects.WARP_WARD, wardFor(WarpData.of(player)), 0,
                     true, true));
-            // not removeBlock, which puts back whatever liquid stands in the place -- which is this
+            // not removeBlock, which would put this fluid back
             level.setBlock(pos, net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(),
                     net.minecraft.world.level.block.Block.UPDATE_ALL);
         }
         super.entityInside(state, level, pos, entity);
     }
 
-    /** How long a dip wards someone with this much warp. */
     public static int wardFor(WarpData warp) {
         int lasting = warp.permanent();
         int divisor = Math.max(1, (int) Math.sqrt(lasting));
         return Math.min(LONGEST, WORTH / divisor);
     }
 
-    /** Bubbles rising through it now and then, and a pop at the surface. */
     @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
         if (random.nextInt(10) == 0) {

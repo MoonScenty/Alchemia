@@ -8,13 +8,7 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.entity.player.Player;
 
-/**
- * How badly a player's dealings with magic have unmoored them.
- * <p>
- * Warp comes in three kinds. Permanent warp never leaves. Sticky warp can be washed away with effort. Temporary warp
- * drains off on its own as the unpleasantness plays out. The counter builds up whenever warp is gained and is what
- * actually decides when something happens; it drains as events fire.
- */
+// Permanent never leaves, sticky can be cleansed, temporary wears off; the counter decides when events fire.
 public record WarpData(int permanent, int sticky, int temporary, int counter) {
     public static final WarpData NONE = new WarpData(0, 0, 0, 0);
 
@@ -32,12 +26,10 @@ public record WarpData(int permanent, int sticky, int temporary, int counter) {
             ByteBufCodecs.VAR_INT, WarpData::counter,
             WarpData::new);
 
-    /** How warped the player is all told, which is what the severity of an event is drawn from. */
     public int total() {
         return permanent + sticky + temporary;
     }
 
-    /** What sticks around once the temporary unpleasantness has worn off. */
     public int lasting() {
         return permanent + sticky;
     }
@@ -56,10 +48,7 @@ public record WarpData(int permanent, int sticky, int temporary, int counter) {
         };
     }
 
-    /**
-     * Adds warp of one kind, never letting it fall below zero. Gaining warp also winds the counter up by the same
-     * amount, so the more a player takes on the sooner something comes of it.
-     */
+    // gaining warp also winds the counter up by the same amount
     public WarpData add(Kind kind, int amount) {
         int gained = Math.max(amount, -of(kind));
         WarpData changed = switch (kind) {

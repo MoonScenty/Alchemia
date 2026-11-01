@@ -37,7 +37,6 @@ public class WorldgenTests {
         growAndCheck(helper, ModWorldgen.SILVERWOOD_TREE, ModBlocks.SILVERWOOD, 5 * 7 + 8, 100);
     }
 
-    /** The silverwood carries its own undergrowth, so both plants must appear with the tree. */
     @GameTest(template = TEMPLATE)
     public static void silverwoodBringsUndergrowth(GameTestHelper helper) {
         layGround(helper, 9);
@@ -51,14 +50,9 @@ public class WorldgenTests {
         helper.succeed();
     }
 
-    /**
-     * About one silverwood in three has a pure node in its heart. Enough trees are grown, one after another on the
-     * same spot, that missing every time would be a fault rather than bad luck.
-     */
     @GameTest(template = TEMPLATE)
     public static void silverwoodSometimesHasANodeInItsHeart(GameTestHelper helper) {
         layGround(helper, 3);
-        // a full run of the space is also the way to prove no node is placed anywhere else
         for (int attempt = 0; attempt < 20; attempt++) {
             clearAbove(helper, 3);
             place(helper, ModWorldgen.SILVERWOOD_TREE);
@@ -92,7 +86,6 @@ public class WorldgenTests {
                 .forEach(AuraNode::discard);
     }
 
-    /** The magical forest's own oak: a great oak, but taller. */
     @GameTest(template = TEMPLATE)
     public static void bigMagicTreeGrowsTall(GameTestHelper helper) {
         layGround(helper, 3);

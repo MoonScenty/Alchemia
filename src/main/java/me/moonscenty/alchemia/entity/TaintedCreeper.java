@@ -34,14 +34,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 
-/**
- * A creeper the taint has made over. It swells and goes off as a creeper does, but the blast breaks nothing: what it
- * throws is taint -- poison into everything living within six blocks, and fibres onto the ground about it.
- */
 public class TaintedCreeper extends Monster implements TaintedMob {
     private static final EntityDataAccessor<Integer> SWELLING = SynchedEntityData.defineId(TaintedCreeper.class,
             EntityDataSerializers.INT);
-    /** How long its fuse is, how hard it goes off, and how far its poison reaches. The original's. */
+    // original's values
     private static final int FUSE = 30;
     private static final float BLAST = 1.5F;
     private static final double POISONS = 6.0;
@@ -58,7 +54,7 @@ public class TaintedCreeper extends Monster implements TaintedMob {
         this(ModEntities.TAINTED_CREEPER.get(), level);
     }
 
-    /** The original's numbers. */
+    // original's values
     public static AttributeSupplier.Builder attributes() {
         return Monster.createMonsterAttributes()
                 .add(Attributes.MAX_HEALTH, 30.0)
@@ -104,13 +100,12 @@ public class TaintedCreeper extends Monster implements TaintedMob {
         return TaintedMob.allied(other) || super.isAlliedTo(other);
     }
 
-    /** It does nothing by touching: all it has is going off. */
     @Override
     public boolean doHurtTarget(Entity target) {
         return true;
     }
 
-    /** A fall sets its fuse burning down as a creeper's does, though never quite to the end. */
+    // a fall burns the fuse down as a creeper's does, but never to the end
     @Override
     public boolean causeFallDamage(float distance, float multiplier, DamageSource source) {
         boolean hurt = super.causeFallDamage(distance, multiplier, source);
@@ -139,7 +134,6 @@ public class TaintedCreeper extends Monster implements TaintedMob {
         super.tick();
     }
 
-    /** A blast that breaks nothing, poison for everything living near, and fibres flung about. */
     private void goOff(ServerLevel level) {
         level.explode(this, getX(), getY() + getBbHeight() / 2.0F, getZ(), BLAST, Level.ExplosionInteraction.NONE);
         for (LivingEntity near : level.getEntitiesOfClass(LivingEntity.class, new AABB(position(), position())
@@ -164,7 +158,6 @@ public class TaintedCreeper extends Monster implements TaintedMob {
         discard();
     }
 
-    /** How near it is to going off, for the renderer, as a creeper's is. */
     public float swelling(float partial) {
         return (oldSwell + (swell - oldSwell) * partial) / (FUSE - 2);
     }
@@ -190,7 +183,6 @@ public class TaintedCreeper extends Monster implements TaintedMob {
         spawnAtLocation(TaintedMob.gooOrTendril(random, 0.5F), getBbHeight() / 2.0F);
     }
 
-    /** Swells while what it goes for is within three blocks and in sight, and settles back if it gets away. */
     private static final class Swell extends Goal {
         private final TaintedCreeper creeper;
         private LivingEntity target;

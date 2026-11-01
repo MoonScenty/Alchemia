@@ -14,9 +14,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
-/** A scrap of somebody's learning. Read, it is four to eight points of experience. */
 public class KnowledgeFragmentItem extends Item {
-    /** What one is worth at least, and at most besides. The original's. */
+    // original's values
     private static final int LEAST = 4;
     private static final int MORE = 5;
 

@@ -14,14 +14,6 @@ import net.minecraft.client.gui.screens.ConfirmLinkScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
-/**
- * What the game shows instead of its title when a jar of the original is not in the {@code mods} folder: which
- * one is wanted, a way to its download page on CurseForge, the folder to put it in, and the way out. The mod draws
- * with the original's pictures and models, so there is nothing to play until both are there.
- * <p>
- * The jars are not fetched for the player. The original's licence lets only its author hand it out, so the player
- * takes it from the author's own page.
- */
 public class MissingJarsScreen extends Screen {
     private static final int BUTTON_WIDTH = 260;
     private static final int BUTTON_HEIGHT = 20;
@@ -74,7 +66,6 @@ public class MissingJarsScreen extends Screen {
         }
     }
 
-    /** There is nowhere to go back to: the game has nothing to show without the jars. */
     @Override
     public boolean shouldCloseOnEsc() {
         return false;

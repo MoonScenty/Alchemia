@@ -29,19 +29,8 @@ import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.SlabType;
 
-/**
- * What wakes in a great hall when its lock is turned.
- * <p>
- * The world keeps count of how many halls have been woken, and what wakes goes round by it -- the Construct, the
- * Warden, the Crimson Cult, the taint -- skipping one now and then. Each is staged as the original staged it: the
- * Warden on a throne at the far corner with an obelisk and urns on either side of the hall and four eldritch
- * pedestals about its middle; the Construct on a throne in the middle between three obelisks, crates and urns heaped
- * in the corners; the cult's greater portal over a ring of sixteen pillars on a ragged floor of doorway stone; and
- * five taintacles, some of them giants, in a hall gone over to taint. Everyone near is told what has come, and then
- * the door melts away, and the lock with it.
- */
 public final class BossRooms {
-    /** The throne: stairs round a glowing crust, by the original's numbers. */
+    // stair facings round the glowing crust, the original's layout
     private static final int[][] THRONE = {{2, 2, 2}, {0, -1, 1}, {3, 3, 3}};
 
     private BossRooms() {
@@ -105,7 +94,6 @@ public final class BossRooms {
         level.removeBlock(lock, false);
     }
 
-    /** Where the far side of the hall is from its middle, by which quarter has the door. */
     private static int[] far(int exit) {
         return switch (exit) {
             case Cell.BOSS_UPPER_LEFT -> new int[] {8, 8};
@@ -136,7 +124,6 @@ public final class BossRooms {
                 .setValue(LootBlock.RARITY, rarity);
     }
 
-    /** Turns it to face the lock, as the original stood its bosses. */
     private static void faceLock(Mob mob, double x, double y, double z, BlockPos lock) {
         double dx = lock.getX() - x;
         double dy = lock.getY() - (y + mob.getEyeHeight());

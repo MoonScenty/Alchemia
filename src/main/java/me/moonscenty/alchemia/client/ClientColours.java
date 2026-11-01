@@ -1,6 +1,5 @@
 package me.moonscenty.alchemia.client;
 
-/** The channels of a packed {@code 0xRRGGBB} colour, each from nought to one. */
 public final class ClientColours {
     private ClientColours() {
     }

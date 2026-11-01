@@ -8,14 +8,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.LeapAtTargetGoal;
 import net.minecraft.world.level.Level;
 
-/**
- * An angry zombie grown huge, and growing with its anger. Every blow it takes makes it a tenth angrier, up to twice
- * as angry as it began, and the anger cools by a five-hundredth a tick. As angry as it is, it is that much bigger
- * and bites five harder for each whole of anger past the first.
- * <p>
- * The original grew its picture by its anger and its hitbox by more than that, so that it stood in four blocks of
- * room drawn in two. Here both grow alike: its size is its anger.
- */
+// Unlike the original, the hitbox grows exactly with the model: its size is its anger.
 public class FuriousZombie extends AngryZombie {
     private static final float CALM = 1.0F;
     private static final float FURIOUS = 2.0F;
@@ -24,7 +17,7 @@ public class FuriousZombie extends AngryZombie {
     private static final double BITE = 7.0;
     private static final double BITE_PER_ANGER = 5.0;
 
-    /** Not saved, as the original's was not: a furious zombie comes back calm. */
+    // not saved, as the original's: it comes back calm
     private float anger = CALM;
 
     public FuriousZombie(EntityType<? extends FuriousZombie> type, Level level) {

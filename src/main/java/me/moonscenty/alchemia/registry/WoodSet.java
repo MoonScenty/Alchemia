@@ -11,9 +11,6 @@ import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.StairBlock;
 import net.neoforged.neoforge.registries.DeferredBlock;
 
-/**
- * All blocks made from one kind of tree.
- */
 public record WoodSet(
         String name,
         DeferredBlock<RotatedPillarBlock> log,

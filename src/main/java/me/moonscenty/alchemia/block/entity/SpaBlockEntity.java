@@ -30,24 +30,13 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 
-/**
- * A spa at work: a tank, a pocket of bath salts, and which of the two it is pouring.
- *
- * <p>Every two seconds, unless a redstone signal holds it, it pours a bucket's worth into the world above it. Mixing,
- * it pours purifying fluid, made of a bucket of water and a dose of salts. Not mixing, it pours whatever is in its
- * tank, so long as that is something that can stand in the world. The first bucket goes on top of it; after that,
- * each goes into a place beside the pool already there, within two blocks of the middle either way, so that the pool
- * spreads out to five by five, a block at a time, wherever there is floor to hold it.
- */
 public class SpaBlockEntity extends BlockEntity implements WorldlyContainer, MenuProvider {
-    /** What the tank holds, how much a pour takes, and how often it pours. The original's. */
+    // original's values
     public static final int CAPACITY = 5000;
     private static final int POUR = 1000;
     private static final int EVERY = 40;
-    /** How far from the middle the pool spreads, either way. */
     private static final int SPREADS = 2;
 
-    /** What the screen is told: how much is in the tank, of what, and whether it is mixing. */
     public static final int READING_AMOUNT = 0;
     public static final int READING_FLUID = 1;
     public static final int READING_MIXING = 2;
@@ -94,7 +83,6 @@ public class SpaBlockEntity extends BlockEntity implements WorldlyContainer, Men
         }
     }
 
-    /** Whether it has what it needs for a pour. */
     private boolean ready() {
         if (tank.getFluidAmount() < POUR) {
             return false;
@@ -105,7 +93,6 @@ public class SpaBlockEntity extends BlockEntity implements WorldlyContainer, Men
         return !pouring().defaultFluidState().createLegacyBlock().isAir();
     }
 
-    /** What it pours: purifying fluid, if mixing, or else what is in the tank. */
     private Fluid pouring() {
         return mixing ? ModFluids.PURIFYING.get() : tank.getFluid().getFluid();
     }
@@ -129,7 +116,6 @@ public class SpaBlockEntity extends BlockEntity implements WorldlyContainer, Men
         }
     }
 
-    /** Whether a pool can be poured here: floor under it, room in it, and not already a still pool of it. */
     private static boolean fits(Level level, BlockPos at, BlockState pool) {
         if (pool.getFluidState().is(Fluids.WATER) && level.dimensionType().ultraWarm()) {
             return false;
@@ -158,7 +144,6 @@ public class SpaBlockEntity extends BlockEntity implements WorldlyContainer, Men
         setChanged();
     }
 
-    /** Mixing, or pouring what is in the tank as it is. */
     public void toggleMixing() {
         mixing = !mixing;
         setChanged();
@@ -172,7 +157,6 @@ public class SpaBlockEntity extends BlockEntity implements WorldlyContainer, Men
         return tank;
     }
 
-    /** The tank as pipes and buckets see it: filled from any side, drawn from any but the top. */
     public IFluidHandler tank(Direction side) {
         return side == Direction.UP ? new IFluidHandler() {
             @Override
@@ -211,8 +195,6 @@ public class SpaBlockEntity extends BlockEntity implements WorldlyContainer, Men
             }
         } : tank;
     }
-
-    // --- the pocket of salts ---------------------------------------------------------------------------------
 
     @Override
     public int getContainerSize() {
@@ -265,7 +247,6 @@ public class SpaBlockEntity extends BlockEntity implements WorldlyContainer, Men
         salts.clear();
     }
 
-    /** Salts go in from any side but the top, and come out the same way. */
     @Override
     public int[] getSlotsForFace(Direction side) {
         return side == Direction.UP ? new int[0] : new int[] {0};
@@ -280,8 +261,6 @@ public class SpaBlockEntity extends BlockEntity implements WorldlyContainer, Men
     public boolean canTakeItemThroughFace(int slot, ItemStack stack, Direction side) {
         return side != Direction.UP;
     }
-
-    // --- the screen ------------------------------------------------------------------------------------------
 
     @Override
     public Component getDisplayName() {

@@ -15,15 +15,11 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.DyeColor;
 import net.neoforged.neoforge.common.data.LanguageProvider;
 
-/**
- * Every translation is declared for both languages side by side so neither can fall behind.
- */
 public abstract class ModLanguageProvider extends LanguageProvider {
     protected ModLanguageProvider(PackOutput output, String locale) {
         super(output, Alchemia.MODID, locale);
     }
 
-    /** What each dye is called, for the sixteen flames and anything else that comes in a set of them. */
     private static final Map<DyeColor, String[]> DYE_NAMES = Map.ofEntries(
             Map.entry(DyeColor.WHITE, new String[]{"White", "하얀"}),
             Map.entry(DyeColor.ORANGE, new String[]{"Orange", "주황"}),
@@ -42,13 +38,6 @@ public abstract class ModLanguageProvider extends LanguageProvider {
             Map.entry(DyeColor.RED, new String[]{"Red", "빨간"}),
             Map.entry(DyeColor.BLACK, new String[]{"Black", "검은"}));
 
-    /**
-     * The twelve foci and the two lines of price under each of them.
-     * <p>
-     * The names are the original's. Several of them say nothing about what the focus does -- a pech's curse is
-     * named after what taught it rather than what it inflicts -- and renaming them for clarity would be renaming
-     * somebody else's spells.
-     */
     private void foci() {
         add("item.alchemia.focus.cost", pick("Vis Cost:", "비스 값:"));
         add("item.alchemia.focus.cost_per_tick", pick("Vis Cost (per tick):", "비스 값 (틱당):"));
@@ -84,12 +73,6 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         }
     }
 
-    /**
-     * The bench a focus is worked on, and the twenty-three things it can work in.
-     * <p>
-     * Each gets a name and a line saying what it actually does, since the pictures on the bench are the only
-     * place they are ever seen and a picture of a snowflake says nothing about how much colder it is.
-     */
     private void upgrades() {
         addBlock(ModBlocks.FOCAL_MANIPULATOR, pick("Focal Manipulator", "포커스 조작기"));
 
@@ -170,7 +153,6 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         }
     }
 
-    /** The turret, the four things it may be told to mind, and what it says when it is somebody else's. */
     private void autocaster() {
         addItem(ModItems.AUTOCASTER, pick("Autocaster", "자동 시전기"));
         addEntityType(me.moonscenty.alchemia.registry.ModEntities.AUTOCASTER, pick("Autocaster", "자동 시전기"));
@@ -333,7 +315,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("research.alchemia.node_magnet.danger", pick(
                 "Warning! The moment you set the magnet down you notice it gives off an all but silent hum that sets your teeth on edge. Grunts and howls answer it from the dark. It seems monsters find the noise unbearable and will come from far and wide to put a stop to it. It would be wise to keep it guarded.",
                 "경고! 자석을 내려놓는 순간, 거의 들리지 않으면서도 이를 시리게 하는 웅웅거림을 낸다는 것을 알아차린다. 어둠 속에서 으르렁대고 울부짖는 소리가 답한다. 몬스터들은 이 소리를 견디지 못해 멀리서도 몰려와 멈추려 드는 것 같다. 지켜 두는 편이 현명하겠다."));
-        // golems: what they are called, what they say, and every trait and part the press shows
+        // --- golems ---
         add("entity.alchemia.golem", pick("Golem", "골렘"));
         add("entity.alchemia.golem.not_yours", pick("This does not belong to you", "당신의 것이 아니다"));
         add("entity.alchemia.golem.follow", pick("I am coming, Master", "따라가겠습니다, 주인님"));
@@ -523,13 +505,6 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("gui.alchemia.autocaster.minds.3", pick("Target Friendly", "아군을 노림"));
     }
 
-    /**
-     * The two robes.
-     * <p>
-     * Neither is a whole suit: the cloth robe has no hood and the void robe has no boots, as the original had
-     * them. The names are the original's too -- "cloth" rather than "robe" for the plain one, because that is
-     * what it is made of and what it is called everywhere the recipes mention it.
-     */
     private void robes() {
         String[][] pieces = {
                 {"cloth_chest", "Robe", "로브"},
@@ -556,7 +531,6 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                         "한 점마다 타격 %s%%, 불과 폭발 %s%%, 주술 %s%%를 흘림"));
     }
 
-    /** Picks the text for this provider's language. */
     protected abstract String pick(String english, String korean);
 
     @Override
@@ -606,7 +580,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         addItem(ModItems.IRON_PLATE, pick("Iron Plate", "철 판"));
         addItem(ModItems.SALIS_MUNDUS, pick("Salis Mundus", "살리스 문두스"));
         addItem(ModItems.ALUMENTUM, pick("Alumentum", "알루멘툼"));
-        // not "Aer Crystal": that is the crystal growing on a node, and two things under one name is one too many
+        // not "Aer Crystal": that name belongs to the crystal growing on a node
         addItem(ModItems.CRYSTALLIZED_ESSENCE, pick("Crystallized Essence", "결정화된 에센시아"));
         addMetalGear();
         addItem(ModItems.TRAVELLER_BOOTS, pick("Traveller's Boots", "여행자의 장화"));
@@ -617,7 +591,6 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         elementalTools();
         addBlock(ModBlocks.INFUSION_SPEED_STONE, pick("Infusion Speed Stone", "주입 속도석"));
         addBlock(ModBlocks.INFUSION_COST_STONE, pick("Infusion Cost Stone", "주입 절약석"));
-        // one flame to a dye, and the dye's own name in front of it -- white is simply "nitor"
         ModBlocks.NITOR.forEach((colour, flame) -> addBlock(flame,
                 colour == DyeColor.WHITE ? pick("Nitor", "니토르")
                         : pick(DYE_NAMES.get(colour)[0] + " Nitor", DYE_NAMES.get(colour)[1] + " 니토르")));
@@ -749,7 +722,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         addBlock(ModBlocks.GOLEM_PRESS, pick("Golem Press", "골렘 프레스"));
         addBlock(ModBlocks.GOLEM_PRESS_PART, pick("Golem Press", "골렘 프레스"));
 
-        // the lands
+        // --- biomes ---
         add("biome.alchemia.magical_forest", pick("Magical Forest", "마법의 숲"));
         add("biome.alchemia.eerie", pick("Eerie", "으스스한 땅"));
         add("biome.alchemia.tainted_land", pick("Tainted Land", "오염된 땅"));
@@ -938,7 +911,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         addBlock(ModBlocks.ARCANE_WORKBENCH, pick("Arcane Workbench", "비전 작업대"));
         addBlock(ModBlocks.ARCANE_WORKBENCH_CHARGER, pick("Arcane Workbench Charger", "비전 작업대 충전기"));
 
-        // the wand and the pieces it is put together from
+        // --- wand ---
         add("item.alchemia.wand", pick("Wand", "완드"));
         add("item.alchemia.wand.named", pick("%s Capped %s Wand", "%s 씌운 %s 완드"));
         add("item.alchemia.staff.named", pick("%s Capped %s Staff", "%s 씌운 %s 지팡이"));
@@ -1046,7 +1019,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("scan.alchemia.hint.unread", pick("%s — not yet read", "%s — 아직 읽지 않음"));
         add("scan.alchemia.hint.read", pick("%s — nothing further", "%s — 더 알아낼 것 없음"));
 
-        // The branches of study. Thaumaturgy is arcana here.
+        // --- research categories ---
         String[][] categories = {
                 {"basics", "Basics", "기초"},
                 {"arcana", "Arcana", "비학"},
@@ -1520,7 +1493,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         addEffect(ModEffects.ALCHEDIARRHEA, pick("Alchediarrhea", "알케설사"));
         addEffect(ModEffects.WARP_WARD, pick("Warp Ward", "뒤틀림 방호"));
 
-        // What warp murmurs before it does its work. Numbered to match the severity tiers.
+        // --- warp messages, numbered by severity tier ---
         String[][] whispers = {
                 {"You feel like you are being watched.", "누군가 지켜보고 있는 것 같다."},
                 {"Something moves at the edge of your sight.", "시야 끝에서 무언가 움직인다."},
@@ -1555,7 +1528,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         addBlock(ModBlocks.AMBER_BRICKS, pick("Amber Bricks", "호박 벽돌"));
 
 
-        // The latin name is the aspect's name in every language; the gloss below it says what it stands for
+        // --- aspects ---
         String[][] aspects = {
                 {"aer", "Air", "공기"},
                 {"terra", "Earth", "땅"},
@@ -1646,7 +1619,6 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         }
     }
 
-    /** A rod, and the cap item made of the same metal, both named after the stuff they are made of. */
     private void addWandRod(String rod, String english, String korean) {
         add("wand_rod.alchemia." + rod, pick(english, korean));
         if (!rod.equals("wood")) {
@@ -1654,7 +1626,6 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         }
     }
 
-    /** The ten tools and eight pieces our two metals are forged into. */
     private void addMetalGear() {
         String[][] metals = {{"alchemium", "Alchemium", "알케미움"}, {"void", "Void", "공허"}};
         String[][] shapes = {
@@ -1671,7 +1642,6 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         }
     }
 
-    /** The five elemental tools and the crusher, and the three ways the shovel lays its square. */
     private void elementalTools() {
         add("item.alchemia.elemental_axe", pick("Axe of the Stream", "흐름의 도끼"));
         add("item.alchemia.elemental_pickaxe", pick("Pickaxe of the Core", "핵의 곡괭이"));
@@ -1747,7 +1717,6 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("item.alchemia.elemental_shovel.laying.2", pick("Laying across out of the face", "면에서 가로로 뻗는다"));
     }
 
-    /** What an altar puts on a tool, written under the tool's name. */
     private void addInfusionEnchantments() {
         add(InfusionEnchantment.COLLECTOR.key(), pick("Collector", "수집"));
         add(InfusionEnchantment.DESTRUCTIVE.key(), pick("Destructive", "파괴"));
@@ -1761,7 +1730,6 @@ public abstract class ModLanguageProvider extends LanguageProvider {
     private void addWandCap(String cap, String english, String korean) {
         add("wand_cap.alchemia." + cap, pick(english, korean));
         add("item.alchemia.wand_cap_" + cap, pick(english + " Wand Cap", korean + " 완드 캡"));
-        // the two that are cast before they are finished have a name for the casting as well
         if (ModItems.INERT_CAPS.containsKey(cap)) {
             add("item.alchemia.wand_cap_" + cap + "_inert",
                     pick("Inert " + english + " Wand Cap", "불활성 " + korean + " 완드 캡"));

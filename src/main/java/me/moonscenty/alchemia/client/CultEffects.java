@@ -7,12 +7,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.util.RandomSource;
 
-/** What the cult leaves in the air: the red puff a cultist steps out of. */
 public final class CultEffects {
     private CultEffects() {
     }
 
-    /** Twenty puffs about the body, white going to blood red, off the original's six-frame run. */
     public static void arrive(Cultist cultist) {
         if (!(cultist.level() instanceof ClientLevel level)) {
             return;

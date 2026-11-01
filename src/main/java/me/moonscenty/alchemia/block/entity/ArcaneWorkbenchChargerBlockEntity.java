@@ -13,14 +13,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
-/**
- * Fills the wand lying on the bench below, a little at a time, for as long as there is aura to be had.
- * <p>
- * It pulls the same way a wand in a hand does, so standing in a worked-out chunk gets nothing here either. What it
- * buys is not speed so much as not having to hold the thing.
- */
 public class ArcaneWorkbenchChargerBlockEntity extends BlockEntity {
-    /** How often it pulls, in ticks, and how much it asks for each time. */
     private static final int EVERY = 10;
     private static final int AMOUNT = 5;
 
@@ -46,8 +39,6 @@ public class ArcaneWorkbenchChargerBlockEntity extends BlockEntity {
             return;
         }
         bench.setChanged();
-        // the original showed a spark only for a full draw: a spark of the last vis taken, drawn in out of a block
-        // somewhere about the charger and into its middle
         if (charged.full()) {
             RandomSource random = served.random;
             BlockPos from = pos.offset(random.nextInt(3) - random.nextInt(3), random.nextInt(3),

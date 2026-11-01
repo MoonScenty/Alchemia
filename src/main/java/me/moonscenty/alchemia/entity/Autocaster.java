@@ -43,46 +43,31 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
-/**
- * A focus bolted to a wall, with just enough mind to point itself at something and let the focus off.
- *
- * <p>It is a machine, not a thaumaturge. It draws its own vis out of the air around it a drop at a time, and
- * nothing it wears or carries makes a working any cheaper. What it is good for is being somewhere a person is
- * not: seven of the twelve foci are worth aiming at a thing, and an autocaster will aim one at anything its owner
- * has told it to mind.
- *
- * <p>It cannot move and cannot be pushed. It sits on whichever face it was put against, turns its head, and is
- * taken down again by clicking it with a wand.
- */
 public class Autocaster extends ConstructWithSlot {
-    /** Which face it is stuck to, which is the only thing that settles how it is drawn. */
     private static final EntityDataAccessor<Direction> FACING =
             SynchedEntityData.defineId(Autocaster.class, EntityDataSerializers.DIRECTION);
 
-    /** How much of any one primal it will hold, and how much the aura hands it at a time. */
+    // per primal
     public static final int HOLDS = 100;
     private static final int DRAWS = 1;
-    /** How often it draws a drop out of the air, and how often it knits itself back together, in ticks. */
     private static final int DRAWS_EVERY = 4;
     private static final int MENDS_EVERY = 40;
 
-    /** What it is worth hitting, and how hard that is. The original's numbers. */
+    // original's values
     private static final double LIVES = 50.0;
     private static final int PLATING = 4;
-    /** How much of a broken one is worth picking up again, and how often its mind survives. The original's. */
+    // original's values
     private static final float SALVAGED = 0.5F;
     private static final float MIND_SALVAGED = 0.2F;
-    /** How often it looks round for something to shoot, as a one-in-this chance a tick. */
+    // one-in-N chance per tick
     private static final int LOOKS_ROUND = 5;
-    /** The wait after a shot, as a share of what the same focus makes a hand wait. */
+    // cooldown multiplier over the same focus cast by hand
     private static final double SLOWER_BY_HAND = 1.33;
-    /** A millisecond wait as the original wrote it, in the ticks this counts in. */
+    // focus cooldowns are in milliseconds
     private static final int A_TICK = 50;
-    /** Its own store, a reservoir for each primal. Nobody is shown it, as nobody was shown the original's. */
     private AspectList vis = AspectList.EMPTY;
-    /** Ticks before it will shoot again. */
     private int waits = 10;
-    /** How many shots this burst has been, which is what a focus held down counts by. */
+    // counts shots in a burst, which per-tick foci scale by
     private int shots;
     private boolean shotLastTick;
 
@@ -91,7 +76,6 @@ public class Autocaster extends ConstructWithSlot {
         xpReward = 6;
     }
 
-    /** Put against a face, which is where it stays. */
     public Autocaster(Level level, BlockPos at, Direction face) {
         this(ModEntities.AUTOCASTER.get(), level);
         moveTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5, 0.0F, 0.0F);
@@ -104,12 +88,6 @@ public class Autocaster extends ConstructWithSlot {
                 .add(Attributes.FOLLOW_RANGE, Focus.Turret.SEES);
     }
 
-    /**
-     * Two goals and no more.
-     * <p>
-     * One picks something to shoot at; the other makes it shoot back at whatever shot it. Everything else a mob
-     * has goals for -- wandering, fleeing, looking about -- is of no use to a thing bolted to a wall.
-     */
     @Override
     protected void registerGoals() {
         targetSelector.addGoal(1, new HurtByTargetGoal(this));
@@ -134,14 +112,7 @@ public class Autocaster extends ConstructWithSlot {
         return MENDS_EVERY;
     }
 
-    // --- what it does with its time ---------------------------------------------------------------------
-
-    /**
-     * Pointing itself at whatever it has settled on.
-     * <p>
-     * Done here rather than in a goal of its own because that is all a goal would do, and because this runs the
-     * tick before the look control reads it, which is where a mob's aiming belongs.
-     */
+    // aims here rather than in a goal so it runs before the look control reads it
     @Override
     protected void customServerAiStep() {
         super.customServerAiStep();
@@ -151,7 +122,6 @@ public class Autocaster extends ConstructWithSlot {
         }
     }
 
-    /** Drawing breath and shooting. */
     @Override
     public void tick() {
         super.tick();
@@ -176,12 +146,7 @@ public class Autocaster extends ConstructWithSlot {
         }
     }
 
-    /**
-     * One drop of whichever primal it has least of, out of the air it is standing in.
-     * <p>
-     * Least first, so a turret left alone fills evenly rather than filling up on whatever the land happens to be
-     * thick with. It takes nothing a chunk has not got, so a thin sky simply leaves it dry.
-     */
+    // least-stocked primal first so it fills evenly; takes only what the chunk has
     private void drawBreath() {
         Holder<Aspect> lowest = null;
         int least = Integer.MAX_VALUE;
@@ -197,17 +162,8 @@ public class Autocaster extends ConstructWithSlot {
         }
     }
 
-    /**
-     * Lets the focus off at whatever it is pointed at.
-     * <p>
-     * The order is the order a hand casts in: it must be in range, it must be seen, the price must be in the
-     * reservoir, and only when the working itself has come to something is the price actually taken. A turret
-     * firing into a wall would otherwise drink itself dry in a few seconds.
-     *
-     * <p>Before it shoots it lifts its nose by however much the focus drops on the way, scaled by how far off the
-     * mark is, and puts it straight back afterwards. The lift is part of the shot and not part of where it is
-     * looking.
-     */
+    // vis is only taken once the spell actually does something, or a turret firing into a wall drains itself
+    // the pitch is raised for the focus's drop during the shot only, then restored
     private void shoot() {
         LivingEntity mark = getTarget();
         Focus focus = loaded();
@@ -241,20 +197,18 @@ public class Autocaster extends ConstructWithSlot {
         shotLastTick = true;
     }
 
-    /** The wand a hand would be holding, made up on the spot so a spell has one to read. */
+    // spells read the caster's wand, so make one up
     private ItemStack wand() {
         ItemStack wand = WandItem.of(ModWandParts.GREATWOOD, ModWandParts.GOLD);
         WandItem.setFocus(wand, getMainHandItem());
         return wand;
     }
 
-    // --- its reservoir ----------------------------------------------------------------------------------
-
     public AspectList vis() {
         return vis;
     }
 
-    /** Whether the whole price is in the reservoir. Nothing it wears makes a working any cheaper. */
+    // no wand or gear discounts apply
     public boolean holds(AspectList price) {
         for (Holder<Aspect> aspect : price.sortedByName()) {
             if (vis.get(aspect) < price.get(aspect)) {
@@ -270,29 +224,20 @@ public class Autocaster extends ConstructWithSlot {
         }
     }
 
-    /** The most of any one primal it holds. */
     protected int holdsAtMost() {
         return HOLDS;
     }
 
-    /** Sets how much of one aspect it holds. */
     protected void setVis(Holder<Aspect> aspect, int amount) {
         vis = vis.withAmount(aspect, amount);
     }
 
-    /** Fills it up, which is a thing only a test and the creative hand have any business doing. */
     public void fill() {
         for (Holder<Aspect> primal : ModAspects.primals()) {
             vis = vis.withAmount(primal, holdsAtMost());
         }
     }
 
-    // --- what it is pointed at --------------------------------------------------------------------------
-
-    /**
-     * What the turret rules make of it, except that another autocaster is fair game only when set against
-     * friends and not its owner's.
-     */
     @Override
     public boolean worthShooting(LivingEntity other) {
         if (other instanceof Autocaster theirs) {
@@ -300,8 +245,6 @@ public class Autocaster extends ConstructWithSlot {
         }
         return super.worthShooting(other);
     }
-
-    // --- being handled ----------------------------------------------------------------------------------
 
     @Override
     protected boolean letsHandle(Player player, InteractionHand hand) {
@@ -322,12 +265,7 @@ public class Autocaster extends ConstructWithSlot {
         }
     }
 
-    /**
-     * What is left of a broken one.
-     * <p>
-     * Half of its brasswork and half of its boards, and now and then the made mind at the heart of it, as the
-     * original gave back.
-     */
+    // original's salvage
     @Override
     protected void salvage() {
         salvage(ModItems.BIOALCHEMIC_MIND.get(), MIND_SALVAGED);
@@ -335,8 +273,6 @@ public class Autocaster extends ConstructWithSlot {
         salvage(ModBlocks.GREATWOOD.planks().get(), SALVAGED);
         salvage(ModBlocks.GREATWOOD.planks().get(), SALVAGED);
     }
-
-    // --- a thing bolted to a wall -----------------------------------------------------------------------
 
     @Override
     public void travel(Vec3 wanted) {
@@ -365,7 +301,7 @@ public class Autocaster extends ConstructWithSlot {
         entityData.set(FACING, face);
     }
 
-    // --- what it sounds like: the game's own, not the constructs' clack ---------------------------------
+    // the game's own sounds, not the constructs' clack
 
     @Override
     protected SoundEvent getAmbientSound() {
@@ -382,31 +318,20 @@ public class Autocaster extends ConstructWithSlot {
         return SoundEvents.GENERIC_DEATH;
     }
 
-    // --- the one slot it has ----------------------------------------------------------------------------
-
-    /** The focus goes in the hand. */
     public FocusItem fitted() {
         return getMainHandItem().getItem() instanceof FocusItem focus ? focus : null;
     }
 
-    /** What that focus does and costs, with whatever is worked into it counted in. */
     public Focus loaded() {
         FocusItem item = fitted();
         return item == null ? null : item.focus(getMainHandItem());
     }
 
-    /** Whether an autocaster will take this at all: a focus, and one worth aiming at something. */
     public static boolean takes(ItemStack stack) {
         return stack.isEmpty()
                 || stack.getItem() instanceof FocusItem focus && focus.focus(stack).turret() != null;
     }
 
-    /**
-     * A new focus is a new reach, so the thing looks for a mark as far off as this one will carry.
-     * <p>
-     * Nothing else about it changes: the vis it has drawn is its own and stays through a change of focus, as the
-     * original's did.
-     */
     @Override
     public void setChanged() {
         Focus.Turret turret = loaded() == null ? null : loaded().turret();
@@ -421,8 +346,6 @@ public class Autocaster extends ConstructWithSlot {
     public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
         return new AutocasterMenu(id, inventory, this);
     }
-
-    // --- saving -----------------------------------------------------------------------------------------
 
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {

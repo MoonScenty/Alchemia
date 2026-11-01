@@ -16,13 +16,6 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 
-/**
- * The bench a focus is worked on.
- *
- * <p>It does one thing: it screws another upgrade into whatever focus is laid on it. The price is paid in levels
- * up front and in vis drawn out of the air over the following seconds, so a manipulator wants standing somewhere
- * the aura is thick, and it will sit there drawing for a while before anything comes of it.
- */
 public class FocalManipulatorBlock extends BaseEntityBlock {
     public static final MapCodec<FocalManipulatorBlock> CODEC = simpleCodec(FocalManipulatorBlock::new);
 
@@ -65,7 +58,6 @@ public class FocalManipulatorBlock extends BaseEntityBlock {
         return InteractionResult.sidedSuccess(level.isClientSide);
     }
 
-    /** Whatever was laid on it falls out, as it does from any bench that is broken with work on it. */
     @Override
     protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState replacement, boolean moving) {
         net.minecraft.world.Containers.dropContentsOnDestroy(state, replacement, level, pos);

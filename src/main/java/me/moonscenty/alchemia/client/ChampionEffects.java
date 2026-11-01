@@ -15,12 +15,6 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 
-/**
- * The sparks about a champion, in its modifier's colour, from the original's particle sheet.
- * <p>
- * The original drew each of the thirteen its own way; these share one way of drawing and differ in colour, how
- * often, and whether they rise or sink. An infested one drips slime, as the original's did.
- */
 @EventBusSubscriber(modid = Alchemia.MODID, value = Dist.CLIENT)
 public final class ChampionEffects {
     private ChampionEffects() {

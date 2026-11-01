@@ -11,13 +11,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.chunk.LevelChunk;
 
-/**
- * Drawing on the aura, and putting it back.
- * <p>
- * Everything here works in whole chunks: a position only says which chunk is meant. Draining never takes more than
- * is there, and asks before it takes, so a device that needs several aspects at once cannot end up having spent half
- * of what it wanted.
- */
 public final class AuraHandler {
     private AuraHandler() {
     }
@@ -57,7 +50,7 @@ public final class AuraHandler {
         }
     }
 
-    /** Takes the lot or nothing, so a call that fails leaves the chunk as it was. */
+    // all or nothing
     public static boolean drain(LevelAccessor level, BlockPos pos, Holder<Aspect> aspect, int amount) {
         AuraChunk aura = at(level, pos);
         if (!aura.exists() || aura.get(aspect) < amount) {
@@ -67,7 +60,7 @@ public final class AuraHandler {
         return true;
     }
 
-    /** The same for several aspects at once: every one is checked before any of them is spent. */
+    // every aspect is checked before any is spent
     public static boolean drain(LevelAccessor level, BlockPos pos, AspectList wanted) {
         AuraChunk aura = at(level, pos);
         if (!aura.exists()) {
@@ -87,7 +80,6 @@ public final class AuraHandler {
         return true;
     }
 
-    /** Takes as much as is there, up to what was asked for, and says how much that was. */
     public static int drainAvailable(LevelAccessor level, BlockPos pos, Holder<Aspect> aspect, int amount) {
         AuraChunk aura = at(level, pos);
         int taken = Math.min(amount, aura.get(aspect));
@@ -97,13 +89,7 @@ public final class AuraHandler {
         return taken;
     }
 
-    /**
-     * Puts aura back, the way a node does.
-     * <p>
-     * A chunk already holding as much as it will take does not simply swell: the further past its base it is, the
-     * more likely the new aura spills over into the land around instead. That is what stops a node from making an
-     * endless well of one chunk while everywhere else stays thin.
-     */
+    // the further past its base a chunk is, the likelier new aura spills to a neighbour, so one chunk can't hoard it
     public static void recharge(ServerLevel level, BlockPos pos, Holder<Aspect> aspect, int amount,
             RandomSource random) {
         AuraChunk aura = at(level, pos);
@@ -117,7 +103,7 @@ public final class AuraHandler {
             return;
         }
 
-        // how far past its base it already is, measured against a tenth of the base
+        // overflow, in tenths of the base
         float over = (here - aura.base()) / (aura.base() * 0.1F);
         if (random.nextFloat() > over) {
             store(level, pos, aura.add(aspect, amount));
@@ -126,7 +112,6 @@ public final class AuraHandler {
         }
     }
 
-    /** Hands the aura to one of the four chunks around instead. */
     private static void spill(ServerLevel level, BlockPos pos, Holder<Aspect> aspect, int amount,
             RandomSource random) {
         Direction side = Direction.Plane.HORIZONTAL.getRandomDirection(random);
@@ -137,16 +122,11 @@ public final class AuraHandler {
         }
     }
 
-    /**
-     * Whether the aura here is thin enough that it should be left alone. The original let a reader who had studied
-     * the matter notice this; here it is simply true of anywhere run down past a tenth of what it holds.
-     */
     public static boolean shouldSpare(LevelAccessor level, BlockPos pos, Holder<Aspect> aspect) {
         AuraChunk aura = at(level, pos);
         return aura.exists() && (float) aura.get(aspect) / aura.base() < 0.1F;
     }
 
-    /** Whether any of these should be left alone here. */
     @SafeVarargs
     public static boolean shouldSpareAny(LevelAccessor level, BlockPos pos, Holder<Aspect>... aspects) {
         for (Holder<Aspect> aspect : aspects) {
@@ -157,12 +137,10 @@ public final class AuraHandler {
         return false;
     }
 
-    /** {@link #drain}, unless the aura here should be spared. */
     public static boolean drainUnlessSpared(LevelAccessor level, BlockPos pos, Holder<Aspect> aspect, int amount) {
         return !shouldSpare(level, pos, aspect) && drain(level, pos, aspect, amount);
     }
 
-    /** {@link #drain} of several, unless any of them should be spared here. */
     public static boolean drainUnlessSpared(LevelAccessor level, BlockPos pos, AspectList wanted) {
         for (Holder<Aspect> aspect : wanted.sortedByName()) {
             if (shouldSpare(level, pos, aspect)) {
@@ -172,7 +150,6 @@ public final class AuraHandler {
         return drain(level, pos, wanted);
     }
 
-    /** {@link #drainAvailable}, or nothing if the aura here should be spared. */
     public static int drainAvailableUnlessSpared(LevelAccessor level, BlockPos pos, Holder<Aspect> aspect,
             int amount) {
         return shouldSpare(level, pos, aspect) ? 0 : drainAvailable(level, pos, aspect, amount);

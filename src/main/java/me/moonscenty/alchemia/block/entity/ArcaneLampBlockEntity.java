@@ -13,19 +13,11 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
-/**
- * An arcane lamp at work: setting down points of light in the dark places round it, one at a time.
- *
- * <p>Every quarter of a second it picks somewhere within fifteen blocks and, if that place is empty, dark, and in
- * plain sight of the lamp, leaves a light there. Over a few minutes a cave fills with them. None is set more
- * than four blocks above the ground, so a lamp in the open does not light the sky.
- */
 public class ArcaneLampBlockEntity extends BlockEntity {
-    /** How often it sets a light down, how far out it reaches, and how dark a place has to be. All the original's. */
+    // original's values
     private static final int EVERY = 5;
     private static final int REACHES = 15;
     private static final int DARKER_THAN = 11;
-    /** How far above the ground a light may hang, and how near the bottom of the world it may go. */
     private static final int ABOVE_GROUND = 4;
     private static final int OFF_THE_BOTTOM = 5;
 
@@ -51,12 +43,11 @@ public class ArcaneLampBlockEntity extends BlockEntity {
         }
     }
 
-    /** As the original drew it: two throws of fifteen, one taken from the other, so the middle is likelier. */
+    // difference of two rolls, biased toward the lamp (original)
     private static int spread(Level level) {
         return level.random.nextInt(16) - level.random.nextInt(16);
     }
 
-    /** Whether nothing stands between the lamp and that place. */
     private static boolean inSight(Level level, BlockPos lamp, BlockPos spot) {
         Vec3 from = Vec3.atCenterOf(lamp);
         Vec3 to = Vec3.atCenterOf(spot);
@@ -65,7 +56,6 @@ public class ArcaneLampBlockEntity extends BlockEntity {
         return seen.getType() == HitResult.Type.MISS || seen.getBlockPos().equals(lamp) || seen.getBlockPos().equals(spot);
     }
 
-    /** Puts out every light it set down. Called when the lamp is put out or taken away. */
     public void takeBackLights() {
         if (level == null || level.isClientSide) {
             return;

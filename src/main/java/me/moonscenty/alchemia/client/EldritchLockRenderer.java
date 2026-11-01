@@ -24,15 +24,9 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
 
-/**
- * The lock on a great hall's door, as the original drew it: a carved block turned to face the way out, four arms of
- * pulsing cubes reaching out over the door that draw back one by one while the lock turns, the tablet in its face
- * once there is one, and over the whole door the stars -- which is all the door is, to look at.
- */
 public class EldritchLockRenderer implements BlockEntityRenderer<EldritchLockBlockEntity> {
     private static final ResourceLocation LOCK = Alchemia.id("textures/entity/eldritch_lock.png");
     private static final ResourceLocation ARM = Alchemia.id("textures/entity/eldritch_cube.png");
-    /** Close enough for the door's stars to be drawn. */
     private static final double STARS_IN_RANGE = 512.0;
 
     private static final LegacyCached<ModelPart> CUBE = LegacyCached.field(LegacyAssets.CUBE, "cube");
@@ -106,7 +100,6 @@ public class EldritchLockRenderer implements BlockEntityRenderer<EldritchLockBlo
         }
     }
 
-    /** The door, five by five across the lock, its stars shown from both sides. */
     private static void stars(PoseStack pose, VertexConsumer buffer, Direction facing) {
         Matrix4f matrix = pose.last().pose();
         float low = -2.0F;

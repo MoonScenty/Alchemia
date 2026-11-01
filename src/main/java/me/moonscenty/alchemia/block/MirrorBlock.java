@@ -31,14 +31,8 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-/**
- * A mirror: a thin pane hung on a solid face, looking out the way it was put up. A magic mirror and an essentia
- * mirror are the same block apart from what they pass. Nothing collides with it, and anything a magic mirror can
- * take that comes into its block is taken. It falls off if what it hangs on goes. Drawn wholly by its renderer.
- */
 public class MirrorBlock extends BaseEntityBlock {
     public static final MapCodec<MirrorBlock> CODEC = simpleCodec(properties -> new MirrorBlock(properties, false));
-    /** The way the glass looks: into the room, away from what it hangs on. */
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
     private static final Map<Direction, VoxelShape> PANES = Map.of(
             Direction.DOWN, Block.box(0, 14, 0, 16, 16, 16),
@@ -92,7 +86,6 @@ public class MirrorBlock extends BaseEntityBlock {
         return canSurvive(state, context.getLevel(), context.getClickedPos()) ? state : null;
     }
 
-    /** On a face that is solid where it hangs. */
     @Override
     protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
         Direction facing = state.getValue(FACING);
@@ -100,7 +93,6 @@ public class MirrorBlock extends BaseEntityBlock {
         return level.getBlockState(behind).isFaceSturdy(level, behind, facing);
     }
 
-    /** Falls off, and drops, a tick after what it hangs on has gone. */
     @Override
     protected BlockState updateShape(BlockState state, Direction direction, BlockState neighbour,
             LevelAccessor level, BlockPos pos, BlockPos neighbourPos) {
@@ -129,7 +121,6 @@ public class MirrorBlock extends BaseEntityBlock {
                 : createTickerHelper(type, ModBlockEntities.MIRROR.get(), MirrorBlockEntity::tick);
     }
 
-    /** A magic mirror takes in a stack that comes into its block, once it is not one it has just let out. */
     @Override
     protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
         if (!essentia && !level.isClientSide && entity instanceof ItemEntity item && item.isAlive()
@@ -138,7 +129,6 @@ public class MirrorBlock extends BaseEntityBlock {
         }
     }
 
-    /** Taken down, it tells its partner it is on its own; what it carries remembers where the partner is. */
     @Override
     protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState replacement, boolean moving) {
         if (!state.is(replacement.getBlock()) && level.getBlockEntity(pos) instanceof MirrorBlockEntity mirror) {

@@ -10,13 +10,6 @@ import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
-/**
- * What our blocks will say yes to when something else asks them in the game's common terms.
- *
- * <p>The crucible takes water from anything that pours it: a water jug, or another mod's pipe. It gives nothing back
- * that way -- what is in a crucible is not water any more once something is dissolved in it, and a bucket is still
- * the way to empty one. The spa is an ordinary tank and an ordinary pocket, shut only at the top.
- */
 @EventBusSubscriber(modid = Alchemia.MODID)
 public final class ModCapabilities {
     private ModCapabilities() {
@@ -26,10 +19,8 @@ public final class ModCapabilities {
     public static void register(RegisterCapabilitiesEvent event) {
         event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, ModBlockEntities.CRUCIBLE.get(),
                 (crucible, side) -> new CrucibleWater(crucible));
-        // a wand set on a recharge pedestal, or taken off it, by anyone's pipes as by a hopper
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, ModBlockEntities.RECHARGE_PEDESTAL.get(),
                 (pedestal, side) -> new net.neoforged.neoforge.items.wrapper.InvWrapper(pedestal));
-        // a totem takes shards from anyone's pipes, and so does any pole under it, for the totem
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, ModBlockEntities.AURA_TOTEM.get(),
                 (totem, side) -> new net.neoforged.neoforge.items.wrapper.InvWrapper(totem));
         event.registerBlock(Capabilities.ItemHandler.BLOCK, (level, pos, state, found, side) -> {
@@ -39,10 +30,8 @@ public final class ModCapabilities {
                     ? new IntoTotem(totem) : null;
         }, ModBlocks.AURA_TOTEM_POLE_INNER.get(), ModBlocks.AURA_TOTEM_POLE_OUTER.get(),
                 ModBlocks.AURA_TOTEM_POLE_PURE.get());
-        // a magic mirror takes items from anyone's pipes, and passes them on; nothing is ever taken back out
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, ModBlockEntities.MIRROR.get(),
                 (mirror, side) -> mirror.essentia() ? null : new IntoMirror(mirror));
-        // the spa's tank, and its pocket of salts, to anyone's pipes as to a bucket and a hopper
         event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, ModBlockEntities.SPA.get(),
                 (spa, side) -> spa.tank(side));
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, ModBlockEntities.SPA.get(),
@@ -50,7 +39,6 @@ public final class ModCapabilities {
                         : new net.neoforged.neoforge.items.wrapper.SidedInvWrapper(spa, side));
     }
 
-    /** A totem as seen from a pole under it: shards go in, nothing comes out. */
     private static final class IntoTotem extends net.neoforged.neoforge.items.wrapper.InvWrapper {
         IntoTotem(net.minecraft.world.Container totem) {
             super(totem);
@@ -62,7 +50,6 @@ public final class ModCapabilities {
         }
     }
 
-    /** A crucible as a tank of water that only fills. */
     private record CrucibleWater(CrucibleBlockEntity crucible) implements IFluidHandler {
         @Override
         public int getTanks() {
@@ -103,7 +90,6 @@ public final class ModCapabilities {
         }
     }
 
-    /** One square that is never full and never gives anything back: whatever goes in, goes through the mirror. */
     private record IntoMirror(me.moonscenty.alchemia.block.entity.MirrorBlockEntity mirror)
             implements net.neoforged.neoforge.items.IItemHandler {
         @Override

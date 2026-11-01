@@ -35,14 +35,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
-/**
- * A taint crawler: a little grub of taint, a silverfish's size and less, which leaves fibres where it crawls.
- *
- * <p>It comes of a taint growth when one is broken, of a chunk thick with flux, of an animal the taint has killed, and
- * out of an infested champion. It goes for players. On any but easy, a bite now and then gives taint poison.
- */
 public class TaintCrawler extends Monster implements TaintedMob {
-    /** The original's numbers. */
+    // original's values
     private static final double LIVES = 8.0;
     private static final double SPEED = 0.275;
     private static final double BITES = 2.0;
@@ -86,7 +80,6 @@ public class TaintCrawler extends Monster implements TaintedMob {
         return TaintedMob.allied(other) || super.isAlliedTo(other);
     }
 
-    /** Wherever it has crawled to, every quarter second, it leaves fibres if there is something to cling to. */
     @Override
     public void tick() {
         if (level().isClientSide && random.nextFloat() < 0.05F) {
@@ -104,7 +97,6 @@ public class TaintCrawler extends Monster implements TaintedMob {
         super.tick();
     }
 
-    /** Open ground or something soft growing there, not under water, and with something solid to cling to. */
     private static boolean takes(ServerLevel level, BlockPos at) {
         BlockState there = level.getBlockState(at);
         if (there.is(BlockTags.LEAVES) || !there.getFluidState().isEmpty() || there.getBlock() instanceof Tainted) {
@@ -114,7 +106,6 @@ public class TaintCrawler extends Monster implements TaintedMob {
         return soft && TaintSpread.besideSolid(level, at) && !TaintSpread.onlyBesideTaint(level, at);
     }
 
-    /** On normal and hard, a bite can carry taint poison: three seconds of it, or six. */
     @Override
     public boolean doHurtTarget(Entity victim) {
         if (!super.doHurtTarget(victim)) {
@@ -130,7 +121,6 @@ public class TaintCrawler extends Monster implements TaintedMob {
         return true;
     }
 
-    /** One time in eight, a scrap of what it was made of. */
     @Override
     protected void dropCustomDeathLoot(ServerLevel level, DamageSource source, boolean recentlyHit) {
         super.dropCustomDeathLoot(level, source, recentlyHit);
@@ -170,18 +160,12 @@ public class TaintCrawler extends Monster implements TaintedMob {
         return Entity.MovementEmission.EVENTS;
     }
 
-    /**
-     * Sets one down where something tainted burst.
-     *
-     * @return whether it came
-     */
     public static boolean spawnAt(ServerLevel level, double x, double y, double z) {
         TaintCrawler crawler = new TaintCrawler(level);
         crawler.moveTo(x, y, z, level.random.nextInt(360), 0.0F);
         return level.addFreshEntity(crawler);
     }
 
-    /** A flux trouble: a crawler on the ground. */
     public static boolean fromFlux(ServerLevel level, BlockPos ground, net.minecraft.util.RandomSource random) {
         return ground.getY() + 1 < level.getMaxBuildHeight()
                 && spawnAt(level, ground.getX() + 0.5, ground.getY() + 1, ground.getZ() + 0.5);

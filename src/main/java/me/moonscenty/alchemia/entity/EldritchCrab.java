@@ -40,22 +40,6 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.core.BlockPos;
 
-/**
- * An eldritch crab: a scuttling thing the size of a dog that lives in husks and comes out when they die.
- *
- * <h3>Its shell</h3>
- * One out of a husk, and a third of the rest (all of them on hard), wear a shell of crimson plate on the tail worth
- * five points of armour. At half health the shell breaks off.
- *
- * <h3>Its grip</h3>
- * A bare crab that leaps at whatever last hurt it and lands high enough on it -- half its height up and within two
- * blocks -- takes hold of its head and rides there, biting every half to one second. Each bite there is one chance in
- * five it lets go.
- *
- * <h3>Where this differs from the original</h3>
- * The original's crab meant to let go one bite in five as well, but the call it made only shuffled it about on the
- * head, so in practice it never let go. Here it does. The claws snap smoothly rather than a step a tick.
- */
 public class EldritchCrab extends Monster implements EldritchMob {
     private static final EntityDataAccessor<Byte> FLAGS = SynchedEntityData.defineId(EldritchCrab.class,
             EntityDataSerializers.BYTE);
@@ -97,8 +81,6 @@ public class EldritchCrab extends Monster implements EldritchMob {
         targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Cultist.class, true));
     }
 
-    // --- its shell -----------------------------------------------------------
-
     public boolean hasHelm() {
         return (entityData.get(FLAGS) & HELM) != 0;
     }
@@ -129,7 +111,7 @@ public class EldritchCrab extends Monster implements EldritchMob {
         return hurt;
     }
 
-    // --- its grip ------------------------------------------------------------
+    // the original meant to let go one bite in five but its call never did; here it does
 
     @Override
     public void tick() {
@@ -180,8 +162,6 @@ public class EldritchCrab extends Monster implements EldritchMob {
         return !effect.is(MobEffects.POISON) && super.canBeAffected(effect);
     }
 
-    // --- coming into the world -----------------------------------------------
-
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason,
             SpawnGroupData data) {
@@ -197,8 +177,6 @@ public class EldritchCrab extends Monster implements EldritchMob {
         return super.finalizeSpawn(level, difficulty, reason, data);
     }
 
-    // --- what it leaves ------------------------------------------------------
-
     @Override
     protected void dropCustomDeathLoot(ServerLevel level, DamageSource source, boolean recentlyHit) {
         super.dropCustomDeathLoot(level, source, recentlyHit);
@@ -207,8 +185,6 @@ public class EldritchCrab extends Monster implements EldritchMob {
             spawnAtLocation(Items.ENDER_PEARL);
         }
     }
-
-    // --- its voice -----------------------------------------------------------
 
     @Override
     protected SoundEvent getAmbientSound() {
@@ -234,8 +210,6 @@ public class EldritchCrab extends Monster implements EldritchMob {
     protected void playStepSound(BlockPos pos, BlockState state) {
         playSound(SoundEvents.SPIDER_STEP, 0.15F, 1.0F);
     }
-
-    // --- saving --------------------------------------------------------------
 
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {

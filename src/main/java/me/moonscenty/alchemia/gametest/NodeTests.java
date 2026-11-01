@@ -23,10 +23,6 @@ import net.minecraft.world.level.chunk.LevelChunk;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/**
- * Nodes are the only thing that puts aura back, so what matters is that they are made sensibly and that feeding the
- * land actually reaches it.
- */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class NodeTests {
@@ -41,7 +37,6 @@ public class NodeTests {
         return node;
     }
 
-    /** A fresh node is always something: a size, a kind and an aspect. */
     @GameTest(template = TEMPLATE)
     public static void everyNodeIsDrawnUpWhole(GameTestHelper helper) {
         RandomSource random = RandomSource.create(11L);
@@ -55,7 +50,6 @@ public class NodeTests {
         helper.succeed();
     }
 
-    /** Most nodes are plain, and every kind turns up eventually. */
     @GameTest(template = TEMPLATE)
     public static void oddNodesAreTheMinority(GameTestHelper helper) {
         RandomSource random = RandomSource.create(12L);
@@ -75,7 +69,6 @@ public class NodeTests {
         helper.succeed();
     }
 
-    /** A node made of something compound still feeds the land one of the six it is made from. */
     @GameTest(template = TEMPLATE)
     public static void whatANodeFeedsIsAlwaysPrimal(GameTestHelper helper) {
         RandomSource random = RandomSource.create(13L);
@@ -90,7 +83,6 @@ public class NodeTests {
         helper.succeed();
     }
 
-    /** Every kind gives something rather than nothing, however dim or bright it is. */
     @GameTest(template = TEMPLATE)
     public static void everyKindIsWorthSomething(GameTestHelper helper) {
         RandomSource random = RandomSource.create(14L);
@@ -104,7 +96,6 @@ public class NodeTests {
         helper.succeed();
     }
 
-    /** Only a hungry node takes rather than gives. */
     @GameTest(template = TEMPLATE)
     public static void onlyTheHungryOneTakes(GameTestHelper helper) {
         for (NodeType type : NodeType.values()) {
@@ -114,7 +105,6 @@ public class NodeTests {
         helper.succeed();
     }
 
-    /** Putting aura back reaches the chunk, and a chunk already full does not simply keep swelling. */
     @GameTest(template = TEMPLATE)
     public static void feedingTheLandReachesIt(GameTestHelper helper) {
         BlockPos here = helper.absolutePos(BlockPos.ZERO);
@@ -142,7 +132,6 @@ public class NodeTests {
         helper.succeed();
     }
 
-    /** Land with no aura at all must not swallow what a node gives without trace. */
     @GameTest(template = TEMPLATE)
     public static void feedingNowhereDoesNothing(GameTestHelper helper) {
         BlockPos away = new BlockPos(30_000_000, 64, 30_000_000);
@@ -152,7 +141,6 @@ public class NodeTests {
         helper.succeed();
     }
 
-    /** A reading of a node is a reading of whatever it is made of, however large it has grown. */
     @GameTest(template = TEMPLATE)
     public static void aNodeReadsAsWhatItIsMadeOf(GameTestHelper helper) {
         AuraNode node = node(helper, RandomSource.create(7L));
@@ -165,7 +153,6 @@ public class NodeTests {
         helper.succeed();
     }
 
-    /** A node cannot be hit or stood on, which once meant an alchemometer could not find it either. */
     @GameTest(template = TEMPLATE)
     public static void aNodeCanBeReadEvenThoughNothingCanTouchIt(GameTestHelper helper) {
         AuraNode node = node(helper, RandomSource.create(8L));

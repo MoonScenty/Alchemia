@@ -25,36 +25,21 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 
-/**
- * What stands on the research table: an inkwell with its quill once there are tools on it, and a rolled scroll once
- * there is a note.
- * <p>
- * They are the original's: the inkwell and the scroll with its ribbon are read out of its code
- * ({@code ModelResearchTable}) and drawn where its renderer drew them, and the quill is its flat picture stood in the
- * inkwell at its angle, drawn the way a flat item is so it keeps the thin look a pen has when you hold one.
- */
 public class ResearchTableRenderer implements BlockEntityRenderer<ResearchTableBlockEntity> {
     public static final ModelResourceLocation QUILL = ModelResourceLocation.standalone(Alchemia.id("block/research_table_quill"));
-    /** The original's sheet for the inkwell and the scroll. */
     private static final ResourceLocation LEGACY_TEXTURE = Alchemia.id("textures/entity/research_table.png");
-    /** The original tied the scroll with a ribbon in the note's colour, and in this grey when it had none. */
     private static final int RIBBON = 0xFF999999;
-    /** The original's quill: half size, a sixteenth thick, and where its renderer put it. */
     private static final float LEGACY_QUILL_SCALE = 0.5F;
     private static final float LEGACY_QUILL_THICK = 0.0625F;
 
     private final Minecraft client = Minecraft.getInstance();
     private ItemStack carrier = ItemStack.EMPTY;
 
-    /** The original's three parts, baked again whenever the import changes. */
     private static final LegacyCached<Parts> PARTS = new LegacyCached<>(() -> LegacyModels.get(
             LegacyAssets.RESEARCH_TABLE).map(read -> new Parts(LegacyModelBaker.field(read, "Inkwell"),
             LegacyModelBaker.field(read, "ScrollTube"), LegacyModelBaker.field(read, "ScrollRibbon"))).orElse(null));
 
-    /**
-     * The item renderer draws nothing for an empty stack, so it is handed the scribing tools to carry the quill
-     * model. Only the model is drawn; the stack just has to be something.
-     */
+    // the item renderer skips empty stacks, so any stack carries the quill model
     private ItemStack carrier() {
         if (carrier.isEmpty()) {
             carrier = new ItemStack(ModItems.SCRIBING_TOOLS.get());
@@ -81,7 +66,6 @@ public class ResearchTableRenderer implements BlockEntityRenderer<ResearchTableB
         }
     }
 
-    /** As the original's renderer drew them: from the middle of the desk's top, turned upside down and round. */
     private void renderLegacy(Parts parts, Direction facing, boolean tools, boolean notes, PoseStack pose,
             MultiBufferSource buffers, int light) {
         pose.pushPose();
@@ -101,8 +85,6 @@ public class ResearchTableRenderer implements BlockEntityRenderer<ResearchTableB
         if (tools) {
             parts.inkwell().render(pose, buffer, light, OverlayTexture.NO_OVERLAY);
 
-            // the quill: turned back upright, set in the inkwell and turned a little, then drawn as a flat picture
-            // from its corner, mirrored, as the original's own flat drawing laid its picture out
             pose.pushPose();
             pose.mulPose(Axis.XP.rotationDegrees(180F));
             pose.translate(-0.5F, 0.1F, 0.125F);

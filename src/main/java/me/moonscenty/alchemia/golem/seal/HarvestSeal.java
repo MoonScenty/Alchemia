@@ -33,17 +33,10 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.util.FakePlayer;
 
-/**
- * Harvest: walks its area a block every quarter second, and sends deft, smart golems to whatever has grown ripe.
- * Crops picked by hand are picked; the rest are cut, and, if it is set to replant, the golem comes back with
- * whatever it was grown from and plants it again, tilling the ground first if it has gone back to dirt. Set to,
- * it asks for seed from providing seals when the golem has none.
- */
 public class HarvestSeal extends Seal {
     private static final int REPLANT = 0;
     private static final int PROVISION = 1;
 
-    /** A crop cut down that is to be planted again: where, against which face, what with, and on tilled earth. */
     private static final class Replant {
         final BlockPos pos;
         final Direction face;
@@ -127,7 +120,6 @@ public class HarvestSeal extends Seal {
         return true;
     }
 
-    /** Works out how a crop just cut would be planted again, and asks for it to be. */
     private void plan(ServerLevel level, Task task, BlockPos at, BlockState was) {
         ItemStack seed = Fieldwork.seed(was);
         if (seed.isEmpty()) {
@@ -150,7 +142,6 @@ public class HarvestSeal extends Seal {
         }
     }
 
-    /** Plants a seed back where a crop was cut, tilling the ground first if it needs it. */
     private static void plant(ServerLevel level, Golem golem, Replant replant) {
         FakePlayer hands = Fieldwork.hands(level, golem);
         BlockPos ground = replant.pos.below();
@@ -173,7 +164,6 @@ public class HarvestSeal extends Seal {
         }
     }
 
-    /** A replanting golem must have the seed; set to, the seal asks providers for some when it has none. */
     @Override
     public boolean canGolemPerform(Golem golem, Task task) {
         Replant replant = replants.get(task.pos().asLong());

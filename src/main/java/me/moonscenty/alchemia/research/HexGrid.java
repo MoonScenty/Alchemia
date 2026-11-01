@@ -13,14 +13,9 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.RandomSource;
 
-/**
- * Axial coordinates on a hex board, and the handful of shapes a research note is cut from.
- * <p>
- * A cell is named by two numbers rather than three: the third is always {@code -q - r}, so keeping it would only be
- * something else to get wrong.
- */
+// Axial coordinates; the third (-q - r) is implied.
 public final class HexGrid {
-    /** The six ways out of a cell, in order, so that walking them traces a ring. */
+    // in ring-walking order
     private static final int[][] NEIGHBOURS = {{1, 0}, {1, -1}, {0, -1}, {-1, 0}, {-1, 1}, {0, 1}};
     public static final int SIDES = 6;
 
@@ -51,7 +46,6 @@ public final class HexGrid {
             return around;
         }
 
-        /** How many steps apart two cells are, walking from one to the other. */
         public int distanceTo(Hex other) {
             return (Math.abs(q - other.q) + Math.abs(r - other.r) + Math.abs(q + r - other.q - other.r)) / 2;
         }
@@ -59,7 +53,6 @@ public final class HexGrid {
 
     public static final Hex CENTRE = new Hex(0, 0);
 
-    /** The cells exactly {@code radius} steps from the middle, in order around the edge. */
     public static List<Hex> ring(int radius) {
         if (radius <= 0) {
             return List.of(CENTRE);
@@ -79,7 +72,6 @@ public final class HexGrid {
         return ring;
     }
 
-    /** Every cell out to {@code radius}, middle included. */
     public static Set<Hex> filled(int radius) {
         Set<Hex> cells = new LinkedHashSet<>();
         for (int step = 0; step <= radius; step++) {
@@ -88,10 +80,7 @@ public final class HexGrid {
         return cells;
     }
 
-    /**
-     * Spaces a number of cells evenly around a ring, starting somewhere random. Evenly rather than at random, so a
-     * note never opens with two endpoints sat next to each other and the puzzle already half solved.
-     */
+    // evenly rather than randomly spaced, so no two endpoints start next to each other
     public static List<Hex> spaceAroundRing(int radius, int count, RandomSource random) {
         List<Hex> ring = ring(radius);
         if (count <= 0 || ring.isEmpty()) {

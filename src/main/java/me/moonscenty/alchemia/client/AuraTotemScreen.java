@@ -13,17 +13,12 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
-/**
- * The aura totem as the original drew it: a pocket for shards and a bar for how much of the burning one is left, in
- * the colour of what it moves.
- */
 public class AuraTotemScreen extends AbstractContainerScreen<AuraTotemMenu> {
     private static final ResourceLocation PANEL = Alchemia.id("textures/gui/aura_totem.png");
     private static final int SHEET = 256;
     private static final int PANEL_W = 176;
     private static final int PANEL_H = 166;
 
-    // Laid out as the original laid it out.
     private static final int BAR_X = 64;
     private static final int BAR_Y = 52;
     private static final int BAR_W = 48;
@@ -68,7 +63,6 @@ public class AuraTotemScreen extends AbstractContainerScreen<AuraTotemMenu> {
         RenderSystem.disableBlend();
     }
 
-    /** The panel is a picture of the totem, as the original's was; it carries no words. */
     @Override
     protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
     }

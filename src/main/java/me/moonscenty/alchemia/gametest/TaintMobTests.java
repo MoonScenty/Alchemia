@@ -25,15 +25,11 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/**
- * The creatures of the taint, step eleven: the crawler, the swarm and the taintacle, and the geyser.
- */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class TaintMobTests {
     private static final String TEMPLATE = "empty_32x40x32";
 
-    /** A floor of this under the given spots. */
     private static void floor(GameTestHelper helper, net.minecraft.world.level.block.Block block, BlockPos... over) {
         for (BlockPos at : over) {
             helper.setBlock(at.below(), block);
@@ -45,7 +41,6 @@ public class TaintMobTests {
                 new AuraChunk(AuraGeneration.BASE, AspectList.EMPTY.add(ModAspects.FLUX, flux)));
     }
 
-    /** Wherever a crawler crawls, it leaves fibres behind. */
     @GameTest(template = TEMPLATE)
     public static void aCrawlerLeavesFibres(GameTestHelper helper) {
         BlockPos at = new BlockPos(4, 2, 4);
@@ -57,7 +52,6 @@ public class TaintMobTests {
         });
     }
 
-    /** The creatures of the taint are all on one side. */
     @GameTest(template = TEMPLATE)
     public static void taintedCreaturesKeepTogether(GameTestHelper helper) {
         BlockPos at = new BlockPos(4, 2, 4);
@@ -70,7 +64,6 @@ public class TaintMobTests {
         helper.succeed();
     }
 
-    /** A taintacle stays where it rose, and withers away off the taint. */
     @GameTest(template = TEMPLATE, timeoutTicks = 100)
     public static void aTaintacleIsRooted(GameTestHelper helper) {
         BlockPos rooted = new BlockPos(3, 2, 3);
@@ -80,7 +73,7 @@ public class TaintMobTests {
         Taintacle onTaint = helper.spawnWithNoFreeWill(ModEntities.TAINTACLE.get(), rooted);
         Taintacle offTaint = helper.spawnWithNoFreeWill(ModEntities.TAINTACLE.get(), stranded);
         Vec3 was = onTaint.position();
-        // either may have risen a champion, which is not whole to begin with, so each is held to how it began
+        // either may roll as a champion with reduced health, so compare against starting health
         float onAtFirst = onTaint.getHealth();
         float offAtFirst = offTaint.getHealth();
         onTaint.setDeltaMovement(1.0, 0.0, 1.0);
@@ -93,7 +86,6 @@ public class TaintMobTests {
         });
     }
 
-    /** A taintacle sends a tendril up under something on the taint some way off. */
     @GameTest(template = TEMPLATE, timeoutTicks = 100)
     public static void aTaintacleSendsATendril(GameTestHelper helper) {
         BlockPos rooted = new BlockPos(2, 2, 2);
@@ -110,7 +102,6 @@ public class TaintMobTests {
         });
     }
 
-    /** A swarm's bite weakens, and does not knock what it bites about. */
     @GameTest(template = TEMPLATE)
     public static void aSwarmWeakens(GameTestHelper helper) {
         BlockPos at = new BlockPos(5, 2, 5);
@@ -125,7 +116,6 @@ public class TaintMobTests {
         helper.succeed();
     }
 
-    /** A growth that goes bursts: a crawler, or a breath of flux. */
     @GameTest(template = TEMPLATE)
     public static void aGrowthBursts(GameTestHelper helper) {
         BlockPos at = new BlockPos(4, 2, 4);
@@ -141,7 +131,6 @@ public class TaintMobTests {
         helper.succeed();
     }
 
-    /** A geyser with no flux about it gives up, into a puddle of goo. */
     @GameTest(template = TEMPLATE)
     public static void aStarvedGeyserTurnsToGoo(GameTestHelper helper) {
         BlockPos at = new BlockPos(4, 2, 4);
@@ -152,7 +141,7 @@ public class TaintMobTests {
         RandomSource random = RandomSource.create(2L);
         for (int turn = 0; turn < 200 && helper.getLevel().getBlockState(where).is(ModBlocks.TAINT_GEYSER.get());
                 turn++) {
-            // a geyser breathes flux into thin air, which would keep it alive; the air is kept thin
+            // keep the air thin: the geyser's own flux would otherwise keep it alive
             flux(helper, at, 0);
             helper.getLevel().getBlockState(where).randomTick(helper.getLevel(), where, random);
         }
@@ -160,7 +149,6 @@ public class TaintMobTests {
         helper.succeed();
     }
 
-    /** A chunk thick with flux can let out a crawler on the ground. */
     @GameTest(template = TEMPLATE)
     public static void fluxLetsOutACrawler(GameTestHelper helper) {
         BlockPos ground = helper.absolutePos(new BlockPos(4, 1, 4));

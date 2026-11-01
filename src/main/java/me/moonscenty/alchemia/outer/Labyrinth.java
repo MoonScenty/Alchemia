@@ -14,23 +14,13 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.saveddata.SavedData;
 
-/**
- * Every maze of the Outer Lands there is, cell by cell, kept with the world -- with the overworld, as the original
- * kept it. A cell is one chunk of the Outer Lands; chunks that are no cell of any maze stay solid ancient bedrock.
- * <p>
- * Also kept: which overworld portal each maze was opened from, so that leaving a maze comes out where it was
- * entered (the original went looking for a portal within a hundred and twenty-eight blocks of where the player
- * stood, which did not always find one), and how many great halls have been woken, which says what wakes next.
- * <p>
- * The chunk generator reads it from its own threads, so the cells are in a concurrent map and the instance in hand
- * is held in a static while the server runs.
- */
+// Read from chunk-generator threads, hence the concurrent maps and the static instance.
 public class Labyrinth extends SavedData {
     private static final String NAME = Alchemia.MODID + "_labyrinth";
     private static volatile Labyrinth current;
 
     private final Map<Long, Short> cells = new ConcurrentHashMap<>();
-    /** The overworld portal each maze's portal cell was opened from. */
+    // exits come out at the recorded portal; the original searched 128 blocks and could miss
     private final Map<Long, Long> links = new ConcurrentHashMap<>();
     private int bossCount;
 
@@ -38,14 +28,12 @@ public class Labyrinth extends SavedData {
         return new SavedData.Factory<>(Labyrinth::new, Labyrinth::load, null);
     }
 
-    /** The labyrinth of this server, loaded with the overworld. */
     public static Labyrinth of(MinecraftServer server) {
         Labyrinth labyrinth = server.overworld().getDataStorage().computeIfAbsent(factory(), NAME);
         current = labyrinth;
         return labyrinth;
     }
 
-    /** The labyrinth of the server that is running, for the chunk generator; null when none has been loaded. */
     public static Labyrinth current() {
         return current;
     }
@@ -58,7 +46,6 @@ public class Labyrinth extends SavedData {
         return ChunkPos.asLong(x, z);
     }
 
-    /** The cell at this chunk, or null when it is no part of a maze. */
     public Cell get(int x, int z) {
         Short packed = cells.get(key(x, z));
         return packed == null ? null : new Cell(packed);
@@ -69,7 +56,6 @@ public class Labyrinth extends SavedData {
         setDirty();
     }
 
-    /** Whether any maze has a cell within this many chunks either way of here. */
     public boolean inRange(int x, int z, int width, int height) {
         for (int i = -width; i <= width; i++) {
             for (int j = -height; j <= height; j++) {
@@ -81,10 +67,7 @@ public class Labyrinth extends SavedData {
         return false;
     }
 
-    /**
-     * Lays down a maze for the portal over this altar, unless there is one in range already: fifteen to twenty-nine
-     * cells each way, its portal in the altar's own chunk. True when there was one already, as the original said.
-     */
+    // true when a maze was already there, as the original's
     public boolean ensureMaze(BlockPos altar, RandomSource random) {
         int width = 15 + random.nextInt(8) * 2;
         int height = 15 + random.nextInt(8) * 2;
@@ -99,7 +82,6 @@ public class Labyrinth extends SavedData {
         return false;
     }
 
-    /** Copies a maze in, its portal on this chunk. */
     void place(int x, int z, MazeGenerator maze) {
         int ox = x - (1 + maze.width / 2);
         int oz = z - (1 + maze.height / 2);
@@ -113,7 +95,6 @@ public class Labyrinth extends SavedData {
         setDirty();
     }
 
-    /** The portal cell nearest this chunk, or null when there is no maze at all. */
     public ChunkPos nearestPortal(int x, int z) {
         ChunkPos best = null;
         long bestDistance = Long.MAX_VALUE;
@@ -131,13 +112,12 @@ public class Labyrinth extends SavedData {
         return best;
     }
 
-    /** The overworld portal a maze's portal cell was opened from, or null when it is not known. */
     public BlockPos linkOf(ChunkPos portalCell) {
         Long link = links.get(portalCell.toLong());
         return link == null ? null : BlockPos.of(link);
     }
 
-    /** The next great hall to wake: counted on by one, and one time in four by two. What it is goes round by four. */
+    // counts up by 1, or by 2 one time in four; the boss kind cycles through four
     public int nextBoss(RandomSource random) {
         bossCount++;
         if (random.nextFloat() < 0.25F) {

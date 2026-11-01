@@ -25,17 +25,11 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 
-/**
- * A magic hand mirror: a mirror on a handle, linked to a magic mirror somewhere, that things can be put into from
- * wherever one stands and come out of that mirror. It only sends; nothing comes back through it. It may be linked
- * to a mirror that is already paired.
- */
 public class HandMirrorItem extends Item {
     public HandMirrorItem(Properties properties) {
         super(properties);
     }
 
-    /** Held against a magic mirror, it remembers that mirror. */
     @Override
     public InteractionResult useOn(UseOnContext context) {
         Level level = context.getLevel();
@@ -53,7 +47,6 @@ public class HandMirrorItem extends Item {
         return InteractionResult.sidedSuccess(level.isClientSide);
     }
 
-    /** Opened, it takes whatever is put in it through to its mirror. */
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack held = player.getItemInHand(hand);
@@ -72,7 +65,6 @@ public class HandMirrorItem extends Item {
         return InteractionResultHolder.sidedSuccess(held, level.isClientSide);
     }
 
-    /** The mirror this one is linked to, if it is still there and its chunk is loaded. */
     @Nullable
     public static MirrorBlockEntity target(Level level, ItemStack mirror) {
         GlobalPos link = mirror.get(ModDataComponents.MIRROR_LINK.get());
@@ -87,7 +79,6 @@ public class HandMirrorItem extends Item {
         return found;
     }
 
-    /** The mirror it was linked to is gone: the link is forgotten, and the holder told. */
     public static void broken(Level level, Player player, ItemStack mirror) {
         mirror.remove(ModDataComponents.MIRROR_LINK.get());
         level.playSound(null, player.blockPosition(), ModSounds.ZAP.get(), SoundSource.PLAYERS, 1.0F, 0.8F);

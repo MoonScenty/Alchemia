@@ -19,16 +19,11 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/**
- * A smelter is only worth building if what it boils off actually reaches the vessels above it, and if those vessels
- * sort what they catch. Both are what make a stack of them a thing worth arranging rather than a decoration.
- */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class SmelterTests {
     private static final String TEMPLATE = "empty_32x40x32";
     private static final BlockPos WHERE = new BlockPos(2, 1, 2);
-    /** Long enough that pours every forty ticks and every thirty-two come out more than one apart. */
     private static final int POURED = 600;
 
     private static EssentiaSmelterBlockEntity smelter(GameTestHelper helper, ItemStack input) {
@@ -57,7 +52,6 @@ public class SmelterTests {
         }
     }
 
-    /** What it burns comes apart into what it is made of, and the fire shows while it is at it. */
     @GameTest(template = TEMPLATE, timeoutTicks = 400)
     public static void itBoilsThingsDown(GameTestHelper helper) {
         EssentiaSmelterBlockEntity smelter = smelter(helper, new ItemStack(Items.IRON_INGOT, 2));
@@ -69,7 +63,6 @@ public class SmelterTests {
         helper.succeed();
     }
 
-    /** A vessel over the smelter catches what rises, and a smelter with nothing over it simply fills up. */
     @GameTest(template = TEMPLATE, timeoutTicks = 600)
     public static void whatRisesIsCaught(GameTestHelper helper) {
         EssentiaSmelterBlockEntity smelter = smelter(helper, new ItemStack(Items.IRON_INGOT, 8));
@@ -82,7 +75,6 @@ public class SmelterTests {
         helper.succeed();
     }
 
-    /** A vessel takes one kind and no other, which is the whole of how essentia is sorted. */
     @GameTest(template = TEMPLATE)
     public static void aVesselHoldsOneKind(GameTestHelper helper) {
         AlembicBlockEntity alembic = alembic(helper, 1);
@@ -93,7 +85,6 @@ public class SmelterTests {
         helper.succeed();
     }
 
-    /** Stacked vessels lose their legs, since they are standing on the one below rather than on the ground. */
     @GameTest(template = TEMPLATE)
     public static void stackedVesselsStandOnEachOther(GameTestHelper helper) {
         alembic(helper, 1);
@@ -105,19 +96,12 @@ public class SmelterTests {
         helper.succeed();
     }
 
-    /**
-     * Alumentum burns for four coals and hurries the pouring by a fifth.
-     * <p>
-     * The original hurried what rises, not what boils: the same item takes as long to come apart either way, but
-     * what has come apart goes up into the vessels every four fifths of the usual wait.
-     */
     @GameTest(template = TEMPLATE, timeoutTicks = 400)
     public static void alumentumBurnsLongAndHurriesThePour(GameTestHelper helper) {
         helper.assertValueEqual(new ItemStack(ModItems.ALUMENTUM.get()).getBurnTime(RecipeType.SMELTING),
                 new ItemStack(Items.COAL).getBurnTime(RecipeType.SMELTING) * 4,
                 "alumentum is worth four coals in anything that takes fuel");
 
-        // the same fire, the same iron, the same number of ticks: more has risen out of the hurried one
         EssentiaSmelterBlockEntity coal = smelter(helper, new ItemStack(Items.IRON_INGOT, 32));
         AlembicBlockEntity caughtFromCoal = alembic(helper, 1);
         run(helper, coal, POURED);
@@ -143,7 +127,6 @@ public class SmelterTests {
         helper.succeed();
     }
 
-    /** A pump against its side pours a second column off the same fire. */
     @GameTest(template = TEMPLATE, timeoutTicks = 400)
     public static void aPumpPoursASecondColumn(GameTestHelper helper) {
         EssentiaSmelterBlockEntity smelter = smelter(helper, new ItemStack(Items.IRON_INGOT, 32));
@@ -161,7 +144,6 @@ public class SmelterTests {
         helper.succeed();
     }
 
-    /** What a smelter fails to keep goes into the air as flux. */
     @GameTest(template = TEMPLATE, timeoutTicks = 400)
     public static void whatIsLostGoesUpAsFlux(GameTestHelper helper) {
         BlockPos at = helper.absolutePos(WHERE);

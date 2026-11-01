@@ -15,24 +15,12 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
-/**
- * A splinter of raw vis that follows what it was thrown at.
- *
- * <p>It is the cheapest of the twelve and does the least, and it never misses. That is the whole bargain: the
- * focus will not even go off unless there is something to lock on to, and once it has gone off the thing it was
- * aimed at is going to be hit.
- *
- * <p>It steers rather than turns on the spot, so running round a pillar still works. It just does not work for
- * long.
- */
 public class VisShard extends Bolt {
     private static final float HURTS = 1.0F;
-    /** How hard it steers towards its mark each tick, and how fast it travels once it is pointed. */
     private static final double STEERS = 0.25;
     private static final double FLIES = 0.6;
     private static final int FADES_AFTER = 100;
 
-    /** How far a persistent splinter looks for something else to chase. */
     private static final double LOOKS = 16.0;
 
     private float hurts = HURTS;
@@ -48,13 +36,11 @@ public class VisShard extends Bolt {
         chasing = mark.getId();
     }
 
-    /** It is held up by what it is made of, not by its speed. */
     @Override
     protected double getDefaultGravity() {
         return 0.0;
     }
 
-    /** What one splinter is worth, and whether it will find another mark when this one is gone. */
     public VisShard chasing(float hurts, boolean persistent) {
         this.hurts = hurts;
         this.persistent = persistent;
@@ -85,12 +71,6 @@ public class VisShard extends Bolt {
         super.tick();
     }
 
-    /**
-     * The nearest other living thing, for a splinter whose mark has gone.
-     * <p>
-     * Whoever threw it is passed over, which is the whole of what keeps a persistent splinter from turning
-     * round on its caster the moment the thing it was aimed at dies.
-     */
     private Entity somethingElse() {
         Entity thrower = getOwner();
         LivingEntity found = level().getNearestEntity(LivingEntity.class,

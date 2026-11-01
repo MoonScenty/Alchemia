@@ -14,25 +14,12 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 
-/**
- * A hole bored clean through a wall, which closes again six seconds later.
- *
- * <p>Nothing is broken and nothing drops. What is in the way is set aside and handed back, so this is a way
- * through a thing rather than a way of taking it: a vault wall opened with this is a vault wall again before
- * anybody has carried much out of it.
- *
- * <p>How deep it goes is how thick the wall is. The focus looks straight in before it starts and counts the solid
- * run, so a hole never opens into the far side of a mountain and never stops short of the far side of a door.
- * Thirty-three squares is as far as it will look, which is thicker than anything worth walking through. A focus
- * that has been widened looks further in, and one that has been lengthened holds the hole open longer; both are
- * what the original did with those two, and neither makes the tunnel any wider.
- */
+// blocks are set aside and restored when the hole closes; nothing drops
 public final class Hole {
-    /** How far in it will look for the far side. */
+    // original's value
     private static final int LOOKS_IN = 33;
-    /** How long a hole stays open, in ticks. */
     private static final int STAYS_OPEN = 120;
-    /** What a rank of widening adds to how far it looks, and a rank of lengthening to how long it holds. */
+    // per rank of enlarge (depth) and of extend (duration)
     private static final int DEEPER = 8;
     private static final int LONGER = 60;
 
@@ -67,12 +54,7 @@ public final class Hole {
         return true;
     }
 
-    /**
-     * How many squares of solid there are before the far side.
-     * <p>
-     * Counted before a single square is opened, so the whole tunnel is decided on the wall as it stands rather
-     * than on a wall that is already full of holes.
-     */
+    // measured before anything opens, so the tunnel depends on the intact wall
     private static int thickness(ServerLevel level, BlockPos face, Direction in, int looks) {
         BlockPos at = face;
         int deep = 0;

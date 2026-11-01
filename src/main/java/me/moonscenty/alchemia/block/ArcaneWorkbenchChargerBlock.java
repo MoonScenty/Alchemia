@@ -18,17 +18,10 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-/**
- * A frame of four posts with a crystal hanging between them, meant to stand on top of an arcane workbench.
- * <p>
- * It only ever fills the wand on the bench below it. That is the whole of it: it does nothing on its own and
- * nothing for a wand carried past, which is what makes a workbench somewhere worth coming back to.
- */
 public class ArcaneWorkbenchChargerBlock extends BaseEntityBlock {
     public static final MapCodec<ArcaneWorkbenchChargerBlock> CODEC =
             simpleCodec(ArcaneWorkbenchChargerBlock::new);
 
-    // the four posts stand at the corners and lean in to meet above the middle, where the crystal hangs
     private static final VoxelShape SHAPE = Shapes.or(
             Block.box(0, 0, 0, 5, 9, 5),
             Block.box(11, 0, 0, 16, 9, 5),

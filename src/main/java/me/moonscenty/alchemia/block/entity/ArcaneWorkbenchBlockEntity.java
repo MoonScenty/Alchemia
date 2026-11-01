@@ -20,15 +20,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
-/**
- * What is laid out on an arcane workbench: the nine squares of the grid, and the wand that pays for the work.
- * <p>
- * Unlike a vanilla bench this keeps hold of what is on it when the screen is closed, because the wand is meant to
- * be left there — the charger sitting above the bench tops it up while nobody is using it.
- */
+// keeps its contents when closed: the wand is meant to stay on it for the charger above
 public class ArcaneWorkbenchBlockEntity extends SyncedBlockEntity implements Container, MenuProvider {
     public static final int GRID = 9;
-    /** Where the wand lies. The last slot, so the nine before it are the grid in reading order. */
     public static final int SLOT_WAND = GRID;
     public static final int SIZE = GRID + 1;
 
@@ -112,7 +106,6 @@ public class ArcaneWorkbenchBlockEntity extends SyncedBlockEntity implements Con
         ContainerHelper.saveAllItems(tag, contents, registries);
     }
 
-    /** The wand is drawn lying on the bench, so what is on it has to reach the client without the screen open. */
     @Override
     public void setChanged() {
         super.setChanged();

@@ -17,13 +17,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 
-/**
- * A length of pipe with a little room in it.
- * <p>
- * It carries like any other, but it also keeps a few points of its own, drawing them in whenever the run has any to
- * spare and giving them up as soon as anything further along wants them. A works that draws in bursts therefore has
- * something to draw on between them instead of waiting on whatever is boiling.
- */
 public class BufferTubeBlock extends TubeBlock {
     public static final MapCodec<BufferTubeBlock> CODEC = simpleCodec(BufferTubeBlock::new);
 
@@ -41,16 +34,13 @@ public class BufferTubeBlock extends TubeBlock {
         return new BufferTubeBlockEntity(pos, state);
     }
 
-    /** Says what it is sitting on. */
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player,
             BlockHitResult hit) {
         if (!(level.getBlockEntity(pos) instanceof BufferTubeBlockEntity buffer)) {
             return InteractionResult.PASS;
         }
-        // a block that only reports what is in it must not swallow the click: Minecraft asks the block with
-        // the item first, then the block on its own, and only then the item itself. A jar that answers a phial
-        // with a sentence about its contents is a jar the phial can never be used on.
+        // empty hand only: answering a held item would block that item's own use
         if (!player.getMainHandItem().isEmpty()) {
             return InteractionResult.PASS;
         }
@@ -64,7 +54,6 @@ public class BufferTubeBlock extends TubeBlock {
         return level.isClientSide ? InteractionResult.SUCCESS : InteractionResult.CONSUME;
     }
 
-    /** What is in it, most of it first, written out as a list. */
     private static MutableComponent names(BufferTubeBlockEntity buffer) {
         MutableComponent out = Component.empty();
         boolean first = true;

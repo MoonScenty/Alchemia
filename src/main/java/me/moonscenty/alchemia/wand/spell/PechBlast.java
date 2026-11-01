@@ -18,31 +18,16 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 
-/**
- * A pech's curse: a thrown spite that bursts where it lands and leaves whoever was standing there the worse for it.
- *
- * <p>One of three afflictions at random -- poison, a dragging slowness, or a weakness in the arms. The original
- * picked one each time it burst rather than laying on all three; a focus named after somebody's curse ought to
- * be a nuisance and not a sentence.
- *
- * <p>It is not aimed at anything in particular. Whatever is within two blocks of the burst catches it, and so a
- * crowd is worth more than a duel.
- */
+// one random affliction (all three with nightshade) on everything near the burst
 public class PechBlast extends ThrowableProjectile {
-    /** How far from the burst the curse reaches. */
     private static final double REACHES = 2.0;
-    /** What the burst itself does, before anything settles on anybody. */
     private static final float HURTS = 2.0F;
-    /** How long an affliction lasts, in ticks. */
     private static final int LASTS = 100;
-    /** The curse flies flat enough for the few blocks it has; it is spite, not a stone. */
     private static final float FALLS = 0.015F;
-    /** Nothing this old was going to hit anything. */
     private static final int GIVES_UP = 100;
-    /** What one rank of lengthening adds to an affliction, in ticks. */
+    // ticks per rank of extend
     private static final int LONGER = 40;
 
-    /** Ranks of force, of lengthening, and whether it lays on all three rather than one. */
     private int strength;
     private int longer;
     private boolean nightshade;
@@ -55,7 +40,6 @@ public class PechBlast extends ThrowableProjectile {
         super(ModEntities.PECH_BLAST.get(), thrower, level);
     }
 
-    /** What is worked into the focus that threw it. */
     public PechBlast cursing(int strength, int longer, boolean nightshade) {
         this.strength = strength;
         this.longer = longer;
@@ -63,7 +47,6 @@ public class PechBlast extends ThrowableProjectile {
         return this;
     }
 
-    /** Nothing about it is worth telling the client; it is a trail of particles and a burst. */
     @Override
     protected void defineSynchedData(net.minecraft.network.syncher.SynchedEntityData.Builder builder) {
     }
@@ -83,19 +66,12 @@ public class PechBlast extends ThrowableProjectile {
         }
     }
 
-    /**
-     * The burst.
-     * <p>
-     * Whatever threw it is spared. A curse that caught the one casting it would be a curse nobody cast twice,
-     * and the original spared the thrower too.
-     */
     @Override
     protected void onHit(HitResult where) {
         super.onHit(where);
         burst(where);
     }
 
-    /** The burst itself, which anything may set off and a test may watch. */
     public void burst(HitResult where) {
         if (!(level() instanceof ServerLevel served)) {
             return;
@@ -111,7 +87,7 @@ public class PechBlast extends ThrowableProjectile {
         for (LivingEntity hit : caught) {
             hit.hurt(damageSources().indirectMagic(this, thrower), HURTS + strength);
             if (nightshade) {
-                // the original gave the dragging slowness one rank more than the other two
+                // slowness gets one amplifier rank more than the other two, as in the original
                 hit.addEffect(new MobEffectInstance(MobEffects.POISON, lasts, strength));
                 hit.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, lasts, strength + 1));
                 hit.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, lasts, strength));
@@ -122,7 +98,6 @@ public class PechBlast extends ThrowableProjectile {
         discard();
     }
 
-    /** One of the three, chosen when it bursts rather than when it is thrown. */
     private net.minecraft.core.Holder<net.minecraft.world.effect.MobEffect> oneOf() {
         return switch (random.nextInt(3)) {
             case 0 -> MobEffects.POISON;
@@ -147,13 +122,11 @@ public class PechBlast extends ThrowableProjectile {
         nightshade = tag.getBoolean("nightshade");
     }
 
-    /** A curse passes through whoever cast it; it is looking for anybody else. */
     @Override
     protected boolean canHitEntity(Entity other) {
         return super.canHitEntity(other) && other != getOwner();
     }
 
-    /** Hitting a living thing is still only a place to burst. The burst is what does the work. */
     @Override
     protected void onHitEntity(EntityHitResult struck) {
         super.onHitEntity(struck);

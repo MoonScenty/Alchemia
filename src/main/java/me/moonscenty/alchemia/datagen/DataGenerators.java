@@ -38,7 +38,7 @@ public class DataGenerators {
         ModBlockTagsProvider blockTags = generator.addProvider(event.includeServer(), new ModBlockTagsProvider(output, lookupProvider, existingFileHelper));
         generator.addProvider(event.includeServer(), new ModItemTagsProvider(output, lookupProvider, blockTags.contentsGetter(), existingFileHelper));
         generator.addProvider(event.includeServer(), new ModRecipeProvider(output, lookupProvider));
-        // the mod's own lands are written by the entries provider, so the biome tags look them up through it
+        // mod biomes come from the entries provider, so biome tags must look them up through it
         DatapackBuiltinEntriesProvider entries = generator.addProvider(event.includeServer(),
                 new DatapackBuiltinEntriesProvider(output, lookupProvider, ModDatapackEntries.BUILDER,
                         Set.of(Alchemia.MODID)));
@@ -57,11 +57,7 @@ public class DataGenerators {
         generator.addProvider(event.includeServer(), new ModEntityTypeTagsProvider(output, lookupProvider, existingFileHelper));
     }
 
-    /**
-     * Tells the checks that every picture and model taken from the original's jars is there. They come from the
-     * player's jars when the game starts and are never in the repository, so writing a model that names one would
-     * otherwise be refused as naming a file that does not exist.
-     */
+    // assets from the original's jars are loaded at runtime and not in the repo, so mark them as existing
     private static void knowImported(ExistingFileHelper files) {
         ExistingFileHelper.ResourceType models =
                 new ExistingFileHelper.ResourceType(PackType.CLIENT_RESOURCES, ".json", "models");

@@ -11,22 +11,14 @@ import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.network.PacketDistributor;
 
-/**
- * What warp calls up out of the dark, and where it puts it.
- * <p>
- * Everything warp calls is put the original's way: up to fifty tries, each seven to twenty-four blocks off the player
- * along each of the three ways or not at all, on solid ground with room to stand and no water -- so above or below as
- * readily as beside, in the cave under the floor or on the hill over the house.
- */
+// Placement is the original's: offsets on all three axes, so a summons lands above or below as readily as beside.
 public final class WarpSummons {
-    /** The most guardians one fog brings, and the most spiders one swarm. */
     private static final int MOST_GUARDIANS = 8;
     private static final int MOST_SPIDERS = 50;
 
     private WarpSummons() {
     }
 
-    /** A fog comes down on the player, and so many guardians walk in it, already after them. */
     public static void mist(ServerPlayer player, int guardians) {
         PacketDistributor.sendToPlayer(player, Mist.WARP);
         for (int i = 0; i < Math.min(MOST_GUARDIANS, guardians); i++) {
@@ -38,10 +30,6 @@ public final class WarpSummons {
         }
     }
 
-    /**
-     * Spiders all around, as many as the warp is deep up to fifty. Unless they are real, only the player sees them,
-     * and they bite for nothing and are gone in a minute.
-     */
     public static void spiders(ServerPlayer player, int warp, boolean real) {
         for (int i = 0; i < Math.min(MOST_SPIDERS, warp); i++) {
             MindSpider spider = new MindSpider(player.serverLevel());
@@ -56,7 +44,6 @@ public final class WarpSummons {
         }
     }
 
-    /** A lesser crimson portal somewhere near. */
     public static boolean portal(ServerPlayer player) {
         CultistPortal portal = new CultistPortal(player.serverLevel());
         if (!place(player.serverLevel(), player, portal, 1.0, true)) {
@@ -67,7 +54,6 @@ public final class WarpSummons {
         return player.serverLevel().addFreshEntity(portal);
     }
 
-    /** Finds the thing somewhere to stand near the player; leaves it there and says so, or says it found nowhere. */
     static boolean place(ServerLevel level, Player player, Mob mob, double up, boolean centred) {
         BlockPos at = player.blockPosition();
         for (int tries = 0; tries < 50; tries++) {

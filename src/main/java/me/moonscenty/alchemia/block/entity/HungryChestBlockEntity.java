@@ -7,16 +7,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
-/**
- * The inside of a hungry chest, which is the inside of any chest, and the snap of its lid when it eats.
- *
- * <p>The snap is a little lift of the lid on its own, over and above however far it is being held open by somebody
- * looking in. It falls shut again by itself.
- */
 public class HungryChestBlockEntity extends ChestBlockEntity {
-    /** The block event that says it has just eaten. */
     public static final int SNAPS = 2;
-    /** How far the lid snaps open, and how fast it falls back, as shares of fully open. */
     private static final float SNAP = 0.2F;
     private static final float FALLS = 0.1F;
 
@@ -47,7 +39,6 @@ public class HungryChestBlockEntity extends ChestBlockEntity {
         return super.triggerEvent(id, type);
     }
 
-    /** How far open the lid is: held open by somebody, or snapped open by a mouthful, whichever is wider. */
     public float lid(float partial) {
         return Math.max(getOpenNess(partial), wasSnap + (snap - wasSnap) * partial);
     }

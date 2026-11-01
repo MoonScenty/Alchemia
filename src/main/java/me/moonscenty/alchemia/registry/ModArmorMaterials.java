@@ -14,21 +14,10 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
-/**
- * What our two metals are worth as armour.
- * <p>
- * The numbers are the original's. Alchemium stops what iron stops and lasts two-thirds again as long as diamond
- * does, which is what makes it the suit somebody actually wears while they work. Void stops nearly what diamond
- * stops and wears out faster than leather, which makes it the suit somebody wears once, on purpose.
- * <p>
- * Neither is given toughness. The version this was ported from had no such number, and inventing one for a suit
- * would have quietly made it better than the original ever meant it to be.
- */
 public final class ModArmorMaterials {
     public static final DeferredRegister<ArmorMaterial> MATERIALS =
             DeferredRegister.create(Registries.ARMOR_MATERIAL, Alchemia.MODID);
 
-    /** How many times over the base a suit of each lasts. Vanilla's iron is fifteen and its diamond thirty-three. */
     public static final int ALCHEMIUM_LASTS = 25;
     public static final int VOID_LASTS = 10;
 
@@ -40,46 +29,22 @@ public final class ModArmorMaterials {
             MATERIALS.register("void", () -> material("void", stops(3, 7, 6, 3), 10,
                     () -> Ingredient.of(ModItems.VOID_INGOT)));
 
-    /**
-     * The traveller's boots, which are leather with a band round them and not a metal at all.
-     * <p>
-     * Leather's own numbers, because that is what they are made of. What is worth having about them is not what
-     * they stop. How long they last is set on the item, not here, since the original set it outright rather
-     * than as so many times a base.
-     */
     public static final DeferredHolder<ArmorMaterial, ArmorMaterial> TRAVELLER =
             MATERIALS.register("traveller", () -> new ArmorMaterial(stops(1, 3, 2, 1), 15,
                     SoundEvents.ARMOR_EQUIP_LEATHER, () -> Ingredient.of(net.minecraft.world.item.Items.LEATHER),
                     List.of(new ArmorMaterial.Layer(Alchemia.id("traveller_boots"))), 0.0F, 0.0F));
 
-    /**
-     * The goggles, which stop about what a hat stops.
-     * <p>
-     * A material of their own rather than the boots', because the sheet a piece is drawn from is named here and
-     * nowhere else. Two pieces sharing a material would be two pieces sharing a picture, however different the
-     * models hung on them are.
-     */
+    // own material: the armour texture is named by the material, so sharing one shares the texture
     public static final DeferredHolder<ArmorMaterial, ArmorMaterial> GOGGLES =
             MATERIALS.register("goggles", () -> new ArmorMaterial(stops(1, 3, 2, 1), 15,
                     SoundEvents.ARMOR_EQUIP_IRON, () -> Ingredient.of(ModItems.BRASS_INGOT),
                     List.of(new ArmorMaterial.Layer(Alchemia.id("goggles"))), 0.0F, 0.0F));
 
-    /**
-     * The thaumostatic harness: the goggles' numbers, which were the original's for anything worn that was not meant
-     * to stop a blow, and brass to mend it with.
-     */
     public static final DeferredHolder<ArmorMaterial, ArmorMaterial> HARNESS =
             MATERIALS.register("hover_harness", () -> new ArmorMaterial(stops(1, 3, 2, 1), 25,
                     SoundEvents.ARMOR_EQUIP_IRON, () -> Ingredient.of(ModItems.BRASS_INGOT),
                     List.of(new ArmorMaterial.Layer(Alchemia.id("hover_harness"))), 0.0F, 0.0F));
 
-    /**
-     * The two robes. Each is two sheets, as leather is: the cloth, which takes the dye, and over it the trim, which
-     * does not. The original drew both robes that way.
-     * <p>
-     * Cloth takes leather's numbers because that is what it is. The void robe takes void metal's, which is what
-     * the original gave it -- a robe that stops as much as a breastplate and falls apart as fast.
-     */
     public static final DeferredHolder<ArmorMaterial, ArmorMaterial> CLOTH =
             MATERIALS.register("cloth", () -> new ArmorMaterial(stops(1, 3, 2, 1), 25,
                     SoundEvents.ARMOR_EQUIP_LEATHER, () -> Ingredient.of(net.minecraft.world.item.Items.LEATHER),
@@ -90,14 +55,6 @@ public final class ModArmorMaterials {
                     SoundEvents.ARMOR_EQUIP_LEATHER, () -> Ingredient.of(ModItems.VOID_INGOT),
                     robeLayers("void_robe"), 0.0F, 0.0F));
 
-    /**
-     * Fortress armour: as much stopped as void metal, as long-lasting as alchemium, and better at taking an
-     * enchantment than anything else in the mod. Nothing in a single metal manages all three, which is the point
-     * of building it on an altar out of a suit that was already finished.
-     * <p>
-     * One layer, drawn as usual. With the original's jar its sheet is the original's and the model it is drawn on
-     * is read out of the original's code; without, both are plain armour.
-     */
     public static final DeferredHolder<ArmorMaterial, ArmorMaterial> FORTRESS =
             MATERIALS.register("fortress", () -> new ArmorMaterial(stops(3, 7, 6, 3), 40,
                     SoundEvents.ARMOR_EQUIP_IRON, () -> Ingredient.of(ModItems.ALCHEMIUM_INGOT),
@@ -105,17 +62,12 @@ public final class ModArmorMaterials {
 
     public static final int FORTRESS_LASTS = 25;
 
-    /**
-     * What the Crimson Cult wears: iron, all of it, the original's numbers exactly. The robe and the plate are drawn
-     * on the original's own models; the boots are plain armour.
-     */
     public static final DeferredHolder<ArmorMaterial, ArmorMaterial> CRIMSON_ROBE =
             MATERIALS.register("crimson_robe", () -> material("crimson_robe", stops(2, 6, 5, 2), 9,
                     () -> Ingredient.of(net.minecraft.world.item.Items.IRON_INGOT)));
     public static final DeferredHolder<ArmorMaterial, ArmorMaterial> CRIMSON_PLATE =
             MATERIALS.register("crimson_plate", () -> material("crimson_plate", stops(2, 6, 5, 2), 9,
                     () -> Ingredient.of(net.minecraft.world.item.Items.IRON_INGOT)));
-    /** The Crimson Praetor's: the cult's best, iron to mend. */
     public static final DeferredHolder<ArmorMaterial, ArmorMaterial> CRIMSON_PRAETOR =
             MATERIALS.register("crimson_praetor", () -> material("crimson_praetor", stops(3, 8, 6, 3), 20,
                     () -> Ingredient.of(net.minecraft.world.item.Items.IRON_INGOT)));
@@ -123,30 +75,26 @@ public final class ModArmorMaterials {
             MATERIALS.register("crimson_boots", () -> material("crimson_boots", stops(2, 6, 5, 2), 9,
                     () -> Ingredient.of(net.minecraft.world.item.Items.IRON_INGOT)));
 
-    /** Iron's. */
     public static final int CRIMSON_LASTS = 15;
 
-    /** How many times over the base each robe lasts. */
     public static final int CLOTH_LASTS = 25;
     public static final int VOID_ROBE_LASTS = 10;
 
     private ModArmorMaterials() {
     }
 
-    /** The dyed cloth and the undyed trim over it. */
     private static List<ArmorMaterial.Layer> robeLayers(String name) {
         return List.of(new ArmorMaterial.Layer(Alchemia.id(name), "", true),
                 new ArmorMaterial.Layer(Alchemia.id(name), "_overlay", false));
     }
 
-    /** What each piece takes off a blow, given head first. */
     private static Map<ArmorItem.Type, Integer> stops(int head, int chest, int legs, int feet) {
         Map<ArmorItem.Type, Integer> by = new EnumMap<>(ArmorItem.Type.class);
         by.put(ArmorItem.Type.HELMET, head);
         by.put(ArmorItem.Type.CHESTPLATE, chest);
         by.put(ArmorItem.Type.LEGGINGS, legs);
         by.put(ArmorItem.Type.BOOTS, feet);
-        // a horse cannot wear either of these, but the map has to answer for every kind of piece there is
+        // the map must cover every ArmorItem.Type, BODY included
         by.put(ArmorItem.Type.BODY, chest);
         return by;
     }
@@ -157,7 +105,6 @@ public final class ModArmorMaterials {
                 List.of(new ArmorMaterial.Layer(Alchemia.id(name))), 0.0F, 0.0F);
     }
 
-    /** The holder an armour piece is built from. */
     public static Holder<ArmorMaterial> of(DeferredHolder<ArmorMaterial, ArmorMaterial> which) {
         return which;
     }

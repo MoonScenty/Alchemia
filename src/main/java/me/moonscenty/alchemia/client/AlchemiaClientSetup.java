@@ -46,19 +46,13 @@ import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 
-/** Client-side wiring: extra models to bake, and who draws what. */
 @EventBusSubscriber(modid = Alchemia.MODID, value = Dist.CLIENT)
 public class AlchemiaClientSetup {
-    /**
-     * The models built on the original's meshes, which a model file cannot describe: they are wrapped around the
-     * models baked from our files, which say only how a thing is held, shown and broken.
-     */
     @SubscribeEvent
     public static void wrapModels(ModelEvent.ModifyBakingResult event) {
         ModBlocks.CRYSTALS.values().forEach(crystal -> crystal.get().getStateDefinition().getPossibleStates()
                 .forEach(state -> event.getModels().computeIfPresent(BlockModelShaper.stateToModelLocation(state),
                         (location, ours) -> new LegacyCrystalModel(ours, state))));
-        // every kind of tube, built on the original's mesh with our valve handles and one-way arrows kept
         Stream.of(ModBlocks.TUBE, ModBlocks.TUBE_VALVE, ModBlocks.TUBE_ONEWAY, ModBlocks.TUBE_RESTRICT,
                 ModBlocks.TUBE_FILTER, ModBlocks.TUBE_BUFFER).forEach(tube -> tube.get().getStateDefinition()
                 .getPossibleStates().forEach(state -> event.getModels().computeIfPresent(
@@ -66,8 +60,7 @@ public class AlchemiaClientSetup {
                         (location, ours) -> new LegacyTubeModel(ours, state))));
         event.getModels().computeIfPresent(ModelResourceLocation.inventory(ModItems.WAND.getId()),
                 (location, ours) -> new LegacyWandModel(ours));
-        // the stabiliser, the charger and the alembic in the hand, on the original's meshes as its renderers placed
-        // them there: all three are modelled lying down and stood up from the middle of the block
+        // all three meshes are modelled lying down and stood up from the block's middle
         Matrix4f standing = new Matrix4f().translate(0.5F, 0.0F, 0.5F).rotateX((float) Math.toRadians(-90.0));
         List<LegacyMeshItemModel.Placed> stabilizer = new ArrayList<>();
         stabilizer.add(new LegacyMeshItemModel.Placed("lock", standing));
@@ -78,8 +71,6 @@ public class AlchemiaClientSetup {
         event.getModels().computeIfPresent(ModelResourceLocation.inventory(ModBlocks.NODE_STABILIZER.getId()),
                 (location, ours) -> new LegacyMeshItemModel(ours, LegacyAssets.STABILIZER_MESH, true,
                         Alchemia.id("item/legacy/node_stabilizer"), stabilizer));
-        // a loose alembic on its legs. The original set the whole of it 0.4 lower in the hand, which sinks it out of
-        // the slot here, so it stands where the placed one does
         List<LegacyMeshItemModel.Placed> alembic = List.of(
                 new LegacyMeshItemModel.Placed("Legs", standing),
                 new LegacyMeshItemModel.Placed("Pot", standing),
@@ -87,7 +78,6 @@ public class AlchemiaClientSetup {
         event.getModels().computeIfPresent(ModelResourceLocation.inventory(ModBlocks.ALEMBIC.getId()),
                 (location, ours) -> new LegacyMeshItemModel(ours, LegacyAssets.ALEMBIC_MESH, true,
                         Alchemia.id("item/legacy/alembic"), alembic));
-        // the charger stands its ring, its four supports and its crystal up from the middle, as ChargerRenderer does
         Matrix4f relay = new Matrix4f().translate(0.5F, 0.5F, 0.5F).rotateX((float) Math.toRadians(90.0))
                 .rotateZ((float) Math.toRadians(45.0));
         List<LegacyMeshItemModel.Placed> charger = new ArrayList<>();
@@ -101,43 +91,34 @@ public class AlchemiaClientSetup {
         event.getModels().computeIfPresent(ModelResourceLocation.inventory(ModBlocks.ARCANE_WORKBENCH_CHARGER.getId()),
                 (location, ours) -> new LegacyMeshItemModel(ours, LegacyAssets.RELAY_MESH, true,
                         Alchemia.id("item/legacy/vis_relay"), charger));
-        // the alchemometer, as Thaumcraft 4's thaumometer
         event.getModels().computeIfPresent(ModelResourceLocation.inventory(ModItems.ALCHEMOMETER.getId()),
                 (location, ours) -> new LegacyScannerModel(ours));
     }
 
-    /** Models drawn by hand in renderers rather than named by a blockstate have to be asked for. */
     @SubscribeEvent
     public static void registerExtraModels(ModelEvent.RegisterAdditional event) {
-        // the quill stood in the research table's inkwell
         event.register(ResearchTableRenderer.QUILL);
-        // how a staff is held and shown, which the wand model borrows for one
         event.register(LegacyWandModel.STAFF);
     }
 
-    /** Tells the book how to open itself, which only the client knows how to do. */
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event) {
         AlchemonomiconItem.opener = () -> Minecraft.getInstance().setScreen(new AlchemonomiconScreen());
 
-        // a phial and a label are each drawn one way empty and another way with something named on them
         for (Item item : List.of(ModItems.PHIAL.get(), ModItems.JAR_LABEL.get())) {
             ItemProperties.register(item, Alchemia.id("filled"), (stack, level, holder, seed) ->
                     stack.has(ModDataComponents.ESSENTIA.get()) ? 1 : 0);
         }
-        // a mirror in the hand that remembers a partner shows its pane open
         for (Item item : List.of(ModBlocks.MIRROR.get().asItem(), ModBlocks.MIRROR_ESSENTIA.get().asItem())) {
             ItemProperties.register(item, Alchemia.id("linked"), (stack, level, holder, seed) ->
                     stack.has(ModDataComponents.MIRROR_LINK.get()) ? 1 : 0);
         }
-        // the bow of bone bends as a bow does, in half the time
         ItemProperties.register(ModItems.BONE_BOW.get(), Alchemia.id("pulling"), (stack, level, holder, seed) ->
                 holder != null && holder.isUsingItem() && holder.getUseItem() == stack ? 1 : 0);
         ItemProperties.register(ModItems.BONE_BOW.get(), Alchemia.id("pull"), (stack, level, holder, seed) ->
                 holder == null || holder.getUseItem() != stack ? 0
                         : (stack.getUseDuration(holder) - holder.getUseItemRemainingTicks())
                                 / (float) me.moonscenty.alchemia.item.BoneBowItem.FULL_DRAW);
-        // the lodestone lights while its holder looks towards a portal
         ItemProperties.register(ModItems.SINISTER_STONE.get(), Alchemia.id("active"), (stack, level, holder, seed) ->
                 me.moonscenty.alchemia.item.SinisterStoneItem.feels(
                         holder != null ? holder : Minecraft.getInstance().player) ? 1 : 0);
@@ -150,7 +131,6 @@ public class AlchemiaClientSetup {
             net.minecraft.client.renderer.ItemBlockRenderTypes.setRenderLayer(death,
                     net.minecraft.client.renderer.RenderType.translucent());
         }
-        // purifying fluid is seen through, as water is
         net.minecraft.client.renderer.ItemBlockRenderTypes.setRenderLayer(
                 me.moonscenty.alchemia.registry.ModFluids.PURIFYING.get(),
                 net.minecraft.client.renderer.RenderType.translucent());
@@ -159,23 +139,13 @@ public class AlchemiaClientSetup {
                 net.minecraft.client.renderer.RenderType.translucent());
     }
 
-    /**
-     * What colour the essentia in a phial reads as, and the ink on a label.
-     * <p>
-     * Both are drawn grey and coloured here, the same as the liquid in a jar, so one picture serves thirty-five
-     * aspects. The layer that takes the colour differs: a phial is filled behind its glass, a label is written on
-     * top of its paper.
-     */
     @SubscribeEvent
     public static void registerItemColours(RegisterColorHandlersEvent.Item event) {
-        // a tallow candle's wax is its dye's colour; the wick is not
         ModBlocks.TALLOW_CANDLES.forEach((dye, candle) -> event.register((stack, tint) ->
                 tint == 0 ? FastColor.ARGB32.opaque(dye.getMapColor().col) : -1, candle.get()));
         event.register((stack, tint) -> tint == 0 ? named(stack) : PLAIN, ModItems.PHIAL.get());
-        // an apprentice's ring takes its primal's colour
         ModItems.APPRENTICE_RINGS.values().forEach(ring -> event.register((stack, tint) ->
                 FastColor.ARGB32.opaque(ring.get().primal().value().color()), ring.get()));
-        // a banner's cloth in its dye, its symbol in its aspect
         event.register((stack, tint) -> {
             net.minecraft.world.item.DyeColor dye = stack.getOrDefault(
                     net.minecraft.core.component.DataComponents.BASE_COLOR, net.minecraft.world.item.DyeColor.WHITE);
@@ -188,49 +158,32 @@ public class AlchemiaClientSetup {
             }
             return PLAIN;
         }, ModItems.BANNER.get());
-        // a golem is the colour of what it is made of
         event.register((stack, tint) -> 0xFF000000
                 | me.moonscenty.alchemia.item.GolemItem.design(stack).material().colour(), ModItems.GOLEM.get());
-        // the glimmering grass, held, is the colour grass is held
         event.register((stack, tint) -> 0xFF000000 | net.minecraft.world.level.GrassColor.get(0.5, 1.0),
                 ModBlocks.AMBIENT_GRASS.get());
-        // a crystal is drawn in grey and painted by the one point it holds
         event.register((stack, tint) -> tint == 0 ? named(stack) : PLAIN, ModItems.CRYSTALLIZED_ESSENCE.get());
         event.register((stack, tint) -> tint == 0 ? named(stack) : PLAIN, ModItems.WISPY_ESSENCE.get());
         event.register((stack, tint) -> tint == 1 ? named(stack) : PLAIN, ModItems.JAR_LABEL.get());
-        // the liquid standing in a jar held in the hand, in the colour of whatever it is
         event.register((stack, tint) -> tint == 0 ? inside(stack) : PLAIN, ModBlocks.JAR.get().asItem(),
                 ModBlocks.VOID_JAR.get().asItem());
-        // a vis crystal in the hand is the original's grey cluster, coloured by its aspect
         ModBlocks.CRYSTALS.forEach((type, crystal) -> event.register(
                 (stack, tint) -> tint == 0 ? 0xFF000000 | type.aspect().value().color() : PLAIN, crystal.get().asItem()));
-        // a flame in a slot is two layers: the grey flame, which takes the colour the original gave it (the dye's
-        // colour on a map, not its colour as a dye), and its bead, which takes none
         ModBlocks.NITOR.forEach((colour, flame) -> event.register(
                 (stack, tint) -> tint == 0 ? 0xFF000000 | colour.getMapColor().col : PLAIN, flame.get().asItem()));
-        // a robe in a slot is its cloth, which takes the dye, and the trim over it, which does not
         ModItems.ROBES.values().forEach(robe -> event.register(
                 (stack, tint) -> tint == 0 ? FastColor.ARGB32.opaque(RobeItem.dyed(stack)) : PLAIN, robe.get()));
     }
 
-    /**
-     * White, and said properly.
-     * <p>
-     * An item tint is read as four bytes, not three: the renderer takes the top byte as how opaque the face is.
-     * A colour written as six digits therefore says "perfectly clear", and a phial tinted with plain white
-     * vanishes out of the slot altogether. A block tint has no such byte and is read as three, which is why the
-     * liquid in a jar was never troubled by this.
-     */
+    // item tints read the top byte as alpha, so a bare 0xFFFFFF would be invisible
     private static final int PLAIN = FastColor.ARGB32.opaque(0xFFFFFF);
 
-    /** The colour of what is in a jar that has been picked up. */
     private static int inside(ItemStack stack) {
         AspectList held = stack.get(ModDataComponents.CONTENTS.get());
         return held == null || held.isEmpty() ? PLAIN
                 : FastColor.ARGB32.opaque(held.sortedByAmount().getFirst().value().color());
     }
 
-    /** The colour of the aspect an item names, or white if it names none. */
     private static int named(ItemStack stack) {
         Holder<Aspect> aspect = stack.get(ModDataComponents.ESSENTIA.get());
         return aspect == null ? PLAIN : FastColor.ARGB32.opaque(aspect.value().color());
@@ -255,60 +208,40 @@ public class AlchemiaClientSetup {
         event.register(ModMenus.SEAL.get(), SealScreen::new);
     }
 
-    /**
-     * What colour the water in a crucible reads as.
-     * <p>
-     * The model's liquid face carries a tint index, and this is what fills it in. A pot that has had nothing thrown
-     * in it is plain water; after that it drifts towards whatever is dissolved, so what is in the pot can be read
-     * across a room without opening anything.
-     */
     @SubscribeEvent
     public static void registerBlockColours(RegisterColorHandlersEvent.Block event) {
         ModBlocks.TALLOW_CANDLES.forEach((dye, candle) -> event.register((state, level, pos, tint) ->
                 tint == 0 ? dye.getMapColor().col : 0xFFFFFF, candle.get()));
-        // a filter tube wears the colour of the one thing it lets by, which is the only way to read a run of pipe
         event.register((state, level, pos, tint) ->
                 level != null && pos != null && level.getBlockEntity(pos) instanceof FilterTubeBlockEntity filter
                         ? filter.only().map(aspect -> aspect.value().color()).orElse(0xFFFFFF)
                         : 0xFFFFFF, ModBlocks.TUBE_FILTER.get());
 
-        // the glimmering grass takes the colour of the land it grows in, as grass does
         event.register((state, level, pos, tint) -> level != null && pos != null
                 ? net.minecraft.client.renderer.BiomeColors.getAverageGrassColor(level, pos)
                 : net.minecraft.world.level.GrassColor.getDefaultColor(), ModBlocks.AMBIENT_GRASS.get());
 
-        // a totem glows in the colour of what it moves, and nearly black when it moves nothing
         event.register((state, level, pos, tint) ->
                 level != null && pos != null && level.getBlockEntity(pos)
                         instanceof me.moonscenty.alchemia.block.entity.AuraTotemBlockEntity totem
                         ? totem.glow() : 0x101010, ModBlocks.AURA_TOTEM_PUSH.get(), ModBlocks.AURA_TOTEM_PULL.get());
 
-        // the liquid standing in a jar, in the colour of whatever the jar is holding
         event.register((state, level, pos, tint) ->
                 level != null && pos != null && level.getBlockEntity(pos) instanceof JarBlockEntity jar
                         ? (tint == 1 ? jar.label().map(aspect -> aspect.value().color()).orElse(0xFFFFFF)
                                      : jar.colour())
                         : 0xFFFFFF, ModBlocks.JAR.get(), ModBlocks.VOID_JAR.get());
 
-        // the original's crystal is grey and takes its aspect's colour
         ModBlocks.CRYSTALS.forEach((type, crystal) -> event.register(
                 (state, level, pos, tint) -> tint == LegacyCrystalModel.TINT ? type.aspect().value().color() : -1,
                 crystal.get()));
 
-        // a flame is drawn in grey and painted by the kind of flame it is; its bead is a second layer, undyed
         ModBlocks.NITOR.forEach((colour, flame) -> event.register(
                 (state, level, pos, tint) -> tint == 0 ? colour.getMapColor().col : -1, flame.get()));
     }
 
-    /**
-     * The blocks whose breaking chips must not be dyed by the colour they give out.
-     * <p>
-     * See {@link PlainBreakParticles} for why. All three are tinted by what stands inside them rather than by
-     * anything about the block, and all three are broken often enough for it to show.
-     */
     @SubscribeEvent
     public static void registerClientExtensions(RegisterClientExtensionsEvent event) {
-        // the centrifuge and the crystallizer in a hand are their blocks' own renderers, standing still
         event.registerItem(new net.neoforged.neoforge.client.extensions.common.IClientItemExtensions() {
             @Override
             public net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer getCustomRenderer() {
@@ -316,7 +249,6 @@ public class AlchemiaClientSetup {
             }
         }, ModBlocks.CENTRIFUGE.get().asItem(), ModBlocks.CRYSTALLIZER.get().asItem(),
                 ModBlocks.ARCANE_BORE.get().asItem(), ModBlocks.ARCANE_BORE_BASE.get().asItem());
-        // the bellows in a hand is the block's own model, breathing on a clock of its own
         event.registerItem(new net.neoforged.neoforge.client.extensions.common.IClientItemExtensions() {
             @Override
             public net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer getCustomRenderer() {
@@ -334,7 +266,6 @@ public class AlchemiaClientSetup {
         event.registerFluidType(LiquidDeathLook.INSTANCE, me.moonscenty.alchemia.registry.ModFluids.DEATH_TYPE.get());
         event.registerBlock(PlainBreakParticles.INSTANCE,
                 ModBlocks.CRUCIBLE.get(), ModBlocks.JAR.get(), ModBlocks.VOID_JAR.get(), ModBlocks.TUBE_FILTER.get());
-        // robes in the original's violet until dyed; the void robe on the original's model when its jar is there
         ModItems.CRIMSON.values().forEach(piece -> {
             switch (piece.get().kind()) {
                 case ROBE -> event.registerItem(me.moonscenty.alchemia.client.armour.CultistArmourExtensions.ROBE,
@@ -349,14 +280,12 @@ public class AlchemiaClientSetup {
         });
         ModItems.ROBES.values().forEach(robe -> event.registerItem(
                 robe.get().drab() ? RobeExtensions.VOID : RobeExtensions.CLOTH, robe.get()));
-        // fortress armour on the original's own model when its jar is there, plain armour when not
         ModItems.FORTRESS.values().forEach(piece -> event.registerItem(FortressExtensions.INSTANCE, piece.get()));
     }
 
-    /** What draws the mod's particles. */
     @SubscribeEvent
     public static void registerParticles(RegisterParticleProvidersEvent event) {
-        // the original's own particles are drawn straight off its sheets, so they have no sprites to register
+        // legacy particles draw straight off their sheets, so there are no sprites to register
         event.registerSpecial(ModParticles.SPARKLE.get(), new SparkleParticle.Maker());
         event.registerSpecial(ModParticles.ESSENCE.get(), new EssenceParticle.Maker());
         event.registerSpecial(ModParticles.MARK.get(), new MarkParticle.Maker());
@@ -369,7 +298,6 @@ public class AlchemiaClientSetup {
 
     @SubscribeEvent
     public static void addLayers(EntityRenderersEvent.AddLayers event) {
-        // the harness's pack and rings, on every player
         for (var skin : event.getSkins()) {
             if (event.getSkin(skin) instanceof net.minecraft.client.renderer.entity.player.PlayerRenderer player) {
                 player.addLayer(new HarnessLayer(player));
@@ -390,7 +318,6 @@ public class AlchemiaClientSetup {
         event.registerBlockEntityRenderer(ModBlockEntities.CRAB_SPAWNER.get(), CrabSpawnerRenderer::new);
         event.registerEntityRenderer(ModEntities.AURA_NODE.get(), AuraNodeRenderer::new);
         event.registerEntityRenderer(ModEntities.PRIMAL_ARROW.get(), PrimalArrowRenderer::new);
-        // the original drew nothing of it but its smoke and sparks
         event.registerEntityRenderer(ModEntities.ALUMENTUM.get(),
                 net.minecraft.client.renderer.entity.NoopRenderer::new);
         event.registerEntityRenderer(ModEntities.TAINT_BOTTLE.get(),
@@ -437,9 +364,7 @@ public class AlchemiaClientSetup {
                 me.moonscenty.alchemia.client.legacy.LegacyAssets.TAINTACLE_TINY, 6, 0.2F));
         event.registerEntityRenderer(ModEntities.ANGRY_ZOMBIE.get(), AngryZombieRenderer::new);
         event.registerEntityRenderer(ModEntities.FURIOUS_ZOMBIE.get(), AngryZombieRenderer::new);
-        // a cloud is all particles, so there is nothing to draw for the entity itself
         event.registerEntityRenderer(ModEntities.TAINT_CLOUD.get(), NoopRenderer::new);
-        // both of these are a trail of particles and nothing else, as the thing they came from was
         event.registerEntityRenderer(ModEntities.PECH_BLAST.get(), NoopRenderer::new);
         event.registerEntityRenderer(ModEntities.GRAPPLE.get(), NoopRenderer::new);
         event.registerEntityRenderer(ModEntities.EMBER.get(), NoopRenderer::new);

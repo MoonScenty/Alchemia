@@ -4,7 +4,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Mob;
 
-/** Saving where a mob keeps to, which the game itself does not save. */
 public final class Home {
     private Home() {
     }

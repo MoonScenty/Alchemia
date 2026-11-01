@@ -26,21 +26,12 @@ import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 
-/**
- * Working at an arcane workbench: the grid, the wand that pays for the work, and what comes of the two.
- * <p>
- * Which recipe is on the grid is worked out on both sides rather than sent across. Everything it depends on — what
- * is in the slots, the recipes, and what the player has researched — is already on the client, so the screen can
- * show the price without a packet of its own.
- */
 public class ArcaneWorkbenchMenu extends AlchemiaMenu {
     public static final int SLOT_RESULT = 0;
     public static final int FIRST_GRID = 1;
     public static final int SLOT_WAND = FIRST_GRID + ArcaneWorkbenchBlockEntity.GRID;
     private static final int BENCH_SLOTS = SLOT_WAND + 1;
 
-    // Where each piece sits on the drawn panel.
-    // the original's places, so its panel and ours both fit: the grid is spread out on the cloth, a slot every 24
     private static final int GRID_X = 40;
     private static final int GRID_Y = 40;
     private static final int GRID_STEP = 24;
@@ -56,7 +47,6 @@ public class ArcaneWorkbenchMenu extends AlchemiaMenu {
     private final ContainerLevelAccess access;
     private final Player player;
 
-    /** What the client builds: the bench is a stand-in, filled in by the slots syncing across. */
     public ArcaneWorkbenchMenu(int id, Inventory inventory) {
         this(id, inventory, new SimpleContainer(ArcaneWorkbenchBlockEntity.SIZE), ContainerLevelAccess.NULL);
     }
@@ -91,7 +81,6 @@ public class ArcaneWorkbenchMenu extends AlchemiaMenu {
         lookUp();
     }
 
-    /** What is on the grid, in the shape the recipe manager wants it. */
     public CraftingInput grid() {
         List<ItemStack> items = new ArrayList<>(ArcaneWorkbenchBlockEntity.GRID);
         for (int slot = 0; slot < ArcaneWorkbenchBlockEntity.GRID; slot++) {
@@ -104,35 +93,26 @@ public class ArcaneWorkbenchMenu extends AlchemiaMenu {
         return bench.getItem(ArcaneWorkbenchBlockEntity.SLOT_WAND);
     }
 
-    /** The recipe the grid spells out, whether or not it can be paid for. */
     public Optional<RecipeHolder<ArcaneRecipe>> matching() {
         Level level = player.level();
         return level.getRecipeManager().getRecipeFor(ModRecipes.ARCANE.get(), grid(), level);
     }
 
-    /** What the work on the grid would cost. */
     public AspectList cost() {
         return matching().map(found -> found.value().cost(grid())).orElse(AspectList.EMPTY);
     }
 
-    /** Whether the research behind a recipe has been done. A recipe with no research named is open to anyone. */
     public boolean known(ArcaneRecipe recipe) {
         return recipe.research()
                 .map(research -> PlayerKnowledge.of(player).hasResearch(research))
                 .orElse(true);
     }
 
-    /** Whether the wand on the bench can pay for what is on the grid. */
     public boolean affordable() {
         return VisHolder.canPay(wand(), cost(), player, VisHolder.Spending.CRAFTING);
     }
 
-    /**
-     * Puts the result out, or takes it away again.
-     * <p>
-     * Research and vis are weighed here rather than in the slot, so that work the player cannot do leaves the
-     * result square empty instead of showing something they are not allowed to pick up.
-     */
+    // research and vis are checked here, not in the slot, so an unaffordable result never shows
     private void lookUp() {
         if (player.level().isClientSide) {
             return;
@@ -155,7 +135,6 @@ public class ArcaneWorkbenchMenu extends AlchemiaMenu {
         access.execute((level, pos) -> lookUp());
     }
 
-    /** Spends the ingredients and the vis once the result is carried off. */
     private void craft(Player taker, ItemStack made) {
         matching().ifPresent(found -> {
             VisHolder holder = VisHolder.of(wand());
@@ -213,7 +192,6 @@ public class ArcaneWorkbenchMenu extends AlchemiaMenu {
         return copy;
     }
 
-    /** The grid keeps what is on it, but the result square is no place to leave anything. */
     @Override
     public void removed(Player taker) {
         super.removed(taker);
@@ -225,7 +203,6 @@ public class ArcaneWorkbenchMenu extends AlchemiaMenu {
         return stillValid(access, taker, ModBlocks.ARCANE_WORKBENCH.get());
     }
 
-    /** The square the finished thing waits in. Nothing may be put into it, and taking from it spends the work. */
     private class ArcaneResultSlot extends Slot {
         ArcaneResultSlot(Container container, int x, int y) {
             super(container, 0, x, y);

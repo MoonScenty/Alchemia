@@ -7,15 +7,10 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 
-/** The froth a wash with sanitizing soap raises, as the crucible's bubbles, about the one washing. */
 public final class SoapEffects {
     private SoapEffects() {
     }
 
-    /**
-     * @param count  how many bubbles
-     * @param spread how far across, centred on whoever it is, they may rise
-     */
     public static void lather(Level world, LivingEntity user, int count, double spread, int colour) {
         if (!(world instanceof ClientLevel level)) {
             return;

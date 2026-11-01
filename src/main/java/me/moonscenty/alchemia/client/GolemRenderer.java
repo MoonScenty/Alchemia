@@ -30,25 +30,11 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 
-/**
- * Draws a golem as the original put one together: a body of chest, waist, head and two arms out of one mesh, all in
- * the picture of what it is made of, with each of its parts hung on where it belongs. A head part goes on the head
- * and turns with it; arms go on each arm, legs on each leg, and the rest on the body.
- *
- * <p>Its arms swing as it walks and come up together to carry something, which it holds out in front of it. It leans
- * into its going, more if it rolls or flies. A few parts move of their own: claws snap when it strikes, grinders spin
- * up and run down, dart launchers come up to aim, wheels turn as far as it rolled, and a hauler's basket shows what
- * is in its second hand.
- *
- * <p>Not a {@link LivingEntityRenderer}: that turns the world upside down for a model built the way a player's is,
- * and these meshes are built the right way up.
- */
+// not a LivingEntityRenderer: that flips the pose for player-style models, these meshes are built upright
 public class GolemRenderer extends EntityRenderer<Golem> {
     private static final String BASE = "golem_base";
-    /** How far a hurt golem rolls over when it dies, as any creature does. */
     private static final float DEATH_ROLL = 90.0F;
 
-    /** Each grinder's speed and how far round it has come, by golem. */
     private final Map<Golem, float[]> grinders = new WeakHashMap<>();
 
     public GolemRenderer(EntityRendererProvider.Context context) {
@@ -89,7 +75,6 @@ public class GolemRenderer extends EntityRenderer<Golem> {
         super.render(golem, yaw, partialTick, pose, buffers, light);
     }
 
-    /** One golem being drawn, with everything every part of it needs to know. */
     private final class Drawing {
         private final Golem golem;
         private final GolemDesign design;
@@ -116,7 +101,7 @@ public class GolemRenderer extends EntityRenderer<Golem> {
             this.material = design.material().texture();
         }
 
-        /** The original's numbers throughout. */
+        // original's numbers throughout
         void draw(float swing, float amount, float age, float headYaw, float headPitch) {
             boolean holding = !golem.getMainHandItem().isEmpty();
             boolean rolls = golem.has(GolemTrait.WHEELED) || golem.has(GolemTrait.FLYER);
@@ -230,7 +215,6 @@ public class GolemRenderer extends EntityRenderer<Golem> {
             pose.popPose();
         }
 
-        /** Every part of the golem hung on at this point, drawn for this side. */
         private void parts(Attach at, Side side) {
             for (GolemParts.Part part : design.parts()) {
                 Look look = part.look();
@@ -240,10 +224,6 @@ public class GolemRenderer extends EntityRenderer<Golem> {
             }
         }
 
-        /**
-         * One part's mesh, a group at a time: the groups named {@code bm...} in the golem's material and the rest
-         * in the part's own picture, each moved first if it is one that moves.
-         */
         private void part(GolemParts.Part part, Look look, Side side) {
             LegacyMesh mesh = mesh(look.mesh());
             if (mesh == null) {
@@ -269,7 +249,6 @@ public class GolemRenderer extends EntityRenderer<Golem> {
             }
         }
 
-        /** What the moving parts do before they are drawn. */
         private void move(GolemParts.Part part, String name, Side side) {
             if (part == GolemParts.Arms.CLAWS && name.startsWith("claw")) {
                 float snap = golem.getAttackAnim(partialTick) * 4.1F;
@@ -298,7 +277,6 @@ public class GolemRenderer extends EntityRenderer<Golem> {
             }
         }
 
-        /** Something it is carrying, held out in front or sat in its basket. */
         private void held(@Nullable ItemStack stack, float out, float flat) {
             if (stack == null || stack.isEmpty()) {
                 return;
@@ -324,12 +302,9 @@ public class GolemRenderer extends EntityRenderer<Golem> {
         MIDDLE
     }
 
-    // --- the meshes ---------------------------------------------------------------------------------------
-
     private static final Map<String, LegacyMesh> MESHES = new HashMap<>();
     private static int meshesFrom = -1;
 
-    /** One of the original's golem meshes as of the last import, turned over for the loader it was read with. */
     @Nullable
     private static LegacyMesh mesh(String name) {
         int generation = LegacyModels.generation();

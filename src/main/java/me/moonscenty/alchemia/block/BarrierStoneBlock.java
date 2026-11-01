@@ -29,18 +29,9 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.joml.Vector3f;
 
-/**
- * A barrier stone, the original's barrier paving stone: arcane brick worked into a ward. It keeps the two blocks over
- * it filled with a warding aura that no creature but a player walks through, and pushes back anything that tries to
- * jump or fly over. A redstone signal turns it off.
- * <p>
- * Its runes tell how it is: blue while a signal holds it off, red while something sits in the space it should ward,
- * purple while it is holding back a creature.
- */
 public class BarrierStoneBlock extends BaseEntityBlock {
     public static final MapCodec<BarrierStoneBlock> CODEC = simpleCodec(BarrierStoneBlock::new);
     public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
-    /** A paving stone stands a sixteenth short of a full block, the way farmland does; it is walked on as one. */
     private static final VoxelShape SHAPE = Block.box(0.0, 0.0, 0.0, 16.0, 15.0, 16.0);
 
     private static final Vector3f BLUE = new Vector3f(0.4F, 0.15F, 0.9F);
@@ -76,7 +67,6 @@ public class BarrierStoneBlock extends BaseEntityBlock {
         }
     }
 
-    /** Whether a ward at this place is up: a barrier stone below it, one or two down, with no signal on it. */
     public static boolean warding(BlockGetter level, BlockPos ward) {
         for (int down = 1; down <= 2; down++) {
             BlockState below = level.getBlockState(ward.below(down));
@@ -141,7 +131,6 @@ public class BarrierStoneBlock extends BaseEntityBlock {
         }
     }
 
-    /** Something other than the ward, or the open air it will soon fill, where the ward should be. */
     private static boolean blocked(Level level, BlockPos at) {
         BlockState there = level.getBlockState(at);
         return !there.isAir() && !there.is(ModBlocks.WARDING_AURA.get());

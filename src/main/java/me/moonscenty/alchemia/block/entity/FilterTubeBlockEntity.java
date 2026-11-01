@@ -11,12 +11,6 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.state.BlockState;
 
-/**
- * A tube that remembers the one aspect it will let by.
- * <p>
- * Nothing is kept in it — what it holds is an instruction, not essentia — so it carries like any other length of
- * pipe and only the walk that looks for something to move ever asks it anything.
- */
 public class FilterTubeBlockEntity extends TubeBlockEntity {
     private Holder<Aspect> only;
 

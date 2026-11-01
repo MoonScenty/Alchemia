@@ -17,20 +17,11 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 
-/**
- * Draws a pair of bellows as the original drew them: two plates either side of a leather bag, a plate across the
- * middle with the nozzle on it, and the outer plates drawn in and pushed apart as the bag breathes.
- *
- * <p>The plates and the bag are the original's model ({@code ModelBellows}), read out of its code. How they move is
- * read out of its renderer, which the decompiler could not put back together and had to be followed by hand.
- */
 public class BellowsRenderer implements BlockEntityRenderer<BellowsBlockEntity> {
     static final ResourceLocation TEXTURE = Alchemia.id("textures/entity/bellows.png");
-    /** How far the plates sit apart when the bag is empty, and how much further a full bag pushes them. */
     private static final float CLOSEST = 0.125F;
     private static final float SPREADS = 0.875F;
 
-    /** The original's parts, baked again whenever the import changes. */
     private static final LegacyCached<ModelPart> BAG = LegacyCached.field(LegacyAssets.BELLOWS, "Bag");
     private static final LegacyCached<ModelPart> TOP = LegacyCached.field(LegacyAssets.BELLOWS, "TopPlank");
     private static final LegacyCached<ModelPart> MIDDLE = LegacyCached.field(LegacyAssets.BELLOWS, "MiddlePlank");
@@ -47,7 +38,6 @@ public class BellowsRenderer implements BlockEntityRenderer<BellowsBlockEntity> 
                 ? bellows.getBlockState().getValue(BellowsBlock.FACING) : Direction.WEST;
         draw(pose, buffers.getBuffer(RenderType.entityCutoutNoCull(TEXTURE)), facing, bellows.inflation(partial),
                 light, overlay);
-        // blowing into a buffer tube, the original drew a bore's nozzle on the tube, pointing back at the bellows
         if (bellows.getLevel() != null && bellows.getLevel().getBlockEntity(bellows.getBlockPos().relative(facing))
                 instanceof me.moonscenty.alchemia.block.entity.BufferTubeBlockEntity) {
             pose.pushPose();
@@ -58,10 +48,6 @@ public class BellowsRenderer implements BlockEntityRenderer<BellowsBlockEntity> 
         }
     }
 
-    /**
-     * The bellows at a given fullness, facing a given way. Shared with the item, which breathes on a clock of its
-     * own rather than a block's.
-     */
     static void draw(PoseStack pose, VertexConsumer buffer, Direction facing, float inflation, int light,
             int overlay) {
         ModelPart bag = BAG.get();
@@ -100,7 +86,6 @@ public class BellowsRenderer implements BlockEntityRenderer<BellowsBlockEntity> 
         pose.popPose();
     }
 
-    /** Turned so the nozzle points the way the bellows face. The original's turns, in its order. */
     private static void orient(PoseStack pose, Direction facing) {
         pose.translate(0.5F, -0.5F, 0.5F);
         switch (facing) {
@@ -116,7 +101,7 @@ public class BellowsRenderer implements BlockEntityRenderer<BellowsBlockEntity> 
             case WEST -> pose.mulPose(Axis.YP.rotationDegrees(270.0F));
             case EAST -> pose.mulPose(Axis.YP.rotationDegrees(90.0F));
             default -> {
-                // south is the way the model was built
+                // south is how the model was built
             }
         }
     }

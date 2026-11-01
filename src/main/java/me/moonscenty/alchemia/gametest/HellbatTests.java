@@ -25,12 +25,6 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/**
- * Nine Hells and the firebat it lets off.
- * <p>
- * A bat goes after what the wand was pointed at and nothing else, and does not outlive it. What is worked into the
- * focus changes what a bat is: a bomb bursts on the first thing it reaches, a devil is harder to kill.
- */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class HellbatTests {
@@ -47,11 +41,10 @@ public class HellbatTests {
                 .inflate(40.0));
     }
 
-    /** Pointed at something alive, one bat goes, set on it. */
     @GameTest(template = TEMPLATE)
     public static void aBatIsSetOnWhatTheWandIsPointedAt(GameTestHelper helper) {
         Player caster = helper.makeMockPlayer(GameType.SURVIVAL);
-        // a mock player stands wherever it was made, not in the test's plot, and the bat leaves from its hand
+        // a mock player stands where it was created, not in the test plot
         Vec3 hand = helper.absoluteVec(new Vec3(2.5, 2.0, 2.5));
         caster.moveTo(hand.x, hand.y, hand.z);
         LivingEntity target = helper.spawn(EntityType.ZOMBIE, new BlockPos(4, 2, 4));
@@ -66,7 +59,6 @@ public class HellbatTests {
         helper.succeed();
     }
 
-    /** Pointed at nothing, nothing goes, and so nothing is paid for. */
     @GameTest(template = TEMPLATE)
     public static void pointedAtNothingNoBatGoes(GameTestHelper helper) {
         Player caster = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -76,7 +68,6 @@ public class HellbatTests {
         helper.succeed();
     }
 
-    /** A wand's bat with nothing left to chase does not hang about. */
     @GameTest(template = TEMPLATE, timeoutTicks = 100)
     public static void aBatWithNothingToChaseWithers(GameTestHelper helper) {
         FireBat bat = helper.spawn(me.moonscenty.alchemia.registry.ModEntities.FIRE_BAT.get(), new BlockPos(4, 4, 4));
@@ -86,7 +77,6 @@ public class HellbatTests {
         helper.succeedWhen(() -> helper.assertFalse(bat.isAlive(), "the bat is gone"));
     }
 
-    /** A bomb bursts on what it reaches, hurts it, and leaves the ground as it was. */
     @GameTest(template = TEMPLATE, timeoutTicks = 200)
     public static void aBombBurstsOnWhatItReachesAndBreaksNothing(GameTestHelper helper) {
         BlockPos floor = new BlockPos(4, 1, 4);
@@ -103,7 +93,6 @@ public class HellbatTests {
         });
     }
 
-    /** A devil is the harder bat the upgrade promised, and never bursts. */
     @GameTest(template = TEMPLATE)
     public static void aDevilIsHarderToKill(GameTestHelper helper) {
         LivingEntity target = helper.spawn(EntityType.PIG, new BlockPos(10, 2, 10));
@@ -116,7 +105,6 @@ public class HellbatTests {
         helper.succeed();
     }
 
-    /** Fire and bursts do nothing to a firebat. */
     @GameTest(template = TEMPLATE)
     public static void fireAndBurstsDoNotTouchIt(GameTestHelper helper) {
         FireBat bat = helper.spawn(me.moonscenty.alchemia.registry.ModEntities.FIRE_BAT.get(), new BlockPos(4, 4, 4));

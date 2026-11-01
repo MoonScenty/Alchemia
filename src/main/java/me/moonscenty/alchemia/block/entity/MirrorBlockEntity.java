@@ -32,18 +32,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
-/**
- * A mirror, and the other mirror it is paired with, which may be in another world.
- * <p>
- * A magic mirror takes in whole any stack of items that comes into its block and lets it out of its partner, a
- * single item a tick; hoppers and pipes can feed it too. An essentia mirror passes nothing on its own: it stands in
- * for whatever essentia is held within eight blocks in front of its partner, so that an altar or a lamp reaching
- * for essentia near one mirror draws on jars by the other.
- * <p>
- * Pairs are exclusive. An unpaired mirror tries now and then to pair again with the one it remembers, more seldom
- * the longer it fails. Moving things strains the aura: every hundred and twenty-eight items through a magic mirror,
- * or sixty-four points of essentia through an essentia one, lets out a point of flux.
- */
+// an essentia mirror holds nothing; it stands in for essentia held near its partner
 public class MirrorBlockEntity extends SyncedBlockEntity implements EssentiaHolder {
     private static final int RETRIES_FIRST = 40;
     private static final int RETRIES_AT_MOST = 600;
@@ -51,9 +40,7 @@ public class MirrorBlockEntity extends SyncedBlockEntity implements EssentiaHold
     private static final int ITEMS_A_FLUX = 128;
     private static final int ESSENTIA_A_FLUX = 64;
     private static final int SETTLES_EVERY = 100;
-    /** How far in front of the partner an essentia mirror reaches, across and deep. */
     private static final int REACHES = 8;
-    /** The block event the client's swirl is sent as. */
     public static final int SWIRL = 1;
 
     private boolean linked;
@@ -89,9 +76,6 @@ public class MirrorBlockEntity extends SyncedBlockEntity implements EssentiaHold
         return GlobalPos.of(level.dimension(), worldPosition);
     }
 
-    // --- the pair ------------------------------------------------------------
-
-    /** The mirror at the other end, if its world is running and its chunk is loaded; nothing is loaded to look. */
     @Nullable
     public MirrorBlockEntity partner() {
         if (link == null || !(level instanceof ServerLevel served)) {
@@ -106,19 +90,16 @@ public class MirrorBlockEntity extends SyncedBlockEntity implements EssentiaHold
         return mirror;
     }
 
-    /** Whether this and its partner point at each other. */
     public boolean paired() {
         MirrorBlockEntity partner = partner();
         return linked && partner != null && partner.linked && here().equals(partner.link);
     }
 
-    /** Remembers where its partner is, as a mirror carried from that partner does when it is put down. */
     public void remember(GlobalPos partner) {
         link = partner;
         restore();
     }
 
-    /** Pairs with the mirror it remembers, if that one is there and not already paired with another. */
     private void restore() {
         MirrorBlockEntity partner = partner();
         if (partner == null || partner.paired()) {
@@ -135,7 +116,6 @@ public class MirrorBlockEntity extends SyncedBlockEntity implements EssentiaHold
         changed();
     }
 
-    /** Tells the partner it is on its own, as a mirror taken down does. */
     public void unpair() {
         MirrorBlockEntity partner = partner();
         if (partner != null) {
@@ -143,8 +123,6 @@ public class MirrorBlockEntity extends SyncedBlockEntity implements EssentiaHold
             partner.changed();
         }
     }
-
-    // --- ticking -----------------------------------------------------------
 
     public static void tick(Level level, BlockPos pos, BlockState state, MirrorBlockEntity mirror) {
         mirror.count++;
@@ -172,9 +150,6 @@ public class MirrorBlockEntity extends SyncedBlockEntity implements EssentiaHold
         }
     }
 
-    // --- items -------------------------------------------------------------
-
-    /** A stack come into the block: sent whole to the partner, if the pair holds. */
     public boolean send(ItemEntity item) {
         if (essentia() || !paired()) {
             return false;
@@ -188,7 +163,6 @@ public class MirrorBlockEntity extends SyncedBlockEntity implements EssentiaHold
         return true;
     }
 
-    /** A stack pushed in by a hopper or a pipe: on to the partner, or back out of this one if it has none. */
     public void insert(ItemStack stack) {
         MirrorBlockEntity partner = paired() ? partner() : null;
         if (partner == null) {
@@ -201,7 +175,6 @@ public class MirrorBlockEntity extends SyncedBlockEntity implements EssentiaHold
         level.blockEvent(worldPosition, getBlockState().getBlock(), SWIRL, 0);
     }
 
-    /** Something sent this way, whether from the partner or from a hand mirror, to be let out a piece at a time. */
     public void receive(ItemStack stack) {
         if (!stack.isEmpty()) {
             queue.add(stack);
@@ -209,7 +182,6 @@ public class MirrorBlockEntity extends SyncedBlockEntity implements EssentiaHold
         }
     }
 
-    /** One item out of what has been sent here, a tick, picked at random. */
     private void eject(ServerLevel level) {
         if (queue.isEmpty() || count <= 20) {
             return;
@@ -226,7 +198,6 @@ public class MirrorBlockEntity extends SyncedBlockEntity implements EssentiaHold
         level.blockEvent(worldPosition, getBlockState().getBlock(), SWIRL, 0);
     }
 
-    /** Out into the room, pushed away from the glass, and not to be taken straight back in. */
     private void spit(ServerLevel level, ItemStack stack) {
         Direction f = facing();
         ItemEntity item = new ItemEntity(level, worldPosition.getX() + 0.5 - f.getStepX() * 0.3,
@@ -259,9 +230,6 @@ public class MirrorBlockEntity extends SyncedBlockEntity implements EssentiaHold
         return true;
     }
 
-    // --- essentia ----------------------------------------------------------
-
-    /** What stands in front of the partner, nearest first, other essentia mirrors left out. */
     private List<EssentiaHolder> beyond() {
         MirrorBlockEntity partner = essentia() && paired() ? partner() : null;
         if (partner == null) {
@@ -320,13 +288,10 @@ public class MirrorBlockEntity extends SyncedBlockEntity implements EssentiaHold
         return false;
     }
 
-    /** No pipe meets it: the original's could not be piped into. */
     @Override
     public boolean reachableFrom(Direction side) {
         return false;
     }
-
-    // --- what it keeps when taken down ---------------------------------------
 
     @Override
     protected void applyImplicitComponents(DataComponentInput input) {
@@ -349,8 +314,6 @@ public class MirrorBlockEntity extends SyncedBlockEntity implements EssentiaHold
     public void removeComponentsFromTag(CompoundTag tag) {
         tag.remove("link");
     }
-
-    // --- saving ------------------------------------------------------------
 
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {

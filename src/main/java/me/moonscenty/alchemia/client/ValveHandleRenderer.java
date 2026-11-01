@@ -20,20 +20,11 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.BlockState;
 
-/**
- * The wheel on a valve, as the original drew it: a ring on a short stem standing out of the side the valve faces.
- * Shutting the valve screws it in, a turn and a half and a little way down; opening it screws it back out.
- * <p>
- * The wheel and its stem are the original's model ({@code ModelTubeValve}), read out of its code.
- */
 public class ValveHandleRenderer implements BlockEntityRenderer<ValveTubeBlockEntity> {
-    /** The original's sheet for the wheel. */
     static final ResourceLocation TEXTURE = Alchemia.id("textures/entity/valve.png");
-    /** How far the wheel has turned when it is shut, and how far it turns in a tick on the way. */
     private static final float SHUT = 360.0F;
     private static final float PER_TICK = 20.0F;
 
-    /** The original's wheel and stem, baked again whenever the import changes. */
     private static final LegacyCached<ModelPart> RING = LegacyCached.field(LegacyAssets.VALVE, "ValveRing");
     private static final LegacyCached<ModelPart> ROD = LegacyCached.field(LegacyAssets.VALVE, "ValveRod");
 
@@ -54,7 +45,6 @@ public class ValveHandleRenderer implements BlockEntityRenderer<ValveTubeBlockEn
         }
         boolean open = state.getValue(ValveTubeBlock.OPEN);
         float ticks = valve.getLevel() == null ? 0.0F : valve.getLevel().getGameTime() + partial;
-        // how far it has been screwed since it was last worked, at the original's pace
         float moved = Math.max(0.0F, (ticks - valve.worked()) * PER_TICK);
         float turned = open ? Math.max(0.0F, SHUT - moved) : Math.min(SHUT, moved);
 
@@ -72,10 +62,6 @@ public class ValveHandleRenderer implements BlockEntityRenderer<ValveTubeBlockEn
         pose.popPose();
     }
 
-    /**
-     * Turns the model's up to the given side, as the original's valve and one-way renderers both did: a quarter turn
-     * about the upright, or onto its back for up and down, and then a quarter turn about the side itself.
-     */
     static void pointAlong(PoseStack pose, Direction side) {
         if (side.getStepY() == 0) {
             pose.mulPose(Axis.YP.rotationDegrees(90.0F));
@@ -87,7 +73,6 @@ public class ValveHandleRenderer implements BlockEntityRenderer<ValveTubeBlockEn
                 side.getStepX(), side.getStepY(), side.getStepZ()));
     }
 
-    /** The original's stem on its own, for the one-way tube's mark; null until it has been read. */
     static ModelPart rod() {
         ModelPart ring = RING.get();
         ModelPart rod = ROD.get();

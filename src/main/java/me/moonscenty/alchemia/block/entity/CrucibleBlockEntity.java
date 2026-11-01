@@ -31,43 +31,24 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 
-/**
- * What is in a crucible: how much water, how hot it is, and what has been dissolved into it so far.
- * <p>
- * Dissolving is what the pot is for. Anything that falls in comes apart into what it is made of, and once the right
- * things are floating in the water, one last thing thrown in boils the lot into something new.
- * <p>
- * The pot holds only so much. Past that it spills, and what spills does not simply vanish: it goes into the air as
- * flux, which is the price of working carelessly and the reason a crucible is worth watching.
- */
 public class CrucibleBlockEntity extends SyncedBlockEntity {
-    /** Plain water, for a pot that has had nothing thrown in it yet. */
     private static final int WATER = 0x3F76E4;
 
-    /** How much water a full pot holds, and how much a piece of work drinks. */
     public static final int FULL = 1000;
     private static final int PER_CRAFT = 50;
 
-    /** How hot it gets, how fast, and how hot it has to be to do anything. */
     private static final int HOTTEST = 200;
     private static final int WORKS_AT = 150;
 
-    /** How much can be dissolved before the pot runs over. */
     public static final int CAPACITY = 100;
-    /** A hot pot boils away what is in it this often, in ticks, whether or not it is full. */
     private static final int BOILS_OFF = 100;
 
-    /**
-     * How long since the pot last boiled something off. It starts behind, and the original set it further back
-     * whenever something went in -- a long way after a piece of work, less after something melted -- so a pot being
-     * worked boils off less than one left standing.
-     */
+    // boil-off counter resets: further back after a craft than after melting (original's values)
     private static final int STARTS_AT = -100;
     private static final int AFTER_WORK = -250;
     private static final int AFTER_MELT = -150;
-    /** One touch in this many scalds whatever is standing in a hot pot, for a point of fire. */
     private static final int SCALDS_EVERY = 10;
-    /** What the pot marks its own work with, so it does not take back in what it has just made. */
+    // tags the pot's own output so it is not swallowed again
     public static final String MADE_HERE = "alchemia.crucible_made";
 
     private int water;
@@ -76,9 +57,7 @@ public class CrucibleBlockEntity extends SyncedBlockEntity {
     private int counter = STARTS_AT;
     private int touches;
 
-    /** The event that tells the client the pot boiled up, with how hard as its data. */
     private static final int BOIL_UP = 2;
-    /** The event that tells the client a recipe came out, for the puff it goes up in. */
     private static final int CRAFTED = 99;
 
     public CrucibleBlockEntity(BlockPos pos, BlockState state) {
@@ -103,13 +82,6 @@ public class CrucibleBlockEntity extends SyncedBlockEntity {
         changed();
     }
 
-    /**
-     * Water poured in a little at a time, by a jug or a pipe of somebody else's.
-     * <p>
-     * Unlike a bucket emptied into it, this does not throw out what is dissolved: it only tops the pot up.
-     *
-     * @return how much it took, which is never more than there was room for
-     */
     public int pour(int amount, boolean really) {
         int room = Math.max(0, FULL - water);
         int taken = Math.min(room, amount);
@@ -120,10 +92,8 @@ public class CrucibleBlockEntity extends SyncedBlockEntity {
         return taken;
     }
 
-    /** Empties the pot into a bucket. Whatever was dissolved goes into the air rather than into the bucket. */
     public void drain() {
         if (level != null && !level.isClientSide && !dissolved.isEmpty()) {
-            // the original boiled up five times as hard when what was in the pot was thrown out
             level.blockEvent(worldPosition, getBlockState().getBlock(), BOIL_UP, 5);
         }
         spillAll();
@@ -148,8 +118,6 @@ public class CrucibleBlockEntity extends SyncedBlockEntity {
         return super.triggerEvent(id, data);
     }
 
-    // --- ticking -----------------------------------------------------------
-
     public static void tick(Level level, BlockPos pos, BlockState state, CrucibleBlockEntity crucible) {
         if (!(level instanceof ServerLevel served)) {
             return;
@@ -158,7 +126,7 @@ public class CrucibleBlockEntity extends SyncedBlockEntity {
         if (crucible.working()) {
             crucible.swallow(served, pos);
         }
-        // running over loses a point a tick, as the original's did, rather than everything over the brim at once
+        // overflow spills one point a tick (original's rate)
         if (crucible.dissolved.total() > CAPACITY) {
             crucible.spill(served, pos, 1);
         }
@@ -169,7 +137,6 @@ public class CrucibleBlockEntity extends SyncedBlockEntity {
         }
     }
 
-    /** Comes up to heat over a fire and falls away from one. A dry pot cools however big the fire under it is. */
     private void warm(ServerLevel level, BlockPos pos) {
         int before = heat;
         if (water > 0 && CrucibleBlock.heated(level, pos)) {
@@ -177,17 +144,11 @@ public class CrucibleBlockEntity extends SyncedBlockEntity {
         } else {
             heat = Math.max(0, heat - 1);
         }
-        // the froth starts and stops at the working mark, so the client is told when it is crossed
         if ((before > WORKS_AT) != (heat > WORKS_AT)) {
             changed();
         }
     }
 
-    /**
-     * Takes in whatever has fallen into the pot, a whole stack at once as the original did: each piece in turn
-     * either finishes a recipe or comes apart into what it is made of, until the stack is gone or the rest of it is
-     * something the pot cannot take. What the pot made itself is left be.
-     */
     private void swallow(ServerLevel level, BlockPos pos) {
         AABB inside = new AABB(pos).deflate(0.15, 0.0, 0.15).contract(0.0, 0.4, 0.0);
         for (ItemEntity item : level.getEntitiesOfClass(ItemEntity.class, inside)) {
@@ -208,20 +169,11 @@ public class CrucibleBlockEntity extends SyncedBlockEntity {
         }
     }
 
-    /**
-     * One thing put in by hand, the original's right click on the pot with something other than a wand.
-     *
-     * @return whether the pot took it
-     */
     public boolean putByHand(ItemStack held, Player player) {
         return level instanceof ServerLevel served && working()
                 && put(served, worldPosition, held.copyWithCount(1), player) == 0;
     }
 
-    /**
-     * Puts in as much of a stack as the pot will take, a piece at a time, and says how many are left. The pot
-     * bubbles once for whatever melted and puffs once for whatever was made, however many pieces it was.
-     */
     private int put(ServerLevel level, BlockPos pos, ItemStack stack, Player thrower) {
         int left = stack.getCount();
         boolean melted = false;
@@ -253,10 +205,6 @@ public class CrucibleBlockEntity extends SyncedBlockEntity {
         CRAFTED, MELTED, NOTHING
     }
 
-    /**
-     * One thing into the pot. A recipe wants only that there be some water left, and drinks its fifty or whatever
-     * there is, as the original's did.
-     */
     private Taken take(ServerLevel level, BlockPos pos, ItemStack one, Player thrower) {
         Optional<RecipeHolder<CrucibleRecipe>> found = level.getRecipeManager()
                 .getRecipeFor(ModRecipes.CRUCIBLE.get(), new CrucibleInput(one, dissolved), level);
@@ -281,9 +229,6 @@ public class CrucibleBlockEntity extends SyncedBlockEntity {
         return Taken.MELTED;
     }
 
-    /**
-     * Something alive standing in a hot pot: one touch in ten scalds it for a point of fire damage, with a hiss.
-     */
     public void touched(net.minecraft.world.entity.LivingEntity living) {
         if (!(level instanceof ServerLevel served) || !working() || ++touches < SCALDS_EVERY) {
             return;
@@ -307,9 +252,6 @@ public class CrucibleBlockEntity extends SyncedBlockEntity {
         level.addFreshEntity(out);
     }
 
-    // --- spilling ----------------------------------------------------------
-
-    /** Loses some of what is dissolved. It goes into the air as flux rather than nowhere. */
     private void spill(ServerLevel level, BlockPos pos, int amount) {
         List<Holder<Aspect>> held = dissolved.sortedByAmount();
         if (held.isEmpty()) {
@@ -322,7 +264,6 @@ public class CrucibleBlockEntity extends SyncedBlockEntity {
         changed();
     }
 
-    /** Everything at once, for a pot tipped over or broken. */
     public void spillAll() {
         if (level instanceof ServerLevel served && !dissolved.isEmpty()) {
             AuraHandler.add(served, worldPosition, ModAspects.FLUX, dissolved.total());
@@ -330,12 +271,6 @@ public class CrucibleBlockEntity extends SyncedBlockEntity {
         dissolved = AspectList.EMPTY;
     }
 
-    // --- what it looks like ------------------------------------------------
-
-    /**
-     * What colour the water reads as, as the original coloured it: plain water, darkening towards a murky purple as
-     * the pot fills with what is dissolved in it. Anything at all in it takes it halfway there at once.
-     */
     public int colour() {
         float murk = (float) dissolved.total() / CAPACITY;
         if (murk > 0.0F) {
@@ -347,22 +282,13 @@ public class CrucibleBlockEntity extends SyncedBlockEntity {
         return (int) Math.max(0.0F, red) << 16 | (int) Math.max(0.0F, green) << 8 | (int) Math.max(0.0F, blue);
     }
 
-    /**
-     * How high the surface stands, as the original worked it out: from 0.3 dry to 0.8 brim-full of water, and what is
-     * dissolved raises it the rest of the way towards the rim.
-     */
     public float surface() {
         float water = 0.3F + 0.5F * this.water / FULL;
         float raised = water + (float) dissolved.total() / CAPACITY * (1.0F - water);
-        // the original kept it off exactly the rim, where it would fight the top of the walls
+        // stay off exactly 1.0, where the surface z-fights the rim
         return raised > 1.0F ? 1.001F : raised == 1.0F ? 0.9999F : raised;
     }
 
-    /**
-     * Keeps the block state in step with what is in the pot, and tells the client.
-     * <p>
-     * The state carries only how full it looks, since that is all the model needs; everything else lives here.
-     */
     @Override
     protected void changed() {
         setChanged();
@@ -377,8 +303,6 @@ public class CrucibleBlockEntity extends SyncedBlockEntity {
             level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
         }
     }
-
-    // --- saving ------------------------------------------------------------
 
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {

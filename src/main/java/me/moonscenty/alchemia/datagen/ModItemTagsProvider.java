@@ -26,10 +26,8 @@ public class ModItemTagsProvider extends ItemTagsProvider {
     protected void addTags(HolderLookup.Provider provider) {
         ModBlocks.NITOR.values().forEach(flame -> tag(ModTags.Items.NITOR).add(flame.get().asItem()));
         ModItems.FOCI.values().forEach(focus -> tag(ModTags.Items.FOCI).add(focus.get()));
-        // haste goes on any boots, and on the harness
         tag(ModTags.Items.HASTE_ENCHANTABLE).addTag(net.minecraft.tags.ItemTags.FOOT_ARMOR)
                 .add(ModItems.THAUMOSTATIC_HARNESS.get());
-        // repair goes on the original's own gear
         var repairable = tag(ModTags.Items.REPAIR_ENCHANTABLE);
         java.util.stream.Stream.of(ModItems.METAL_TOOLS, ModItems.ELEMENTAL_TOOLS, ModItems.METAL_ARMOUR,
                         ModItems.ROBES, ModItems.FORTRESS, ModItems.CRIMSON)
@@ -37,19 +35,15 @@ public class ModItemTagsProvider extends ItemTagsProvider {
                 .forEach(item -> repairable.add(item.get()));
         repairable.add(ModItems.PRIMAL_CRUSHER.get(), ModItems.GOGGLES.get(), ModItems.TRAVELLER_BOOTS.get(),
                 ModItems.THAUMOSTATIC_HARNESS.get(), ModItems.BONE_BOW.get(), ModItems.CRIMSON_BLADE.get());
-        // the bow of bone takes a bow's enchantments
         tag(net.minecraft.tags.ItemTags.BOW_ENCHANTABLE).add(ModItems.BONE_BOW.get());
         tag(net.minecraft.tags.ItemTags.DURABILITY_ENCHANTABLE).add(ModItems.BONE_BOW.get());
         tag(net.neoforged.neoforge.common.Tags.Items.TOOLS_BOW).add(ModItems.BONE_BOW.get());
-        // the original's crafting warp: a point, sticking, for making any of these
         tag(ModTags.Items.WARPS_WHEN_MADE).add(ModItems.FOCI.get("hellbat").get(), ModItems.FOCI.get("primal").get(),
                 ModBlocks.BRAIN_JAR.get().asItem(), ModItems.SINISTER_STONE.get(), ModItems.LIQUID_DEATH_BUCKET.get(),
                 ModItems.BOTTLE_TAINT.get());
         baubles();
         robes();
-        // wolves will eat it, as the original's would
         tag(ItemTags.MEAT).add(ModItems.ZOMBIE_BRAIN.get());
-        // the meat chunks are meat to a wolf, all but the fish
         ModItems.MEAT_CHUNKS.forEach((meat, chunk) -> {
             if (!meat.equals("fish")) {
                 tag(ItemTags.MEAT).add(chunk.get());
@@ -73,8 +67,6 @@ public class ModItemTagsProvider extends ItemTagsProvider {
         copy(Tags.Blocks.ORE_RATES_SINGULAR, Tags.Items.ORE_RATES_SINGULAR);
         copy(Tags.Blocks.ORE_RATES_DENSE, Tags.Items.ORE_RATES_DENSE);
 
-        // what an aura node can be seen through. The sight reads this and nothing else
-        // the goggles, and the void robe's hood, which the original let see what the goggles see
         tag(ModTags.Items.REVEALS).add(ModItems.GOGGLES.get(), ModItems.ROBES.get("void_robe_helm").get());
 
         tag(ModTags.Items.GEMS_AMBER).add(ModItems.AMBER.get());
@@ -124,15 +116,12 @@ public class ModItemTagsProvider extends ItemTagsProvider {
         copy(BlockTags.LEAVES, ItemTags.LEAVES);
         copy(BlockTags.SAPLINGS, ItemTags.SAPLINGS);
 
-        // the balanced shard counts as one too, as it did in the original, so anything asking for "a shard" takes it
         ModItems.SHARDS.values().forEach(shard -> tag(ModTags.Items.SHARDS).add(shard.get()));
         tag(ModTags.Items.SHARDS).add(ModItems.BALANCED_SHARD.get());
         tag(ModTags.Items.CLUSTERS).add(ModItems.IRON_CLUSTER.get(), ModItems.GOLD_CLUSTER.get(),
                 ModItems.COPPER_CLUSTER.get(), ModItems.CINNABAR_CLUSTER.get());
     }
 
-    /** Each robe piece where the game looks for armour of its shape, and where an enchanting table looks. */
-    /** Which Curios slot each bauble goes in, and what runic augmentation will take to. */
     private void baubles() {
         var necklace = net.minecraft.tags.ItemTags.create(net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(
                 "curios", "necklace"));
@@ -187,17 +176,11 @@ public class ModItemTagsProvider extends ItemTagsProvider {
             tag(ItemTags.DURABILITY_ENCHANTABLE).add(robe);
             tag(ItemTags.ARMOR_ENCHANTABLE).add(robe);
             tag(ItemTags.EQUIPPABLE_ENCHANTABLE).add(robe);
-            // both robes take dye and wash out in a cauldron, as the original's both did
             tag(ItemTags.DYEABLE).add(robe);
         });
     }
 
-    /**
-     * The tools and armour of our metals, put where the game and the mod both look for them.
-     * <p>
-     * A pickaxe that is not in the pickaxes tag is not a pickaxe to anything that asks: not to vanilla, and not
-     * to the workings an altar puts on tools. Extending the class is not the same as saying so.
-     */
+    // tools must be in the vanilla tool tags; extending the class is not enough
     private void metalGear() {
         java.util.Map<String, net.minecraft.tags.TagKey<net.minecraft.world.item.Item>> shapes =
                 java.util.Map.of(
@@ -218,7 +201,6 @@ public class ModItemTagsProvider extends ItemTagsProvider {
                     tag(shapes.get(shape)).add(made.getValue().get());
                 });
 
-        // and what may be taken to an enchanting table, which is a separate list from what a thing is
         ModItems.METAL_TOOLS.forEach((name, tool) -> {
             tag(net.minecraft.tags.ItemTags.DURABILITY_ENCHANTABLE).add(tool.get());
             if (name.endsWith("_sword")) {
@@ -229,7 +211,6 @@ public class ModItemTagsProvider extends ItemTagsProvider {
                 tag(net.minecraft.tags.ItemTags.MINING_LOOT_ENCHANTABLE).add(tool.get());
             }
         });
-        // the elemental tools are tools of their shape, and the crusher is two shapes at once
         ModItems.ELEMENTAL_TOOLS.forEach((name, tool) -> {
             String shape = name.substring(name.indexOf('_') + 1);
             tag(shapes.get(shape)).add(tool.get());

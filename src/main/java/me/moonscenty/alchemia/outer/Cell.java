@@ -1,20 +1,14 @@
 package me.moonscenty.alchemia.outer;
 
-/**
- * One chunk of a maze in the Outer Lands: which of its four sides open onto the next, and what it holds. Kept, as
- * the original kept it, packed into a short -- the sides in the low bits (north 1, south 2, east 4, west 8) and the
- * feature in the high byte.
- */
+// Packed into a short as the original's: sides in the low bits, feature in the high byte.
 public final class Cell {
     public static final int NORTH = 1;
     public static final int SOUTH = 2;
     public static final int EAST = 4;
     public static final int WEST = 8;
 
-    /** What a cell holds. */
     public static final int PASSAGE = 0;
     public static final int PORTAL = 1;
-    /** The four quarters of the great hall at the end: upper left, upper right, lower left, lower right. */
     public static final int BOSS_UPPER_LEFT = 2;
     public static final int BOSS_UPPER_RIGHT = 3;
     public static final int BOSS_LOWER_LEFT = 4;
@@ -30,7 +24,7 @@ public final class Cell {
     public static final int OVERGROWN = 22;
     public static final int TAINTED = 23;
     public static final int WEBBED = 24;
-    /** Only while a maze is being carved: the tunnel that brings the hall in. */
+    // only while a maze is being carved
     static final int CARVING = 99;
 
     public boolean north;

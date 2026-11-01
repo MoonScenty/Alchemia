@@ -13,9 +13,6 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
-/**
- * A pig the taint has made over.
- */
 public class TaintedPig extends TaintedBeast {
     public TaintedPig(EntityType<? extends TaintedPig> type, Level level) {
         super(type, level);
@@ -25,7 +22,7 @@ public class TaintedPig extends TaintedBeast {
         this(ModEntities.TAINTED_PIG.get(), level);
     }
 
-    /** The original's numbers. */
+    // original's values
     public static AttributeSupplier.Builder attributes() {
         return Monster.createMonsterAttributes()
                 .add(Attributes.MAX_HEALTH, 20.0)

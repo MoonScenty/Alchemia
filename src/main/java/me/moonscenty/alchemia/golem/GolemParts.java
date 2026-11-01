@@ -17,18 +17,11 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Blocks;
 
-/**
- * Everything a golem can be pressed from: what it is made of, and the head, arms, legs and fitting it is given.
- *
- * <p>The parts, their traits, what they take and the research each waits on are all the original's. A part asks for
- * things outright, or for "the base" and "the mechanism" of whatever the golem is made of, so that a wooden golem's
- * legs take planks and a brass one's take plate.
- */
+// Parts, traits, costs and research are the original's.
 public final class GolemParts {
     private GolemParts() {
     }
 
-    /** Where on the body a part's mesh is hung, and so what moves it. */
     public enum Attach {
         HEAD,
         ARMS,
@@ -36,10 +29,7 @@ public final class GolemParts {
         BODY
     }
 
-    /**
-     * How a part looks: one of the original's meshes and the picture laid over it. A part with no picture of its
-     * own is drawn wholly in its golem's material, and every part draws its groups named {@code bm...} in it.
-     */
+    // a part with no texture of its own is drawn in the golem's material; groups named bm* always are
     public record Look(String mesh, @Nullable String texture, Attach attach) {
         public String meshPath() {
             return "models/legacy/golem/" + mesh + ".obj";
@@ -51,25 +41,20 @@ public final class GolemParts {
         }
     }
 
-    /** One thing a part takes. */
     public sealed interface Need permits Stack, Of {
     }
 
-    /** So many of a given item. */
     public record Stack(Supplier<? extends ItemLike> item, int count) implements Need {
     }
 
-    /** One of whatever the golem is made of. */
     public enum Of implements Need {
         BASE,
         MECHANISM
     }
 
-    /** What every kind of part has. */
     public interface Part {
         String key();
 
-        /** All of these must be known to choose it at the press. */
         List<String> research();
 
         List<GolemTrait> traits();
@@ -79,7 +64,6 @@ public final class GolemParts {
         @Nullable
         Look look();
 
-        /** The family of parts it is one of, for its name: material, head, arm, leg or addon. */
         String family();
 
         default String translationKey() {
@@ -90,7 +74,6 @@ public final class GolemParts {
             return translationKey() + ".text";
         }
 
-        /** The little picture the press shows it by. */
         default ResourceLocation icon() {
             return Alchemia.id("textures/gui/golem/" + family() + "_" + key() + ".png");
         }
@@ -109,7 +92,6 @@ public final class GolemParts {
         return new Stack(item, count);
     }
 
-    /** What the frame is made of: how much it takes, how hard it hits, and some of its traits. */
     public enum Material implements Part {
         WOOD("golem_wood", 0x4D332A, 6, 2, 1, () -> ModBlocks.GREATWOOD.planks().get(),
                 () -> ModItems.BRASS_GEAR.get(), GolemTrait.LIGHT),
@@ -160,7 +142,6 @@ public final class GolemParts {
             return traits;
         }
 
-        /** A frame takes two of its base and one of its mechanism, before any part asks for more. */
         @Override
         public List<Need> needs() {
             return List.of(Of.BASE, Of.BASE, Of.MECHANISM);
@@ -177,12 +158,11 @@ public final class GolemParts {
             return "material";
         }
 
-        /** What the golem item is tinted. */
         public int colour() {
             return colour;
         }
 
-        /** Added to a golem's ten. */
+        // added to a base of 10
         public int health() {
             return health;
         }
@@ -191,7 +171,6 @@ public final class GolemParts {
             return armour;
         }
 
-        /** How hard it hits, if it fights at all. */
         public int damage() {
             return damage;
         }
@@ -204,7 +183,6 @@ public final class GolemParts {
             return new ItemStack(mechanism.get());
         }
 
-        /** The picture the whole frame is drawn in. */
         public ResourceLocation texture() {
             return Alchemia.id("textures/entity/golem/mat_" + key() + ".png");
         }

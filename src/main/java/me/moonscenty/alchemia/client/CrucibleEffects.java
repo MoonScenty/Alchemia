@@ -20,18 +20,9 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
-/**
- * What a crucible shows, as the original showed it: froth on a boiling surface and froth running over the rim of a
- * full pot, a bubble now and then in the colour of something dissolved, and a boil-up when something goes in.
- * <p>
- * Drawn every tick on the client, while there is water in the pot.
- */
 public final class CrucibleEffects {
-    /** A surface bubble's chance in a tick is one in this. */
     private static final int BUBBLE_ODDS = 6;
-    /** White, for a boil-up in a pot holding nothing. */
     private static final int WHITE = 0xFFFFFF;
-    /** The froth's colour. */
     private static final int FROTH = 0x7F7FB2;
 
     private CrucibleEffects() {
@@ -46,7 +37,6 @@ public final class CrucibleEffects {
         if (crucible.working()) {
             add(new BubbleParticle(client, pos.getX() + 0.2 + random.nextFloat() * 0.6, top,
                     pos.getZ() + 0.2 + random.nextFloat() * 0.6, FROTH, -4, 0.0, BubbleParticle.Kind.FROTH));
-            // a pot as full as it will go runs over at every edge of the rim
             if (crucible.dissolved().total() >= CrucibleBlockEntity.CAPACITY) {
                 for (int i = 0; i < 2; i++) {
                     rimFroth(client, pos.getX(), pos.getZ() + random.nextFloat(), pos.getY() + 1);
@@ -70,11 +60,6 @@ public final class CrucibleEffects {
         add(new BubbleParticle(level, x, y, z, FROTH, -4, 0.0, BubbleParticle.Kind.FROTH_DOWN));
     }
 
-    /**
-     * Something went into the pot: it boils up, in the colours of what is in it. The harder the event, the higher
-     * the bubbles are pushed; the original pushed a spill five times harder than a dissolving. Either way it
-     * slops.
-     */
     public static void boil(Level level, BlockPos pos, CrucibleBlockEntity crucible, int strength) {
         if (!(level instanceof ClientLevel client)) {
             return;
@@ -94,10 +79,6 @@ public final class CrucibleEffects {
         }
     }
 
-    /**
-     * A recipe came out of the pot: a slop, and the original's purple puff, with its flourish, rising out of the
-     * top.
-     */
     public static void crafted(Level level, BlockPos pos) {
         if (level instanceof ClientLevel client) {
             client.playLocalSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, ModSounds.SPILL.get(),
@@ -108,10 +89,6 @@ public final class CrucibleEffects {
         }
     }
 
-    /**
-     * The original's puff of magic ({@code drawBamf}): sparks flung out, with the flourish a few pale wisps and a
-     * flash, and a little smoke that lingers. When it goes up the sparks are flung upwards and the smoke drifts up.
-     */
     public static void bamf(ClientLevel level, double x, double y, double z, float r, float g, float b,
             boolean flair, boolean up) {
         RandomSource random = level.random;
@@ -173,12 +150,10 @@ public final class CrucibleEffects {
         }
     }
 
-    /** A speed of at least {@code least} and up to {@code more} faster, either way. */
     private static double flung(RandomSource random, float least, float more) {
         return (least + random.nextFloat() * more) * (random.nextBoolean() ? -1 : 1);
     }
 
-    /** A colour band a little off, one way or the other. */
     private static float tinge(RandomSource random, float band) {
         return Math.clamp(band * (1.0F + (float) random.nextGaussian() * 0.1F), 0.0F, 1.0F);
     }

@@ -21,15 +21,7 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 
-/**
- * Something boiled out of a crucible: a thing dropped in, and what has to already be dissolved for it to take.
- * <p>
- * The pot is not a bench, so nothing is laid out in a shape. What matters is what is in the water and what falls
- * into it, and the one thing that falls in is used up whether or not it is the last ingredient needed.
- *
- * @param catalyst what is thrown in to finish the work
- * @param aspects what has to be dissolved first, and what is taken out of the pot when the work is done
- */
+// The catalyst is used up whether or not it completes the recipe.
 public record CrucibleRecipe(Ingredient catalyst, AspectList aspects, ItemStack result,
                              Optional<ResourceLocation> research) implements Recipe<CrucibleInput> {
 
@@ -51,7 +43,6 @@ public record CrucibleRecipe(Ingredient catalyst, AspectList aspects, ItemStack 
         return result.copy();
     }
 
-    /** What is left in the water once this has been boiled out of it. */
     public AspectList taken(AspectList dissolved) {
         AspectList left = dissolved;
         for (Holder<Aspect> aspect : aspects.sortedByName()) {
@@ -60,7 +51,6 @@ public record CrucibleRecipe(Ingredient catalyst, AspectList aspects, ItemStack 
         return left;
     }
 
-    /** The one thing thrown in. Naming it here is what lets the book draw the recipe like any other. */
     @Override
     public NonNullList<Ingredient> getIngredients() {
         return NonNullList.of(Ingredient.EMPTY, catalyst);

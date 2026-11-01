@@ -11,7 +11,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.BlockHitResult;
@@ -19,13 +18,6 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/**
- * The stand an infusion is laid out on.
- * <p>
- * All it has to do is take one thing, give it back, and not swallow anything when it is broken. That is the whole
- * of it, and all three are worth holding to: a ring of twelve of these holding somebody's materials is not a thing
- * to be casual about.
- */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class PedestalTests {
@@ -37,7 +29,6 @@ public class PedestalTests {
         return (ArcanePedestalBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(WHERE));
     }
 
-    /** Clicks the top of the pedestal with whatever is in hand, the way a person would. */
     private static Player clicks(GameTestHelper helper, ItemStack held) {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, held);
@@ -48,7 +39,6 @@ public class PedestalTests {
         return player;
     }
 
-    /** One thing goes on and one thing comes off, and a stack does not go on whole. */
     @GameTest(template = TEMPLATE)
     public static void itTakesOneThing(GameTestHelper helper) {
         ArcanePedestalBlockEntity stand = stand(helper);
@@ -66,7 +56,6 @@ public class PedestalTests {
         helper.succeed();
     }
 
-    /** A pedestal that is holding something will not take another thing on top of it. */
     @GameTest(template = TEMPLATE)
     public static void itHoldsOneThingAtATime(GameTestHelper helper) {
         ArcanePedestalBlockEntity stand = stand(helper);
@@ -78,7 +67,6 @@ public class PedestalTests {
         helper.succeed();
     }
 
-    /** Breaking it drops what was standing on it rather than losing it. */
     @GameTest(template = TEMPLATE)
     public static void breakingItDropsWhatIsOnIt(GameTestHelper helper) {
         stand(helper);

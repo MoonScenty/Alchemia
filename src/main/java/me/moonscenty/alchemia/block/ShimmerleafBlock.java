@@ -13,9 +13,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-/**
- * A pale flower that grows in the shade of silverwood and gives off cold sparks.
- */
 public class ShimmerleafBlock extends BushBlock {
     public static final MapCodec<ShimmerleafBlock> CODEC = simpleCodec(ShimmerleafBlock::new);
     private static final VoxelShape SHAPE = Block.box(3, 0, 3, 13, 13, 13);

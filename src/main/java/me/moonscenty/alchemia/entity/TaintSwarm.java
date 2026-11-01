@@ -28,25 +28,18 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.Vec3;
 
-/**
- * A taint swarm: a cloud of tiny purple flies, two blocks across, that comes up out of a taint geyser.
- *
- * <p>It drifts about low over the ground until a player comes within eight blocks, then closes on them and bites,
- * three times every two seconds or so, without knocking them back. Every bite weakens. It has no body to speak of:
- * nothing pushes it, it never falls hard, and it treads on no pressure plate.
- */
 public class TaintSwarm extends Monster implements TaintedMob {
     private static final EntityDataAccessor<Byte> FLAGS = SynchedEntityData.defineId(TaintSwarm.class,
             EntityDataSerializers.BYTE);
     private static final int SUMMONED = 2;
 
-    /** The original's numbers. */
+    // original's values
     private static final double LIVES = 30.0;
     private static final double BITES = 2.0;
     private static final double HUNTS = 8.0;
     private static final float REACH = 3.0F;
     private static final int WEAKENS_FOR = 100;
-    /** What a summoned swarm with nothing to bite takes each tick until it is gone. */
+    // damage per tick to a summoned swarm with nothing to bite
     private static final float WITHERS = 5.0F;
 
     @Nullable
@@ -132,7 +125,6 @@ public class TaintSwarm extends Monster implements TaintedMob {
         }
     }
 
-    /** About where it is, never far over the ground, and never out of tainted land. */
     private void drift() {
         if (driftingTo != null && (!level().isEmptyBlock(driftingTo)
                 || driftingTo.getY() < level().getMinBuildHeight() + 1
@@ -148,7 +140,6 @@ public class TaintSwarm extends Monster implements TaintedMob {
         steer(driftingTo.getX() + 0.5, driftingTo.getY() + 0.1, driftingTo.getZ() + 0.5, 0.015);
     }
 
-    /** Some way towards a fixed speed in the direction of where it is going, closing faster up than across. */
     private void steer(double x, double y, double z, double closes) {
         Vec3 moving = getDeltaMovement();
         double dx = moving.x + (Math.signum(x - getX()) * 0.5 - moving.x) * closes;
@@ -160,7 +151,6 @@ public class TaintSwarm extends Monster implements TaintedMob {
         setYRot(getYRot() + Mth.wrapDegrees(facing - getYRot()));
     }
 
-    /** Within three blocks and overlapping it up and down, a bite that weakens and does not knock back. */
     public void bite(LivingEntity target, float distance) {
         if (biteIn > 0 || distance >= REACH || target.getBoundingBox().maxY <= getBoundingBox().minY
                 || target.getBoundingBox().minY >= getBoundingBox().maxY) {
@@ -176,7 +166,6 @@ public class TaintSwarm extends Monster implements TaintedMob {
         playSound(ModSounds.SWARM_ATTACK.get(), 0.3F, 0.9F + random.nextFloat() * 0.2F);
     }
 
-    /** It is a cloud of light-hungry things; nothing it stands in can darken it. */
     @Override
     public float getLightLevelDependentMagicValue() {
         return 1.0F;
@@ -206,7 +195,6 @@ public class TaintSwarm extends Monster implements TaintedMob {
         return true;
     }
 
-    /** Half the time, a little of the goo it came up through. */
     @Override
     protected void dropCustomDeathLoot(ServerLevel level, DamageSource source, boolean recentlyHit) {
         super.dropCustomDeathLoot(level, source, recentlyHit);

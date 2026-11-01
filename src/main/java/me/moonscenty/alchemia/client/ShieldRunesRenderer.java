@@ -28,11 +28,6 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 
-/**
- * The runes of a shield flaring where a blow lands, as the original drew them: a half-shell of runes round the one
- * shielded, turned toward the blow, that burns up through fifteen frames in a third of a second or so. A monster's
- * shield ripples instead of burning.
- */
 @EventBusSubscriber(modid = Alchemia.MODID, value = Dist.CLIENT)
 public final class ShieldRunesRenderer {
     private static final List<Flare> FLARES = new ArrayList<>();
@@ -44,7 +39,6 @@ public final class ShieldRunesRenderer {
     private ShieldRunesRenderer() {
     }
 
-    /** A blow on someone's shield, from the server. */
     public static void flare(int shieldedId, int from) {
         ClientLevel level = Minecraft.getInstance().level;
         if (level == null) {

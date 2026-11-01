@@ -30,10 +30,6 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 
-/**
- * Operator commands for poking at a player's knowledge and warp, and at the aura and its nodes, so all of it can be
- * exercised before the things that normally drive them exist.
- */
 @EventBusSubscriber(modid = Alchemia.MODID)
 public class AlchemiaCommand {
     @SubscribeEvent
@@ -107,7 +103,7 @@ public class AlchemiaCommand {
         return entries.size();
     }
 
-    /** Clearing the research hands back whatever starts unlocked, or the book would have nothing to open. */
+    // re-grants the starting entries, or the book would have nothing to open
     private static int forgetResearch(CommandSourceStack source) throws CommandSyntaxException {
         ServerPlayer player = source.getPlayerOrException();
         PlayerKnowledge.update(player, PlayerKnowledge::withoutResearch);
@@ -132,7 +128,6 @@ public class AlchemiaCommand {
                                         IntegerArgumentType.getInteger(context, "amount")))));
     }
 
-    /** Puts flux into the chunk, which is how the taint is given something to feed on for testing. */
     private static int pollute(CommandSourceStack source, int amount) throws CommandSyntaxException {
         ServerPlayer player = source.getPlayerOrException();
         AuraHandler.add(player.level(), player.blockPosition(), ModAspects.FLUX, amount);
@@ -167,7 +162,6 @@ public class AlchemiaCommand {
         return taken;
     }
 
-    /** Puts the chunk back to as much as it will hold, for looking at how it settles afterwards. */
     private static int fillAura(CommandSourceStack source) throws CommandSyntaxException {
         ServerPlayer player = source.getPlayerOrException();
         AuraChunk aura = AuraHandler.at(player.level(), player.blockPosition());
@@ -185,10 +179,6 @@ public class AlchemiaCommand {
         return aura.base();
     }
 
-    /**
-     * Hangs a node in front of the player, for testing anything that wants one until there is a way to carry one.
-     * The original had a creative-only item for this; a command does the same without needing a picture.
-     */
     private static LiteralArgumentBuilder<CommandSourceStack> node() {
         LiteralArgumentBuilder<CommandSourceStack> spawn = Commands.literal("spawn")
                 .executes(context -> spawnNode(context.getSource(), null, null, 0));
@@ -220,7 +210,6 @@ public class AlchemiaCommand {
             }
         }
 
-        // two blocks out along the player's look, at eye height, which puts it where they can see it at once
         Vec3 at = player.getEyePosition().add(player.getLookAngle().scale(2.0));
         AuraNode node = new AuraNode(player.level());
         node.moveTo(at.x, at.y, at.z, 0.0F, 0.0F);
@@ -308,7 +297,6 @@ public class AlchemiaCommand {
         return showWarp(source);
     }
 
-    /** Rolls the warp check right away instead of waiting out the interval. */
     private static int forceCheck(CommandSourceStack source) throws CommandSyntaxException {
         WarpHandler.check(source.getPlayerOrException());
         return showWarp(source);

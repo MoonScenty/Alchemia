@@ -16,14 +16,11 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 
-/**
- * Every task wanting doing, world by world. Like the original's, they are not kept when the game closes: the seals
- * that asked for them ask again soon enough.
- */
+// Not saved, like the original's: seals ask again soon enough.
 public final class Tasks {
-    /** No world holds more than this; the eldest goes to make room. */
+    // the eldest is dropped to make room
     private static final int LIMIT = 1000;
-    /** Each task asked for is worth this many squared blocks of nearness per point of priority. */
+    // squared blocks of distance per point of priority
     private static final double PRIORITY_WEIGHT = 256.0;
 
     private static final Map<ResourceKey<Level>, Map<Integer, Task>> TASKS = new ConcurrentHashMap<>();
@@ -56,10 +53,6 @@ public final class Tasks {
         return List.copyOf(of(level).values());
     }
 
-    /**
-     * The tasks of one kind a golem might take, nearest first, a point of priority counting for as much as sixteen
-     * blocks of distance. Taken ones are left out, and those meant for some other golem.
-     */
     public static List<Task> sortedFor(Golem golem, Task.Kind kind) {
         List<Task> out = new ArrayList<>();
         for (Task task : of(golem.level()).values()) {
@@ -73,7 +66,6 @@ public final class Tasks {
         return out;
     }
 
-    /** A golem has got there: the seal that asked says whether it was done. */
     public static void complete(Task task, Golem golem) {
         if (task.completed() || task.suspended() || !(golem.level() instanceof ServerLevel level)) {
             return;
@@ -82,7 +74,6 @@ public final class Tasks {
         task.setCompletion(asked == null || asked.seal().onTaskCompletion(level, golem, task));
     }
 
-    /** Once a second: ages every task, and lets go of those run out or suspended, telling their seals. */
     public static void clearSuspendedOrExpired(ServerLevel level) {
         Iterator<Task> it = of(level).values().iterator();
         while (it.hasNext()) {
@@ -99,7 +90,6 @@ public final class Tasks {
         }
     }
 
-    /** Every task a seal here asked for is called off. */
     public static void suspendFor(Level level, me.moonscenty.alchemia.golem.seal.SealPos seal) {
         for (Task task : of(level).values()) {
             if (seal.equals(task.seal())) {
@@ -108,7 +98,6 @@ public final class Tasks {
         }
     }
 
-    /** All of them, when the server stops. */
     public static void clear() {
         TASKS.clear();
     }

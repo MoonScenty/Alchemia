@@ -23,13 +23,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.DyeColor;
 
-/**
- * A seal's panel as the original drew it: a round dial with the seal's pages as little buttons round its rim, the
- * redstone switch after them, and whichever page is open in the middle, with the player's pack below.
- *
- * <p>The pages are priority and locking (with the colour of golem it is set for), filter, area, options, and what
- * golems it wants or will not have. Only the seal's owner can lock it or set it to mind redstone.
- */
 public class SealScreen extends AbstractContainerScreen<SealMenu> {
     private static final ResourceLocation BASE = Alchemia.id("textures/gui/base.png");
     private static final int SHEET = 256;
@@ -40,7 +33,6 @@ public class SealScreen extends AbstractContainerScreen<SealMenu> {
     private static final int RIM = 86;
     private static final int WRAP = 150;
 
-    /** One thing that can be clicked or hovered on the panel. */
     private record Spot(int x, int y, int wide, int tall, int id, Component tip) {
         boolean over(double mx, double my) {
             return mx >= x && mx < x + wide && my >= y && my < y + tall;
@@ -63,7 +55,6 @@ public class SealScreen extends AbstractContainerScreen<SealMenu> {
         return Objects.equals(seal.owner(), minecraft.player.getUUID());
     }
 
-    /** Where the n-th thing round the rim goes, as the original spread them over a sixth of the circle. */
     private int[] rim(int index, int count) {
         float slice = 60.0F / count;
         float start = -180.0F + (count - 1) * slice / 2.0F;
@@ -72,7 +63,6 @@ public class SealScreen extends AbstractContainerScreen<SealMenu> {
         return new int[] {(int) (Mth.cos(angle) * RIM), (int) (Mth.sin(angle) * RIM)};
     }
 
-    /** Everything clickable on the open page, worked out afresh each frame. */
     private void layOut(SealEntity seal) {
         spots.clear();
         Seal kind = seal.seal();
@@ -137,8 +127,6 @@ public class SealScreen extends AbstractContainerScreen<SealMenu> {
         }
         return half;
     }
-
-    // --- drawing ------------------------------------------------------------------------------------------
 
     @Override
     protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
@@ -240,7 +228,6 @@ public class SealScreen extends AbstractContainerScreen<SealMenu> {
         }
     }
 
-    /** What each square counts, drawn over its picture, where the seal counts at all. */
     private void counts(GuiGraphics graphics, SealEntity seal) {
         if (menu.category() != Seal.FILTER || !seal.seal().hasStacksizeLimiters()) {
             return;
@@ -304,7 +291,6 @@ public class SealScreen extends AbstractContainerScreen<SealMenu> {
         }
     }
 
-    /** The panel is a picture; it carries no title of its own. */
     @Override
     protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
     }
@@ -320,7 +306,6 @@ public class SealScreen extends AbstractContainerScreen<SealMenu> {
         renderTooltip(graphics, mouseX, mouseY);
     }
 
-    /** The name of a page beside its button, and what the other buttons and the trait pictures mean. */
     private void tips(GuiGraphics graphics, SealEntity seal, int mouseX, int mouseY) {
         int mx = mouseX - leftPos;
         int my = mouseY - topPos;
@@ -358,8 +343,6 @@ public class SealScreen extends AbstractContainerScreen<SealMenu> {
         }
     }
 
-    // --- clicking -----------------------------------------------------------------------------------------
-
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         SealEntity seal = seal();
@@ -387,7 +370,6 @@ public class SealScreen extends AbstractContainerScreen<SealMenu> {
         return super.mouseClicked(mouseX, mouseY, button);
     }
 
-    /** The number keys do nothing here, as in the original: there is nothing on the panel to swap into. */
     @Override
     protected boolean checkHotbarKeyPressed(int keyCode, int scanCode) {
         return false;

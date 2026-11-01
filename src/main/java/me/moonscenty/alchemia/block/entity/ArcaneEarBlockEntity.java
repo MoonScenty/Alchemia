@@ -28,25 +28,17 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.level.NoteBlockEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 
-/**
- * An arcane ear listening: the note it is tuned to, and how long it has left to signal for having heard it.
- *
- * <p>Every note block played on the server this tick is written down, and every ear goes over what was written
- * when it ticks. Note blocks play before the ears tick, so an ear hears a note the tick it is played; the list is
- * thrown away at the end of the tick.
- */
 @EventBusSubscriber(modid = Alchemia.MODID)
 public class ArcaneEarBlockEntity extends SyncedBlockEntity {
-    /** How far an ear hears, squared, and how long it signals for a note. The original's. */
+    // original's values
     private static final double HEARS_SQUARED = 64 * 64;
     private static final int SIGNALS_FOR = 10;
-    /** The notes a note block runs through: two octaves. */
     private static final int NOTES = 25;
 
-    /** A note played this tick: where, in what voice, at what pitch. */
     private record Heard(BlockPos at, NoteBlockInstrument voice, int note) {
     }
 
+    // note blocks play before ears tick, so ears hear notes the same tick; cleared at server tick end
     private static final Map<ResourceKey<Level>, List<Heard>> PLAYED = new HashMap<>();
 
     private int note;
@@ -89,7 +81,6 @@ public class ArcaneEarBlockEntity extends SyncedBlockEntity {
         }
     }
 
-    /** The voice it hears in: the one a note block would play in, standing on what the ear is fixed to. */
     public NoteBlockInstrument voice() {
         Direction facing = getBlockState().getValue(ArcaneEarBlock.FACING);
         return level.getBlockState(worldPosition.relative(facing.getOpposite())).instrument();
@@ -98,21 +89,18 @@ public class ArcaneEarBlockEntity extends SyncedBlockEntity {
     private void signal(boolean on) {
         BlockState state = getBlockState();
         if (state.getValue(ArcaneEarBlock.ENABLED) != on) {
-            // what is round the ear hears of it from the block update; what is round its block, from here
             level.setBlock(worldPosition, state.setValue(ArcaneEarBlock.ENABLED, on), Block.UPDATE_ALL);
             level.updateNeighborsAt(worldPosition.relative(state.getValue(ArcaneEarBlock.FACING).getOpposite()),
                     state.getBlock());
         }
     }
 
-    /** A semitone up, round again to the lowest after the highest. */
     public void raisePitch() {
         note = (note + 1) % NOTES;
         // goggles show the note it is tuned to, so whoever is watching has to know
         changed();
     }
 
-    /** Its note shown over it, and sounded, in its voice, if it is being tuned rather than answering. */
     public void play(boolean aloud) {
         if (!(level instanceof ServerLevel served)) {
             return;
@@ -126,7 +114,6 @@ public class ArcaneEarBlockEntity extends SyncedBlockEntity {
         }
     }
 
-    /** The note of what is at a place, for goggles to show: a note block's or an ear's, or -1 if it has none. */
     public static int noteAt(BlockState state, BlockEntity entity) {
         if (state.getBlock() instanceof NoteBlock) {
             return state.getValue(NoteBlock.NOTE);

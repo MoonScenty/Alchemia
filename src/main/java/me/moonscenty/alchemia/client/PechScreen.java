@@ -12,14 +12,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
-/**
- * Trading with a pech, as the original drew it: the offer on the left, what comes back on the right, and between
- * them a question mark that turns into the bones once something it prizes is offered and the right is clear.
- */
 public class PechScreen extends AbstractContainerScreen<PechMenu> {
     private static final ResourceLocation PANEL = Alchemia.id("textures/gui/pech.png");
     private static final int SHEET = 256;
-    /** The original's panel is a pixel narrower than most, and stands taller, its top half see-through. */
     private static final int PANEL_W = 175;
     private static final int PANEL_H = 232;
     private static final int BONES_X = 67;
@@ -45,7 +40,6 @@ public class PechScreen extends AbstractContainerScreen<PechMenu> {
         RenderSystem.disableBlend();
     }
 
-    /** The bones roll when clicked, if they are showing. */
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (menu.canRoll() && mouseX >= leftPos + BONES_X && mouseX < leftPos + BONES_X + BONES_SIZE
@@ -59,7 +53,6 @@ public class PechScreen extends AbstractContainerScreen<PechMenu> {
         return super.mouseClicked(mouseX, mouseY, button);
     }
 
-    /** The panel carries no words, as the original's did not. */
     @Override
     protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
     }

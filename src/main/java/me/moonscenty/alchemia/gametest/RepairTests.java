@@ -19,7 +19,6 @@ import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/** Repair: two levels, on the original's own gear only and never with unbreaking, mending out of the aura. */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class RepairTests {

@@ -17,9 +17,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/**
- * The devices of step ten, and the parts they are built from.
- */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class DeviceTests {
@@ -29,7 +26,6 @@ public class DeviceTests {
         helper.setBlock(at, ModBlocks.BELLOWS.get().defaultBlockState().setValue(BellowsBlock.FACING, facing));
     }
 
-    /** Bellows blowing on a furnace add a tick of cooking every second tick, so it cooks half again as fast. */
     @GameTest(template = TEMPLATE)
     public static void bellowsHurryAFurnace(GameTestHelper helper) {
         BlockPos furnaceAt = new BlockPos(2, 2, 2);
@@ -49,7 +45,6 @@ public class DeviceTests {
         helper.succeed();
     }
 
-    /** A furnace with nothing cooking in it is not started by being blown on, nor is the last tick taken from it. */
     @GameTest(template = TEMPLATE)
     public static void bellowsDoNotStartOrFinishTheWork(GameTestHelper helper) {
         BlockPos furnaceAt = new BlockPos(2, 2, 2);
@@ -75,7 +70,6 @@ public class DeviceTests {
         helper.succeed();
     }
 
-    /** A signal holds them still. */
     @GameTest(template = TEMPLATE)
     public static void redstoneHoldsTheBellowsStill(GameTestHelper helper) {
         BlockPos bellowsAt = new BlockPos(2, 2, 2);
@@ -91,7 +85,6 @@ public class DeviceTests {
         });
     }
 
-    /** Only bellows facing the block, and pumping, are counted as blowing on it. */
     @GameTest(template = TEMPLATE)
     public static void onlyBellowsFacingInAreCounted(GameTestHelper helper) {
         BlockPos middle = new BlockPos(4, 2, 4);
@@ -105,7 +98,6 @@ public class DeviceTests {
         helper.succeed();
     }
 
-    /** An arcane lamp sets lights down in the dark round it, and takes them back when it is put out. */
     @GameTest(template = TEMPLATE, timeoutTicks = 400)
     public static void anArcaneLampLightsTheDark(GameTestHelper helper) {
         BlockPos ceiling = new BlockPos(8, 6, 8);
@@ -135,7 +127,6 @@ public class DeviceTests {
         return found;
     }
 
-    /** A lamp falls when what it hangs from is taken away. */
     @GameTest(template = TEMPLATE)
     public static void aLampFallsWithoutItsSupport(GameTestHelper helper) {
         BlockPos ceiling = new BlockPos(3, 4, 3);
@@ -147,7 +138,6 @@ public class DeviceTests {
         helper.succeed();
     }
 
-    /** The lamp of growth eats only herba, and only through the face it hangs from. */
     @GameTest(template = TEMPLATE)
     public static void theGrowthLampIsFedThroughItsBack(GameTestHelper helper) {
         BlockPos at = new BlockPos(3, 2, 3);
@@ -163,11 +153,6 @@ public class DeviceTests {
         helper.succeed();
     }
 
-    /**
-     * Fed, the lamp of growth reaches every plant round it. It walks the ground a column a tick in a shuffled
-     * order and visits each column once before it starts again, so a full round of thirteen by thirteen is
-     * certain to have found the one crop there is -- whether the crop takes the turn is the crop's business.
-     */
     @GameTest(template = TEMPLATE)
     public static void theGrowthLampReachesACrop(GameTestHelper helper) {
         BlockPos lampAt = new BlockPos(4, 4, 4);
@@ -189,7 +174,6 @@ public class DeviceTests {
         helper.succeed();
     }
 
-    /** Fed, the lamp of fertility sets two of a kind to courting. */
     @GameTest(template = TEMPLATE)
     public static void theFertilityLampMakesAMatch(GameTestHelper helper) {
         BlockPos at = new BlockPos(4, 4, 4);
@@ -207,7 +191,6 @@ public class DeviceTests {
         helper.succeed();
     }
 
-    /** A hungry chest eats what comes to rest on it. */
     @GameTest(template = TEMPLATE, timeoutTicks = 100)
     public static void aHungryChestEatsWhatFallsOnIt(GameTestHelper helper) {
         BlockPos at = new BlockPos(3, 2, 3);
@@ -220,7 +203,6 @@ public class DeviceTests {
         });
     }
 
-    /** The urn fills a bucket by hand, and tops up a crucible beside it by itself. */
     @GameTest(template = TEMPLATE, timeoutTicks = 400)
     public static void theUrnFillsWhatIsRoundIt(GameTestHelper helper) {
         BlockPos jugAt = new BlockPos(3, 2, 3);
@@ -236,7 +218,7 @@ public class DeviceTests {
         helper.assertTrue(player.getMainHandItem().is(net.minecraft.world.item.Items.WATER_BUCKET),
                 "the bucket came away full");
 
-        // give it water in hand rather than wait on the air over a test plot
+        // fill it directly rather than waiting on the test plot's air
         jug.drawn(-3 * me.moonscenty.alchemia.block.entity.WaterJugBlockEntity.FILL);
         helper.runAfterDelay(380, () -> {
             var pot = (me.moonscenty.alchemia.block.entity.CrucibleBlockEntity) helper.getBlockEntity(potAt);
@@ -245,14 +227,13 @@ public class DeviceTests {
         });
     }
 
-    /** A levitator facing up, with aer to burn, lifts what is dropped on it. */
     @GameTest(template = TEMPLATE, timeoutTicks = 100)
     public static void aLevitatorLiftsWhatIsOverIt(GameTestHelper helper) {
         BlockPos at = new BlockPos(3, 2, 3);
         helper.setBlock(at, ModBlocks.LEVITATOR.get().defaultBlockState()
                 .setValue(me.moonscenty.alchemia.block.LevitatorBlock.FACING, Direction.UP));
         var levitator = (me.moonscenty.alchemia.block.entity.LevitatorBlockEntity) helper.getBlockEntity(at);
-        // give it aer in hand rather than wait on the air over a test plot
+        // give it aer directly rather than waiting on the test plot's air
         levitator.given(12000);
         var item = helper.spawnItem(net.minecraft.world.item.Items.FEATHER, 3.5F, 3.2F, 3.5F);
         double from = item.getY();
@@ -263,7 +244,6 @@ public class DeviceTests {
         });
     }
 
-    /** A levitator reaches as far as the first solid block, and its range steps round from eight. */
     @GameTest(template = TEMPLATE, timeoutTicks = 100)
     public static void aLevitatorStopsShortOfASolidBlock(GameTestHelper helper) {
         BlockPos at = new BlockPos(3, 2, 3);
@@ -290,7 +270,6 @@ public class DeviceTests {
                 .setValue(me.moonscenty.alchemia.block.RedstoneRelayBlock.OUT, out);
     }
 
-    /** A relay answers only to a signal as strong as it asks for, and gives out what it is set to. */
     @GameTest(template = TEMPLATE, timeoutTicks = 100)
     public static void aRelayAnswersAtItsThreshold(GameTestHelper helper) {
         BlockPos asksTooMuch = relayLane(helper, 3, 15);
@@ -304,10 +283,6 @@ public class DeviceTests {
         });
     }
 
-    /**
-     * A relay asking for the given signal and giving six, with a wire out of it, and then fed from a block of redstone
-     * down two lengths of wire, so that what reaches it is fourteen.
-     */
     private static BlockPos relayLane(GameTestHelper helper, int x, int asks) {
         for (int z = 0; z <= 4; z++) {
             helper.setBlock(new BlockPos(x, 1, z), Blocks.STONE);
@@ -321,7 +296,6 @@ public class DeviceTests {
         return at;
     }
 
-    /** The relay's toggles step under a click: the back one sets what it takes, the front one what it gives. */
     @GameTest(template = TEMPLATE)
     public static void aRelaysTogglesStep(GameTestHelper helper) {
         BlockPos at = new BlockPos(3, 2, 3);
@@ -329,7 +303,6 @@ public class DeviceTests {
         helper.setBlock(at, relay(Direction.SOUTH, 1, 15));
         BlockPos where = helper.absolutePos(at);
         var player = helper.makeMockPlayer(net.minecraft.world.level.GameType.CREATIVE);
-        // facing south: the input end is south, its right hand west
         click(helper, at, player, where.getCenter().add(0.0, -0.3, 0.25));
         helper.assertBlockProperty(at, me.moonscenty.alchemia.block.RedstoneRelayBlock.IN, 2);
         click(helper, at, player, where.getCenter().add(-0.25, -0.3, -0.25));
@@ -346,7 +319,6 @@ public class DeviceTests {
                 helper.absolutePos(at), false));
     }
 
-    /** An ear on stone hears a note block on stone play its note, and only its note. */
     @GameTest(template = TEMPLATE, timeoutTicks = 100)
     public static void anArcaneEarHearsItsNote(GameTestHelper helper) {
         BlockPos stone = new BlockPos(3, 2, 3);
@@ -381,7 +353,6 @@ public class DeviceTests {
         });
     }
 
-    /** Bath salts dissolving in still water turn it to purifying fluid; anywhere else they are only gone. */
     @GameTest(template = TEMPLATE)
     public static void bathSaltsTurnStillWater(GameTestHelper helper) {
         BlockPos pool = new BlockPos(3, 2, 3);
@@ -401,7 +372,6 @@ public class DeviceTests {
         helper.succeed();
     }
 
-    /** A dip in a still pool wards a player against warp, and uses the pool up; deeper warp, shorter ward. */
     @GameTest(template = TEMPLATE)
     public static void purifyingFluidWardsAgainstWarp(GameTestHelper helper) {
         BlockPos pool = new BlockPos(3, 2, 3);
@@ -417,7 +387,6 @@ public class DeviceTests {
         helper.succeed();
     }
 
-    /** The spa takes water from a bucket, as anything that holds liquid takes it. */
     @GameTest(template = TEMPLATE)
     public static void aSpaIsFilledFromABucket(GameTestHelper helper) {
         BlockPos at = new BlockPos(3, 2, 3);
@@ -432,7 +401,6 @@ public class DeviceTests {
         helper.succeed();
     }
 
-    /** Fed water and salts, the spa pours a pool of purifying fluid above it, spreading out from the middle. */
     @GameTest(template = TEMPLATE)
     public static void aSpaPoursAPurifyingPool(GameTestHelper helper) {
         BlockPos at = new BlockPos(4, 2, 4);
@@ -469,7 +437,6 @@ public class DeviceTests {
         helper.succeed();
     }
 
-    /** Switched off mixing, the spa pours what is in its tank as it is. */
     @GameTest(template = TEMPLATE)
     public static void aSpaPoursItsTankUnmixed(GameTestHelper helper) {
         BlockPos at = new BlockPos(3, 2, 3);
@@ -486,7 +453,6 @@ public class DeviceTests {
         helper.succeed();
     }
 
-    /** Sets the chunk under a place to hold exactly this much aer and flux, against the usual base. */
     private static void aura(GameTestHelper helper, BlockPos at, int air, int flux) {
         helper.getLevel().getChunkAt(helper.absolutePos(at)).setData(
                 me.moonscenty.alchemia.aura.ModAuraAttachment.AURA,
@@ -496,7 +462,6 @@ public class DeviceTests {
                                 .add(me.moonscenty.alchemia.registry.ModAspects.FLUX, flux)));
     }
 
-    /** A wand set on a recharge pedestal is filled from the aura; one taken off it comes back to the hand. */
     @GameTest(template = TEMPLATE)
     public static void aRechargePedestalFillsAWand(GameTestHelper helper) {
         BlockPos at = new BlockPos(3, 2, 3);
@@ -522,7 +487,6 @@ public class DeviceTests {
         helper.succeed();
     }
 
-    /** A dioptra tuned with an aer shard reads how much aer is in each chunk, and a comparator reads its own. */
     @GameTest(template = TEMPLATE)
     public static void aDioptraReadsTheAura(GameTestHelper helper) {
         BlockPos at = new BlockPos(3, 2, 3);
@@ -549,7 +513,6 @@ public class DeviceTests {
         helper.succeed();
     }
 
-    /** A totem counts the poles under it, five at most, and is quickened by the inner and outer ones. */
     @GameTest(template = TEMPLATE)
     public static void aTotemCountsItsPoles(GameTestHelper helper) {
         BlockPos at = new BlockPos(3, 8, 3);
@@ -569,7 +532,6 @@ public class DeviceTests {
         helper.succeed();
     }
 
-    /** A shard put in through a pole lands in the totem above; nothing comes back out that way. */
     @GameTest(template = TEMPLATE)
     public static void aPoleFeedsItsTotem(GameTestHelper helper) {
         BlockPos at = new BlockPos(3, 3, 3);
@@ -588,7 +550,6 @@ public class DeviceTests {
         helper.succeed();
     }
 
-    /** A dispersal totem burns a shard and moves its aspect out of its own chunk. */
     @GameTest(template = TEMPLATE)
     public static void aDispersalTotemMovesVisOut(GameTestHelper helper) {
         BlockPos at = new BlockPos(3, 2, 3);
@@ -611,7 +572,6 @@ public class DeviceTests {
         helper.succeed();
     }
 
-    /** The totems take a wisp's essence, of any kind, as the original's did. */
     @GameTest(template = TEMPLATE)
     public static void totemsTakeAWispsEssence(GameTestHelper helper) {
         for (String name : new String[] {"aura_totem_push", "aura_totem_pull"}) {
@@ -623,7 +583,6 @@ public class DeviceTests {
         helper.succeed();
     }
 
-    /** The autocaster is built round the original's made mind again, with the resonator in its ring. */
     @GameTest(template = TEMPLATE)
     public static void theAutocasterIsBuiltOfItsOwnParts(GameTestHelper helper) {
         var recipe = helper.getLevel().getRecipeManager().byKey(Alchemia.id("autocaster")).orElseThrow();

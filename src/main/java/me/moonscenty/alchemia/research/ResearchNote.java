@@ -15,12 +15,6 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 
-/**
- * A puzzle part-drawn on a sheet, and the research it will finish once it is solved.
- * <p>
- * The board is a hex grid with the subject's aspects pinned around the edge. Working it out means laying a run of
- * aspects between them, each one sharing something with the one before, which is the reasoning made into a game.
- */
 public record ResearchNote(ResourceLocation research, AspectList budget, List<Cell> cells, boolean complete) {
     public static final Codec<ResearchNote> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             ResourceLocation.CODEC.fieldOf("research").forGetter(ResearchNote::research),
@@ -36,12 +30,7 @@ public record ResearchNote(ResourceLocation research, AspectList budget, List<Ce
             ByteBufCodecs.BOOL, ResearchNote::complete,
             ResearchNote::new);
 
-    /**
-     * One space on the board. A cell that is not in the list is not part of the board at all: the sheet is torn there,
-     * and nothing can be laid on it.
-     *
-     * @param pinned true for the aspects the subject itself puts on the sheet, which the player may not move
-     */
+    // a hex missing from the list is torn out of the sheet
     public record Cell(HexGrid.Hex at, Optional<Holder<Aspect>> aspect, boolean pinned) {
         public static final Codec<Cell> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 HexGrid.Hex.CODEC.fieldOf("at").forGetter(Cell::at),
@@ -68,7 +57,6 @@ public record ResearchNote(ResourceLocation research, AspectList budget, List<Ce
         }
     }
 
-    /** The aspects the subject pinned to the sheet, which are the ends the player has to join up. */
     public List<Cell> pinnedCells() {
         return cells.stream().filter(Cell::pinned).toList();
     }
@@ -77,7 +65,6 @@ public record ResearchNote(ResourceLocation research, AspectList budget, List<Ce
         return cells.stream().filter(cell -> cell.at().equals(at)).findFirst();
     }
 
-    /** Whether a cell is part of the board at all, as opposed to a tear in the sheet. */
     public boolean holds(HexGrid.Hex at) {
         return cellAt(at).isPresent();
     }

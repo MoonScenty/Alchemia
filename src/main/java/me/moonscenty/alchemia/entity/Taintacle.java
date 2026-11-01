@@ -30,23 +30,16 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
-/**
- * A taintacle: a tentacle of taint three blocks tall, rooted where it rose out of tainted ground.
- *
- * <p>It never moves, only lashes at whatever comes within two or three blocks of it. Off the taint it withers, a point
- * a second. Something it has taken against standing on taint four to sixteen blocks off, it sends a little tendril up
- * out of the ground under them, every two seconds.
- */
 public class Taintacle extends Monster implements TaintedMob {
-    /** Event: it lashes out, and flails hard for a while. */
+    // entity event id
     public static final byte FLAILS = 16;
 
-    /** The original's numbers. */
+    // original's values
     private static final double LIVES = 50.0;
     private static final double LASHES = 7.0;
     private static final float REACHES = 2.0F;
 
-    /** How hard it is flailing, client-side; it settles back to one by a hundredth a tick. */
+    // client-side
     public float flail = 1.0F;
 
     public Taintacle(EntityType<? extends Taintacle> type, Level level) {
@@ -75,13 +68,11 @@ public class Taintacle extends Monster implements TaintedMob {
         targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, true));
     }
 
-    /** Only on tainted ground, and not in peace. */
     public static boolean checkSpawnRules(EntityType<? extends Taintacle> type, ServerLevelAccessor level,
             MobSpawnType reason, BlockPos pos, RandomSource random) {
         return level.getDifficulty() != Difficulty.PEACEFUL && onTaint(level, pos);
     }
 
-    /** Whether this spot, or the one under it, is tainted. */
     public static boolean onTaint(LevelAccessor level, BlockPos pos) {
         return level.getBlockState(pos).getBlock() instanceof Tainted
                 || level.getBlockState(pos.below()).getBlock() instanceof Tainted;
@@ -97,13 +88,11 @@ public class Taintacle extends Monster implements TaintedMob {
         return TaintedMob.allied(other) || super.isAlliedTo(other);
     }
 
-    /** Rooted: it goes nowhere but down, if the ground goes from under it. */
     @Override
     public void move(MoverType type, Vec3 movement) {
         super.move(type, new Vec3(0.0, Math.min(0.0, movement.y), 0.0));
     }
 
-    /** How far it can reach to lash, beyond its own girth: two blocks and a bit. */
     @Override
     protected AABB getAttackBoundingBox() {
         double reach = reach();
@@ -141,7 +130,6 @@ public class Taintacle extends Monster implements TaintedMob {
         return true;
     }
 
-    /** A tendril up out of the ground under something that stands on taint. */
     private void tendrilUnder(ServerLevel level, LivingEntity target) {
         boolean outer = level.getBiome(target.blockPosition()).is(me.moonscenty.alchemia.worldgen.ModBiomes.ELDRITCH);
         if (!outer && !onTaint(level, target.blockPosition())) {
@@ -158,7 +146,6 @@ public class Taintacle extends Monster implements TaintedMob {
         playSound(ModSounds.TENTACLE.get(), getSoundVolume(), getVoicePitch());
     }
 
-    /** A lash: it flails, and the sound of it. */
     @Override
     public boolean doHurtTarget(Entity target) {
         level().broadcastEntityEvent(this, FLAILS);
@@ -175,7 +162,6 @@ public class Taintacle extends Monster implements TaintedMob {
         }
     }
 
-    /** A scrap of goo or a tendril of it. */
     @Override
     protected void dropCustomDeathLoot(ServerLevel level, DamageSource source, boolean recentlyHit) {
         super.dropCustomDeathLoot(level, source, recentlyHit);

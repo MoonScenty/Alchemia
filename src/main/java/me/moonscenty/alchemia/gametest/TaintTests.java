@@ -24,10 +24,6 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/**
- * The taint is the one thing in the mod that eats the world, so it has to be shown to take ground only where it
- * should, to give it back when its flux runs out, and never to get anything for free.
- */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class TaintTests {
@@ -35,13 +31,7 @@ public class TaintTests {
     private static final BlockPos HERE = new BlockPos(8, 4, 8);
     private static final int BASE = AuraGeneration.BASE;
 
-    /**
-     * Flux in the air here, and in every chunk a test might reach into.
-     * <p>
-     * One chunk is not enough. Where a structure lands is not up to the test, so a spot a block or two from the
-     * middle can fall in the next chunk along, and the taint asks the chunk it is standing in rather than the
-     * one the test had in mind. Filling the nine leaves nothing to where the structure happened to be put.
-     */
+    // fill all nine chunks: the structure may place the test spot in a neighbouring chunk
     private static void flux(GameTestHelper helper, int amount) {
         BlockPos middle = helper.absolutePos(HERE);
         for (int east = -16; east <= 16; east += 16) {
@@ -63,7 +53,6 @@ public class TaintTests {
         }
     }
 
-    /** Dirt with taint on most sides is eaten and turned to tainted soil. */
     @GameTest(template = TEMPLATE)
     public static void hemmedDirtTurnsToTaintedSoil(GameTestHelper helper) {
         flux(helper, BASE);
@@ -78,7 +67,6 @@ public class TaintTests {
         helper.succeed();
     }
 
-    /** Anything too hard for the taint is beyond it, however well surrounded. */
     @GameTest(template = TEMPLATE)
     public static void obsidianIsBeyondTheTaint(GameTestHelper helper) {
         flux(helper, BASE);
@@ -92,15 +80,10 @@ public class TaintTests {
         helper.succeed();
     }
 
-    /**
-     * Fibres creep across open ground, clinging to whatever solid thing is beside them. They are the front, so the
-     * check stops the moment they arrive: left longer, they eat the stone and wither, which is the next test.
-     */
     @GameTest(template = TEMPLATE)
     public static void fibresTakeHoldOnOpenGround(GameTestHelper helper) {
         flux(helper, BASE);
         helper.setBlock(HERE, ModBlocks.TAINT_SOIL.get());
-        // a stone floor next door, with air above it, is exactly where fibres go
         helper.setBlock(HERE.east(), Blocks.STONE);
         BlockPos onto = HERE.east().above();
 
@@ -115,7 +98,6 @@ public class TaintTests {
         helper.succeed();
     }
 
-    /** With no flux to feed it the taint does not move an inch. */
     @GameTest(template = TEMPLATE)
     public static void nothingSpreadsWithoutFlux(GameTestHelper helper) {
         flux(helper, 0);
@@ -127,7 +109,6 @@ public class TaintTests {
         helper.succeed();
     }
 
-    /** Starved of flux, tainted soil crumbles to taint dust, as the original's did. */
     @GameTest(template = TEMPLATE)
     public static void starvedSoilCrumblesToDust(GameTestHelper helper) {
         flux(helper, 0);
@@ -141,11 +122,10 @@ public class TaintTests {
         helper.succeed();
     }
 
-    /** A plain fibre with only taint to hold on to has done its job and withers. */
     @GameTest(template = TEMPLATE)
     public static void fibresWitherOnceTheGroundUnderThemHasTurned(GameTestHelper helper) {
         flux(helper, BASE);
-        // which fibres sprout something is settled by where they stand, so find a spot that grows nothing
+        // find a spot whose fibres grow nothing
         BlockPos spot = null;
         for (int x = 2; x < 30 && spot == null; x++) {
             BlockPos candidate = new BlockPos(x, 4, 8);
@@ -159,13 +139,11 @@ public class TaintTests {
         helper.assertTrue(spot != null, "somewhere along a row of thirty there should be a plain fibre");
         helper.assertBlockPresent(ModBlocks.TAINT_FIBRE.get(), spot);
 
-        // the stone it clings to is eaten from under it
         helper.setBlock(spot.below(), ModBlocks.TAINT_ROCK.get());
         helper.assertBlockPresent(Blocks.AIR, spot);
         helper.succeed();
     }
 
-    /** A chunk thick with flux lets it out as trouble, and pays for it. */
     @GameTest(template = TEMPLATE)
     public static void aChunkThickWithFluxKnocksANodeAbout(GameTestHelper helper) {
         flux(helper, BASE * 3);
@@ -179,31 +157,21 @@ public class TaintTests {
         int before = fluxLeft(helper);
         RandomSource random = RandomSource.create(7L);
         FluxEvents.Trouble happened = null;
-        // nobody is about to be warped or sickened, so the only trouble that can come of it is the node
         for (int i = 0; i < 100 && happened == null; i++) {
             happened = FluxEvents.strikeAt(helper.getLevel(), at, random);
         }
         helper.assertTrue(happened != null, "a chunk this thick with flux should have let something out");
-        // nobody is here to be warped or sickened, so it has to have been the weather, the node or a wisp
         helper.assertTrue(!happened.name().equals("warp") && !happened.name().equals("sickness"),
                 "with nobody about, neither warp nor sickness should have come of it");
         helper.assertTrue(fluxLeft(helper) == before - happened.cost(), "and the chunk should have paid for it");
         helper.succeed();
     }
 
-    /** The six sides a fibre can take hold of, for the tests that check all of them at once. */
     private static final BooleanProperty[] SIDES = {
             TaintFibreBlock.NORTH, TaintFibreBlock.EAST, TaintFibreBlock.SOUTH,
             TaintFibreBlock.WEST, TaintFibreBlock.UP, TaintFibreBlock.DOWN,
     };
 
-    /**
-     * Fibres take hold of leaves.
-     * <p>
-     * Leaves hold nothing up -- no torch, no ladder -- so asking whether a fibre could stand on them said no, and a
-     * fibre in a canopy the taint had eaten drew no face at all. It was still there to walk through and to break;
-     * there was simply nothing to see.
-     */
     @GameTest(template = TEMPLATE)
     public static void fibresTakeHoldOfLeaves(GameTestHelper helper) {
         for (Direction side : Direction.values()) {
@@ -219,28 +187,17 @@ public class TaintTests {
         helper.succeed();
     }
 
-    /**
-     * A fibre with nothing at all to hold on to goes, rather than standing about drawing nothing.
-     * <p>
-     * Every part of the fibre's picture is a sheet spread over some neighbouring face. With no face to spread over
-     * there is no picture, and an invisible block is worse than an empty one.
-     */
     @GameTest(template = TEMPLATE)
     public static void aFibreWithNothingToHoldGoes(GameTestHelper helper) {
         helper.setBlock(HERE.below(), Blocks.STONE);
         helper.setBlock(HERE, TaintSpread.fibres(helper.getLevel(), helper.absolutePos(HERE)));
         helper.assertBlockPresent(ModBlocks.TAINT_FIBRE.get(), HERE);
 
-        // the floor it was lying on is taken away and there is nothing else within reach
         helper.setBlock(HERE.below(), Blocks.AIR);
         helper.assertBlockPresent(Blocks.AIR, HERE);
         helper.succeed();
     }
 
-    /**
-     * Walking on tainted ground now and then poisons what walks: one step in seven hundred and fifty. Ten thousand
-     * steps make missing it a fault rather than bad luck. The undead walk it untouched.
-     */
     @GameTest(template = TEMPLATE)
     public static void walkingOnTaintedGroundPoisons(GameTestHelper helper) {
         BlockPos ground = new BlockPos(4, 1, 4);
@@ -262,7 +219,6 @@ public class TaintTests {
         helper.succeed();
     }
 
-    /** The taint's poison does its own creatures good: a crawler that has it is healed, where a pig is hurt. */
     @GameTest(template = TEMPLATE)
     public static void taintPoisonHealsTheTaintsOwn(GameTestHelper helper) {
         var poison = me.moonscenty.alchemia.player.effect.ModEffects.TAINT_POISON;

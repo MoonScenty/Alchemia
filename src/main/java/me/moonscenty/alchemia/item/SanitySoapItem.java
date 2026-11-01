@@ -15,14 +15,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 
-/**
- * Sanitizing soap, the original's {@code ItemSanitySoap}: held up and scrubbed with for ten seconds, it washes all
- * temporary warp away and, one time in three, a point of the warp that sticks. Warp ward makes that a good deal
- * likelier, and so does standing in purifying fluid while you do it. Put it down early and nothing comes of it.
- * What has been written into you for good it does not touch.
- */
 public class SanitySoapItem extends Item {
-    /** How long a wash is held for, and how far into it it counts as done. */
     public static final int WASH = 200;
     public static final int DONE = 195;
     private static final float CHANCE = 0.33F;
@@ -48,7 +41,6 @@ public class SanitySoapItem extends Item {
         return UseAnim.BLOCK;
     }
 
-    /** Lathering: a rustle now and then and a froth about whoever is washing, and done once it has been long enough. */
     @Override
     public void onUseTick(Level level, LivingEntity user, ItemStack stack, int remaining) {
         if (WASH - remaining > DONE) {
@@ -81,7 +73,6 @@ public class SanitySoapItem extends Item {
         }
     }
 
-    /** What a finished wash does, given the roll it was made with. */
     public static void wash(Player player, float roll) {
         float chance = CHANCE;
         if (player.hasEffect(ModEffects.WARP_WARD)) {

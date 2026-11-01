@@ -42,31 +42,10 @@ import net.neoforged.neoforge.event.entity.living.LivingDropsEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 
-/**
- * Champion mobs, as the original made them.
- *
- * <h3>Who becomes one</h3>
- * Every monster on the list ({@code alchemia:champion_candidates}) is rolled once, the first time it is in a world,
- * and never again. A roll of a hundred has to come out at nought or below: so one in a hundred on normal, three on
- * hard, none on easy, two more in the Nether, the End or somewhere spooky, three more in the Outer Lands and ten more
- * in a maze's key room or library. A taintacle has one more, an inhabited zombie two. Nothing with less than ten
- * health is ever made one. With champions turned off in the config the roll starts two higher, the dangerous rooms
- * count three and the kinds count nothing, which leaves only those few places.
- *
- * <h3>What one is</h3>
- * A hundred more health (of which it gets twenty-five at once, not all), three times the bite, a name that says what
- * it is the champion of, and one of the thirteen {@link ChampionModifier modifiers}. It dies for five to seven more
- * experience than it would have, and a bag of loot: common or uncommon, and with looting now and then rare.
- *
- * <h3>Where this differs from the original</h3>
- * The original kept the roll in an attribute it gave every monster; here it is a number attached to the mob, saved
- * and sent to whoever can see it. An infested champion, struck, may burst a taint crawler out of itself.
- */
+// Champion rolls, buffs and loot; the odds are the original's.
 @EventBusSubscriber(modid = Alchemia.MODID)
 public final class Champions {
-    /** Never rolled. */
     public static final int UNROLLED = -2;
-    /** Rolled, and nothing came of it. */
     public static final int ORDINARY = -1;
 
     private static final ResourceLocation HEALTH = Alchemia.id("champion_health");
@@ -82,7 +61,6 @@ public final class Champions {
         return entity.getData(ModAttachments.CHAMPION);
     }
 
-    /** What it is the champion of, or null if it is no champion. */
     public static ChampionModifier modifier(Entity entity) {
         return ChampionModifier.of(of(entity));
     }
@@ -90,8 +68,6 @@ public final class Champions {
     public static boolean isChampion(Entity entity) {
         return of(entity) >= 0;
     }
-
-    // --- the roll --------------------------------------------------------------
 
     @SubscribeEvent
     public static void joined(EntityJoinLevelEvent event) {
@@ -115,7 +91,7 @@ public final class Champions {
         }
     }
 
-    /** What is added to the roll of a hundred for this mob where it stands: below nought, the likelier. */
+    // added to nextInt(100); a candidate becomes a champion at 0 or below
     public static int offset(Monster mob) {
         boolean on = AlchemiaConfig.CHAMPION_MOBS.get();
         int roll = 0;
@@ -142,7 +118,7 @@ public final class Champions {
         return roll;
     }
 
-    /** In a maze's key room or library, the original's {@code isDangerousLocation}. */
+    // original's isDangerousLocation
     private static boolean dangerous(Monster mob) {
         if (mob.level().getServer() == null) {
             return false;
@@ -152,7 +128,7 @@ public final class Champions {
         return cell != null && (cell.feature == Cell.KEY_ROOM || cell.feature == Cell.LIBRARY);
     }
 
-    /** How much likelier some kinds are, the original's champion whitelist weights less one. */
+    // original's whitelist weights minus one
     private static int kindBonus(Monster mob) {
         if (mob instanceof InhabitedZombie) {
             return 2;
@@ -160,7 +136,7 @@ public final class Champions {
         return mob instanceof Taintacle ? 1 : 0;
     }
 
-    /** A boss is a champion of something always, and gets only what that kind of champion adds. */
+    // bosses always get a modifier, but none of the regular champion health or damage boost
     public static void makeBoss(me.moonscenty.alchemia.entity.boss.ThaumcraftBoss boss) {
         ChampionModifier modifier = ChampionModifier.values()[boss.getRandom().nextInt(ChampionModifier.values().length)];
         boss.setData(ModAttachments.CHAMPION, modifier.ordinal());
@@ -179,12 +155,10 @@ public final class Champions {
         boss.name();
     }
 
-    /** Makes it a champion of something, by chance. */
     public static void makeRandom(Monster mob) {
         make(mob, ChampionModifier.values()[mob.getRandom().nextInt(ChampionModifier.values().length)]);
     }
 
-    /** Makes it the champion of this, whatever it was before. */
     public static void make(Monster mob, ChampionModifier modifier) {
         if (mob instanceof net.minecraft.world.entity.monster.Creeper) {
             // a creeper is only ever bold
@@ -217,12 +191,9 @@ public final class Champions {
         }
     }
 
-    /** How much a warded champion's ward holds: half its health before it was made one. */
     private static int ward(LivingEntity mob) {
         return (int) mob.getAttribute(Attributes.MAX_HEALTH).getBaseValue() / 2;
     }
-
-    // --- what it does ----------------------------------------------------------
 
     @SubscribeEvent
     public static void ticked(EntityTickEvent.Post event) {
@@ -266,7 +237,6 @@ public final class Champions {
         }
     }
 
-    /** What a champion does to what hurts it. */
     private static float defend(ChampionModifier modifier, LivingEntity champion, LivingEntity attacker,
             DamageSource source, float amount) {
         switch (modifier) {
@@ -296,7 +266,6 @@ public final class Champions {
         return amount;
     }
 
-    /** What a champion does to what it hurts. */
     private static float attack(ChampionModifier modifier, Monster champion, LivingEntity target, float amount) {
         var random = champion.getRandom();
         switch (modifier) {
@@ -332,12 +301,10 @@ public final class Champions {
         return amount;
     }
 
-    // --- what it leaves ------------------------------------------------------
-
     @SubscribeEvent
     public static void died(LivingDropsEvent event) {
         LivingEntity dead = event.getEntity();
-        // a boss is made a champion for its strength, but leaves its own rare bag and nothing more, as the original
+        // a boss leaves only its own rare bag, as the original
         if (!(dead.level() instanceof ServerLevel level) || !(dead instanceof Monster) || !isChampion(dead)
                 || dead instanceof me.moonscenty.alchemia.entity.boss.ThaumcraftBoss
                 || !event.isRecentlyHit() || event.getSource().getEntity() instanceof FakePlayer) {

@@ -17,15 +17,9 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 
-/**
- * What a banner is: which way it hangs, whether from a wall or on its own pole, its colour -- none for the Crimson
- * Cult's -- and the aspect painted on it, if any.
- */
 public class BannerBlockEntity extends SyncedBlockEntity {
-    /** One of sixteen turns standing, or one of four hanging. */
     private byte facing;
     private boolean wall;
-    /** Null for the cult's. */
     @Nullable
     private DyeColor colour;
     @Nullable
@@ -48,7 +42,6 @@ public class BannerBlockEntity extends SyncedBlockEntity {
         return colour;
     }
 
-    /** The Crimson Cult's banner: no colour of its own, and nothing may be painted on it. */
     public boolean isCult() {
         return colour == null;
     }

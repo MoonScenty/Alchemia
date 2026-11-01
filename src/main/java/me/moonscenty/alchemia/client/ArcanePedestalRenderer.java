@@ -11,18 +11,9 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 
-/**
- * Stands the thing on the pedestal up where it can be seen, and turns it.
- * <p>
- * It turns because a ring of pedestals is something you read at a glance while you are walking round it, and a
- * still item seen edge on is a sliver. It is the same turn every pedestal does, taken from the world clock rather
- * than from each block, so a ring of them moves together instead of shimmering.
- */
 public class ArcanePedestalRenderer implements BlockEntityRenderer<ArcanePedestalBlockEntity> {
-    /** How high above the block the thing floats, and how far it bobs either side of that. */
     private static final float STANDS = 1.15F;
     private static final float BOBS = 0.05F;
-    /** How long one turn takes, and one bob, in ticks. */
     private static final float TURNS_IN = 90.0F;
     private static final float BOBS_IN = 64.0F;
 

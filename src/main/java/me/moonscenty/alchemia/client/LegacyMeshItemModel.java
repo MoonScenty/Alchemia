@@ -28,15 +28,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.model.BakedModelWrapper;
 
-/**
- * An item drawn on parts of one of the original's meshes, each placed where the original's renderer placed it, when
- * the jar is there; otherwise our own model of it.
- * <p>
- * For the things the original drew in its renderer even in the hand, which the game no longer lets an item do: the
- * same parts at the same places are baked into the model once, and held and shown as our own model of it is.
- */
 public class LegacyMeshItemModel extends BakedModelWrapper<BakedModel> {
-    /** One part of the mesh, and where it goes. */
     public record Placed(String part, Matrix4f at) {
     }
 
@@ -47,11 +39,6 @@ public class LegacyMeshItemModel extends BakedModelWrapper<BakedModel> {
 
     private final LegacyCached<List<BakedQuad>> quads;
 
-    /**
-     * @param mesh    the mesh's key in {@link LegacyModels}
-     * @param flipped whether the original's loader turned its texture corners over
-     * @param texture the picture, on the block atlas
-     */
     public LegacyMeshItemModel(BakedModel ours, String mesh, boolean flipped, ResourceLocation texture,
             List<Placed> parts) {
         super(ours);
@@ -80,7 +67,7 @@ public class LegacyMeshItemModel extends BakedModelWrapper<BakedModel> {
         return legacy() || super.isGui3d();
     }
 
-    // the wrapper hands both of these to the model it wraps, which would draw ours instead of this
+    // the wrapper would forward these to the wrapped model and draw that instead
 
     @Override
     public BakedModel applyTransform(ItemDisplayContext context, PoseStack pose, boolean leftHand) {

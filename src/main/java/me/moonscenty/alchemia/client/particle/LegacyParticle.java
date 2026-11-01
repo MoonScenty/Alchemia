@@ -4,16 +4,8 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.SingleQuadParticle;
 
-/**
- * A particle drawn straight off one of the original's sheets, a cell at a time.
- * <p>
- * The original's sheets are sixteen cells by sixteen; a cell is picked by its column and row. Each kind of particle
- * says which layer it is drawn in and how it moves; this holds what they all share.
- */
 public abstract class LegacyParticle extends SingleQuadParticle {
-    /** Cells across and down a sheet. */
     protected static final int CELLS = 16;
-    /** The brightest the game can light anything, block and sky both. */
     protected static final int FULL_BRIGHT = 0xF000F0;
 
     private final LegacySheet sheet;
@@ -28,7 +20,6 @@ public abstract class LegacyParticle extends SingleQuadParticle {
         cell(0, 0);
     }
 
-    /** Draw from this cell of the sheet. */
     protected void cell(int column, int row) {
         u0 = column / (float) CELLS;
         u1 = (column + 1) / (float) CELLS;
@@ -36,7 +27,6 @@ public abstract class LegacyParticle extends SingleQuadParticle {
         v1 = (row + 1) / (float) CELLS;
     }
 
-    /** Draw from the cell of this number, counting along the rows of a sheet cut into {@code grid} by grid. */
     protected void numbered(int index, int grid) {
         int column = index % grid;
         int row = index / grid;
@@ -46,7 +36,6 @@ public abstract class LegacyParticle extends SingleQuadParticle {
         v1 = (row + 1) / (float) grid;
     }
 
-    /** Draw from this part of the sheet, as fractions of it. */
     protected void area(float left, float top, float right, float bottom) {
         u0 = left;
         u1 = right;

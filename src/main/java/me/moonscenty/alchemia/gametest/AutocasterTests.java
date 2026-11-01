@@ -25,19 +25,11 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/**
- * The autocaster: a focus that works while nobody is holding it.
- * <p>
- * What is worth proving is that it only takes foci worth aiming, that it is its owner's and nobody else's, that
- * it fills itself out of the air, and that it will not shoot on an empty reservoir. The shooting itself is the
- * focus's own, and is tested where the focus is.
- */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class AutocasterTests {
     private static final String TEMPLATE = "empty_32x40x32";
 
-    /** One against a wall, owned by whoever put it there. */
     private static Autocaster placed(GameTestHelper helper, Player owner, BlockPos at, Direction face) {
         Autocaster turret = new Autocaster(helper.getLevel(), helper.absolutePos(at), face);
         turret.setOwner(owner.getUUID());
@@ -49,7 +41,6 @@ public class AutocasterTests {
         turret.setItem(0, new ItemStack(ModItems.FOCI.get(focus).get()));
     }
 
-    /** Seven of the twelve are worth aiming at a thing; the rest mean nothing without a hand behind them. */
     @GameTest(template = TEMPLATE)
     public static void itOnlyTakesAFocusWorthAiming(GameTestHelper helper) {
         helper.assertTrue(Autocaster.takes(new ItemStack(ModItems.FOCI.get("shock").get())),
@@ -64,7 +55,6 @@ public class AutocasterTests {
         helper.succeed();
     }
 
-    /** Put against a face: it stands where it was put, pointing out of the wall it is on. */
     @GameTest(template = TEMPLATE)
     public static void aPlacerPutsOneAgainstTheFaceThatWasClicked(GameTestHelper helper) {
         Player owner = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -88,7 +78,6 @@ public class AutocasterTests {
         helper.succeed();
     }
 
-    /** A focus with a longer reach is a turret that looks further, and no vis is lost in the change. */
     @GameTest(template = TEMPLATE)
     public static void changingTheFocusChangesHowFarItLooks(GameTestHelper helper) {
         Player owner = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -106,7 +95,6 @@ public class AutocasterTests {
         helper.succeed();
     }
 
-    /** It fills itself out of the air it is standing in, a drop at a time and the thinnest primal first. */
     @GameTest(template = TEMPLATE, timeoutTicks = 200)
     public static void itDrawsItsOwnVisOutOfTheAir(GameTestHelper helper) {
         AuraGeneration.ensure(helper.getLevel(),
@@ -122,7 +110,6 @@ public class AutocasterTests {
         });
     }
 
-    /** A dry turret with a good mark in front of it holds its fire rather than shooting for nothing. */
     @GameTest(template = TEMPLATE, timeoutTicks = 200)
     public static void aDryTurretDoesNotShoot(GameTestHelper helper) {
         Player owner = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -138,7 +125,6 @@ public class AutocasterTests {
         });
     }
 
-    /** Filled, told to mind animals and pointed into an open room, it shoots. */
     @GameTest(template = TEMPLATE, timeoutTicks = 300)
     public static void aFilledTurretShootsWhatItIsToldToMind(GameTestHelper helper) {
         Player owner = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -156,7 +142,6 @@ public class AutocasterTests {
         });
     }
 
-    /** What it is not told to mind, it leaves alone. */
     @GameTest(template = TEMPLATE, timeoutTicks = 200)
     public static void itLeavesAloneWhatItWasNotToldToMind(GameTestHelper helper) {
         Player owner = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -174,7 +159,6 @@ public class AutocasterTests {
         });
     }
 
-    /** Broken open, it gives back whatever was bolted into it. */
     @GameTest(template = TEMPLATE, timeoutTicks = 100)
     public static void itGivesBackItsFocusWhenItIsKilled(GameTestHelper helper) {
         Player owner = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -189,7 +173,6 @@ public class AutocasterTests {
         });
     }
 
-    /** It will not be opened or taken down by somebody who did not put it there. */
     @GameTest(template = TEMPLATE)
     public static void itIsNobodyElsesToTouch(GameTestHelper helper) {
         Player owner = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -202,7 +185,6 @@ public class AutocasterTests {
         helper.succeed();
     }
 
-    /** The one thing it carries is in its hand, which is what the client is shown and what a renderer reads. */
     @GameTest(template = TEMPLATE)
     public static void itsFocusIsTheOneThingItHolds(GameTestHelper helper) {
         Player owner = helper.makeMockPlayer(GameType.SURVIVAL);

@@ -6,9 +6,6 @@ import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.Registries;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
-/**
- * Everything this mod ships as datapack content, gathered in one place for the generator.
- */
 public class ModDatapackEntries {
     public static final RegistrySetBuilder BUILDER = new RegistrySetBuilder()
             .add(Registries.CONFIGURED_FEATURE, ModWorldgen::bootstrapConfigured)

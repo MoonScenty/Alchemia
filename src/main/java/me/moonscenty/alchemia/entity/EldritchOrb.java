@@ -13,13 +13,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
-/**
- * A guardian's orb: a knot of dark that flies straight and bursts on whatever it meets, five seconds at most. Its
- * burst catches everything alive within two blocks that is not undead and not the one who cast it, for two thirds of
- * the caster's own blow as magic, and leaves them weak for eight seconds.
- * <p>
- * The original's could burst a second time on the tick after the first. This one is gone at once.
- */
+// Gone on its first burst; the original's could burst again the next tick.
 public class EldritchOrb extends ThrowableProjectile {
     private static final int LASTS = 100;
 

@@ -15,13 +15,7 @@ import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
-/**
- * The Crimson Cult's blade. Whatever it cuts is left weak for three seconds and hungry for six, it mends itself a
- * point a second as void metal does, and it is uneasy to hold: two points of warp while it is in hand.
- * <p>
- * The original's sword was three and a half over a plain sword's base. Swords hit a point softer now than they did
- * then, and so does this one; it is still three and a half over the plain sword of today.
- */
+// keeps the original's +3.5 over a plain sword rather than its absolute damage
 public class CrimsonBladeItem extends SwordItem implements WarpingGear {
     private static final int WARP = 2;
     private static final int MENDS_EVERY = 20;

@@ -8,7 +8,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 
-/** The key to a great hall of the Outer Lands, kept in the maze's key room. It goes into the lock on the hall's door. */
 public class RunedTabletItem extends Item {
     public RunedTabletItem(Properties properties) {
         super(properties);

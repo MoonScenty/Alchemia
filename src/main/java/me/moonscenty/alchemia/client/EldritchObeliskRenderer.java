@@ -19,10 +19,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.AABB;
 
-/**
- * An obelisk as the original drew it: three blocks of carved stone that let the stars show through, a capstone at
- * either end pointing out, and the whole of it bobbing gently in the air above its foot.
- */
 public class EldritchObeliskRenderer implements BlockEntityRenderer<EldritchObeliskBlockEntity> {
     private static final ResourceLocation SIDE = Alchemia.id("textures/entity/obelisk_side.png");
     private static final float HEIGHT = 3.0F;
@@ -36,7 +32,6 @@ public class EldritchObeliskRenderer implements BlockEntityRenderer<EldritchObel
         var viewer = Minecraft.getInstance().getCameraEntity();
         float bob = viewer == null ? 0.1F : Mth.sin((viewer.tickCount + partial) / 10.0F) * 0.1F + 0.1F;
 
-        // the stars inside
         pose.pushPose();
         pose.translate(0.0F, 1.0F + bob, 0.0F);
         VertexConsumer stars = buffers.getBuffer(LegacyRenderTypes.mirrorPortal());
@@ -47,7 +42,6 @@ public class EldritchObeliskRenderer implements BlockEntityRenderer<EldritchObel
         plane(stars, matrix, 0.99F, 0.01F, 0.99F, 0.99F);
         pose.popPose();
 
-        // the carved sides over them
         VertexConsumer sides = buffers.getBuffer(RenderType.entityTranslucent(SIDE));
         for (int i = 0; i < 4; i++) {
             pose.pushPose();
@@ -58,7 +52,6 @@ public class EldritchObeliskRenderer implements BlockEntityRenderer<EldritchObel
             pose.popPose();
         }
 
-        // a cap at either end
         pose.pushPose();
         pose.translate(0.5F, 1.0F + bob, 0.5F);
         pose.mulPose(Axis.XP.rotationDegrees(90.0F));
@@ -71,7 +64,6 @@ public class EldritchObeliskRenderer implements BlockEntityRenderer<EldritchObel
         pose.popPose();
     }
 
-    /** A plane three high from one corner to the other. */
     private static void plane(VertexConsumer buffer, Matrix4f matrix, float x0, float z0, float x1, float z1) {
         buffer.addVertex(matrix, x0, 0.0F, z0);
         buffer.addVertex(matrix, x0, HEIGHT, z0);

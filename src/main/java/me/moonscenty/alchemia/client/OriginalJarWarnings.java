@@ -11,23 +11,11 @@ import net.neoforged.fml.ModLoadingIssue;
 import net.neoforged.neoforge.client.event.ScreenEvent;
 import net.neoforged.neoforge.client.gui.LoadingErrorScreen;
 
-/**
- * Keeps the loader's warnings about the original's jars from stopping the game at every start.
- * <p>
- * The original's two jars sit in the mods folder because that is where a player puts mods. The loader sees they are
- * for an old Forge, passes over them, and then shows a warning screen about each before the title. They are meant to
- * be there, so when every warning on that screen is about one of them, and nothing has gone wrong outright, the
- * screen is passed by and the game goes on to what would have come next. Anything else -- an error, or a warning
- * about any other file -- leaves the screen as it is.
- * <p>
- * The screen keeps its lists to itself, so they are read off it by name. Should a later loader rename them, this
- * finds nothing and the screen simply shows, as it would have anyway.
- */
+// the warning screen's lists are private and read by name; if renamed, the screen just shows
 public final class OriginalJarWarnings {
     private OriginalJarWarnings() {
     }
 
-    /** Passes the loader's warning screen by when there is nothing on it but the original's jars. */
     public static void onOpening(ScreenEvent.Opening event) {
         if (!(event.getNewScreen() instanceof LoadingErrorScreen screen)) {
             return;
@@ -55,7 +43,6 @@ public final class OriginalJarWarnings {
         }
     }
 
-    /** Whether a warning is the loader passing over one of the original's jars. */
     private static boolean aboutAnOriginal(ModLoadingIssue issue) {
         if (issue.severity() != ModLoadingIssue.Severity.WARNING) {
             return false;

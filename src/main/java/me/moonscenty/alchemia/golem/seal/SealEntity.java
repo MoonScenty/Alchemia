@@ -14,15 +14,10 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 
-/**
- * A seal stuck somewhere: what kind it is, and everything its owner has set on it. Priority runs from five below to
- * five above; colour is nought for every golem or one more than a dye's number for golems of that colour only. A
- * locked seal is worked only by its owner's golems; a seal minding redstone stops while it is powered.
- */
+// colour is 0 for any golem, otherwise dye id + 1
 public final class SealEntity {
     public static final int LOWEST = -5;
     public static final int HIGHEST = 5;
-    /** The widest an area runs each way. */
     public static final int WIDEST = 8;
 
     private final SealPos pos;
@@ -33,7 +28,6 @@ public final class SealEntity {
     private boolean redstone;
     @Nullable
     private UUID owner;
-    /** How far it reaches across, up and along, for a seal that works over an area. */
     private BlockPos area;
     private boolean stopped;
 
@@ -104,12 +98,10 @@ public final class SealEntity {
                 Math.clamp(area.getZ(), 1, WIDEST));
     }
 
-    /** Whether it is set to mind redstone and the block it is on, or the one in front of it, is powered. */
     public boolean stoppedByRedstone(Level level) {
         return redstone && (level.hasNeighborSignal(pos.pos()) || level.hasNeighborSignal(pos.front()));
     }
 
-    /** Every tick: stopped by redstone it calls off its tasks; otherwise its seal goes about its work. */
     public void tick(ServerLevel level) {
         if (stoppedByRedstone(level)) {
             if (!stopped) {
@@ -122,10 +114,6 @@ public final class SealEntity {
         seal.tick(level, this);
     }
 
-    /**
-     * The blocks it works over: starting in front of its face and running as far out as its area says, and as far
-     * either side across the face.
-     */
     public AABB bounds() {
         Direction face = pos.face();
         AABB box = new AABB(pos.pos()).move(face.getStepX(), face.getStepY(), face.getStepZ());
@@ -136,10 +124,7 @@ public final class SealEntity {
                 face.getStepZ() == 0 ? area.getZ() - 1 : 0);
     }
 
-    /**
-     * The n-th block of its area, counting through every block of it in turn and round again: how the seals that
-     * look over an area block by block go about it. The original's arithmetic, odd signs and all.
-     */
+    // the original's arithmetic, odd signs and all
     public BlockPos posInArea(int count) {
         Direction face = pos.face();
         int across = 1 + (area.getX() - 1) * (face.getStepX() == 0 ? 2 : 1);
@@ -154,8 +139,6 @@ public final class SealEntity {
         return pos.pos().offset(x - (face.getStepX() == 0 ? across / 2 : 0), y - (face.getStepY() == 0 ? up / 2 : 0),
                 z - (face.getStepZ() == 0 ? along / 2 : 0));
     }
-
-    // --- saving ---------------------------------------------------------------------------------------------
 
     public CompoundTag save(HolderLookup.Provider registries) {
         CompoundTag tag = new CompoundTag();
@@ -174,7 +157,6 @@ public final class SealEntity {
         return tag;
     }
 
-    /** A seal as saved, or null if it was of a kind there no longer is. */
     @Nullable
     public static SealEntity load(CompoundTag tag, HolderLookup.Provider registries) {
         Seal seal = SealTypes.make(tag.getString("type"));

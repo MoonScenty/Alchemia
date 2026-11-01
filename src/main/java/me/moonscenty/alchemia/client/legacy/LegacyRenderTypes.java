@@ -10,18 +10,9 @@ import net.minecraft.Util;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 
-/**
- * Ways of drawing the original used that the game has no ready name for.
- *
- * <p>Only a subclass may reach the pieces a render type is put together from, hence the extending; nothing here is a
- * render type of its own.
- */
+// extends RenderType only to reach its protected state shards
 public final class LegacyRenderTypes extends RenderType {
-    /**
-     * Light added over what is already there, as much as the picture is opaque: the original's
-     * {@code glBlendFunc(GL_SRC_ALPHA, GL_ONE)}. The game's own glowing eyes add the whole colour whatever the
-     * picture's alpha, which turns a soft half-clear glow into a hard bright one.
-     */
+    // GL_SRC_ALPHA, GL_ONE: vanilla's eyes add full colour regardless of alpha
     private static final TransparencyStateShard ADD_BY_ALPHA = new TransparencyStateShard("alchemia_add_by_alpha",
             () -> {
                 RenderSystem.enableBlend();
@@ -51,11 +42,6 @@ public final class LegacyRenderTypes extends RenderType {
                     .setWriteMaskState(COLOR_WRITE)
                     .createCompositeState(false)));
 
-    /**
-     * The swirl seen in a paired mirror: the original drew it the way the game draws the end portal, layer on
-     * layer, with two pictures of its own, and the game's end-portal shader does the same with whichever two it is
-     * given.
-     */
     private static final RenderType MIRROR_PORTAL = create("alchemia_mirror_portal", DefaultVertexFormat.POSITION,
             VertexFormat.Mode.QUADS, 256, false, false, CompositeState.builder()
                     .setShaderState(RENDERTYPE_END_PORTAL_SHADER)
@@ -65,10 +51,6 @@ public final class LegacyRenderTypes extends RenderType {
                             .build())
                     .createCompositeState(false));
 
-    /**
-     * A flat picture laid on the world with its own alpha, both sides, not written into depth: how the original drew
-     * seals and the frames round their areas. Seen through walls, it is not tested against depth either.
-     */
     private static final java.util.function.BiFunction<ResourceLocation, Boolean, RenderType> SEAL = Util.memoize(
             (texture, throughWalls) -> create("alchemia_seal", DefaultVertexFormat.NEW_ENTITY,
                     VertexFormat.Mode.QUADS, 1536, false, true, CompositeState.builder()
@@ -91,17 +73,14 @@ public final class LegacyRenderTypes extends RenderType {
         return MIRROR_PORTAL;
     }
 
-    /** A glow laid over a model at full brightness, faded by its own picture's alpha and the colour's. */
     public static RenderType glow(ResourceLocation texture) {
         return GLOW.apply(texture);
     }
 
-    /** A seal, or a frame round its area, seen through walls if asked. */
     public static RenderType seal(ResourceLocation texture, boolean throughWalls) {
         return SEAL.apply(texture, throughWalls);
     }
 
-    /** {@link #glow}, seen from behind as well as in front, for sheets hung in the air rather than laid on a model. */
     public static RenderType glowBothSides(ResourceLocation texture) {
         return GLOW_BOTH_SIDES.apply(texture);
     }

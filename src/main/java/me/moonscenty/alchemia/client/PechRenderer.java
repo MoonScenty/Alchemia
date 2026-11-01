@@ -17,9 +17,6 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
-/**
- * A pech in the original's skin for its kind -- forager, mage or stalker -- with whatever it holds in its right hand.
- */
 public class PechRenderer extends MobRenderer<Pech, PechModel> {
     private static final ResourceLocation[] SKINS = {
             Alchemia.id("textures/entity/pech_forage.png"),
@@ -36,12 +33,8 @@ public class PechRenderer extends MobRenderer<Pech, PechModel> {
         return SKINS[Math.floorMod(pech.getKind(), SKINS.length)];
     }
 
-    /**
-     * What it holds, in its right hand. Its arms are shorter than a biped's, so the original held things higher up
-     * them than a biped does; it lifted a wand and a bow a little further still.
-     */
     private static final class HeldItem extends RenderLayer<Pech, PechModel> {
-        /** How much higher up the arm than a biped's hand the original put a pech's: 7/16 against 0.32. */
+        // original's hand at 7/16 against a biped's 0.32
         private static final float SHORTER = 0.4375F - 0.32F;
         private final net.minecraft.client.renderer.ItemInHandRenderer items;
 

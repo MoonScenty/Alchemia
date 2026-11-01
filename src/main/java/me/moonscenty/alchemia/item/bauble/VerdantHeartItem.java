@@ -18,12 +18,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import top.theillusivec4.curios.api.SlotContext;
 
-/**
- * The verdant heart band, that holds two hundred of life and spends it on its wearer once a second -- on the first
- * of these that wants it: twenty to lift withering, ten to lift poison, five to lift the flux flu; a lifegiver's five
- * to mend a point of health; a sustainer's one to give back breath, or else to feed. It is charged as a wand is, and
- * draws earth and water for it, not while either is to be spared.
- */
 public class VerdantHeartItem extends BaubleItem implements Rechargeable {
     public static final int HOLDS = 200;
     public static final int PLAIN = 0;
@@ -48,7 +42,6 @@ public class VerdantHeartItem extends BaubleItem implements Rechargeable {
         return false;
     }
 
-    /** Spends this much if it has it. */
     private static boolean spend(ItemStack stack, int cost) {
         if (stack.getDamageValue() + cost > HOLDS) {
             return false;
@@ -91,7 +84,6 @@ public class VerdantHeartItem extends BaubleItem implements Rechargeable {
         }
     }
 
-    /** Draws earth and water out of the aura here for it, the mean of what came. */
     @Override
     public boolean charge(ItemStack stack, ServerLevel level, BlockPos at, int amount) {
         if (AuraHandler.shouldSpareAny(level, at, ModAspects.EARTH, ModAspects.WATER)) {

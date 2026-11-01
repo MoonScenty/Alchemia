@@ -14,10 +14,6 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
-/**
- * The essentia centrifuge. Everything it does is its block entity's; everything it looks like is drawn by its
- * renderer, a rotor between two plates, so the block itself draws nothing.
- */
 public class CentrifugeBlock extends BaseEntityBlock {
     public static final MapCodec<CentrifugeBlock> CODEC = simpleCodec(CentrifugeBlock::new);
 

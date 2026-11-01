@@ -21,16 +21,13 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
-/** What the creatures of the taint leave in the air: their own particles, as the original drew them. */
 public final class TaintEffects {
-    /** How many flies make up a swarm. */
     private static final int FLIES = 25;
     private static final Map<TaintSwarm, List<SwarmParticle>> SWARMS = new WeakHashMap<>();
 
     private TaintEffects() {
     }
 
-    /** A slow purple wisp of pollution rising off where a crawler is. */
     public static void pollution(Entity crawler, BlockPos at) {
         if (!(crawler.level() instanceof ClientLevel level)) {
             return;
@@ -49,7 +46,6 @@ public final class TaintEffects {
                 .spins(random.nextFloat() * 360.0F, random.nextBoolean() ? -1.0F : 1.0F));
     }
 
-    /** Keeps a swarm in flies: one more each tick until it has its full count, each following it about. */
     public static void swarm(TaintSwarm swarm) {
         if (!(swarm.level() instanceof ClientLevel level)) {
             return;
@@ -69,7 +65,6 @@ public final class TaintEffects {
         }
     }
 
-    /** Gobbets of taint about a creature the taint has just made over, a ring of them up its height. */
     public static void sploosh(Entity creature) {
         if (!(creature.level() instanceof ClientLevel level)) {
             return;
@@ -87,7 +82,6 @@ public final class TaintEffects {
         }
     }
 
-    /** A tainted creeper going off: gobbets of taint flung every way. */
     public static void taintsplosion(Entity creeper) {
         if (!(creeper.level() instanceof ClientLevel level)) {
             return;
@@ -108,7 +102,6 @@ public final class TaintEffects {
         }
     }
 
-    /** An alchemic slime landing, or flung: a splash of violet about it, the wider the bigger it is. */
     public static void slimeSplash(Entity slime, int size, int count) {
         if (!(slime.level() instanceof ClientLevel level)) {
             return;
@@ -125,7 +118,6 @@ public final class TaintEffects {
         }
     }
 
-    /** Slime and broken ground thrown up in a ring as a tentacle rises out of the earth. */
     public static void arise(Entity tentacle) {
         if (!(tentacle.level() instanceof ClientLevel level)) {
             return;

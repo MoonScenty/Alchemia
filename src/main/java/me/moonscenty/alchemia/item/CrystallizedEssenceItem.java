@@ -12,22 +12,11 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 
-/**
- * A single point of one essentia, set hard enough to carry.
- * <p>
- * Not the crystal that grows on a node -- that one is called after the aspect it is made of, and there is only
- * one of those to an element. This is the aspect itself gone solid, and there is one for every aspect there is.
- * <p>
- * It is drawn in grey and painted by whatever is in it, so one picture serves for every aspect there is and no
- * new one is needed when another is added. What it holds is a component rather than thirty-five items, for the
- * same reason a phial holds one: an item per aspect is an item per aspect forever.
- */
 public class CrystallizedEssenceItem extends Item {
     public CrystallizedEssenceItem(Properties properties) {
         super(properties);
     }
 
-    /** What is in it, if anything. A crystal of nothing is a curiosity, not a thing anyone should have. */
     public static Optional<Holder<Aspect>> inside(ItemStack stack) {
         return Optional.ofNullable(stack.get(ModDataComponents.ESSENTIA.get()));
     }

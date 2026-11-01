@@ -31,20 +31,9 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-/**
- * The runic matrix: eight stones turning in the air with nothing holding them up.
- * <p>
- * There is no model. What you see is drawn a frame at a time by the renderer, because the whole of it is movement
- * -- it turns, it leans, and it shakes itself apart as the work goes wrong. A still picture of it would be a lie
- * about what the thing is.
- * <p>
- * It is worked by pointing a wand at it. Everything else about it -- what is being made, what is still owed, how
- * badly it is going -- lives in the block entity.
- */
 public class InfusionMatrixBlock extends BaseEntityBlock {
     public static final MapCodec<InfusionMatrixBlock> CODEC = simpleCodec(InfusionMatrixBlock::new);
 
-    /** What you can hit: the space the stones turn in, which is nearly the whole block. */
     private static final VoxelShape SHAPE = Block.box(1, 1, 1, 15, 15, 15);
 
     public InfusionMatrixBlock(Properties properties) {
@@ -61,7 +50,6 @@ public class InfusionMatrixBlock extends BaseEntityBlock {
         return SHAPE;
     }
 
-    /** Nothing at all is drawn by the block itself. */
     @Override
     protected RenderShape getRenderShape(BlockState state) {
         return RenderShape.INVISIBLE;
@@ -72,12 +60,6 @@ public class InfusionMatrixBlock extends BaseEntityBlock {
         return new InfusionMatrixBlockEntity(pos, state);
     }
 
-    /**
-     * Pointing a wand at it sets it going.
-     * <p>
-     * Nothing is taken out of the wand for it. What an infusion costs is the essentia in the jars and the things
-     * on the pedestals, and charging for the match as well would only be a toll on remembering to bring the wand.
-     */
     @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
             Player player, InteractionHand hand, BlockHitResult hit) {
@@ -110,7 +92,6 @@ public class InfusionMatrixBlock extends BaseEntityBlock {
         return ItemInteractionResult.CONSUME;
     }
 
-    /** Says what the work is still waiting on, which is nearly always a jar that has run dry. */
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player,
             BlockHitResult hit) {
@@ -123,7 +104,6 @@ public class InfusionMatrixBlock extends BaseEntityBlock {
         if (!matrix.awake()) {
             say(player, "block.alchemia.infusion_matrix.asleep");
         } else if (!matrix.busy()) {
-            // said before the working rather than during it, since this is the one thing you can still fix
             int leaning = matrix.symmetry(level);
             player.displayClientMessage((leaning > 0
                     ? Component.translatable("block.alchemia.infusion_matrix.lopsided", leaning)
@@ -140,7 +120,6 @@ public class InfusionMatrixBlock extends BaseEntityBlock {
         return InteractionResult.CONSUME;
     }
 
-    /** What is still to be drunk, most of it first. */
     private static MutableComponent owing(InfusionMatrixBlockEntity matrix) {
         MutableComponent out = Component.empty();
         boolean first = true;
@@ -158,7 +137,6 @@ public class InfusionMatrixBlock extends BaseEntityBlock {
         player.displayClientMessage(Component.translatable(key).withStyle(ChatFormatting.GRAY), true);
     }
 
-    /** Taking the matrix away takes the altar with it: the corners are arcane stone again. */
     @Override
     protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState replacement, boolean moving) {
         if (!state.is(replacement.getBlock())
@@ -171,7 +149,6 @@ public class InfusionMatrixBlock extends BaseEntityBlock {
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state,
             BlockEntityType<T> type) {
-        // the client only hums along while a working is under way
         return level.isClientSide
                 ? createTickerHelper(type, me.moonscenty.alchemia.registry.ModBlockEntities.INFUSION_MATRIX.get(),
                         InfusionMatrixBlockEntity::clientTick)

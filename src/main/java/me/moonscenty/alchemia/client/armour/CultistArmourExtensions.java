@@ -13,12 +13,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 
-/**
- * How the Crimson Cult's robe and plate are drawn: each on the original's own model, which the original built twice,
- * once for the piece on the chest and once for the hood or helm and the legs. The robe hangs a skirt and the plate a
- * cloak and a tabard, and both swing with the stride by the original's sums. The boots are plain armour and are not
- * drawn here.
- */
 public class CultistArmourExtensions implements IClientItemExtensions {
     public static final CultistArmourExtensions ROBE = new CultistArmourExtensions(LegacyAssets.ROBE,
             LegacyAssets.ROBE_SKIRT, false);

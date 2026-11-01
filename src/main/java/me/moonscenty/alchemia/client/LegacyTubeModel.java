@@ -31,28 +31,17 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.model.BakedModelWrapper;
 import net.neoforged.neoforge.client.model.data.ModelData;
 
-/**
- * A tube on the original's mesh: a small box in the middle, or a large one for a buffer, and
- * a length of pipe out to every side it is joined on. The kinds of tube differ only in which part of the original's
- * one sheet they wear, and the original moved the mesh's texture corners to choose it; this moves them the same way.
- * <p>
- * The marks the original drew in its renderers are drawn in ours: the valve's wheel by ValveHandleRenderer and
- * the one-way's stub by OnewayMarkRenderer.
- */
 public class LegacyTubeModel extends BakedModelWrapper<BakedModel> {
-    /** The original's sheet. */
     private static final ResourceLocation TEXTURE = Alchemia.id("block/legacy/tube");
-    /** The parts of the mesh: the middle box, the pipe to each side in the game's order of sides, the buffer box. */
     private static final int MIDDLE = 0;
     private static final int BUFFER_MIDDLE = 7;
-    /** The texture corners the original moved for each kind: the first four across, the next twenty-four down. */
+    // texture-corner indices the original shifted per kind: first 4 across, next 24 down
     private static final int ACROSS_BELOW = 4;
     private static final int DOWN_BELOW = 28;
     private static final float FILTER_ACROSS = 0.1875F;
     private static final float RESTRICT_DOWN = 0.125F;
     private static final float BUFFER_DOWN = 0.25F;
     private static final float FILTER_DOWN = 0.375F;
-    /** The tint our filter tube is coloured by, taken by the original's middle box for a filter. */
     private static final int FILTER_TINT = 0;
 
     private static final Map<Integer, List<BakedQuad>> BAKED = new ConcurrentHashMap<>();
@@ -90,7 +79,6 @@ public class LegacyTubeModel extends BakedModelWrapper<BakedModel> {
                 joined |= 1 << way.ordinal();
             }
         }
-        // a side shut with a wand is not drawn, the original's openSides
         Integer shut = data.get(me.moonscenty.alchemia.block.entity.TubeBlockEntity.SHUT);
         int sides = shut == null ? joined : joined & ~shut;
         kept.addAll(BAKED.computeIfAbsent(kind.ordinal() << 6 | sides, key -> bake(mesh, kind, sides)));
@@ -128,7 +116,6 @@ public class LegacyTubeModel extends BakedModelWrapper<BakedModel> {
         }
     }
 
-    /** The kinds of tube as the original told them apart, and where on its sheet each one's picture is. */
     private enum Kind {
         PLAIN(0.0F, 0.0F),
         RESTRICT(0.0F, RESTRICT_DOWN),
@@ -154,7 +141,6 @@ public class LegacyTubeModel extends BakedModelWrapper<BakedModel> {
             if (block instanceof RestrictTubeBlock) {
                 return RESTRICT;
             }
-            // the original's valve and one-way tubes wore the plain tube's picture, with their extras drawn over it
             return PLAIN;
         }
     }

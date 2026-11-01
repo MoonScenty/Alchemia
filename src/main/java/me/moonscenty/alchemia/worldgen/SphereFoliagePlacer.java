@@ -14,9 +14,7 @@ import net.minecraft.world.level.levelgen.feature.configurations.TreeConfigurati
 import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacer;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacerType;
 
-/**
- * A ball of leaves with a ragged surface. {@code stretch} pulls the ball upwards into a capsule of that many extra blocks.
- */
+// stretch: extra blocks pulling the ball up into a capsule
 public class SphereFoliagePlacer extends FoliagePlacer {
     public static final MapCodec<SphereFoliagePlacer> CODEC = RecordCodecBuilder.mapCodec(instance -> foliagePlacerParts(instance)
             .and(Codec.intRange(0, 16).fieldOf("stretch").forGetter(placer -> placer.stretch))

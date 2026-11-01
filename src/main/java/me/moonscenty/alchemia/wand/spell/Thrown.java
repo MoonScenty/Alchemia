@@ -13,59 +13,39 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 
-/**
- * The foci that throw something and let it do the rest.
- *
- * <p>None of them aims. Whatever the wand was pointed at only settles which way the thing goes; what it lands on
- * is whatever happens to be in the way by the time it gets there, which is the whole difference between a thrown
- * thing and a bolt.
- *
- * <p>What is worked into the focus is read here rather than inside each thrown thing, because it is the focus
- * that was upgraded and the thrown thing only carries out what it was sent to do.
- */
 public final class Thrown {
-    /** How fast each leaves the hand, and how far off true. Both fly straight: these are not arrows. */
+    // speed and inaccuracy
     private static final float FLIES = 1.5F;
     private static final float TRUE = 0.0F;
 
-    /** How many embers leave the wand each tick, and how wide the spray is, in degrees. */
+    // embers per tick and spray angle in degrees
     private static final int MOTES = 2;
     private static final float SCATTERS = 15.0F;
-    /** A beam is the same fire drawn into a line: barely any spread, and it lasts half again as long. */
+    // firebeam: spread multiplier, damage bonus and multiplier, ember lifetime
     private static final float NARROW = 0.25F;
     private static final float SHARPER = 0.5F;
     private static final float HOTTER = 1.5F;
     private static final int REACHES = 30;
-    /** What one mote is worth before anything is worked in, and what a rank of force adds. */
     private static final float EMBER = 2.0F;
-    /** How often the roar of it is heard while the button is down, in ticks. */
     private static final int ROARS_EVERY = 10;
 
-    /** A volley is this many splinters plus two a rank, each worth almost nothing. */
+    // scattershot: base splinters (plus two per rank) and damage each
     private static final int SPLINTERS = 5;
     private static final float SPLINTER = 1.0F;
-    /** A spike, a boulder, and what a rank of force is worth to each. */
+    // ice spike and boulder damage, and what each rank of potency adds
     private static final float SPIKE = 3.0F;
     private static final float SHARPENS_SPIKE = 1.5F;
     private static final float BOULDER = 4.0F;
     private static final float SHARPENS_BOULDER = 2.0F;
-    /** How many walls a boulder comes off before it gives up. */
     private static final int WALLS = 6;
 
-    /** What a splinter of vis is worth, and what a rank of force adds to it. */
+    // vis shard damage, and what each rank of potency adds
     private static final float SLIVER = 1.0F;
     private static final float SHARPENS_SLIVER = 0.5F;
 
     private Thrown() {
     }
 
-    /**
-     * Fire: a spray of embers held down, or one ball thrown.
-     * <p>
-     * Which it is depends on what is worked into the focus, and they are not the same tool. The spray fills a
-     * doorway for as long as the vis holds out; the ball is one throw across a room with a second's wait after
-     * it. A beam is the spray again, drawn into a line that burns through whatever stands in it.
-     */
     public static boolean fire(ServerLevel level, LivingEntity caster, ItemStack wand, HitResult aim, int heldFor) {
         int potency = Casting.worked(wand, FocusUpgrade.POTENCY);
         int alchemists = Casting.worked(wand, FocusUpgrade.ALCHEMISTS_FIRE);
@@ -97,12 +77,6 @@ public final class Thrown {
         return true;
     }
 
-    /**
-     * Frost: one spike, a volley of splinters, or a boulder.
-     * <p>
-     * The spike is aimed and the volley is not; the boulder is aimed and then stops being, since it comes off
-     * walls and ends up where it ends up. Anything the cold touches is slowed, if the focus was built for it.
-     */
     public static boolean frost(ServerLevel level, LivingEntity caster, ItemStack wand, HitResult aim, int heldFor) {
         int potency = Casting.worked(wand, FocusUpgrade.POTENCY);
         int chills = Casting.worked(wand, FocusUpgrade.ALCHEMISTS_FROST);
@@ -128,12 +102,6 @@ public final class Thrown {
                 ModSounds.ICE.get(), 0.4F, 1.0F + level.random.nextFloat() * 0.1F);
     }
 
-    /**
-     * A splinter that follows what the wand was pointed at.
-     * <p>
-     * It will not go off at all without a mark. That is the whole of what makes it cheap: a focus that cannot
-     * miss is a focus that has to be given something to not miss.
-     */
     public static boolean visShard(ServerLevel level, LivingEntity caster, ItemStack wand, HitResult aim,
             int heldFor) {
         if (!(aim instanceof EntityHitResult struck) || !(struck.getEntity() instanceof LivingEntity mark)) {
@@ -145,7 +113,6 @@ public final class Thrown {
         return let(level, caster, shard, ModSounds.SCAN.get(), 0.3F, 1.1F + level.random.nextFloat() * 0.1F);
     }
 
-    /** All six primals wound into a ball, and a hole where it lands. */
     public static boolean primal(ServerLevel level, LivingEntity caster, ItemStack wand, HitResult aim,
             int heldFor) {
         PrimalOrb orb = new PrimalOrb(level, caster);
@@ -155,7 +122,6 @@ public final class Thrown {
         return let(level, caster, orb, ModSounds.ICE.get(), 0.3F, 0.8F + level.random.nextFloat() * 0.1F);
     }
 
-    /** A pech's curse, thrown at nothing in particular. */
     public static boolean pech(ServerLevel level, LivingEntity caster, ItemStack wand, HitResult aim, int heldFor) {
         PechBlast blast = new PechBlast(level, caster).cursing(
                 Casting.worked(wand, FocusUpgrade.POTENCY),
@@ -164,7 +130,6 @@ public final class Thrown {
         return let(level, caster, blast, ModSounds.ICE.get(), 0.4F, 1.0F + level.random.nextFloat() * 0.1F);
     }
 
-    /** A hook, thrown at a wall. */
     public static boolean grapple(ServerLevel level, LivingEntity caster, ItemStack wand, HitResult aim,
             int heldFor) {
         Grapple hook = new Grapple(level, caster).hauling(
@@ -173,7 +138,6 @@ public final class Thrown {
         return let(level, caster, hook, ModSounds.ICE.get(), 0.3F, 0.8F + level.random.nextFloat() * 0.1F);
     }
 
-    /** Sends it off along the line of sight and says that something happened, in the sound its focus made. */
     private static boolean let(ServerLevel level, LivingEntity caster, ThrowableProjectile thrown, SoundEvent sound,
             float volume, float pitch) {
         thrown.shootFromRotation(caster, caster.getXRot(), caster.getYRot(), 0.0F, FLIES, TRUE);

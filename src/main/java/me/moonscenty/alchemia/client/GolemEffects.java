@@ -21,18 +21,12 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
 
-/**
- * What golems and their press put in the air, as the original drew it: the puffs a golem gives when told something,
- * the haze under a flyer, the grit a roller kicks up, and the steam off a press.
- */
 public final class GolemEffects {
-    /** How far round each roller's wheel has turned, in degrees. */
     private static final Map<Golem, float[]> WHEELS = new WeakHashMap<>();
 
     private GolemEffects() {
     }
 
-    /** Every tick on the client: what its legs do to the air and the ground. */
     public static void tick(Golem golem) {
         if (!(golem.level() instanceof ClientLevel level)) {
             return;
@@ -55,10 +49,6 @@ public final class GolemEffects {
         }
     }
 
-    /**
-     * Turns a roller's wheel by as far as it went, forwards or back by which way it is facing against which way
-     * it went; and on the ground, going at a fair clip, it throws up bits of what it is rolling over.
-     */
     private static void roll(Golem golem, ClientLevel level) {
         double dx = golem.getX() - golem.xo;
         double dy = golem.getY() - golem.yo;
@@ -85,13 +75,11 @@ public final class GolemEffects {
         }
     }
 
-    /** How far round a roller's wheel has turned. */
     public static float wheel(Golem golem) {
         float[] wheel = WHEELS.get(golem);
         return wheel == null ? 0.0F : wheel[0];
     }
 
-    /** The puffs over its head: following, staying, or coming on a rank. */
     public static void emote(Golem golem, byte event) {
         if (!(golem.level() instanceof ClientLevel level)) {
             return;
@@ -121,10 +109,6 @@ public final class GolemEffects {
         }
     }
 
-    /**
-     * Steam off the top of a press, so many puffs at once, with a hiss as loud as asked; a hiss of nothing is no
-     * hiss at all.
-     */
     public static void pressHiss(Level level, BlockPos pos, int puffs, float loudness) {
         if (!(level instanceof ClientLevel client)) {
             return;

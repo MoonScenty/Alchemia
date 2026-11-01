@@ -20,24 +20,16 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 
-/**
- * Putting a sceptre together, the original's {@code ArcaneSceptreRecipe}: a wand's rod in the middle of the bench with
- * a cap above it, a cap to its right and a cap in the far corner below, and a primal charm in the top corner where the
- * crossbar meets the shaft. Any rod but a staff core, and the three caps all of a kind.
- * <p>
- * Unlike a wand it has a price, and the price is set by what went into it: the cap's working cost times the rod's,
- * times ten, of every primal. That is why the price is asked of the grid rather than of the recipe.
- */
 public class ArcaneSceptreRecipe extends UnitArcaneRecipe {
     public static final ArcaneSceptreRecipe INSTANCE = new ArcaneSceptreRecipe();
 
-    /** Where each piece lies, numbered across the rows of the grid. */
+    // grid slots, row by row
     private static final int TOP_CAP = 1;
     private static final int CHARM = 2;
     private static final int ROD = 4;
     private static final int SIDE_CAP = 5;
     private static final int LOW_CAP = 6;
-    /** What a cap's cost times a rod's is multiplied by, for each primal. The original's. */
+    // original's value
     private static final int PRICE = 10;
 
     @Override
@@ -57,7 +49,6 @@ public class ArcaneSceptreRecipe extends UnitArcaneRecipe {
         return parts == null ? AspectList.EMPTY : price(parts.cap().value(), parts.rod().value());
     }
 
-    /** What a sceptre of these makes the bench charge, of every primal. */
     public static AspectList price(WandCap cap, WandRod rod) {
         return AspectList.eachPrimal(cap.craftCost() * rod.craftCost() * PRICE);
     }
@@ -65,7 +56,6 @@ public class ArcaneSceptreRecipe extends UnitArcaneRecipe {
     private record Parts(Holder<WandRod> rod, Holder<WandCap> cap) {
     }
 
-    /** The rod and cap these nine squares spell a sceptre of, or nothing. */
     private static Parts parts(CraftingInput input) {
         if (!ArcaneRecipe.onlyFilled(input, TOP_CAP, CHARM, ROD, SIDE_CAP, LOW_CAP)) {
             return null;
@@ -82,19 +72,17 @@ public class ArcaneSceptreRecipe extends UnitArcaneRecipe {
         return new Parts(rod, cap);
     }
 
-    /** The plainest sceptre, iron on wood, which is what the book and a recipe viewer show. */
+    // iron on wood, for the book and recipe viewers
     @Override
     public ItemStack getResultItem(HolderLookup.Provider registries) {
         return WandItem.sceptre(ModWandParts.WOOD, ModWandParts.IRON);
     }
 
-    /** What the plainest sceptre costs, for showing; the bench asks the grid. */
     @Override
     public AspectList cost() {
         return price(ModWandParts.IRON.get(), ModWandParts.WOOD.get());
     }
 
-    /** The plainest layout, for the book to draw. */
     @Override
     public NonNullList<Ingredient> getIngredients() {
         Ingredient cap = Ingredient.of(ModItems.WAND_CAPS.get("iron").get());

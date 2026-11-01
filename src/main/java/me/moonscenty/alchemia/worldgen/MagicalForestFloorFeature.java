@@ -13,13 +13,7 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
-/**
- * The magical forest's floor, as the original dressed it: one patch of grass in a chunk that glimmers at night,
- * and vishrooms put up here and there beside the roots of trees. Both look down from the top of the world for the
- * grass; the original gave up looking below a certain height.
- */
 public class MagicalForestFloorFeature extends Feature<NoneFeatureConfiguration> {
-    /** Which of the two it lays. */
     private final boolean glimmer;
 
     public MagicalForestFloorFeature(Codec<NoneFeatureConfiguration> codec, boolean glimmer) {
@@ -35,7 +29,6 @@ public class MagicalForestFloorFeature extends Feature<NoneFeatureConfiguration>
         return glimmer ? glimmer(level, random, corner) : vishrooms(level, random, corner);
     }
 
-    /** Three tries at grass somewhere in the middle of the chunk, and the first found glimmers. */
     private static boolean glimmer(WorldGenLevel level, RandomSource random, BlockPos corner) {
         for (int attempt = 0; attempt < 3; attempt++) {
             BlockPos at = grass(level, corner.offset(4 + random.nextInt(8), 0, 4 + random.nextInt(8)), 30);
@@ -47,7 +40,6 @@ public class MagicalForestFloorFeature extends Feature<NoneFeatureConfiguration>
         return false;
     }
 
-    /** Eight tries at open grass beside a log, each putting up a vishroom where it finds one. */
     private static boolean vishrooms(WorldGenLevel level, RandomSource random, BlockPos corner) {
         boolean any = false;
         for (int attempt = 0; attempt < 8; attempt++) {
@@ -60,7 +52,6 @@ public class MagicalForestFloorFeature extends Feature<NoneFeatureConfiguration>
         return any;
     }
 
-    /** The grass under the top of the world here, looking no lower than the floor given. */
     private static BlockPos grass(WorldGenLevel level, BlockPos column, int floor) {
         BlockPos at = level.getHeightmapPos(Heightmap.Types.WORLD_SURFACE_WG, column);
         while (at.getY() > floor && !level.getBlockState(at).is(Blocks.GRASS_BLOCK)) {

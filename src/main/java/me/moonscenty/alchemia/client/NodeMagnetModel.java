@@ -11,11 +11,6 @@ import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.util.Mth;
 
-/**
- * The node magnet, which is the original's {@code ModelNodeMagnet} read out of its code: a box with a glass dome and a
- * crystal at the back and a magnet at the front, on a tripod. The box turns to face the node it is pulling, and the
- * magnet's arms spin while it pulls.
- */
 public class NodeMagnetModel extends EntityModel<NodeMagnet> {
     private static int bakedFrom = -1;
     private static ModelPart base;

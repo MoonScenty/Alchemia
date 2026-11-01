@@ -28,13 +28,6 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/**
- * The five elemental tools and the crusher.
- * <p>
- * What is worth proving is mostly what they do that an ordinary tool does not: the workings they come with, the
- * shovel laying a square out of the bag, the hoe tilling a square, the crusher mending itself and weighing on its
- * holder. And the clusters, which three different things now hand out and which have to be the right ones.
- */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class ElementalToolTests {
@@ -44,7 +37,6 @@ public class ElementalToolTests {
         return new ItemStack(ModItems.ELEMENTAL_TOOLS.get(name).get());
     }
 
-    /** Ore of all four kinds has a cluster, and what is not ore has none. */
     @GameTest(template = TEMPLATE)
     public static void oreHasItsCluster(GameTestHelper helper) {
         helper.assertTrue(Clusters.of(new ItemStack(Items.RAW_IRON)).is(ModItems.IRON_CLUSTER.get()),
@@ -64,7 +56,6 @@ public class ElementalToolTests {
         helper.succeed();
     }
 
-    /** Each comes with what its element is in a tool, from the moment it exists. */
     @GameTest(template = TEMPLATE)
     public static void eachComesWithItsWorkings(GameTestHelper helper) {
         helper.assertTrue(InfusionEnchantments.has(tool("elemental_axe"), InfusionEnchantment.BURROWING)
@@ -88,7 +79,6 @@ public class ElementalToolTests {
         helper.succeed();
     }
 
-    /** The shovel lays a square of what it was used against, out of the bag, one per square. */
     @GameTest(template = TEMPLATE)
     public static void theShovelLaysASquareOutOfTheBag(GameTestHelper helper) {
         Player digger = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -110,7 +100,6 @@ public class ElementalToolTests {
         helper.succeed();
     }
 
-    /** It runs out when the bag does, and lays only as many as it was given. */
     @GameTest(template = TEMPLATE)
     public static void theShovelStopsWhenTheBagIsEmpty(GameTestHelper helper) {
         Player digger = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -133,7 +122,6 @@ public class ElementalToolTests {
         helper.succeed();
     }
 
-    /** The setting key turns it round its three ways of laying, and back to the first. */
     @GameTest(template = TEMPLATE)
     public static void theShovelTurnsRoundItsThreeWays(GameTestHelper helper) {
         Player digger = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -147,7 +135,6 @@ public class ElementalToolTests {
         helper.succeed();
     }
 
-    /** The hoe tills a square where an ordinary hoe tills one. */
     @GameTest(template = TEMPLATE)
     public static void theHoeTillsASquare(GameTestHelper helper) {
         Player farmer = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -171,7 +158,6 @@ public class ElementalToolTests {
         helper.succeed();
     }
 
-    /** The crusher mends itself wherever it is carried. */
     @GameTest(template = TEMPLATE, timeoutTicks = 100)
     public static void theCrusherMendsItself(GameTestHelper helper) {
         Player holder = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -185,7 +171,6 @@ public class ElementalToolTests {
         helper.succeed();
     }
 
-    /** It is the right tool for stone and earth alike, and for nothing that grows. */
     @GameTest(template = TEMPLATE)
     public static void theCrusherIsAPickaxeAndAShovel(GameTestHelper helper) {
         ItemStack crusher = new ItemStack(ModItems.PRIMAL_CRUSHER.get());
@@ -197,7 +182,6 @@ public class ElementalToolTests {
         helper.succeed();
     }
 
-    /** Held, it weighs on its holder: warp events come likelier and worse, and wind down slower. */
     @GameTest(template = TEMPLATE)
     public static void theCrusherCarriesWarp(GameTestHelper helper) {
         Player holder = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -212,7 +196,6 @@ public class ElementalToolTests {
         helper.succeed();
     }
 
-    /** Held up, the axe draws loose things towards whoever is holding it. */
     @GameTest(template = TEMPLATE)
     public static void theAxeDrawsLooseThingsIn(GameTestHelper helper) {
         Player holder = helper.makeMockPlayer(GameType.SURVIVAL);

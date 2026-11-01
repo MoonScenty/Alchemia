@@ -37,26 +37,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.model.BakedModelWrapper;
 
-/**
- * The wand on the original's own mesh: a rod with a cap at either end, each part wearing the picture of what it is
- * made of, as the original put one together.
- * <p>
- * Our wand's model file says only how a wand is held and shown; this builds what it looks like from the mesh, for
- * whatever the wand in hand is made of. The mesh is drawn at four fifths about its middle, which is the length a
- * wand is held at.
- * <p>
- * The original's mesh also has a crossbar, drawn in the cap's metal on a sceptre and left off everything else; a
- * focus fitted to the wand sits on its tip, in the focus's own picture, as the original drew it. A wand on a staff core
- * is a staff, built on the original's longer staff mesh and held and shown as {@link #STAFF} says.
- */
 public class LegacyWandModel extends BakedModelWrapper<BakedModel> {
-    /** How much smaller the mesh is drawn, and about where. */
     private static final float SCALE = 0.8F;
     private static final float MIDDLE = 0.5F;
-    /** How a staff is held and shown, which differs from a wand only in how small it is drawn in a slot. */
     public static final ModelResourceLocation STAFF = ModelResourceLocation.standalone(Alchemia.id("item/staff"));
 
-    /** Built wands by rod and cap, for as long as the import that built them lasts. */
     private static final Map<String, BakedModel> BUILT = new ConcurrentHashMap<>();
     private static volatile int builtFrom = -1;
 
@@ -141,7 +126,6 @@ public class LegacyWandModel extends BakedModelWrapper<BakedModel> {
         return MIDDLE + (at - MIDDLE) * SCALE;
     }
 
-    /** One built wand: the original's parts, held and shown as our model of the same wand is. */
     private static final class Built extends BakedModelWrapper<BakedModel> {
         private final List<BakedQuad> quads;
 
@@ -165,7 +149,7 @@ public class LegacyWandModel extends BakedModelWrapper<BakedModel> {
             return ItemOverrides.EMPTY;
         }
 
-        // the wrapper hands both of these to the model it wraps, which would draw our wand instead of this one
+        // the wrapper would forward these to the wrapped model and draw that instead
 
         @Override
         public BakedModel applyTransform(ItemDisplayContext context, PoseStack pose, boolean leftHand) {

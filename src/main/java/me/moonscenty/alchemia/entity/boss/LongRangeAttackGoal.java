@@ -5,14 +5,11 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.RangedAttackGoal;
 import net.minecraft.world.entity.monster.RangedAttackMob;
 
-/**
- * Shooting, as the game's own goal does, but only at what is at least so far away: nearer than that, it is left to
- * whatever fights hand to hand.
- */
+// Shoots only beyond a minimum range; nearer, the melee goal takes over.
 public class LongRangeAttackGoal extends RangedAttackGoal {
     private final Mob mob;
     private final double nearest;
-    /** Whether the distance is only checked before it starts, so a mark that closes in mid-chase is still shot at. */
+    // checked only before starting, so a target closing in mid-chase is still shot at
     private final boolean onlyToStart;
 
     public <T extends Mob & RangedAttackMob> LongRangeAttackGoal(T mob, double nearest, double speed, int fastest,
@@ -28,7 +25,6 @@ public class LongRangeAttackGoal extends RangedAttackGoal {
         this.onlyToStart = onlyToStart;
     }
 
-    /** One that keeps on while it is still closing in, even once the mark is nearer than it would start at. */
     public static <T extends Mob & RangedAttackMob> LongRangeAttackGoal toStart(T mob, double nearest, double speed,
             int fastest, int slowest, float range) {
         return new LongRangeAttackGoal(mob, nearest, true, speed, fastest, slowest, range);

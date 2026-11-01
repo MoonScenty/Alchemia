@@ -20,12 +20,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
-/**
- * Holds what has been left out on a research table: a set of scribing tools, and the note being worked through.
- * <p>
- * Both are visible on the desk, so whenever they change the block state is updated to match and the model picks up
- * the difference.
- */
 public class ResearchTableBlockEntity extends SyncedBlockEntity implements Container, MenuProvider {
     public static final int SLOT_TOOLS = 0;
     public static final int SLOT_NOTES = 1;
@@ -40,7 +34,6 @@ public class ResearchTableBlockEntity extends SyncedBlockEntity implements Conta
         return contents.get(slot);
     }
 
-    /** Puts something down on the desk, handing back whatever was there before. */
     public ItemStack put(int slot, ItemStack stack) {
         ItemStack previous = contents.get(slot);
         contents.set(slot, stack);
@@ -57,7 +50,6 @@ public class ResearchTableBlockEntity extends SyncedBlockEntity implements Conta
         };
     }
 
-    /** Spends a point of ink, and clears the tools away once they run dry. */
     public boolean useInk() {
         ItemStack tools = contents.get(SLOT_TOOLS);
         if (tools.isEmpty()) {
@@ -84,8 +76,6 @@ public class ResearchTableBlockEntity extends SyncedBlockEntity implements Conta
             level.setBlock(worldPosition, updated, Block.UPDATE_ALL);
         }
     }
-
-    // --- Container, so the desk can be worked at through a screen ----------
 
     @Override
     public int getContainerSize() {
@@ -127,7 +117,6 @@ public class ResearchTableBlockEntity extends SyncedBlockEntity implements Conta
         return accepts(slot, stack);
     }
 
-    /** Only someone still stood at the desk may keep working at it. */
     @Override
     public boolean stillValid(Player player) {
         return Container.stillValidBlockEntity(this, player);
@@ -151,7 +140,6 @@ public class ResearchTableBlockEntity extends SyncedBlockEntity implements Conta
                 ContainerLevelAccess.create(level, worldPosition));
     }
 
-    /** Everything left on the desk, for when the block is broken. */
     public NonNullList<ItemStack> contents() {
         return contents;
     }

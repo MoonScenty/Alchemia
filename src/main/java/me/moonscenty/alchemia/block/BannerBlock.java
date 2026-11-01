@@ -24,11 +24,6 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-/**
- * A banner: dyed cloth on a pole, or hanging from a wall, with an aspect painted on it if somebody has put a phial to
- * it -- and the Crimson Cult's own, which nobody makes and nobody paints. Nothing walks into a banner, and it stays up
- * when what it was put on is taken away, as the original's did.
- */
 public class BannerBlock extends BaseEntityBlock {
     public static final MapCodec<BannerBlock> CODEC = simpleCodec(BannerBlock::new);
     private static final VoxelShape STANDING = Block.box(5.3, 0.0, 5.3, 10.6, 32.0, 10.6);
@@ -71,7 +66,6 @@ public class BannerBlock extends BaseEntityBlock {
         return Shapes.empty();
     }
 
-    /** A filled phial paints its aspect on; crouching wipes it off. The cult's banner takes no paint. */
     @Override
     protected ItemInteractionResult useItemOn(ItemStack held, BlockState state, Level level, BlockPos pos,
             Player player, InteractionHand hand, BlockHitResult hit) {

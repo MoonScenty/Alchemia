@@ -16,17 +16,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
-/**
- * An essentia transfuser, the original's {@code TileEssentiaInput} and {@code TileEssentiaOutput}: a pipe fitting
- * that moves essentia through the air to or from the jars in front of it, as the infusion matrix draws it.
- * <p>
- * Its back takes a pipe. The filling kind is somewhere a pipe can empty into: whatever reaches it goes to a jar in
- * front of it, one already holding something before an empty one, the nearest first. The emptying kind is somewhere
- * a pipe can draw from: it gives whatever the jars in front of it hold, again the nearest first. In front means
- * sixteen blocks out from its face and sixteen to either side. Other pipes and transfusers are not counted as jars.
- */
 public class TransfuserBlockEntity extends BlockEntity implements EssentiaHolder {
-    /** How far it reaches out in front, and to the sides. */
     public static final int REACH = 16;
 
     public TransfuserBlockEntity(BlockPos pos, BlockState state) {
@@ -41,7 +31,6 @@ public class TransfuserBlockEntity extends BlockEntity implements EssentiaHolder
         return getBlockState().getValue(TransfuserBlock.FACING);
     }
 
-    /** Only its back, where the pipe goes. */
     @Override
     public boolean reachableFrom(Direction side) {
         return side == facing().getOpposite();
@@ -57,7 +46,6 @@ public class TransfuserBlockEntity extends BlockEntity implements EssentiaHolder
         return !filling() && side == facing().getOpposite();
     }
 
-    /** The filling kind holds nothing of its own; the emptying kind shows what the jars in front hold. */
     @Override
     public AspectList held() {
         AspectList all = AspectList.EMPTY;
@@ -75,7 +63,6 @@ public class TransfuserBlockEntity extends BlockEntity implements EssentiaHolder
         return filling() && jars().stream().anyMatch(jar -> jar.wants(aspect));
     }
 
-    /** Into a jar that already has something, if one will take it, and only then into an empty one. */
     @Override
     public boolean accept(Holder<Aspect> aspect) {
         if (!filling()) {
@@ -107,14 +94,12 @@ public class TransfuserBlockEntity extends BlockEntity implements EssentiaHolder
         return false;
     }
 
-    /** Drops of the essentia from where it came from to where it went, as an infusion draws them. */
     private void thread(BlockPos from, BlockPos to, Holder<Aspect> aspect) {
         if (level instanceof ServerLevel server) {
             EssentiaReach.thread(server, from, to, aspect.value().color());
         }
     }
 
-    /** Every jar in front, nearest first. */
     private List<EssentiaHolder> jars() {
         List<EssentiaHolder> found = new ArrayList<>();
         if (level == null) {
@@ -131,12 +116,10 @@ public class TransfuserBlockEntity extends BlockEntity implements EssentiaHolder
         return found;
     }
 
-    /** Within sixteen across and sixteen out from the face, as the original searched. */
     public static boolean inFront(BlockPos from, Direction facing, BlockPos at) {
         return inFront(from, facing, at, REACH);
     }
 
-    /** Within so far across and so far out from the face, the block itself left out. */
     public static boolean inFront(BlockPos from, Direction facing, BlockPos at, int reach) {
         int dx = at.getX() - from.getX();
         int dy = at.getY() - from.getY();

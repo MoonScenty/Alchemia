@@ -20,10 +20,7 @@ public class ModCreativeTabs {
             .icon(() -> ModItems.BALANCED_SHARD.get().getDefaultInstance())
             .displayItems((parameters, output) -> {
                 ModItems.ITEMS.getEntries().forEach(item -> output.accept(item.get()));
-                // a wand nobody has to charge, for trying out what a charged one is for
                 output.accept(WandItem.brimming(WandItem.of(ModWandParts.SILVERWOOD, ModWandParts.VOID)));
-                // a phial of every essentia. Filling one by hand means a smelter, a vessel and a working furnace
-                // first, which is a long way round for somebody only wanting to see what the colours look like
                 ModAspects.REGISTRY.holders().forEach(aspect -> {
                     output.accept(PhialItem.filled(ModItems.PHIAL.get().getDefaultInstance(), aspect));
                     output.accept(CrystallizedEssenceItem.of(aspect));

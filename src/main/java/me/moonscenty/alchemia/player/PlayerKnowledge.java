@@ -19,12 +19,6 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 
-/**
- * What a player has worked out so far.
- * <p>
- * Aspects have to be discovered before they can be read off an item; until then they show as a question mark. Everyone
- * starts knowing the six primals, since those are plain enough to see in anything.
- */
 public record PlayerKnowledge(Set<Aspect> discoveredAspects, Set<ResourceLocation> completedResearch) {
     public static final Codec<PlayerKnowledge> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             ModAspects.REGISTRY.byNameCodec().listOf().fieldOf("discovered_aspects")
@@ -42,7 +36,6 @@ public record PlayerKnowledge(Set<Aspect> discoveredAspects, Set<ResourceLocatio
                     aspects.stream().map(Holder::value).collect(Collectors.toCollection(LinkedHashSet::new)),
                     new LinkedHashSet<>(research)));
 
-    /** A player who has only ever seen the obvious. */
     public static PlayerKnowledge fresh() {
         Set<Aspect> primals = new LinkedHashSet<>();
         ModAspects.primals().forEach(primal -> primals.add(primal.value()));
@@ -57,7 +50,6 @@ public record PlayerKnowledge(Set<Aspect> discoveredAspects, Set<ResourceLocatio
         return completedResearch.contains(research);
     }
 
-    /** The same knowledge with one more aspect in it, or this one if it was already known. */
     public PlayerKnowledge withAspect(Holder<Aspect> aspect) {
         if (knows(aspect)) {
             return this;
@@ -67,7 +59,6 @@ public record PlayerKnowledge(Set<Aspect> discoveredAspects, Set<ResourceLocatio
         return new PlayerKnowledge(grown, completedResearch);
     }
 
-    /** Discovers everything an item is made of at once, which is what a scan amounts to. */
     public PlayerKnowledge withAspects(AspectList aspects) {
         PlayerKnowledge result = this;
         for (Holder<Aspect> aspect : aspects.sortedByName()) {
@@ -85,22 +76,18 @@ public record PlayerKnowledge(Set<Aspect> discoveredAspects, Set<ResourceLocatio
         return new PlayerKnowledge(discoveredAspects, grown);
     }
 
-    /** The same knowledge with the research cleared, keeping the aspects that have been seen. */
     public PlayerKnowledge withoutResearch() {
         return new PlayerKnowledge(discoveredAspects, Set.of());
     }
 
-    /** The same knowledge back to only the obvious aspects, keeping the research that has been done. */
     public PlayerKnowledge withoutAspects() {
         return new PlayerKnowledge(fresh().discoveredAspects(), completedResearch);
     }
 
-    /** Reads a player's knowledge, falling back to a fresh one on the client before the first sync arrives. */
     public static PlayerKnowledge of(Player player) {
         return player.getData(ModAttachments.KNOWLEDGE);
     }
 
-    /** Replaces a player's knowledge with what the change makes of it. */
     public static void update(Player player, UnaryOperator<PlayerKnowledge> change) {
         player.setData(ModAttachments.KNOWLEDGE, change.apply(of(player)));
     }

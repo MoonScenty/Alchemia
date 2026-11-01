@@ -12,10 +12,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
-/**
- * Opening the Eye: a wand to an eldritch altar with all four eyes in it, by someone who knows the rite, opens the way
- * above it. It costs five hundred of every primal.
- */
 public final class Oculus {
     public static final ResourceLocation RESEARCH = Alchemia.id("oculus");
     private static final int EACH = 500;
@@ -23,7 +19,6 @@ public final class Oculus {
     private Oculus() {
     }
 
-    /** Whether the wand opened the way. */
     public static boolean open(Level level, BlockPos pos, Player player, ItemStack wand) {
         if (!(level.getBlockEntity(pos) instanceof EldritchAltarBlockEntity altar)
                 || !(level.getBlockEntity(pos.above()) instanceof EldritchPortalBlockEntity portal)
@@ -35,7 +30,6 @@ public final class Oculus {
             return false;
         }
         if (level instanceof net.minecraft.server.level.ServerLevel served) {
-            // the original would not open the way until a maze lay beyond it; one is laid now if there is none
             me.moonscenty.alchemia.outer.Labyrinth.of(served.getServer()).ensureMaze(pos, level.random);
         }
         if (!level.isClientSide) {

@@ -13,26 +13,12 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 
-/**
- * Draws fortress armour on the original's own model, read out of the player's jar.
- *
- * <p>Without the jar there is no model to read, and the pieces fall back to plain armour stretched over the body
- * off our own sheets.
- *
- * <h3>What grows with the set</h3>
- * The more of the suit is worn, the more of it there is: shoulder plates, side flaps and a book on the back from two
- * pieces, the scroll, the crest, the gem and the lower plates from three. The parts and the counts are the
- * original's. The goggles and the three masks are worked into a helm later; until then none of them show.
- */
 public class FortressExtensions implements IClientItemExtensions {
-    /** Shown from two pieces worn. */
     private static final List<String> FROM_TWO = List.of("Book", "flapL", "flapR", "ShoulderplateLtop",
             "ShoulderplateL1", "ShoulderplateRtop", "ShoulderplateR1", "SidepanelR2", "SidepanelL2");
-    /** Shown from three. */
     private static final List<String> FROM_THREE = List.of("Scroll", "OrnamentL", "OrnamentL2", "OrnamentR",
             "OrnamentR2", "Gemornament", "Gem", "ShoulderplateL2", "ShoulderplateL3", "ShoulderplateR2",
             "ShoulderplateR3", "SidepanelR3", "SidepanelL3");
-    /** Worked into a helm on the altar. None of them is worn until one has been. */
     private static final List<String> HELM_WORK = List.of("Goggles", "Mask_0", "Mask_1", "Mask_2");
 
     public static final FortressExtensions INSTANCE = new FortressExtensions();
@@ -53,7 +39,6 @@ public class FortressExtensions implements IClientItemExtensions {
         int pieces = worn(wearer);
         FROM_TWO.forEach(name -> drawn.show(name, pieces >= 2));
         FROM_THREE.forEach(name -> drawn.show(name, pieces >= 3));
-        // only what was worked into this very helm, and only on the helm. A cuirass has no face to put it on
         String fitted = slot == EquipmentSlot.HEAD
                 ? FortressArmorItem.fitting(stack).map(HelmFitting::part).orElse("")
                 : "";

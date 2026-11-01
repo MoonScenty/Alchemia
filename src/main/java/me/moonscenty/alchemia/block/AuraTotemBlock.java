@@ -30,27 +30,14 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-/**
- * An aura totem, or one of the poles it stands on.
- *
- * <p>A totem moves vis between two rings of chunks round it, a shard at a time: the totem of dispersal from the inner
- * ring out to the outer, the totem of attraction from the outer in. Alone, the inner ring is its own chunk and the
- * outer the eight round that. Up to five poles stacked under it change that -- an inner pole widens the inner ring by
- * a chunk, an outer pole the outer, and each of either quickens it -- and a stabilising pole makes it less likely to
- * spoil what it moves into flux.
- *
- * <p>A pole is worked from the totem above it: what is put into a pole goes into the totem, and clicking a pole opens
- * the totem.
- */
 public class AuraTotemBlock extends BaseEntityBlock {
     public static final MapCodec<AuraTotemBlock> CODEC = RecordCodecBuilder.mapCodec(totem -> totem.group(
             Kind.CODEC.fieldOf("kind").forGetter(AuraTotemBlock::kind), propertiesCodec())
             .apply(totem, AuraTotemBlock::new));
-    /** The most poles a totem counts under it. The original's. */
+    // original's limit
     public static final int MOST_POLES = 5;
     private static final VoxelShape POLE = Block.box(2, 0, 2, 14, 16, 14);
 
-    /** Which of the five it is. */
     public enum Kind implements StringRepresentable {
         PUSH, PULL, POLE_OUTER, POLE_INNER, POLE_PURE;
 
@@ -82,7 +69,6 @@ public class AuraTotemBlock extends BaseEntityBlock {
         return CODEC;
     }
 
-    /** The totem a block of a stack answers to: itself, or the first totem above the poles it is part of. */
     public static BlockPos headOf(BlockGetter level, BlockPos pos) {
         BlockPos at = pos;
         for (int climbed = 0; climbed <= MOST_POLES; climbed++) {
@@ -98,7 +84,6 @@ public class AuraTotemBlock extends BaseEntityBlock {
         return null;
     }
 
-    /** Another totem or pole in hand is put down against it, so that a stack can be built by clicking. */
     @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
             Player player, InteractionHand hand, BlockHitResult hit) {
@@ -108,7 +93,6 @@ public class AuraTotemBlock extends BaseEntityBlock {
         return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
     }
 
-    /** Opens the totem, from itself or from any pole under it. */
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player,
             BlockHitResult hit) {

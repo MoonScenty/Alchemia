@@ -19,13 +19,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 
-/**
- * The pattern crafter's face, as the original's {@code TilePatternCrafterRenderer} drew it: the pattern the dial is
- * set to in a window at the top, and two brass gears either side below, turning against each other for a moment
- * after each craft and running down.
- */
 public class PatternCrafterRenderer implements BlockEntityRenderer<PatternCrafterBlockEntity> {
-    /** The ten patterns side by side, one sixteen pixel picture each. */
     private static final ResourceLocation MODES = Alchemia.id("textures/block/legacy/pattern_crafter_modes.png");
     private static final float HALF = 0.25F;
 
@@ -45,7 +39,6 @@ public class PatternCrafterRenderer implements BlockEntityRenderer<PatternCrafte
             default -> 0.0F;
         }));
 
-        // the window: on the face, which is the block's north side once turned
         float u0 = crafter.mode() / (float) PatternCrafterBlockEntity.PATTERNS.length;
         float u1 = (crafter.mode() + 1) / (float) PatternCrafterBlockEntity.PATTERNS.length;
         float z = -0.501F;
@@ -56,7 +49,6 @@ public class PatternCrafterRenderer implements BlockEntityRenderer<PatternCrafte
         vertex(window, at, -HALF, HALF, z, u1, 0.0F, light);
         vertex(window, at, HALF, HALF, z, u0, 0.0F, light);
 
-        // the gears, turning against each other
         float turned = crafter.angle(partial) % 360.0F;
         ItemStack gear = new ItemStack(ModItems.BRASS_GEAR.get());
         for (int side = -1; side <= 1; side += 2) {

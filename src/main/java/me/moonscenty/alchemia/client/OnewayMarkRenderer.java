@@ -15,14 +15,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.FastColor;
 import net.minecraft.world.level.block.state.BlockState;
 
-/**
- * The one-way tube's mark, as the original drew it: a stub of the valve's stem, tinted blue, standing on the side it
- * lets essentia out of, where it joins something.
- * <p>
- * The plain and restricting tubes share this block entity and draw nothing here.
- */
 public class OnewayMarkRenderer implements BlockEntityRenderer<TubeBlockEntity> {
-    /** The original's tint for the stub. */
     private static final int TINT = FastColor.ARGB32.colorFromFloat(1.0F, 0.45F, 0.5F, 1.0F);
 
     public OnewayMarkRenderer(BlockEntityRendererProvider.Context context) {
@@ -42,7 +35,7 @@ public class OnewayMarkRenderer implements BlockEntityRenderer<TubeBlockEntity> 
         }
         pose.pushPose();
         pose.translate(0.5, 0.5, 0.5);
-        // the original pointed the model away from the way out and drew the stub back along it, so it stands there
+        // the original pointed the model away from the outlet and drew the stub back along it
         ValveHandleRenderer.pointAlong(pose, out.getOpposite());
         pose.scale(1.25F, 1.0F, 1.25F);
         pose.translate(0.0, -0.4, 0.0);

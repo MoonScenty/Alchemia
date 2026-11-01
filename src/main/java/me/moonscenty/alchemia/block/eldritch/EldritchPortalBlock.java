@@ -16,10 +16,6 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-/**
- * The way to the Outer Lands, above an eldritch altar: shut and unseen until the altar's eyes are all in and a wand
- * has opened it. Nothing breaks it and nothing bumps into it.
- */
 public class EldritchPortalBlock extends BaseEntityBlock {
     public static final MapCodec<EldritchPortalBlock> CODEC = simpleCodec(EldritchPortalBlock::new);
 

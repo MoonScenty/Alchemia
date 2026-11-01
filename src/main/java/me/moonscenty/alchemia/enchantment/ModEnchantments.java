@@ -18,35 +18,19 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
-/**
- * The original's own vanilla-style enchantments, as against the infusion enchantments worked on the altar.
- * <p>
- * Haste, the original's {@code EnchantmentHaste}: on boots of any kind, or on the thaumostatic harness, three levels,
- * a little more speed on the ground for each; half as much in the air or in water. On the harness it takes some of
- * the drag off flying instead. It comes from the enchanting table and enchanted books, as the original put it in
- * the book list.
- * <p>
- * Repair, the original's {@code EnchantmentRepair}: on the original's own gear (its tools, weapons and armour), two
- * levels, not with unbreaking. What it does is {@link Repair}.
- */
 @EventBusSubscriber(modid = Alchemia.MODID, value = Dist.CLIENT)
 public final class ModEnchantments {
     public static final ResourceKey<Enchantment> HASTE =
             ResourceKey.create(Registries.ENCHANTMENT, Alchemia.id("haste"));
     public static final ResourceKey<Enchantment> REPAIR =
             ResourceKey.create(Registries.ENCHANTMENT, Alchemia.id("repair"));
-    /** Repair's levels, the most it mends at once. */
     public static final int REPAIR_LEVELS = 2;
-    /** How much speed each level of haste adds, pushing forward each tick. */
     public static final float HASTE_PER_LEVEL = 0.015F;
 
     private ModEnchantments() {
     }
 
-    /**
-     * Haste: weight three, three levels, the original's costs: 15 + 9 a level, and 50 over the base of 1 + 10 a level.
-     * Repair: weight two, two levels, 20 + 10 a level and the same ceiling, never with unbreaking.
-     */
+    // weights, levels and costs are the original's
     public static void bootstrap(BootstrapContext<Enchantment> context) {
         var items = context.lookup(Registries.ITEM);
         context.register(HASTE, Enchantment.enchantment(Enchantment.definition(
@@ -62,22 +46,17 @@ public final class ModEnchantments {
                 .build(REPAIR.location()));
     }
 
-    /** What level of haste a thing has, or none. */
     public static int haste(Player player, ItemStack stack) {
         return level(player.level(), HASTE, stack);
     }
 
-    /** What level of one of these a thing has, or none. */
     public static int level(net.minecraft.world.level.Level level, ResourceKey<Enchantment> which, ItemStack stack) {
         return level.registryAccess().registryOrThrow(Registries.ENCHANTMENT).getHolder(which)
                 .map(found -> EnchantmentHelper.getItemEnchantmentLevel((Holder<Enchantment>) found, stack))
                 .orElse(0);
     }
 
-    /**
-     * Haste on the boots, walking or running forward, not flying: a push ahead each tick, halved off the ground and
-     * halved again in water. Movement is the client's to work out, so this is done there.
-     */
+    // movement is computed on the client, so haste is applied there
     @SubscribeEvent
     public static void hurry(PlayerTickEvent.Pre event) {
         Player player = event.getEntity();

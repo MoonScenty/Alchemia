@@ -15,19 +15,11 @@ import net.minecraft.world.level.Level;
 import me.moonscenty.alchemia.wand.WandCap;
 import me.moonscenty.alchemia.wand.WandRod;
 
-/**
- * Putting a wand together: a rod across the middle of the bench with a matching cap at each end of it.
- * <p>
- * This one is written in code rather than as a recipe file because what comes out depends on what went in — nine
- * rods against five caps is forty-five wands, and none of them is worth a file of its own.
- * <p>
- * It costs nothing. It has to: the bench takes its price out of a wand, and this is where the first one comes from.
- */
+// free on purpose: the bench takes its price from a wand, and this makes the first one
 public class ArcaneWandRecipe extends UnitArcaneRecipe {
-    /** The one there ever needs to be, since the recipe carries nothing of its own. */
     public static final ArcaneWandRecipe INSTANCE = new ArcaneWandRecipe();
 
-    /** Where each piece has to lie. The rod runs corner to corner, so the caps sit at the two free corners. */
+    // the rod runs corner to corner; caps sit at the two free corners
     private static final int LOWER_CAP = 6;
     private static final int ROD = 4;
     private static final int UPPER_CAP = 2;
@@ -43,7 +35,6 @@ public class ArcaneWandRecipe extends UnitArcaneRecipe {
         return made == null ? ItemStack.EMPTY : made;
     }
 
-    /** The wand these nine squares spell out, or nothing if they do not spell one. */
     private static ItemStack assembled(CraftingInput input) {
         if (!ArcaneRecipe.onlyFilled(input, LOWER_CAP, ROD, UPPER_CAP)) {
             return null;

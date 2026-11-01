@@ -15,7 +15,6 @@ import net.minecraft.world.level.GameType;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/** Haste: three levels, on boots and the harness and nothing else, and a mage pech sells the book. */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class HasteTests {

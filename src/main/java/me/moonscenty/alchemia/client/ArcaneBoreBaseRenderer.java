@@ -15,10 +15,6 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
 
-/**
- * Draws a bore's base as the original did: two plates on five pillars, and the nozzle turned to the side it faces.
- * The parts are the original's model ({@code ModelBoreBase}), read out of its code.
- */
 public class ArcaneBoreBaseRenderer implements BlockEntityRenderer<ArcaneBoreBaseBlockEntity> {
     private static final String[] STAND = {"Base1", "Base2", "PillarMid", "Pillar1", "Pillar2", "Pillar3",
             "Pillar4"};
@@ -37,7 +33,6 @@ public class ArcaneBoreBaseRenderer implements BlockEntityRenderer<ArcaneBoreBas
                 base.getBlockState().getValue(ArcaneBoreBaseBlock.FACING), light, overlay);
     }
 
-    /** The base with its nozzle to a given side. Shared with the item, which points it north. */
     static void draw(PoseStack pose, VertexConsumer buffer, Direction nozzleTo, int light, int overlay) {
         ModelPart[] stand = STAND_PARTS.get();
         ModelPart[] nozzle = NOZZLE_PARTS.get();
@@ -49,7 +44,7 @@ public class ArcaneBoreBaseRenderer implements BlockEntityRenderer<ArcaneBoreBas
         for (ModelPart part : stand) {
             part.render(pose, buffer, light, overlay);
         }
-        // the nozzle is modelled pointing east
+        // nozzle is modelled pointing east
         pose.mulPose(Axis.YP.rotationDegrees(switch (nozzleTo) {
             case NORTH -> 90.0F;
             case SOUTH -> 270.0F;
@@ -62,10 +57,6 @@ public class ArcaneBoreBaseRenderer implements BlockEntityRenderer<ArcaneBoreBas
         pose.popPose();
     }
 
-    /**
-     * The nozzle on its own, as the bellows draw it on a buffer tube they blow into: pointing a given way, any of six,
-     * turned as the original's bellows renderer turned it.
-     */
     static void drawNozzle(PoseStack pose, VertexConsumer buffer, Direction pointing, int light, int overlay) {
         ModelPart[] stand = STAND_PARTS.get();
         ModelPart[] nozzle = NOZZLE_PARTS.get();

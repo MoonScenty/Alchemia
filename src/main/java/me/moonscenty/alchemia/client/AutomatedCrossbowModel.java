@@ -11,11 +11,6 @@ import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.util.Mth;
 
-/**
- * The automated crossbow, which is the original's {@code ModelCrossbow} read out of its code: a crossbow with its
- * ammunition box on top, on a tripod of four legs. The bow turns and tilts to aim, its arms snap forward as it shoots,
- * and the loading bars over the box swing back as it reloads.
- */
 public class AutomatedCrossbowModel extends EntityModel<AutomatedCrossbow> {
     private static int bakedFrom = -1;
     private static ModelPart crossbow;
@@ -25,7 +20,6 @@ public class AutomatedCrossbowModel extends EntityModel<AutomatedCrossbow> {
     private static ModelPart[] rightArm;
     private static ModelPart[] loader;
 
-    /** How far through the reload's winding it is, caught where the partial tick is known. */
     private float winding;
 
     @Override
@@ -66,7 +60,6 @@ public class AutomatedCrossbowModel extends EntityModel<AutomatedCrossbow> {
         }
     }
 
-    /** Bakes the original's parts again whenever the import has changed what there is. */
     private static boolean refresh() {
         int generation = LegacyModels.generation();
         if (generation != bakedFrom) {

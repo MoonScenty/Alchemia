@@ -21,13 +21,11 @@ import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/** The mound, read out of the original's jar, and the urns and crates it keeps. */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class MoundTests {
     private static final String TEMPLATE = "empty_32x40x32";
 
-    /** The layout comes out of the jar whole: some two and a half thousand blocks, the chest and two spawners. */
     @GameTest(template = TEMPLATE)
     public static void theMoundIsReadFromTheJar(GameTestHelper helper) {
         MoundLayout layout = MoundLayout.get().orElse(null);
@@ -41,7 +39,6 @@ public class MoundTests {
         helper.succeed();
     }
 
-    /** Built, it has its chest (or trapped chest), urns or crates by it, spawners and a sinister node. */
     @GameTest(template = TEMPLATE)
     public static void aMoundIsBuilt(GameTestHelper helper) {
         MoundLayout layout = MoundLayout.get().orElseThrow();
@@ -69,7 +66,6 @@ public class MoundTests {
         helper.succeed();
     }
 
-    /** An urn broken gives up one to three things, and more the rarer it is. */
     @GameTest(template = TEMPLATE)
     public static void aRareUrnBreaksIntoLoot(GameTestHelper helper) {
         BlockPos at = new BlockPos(4, 2, 4);

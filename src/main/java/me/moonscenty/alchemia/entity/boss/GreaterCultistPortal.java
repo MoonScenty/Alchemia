@@ -26,16 +26,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.AABB;
 
-/**
- * The greater crimson portal, that opens in a great hall: a portal three blocks high that the Crimson Cult pours
- * through, wave after wave, while anyone is within forty-eight blocks.
- * <p>
- * Opening, it sets the cult's four banners about itself, six blocks out, and crates of loot appear round it. Its
- * first waves come fast; after that they come the slower the more cultists are already about. The thirteenth is the
- * Crimson Praetor. Until then it mends a point a tick; after him every wave it lets through costs it five to nine,
- * and it wears itself out. Touching it burns for eight. It dies in a blast that breaks nothing, and leaves one or two
- * primordial pearls.
- */
 public class GreaterCultistPortal extends CultistPortal {
     private static final double WAKES_WITHIN = 48.0;
     private static final int PRAETOR = 12;
@@ -124,7 +114,6 @@ public class GreaterCultistPortal extends CultistPortal {
         bar.setProgress(getHealth() / getMaxHealth());
     }
 
-    /** The more of the cult already about, the longer the wait. */
     private int timing() {
         return level().getEntitiesOfClass(Cultist.class, new AABB(blockPosition()).inflate(32.0)).size() * 20;
     }

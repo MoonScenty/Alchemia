@@ -37,14 +37,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
 
-/**
- * The Crimson Praetor, who comes through the greater crimson portal at the thirteenth wave, under one of fifteen
- * names: in the Praetor's own plate, with a crimson blade -- or on easy days a void sword -- that may be enchanted.
- * <p>
- * Every cultist within eight blocks of it mends quickly. Further off than sixteen blocks it lobs red bolts that seek
- * their mark; nearer it fights hand to hand. Struck, it calls every cultist within eighty blocks to it, and a cleric
- * at its rite may break off to come. It leaves no pearls -- the portal does -- only a bag of rare loot.
- */
 public class CultistLeader extends ThaumcraftBoss implements RangedAttackMob {
     public static final List<String> TITLES = List.of("Alberic", "Anselm", "Bastian", "Beturian", "Chabier",
             "Chorache", "Chuse", "Dodorol", "Ebardo", "Ferrando", "Fertus", "Guillen", "Larpe", "Obano", "Zelipe");
@@ -148,7 +140,6 @@ public class CultistLeader extends ThaumcraftBoss implements RangedAttackMob {
         }
     }
 
-    /** Turns on whatever hurt it and calls the cult within twice its sight -- clerics at their rite now and then. */
     private static class CallsTheCult extends HurtByTargetGoal {
         CallsTheCult(CultistLeader leader) {
             super(leader);

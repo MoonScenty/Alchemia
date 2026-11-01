@@ -17,11 +17,6 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
-/**
- * An ethereal bloom, the original's {@code BlockEtherealBloom}: shimmerleaf woken in a crucible, a pale flower that
- * puts the land about it back the way it was. It grows on any whole block, gives a soft light, and is drawn by
- * {@code EtherealBloomRenderer} rather than as a plant.
- */
 public class EtherealBloomBlock extends BushBlock implements EntityBlock {
     public static final MapCodec<EtherealBloomBlock> CODEC = simpleCodec(EtherealBloomBlock::new);
 
@@ -34,7 +29,6 @@ public class EtherealBloomBlock extends BushBlock implements EntityBlock {
         return CODEC;
     }
 
-    /** Anything whole will hold one, as the original's. */
     @Override
     protected boolean mayPlaceOn(BlockState state, BlockGetter level, BlockPos pos) {
         return state.isSolidRender(level, pos);

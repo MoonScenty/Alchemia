@@ -28,13 +28,6 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-/**
- * The creeping edge of the taint: fibres clinging to whatever solid face is next to them.
- * <p>
- * They are the part that moves. A fibre only lives while it has something untainted to hold on to, so as the land
- * behind it turns, the fibres there wither and the front carries on. What stays behind are the growths: a few
- * fibres in every fifty, chosen by where they stand, that sprout something and keep it.
- */
 public class TaintFibreBlock extends Block implements Tainted {
     public static final BooleanProperty NORTH = BlockStateProperties.NORTH;
     public static final BooleanProperty EAST = BlockStateProperties.EAST;
@@ -42,10 +35,6 @@ public class TaintFibreBlock extends Block implements Tainted {
     public static final BooleanProperty WEST = BlockStateProperties.WEST;
     public static final BooleanProperty UP = BlockStateProperties.UP;
     public static final BooleanProperty DOWN = BlockStateProperties.DOWN;
-    /**
-     * What has sprouted here, if anything: nothing, three kinds standing on the floor, and one hanging from the
-     * ceiling. Two of them glow.
-     */
     public static final IntegerProperty GROWTH = IntegerProperty.create("growth", 0, 4);
     public static final int HANGING = 4;
 
@@ -58,7 +47,6 @@ public class TaintFibreBlock extends Block implements Tainted {
             Direction.UP, Block.box(0, 15, 0, 16, 16, 16), Direction.DOWN, Block.box(0, 0, 0, 16, 1, 16)));
     private static final VoxelShape SPROUT = Block.box(3, 0, 3, 13, 14, 13);
 
-    /** How rarely brushing through fibres gives a creature the flu. */
     private static final int FLU_CHANCE = 750;
     private static final int FLU_LASTS = 200;
 
@@ -69,7 +57,6 @@ public class TaintFibreBlock extends Block implements Tainted {
                 .setValue(UP, false).setValue(DOWN, false).setValue(GROWTH, 0));
     }
 
-    /** The glowing kinds give a little light, the way the original had them shine in the dark. */
     public static int lightOf(BlockState state) {
         int growth = state.getValue(GROWTH);
         return growth == 2 || growth == HANGING ? 6 : 0;
@@ -80,22 +67,12 @@ public class TaintFibreBlock extends Block implements Tainted {
         level.removeBlock(pos, false);
     }
 
-    // --- taking hold ---------------------------------------------------------
-
-    /**
-     * Whether there is a whole face on that side for a fibre to spread itself over.
-     * <p>
-     * Not the same question as whether something can be stood on. Leaves hold nothing up -- no torch, no ladder --
-     * but they are a full face all the same, and a creeping thing lies flat across them; the game asks it this way
-     * for its own glowing lichen. Asking the standing-on question instead left fibres in a tainted canopy with no
-     * side to draw themselves on, which is to say invisible.
-     */
+    // full-face check as glow lichen uses, not sturdy-face, so leaves count
     public static boolean clingsTo(LevelReader level, BlockPos pos, Direction side) {
         BlockPos next = pos.relative(side);
         return MultifaceBlock.canAttachTo(level, side, next, level.getBlockState(next));
     }
 
-    /** Reads which faces there are to cling to, and what grows here, off the surroundings. */
     public static BlockState fitted(LevelReader level, BlockPos pos, BlockState state) {
         for (Direction side : Direction.values()) {
             state = state.setValue(FACES.get(side), clingsTo(level, pos, side));
@@ -103,7 +80,6 @@ public class TaintFibreBlock extends Block implements Tainted {
         return state.setValue(GROWTH, growthAt(pos, state.getValue(DOWN), state.getValue(UP)));
     }
 
-    /** Whether a fibre has taken hold of anything at all. One that has not is nothing to look at. */
     private static boolean holdsOn(BlockState state) {
         for (BooleanProperty face : FACES.values()) {
             if (state.getValue(face)) {
@@ -113,10 +89,7 @@ public class TaintFibreBlock extends Block implements Tainted {
         return false;
     }
 
-    /**
-     * What sprouts is settled by where the fibre stands, so it does not flicker between kinds as neighbours change,
-     * and the same spot always grows the same thing.
-     */
+    // derived from position so the growth does not flicker as neighbours change
     private static int growthAt(BlockPos pos, boolean floor, boolean ceiling) {
         int roll = RandomSource.create(pos.asLong()).nextInt(50);
         if (ceiling && roll > 47) {
@@ -150,18 +123,15 @@ public class TaintFibreBlock extends Block implements Tainted {
     protected BlockState updateShape(BlockState state, Direction direction, BlockState neighborState,
             LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
         BlockState refitted = fitted(level, pos, state);
-        // nothing left to hold on to: a fibre that draws no face at all would be an invisible block
+        // a fibre with no face to draw would be invisible
         if (!holdsOn(refitted)) {
             return Blocks.AIR.defaultBlockState();
         }
-        // a plain fibre with nothing untainted to hold has lost its purpose
         if (refitted.getValue(GROWTH) == 0 && TaintSpread.onlyBesideTaint(level, pos)) {
             return Blocks.AIR.defaultBlockState();
         }
         return refitted;
     }
-
-    // --- living and dying ----------------------------------------------------
 
     @Override
     protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
@@ -177,12 +147,6 @@ public class TaintFibreBlock extends Block implements Tainted {
         }
     }
 
-    /**
-     * What a growth does besides spreading, as the original's did: breathes flux into air thin of it, one turn in two
-     * hundred, and on top of an upright tainted trunk, one turn in a hundred, breaks through into a geyser.
-     *
-     * @return whether that was its turn
-     */
     private static boolean grow(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         if (me.moonscenty.alchemia.aura.AuraHandler.get(level, pos, me.moonscenty.alchemia.registry.ModAspects.FLUX)
                 <= TaintSpread.SPREADS_ABOVE && random.nextInt(200) == 0) {
@@ -205,7 +169,6 @@ public class TaintFibreBlock extends Block implements Tainted {
         return false;
     }
 
-    /** A growth that goes, by whatever means, bursts: a crawler one time in three, or else a breath of flux. */
     @Override
     protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState replacement, boolean moving) {
         if (level instanceof ServerLevel served && state.getValue(GROWTH) != 0 && !replacement.is(this)) {
@@ -227,8 +190,6 @@ public class TaintFibreBlock extends Block implements Tainted {
             living.addEffect(new MobEffectInstance(ModEffects.TAINT_POISON, FLU_LASTS, 0, false, true));
         }
     }
-
-    // --- shape ---------------------------------------------------------------
 
     @Override
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {

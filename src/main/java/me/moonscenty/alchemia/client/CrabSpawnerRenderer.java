@@ -14,7 +14,6 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 
-/** A crab vent: the crust it is cut into is its block model; this is the original's vent, turned to face out. */
 public class CrabSpawnerRenderer implements BlockEntityRenderer<CrabSpawnerBlockEntity> {
     private static final ResourceLocation VENT = Alchemia.id("textures/entity/crabvent.png");
 

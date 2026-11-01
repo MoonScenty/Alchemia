@@ -20,31 +20,21 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
-/**
- * A brain in a jar: what is left of a zombie's hunger, fed on the thoughts of whatever dies near it.
- * <p>
- * It draws in the nearest experience orb within six blocks and eats every one that touches the jar, up to two
- * thousand points. Shaken, it gives some back -- anything up to sixty-three, at random -- and then waits two
- * seconds before it eats again, so that what it gave is not eaten straight back. It keeps what it holds when it is
- * broken and put down again.
- */
 public class BrainJarBlockEntity extends SyncedBlockEntity {
     public static final int HOLDS = 2000;
     private static final double REACHES = 6.0;
     private static final int GIVES_UP_TO = 64;
+    // pause after giving xp so it is not eaten straight back
     private static final int WAITS = 40;
-    /** After a sigh, it is quiet for this long and then anything up to this much longer, in ticks. The original's. */
     private static final int SIGHS_AFTER = 100;
     private static final int SIGHS_WITHIN = 500;
 
     private int xp;
     private int waiting;
 
-    /** Where the brain looks and how it turns toward it, client side only. */
     private float turned;
     private float turnedBefore;
     private float looking;
-    /** When it may next sigh, by the world clock, client side only. */
     private long nextSigh;
 
     public BrainJarBlockEntity(BlockPos pos, BlockState state) {
@@ -68,7 +58,6 @@ public class BrainJarBlockEntity extends SyncedBlockEntity {
                     new AABB(pos).inflate(REACHES));
             nearest = near.stream().min(Comparator.comparingDouble(orb -> orb.distanceToSqr(middle))).orElse(null);
             if (nearest != null && jar.waiting == 0) {
-                // drawn in as the game draws an orb to a player, harder the closer it comes
                 Vec3 toward = middle.subtract(nearest.position()).scale(1.0 / 7.0);
                 double distance = toward.length();
                 double pull = 1.0 - distance;
@@ -87,7 +76,6 @@ public class BrainJarBlockEntity extends SyncedBlockEntity {
                 jar.looking += 0.01F;
             }
             jar.turned += Mth.wrapDegrees((jar.looking - jar.turned) * Mth.RAD_TO_DEG) * Mth.DEG_TO_RAD * 0.04F;
-            // it sighs at whoever comes close, and then not again for a good while
             if (level.getGameTime() >= jar.nextSigh
                     && level.getNearestPlayer(middle.x, middle.y, middle.z, REACHES, false) != null) {
                 level.playLocalSound(middle.x, middle.y, middle.z, ModSounds.BRAIN.get(), SoundSource.BLOCKS, 0.15F,
@@ -112,7 +100,6 @@ public class BrainJarBlockEntity extends SyncedBlockEntity {
         }
     }
 
-    /** Shaken: lets some of what it holds go, and waits before it eats again. */
     public void shake(Level level) {
         waiting = WAITS;
         if (!(level instanceof ServerLevel served)) {
@@ -129,8 +116,6 @@ public class BrainJarBlockEntity extends SyncedBlockEntity {
     public float turned(float partial) {
         return turnedBefore + Mth.wrapDegrees((turned - turnedBefore) * Mth.RAD_TO_DEG) * Mth.DEG_TO_RAD * partial;
     }
-
-    // --- what it keeps when broken -------------------------------------------
 
     @Override
     protected void applyImplicitComponents(DataComponentInput input) {
@@ -150,8 +135,6 @@ public class BrainJarBlockEntity extends SyncedBlockEntity {
     public void removeComponentsFromTag(CompoundTag tag) {
         tag.remove("XP");
     }
-
-    // --- saving ------------------------------------------------------------
 
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {

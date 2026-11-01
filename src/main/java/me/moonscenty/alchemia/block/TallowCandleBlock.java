@@ -15,11 +15,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-/**
- * A tallow candle, the original's {@code BlockCandle}: a stub of wax in one of the sixteen dye colours, burning
- * bright enough to read by, standing on anything with a flat top. Nothing bumps into it. It steadies an infusion
- * as a skull does, which is why anybody makes sixteen colours of them.
- */
 public class TallowCandleBlock extends Block {
     private static final VoxelShape SHAPE = Block.box(6, 0, 6, 10, 8, 10);
     private final DyeColor colour;
@@ -51,7 +46,6 @@ public class TallowCandleBlock extends Block {
                 : super.updateShape(state, side, other, level, pos, otherPos);
     }
 
-    /** A wisp of smoke and a flame at the wick, every time it is asked. */
     @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
         double x = pos.getX() + 0.5;

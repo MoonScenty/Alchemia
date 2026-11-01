@@ -18,23 +18,18 @@ import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecorator;
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecoratorType;
 
-/**
- * Hangs a node inside the trunk of a tree, some of the time.
- * <p>
- * A silverwood is where the original put its pure nodes: a small one, partway up, in the heart of the wood. Since
- * the same tree is what a sapling grows into, a planted silverwood has the same chance as a wild one.
- */
+// Planted silverwoods get the same node chance as wild ones, since they grow from the same feature.
 public class NodeInTreeDecorator extends TreeDecorator {
     public static final MapCodec<NodeInTreeDecorator> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.floatRange(0.0F, 1.0F).fieldOf("chance").forGetter(decorator -> decorator.chance),
-            // not "type": the dispatcher already writes the decorator's own type under that name
+            // not "type": the dispatcher already writes that key
             NodeType.CODEC.fieldOf("node_type").forGetter(decorator -> decorator.type),
             Codec.floatRange(0.0F, 1.0F).fieldOf("size").forGetter(decorator -> decorator.size))
             .apply(instance, NodeInTreeDecorator::new));
 
     private final float chance;
     private final NodeType type;
-    /** How large the node is next to one drawn up in the open. */
+    // relative to a node drawn up in the open
     private final float size;
 
     public NodeInTreeDecorator(float chance, NodeType type, float size) {
@@ -50,7 +45,7 @@ public class NodeInTreeDecorator extends TreeDecorator {
 
     @Override
     public void place(TreeDecorator.Context context) {
-        // a decorator is only handed a reader, but the world it reads is one an entity can be put into
+        // only a reader is handed in, but during worldgen it is a WorldGenLevel
         if (!(context.level() instanceof WorldGenLevel level) || context.logs().isEmpty()) {
             return;
         }
@@ -60,7 +55,6 @@ public class NodeInTreeDecorator extends TreeDecorator {
         }
 
         List<BlockPos> heart = heartwood(context.logs());
-        // partway up, give or take a block
         int up = heart.size() / 2 - 1 + random.nextInt(3);
         BlockPos at = heart.get(Math.clamp(up, 0, heart.size() - 1));
 
@@ -72,12 +66,7 @@ public class NodeInTreeDecorator extends TreeDecorator {
         level.addFreshEntity(node);
     }
 
-    /**
-     * The column with the most wood in it, bottom to top.
-     * <p>
-     * Roots, buttresses and knots all count as logs, so the trunk is picked out as the one column that runs the
-     * whole height rather than assumed to be wherever the first log lies.
-     */
+    // the trunk is the column running the full height; roots and knots are logs too
     private static List<BlockPos> heartwood(List<BlockPos> logs) {
         Map<Long, List<BlockPos>> columns = new HashMap<>();
         for (BlockPos log : logs) {
@@ -89,7 +78,7 @@ public class NodeInTreeDecorator extends TreeDecorator {
                 tallest = column;
             }
         }
-        // the logs came sorted by height, and grouping them kept that order
+        // still sorted by height
         return tallest;
     }
 }

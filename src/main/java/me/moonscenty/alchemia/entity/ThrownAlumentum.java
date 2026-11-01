@@ -10,13 +10,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 
-/**
- * Thrown alumentum, the original's {@code EntityAlumentum}: a lump of alchemical fire lobbed by hand or from a
- * dispenser, trailing dark smoke and sparks, that goes off where it lands with a little more force than a creeper's
- * worth of fire. Whether it breaks blocks is the mob griefing rule's say.
- */
 public class ThrownAlumentum extends ThrowableItemProjectile {
-    /** How hard it goes off. The original's. */
+    // original's value
     public static final float BLAST = 1.66F;
 
     public ThrownAlumentum(EntityType<? extends ThrownAlumentum> type, Level level) {

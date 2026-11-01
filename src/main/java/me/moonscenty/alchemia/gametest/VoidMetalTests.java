@@ -15,13 +15,6 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/**
- * The two boilings that turn a handful of wheat seeds into metal.
- * <p>
- * These ask the recipes rather than the pot. What a crucible does with a thing dropped in it has tests of its own,
- * and a recipe with research behind it will not fire for a nameless item anyway; what is worth checking here is
- * that the water has to be right, and that being nearly right is not enough.
- */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class VoidMetalTests {
@@ -34,7 +27,6 @@ public class VoidMetalTests {
         return (CrucibleRecipe) found.value();
     }
 
-    /** A wheat seed steeped in darkness stops being a seed. */
     @GameTest(template = TEMPLATE)
     public static void seedsBoilIntoAVoidSeed(GameTestHelper helper) {
         CrucibleRecipe recipe = recipe(helper, "void_seed");
@@ -55,7 +47,6 @@ public class VoidMetalTests {
         helper.succeed();
     }
 
-    /** The seed, steeped again in metal, sets as an ingot -- but not without something wrong in the water. */
     @GameTest(template = TEMPLATE)
     public static void aVoidSeedSetsAsMetal(GameTestHelper helper) {
         CrucibleRecipe recipe = recipe(helper, "void_ingot");
@@ -72,7 +63,6 @@ public class VoidMetalTests {
         helper.succeed();
     }
 
-    /** The last of the caps is drawn from it, which is the whole reason for going to the trouble. */
     @GameTest(template = TEMPLATE)
     public static void theVoidCapIsMadeOfIt(GameTestHelper helper) {
         RecipeHolder<?> found = helper.getLevel().getRecipeManager()

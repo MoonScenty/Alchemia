@@ -14,9 +14,6 @@ import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.BlockStateConfiguration;
 import net.minecraft.world.level.material.Fluids;
 
-/**
- * Scatters crystals through the 3x3x3 area around the origin, on every open spot that touches stone.
- */
 public class CrystalPatchFeature extends Feature<BlockStateConfiguration> {
     public CrystalPatchFeature(Codec<BlockStateConfiguration> codec) {
         super(codec);

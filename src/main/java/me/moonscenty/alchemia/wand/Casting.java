@@ -19,53 +19,30 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
-/**
- * Letting a wand off: taking aim, paying for it, and waiting before it can be done again.
- *
- * <p>Everything here is the same for all twelve foci. What each of them actually does is its own {@link Spell},
- * and none of them is reached until the price has been met.
- *
- * <p>The order matters and is the original's. The price is checked before the spell runs and taken after, so a
- * spell that finds nothing to do leaves the wand as full as it was. A wand pointed at the sky is not a wand being
- * emptied into it.
- */
+// price is checked before the spell and taken only if it did something; original's order
 public final class Casting {
-    /** How far a wand reaches, in blocks. The original looked twenty out for something to hit. */
+    // original's value
     public static final double REACH = 20.0;
 
-    /** A thousandth of a second to a millisecond and twenty ticks to a second, which is how a wait is counted here. */
+    // focus cooldowns are in milliseconds
     private static final int A_SECOND = 1000;
     private static final int TICKS_A_SECOND = 20;
 
     private Casting() {
     }
 
-    /** The focus on the wand, if there is one and it is a focus. */
     public static FocusItem fittedTo(ItemStack wand) {
         return WandItem.focus(wand).getItem() instanceof FocusItem focus ? focus : null;
     }
 
-    /**
-     * What the wand's focus does and costs, as it actually is.
-     * <p>
-     * Everything that charges for a working or decides what one does asks here rather than asking the item,
-     * because what is worked into a focus can change both.
-     */
     public static Focus fitted(ItemStack wand) {
         ItemStack focus = WandItem.focus(wand);
         return focus.getItem() instanceof FocusItem item ? item.focus(focus) : null;
     }
 
-    /**
-     * How many ranks of one upgrade are worked into the focus on this wand.
-     * <p>
-     * Spells are handed the wand rather than the focus, so this is where they ask. Nought for a wand with no
-     * focus on it, which is also what a spell with nothing to read should do nothing about.
-     */
     public static int worked(ItemStack wand, FocusUpgrade upgrade) {
         ItemStack focus = WandItem.focus(wand);
         int level = FocusUpgrades.level(focus, upgrade);
-        // the primal staff lends whatever is fitted to it a step of potency
         if (upgrade == FocusUpgrade.POTENCY && !focus.isEmpty() && wand.getItem() instanceof WandItem
                 && WandItem.rod(wand).potent()) {
             level++;
@@ -73,16 +50,10 @@ public final class Casting {
         return level;
     }
 
-    /** Whether the focus on this wand carries one at all. */
     public static boolean has(ItemStack wand, FocusUpgrade upgrade) {
         return worked(wand, upgrade) > 0;
     }
 
-    /**
-     * Lets the wand off once, if it can be.
-     *
-     * @return whether anything happened, so that a hand can be swung for it
-     */
     public static boolean cast(ServerLevel level, Player caster, ItemStack wand, int heldFor) {
         Focus focus = fitted(wand);
         if (focus == null || caster.getCooldowns().isOnCooldown(wand.getItem())) {
@@ -103,13 +74,6 @@ public final class Casting {
         return true;
     }
 
-    /**
-     * How long before this wand will go off again.
-     * <p>
-     * The original counted in milliseconds off the wall clock. A cooldown here is counted in ticks, which is what
-     * this game counts in and what greys the wand out in the hand while it is waiting. A wait shorter than a tick
-     * becomes one tick: nothing in this game happens twice in a tick anyway.
-     */
     private static void waitAfter(Player caster, ItemStack wand, Focus focus) {
         if (focus.cooldown() <= 0) {
             return;
@@ -118,22 +82,11 @@ public final class Casting {
         caster.getCooldowns().addCooldown(wand.getItem(), ticks);
     }
 
-    /**
-     * What the wand is pointed at: whatever living thing is in the way, or the block behind it, or the air at the
-     * end of the caster's reach.
-     * <p>
-     * An entity wins over the block behind it, which is what anybody pointing a wand at a zombie standing against
-     * a wall means by it.
-     */
     public static HitResult aim(LivingEntity caster) {
         return aim(caster, REACH, 1.0, Casting::catchable);
     }
 
-    /**
-     * The same, this far out, for entities that pass the filter.
-     *
-     * @param slack how far either side of the line of sight an entity is still caught
-     */
+    // slack: how far either side of the line of sight an entity is still caught
     public static HitResult aim(LivingEntity caster, double reach, double slack, Predicate<Entity> filter) {
         Vec3 eye = caster.getEyePosition();
         Vec3 along = caster.getViewVector(1.0F).scale(reach);
@@ -148,12 +101,10 @@ public final class Casting {
         return struck != null ? struck : blocks;
     }
 
-    /** What a wand can be aimed at. Anything that can be hit, except the one holding the wand. */
     private static boolean catchable(Entity entity) {
         return !entity.isSpectator() && entity.isAlive() && entity.isPickable();
     }
 
-    /** Whether a level is one things actually happen in, which is the only one a spell is cast in. */
     public static ServerLevel served(Level level) {
         return level instanceof ServerLevel server ? server : null;
     }

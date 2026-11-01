@@ -6,12 +6,8 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 
-/**
- * A taint tendril: a little taintacle a taintacle sends up under something standing on taint. It lashes as its
- * parent does, close in, and withers away of itself after ten seconds. It leaves nothing.
- */
 public class TaintacleTiny extends Taintacle {
-    /** The original's numbers. */
+    // original's values
     private static final double LIVES = 5.0;
     private static final double LASHES = 2.0;
     private static final int LASTS = 200;
@@ -33,7 +29,6 @@ public class TaintacleTiny extends Taintacle {
                 .add(Attributes.ATTACK_DAMAGE, LASHES);
     }
 
-    /** Close in only. */
     @Override
     protected double reach() {
         return 0.0;

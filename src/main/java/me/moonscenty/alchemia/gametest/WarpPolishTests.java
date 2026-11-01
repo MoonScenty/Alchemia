@@ -21,7 +21,6 @@ import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import top.theillusivec4.curios.api.CuriosApi;
 
-/** Step 14D-2: the warp of learning, of making, and of what is carried. */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class WarpPolishTests {
@@ -31,7 +30,6 @@ public class WarpPolishTests {
         return WarpData.of(player).of(kind);
     }
 
-    /** Warp from learning is split, the larger half for good; a single point is all for good. */
     @GameTest(template = TEMPLATE)
     public static void learningWarpIsSplit(GameTestHelper helper) {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -44,7 +42,6 @@ public class WarpPolishTests {
         helper.succeed();
     }
 
-    /** Learning the oculus leaves six, once; learning it again is nothing. */
     @GameTest(template = TEMPLATE)
     public static void researchCarriesItsWarp(GameTestHelper helper) {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -57,7 +54,6 @@ public class WarpPolishTests {
         helper.succeed();
     }
 
-    /** Void metal carries warp, a robe more; the lodestone none; baubles count; the altar's warp counts. */
     @GameTest(template = TEMPLATE)
     public static void carriedWarpCountsVoidAndBaubles(GameTestHelper helper) {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -75,7 +71,6 @@ public class WarpPolishTests {
         helper.succeed();
     }
 
-    /** Void gear mends itself wherever it is carried. */
     @GameTest(template = TEMPLATE)
     public static void voidGearMends(GameTestHelper helper) {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -91,7 +86,6 @@ public class WarpPolishTests {
         helper.succeed();
     }
 
-    /** Making something the original marked leaves a point of sticking warp; making anything else, none. */
     @GameTest(template = TEMPLATE)
     public static void makingSomeThingsWarps(GameTestHelper helper) {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);

@@ -36,27 +36,20 @@ import net.minecraft.world.level.block.entity.DispenserBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
-/**
- * A crossbow on a tripod with a clockwork mind to aim it, the original's {@code EntityTurretCrossbow}: it shoots at
- * any monster it can see within twenty-four blocks, a bolt every one to three seconds, for as long as it has arrows.
- * <p>
- * Its owner opens it to load it, with arrows or primal arrows. Stood on a dispenser that faces up, it reloads itself
- * from it whenever it runs dry, taking a whole stack at a time.
- */
 public class AutomatedCrossbow extends ConstructWithSlot implements RangedAttackMob {
-    /** What it is worth hitting, and how hard that is. The original's numbers. */
+    // original's values
     private static final double LIVES = 30.0;
     private static final double SEES = 24.0;
     private static final int PLATING = 2;
     private static final int MENDS_EVERY = 80;
-    /** How long the arm takes to wind back after a reload, in ticks, and the event that sets it going. */
+    // ticks; RELOADED is an entity event id
     private static final int WINDS_FOR = 10;
     private static final byte RELOADED = 17;
-    /** How far back along its aim a bolt starts, so it does not start inside the thing that shot it. */
+    // so the bolt does not start inside the turret
     private static final double SET_BACK = 0.9;
     private static final float BOLT_SPEED = 1.6F;
 
-    /** The client's count of the reload's winding, and what it was a tick ago. */
+    // client-side only
     private int winding = -1;
     private float wound;
     private float woundBefore;
@@ -66,7 +59,6 @@ public class AutomatedCrossbow extends ConstructWithSlot implements RangedAttack
         xpReward = 0;
     }
 
-    /** Set down on the block at a position, facing nowhere in particular. */
     public static <T extends AutomatedCrossbow> T at(EntityType<T> type, Level level, BlockPos at) {
         T turret = type.create(level);
         turret.moveTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5, 0.0F, 0.0F);
@@ -87,7 +79,6 @@ public class AutomatedCrossbow extends ConstructWithSlot implements RangedAttack
                 other -> other instanceof Enemy));
     }
 
-    /** The longest it may wait between bolts, in ticks. */
     protected int reloadsWithin() {
         return 60;
     }
@@ -112,12 +103,7 @@ public class AutomatedCrossbow extends ConstructWithSlot implements RangedAttack
         return false;
     }
 
-    // --- shooting ----------------------------------------------------------
-
-    /**
-     * One bolt at whatever it is aiming at, lifted by how far off that is, and a little rougher for a plain arrow
-     * than a primal one, as the original's were.
-     */
+    // plain arrows spread more than primal ones, as the original's
     @Override
     public void performRangedAttack(LivingEntity target, float range) {
         ItemStack ammo = getMainHandItem();
@@ -150,8 +136,6 @@ public class AutomatedCrossbow extends ConstructWithSlot implements RangedAttack
         ammo.shrink(1);
     }
 
-    // --- reloading ---------------------------------------------------------
-
     @Override
     public void aiStep() {
         woundBefore = wound;
@@ -164,7 +148,6 @@ public class AutomatedCrossbow extends ConstructWithSlot implements RangedAttack
         }
     }
 
-    /** Takes the first stack of arrows out of a dispenser it is standing on, if that dispenser faces up. */
     private void reloadFromBelow() {
         BlockPos below = blockPosition().below();
         BlockState state = level().getBlockState(below);
@@ -199,7 +182,6 @@ public class AutomatedCrossbow extends ConstructWithSlot implements RangedAttack
         wound = winding < 0 ? 0.0F : winding / (float) WINDS_FOR;
     }
 
-    /** How far through winding back its arm it is, for drawing. */
     public float winding(float partial) {
         float step = wound - woundBefore;
         if (step < 0.0F) {
@@ -208,12 +190,9 @@ public class AutomatedCrossbow extends ConstructWithSlot implements RangedAttack
         return woundBefore + step * partial;
     }
 
-    /** What it shoots: plain arrows and primal ones, as the original took. */
     public static boolean takes(ItemStack stack) {
         return stack.is(Items.ARROW) || stack.getItem() instanceof PrimalArrowItem;
     }
-
-    // --- opening it --------------------------------------------------------
 
     @Override
     protected void emptyOut() {
@@ -236,7 +215,6 @@ public class AutomatedCrossbow extends ConstructWithSlot implements RangedAttack
         return new CrossbowMenu(id, inventory, this);
     }
 
-    /** The two kinds are told apart by their registry, and the basic one comes from here. */
     public static AutomatedCrossbow basic(Level level, BlockPos at) {
         return at(ModEntities.AUTOMATED_CROSSBOW.get(), level, at);
     }

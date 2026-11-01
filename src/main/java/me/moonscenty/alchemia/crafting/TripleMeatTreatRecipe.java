@@ -16,11 +16,6 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 
-/**
- * The triple meat treat, the original's {@code RecipeTripleMeatTreat}: a sugar and three meat chunks, all of
- * different kinds, anywhere on the grid. Twenty ways to choose three of six, so it is worked out here rather than
- * written out twenty times. The book and recipe viewers are shown a sugar and three chunks of any kind.
- */
 public class TripleMeatTreatRecipe extends CustomRecipe {
     public TripleMeatTreatRecipe(CraftingBookCategory category) {
         super(category);
@@ -41,7 +36,7 @@ public class TripleMeatTreatRecipe extends CustomRecipe {
                 }
                 sugar = true;
             } else if (!isChunk(found) || !meats.add(found.getItem())) {
-                // anything else, or a second chunk of a kind already there
+                // anything else, or a repeated kind of chunk
                 return false;
             }
         }
@@ -69,7 +64,6 @@ public class TripleMeatTreatRecipe extends CustomRecipe {
         return NonNullList.of(Ingredient.EMPTY, Ingredient.of(Items.SUGAR), chunk, chunk, chunk);
     }
 
-    /** Shown in recipe viewers like any other bench recipe. */
     @Override
     public boolean isSpecial() {
         return false;

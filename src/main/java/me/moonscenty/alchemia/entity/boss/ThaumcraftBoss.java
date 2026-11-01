@@ -41,22 +41,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 
-/**
- * What the Outer Lands' great halls hold, and what they share: the Warden, the Construct and the Praetor.
- * <p>
- * Each is a champion of something whenever it comes into the world, and is named for it; it does not get a
- * champion's extra health or blows, only what the kind of champion adds. It wakes slowly -- untouchable and still
- * while it does -- mends a point every second and a half, and never despawns, drowns or sticks in a web. No blow
- * does it more than thirty-five; one that tries makes it angry for ten seconds, which mends it, strengthens it and
- * speeds it by how hard it was hit, and it tells whoever did it.
- * <p>
- * It keeps count of who has hurt it how much and turns on whoever has hurt it most, once that is twenty-five more
- * and a tenth more than what it is fighting now. For every player past the first among those it is fighting it
- * has fifty more health and half a point more to its blows, up to five more players. (The original meant all this
- * and, by two slips, almost never did it; here it does.)
- * <p>
- * It dies leaving one or two primordial pearls and a bag of rare loot.
- */
 public abstract class ThaumcraftBoss extends Monster {
     private static final EntityDataAccessor<Integer> ANGER = SynchedEntityData.defineId(ThaumcraftBoss.class,
             EntityDataSerializers.INT);
@@ -65,10 +49,9 @@ public abstract class ThaumcraftBoss extends Monster {
     private static final ResourceLocation MORE_DAMAGE = me.moonscenty.alchemia.Alchemia.id("boss_damage");
 
     private final Map<Integer, Integer> aggro = new HashMap<>();
-    /** While above nought it is waking: untouchable, still, and not to be pushed. Seen on both sides. */
+    // above 0 while waking: untouchable, still and unpushable
     private static final EntityDataAccessor<Integer> WAKING = SynchedEntityData.defineId(ThaumcraftBoss.class,
             EntityDataSerializers.INT);
-    /** Which of {@link #titles()} it goes by. */
     private static final EntityDataAccessor<Byte> TITLE = SynchedEntityData.defineId(ThaumcraftBoss.class,
             EntityDataSerializers.BYTE);
     private final ServerBossEvent bar = new ServerBossEvent(Component.empty(), BossEvent.BossBarColor.PURPLE,
@@ -110,15 +93,12 @@ public abstract class ThaumcraftBoss extends Monster {
         entityData.set(WAKING, ticks);
     }
 
-    /** What it is called: set once it is known what it is a champion of. */
     public abstract Component title(ChampionModifier modifier);
 
-    /** The names its kind may go by, one picked as it comes into the world; none for a kind with no names. */
     protected List<String> titles() {
         return List.of();
     }
 
-    /** The name it was given out of {@link #titles()}. */
     protected String titled() {
         List<String> titles = titles();
         return titles.get(entityData.get(TITLE) % titles.size());
@@ -150,7 +130,6 @@ public abstract class ThaumcraftBoss extends Monster {
         }
     }
 
-    /** Whether it is too busy with something of its own to think: waking, here; the Warden's frenzy too. */
     protected boolean frozen() {
         return spawnTimer() > 0;
     }
@@ -198,7 +177,7 @@ public abstract class ThaumcraftBoss extends Monster {
         bar.setProgress(getHealth() / getMaxHealth());
     }
 
-    /** Turns on whoever has hurt it most, and grows with how many are fighting it. */
+    // the original meant this target switching and per-player scaling, but two slips disabled them
     private void reckon() {
         LivingEntity target = getTarget();
         int current = aggro.getOrDefault(target.getId(), 0);
@@ -274,7 +253,6 @@ public abstract class ThaumcraftBoss extends Monster {
         return super.hurt(source, amount);
     }
 
-    /** Angry for ten seconds: mended, stronger and quicker by how hard the blow was. */
     protected void enrage(float amount, float strengthBy) {
         addEffect(new MobEffectInstance(MobEffects.REGENERATION, 200, (int) (amount / 15.0F)));
         addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 200, (int) (amount / strengthBy)));
@@ -316,7 +294,6 @@ public abstract class ThaumcraftBoss extends Monster {
         }
     }
 
-    /** One or two primordial pearls, floating where it fell. */
     public static void dropPearls(LivingEntity from) {
         ItemEntity pearls = new ItemEntity(from.level(), from.getX(), from.getY() + from.getBbHeight() / 2.0,
                 from.getZ(), new ItemStack(ModItems.PRIMORDIAL_PEARL.get(), 1 + from.getRandom().nextInt(2)));

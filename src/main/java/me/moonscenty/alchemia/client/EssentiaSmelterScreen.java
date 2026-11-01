@@ -18,20 +18,12 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
-/**
- * The smelter as the worker sees it: what goes in, what burns it, and two gauges.
- * <p>
- * Nothing comes out here, so there is no result square and no arrow to one. The left gauge is what has been boiled
- * off and is waiting to rise; the right is how far the thing in the top slot has got.
- */
 public class EssentiaSmelterScreen extends AbstractContainerScreen<EssentiaSmelterMenu> {
     private static final ResourceLocation PANEL = Alchemia.id("textures/gui/essentia_smelter.png");
     private static final int SHEET = 256;
     private static final int PANEL_W = 176;
     private static final int PANEL_H = 166;
 
-    // Laid out as the original laid it out. Everything fills from the bottom: the fire under the input, what the
-    // smelter holds in the tall gauge to its left under a pane of glass, and how far along the work is to its right.
     private static final int FIRE_X = 80;
     private static final int FIRE_Y = 26;
     private static final int FIRE_W = 16;
@@ -63,22 +55,18 @@ public class EssentiaSmelterScreen extends AbstractContainerScreen<EssentiaSmelt
 
     @Override
     protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
-        // the original's panels have soft, half-clear edges, which come out solid without blending
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         graphics.blit(PANEL, leftPos, topPos, 0, 0, PANEL_W, PANEL_H, SHEET, SHEET);
         gauge(graphics, FIRE_X, FIRE_Y, FIRE_W, FIRE_H, FIRE_FROM_X, menu.burning());
         gauge(graphics, HELD_X, HELD_Y, HELD_W, HELD_H, HELD_FROM_X, menu.filled());
         gauge(graphics, COOKED_X, COOKED_Y, COOKED_W, COOKED_H, COOKED_FROM_X, menu.cooked());
-        // the glass is a faint sheen, mostly see-through; drawn without blending its faint pixels come out solid and
-        // the pane reads as white streaks over an empty gauge
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         graphics.blit(PANEL, leftPos + GLASS_X, topPos + GLASS_Y, GLASS_FROM_X, 0, GLASS_W, GLASS_H, SHEET, SHEET);
         RenderSystem.disableBlend();
     }
 
-    /** One gauge, filled from the bottom by as much of its picture as the share calls for. */
     private void gauge(GuiGraphics graphics, int x, int y, int wide, int tall, int fromX, float share) {
         int high = Math.round(Math.max(0.0F, Math.min(1.0F, share)) * tall);
         if (high <= 0) {
@@ -87,7 +75,6 @@ public class EssentiaSmelterScreen extends AbstractContainerScreen<EssentiaSmelt
         graphics.blit(PANEL, leftPos + x, topPos + y + tall - high, fromX, tall - high, wide, high, SHEET, SHEET);
     }
 
-    /** The panel is a picture of the smelter, as the original's was; it carries no words. */
     @Override
     protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
     }
@@ -98,13 +85,6 @@ public class EssentiaSmelterScreen extends AbstractContainerScreen<EssentiaSmelt
         renderTooltip(graphics, mouseX, mouseY);
     }
 
-    /**
-     * What is in the smelter, listed on the gauge that holds it.
-     * <p>
-     * The original showed a total and nothing else, so there was no way to tell what had gone in. That matters
-     * here, because a vessel above takes one kind and no other: what is mixed in the smelter is what decides how
-     * many vessels are needed.
-     */
     @Override
     protected void renderTooltip(GuiGraphics graphics, int mouseX, int mouseY) {
         if (!over(mouseX, mouseY, GLASS_X, GLASS_Y, GLASS_W, GLASS_H) || minecraft == null) {

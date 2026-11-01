@@ -11,11 +11,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 
-/**
- * A construct folded up to carry, the original's {@code ItemTurretPlacer}: an automated crossbow or a node magnet. It
- * stands on its tripod, so it goes down only where there is room and solid ground under the spot, and whoever set it
- * down owns it.
- */
 public class ConstructItem extends Item {
     private final Supplier<? extends EntityType<? extends Construct>> type;
 

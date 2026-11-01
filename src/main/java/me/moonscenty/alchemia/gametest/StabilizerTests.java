@@ -13,10 +13,6 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/**
- * A stabiliser is only worth anything if it reliably takes hold, since that is what stops a node wandering out of a
- * build, and if it reliably lets go, since that is the only way to get one back.
- */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class StabilizerTests {
@@ -28,7 +24,6 @@ public class StabilizerTests {
         return (NodeStabilizerBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(WHERE));
     }
 
-    /** A node put in the cradle is spawned where the stabiliser expects it. */
     private static AuraNode nodeAt(GameTestHelper helper, NodeStabilizerBlockEntity stabilizer, Vec3 offset) {
         AuraNode node = new AuraNode(helper.getLevel());
         Vec3 at = stabilizer.anchor().add(offset);
@@ -56,7 +51,6 @@ public class StabilizerTests {
         helper.succeed();
     }
 
-    /** The arms only come out while it has something, which is how the thing reads at a glance. */
     @GameTest(template = TEMPLATE)
     public static void theArmsStayInUntilThereIsSomethingToHold(GameTestHelper helper) {
         NodeStabilizerBlockEntity stabilizer = place(helper);
@@ -71,7 +65,6 @@ public class StabilizerTests {
         helper.succeed();
     }
 
-    /** Redstone is how a node is let go without breaking anything. */
     @GameTest(template = TEMPLATE)
     public static void redstoneLetsGo(GameTestHelper helper) {
         NodeStabilizerBlockEntity stabilizer = place(helper);
@@ -92,7 +85,6 @@ public class StabilizerTests {
         helper.succeed();
     }
 
-    /** Only one node fits a cradle, so any others are worked away from it. */
     @GameTest(template = TEMPLATE)
     public static void onlyOneIsHeldAndTheRestAreShovedOff(GameTestHelper helper) {
         NodeStabilizerBlockEntity stabilizer = place(helper);
@@ -107,7 +99,6 @@ public class StabilizerTests {
         helper.succeed();
     }
 
-    /** Nothing anywhere near it means nothing to do. */
     @GameTest(template = TEMPLATE)
     public static void aNodeFarOffIsLeftAlone(GameTestHelper helper) {
         NodeStabilizerBlockEntity stabilizer = place(helper);

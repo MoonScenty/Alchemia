@@ -23,12 +23,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
-/**
- * A knot of magic hanging in the air, feeding the land around it.
- * <p>
- * It is an entity rather than a block because it does not sit on the grid: it drifts, it can be pulled about, and
- * two that meet become one. Nothing can hurt it and it passes through walls.
- */
+// An entity rather than a block: it drifts, can be pulled about, and merges with other nodes.
 public class AuraNode extends Entity {
     private static final EntityDataAccessor<Integer> SIZE =
             SynchedEntityData.defineId(AuraNode.class, EntityDataSerializers.INT);
@@ -37,17 +32,14 @@ public class AuraNode extends Entity {
     private static final EntityDataAccessor<Integer> TYPE =
             SynchedEntityData.defineId(AuraNode.class, EntityDataSerializers.INT);
 
-    /** How far a node looks for others to drift towards. */
     private static final double NEIGHBOUR_RANGE = 32.0;
-    /** How long it keeps that list before looking again. */
+    // ticks before the neighbour list is refreshed
     private static final int NEIGHBOUR_MEMORY = 750;
-    /** One in this many nodes is something other than plain. */
+    // 1 in N nodes is not plain
     private static final int ODDITY = 8;
-    /** One in this many is made of something compound rather than one of the six. */
+    // 1 in N has a compound aspect
     private static final int COMPOUND_CHANCE = 20;
-    /** How fast drifting dies down when nothing is pulling. */
     private static final double DRAG = 0.8;
-    /** Close enough to be the same place. */
     private static final double TOUCHING = 0.1;
 
     private boolean held;
@@ -64,14 +56,11 @@ public class AuraNode extends Entity {
         this(ModEntities.AURA_NODE.get(), level);
     }
 
-    // --- what it is --------------------------------------------------------
-
-    /** Whether something is holding this node still. Nothing can move it or merge with it while it is. */
+    // held nodes neither move nor merge
     public boolean isHeld() {
         return held;
     }
 
-    /** Said by whatever is doing the holding, every tick it keeps hold. */
     public void setHeld(boolean held) {
         this.held = held;
     }
@@ -105,18 +94,13 @@ public class AuraNode extends Entity {
         entityData.set(ASPECT, aspect == null ? "" : aspect.value().id().toString());
     }
 
-    /**
-     * What the land gets fed: always one of the six.
-     * <p>
-     * A node made of something compound gives one of the aspects that compound is made from, following the tree
-     * down until it reaches a primal, since what a compound is made of may well be compound itself.
-     */
+    // compound nodes feed a random primal found by walking down their component tree
     public Holder<Aspect> feedsWith(RandomSource random) {
         Holder<Aspect> aspect = aspect();
         if (aspect == null) {
             return null;
         }
-        // deep enough for any tree that terminates, and it gives up rather than looping on one that does not
+        // cap guards against a component tree that never reaches a primal
         for (int step = 0; step < 16 && !aspect.value().isPrimal(); step++) {
             List<Holder<Aspect>> parts = aspect.value().components().orElse(List.of());
             if (parts.isEmpty()) {
@@ -127,7 +111,6 @@ public class AuraNode extends Entity {
         return aspect.value().isPrimal() ? aspect : ModAspects.randomPrimal(random);
     }
 
-    /** Gives a fresh node its size, kind and aspect. */
     public void drawUp(RandomSource source) {
         int span = 2 + AuraGeneration.BASE / 3;
         setSize(span + source.nextInt(span));
@@ -140,8 +123,6 @@ public class AuraNode extends Entity {
                 : ModAspects.primals();
         setAspect(pool.isEmpty() ? ModAspects.AIR : pool.get(source.nextInt(pool.size())));
     }
-
-    // --- living ------------------------------------------------------------
 
     @Override
     public void tick() {
@@ -163,14 +144,13 @@ public class AuraNode extends Entity {
             }
         }
 
-        // held still, but not frozen: it is still drawn in to the spot it is meant to sit
+        // held, but still eased into its anchor spot
         if (getDeltaMovement().lengthSqr() > 1.0E-6) {
             setDeltaMovement(getDeltaMovement().scale(DRAG));
             setPos(position().add(getDeltaMovement()));
         }
     }
 
-    /** Hands the land below a measure of what this node is made of. */
     private void feed(ServerLevel level) {
         if (!type().feeds() || type() == NodeType.TAINTED) {
             return;
@@ -181,10 +161,6 @@ public class AuraNode extends Entity {
         }
     }
 
-    /**
-     * Nodes pull on one another, and one that reaches another swallows it. What comes out is bigger, may have taken
-     * on the other's kind, and may be made of the two of them mixed together.
-     */
     private void gatherTowardsNeighbours() {
         if (tickCount > lookAgainAt) {
             neighbours = level().getEntitiesOfClass(AuraNode.class, getBoundingBox().inflate(NEIGHBOUR_RANGE),
@@ -225,14 +201,7 @@ public class AuraNode extends Entity {
         other.discard();
     }
 
-    // --- being left alone --------------------------------------------------
-
-    /**
-     * How far off a node may still be drawn.
-     * <p>
-     * The usual cutoff is worked out from how big a thing is, which would drop something this small at about thirty
-     * blocks. A node is meant to be picked out across a valley by anyone with the lenses for it, so it says so.
-     */
+    // vanilla's size-based cull distance would hide a node at ~30 blocks
     private static final double SEEN_FROM = 96.0;
 
     @Override
@@ -263,8 +232,6 @@ public class AuraNode extends Entity {
     public boolean fireImmune() {
         return true;
     }
-
-    // --- plumbing ----------------------------------------------------------
 
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {

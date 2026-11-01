@@ -12,7 +12,6 @@ import me.moonscenty.alchemia.golem.seal.SealPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 
-/** The seals of the world the player is in, as the server last told of them. */
 public final class ClientSeals {
     private static final Map<SealPos, SealEntity> SEALS = new ConcurrentHashMap<>();
 
@@ -28,7 +27,6 @@ public final class ClientSeals {
         return SEALS.values();
     }
 
-    /** One seal as it now is, or gone. */
     public static void update(SealPos pos, @Nullable CompoundTag saved, HolderLookup.Provider registries) {
         SealEntity seal = saved == null ? null : SealEntity.load(saved, registries);
         if (seal == null) {
@@ -38,7 +36,6 @@ public final class ClientSeals {
         }
     }
 
-    /** All of them, anew. */
     public static void replace(List<CompoundTag> saved, HolderLookup.Provider registries) {
         SEALS.clear();
         for (CompoundTag each : saved) {

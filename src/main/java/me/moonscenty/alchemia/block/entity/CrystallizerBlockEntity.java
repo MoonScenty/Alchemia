@@ -25,23 +25,12 @@ import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
 
-/**
- * An essentia crystallizer: takes one point of essentia in by the face it was set against, and some while later
- * puts out a crystal of it on the other side, into whatever container is there or else onto the ground.
- * <p>
- * Any aspect will do, the six primals included. It runs on earth drawn out of the air around it, four points at a
- * time, a hundred steps of work for each four; a crystal takes forty. With no earth in the air it simply waits,
- * holding its point. A redstone signal stops it.
- */
 public class CrystallizerBlockEntity extends SyncedBlockEntity implements EssentiaHolder, Spills {
     private static final int WORKS_EVERY = 5;
-    /** How much work a crystal is, and how much a step of it does at most. */
     private static final int WORK = 200;
     private static final int STEP = 5;
-    /** What it draws from the air when it runs dry, and what each point of that is worth. */
     private static final int DRAWS = 4;
     private static final int FUEL_A_POINT = 25;
-    /** The block event that sets the client's steam going. */
     public static final int VENTS = 0;
     private static final int VENTS_FOR = 7;
 
@@ -51,7 +40,6 @@ public class CrystallizerBlockEntity extends SyncedBlockEntity implements Essent
     private int progress;
     private int counter;
 
-    /** What the client draws: the crystals' spin and their colour, eased toward the aspect's. */
     private float spin;
     private float spinning;
     private float red = 1.0F;
@@ -140,7 +128,6 @@ public class CrystallizerBlockEntity extends SyncedBlockEntity implements Essent
         return 0.1 - random.nextFloat() * 0.2;
     }
 
-    /** Takes one point straight out of a vessel set against its back. A pipe there fills it on its own. */
     private void drawFromBehind(Level level, BlockPos pos) {
         Holder<Aspect> drawn = EssentiaHolder.drawFrom(level, pos, facing(), held -> true);
         if (drawn != null) {
@@ -148,7 +135,6 @@ public class CrystallizerBlockEntity extends SyncedBlockEntity implements Essent
         }
     }
 
-    /** The crystal, into a container in front if there is one with room, else out onto the ground with a puff. */
     private void eject(Level level, BlockPos pos) {
         ItemStack crystal = CrystallizedEssenceItem.of(aspect);
         Direction out = facing().getOpposite();
@@ -176,8 +162,6 @@ public class CrystallizerBlockEntity extends SyncedBlockEntity implements Essent
         return super.triggerEvent(id, param);
     }
 
-    // --- what the renderer reads ---------------------------------------------
-
     public float spin(float partial) {
         return spin + spinning * partial;
     }
@@ -189,8 +173,6 @@ public class CrystallizerBlockEntity extends SyncedBlockEntity implements Essent
     private static int channel(float value) {
         return (int) (Math.max(0.0F, Math.min(1.0F, value)) * 255.0F);
     }
-
-    // --- essentia ----------------------------------------------------------
 
     @Override
     public AspectList held() {
@@ -212,7 +194,6 @@ public class CrystallizerBlockEntity extends SyncedBlockEntity implements Essent
         return true;
     }
 
-    /** Pipes meet it only at its back, the face it was set against. */
     @Override
     public boolean reachableFrom(Direction side) {
         return side == facing();
@@ -223,7 +204,6 @@ public class CrystallizerBlockEntity extends SyncedBlockEntity implements Essent
         return false;
     }
 
-    /** What a broken one lets go: the point it held goes into the air as flux. */
     @Override
     public void spill() {
         if (level != null && !level.isClientSide && aspect != null) {
@@ -231,8 +211,6 @@ public class CrystallizerBlockEntity extends SyncedBlockEntity implements Essent
         }
         aspect = null;
     }
-
-    // --- saving ------------------------------------------------------------
 
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {

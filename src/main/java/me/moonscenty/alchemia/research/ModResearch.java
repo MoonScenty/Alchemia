@@ -7,9 +7,6 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.registries.DataPackRegistryEvent;
 
-/**
- * Research lives in datapacks rather than in code, so a pack can add a branch of study without touching the mod.
- */
 @EventBusSubscriber(modid = Alchemia.MODID, bus = EventBusSubscriber.Bus.MOD)
 public class ModResearch {
     public static final ResourceKey<Registry<ResearchCategory>> CATEGORY_KEY =
@@ -17,7 +14,6 @@ public class ModResearch {
     public static final ResourceKey<Registry<ResearchEntry>> ENTRY_KEY =
             ResourceKey.createRegistryKey(Alchemia.id("research"));
 
-    // The branches of study. Thaumaturgy is called arcana here.
     public static final ResourceKey<ResearchCategory> BASICS = category("basics");
     public static final ResourceKey<ResearchCategory> ARCANA = category("arcana");
     public static final ResourceKey<ResearchCategory> ALCHEMY = category("alchemy");
@@ -27,7 +23,7 @@ public class ModResearch {
 
     @SubscribeEvent
     public static void registerDataPackRegistries(DataPackRegistryEvent.NewRegistry event) {
-        // both are sent to clients, since the book and the scanner both need to read them
+        // synced too: the book and the scanner read these on the client
         event.dataPackRegistry(CATEGORY_KEY, ResearchCategory.CODEC, ResearchCategory.CODEC);
         event.dataPackRegistry(ENTRY_KEY, ResearchEntry.CODEC, ResearchEntry.CODEC);
     }

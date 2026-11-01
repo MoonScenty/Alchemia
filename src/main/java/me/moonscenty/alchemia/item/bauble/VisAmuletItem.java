@@ -13,11 +13,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import top.theillusivec4.curios.api.SlotContext;
 
-/**
- * An amulet that charges what its wearer carries out of the aura where they stand: one drop at a time into the first
- * thing that will take it, looking along the hotbar, then the baubles, then the armour. The vis stone that is found
- * does it every two seconds; the amulet of vis that is made, four times a second.
- */
 public class VisAmuletItem extends BaubleItem {
     private final int every;
     private final boolean found;

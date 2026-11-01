@@ -21,17 +21,6 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-/**
- * The deadly void, that the ancient bedrock gives way to where it is laid open.
- * <p>
- * Its source floods the open air next to it, one block at a time every quarter second, each block a step further
- * from the source, out to twelve. A block that is cut off from anything nearer the source wastes away a step at a
- * time and is gone. It cannot be seen, struck or walked on, and it is dark.
- * <p>
- * It pulls whatever is in it toward the source, things that fall harder than creatures. The source does ten damage
- * as if from falling out of the world; the rest now and then one, and less often the further out. Creatures that
- * breathe water are safe from all but the source.
- */
 public class VacuumBlock extends Block {
     public static final int FURTHEST = 12;
     public static final IntegerProperty SPREAD = IntegerProperty.create("spread", 0, FURTHEST);
@@ -173,7 +162,6 @@ public class VacuumBlock extends Block {
         }
     }
 
-    /** Down the steps to where it comes from. */
     private BlockPos source(Level level, BlockPos pos, int spread) {
         for (int step = 0; step < FURTHEST + 1; step++) {
             boolean moved = false;

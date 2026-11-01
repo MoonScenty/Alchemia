@@ -10,19 +10,11 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import me.moonscenty.alchemia.client.legacy.LegacyAssets;
 import me.moonscenty.alchemia.client.legacy.LegacyModels;
 import me.moonscenty.alchemia.client.legacy.model.LegacyModelBaker;
-import me.moonscenty.alchemia.entity.EldritchGuardian;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
 
-/**
- * The guardian's body, the original's {@code ModelEldritchGuardian} read out of its code: a hood, plate on the chest
- * and shoulders, two arms held out before it, and a skirt of panels and a cloak that hang from the waist.
- * <p>
- * It does not walk. Its arms bob, lifting when it casts, and its panels and cloak sway, by the original's sums. It is
- * drawn as see-through as its renderer says.
- */
 public class EldritchGuardianModel<T extends net.minecraft.world.entity.LivingEntity & me.moonscenty.alchemia.entity.ArmLifting>
         extends EntityModel<T> {
     private static final List<String> ROOTS = List.of("BeltR", "Mbelt", "MbeltL", "MbeltR", "BeltL", "Chestplate",
@@ -34,9 +26,7 @@ public class EldritchGuardianModel<T extends net.minecraft.world.entity.LivingEn
 
     private static int bakedFrom = -1;
     private static Map<String, ModelPart> parts = Map.of();
-    /** The eye under the hood, drawn only for the Warden, glowing. */
     private static ModelPart eye;
-    /** How much of it shows this frame, from the renderer. */
     float alpha = 1.0F;
 
     @Override
@@ -87,7 +77,6 @@ public class EldritchGuardianModel<T extends net.minecraft.world.entity.LivingEn
         }
     }
 
-    /** The eye in the hood, a hair larger than the hood itself, as the original draws it over the Warden. */
     void renderEye(PoseStack pose, VertexConsumer buffer, int light, int overlay) {
         if (!refresh() || eye == null) {
             return;
@@ -98,7 +87,6 @@ public class EldritchGuardianModel<T extends net.minecraft.world.entity.LivingEn
         pose.popPose();
     }
 
-    /** Bakes the original's parts again whenever the import has changed what there is. */
     private static boolean refresh() {
         int generation = LegacyModels.generation();
         if (generation != bakedFrom) {

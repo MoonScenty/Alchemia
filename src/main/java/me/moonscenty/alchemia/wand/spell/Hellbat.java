@@ -16,17 +16,8 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
-/**
- * Nine Hells: a firebat let off the end of the wand and set on whatever living thing it was pointed at.
- *
- * <p>One bat a cast and no more, as the original: what limits them is the second's wait and the vis. It goes for the
- * thing it was set on and nothing else, and once that is dead it does not linger.
- *
- * <p>Pointed at nothing, nothing happens and nothing is paid. Pointed at a player, it only goes if the server lets
- * players fight.
- */
 public final class Hellbat {
-    /** How far the wand looks for something to set a bat on. Further than a wand's own reach: the original's. */
+    // original's value; further than a wand's reach
     private static final double SEES = 32.0;
 
     private Hellbat() {
@@ -41,7 +32,7 @@ public final class Hellbat {
             return false;
         }
 
-        // the original's spot: just off the hand, half a block along the look, and a bat's height up
+        // original's spawn point
         Vec3 look = caster.getViewVector(1.0F);
         float yaw = caster.getYRot() * Mth.DEG_TO_RAD;
         double x = caster.getX() - Mth.cos(yaw) * 0.16F + look.x * 0.5;
@@ -64,10 +55,6 @@ public final class Hellbat {
         return true;
     }
 
-    /**
-     * What the bat is set on: what the wand was pointed at, if that was something alive and not another bat; else
-     * whatever living thing is in the line of sight further out, as far as the original looked.
-     */
     private static LivingEntity target(ServerLevel level, LivingEntity caster, HitResult aim) {
         if (aim instanceof EntityHitResult struck && struck.getEntity() instanceof LivingEntity living
                 && !(living instanceof FireBat)) {

@@ -38,37 +38,25 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.Vec3;
 
-/**
- * A wisp: a drifting knot of one aspect, which spits sparks at whoever it takes against.
- *
- * <p>Most are one of the six primals; one in ten is a compound. It drifts about at random until it takes against
- * somebody -- whoever strikes it, or, now and then, the nearest player within sixteen blocks -- and then closes in to
- * about eleven blocks and zaps them once a second or so. Something standing still is the easier to hit, and takes a
- * point more. Killed, it leaves two points of its aspect behind as wispy essence.
- *
- * <p>Wisps come of themselves in the Nether, in the dark, and from a chunk thick with flux.
- */
 public class Wisp extends FlyingMob implements Enemy, OwnAspects {
     private static final EntityDataAccessor<String> ASPECT =
             SynchedEntityData.defineId(Wisp.class, EntityDataSerializers.STRING);
 
-    /** The original's numbers. */
+    // original's values
     private static final double LIVES = 22.0;
     private static final double ZAPS = 3.0;
     private static final double REACH = 16.0;
-    /** How hard it flies across and up, how much of the gap to that it closes a tick, and how it drifts idly. */
     private static final double ACROSS = 0.5;
     private static final double UP = 0.7;
     private static final double CLOSES = 0.1;
     private static final float DRIFTING = 0.15F;
     private static final float CHASING = 0.5F;
     private static final double FALLS_OFF = 0.6;
-    /** How long it holds a grudge, how long between zaps, and how likely a zap is to land. */
     private static final int GRUDGE = 200;
     private static final int ZAP_AT = 20;
     private static final float LANDS_ON_STILL = 0.66F;
     private static final float LANDS_ON_MOVING = 0.4F;
-    /** At most this many wisps within sixteen blocks before another will come of itself. */
+    // no natural spawn with this many wisps within 16 blocks
     private static final int CROWD = 8;
 
     @Nullable
@@ -91,7 +79,6 @@ public class Wisp extends FlyingMob implements Enemy, OwnAspects {
                 .add(Attributes.ATTACK_DAMAGE, ZAPS);
     }
 
-    /** Where one may come of itself: not crowded, dark as for any monster, and not in peace. */
     public static boolean checkSpawnRules(EntityType<Wisp> type, ServerLevelAccessor level, MobSpawnType reason,
             BlockPos pos, RandomSource random) {
         return level.getDifficulty() != Difficulty.PEACEFUL
@@ -107,7 +94,7 @@ public class Wisp extends FlyingMob implements Enemy, OwnAspects {
         builder.define(ASPECT, "");
     }
 
-    /** What it is a wisp of; nothing until it has drifted for a tick. */
+    // null until its first tick
     @Nullable
     public Holder<Aspect> aspect() {
         String id = entityData.get(ASPECT);
@@ -123,7 +110,6 @@ public class Wisp extends FlyingMob implements Enemy, OwnAspects {
         entityData.set(ASPECT, aspect.unwrapKey().map(key -> key.location().toString()).orElse(""));
     }
 
-    /** Two of its own aspect, on top of what any wisp is. */
     @Override
     public AspectList ownAspects() {
         Holder<Aspect> aspect = aspect();
@@ -195,7 +181,6 @@ public class Wisp extends FlyingMob implements Enemy, OwnAspects {
         zap();
     }
 
-    /** About where it was, now and then somewhere new: six blocks across and a little up or down. */
     private void drift() {
         if (driftingTo != null && (!level().isEmptyBlock(driftingTo)
                 || driftingTo.getY() < level().getMinBuildHeight() + 1
@@ -211,7 +196,6 @@ public class Wisp extends FlyingMob implements Enemy, OwnAspects {
         steer(driftingTo.getX() + 0.5, driftingTo.getY() + 0.1, driftingTo.getZ() + 0.5, DRIFTING);
     }
 
-    /** A tenth of the way towards a fixed speed in the direction of where it is going, facing it. */
     private void steer(double x, double y, double z, float forward) {
         Vec3 moving = getDeltaMovement();
         double dx = moving.x + (Math.signum(x - getX()) * ACROSS - moving.x) * CLOSES;
@@ -223,7 +207,6 @@ public class Wisp extends FlyingMob implements Enemy, OwnAspects {
         setYRot(getYRot() + Mth.wrapDegrees(facing - getYRot()));
     }
 
-    /** Once a second or so, a spark at whatever it has taken against, if it can see them. */
     private void zap() {
         LivingEntity target = getTarget();
         if (target == null || target.distanceToSqr(this) >= REACH * REACH) {
@@ -254,7 +237,6 @@ public class Wisp extends FlyingMob implements Enemy, OwnAspects {
         attackCounter = -20 + random.nextInt(20);
     }
 
-    /** The spark, drawn as a line of little sparks from the wisp to what it struck. */
     private void spark(ServerLevel level, LivingEntity target) {
         Vec3 from = position().add(0.0, getBbHeight() / 2.0, 0.0);
         Vec3 to = target.position().add(0.0, target.getBbHeight() / 2.0, 0.0);
@@ -273,7 +255,6 @@ public class Wisp extends FlyingMob implements Enemy, OwnAspects {
         }
     }
 
-    /** Two points of what it was, as wispy essence. */
     @Override
     protected void dropCustomDeathLoot(ServerLevel level, DamageSource source, boolean recentlyHit) {
         super.dropCustomDeathLoot(level, source, recentlyHit);
@@ -325,11 +306,6 @@ public class Wisp extends FlyingMob implements Enemy, OwnAspects {
         entityData.set(ASPECT, tag.getString("Aspect"));
     }
 
-    /**
-     * A flux trouble: a wisp, five blocks over the ground, one time in three a wisp of flux itself.
-     *
-     * @return whether one came
-     */
     public static boolean fromFlux(ServerLevel level, BlockPos ground, RandomSource random) {
         if (ground.getY() + 5 >= level.getMaxBuildHeight()) {
             return false;
@@ -342,13 +318,11 @@ public class Wisp extends FlyingMob implements Enemy, OwnAspects {
         return level.addFreshEntity(wisp);
     }
 
-    /** Not anything a lead can hold. */
     @Override
     public boolean canBeLeashed() {
         return false;
     }
 
-    /** It is light and air, and pushes nothing about. */
     @Override
     protected void doPush(Entity entity) {
     }

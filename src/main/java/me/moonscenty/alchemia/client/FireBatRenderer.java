@@ -10,10 +10,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
-/**
- * Draws a firebat as the original did: small, burning at full brightness whatever the hour, bobbing as it flies,
- * and a vampire in a skin of its own. A devil or a vampire is drawn nearly twice the size of the others.
- */
 public class FireBatRenderer extends MobRenderer<FireBat, FireBatModel> {
     private static final ResourceLocation FIRE = Alchemia.id("textures/entity/firebat.png");
     private static final ResourceLocation VAMPIRE = Alchemia.id("textures/entity/vampirebat.png");
@@ -42,7 +38,6 @@ public class FireBatRenderer extends MobRenderer<FireBat, FireBatModel> {
         super.setupRotations(bat, pose, bob, yBodyRot, partial, scale);
     }
 
-    /** It is a fire, and lights itself. */
     @Override
     protected int getBlockLightLevel(FireBat bat, BlockPos pos) {
         return 15;

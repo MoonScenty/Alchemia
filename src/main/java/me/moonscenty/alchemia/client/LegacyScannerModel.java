@@ -29,31 +29,15 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.model.BakedModelWrapper;
 
-/**
- * The alchemometer as Thaumcraft 4's thaumometer, when its jar is there: a six-sided brass frame with a glass screen
- * set in it.
- * <p>
- * Thaumcraft 4 drew it by hand, and in the first person drew both the player's arms holding it up to look through.
- * The game no longer lets an item draw the arms that hold it, so this is the frame and its screen as a model, held
- * flat-on in front of the player so that the screen is what they look at, and laid back in a slot as the original
- * laid it. The read-out the original wrote over the screen while scanning is not drawn.
- * <p>
- * Without the jar this is our own flat picture and nothing else.
- */
 public class LegacyScannerModel extends BakedModelWrapper<BakedModel> {
-    /** The frame is modelled about two and a half blocks across; drawn at this, it fills a slot as an item does. */
+    // frame is modelled about 2.8 blocks across
     private static final float SCALE = 1.0F / 2.8F;
     private static final float MIDDLE = 0.5F;
-    /** The frame is a fifth of a block thick; its middle is set on the middle of the item. */
     private static final float THICK_MIDDLE = 0.1F;
-    /** Where the original laid the screen in the frame, and how big. */
     private static final float SCREEN_HEIGHT = 0.11F;
     private static final float SCREEN_HALF = 1.25F;
 
-    /**
-     * How it is held and shown. The frame lies flat as modelled, so it is stood up to face the player in the hand and
-     * tipped back in a slot, after the original's own slot angle of sixty degrees.
-     */
+    // frame lies flat as modelled; the slot tilt is the original's 60 degrees
     private static final ItemTransforms HELD = new ItemTransforms(
             transform(70, 0, 0, 0, 1, 0, 0.55F),
             transform(70, 0, 0, 0, 1, 0, 0.55F),
@@ -103,7 +87,7 @@ public class LegacyScannerModel extends BakedModelWrapper<BakedModel> {
         return legacy() || super.usesBlockLight();
     }
 
-    // the wrapper hands both of these to the model it wraps, which would draw our picture instead of this
+    // the wrapper would forward these to the wrapped model and draw that instead
 
     @Override
     public BakedModel applyTransform(ItemDisplayContext context, PoseStack pose, boolean leftHand) {
@@ -121,7 +105,6 @@ public class LegacyScannerModel extends BakedModelWrapper<BakedModel> {
         TextureAtlasSprite frame = atlas.apply(Alchemia.id("item/legacy/scanner"));
         TextureAtlasSprite screen = atlas.apply(Alchemia.id("item/legacy/scanscreen"));
         List<BakedQuad> out = new ArrayList<>();
-        // Thaumcraft 4 read the mesh with the game's loader of the time, which turned the texture corners over
         LegacyMesh flipped = mesh.flippedV();
         Vector3f normal = new Vector3f();
         for (int group = 0; group < flipped.groups(); group++) {
@@ -134,7 +117,6 @@ public class LegacyScannerModel extends BakedModelWrapper<BakedModel> {
                 out.add(quad(frame, corners, normal));
             }
         }
-        // the screen, both ways up so it shows from either side, as the original drew it unculled
         float h = SCREEN_HALF;
         float y = SCREEN_HEIGHT;
         float[][] up = {{-h, y, -h, 0, 0}, {-h, y, h, 0, 1}, {h, y, h, 1, 1}, {h, y, -h, 1, 0}};

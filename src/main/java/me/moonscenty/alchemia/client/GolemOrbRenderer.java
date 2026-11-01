@@ -16,10 +16,6 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
-/**
- * The orb as the original drew it: a six-frame crackle off the old particle sheet, cut eight by eight, red or blue by
- * the row, swelling and easing as it goes, light added to whatever is behind it.
- */
 public class GolemOrbRenderer extends EntityRenderer<GolemOrb> {
     private static final ResourceLocation SHEET = Alchemia.id("textures/misc/legacy_particles.png");
     private static final float CELL = 1.0F / 8.0F;

@@ -18,9 +18,6 @@ import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacer;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacer;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacerType;
 
-/**
- * A plus-shaped trunk that flares into roots at the base and into knots below the crown, topped by a single canopy.
- */
 public class SilverwoodTrunkPlacer extends TrunkPlacer {
     public static final MapCodec<SilverwoodTrunkPlacer> CODEC = RecordCodecBuilder.mapCodec(
             instance -> trunkPlacerParts(instance).apply(instance, SilverwoodTrunkPlacer::new));
@@ -48,12 +45,10 @@ public class SilverwoodTrunkPlacer extends TrunkPlacer {
         placeLog(level, blockSetter, random, pos.above(freeTreeHeight), config);
 
         for (Direction side : Direction.Plane.HORIZONTAL) {
-            // roots reaching out along the ground and into it
             BlockPos root = pos.relative(side, 2);
             placeLog(level, blockSetter, random, root, config, state -> state.trySetValue(RotatedPillarBlock.AXIS, side.getAxis()));
             placeLog(level, blockSetter, random, root.below(), config);
 
-            // diagonal buttresses at the base and knots under the canopy
             BlockPos corner = pos.relative(side).relative(side.getClockWise());
             placeLog(level, blockSetter, random, corner, config);
             if (random.nextInt(3) != 0) {

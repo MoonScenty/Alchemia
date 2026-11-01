@@ -24,18 +24,10 @@ import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import net.neoforged.neoforge.registries.DeferredBlock;
 
-/**
- * An infusion from end to end: laid out, started, drunk and finished.
- * <p>
- * The smallest working there is -- an obsidian block under the matrix, two shards on the ring, and jars of what it
- * asks for standing nearby. Everything the altar does is in that, so it is worth having it run in a test rather
- * than only in somebody's world.
- */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class InfusionTests {
     private static final String TEMPLATE = "empty_32x40x32";
-    /** The matrix hangs here; the thing worked on stands two below it. */
     private static final BlockPos MATRIX = new BlockPos(8, 6, 8);
 
     private static ArcanePedestalBlockEntity stand(GameTestHelper helper, BlockPos at, ItemStack holding) {
@@ -46,7 +38,6 @@ public class InfusionTests {
         return stand;
     }
 
-    /** A jar of one thing, standing where the matrix can reach it. */
     private static void jar(GameTestHelper helper, BlockPos at, Holder<me.moonscenty.alchemia.aspect.Aspect> aspect,
             int amount) {
         helper.setBlock(at, ModBlocks.JAR.get());
@@ -56,7 +47,6 @@ public class InfusionTests {
         }
     }
 
-    /** Somebody who has done the reading. */
     private static Player scholar(GameTestHelper helper) {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         player.setData(ModAttachments.KNOWLEDGE,
@@ -64,9 +54,6 @@ public class InfusionTests {
         return player;
     }
 
-    /**
-     * The altar itself: a pedestal two below, and a stone at each corner for a pillar to be drawn standing on.
-     */
     private static void altar(GameTestHelper helper) {
         helper.setBlock(MATRIX, ModBlocks.INFUSION_MATRIX.get());
         for (int east = -1; east <= 1; east += 2) {
@@ -77,7 +64,6 @@ public class InfusionTests {
         }
     }
 
-    /** One of the two stones laid under all four corners, a course below the pillars' feet. */
     private static void under(GameTestHelper helper, DeferredBlock<net.minecraft.world.level.block.Block> stone) {
         for (int east = -1; east <= 1; east += 2) {
             for (int south = -1; south <= 1; south += 2) {
@@ -86,7 +72,6 @@ public class InfusionTests {
         }
     }
 
-    /** The whole working: an obsidian rod, laid out and made. */
     private static InfusionMatrixBlockEntity laidOut(GameTestHelper helper) {
         altar(helper);
         stand(helper, MATRIX.below(2), new ItemStack(Items.OBSIDIAN));
@@ -107,7 +92,6 @@ public class InfusionTests {
         }
     }
 
-    /** The first touch of a wand wakes the altar; the touch after that starts the working. */
     @GameTest(template = TEMPLATE)
     public static void theFirstTouchWakesTheAltar(GameTestHelper helper) {
         InfusionMatrixBlockEntity matrix = laidOut(helper);
@@ -116,7 +100,6 @@ public class InfusionTests {
         helper.assertTrue(!matrix.awake(), "a matrix hung over loose stone is asleep");
         helper.assertValueEqual(matrix.wake(player), InfusionMatrixBlockEntity.Woken.WOKEN, "the wand woke it");
         helper.assertTrue(matrix.awake(), "and it is awake");
-        // both blocks of the corner stop being drawn, and the matrix draws a pillar standing where they were
         helper.assertBlockPresent(ModBlocks.ARCANE_PILLAR.get(), MATRIX.offset(1, -2, 1));
         helper.assertBlockPresent(ModBlocks.ARCANE_PILLAR.get(), MATRIX.offset(1, -1, 1));
 
@@ -125,13 +108,6 @@ public class InfusionTests {
         helper.succeed();
     }
 
-    /**
-     * Take one corner out and the altar stops being one, within the second.
-     * <p>
-     * A corner stone is not a neighbour of the matrix, so nothing tells it when one goes; it has to look. What is
-     * worth holding to is that one stone is enough, since somebody who breaks one and sees nothing happen will
-     * break another to find out why.
-     */
     @GameTest(template = TEMPLATE)
     public static void breakingOneCornerPutsItToSleep(GameTestHelper helper) {
         InfusionMatrixBlockEntity matrix = laidOut(helper);
@@ -145,7 +121,6 @@ public class InfusionTests {
         helper.succeed();
     }
 
-    /** Without its four corners there is no altar, and nothing wakes. */
     @GameTest(template = TEMPLATE)
     public static void itWillNotWakeWithoutAnAltar(GameTestHelper helper) {
         InfusionMatrixBlockEntity matrix = laidOut(helper);
@@ -157,7 +132,6 @@ public class InfusionTests {
         helper.succeed();
     }
 
-    /** Pulling a pillar out from under a working ends it and puts the matrix back to sleep. */
     @GameTest(template = TEMPLATE)
     public static void breakingTheAltarEndsTheWorking(GameTestHelper helper) {
         InfusionMatrixBlockEntity matrix = laidOut(helper);
@@ -173,12 +147,6 @@ public class InfusionTests {
         helper.succeed();
     }
 
-    /**
-     * A ring laid out in pairs is steady; one pedestal hanging off the end of it is not.
-     * <p>
-     * This is most of what makes a working dangerous, and the whole reason an altar is a thing you lay out rather
-     * than a thing you scatter.
-     */
     @GameTest(template = TEMPLATE)
     public static void aLopsidedRingIsWhatGoesWrong(GameTestHelper helper) {
         InfusionMatrixBlockEntity matrix = laidOut(helper);
@@ -192,18 +160,11 @@ public class InfusionTests {
         helper.succeed();
     }
 
-    /**
-     * Skulls set in pairs either side of the matrix take something off a working; a lone one puts a little on.
-     * <p>
-     * Counted in tenths, so it takes ten pairs to be worth a whole point of instability. They are meant to be the
-     * last thing you reach for after the ring is already laid out properly, not the first.
-     */
     @GameTest(template = TEMPLATE)
     public static void skullsInPairsHoldItSteady(GameTestHelper helper) {
         InfusionMatrixBlockEntity matrix = laidOut(helper);
         helper.assertValueEqual(matrix.symmetry(helper.getLevel()), 0, "nothing about it yet");
 
-        // ten pairs, set either side of the matrix
         for (int pair = 0; pair < 10; pair++) {
             helper.setBlock(MATRIX.offset(3 + pair, -2, 4), Blocks.SKELETON_SKULL);
             helper.setBlock(MATRIX.offset(-3 - pair, -2, -4), Blocks.SKELETON_SKULL);
@@ -216,7 +177,6 @@ public class InfusionTests {
         helper.succeed();
     }
 
-    /** What the ring is doing is carried into the working itself. */
     @GameTest(template = TEMPLATE)
     public static void theRingMakesTheWorkingDangerous(GameTestHelper helper) {
         InfusionMatrixBlockEntity matrix = laidOut(helper);
@@ -235,7 +195,6 @@ public class InfusionTests {
         helper.succeed();
     }
 
-    /** The matrix finds the ring below it, one pedestal to a column. */
     @GameTest(template = TEMPLATE)
     public static void itFindsTheRing(GameTestHelper helper) {
         helper.setBlock(MATRIX, ModBlocks.INFUSION_MATRIX.get());
@@ -248,7 +207,6 @@ public class InfusionTests {
         helper.succeed();
     }
 
-    /** Laid out properly, it starts; laid out badly, it does not. */
     @GameTest(template = TEMPLATE)
     public static void itStartsOnWhatIsLaidOut(GameTestHelper helper) {
         InfusionMatrixBlockEntity matrix = laidOut(helper);
@@ -260,7 +218,6 @@ public class InfusionTests {
         helper.succeed();
     }
 
-    /** Without the reading behind it, the same ring makes nothing. */
     @GameTest(template = TEMPLATE)
     public static void itWantsTheResearchDone(GameTestHelper helper) {
         InfusionMatrixBlockEntity matrix = laidOut(helper);
@@ -271,17 +228,14 @@ public class InfusionTests {
         helper.succeed();
     }
 
-    /** It drinks the jars dry, eats the ring, and leaves the rod on the pedestal. */
     @GameTest(template = TEMPLATE, timeoutTicks = 600)
     public static void itDrinksAndFinishes(GameTestHelper helper) {
         InfusionMatrixBlockEntity matrix = laidOut(helper);
         Player player = scholar(helper);
         matrix.wake(player);
         matrix.start(player);
-        // nothing going wrong along the way, which in the original could leave the ring a thing short
         matrix.steady();
 
-        // a step for each of the twenty-four points of essentia, six for each thing on the ring, one to finish
         run(helper, matrix, 20);
 
         ArcanePedestalBlockEntity under =
@@ -296,7 +250,6 @@ public class InfusionTests {
         helper.succeed();
     }
 
-    /** Take the thing being worked on away mid-working and the whole thing comes apart. */
     @GameTest(template = TEMPLATE)
     public static void takingTheWorkAwayEndsIt(GameTestHelper helper) {
         InfusionMatrixBlockEntity matrix = laidOut(helper);
@@ -310,13 +263,6 @@ public class InfusionTests {
         helper.succeed();
     }
 
-    /**
-     * Four speed stones shorten a turn, and four cost stones cut the bill.
-     * <p>
-     * Both are read once, when the working begins, and both are what makes the four corners of an altar worth
-     * digging out again after it is built. An altar with nothing under it keeps the plain twenty ticks and pays
-     * the recipe in full, which is the case that has to keep working.
-     */
     @GameTest(template = TEMPLATE)
     public static void theStonesUnderAnAltarChangeThePriceAndThePace(GameTestHelper helper) {
         InfusionMatrixBlockEntity plain = laidOut(helper);
@@ -345,13 +291,6 @@ public class InfusionTests {
         helper.succeed();
     }
 
-    /**
-     * The last two caps are cast at a workbench and finished on an altar.
-     * <p>
-     * The casting is not a cap: it cannot be put on a wand, and nothing else in the mod will take it. That is the
-     * whole point of doing it in two goes -- the altar is not an optional shortcut to a better cap, it is the only
-     * way there is one.
-     */
     @GameTest(template = TEMPLATE)
     public static void theLastTwoCapsAreFinishedOnTheAltar(GameTestHelper helper) {
         helper.assertTrue(
@@ -375,7 +314,6 @@ public class InfusionTests {
         matrix.wake(player);
         helper.assertValueEqual(matrix.wake(player), InfusionMatrixBlockEntity.Woken.STARTED,
                 "the altar took the casting and the salis round it");
-        // three on the ring is lopsided; nothing may be thrown off it, or the working waits for ever
         matrix.steady();
 
         run(helper, matrix, 40);
@@ -386,7 +324,6 @@ public class InfusionTests {
         helper.succeed();
     }
 
-    /** The corners built of another stone: the same altar, two high at each corner. */
     private static void rebuildCorners(GameTestHelper helper, net.minecraft.world.level.block.Block stone) {
         for (int east = -1; east <= 1; east += 2) {
             for (int south = -1; south <= 1; south += 2) {
@@ -396,10 +333,6 @@ public class InfusionTests {
         }
     }
 
-    /**
-     * Corners of eldritch stone work faster and cost a little more; corners of ancient stone work a little faster
-     * and cost a tenth less. Each wakes into pillars of its own stone.
-     */
     @GameTest(template = TEMPLATE)
     public static void olderStonesMakeADifferentAltar(GameTestHelper helper) {
         Player player = scholar(helper);
@@ -426,7 +359,6 @@ public class InfusionTests {
         helper.succeed();
     }
 
-    /** Tainted rock, when its taint dies, is porous stone. */
     @GameTest(template = TEMPLATE)
     public static void deadTaintedRockIsPorous(GameTestHelper helper) {
         BlockPos at = new BlockPos(2, 2, 2);
@@ -437,10 +369,6 @@ public class InfusionTests {
         helper.succeed();
     }
 
-    /**
-     * The ring has to stay laid out to the end. Take what is on it away once the essentia is drunk and the work does
-     * not finish: it waits, wanting more for the wait, as the original's did.
-     */
     @GameTest(template = TEMPLATE, timeoutTicks = 600)
     public static void theRingMustStayToTheEnd(GameTestHelper helper) {
         InfusionMatrixBlockEntity matrix = laidOut(helper);
@@ -461,7 +389,6 @@ public class InfusionTests {
         helper.succeed();
     }
 
-    /** Put something else on the pedestal beneath mid-working and the working comes apart. */
     @GameTest(template = TEMPLATE)
     public static void swappingTheWorkEndsIt(GameTestHelper helper) {
         InfusionMatrixBlockEntity matrix = laidOut(helper);
@@ -474,7 +401,6 @@ public class InfusionTests {
         helper.succeed();
     }
 
-    /** An infusion enchantment costs more the more is already worked into the tool, the original's way. */
     @GameTest(template = TEMPLATE)
     public static void enchantingCostsMoreOnAWorkedTool(GameTestHelper helper) {
         var recipe = (me.moonscenty.alchemia.crafting.InfusionRecipe) helper.getLevel().getRecipeManager()

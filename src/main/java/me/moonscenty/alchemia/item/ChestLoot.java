@@ -16,17 +16,10 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.LootTableLoadEvent;
 
-/**
- * What the original slipped into the game's own chests: in dungeons, temples, mineshafts and strongholds a chance of
- * a bag of loot, alchemium or amber, an uncommon bag or a fragment of knowledge, and once in a long while a rare bag,
- * a book of the art or an alchemium tool; fragments by the handful in a stronghold's library; alchemium at the smith.
- * <p>
- * The original put these among the chest's own things; a chest's things are their own pool now, so these are a pool
- * of their own beside it, mostly empty so that they turn up about as often as they did.
- */
+// a pool beside each chest's own, padded with nothing so items turn up about as often as in the original
 @EventBusSubscriber(modid = Alchemia.MODID)
 public final class ChestLoot {
-    /** Which chests, and how heavily each kind weighs in them: common, uncommon. */
+    // weights: common, uncommon
     private static final Map<String, int[]> CHESTS = Map.of(
             "chests/simple_dungeon", new int[] {5, 4},
             "chests/jungle_temple", new int[] {5, 4},
@@ -35,7 +28,6 @@ public final class ChestLoot {
             "chests/stronghold_corridor", new int[] {4, 3},
             "chests/stronghold_crossing", new int[] {4, 3},
             "chests/stronghold_library", new int[] {4, 3});
-    /** How much of nothing the pool holds, so that the rest comes about as often as among the chest's own. */
     private static final int NOTHING = 90;
 
     private ChestLoot() {

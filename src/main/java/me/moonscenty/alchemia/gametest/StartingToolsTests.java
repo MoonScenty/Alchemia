@@ -18,7 +18,6 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/** How a thaumaturge starts: the recipes for the first things, and a wooden table made a desk or a workbench. */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class StartingToolsTests {

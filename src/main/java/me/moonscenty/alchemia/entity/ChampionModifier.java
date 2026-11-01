@@ -1,11 +1,6 @@
 package me.moonscenty.alchemia.entity;
 
-/**
- * What a champion is the champion of, in the original's order. Each does its work at one of four times: never (it
- * is only a better number), every tick, when the champion hurts something, or when something hurts the champion.
- * <p>
- * The colour is what the client shows around one, roughly the original's for each.
- */
+// In the original's order; the ordinal is what a mob saves.
 public enum ChampionModifier {
     BOLD("bold", When.NEVER, 0x5A00E6),
     SPINED("spine", When.HURT, 0xB33333),
@@ -38,7 +33,6 @@ public enum ChampionModifier {
         this.colour = colour;
     }
 
-    /** The original's name for it, which is also the last part of its translation key. */
     public String key() {
         return key;
     }
@@ -55,7 +49,6 @@ public enum ChampionModifier {
         return colour;
     }
 
-    /** The modifier at this index, or none for anything else (the unrolled and the ordinary). */
     public static ChampionModifier of(int index) {
         return index >= 0 && index < values().length ? values()[index] : null;
     }

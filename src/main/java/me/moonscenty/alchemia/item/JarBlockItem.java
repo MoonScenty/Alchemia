@@ -14,13 +14,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.block.Block;
 
-/**
- * A warded jar in the hand, with whatever was in it when it was picked up.
- * <p>
- * The jar is the one vessel that keeps its essentia when it is broken, which is what being warded means. That
- * makes it the only one whose item has to say what is inside it: two jars that look alike in a chest and hold
- * different things would be a trap rather than a shelf.
- */
 public class JarBlockItem extends BlockItem {
     public JarBlockItem(Block block, Properties properties) {
         super(block, properties);

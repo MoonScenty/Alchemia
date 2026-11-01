@@ -31,20 +31,11 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-/**
- * A writing desk with the tools of research laid out on it.
- * <p>
- * The inkwell and the half-unrolled note are part of the block rather than things sitting on it, so the state says
- * whether each is there and the model is put together from those pieces.
- */
 public class ResearchTableBlock extends BaseEntityBlock {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
-    /** True once a set of scribing tools has been left on the desk. */
     public static final BooleanProperty HAS_TOOLS = BooleanProperty.create("has_tools");
-    /** True while a research note is spread out waiting to be worked through. */
     public static final BooleanProperty HAS_NOTES = BooleanProperty.create("has_notes");
 
-    // legs to the tabletop, matching the model
     private static final VoxelShape SHAPE = Shapes.or(
             Block.box(0, 10, 0, 16, 16, 16),
             Block.box(1, 0, 1, 5, 10, 5),
@@ -69,7 +60,6 @@ public class ResearchTableBlock extends BaseEntityBlock {
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
-        // the drawer handle is on the north face of the model, so the desk faces the player who set it down
         return defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
     }
 
@@ -98,16 +88,11 @@ public class ResearchTableBlock extends BaseEntityBlock {
         return new ResearchTableBlockEntity(pos, state);
     }
 
-    /** The desk is a piece of furniture, so it is drawn from its model rather than as a plain cube. */
     @Override
     protected RenderShape getRenderShape(BlockState state) {
         return RenderShape.MODEL;
     }
 
-    /**
-     * Lays down or takes back whichever of the two things the player is holding. An empty hand takes the note first,
-     * since that is what a player is usually reaching for.
-     */
     @Override
     protected ItemInteractionResult useItemOn(ItemStack held, BlockState state, Level level, BlockPos pos,
             Player player, InteractionHand hand, BlockHitResult hit) {
@@ -124,14 +109,9 @@ public class ResearchTableBlock extends BaseEntityBlock {
                 return ItemInteractionResult.sidedSuccess(level.isClientSide);
             }
         }
-        // anything else the player is holding means they want the desk itself, not to put that down on it
         return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
     }
 
-    /**
-     * Sits the player down at the desk. Clearing it is done from there rather than by right-clicking the block, so
-     * that taking the note back does not fight with opening the work in front of it.
-     */
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
         if (!(level.getBlockEntity(pos) instanceof ResearchTableBlockEntity table)) {

@@ -15,12 +15,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 
-/**
- * A control seal, or a blank one waiting to be made into one. A made seal sticks to the face of a block it is used
- * on, if that is somewhere it can work, and belongs to whoever stuck it there.
- */
 public class SealItem extends Item implements SealDisplayer {
-    /** What kind of seal it is, or null for a blank. */
     @Nullable
     private final String kind;
 

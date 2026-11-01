@@ -8,18 +8,10 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.ViewportEvent;
 
-/**
- * The fog warp brings down, and a guardian keeps about itself.
- * <p>
- * The original thickened the game's fog to a density of a tenth over five seconds, held it, and thinned it again
- * over the last five. The game's fog is a distance now rather than a density, so the same thickening is drawn as the
- * fog closing in from the edge of sight to about a dozen blocks.
- */
 @EventBusSubscriber(modid = Alchemia.MODID, value = Dist.CLIENT)
 public final class WarpFog {
     private static final float THICKEST = 0.1F;
     private static final float THICKENS = 0.001F;
-    /** How near the fog closes at its thickest, in blocks. */
     private static final float NEAREST = 12.0F;
 
     private static int left = -1;
@@ -28,7 +20,6 @@ public final class WarpFog {
     private WarpFog() {
     }
 
-    /** A fog for so long, or at least so long if it only tops up what is there. */
     public static void bring(int ticks, boolean topUp) {
         left = topUp ? Math.max(left, ticks) : ticks;
     }

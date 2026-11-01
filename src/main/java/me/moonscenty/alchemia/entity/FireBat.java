@@ -34,23 +34,7 @@ import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
-/**
- * A firebat, as the original's: a bat that burns, chases what it is set on, and either sets it alight, bites it, or
- * bursts on it.
- *
- * <p>Two lives. A wild one hangs under a ceiling until somebody comes within four blocks, then goes for the nearest
- * player within twelve. A summoned one is let off a wand with its target already chosen, never picks another, and
- * withers within a second once that target is gone. Nothing else keeps it in the world — no timer, no leash.
- *
- * <p>It does not walk or path. Every tick it pushes itself a tenth of the way towards a fixed speed in the
- * direction of where it wants to be, which is the original's flight and vanilla's old bat's.
- *
- * <p>What a wand worked into it is carried as four flags and a bonus. A bomb always bursts on the first thing it
- * reaches; a devil never bursts at all and is bigger and harder; a vampire always bites, heals itself a little,
- * and gives its summoner a moment of regeneration. Any bat but a devil may burst one time in ten.
- */
 public class FireBat extends Monster {
-    /** The flags, one to a bit, in the original's order. */
     private static final EntityDataAccessor<Byte> FLAGS =
             SynchedEntityData.defineId(FireBat.class, EntityDataSerializers.BYTE);
     private static final int HANGING = 0;
@@ -59,37 +43,30 @@ public class FireBat extends Monster {
     private static final int DEVIL = 3;
     private static final int VAMPIRE = 4;
 
-    /** The original's numbers. */
+    // original's values
     private static final double LIVES = 5.0;
-    /**
-     * What a devil can take. The original meant fifteen and said so, but set it before the bat knew it was a devil,
-     * so every devil it ever summoned had five. Fifteen is what the upgrade was sold as.
-     */
+    // the original meant 15 but applied it before the bat knew it was a devil, so devils got 5
     private static final double DEVIL_LIVES = 15.0;
     private static final double WILD_BITE = 1.0;
     private static final double SUMMONED_BITE = 2.0;
     private static final double DEVIL_BITE = 3.0;
-    /** How hard it flies, across and up, and how much of the gap to that it closes in a tick. */
+    // target speeds across and up, and the share of the gap closed per tick
     private static final double ACROSS = 0.5;
     private static final double UP = 0.7;
     private static final double CLOSES = 0.1;
     private static final double FALLS_OFF = 0.6;
-    /** How far a wild one looks for somebody, and how near they come before one hanging wakes. */
     private static final double HUNTS = 12.0;
     private static final double WAKES = 4.0;
-    /** How long between bites, and the reach of one. */
     private static final int BITES_EVERY = 20;
     private static final float REACHES = 2.5F;
-    /** A burst: one time in ten for any but a devil, every time for a bomb, and what a rank of force adds. */
     private static final int BURSTS_ONE_IN = 10;
     private static final float BURST = 1.5F;
     private static final float BURST_A_RANK = 0.33F;
-    /** How long what it lights burns, in seconds, for one let off a wand and for a wild one. */
+    // seconds alight
     private static final int BURNS_SUMMONED = 4;
     private static final int BURNS_WILD = 2;
-    /** What a summoned one with nothing to chase takes each tick until it is gone. */
+    // damage per tick to a summoned bat whose target is gone
     private static final float WITHERS = 2.0F;
-    /** A vampire's sip, and the regeneration it hands its summoner. */
     private static final float SIPS = 1.0F;
     private static final int GIVES_FOR = 26;
     private static final int GIVES_STRENGTH = 1;
@@ -97,9 +74,8 @@ public class FireBat extends Monster {
     @Nullable
     private BlockPos flyingTo;
     private int biteIn;
-    /** What a wand's force added to its bite and to its burst. */
     private int bonus;
-    /** Who let it off, if anybody did. Not saved: a bat outlives no session it was summoned in. */
+    // not saved
     @Nullable
     private UUID summoner;
 
@@ -119,10 +95,6 @@ public class FireBat extends Monster {
                 .add(Attributes.ATTACK_KNOCKBACK, 0.0);
     }
 
-    /**
-     * Where a wild one may come of itself: anywhere a monster may, but darker. Any light at all has to come out at or
-     * under a throw of seven, which a bat in lava light seldom does.
-     */
     public static boolean checkSpawnRules(EntityType<FireBat> type, net.minecraft.world.level.ServerLevelAccessor level,
             net.minecraft.world.entity.MobSpawnType reason, BlockPos pos, net.minecraft.util.RandomSource random) {
         return level.getDifficulty() != net.minecraft.world.Difficulty.PEACEFUL
@@ -135,8 +107,6 @@ public class FireBat extends Monster {
         super.defineSynchedData(builder);
         builder.define(FLAGS, (byte) 0);
     }
-
-    // --- what it is --------------------------------------------------------
 
     private boolean flag(int bit) {
         return (entityData.get(FLAGS) & (1 << bit)) != 0;
@@ -171,13 +141,6 @@ public class FireBat extends Monster {
         return flag(VAMPIRE);
     }
 
-    /**
-     * Sends it after something, as a wand does: awake, set on that and nothing else, and as hard as what the wand
-     * worked into it makes it.
-     *
-     * @param summoner whoever let it off, who gets the credit for what it kills and a vampire's regeneration
-     * @param force    the wand's rank of force, added to its bite, and to its burst if it is a bomb
-     */
     public FireBat summon(LivingEntity target, @Nullable LivingEntity summoner, int force, boolean bomb,
             boolean devil, boolean vampire) {
         bonus = force;
@@ -192,7 +155,6 @@ public class FireBat extends Monster {
         return this;
     }
 
-    /** Its health and bite, as what it now is makes them. */
     private void settle() {
         getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(
                 isSummoned() ? (isDevil() ? DEVIL_BITE : SUMMONED_BITE) + bonus : WILD_BITE);
@@ -211,8 +173,6 @@ public class FireBat extends Monster {
         return served.getEntity(summoner) instanceof LivingEntity living ? living : null;
     }
 
-    // --- flying ------------------------------------------------------------
-
     @Override
     public void tick() {
         super.tick();
@@ -227,7 +187,6 @@ public class FireBat extends Monster {
         }
     }
 
-    /** The original's trail: smoke and a flame every tick from any but a vampire, and sparks off a bomb. */
     private void smoulder() {
         if (isExplosive()) {
             FireBatEffects.fuse(this);
@@ -296,7 +255,6 @@ public class FireBat extends Monster {
         }
     }
 
-    /** Somewhere near to make for, changed now and then or once it is reached, and now and then a ceiling to hang from. */
     private void wander(BlockPos above) {
         if (flyingTo != null && (!level().isEmptyBlock(flyingTo) || flyingTo.getY() <= level().getMinBuildHeight())) {
             flyingTo = null;
@@ -311,7 +269,6 @@ public class FireBat extends Monster {
         }
     }
 
-    /** A tenth of the way towards full speed in each direction it has to go, and its face turned along it. */
     private void steer(double dx, double dy, double dz) {
         Vec3 moving = getDeltaMovement();
         Vec3 now = moving.add((Math.signum(dx) * ACROSS - moving.x) * CLOSES,
@@ -323,18 +280,11 @@ public class FireBat extends Monster {
         setYRot(getYRot() + Mth.wrapDegrees(facing - getYRot()));
     }
 
-    /** A wild one goes for the nearest player; a summoned one has its target and wants no other. */
     @Nullable
     private LivingEntity prey() {
         return isSummoned() ? null : level().getNearestPlayer(this, HUNTS);
     }
 
-    // --- biting ------------------------------------------------------------
-
-    /**
-     * Its one attack, once a second at most, when it is close enough and level with what it is after: a burst, a
-     * bite, or a light.
-     */
     private void bite(LivingEntity target) {
         if (biteIn > 0 || distanceTo(target) >= Math.max(REACHES, target.getBbWidth() * 1.1F)
                 || target.getBoundingBox().maxY <= getBoundingBox().minY
@@ -355,12 +305,12 @@ public class FireBat extends Monster {
 
         if ((isExplosive() || level().random.nextInt(BURSTS_ONE_IN) == 0) && !isDevil()) {
             target.invulnerableTime = 0;
-            // it bursts on what it reached and takes nothing of the world with it, as the original's did
+            // breaks no blocks, as the original's
             level().explode(this, getX(), getY(), getZ(), BURST + (isExplosive() ? bonus * BURST_A_RANK : 0.0F),
                     false, Level.ExplosionInteraction.NONE);
             discard();
         } else if (isVampire() || level().random.nextBoolean()) {
-            // it bites but does not knock back: what it bit is left moving as it was
+            // no knockback: restore the target's motion after the bite
             Vec3 moving = target.getDeltaMovement();
             doHurtTarget(target);
             target.setDeltaMovement(moving);
@@ -371,9 +321,6 @@ public class FireBat extends Monster {
         playSound(SoundEvents.BAT_HURT, 0.5F, 0.9F + level().random.nextFloat() * 0.2F);
     }
 
-    // --- what it takes -----------------------------------------------------
-
-    /** Neither fire nor a burst touches it, its own or another's. Being hit wakes it. */
     @Override
     public boolean hurt(DamageSource source, float amount) {
         if (isInvulnerableTo(source) || source.is(DamageTypeTags.IS_FIRE) || source.is(DamageTypeTags.IS_EXPLOSION)) {
@@ -385,7 +332,6 @@ public class FireBat extends Monster {
         return super.hurt(source, amount);
     }
 
-    /** Water puts it out, a point at a time, rain included. */
     @Override
     public void aiStep() {
         if (!level().isClientSide && isInWaterRainOrBubble()) {
@@ -426,7 +372,6 @@ public class FireBat extends Monster {
         return Entity.MovementEmission.NONE;
     }
 
-    /** Gunpowder from a wild one; a summoned one leaves nothing. */
     @Override
     protected void dropCustomDeathLoot(ServerLevel level, DamageSource source, boolean recentlyHit) {
         super.dropCustomDeathLoot(level, source, recentlyHit);
@@ -441,8 +386,6 @@ public class FireBat extends Monster {
             spawnAtLocation(new ItemStack(Items.GUNPOWDER, count));
         }
     }
-
-    // --- how it sounds -----------------------------------------------------
 
     @Override
     protected float getSoundVolume() {
@@ -469,8 +412,6 @@ public class FireBat extends Monster {
     protected SoundEvent getDeathSound() {
         return SoundEvents.BAT_DEATH;
     }
-
-    // --- saving ------------------------------------------------------------
 
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {

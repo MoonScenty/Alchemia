@@ -13,11 +13,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 
-/**
- * The wand on a recharge pedestal, floating over it, bobbing and turning a degree a tick as the original's did.
- */
 public class RechargePedestalRenderer implements BlockEntityRenderer<RechargePedestalBlockEntity> {
-    /** How high over the block the wand floats, how far it bobs, and how slowly. The original's. */
     private static final float STANDS = 1.15F;
     private static final float BOBS = 0.05F;
     private static final float BOBS_SLOWLY = 16.0F;

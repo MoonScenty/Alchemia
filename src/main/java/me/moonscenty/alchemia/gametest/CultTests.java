@@ -31,7 +31,6 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/** The Crimson Cult: its people, its portal, its book. */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class CultTests {
@@ -45,7 +44,6 @@ public class CultTests {
         return mob;
     }
 
-    /** A knight comes dressed in the crimson plate with a sword; a cleric in the robe with nothing in hand. */
     @GameTest(template = TEMPLATE)
     public static void cultistsComeDressed(GameTestHelper helper) {
         var level = helper.getLevel();
@@ -64,7 +62,6 @@ public class CultTests {
         helper.succeed();
     }
 
-    /** Hurt one and every other within reach turns on whatever did it. */
     @GameTest(template = TEMPLATE, timeoutTicks = 40)
     public static void aHurtCultistCallsTheOthers(GameTestHelper helper) {
         var level = helper.getLevel();
@@ -78,7 +75,6 @@ public class CultTests {
         helper.succeedWhen(() -> helper.assertTrue(friend.getTarget() == attacker, "the far one turned on it too"));
     }
 
-    /** A portal lets a cultist through, and pays for it out of its own health. */
     @GameTest(template = TEMPLATE)
     public static void aPortalLetsTheCultThroughAtACost(GameTestHelper helper) {
         var level = helper.getLevel();
@@ -93,7 +89,6 @@ public class CultTests {
         helper.succeed();
     }
 
-    /** The cleric's orb hits as hard as the cleric. */
     @GameTest(template = TEMPLATE, timeoutTicks = 100)
     public static void aClericsOrbHitsWhatItIsThrownAt(GameTestHelper helper) {
         var level = helper.getLevel();
@@ -107,7 +102,6 @@ public class CultTests {
         helper.succeedWhen(() -> helper.assertTrue(target.getHealth() < before, "the orb found it"));
     }
 
-    /** Reading the rites teaches the cult's hidden lore and leaves warp; the table cannot teach it. */
     @GameTest(template = TEMPLATE)
     public static void theRitesTeachWhatTheTableCannot(GameTestHelper helper) {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -127,7 +121,6 @@ public class CultTests {
         helper.succeed();
     }
 
-    /** One of the deep rungs of warp opens a portal. */
     @GameTest(template = TEMPLATE)
     public static void warpCanOpenAPortal(GameTestHelper helper) {
         helper.assertTrue(WarpHandler.outcomeFor(60, 85).summons() == WarpHandler.Summons.PORTAL,

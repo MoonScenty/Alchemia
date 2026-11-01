@@ -29,34 +29,23 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.ShapedRecipe;
 
-/**
- * An entry opened up: the write-up spread across the two sheets of the book, turned through a pair at a time.
- * <p>
- * Laid out as the original laid it out: the book drawn at 1.3 times a 256 by 181 pane, the writing set on that pane
- * unscaled, a sheet every 152 across, and each kind of recipe drawn over its own picture from the book's second
- * sheet, with the ingredients, the result and the aspects in the original's places.
- */
 public class ResearchPageScreen extends Screen {
     private static final ResourceLocation BOOK = Alchemia.id("textures/gui/research_book.png");
-    /** The pictures recipes are drawn over: a crafting grid, an arcane grid, a crucible, a furnace, an altar. */
     private static final ResourceLocation PLATES = Alchemia.id("textures/gui/research_book_overlay.png");
     private static final int SHEET = 512;
 
     private static final int PANE_W = 256;
     private static final int PANE_H = 181;
     private static final float BOOK_SCALE = 1.3F;
-    /** How far apart the two sheets are, and how wide a sheet's writing runs. */
     private static final int SIDE_STEP = 152;
     private static final int TEXT_W = 139;
     private static final int LINE = 9;
     private static final int ICON = 16;
-    /** How long an ingredient with several options rests on each of them, in ticks. */
     private static final int CYCLE_TICKS = 20;
     private static final int TITLE_COLOUR = 0xFF303030;
     private static final int HEADING_COLOUR = 0xFF505050;
     private static final int TEXT_COLOUR = 0xFF000000;
 
-    // the turn arrows under the sheets, and the rule above and below the entry's name
     private static final int TURN_W = 12;
     private static final int TURN_H = 8;
 
@@ -64,7 +53,6 @@ public class ResearchPageScreen extends Screen {
     private final ResourceLocation id;
     private final List<ResearchPage> pages;
 
-    /** The left sheet of the pair on show; the right is the one after it. */
     private int spread;
     private long ticks;
 
@@ -81,7 +69,6 @@ public class ResearchPageScreen extends Screen {
         ticks++;
     }
 
-    /** The top left of the unscaled pane everything on the sheets is placed against. */
     private int paneX() {
         return (width - PANE_W) / 2;
     }
@@ -98,7 +85,7 @@ public class ResearchPageScreen extends Screen {
         graphics.pose().pushPose();
         graphics.pose().translate((width - PANE_W * BOOK_SCALE) / 2F, (height - PANE_H * BOOK_SCALE) / 2F, 0);
         graphics.pose().scale(BOOK_SCALE, BOOK_SCALE, 1F);
-        // the pane is read off the sheet as if the sheet were 256 wide, which takes in the whole book
+        // sheet read as 256 wide to take in the whole book
         graphics.blit(BOOK, 0, 0, PANE_W, PANE_H, 0, 0, SHEET, PANE_H * 2, SHEET, SHEET);
         graphics.pose().popPose();
 
@@ -107,7 +94,6 @@ public class ResearchPageScreen extends Screen {
         drawTurns(graphics);
     }
 
-    /** Vanilla blurs the world behind a screen, which leaves the writing hard to read. A plain dimming does instead. */
     @Override
     public void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         graphics.fillGradient(0, 0, width, height, 0xB0101018, 0xC0101018);
@@ -131,7 +117,6 @@ public class ResearchPageScreen extends Screen {
         }
     }
 
-    /** The entry's name at the head of the first sheet, between two rules, made smaller if it is long. */
     private void drawTitle(GuiGraphics graphics, int x, int y) {
         rule(graphics, x + 4, y - 13);
         rule(graphics, x + 4, y + 4);
@@ -154,7 +139,6 @@ public class ResearchPageScreen extends Screen {
     }
 
     private void drawText(GuiGraphics graphics, ResearchPage.Text page, int x, int y) {
-        // a passage that outruns the sheet is cut off rather than written over the turn arrows
         int floor = paneY() + 180;
         for (FormattedCharSequence line : font.split(Component.translatable(page.key()), TEXT_W)) {
             if (y > floor) {
@@ -164,8 +148,6 @@ public class ResearchPageScreen extends Screen {
             y += LINE;
         }
     }
-
-    // --- recipes -----------------------------------------------------------
 
     private void drawRecipe(GuiGraphics graphics, ResearchPage.Recipe page, int x, int y) {
         Optional<RecipeHolder<?>> found = minecraft.level.getRecipeManager().byKey(page.recipe());
@@ -194,14 +176,12 @@ public class ResearchPageScreen extends Screen {
         graphics.drawString(font, heading, x + 56 - font.width(heading) / 2, y, HEADING_COLOUR, false);
     }
 
-    /** A piece of the second sheet, given in the sheet's own pixels and drawn at half that size. */
     private static void plate(GuiGraphics graphics, int x, int y, int fromX, int fromY, int wide, int tall) {
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         graphics.blit(PLATES, x, y, wide, tall, fromX, fromY, wide, tall, SHEET, SHEET);
     }
 
-    /** The ordinary bench: a three by three grid under the thing it makes. */
     private void drawCrafting(GuiGraphics graphics, Recipe<?> recipe, ItemStack result, int x, int y) {
         heading(graphics, "research.alchemia.crafting", x, y);
         plate(graphics, x + 4, y + 64, 120, 30, 104, 104);
@@ -210,7 +190,6 @@ public class ResearchPageScreen extends Screen {
         drawGrid(graphics, recipe, x + 16, y + 76);
     }
 
-    /** The arcane bench: the same, on its own grid, with what it asks of a wand along the foot. */
     private void drawArcane(GuiGraphics graphics, Recipe<?> recipe, ArcaneRecipe arcane, ItemStack result, int x,
             int y) {
         heading(graphics, "research.alchemia.arcane_crafting", x, y);
@@ -225,7 +204,6 @@ public class ResearchPageScreen extends Screen {
         }
     }
 
-    /** A furnace: what goes in at the top and what comes out at the bottom, over a flame. */
     private void drawSmelting(GuiGraphics graphics, Recipe<?> recipe, ItemStack result, int x, int y) {
         heading(graphics, "research.alchemia.smelting", x, y);
         plate(graphics, x, y + 28, 0, 384, 112, 128);
@@ -236,7 +214,6 @@ public class ResearchPageScreen extends Screen {
         drawStack(graphics, result, x + 48, y + 144);
     }
 
-    /** The crucible: the result over its rim, the catalyst dropped in, and what must be dissolved, in rows of three. */
     private void drawCrucible(GuiGraphics graphics, CrucibleRecipe crucible, ItemStack result, int x, int y) {
         heading(graphics, "research.alchemia.in_crucible", x, y);
         plate(graphics, x, y + 28, 0, 6, 112, 34);
@@ -247,7 +224,6 @@ public class ResearchPageScreen extends Screen {
         drawAspectRows(graphics, crucible.aspects(), 3, x + 28, y + 128);
     }
 
-    /** The altar: the result on top, the centrepiece in the middle, the rest round it, and the essentia below. */
     private void drawInfusion(GuiGraphics graphics, InfusionRecipe infusion, ItemStack result, int x, int y) {
         heading(graphics, "research.alchemia.in_matrix", x, y);
         plate(graphics, x, y + 20, 0, 6, 112, 34);
@@ -266,10 +242,6 @@ public class ResearchPageScreen extends Screen {
         drawAspectRows(graphics, infusion.essentia(), 5, x + 8, y + 164);
     }
 
-    /**
-     * Aspects in rows of a given length, twenty apart, the last row nudged along the way the original nudged it, and
-     * the whole block lifted by half a row for every row past the first.
-     */
     private void drawAspectRows(GuiGraphics graphics, AspectList aspects, int across, int x, int y) {
         List<Holder<Aspect>> order = aspects.sortedByAmount();
         int size = order.size();
@@ -287,7 +259,6 @@ public class ResearchPageScreen extends Screen {
         }
     }
 
-    /** The grid of a bench recipe, three to a row, thirty-two apart. */
     private void drawGrid(GuiGraphics graphics, Recipe<?> recipe, int x, int y) {
         List<Ingredient> ingredients = recipe.getIngredients();
         int columns = recipe instanceof ShapedRecipe shaped ? shaped.getWidth()
@@ -309,7 +280,6 @@ public class ResearchPageScreen extends Screen {
         graphics.renderItemDecorations(font, stack, x, y);
     }
 
-    /** One aspect in its own colour, with how much of it is wanted written in its corner. */
     private void drawAspect(GuiGraphics graphics, Holder<Aspect> aspect, int amount, int x, int y) {
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
@@ -323,8 +293,6 @@ public class ResearchPageScreen extends Screen {
         graphics.drawString(font, count, x + ICON - font.width(count) + 1, y + ICON - 7, 0xFFFFFFFF, true);
         graphics.pose().popPose();
     }
-
-    // --- turning -----------------------------------------------------------
 
     private int turnX(boolean forward) {
         return forward ? paneX() + 262 : paneX() - 16;
@@ -366,14 +334,12 @@ public class ResearchPageScreen extends Screen {
         return super.mouseClicked(mouseX, mouseY, button);
     }
 
-    /** The original's rustle of a page turning. */
     private void turned() {
         if (minecraft.player != null) {
             minecraft.player.playSound(me.moonscenty.alchemia.registry.ModSounds.PAGE.get(), 0.66F, 1.0F);
         }
     }
 
-    /** Closing goes back to the tree rather than out of the book, which keeps the branch and the panning. */
     @Override
     public void onClose() {
         minecraft.setScreen(parent);

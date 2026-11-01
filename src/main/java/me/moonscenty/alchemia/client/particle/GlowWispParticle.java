@@ -2,13 +2,7 @@ package me.moonscenty.alchemia.client.particle;
 
 import net.minecraft.client.multiplayer.ClientLevel;
 
-/**
- * A soft ball of light, as the original's {@code FXWisp}: the glow in the bottom corner of the sheet, half-clear and
- * added to what is behind it. It either swells and fades back over its life, or dwindles from the start; it can sink
- * a little, and it settles on what it lands on.
- * <p>
- * Every number here is the original's.
- */
+// numbers are the original's
 public class GlowWispParticle extends LegacyParticle {
     private static final float ALPHA = 0.5F;
     private static final double DRAG = 0.98;
@@ -17,11 +11,6 @@ public class GlowWispParticle extends LegacyParticle {
     private final boolean dwindles;
     private final float sinks;
 
-    /**
-     * @param size     how big against the original's own random size
-     * @param dwindles whether it only shrinks, rather than swelling and shrinking
-     * @param sinks    the original's gravity for it; nought hangs still
-     */
     public GlowWispParticle(ClientLevel level, double x, double y, double z, float size, float r, float g, float b,
             boolean dwindles, float sinks) {
         super(level, x, y, z, LegacySheet.GLOW);
@@ -42,7 +31,6 @@ public class GlowWispParticle extends LegacyParticle {
         this.quadSize = 0.0F;
     }
 
-    /** Sets it drifting so that it would reach the given point at the end of its life, as the original's could. */
     public GlowWispParticle towards(double x, double y, double z) {
         this.xd = (x - this.x) / lifetime;
         this.yd = (y - this.y) / lifetime;

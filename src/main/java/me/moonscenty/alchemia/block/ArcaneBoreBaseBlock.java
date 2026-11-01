@@ -17,13 +17,8 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 
-/**
- * An arcane bore's base. Its nozzle points the way it was put down facing you, or away if you crouched, and a wand
- * on any of its sides turns the nozzle to that side. Drawn wholly by its renderer.
- */
 public class ArcaneBoreBaseBlock extends BaseEntityBlock {
     public static final MapCodec<ArcaneBoreBaseBlock> CODEC = simpleCodec(ArcaneBoreBaseBlock::new);
-    /** The nozzle: the side what is mined comes out of. */
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
     public ArcaneBoreBaseBlock(Properties properties) {

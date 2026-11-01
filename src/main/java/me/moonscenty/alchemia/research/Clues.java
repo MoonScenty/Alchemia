@@ -23,14 +23,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
-/**
- * Clues, the original's {@code !}- and {@code @}-keys: things found out in the world rather than at the table, that
- * some research waits on before it shows in the book or can be taken up.
- * <p>
- * A clue is either an aspect, which is met once the player knows that aspect, or a clue of its own, kept among the
- * player's research under {@code alchemia:clue/...}. Most of those come from holding an alchemometer up to the right
- * thing -- a bat, a portal, a bone -- and one, the bath salts', from the headaches warp brings on.
- */
+// The original's !/@ keys: either an aspect to know, or a clue stored as research under alchemia:clue/...
 public final class Clues {
     public static final ResourceLocation BAT = clue("bat");
     public static final ResourceLocation TELEPORT = clue("teleport");
@@ -40,12 +33,9 @@ public final class Clues {
     public static final ResourceLocation BRAIN = clue("brain");
     public static final ResourceLocation TAINT_SHARD = clue("taint_shard");
     public static final ResourceLocation DISPENSER = clue("dispenser");
-    /** What setting a node magnet down teaches its owner about the monsters round about: {@code !NODEMAGNETDANGER}. */
     public static final ResourceLocation NODE_MAGNET_DANGER = clue("node_magnet_danger");
-    /** The headaches of warp, which want something to soothe them: the original's {@code @BATHSALTS}. */
     public static final ResourceLocation BATH_SALTS = clue("bath_salts");
 
-    /** What scanning finds each clue in, the original's scannable things. */
     private static final List<Found> FOUND = List.of(
             new Found(BAT, target -> target instanceof ScanTarget.OfEntity seen && seen.entity() instanceof Bat),
             new Found(TELEPORT, target -> is(target, Items.ENDER_PEARL)
@@ -87,21 +77,16 @@ public final class Clues {
         return false;
     }
 
-    /** Whether a clue is met: an aspect known, or a clue found. */
     public static boolean met(PlayerKnowledge knowledge, ResourceLocation clue) {
         return ModAspects.REGISTRY.getHolder(clue).map(aspect -> knowledge.knows(aspect))
                 .orElseGet(() -> knowledge.hasResearch(clue));
     }
 
-    /** The clues this scan would turn up that the player has not found yet. */
     public static List<ResourceLocation> newIn(PlayerKnowledge knowledge, ScanTarget target) {
         return FOUND.stream().filter(found -> found.in().test(target) && !knowledge.hasResearch(found.clue()))
                 .map(Found::clue).toList();
     }
 
-    /**
-     * Gives a player a clue, with the original's word that something has been found; whether it was new.
-     */
     public static boolean give(Player player, ResourceLocation clue) {
         PlayerKnowledge knowledge = PlayerKnowledge.of(player);
         if (knowledge.hasResearch(clue)) {

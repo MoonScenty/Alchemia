@@ -6,13 +6,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.state.BlockState;
 
-/**
- * When a valve was last worked, so that the handle can be seen swinging round rather than snapping.
- * <p>
- * A moment by the world clock rather than a counter ticked up here: a counter has to be sent to every client that
- * can see the valve, over and over, and a moment is sent once and stays true. The drawing works out for itself how
- * far round the wheel has got.
- */
+// stores when the handle was turned, not a counter, so the client animates without per-tick sync
 public class ValveTubeBlockEntity extends TubeBlockEntity {
     private long worked;
 
@@ -20,7 +14,6 @@ public class ValveTubeBlockEntity extends TubeBlockEntity {
         super(ModBlockEntities.TUBE_VALVE.get(), pos, state);
     }
 
-    /** When the handle started moving, by the world clock. */
     public long worked() {
         return worked;
     }

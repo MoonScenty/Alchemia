@@ -22,24 +22,14 @@ import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 
-/**
- * The original's three lands of the overworld.
- *
- * <p>The magical forest is the only one the world makes of itself: a bright blue-green forest of great oaks with the
- * odd greatwood and silverwood, mushrooms large and small, mossy boulders and vishrooms at the feet of the trees,
- * where pechs and wisps live. The eerie land and the tainted land are never made; they are painted on the world,
- * the one by dark nodes and the other by taint as it spreads, and each is taken back when what made it is gone.
- *
- * <p>Colours, climates and what lives there are the original's.
- */
+// Only the magical forest generates; the eerie and tainted lands are painted on by dark nodes and taint.
 public final class ModBiomes {
     public static final ResourceKey<Biome> MAGICAL_FOREST = key("magical_forest");
     public static final ResourceKey<Biome> EERIE = key("eerie");
     public static final ResourceKey<Biome> TAINTED_LAND = key("tainted_land");
-    /** The Outer Lands' only land. */
     public static final ResourceKey<Biome> ELDRITCH = key("eldritch");
 
-    /** The sky every land the original left to its default had, at the forest's warmth. */
+    // original's default sky colour
     private static final int FOG = 0xC0D8FF;
     private static final int WATER_FOG = 0x050533;
 
@@ -59,7 +49,6 @@ public final class ModBiomes {
         context.register(ELDRITCH, eldritch(placed, carvers));
     }
 
-    /** What every overworld land has under and around it: caves, lakes, geodes, springs, dungeons, ice. */
     private static void everywhere(BiomeGenerationSettings.Builder generation) {
         BiomeDefaultFeatures.addDefaultCarversAndLakes(generation);
         BiomeDefaultFeatures.addDefaultCrystalFormations(generation);
@@ -133,7 +122,6 @@ public final class ModBiomes {
         return land(0.8F, 0.4F, 0x6D4189, 0x7C6D87, 0x7C44FF, 0xCC1188, spawns, generation, null);
     }
 
-    /** Nothing grows; the inhabited dead and the guardians walk the mazes, one at a time. The sky is black. */
     private static Biome eldritch(HolderGetter<PlacedFeature> placed, HolderGetter<ConfiguredWorldCarver<?>> carvers) {
         MobSpawnSettings.Builder spawns = new MobSpawnSettings.Builder();
         spawns.addSpawn(MobCategory.MONSTER,
@@ -180,7 +168,6 @@ public final class ModBiomes {
                 .build();
     }
 
-    /** The sky the game gives a land of this warmth. */
     private static int sky(float temperature) {
         float cool = Mth.clamp(temperature / 3.0F, -1.0F, 1.0F);
         return Mth.hsvToRgb(0.62222224F - cool * 0.05F, 0.5F + cool * 0.1F, 1.0F);

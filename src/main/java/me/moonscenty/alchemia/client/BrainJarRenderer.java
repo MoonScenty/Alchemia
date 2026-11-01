@@ -16,18 +16,10 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
-/**
- * Draws what is inside a brain in a jar, as the original did: the brain, bobbing a little and turning to look at
- * the orb it is drawing in, and the brine it floats in. The jar itself is the block's model, the warded jar's.
- * <p>
- * The brain and the brine are the original's models ({@code ModelBrain} and the brine of {@code ModelJar}), read
- * out of its code. The original drew them upside down and flipped them back, which is kept.
- */
 public class BrainJarRenderer implements BlockEntityRenderer<BrainJarBlockEntity> {
     private static final ResourceLocation BRAIN = Alchemia.id("textures/entity/brain.png");
     private static final ResourceLocation BRINE = Alchemia.id("textures/entity/jar_brine.png");
 
-    /** The original's parts, baked again whenever the import changes. */
     private static final LegacyCached<ModelPart[]> BRAIN_PARTS =
             LegacyCached.fields(LegacyAssets.BRAIN, "Shape1", "Shape2", "Shape3");
     private static final LegacyCached<ModelPart> BRINE_PART = LegacyCached.field(LegacyAssets.JAR, "Brine");

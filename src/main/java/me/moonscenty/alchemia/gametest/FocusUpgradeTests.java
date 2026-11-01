@@ -35,14 +35,6 @@ import net.minecraft.world.level.GameType;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/**
- * What can be worked into a focus, what it costs, and what the focus becomes afterwards.
- *
- * <p>The table of which focus offers what at which rank is the original's, so most of what is worth checking is
- * that it has been copied straight and that nothing in it is unreachable. The rest is the arithmetic: a rank is
- * dearer than the one before it, a price is always quoted in primals, and thrift is a discount on a working and
- * on nothing else.
- */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class FocusUpgradeTests {
@@ -52,7 +44,6 @@ public class FocusUpgradeTests {
         return new ItemStack(ModItems.FOCI.get(kind).get());
     }
 
-    /** Every one of the twenty-three is offered by some focus at some rank, or it may as well not exist. */
     @GameTest(template = TEMPLATE)
     public static void everyUpgradeIsReachable(GameTestHelper helper) {
         Set<FocusUpgrade> found = EnumSet.noneOf(FocusUpgrade.class);
@@ -67,7 +58,6 @@ public class FocusUpgradeTests {
         helper.succeed();
     }
 
-    /** The deep ranks are where a focus is turned into something else, as the original had it. */
     @GameTest(template = TEMPLATE)
     public static void theTableIsTheOriginals(GameTestHelper helper) {
         helper.assertTrue(FocusUpgrades.offers(focus("fire"), 3).contains(FocusUpgrade.FIREBALL),
@@ -83,7 +73,6 @@ public class FocusUpgradeTests {
         helper.succeed();
     }
 
-    /** Ranks fill in order, and a full focus takes nothing more. */
     @GameTest(template = TEMPLATE)
     public static void fiveGoInAndNoMore(GameTestHelper helper) {
         ItemStack focus = focus("shock");
@@ -102,7 +91,6 @@ public class FocusUpgradeTests {
         helper.succeed();
     }
 
-    /** Every rank is half as dear again as the one before, and the bill is always in primals. */
     @GameTest(template = TEMPLATE)
     public static void aDeeperRankCostsMore(GameTestHelper helper) {
         AspectList first = FocusUpgrades.price(FocusUpgrade.FRUGAL, 1);
@@ -116,10 +104,8 @@ public class FocusUpgradeTests {
         helper.succeed();
     }
 
-    /** A compound asks for as much of each of its two halves, all the way down to the six. */
     @GameTest(template = TEMPLATE)
     public static void aPriceBreaksDownIntoPrimals(GameTestHelper helper) {
-        // desire is soul and void; soul is life and death; void is air and entropy
         AspectList broken = AspectList.of(ModAspects.DESIRE, 100).toPrimals();
         helper.assertValueEqual(broken.get(ModAspects.AIR), 100, "a hundred air out of the void in it");
         helper.assertValueEqual(broken.get(ModAspects.WATER), 200, "and water from both life and death");
@@ -127,7 +113,6 @@ public class FocusUpgradeTests {
         helper.succeed();
     }
 
-    /** A fire focus with a fireball in it is a different focus, and the price and the wait say so. */
     @GameTest(template = TEMPLATE)
     public static void anUpgradeCanChangeTheFocusOutright(GameTestHelper helper) {
         ItemStack focus = focus("fire");
@@ -145,7 +130,6 @@ public class FocusUpgradeTests {
         helper.succeed();
     }
 
-    /** Digging wider costs more earth, and taking the block up whole costs one of everything else. */
     @GameTest(template = TEMPLATE)
     public static void excavationPaysForWhatIsAskedOfIt(GameTestHelper helper) {
         ItemStack focus = focus("excavation");
@@ -164,7 +148,6 @@ public class FocusUpgradeTests {
         helper.succeed();
     }
 
-    /** Thrift pays for the focus's own working. A bench borrowing the wand's vis pays the full price. */
     @GameTest(template = TEMPLATE)
     public static void thriftOnlyPaysForTheWorking(GameTestHelper helper) {
         Player holder = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -194,7 +177,6 @@ public class FocusUpgradeTests {
         helper.succeed();
     }
 
-    /** The whole of it: a focus on the bench, levels paid, vis drawn, and one more thing worked in. */
     @GameTest(template = TEMPLATE, timeoutTicks = 600)
     public static void theBenchWorksOneThingIn(GameTestHelper helper) {
         BlockPos at = new BlockPos(2, 2, 2);
@@ -212,7 +194,6 @@ public class FocusUpgradeTests {
         });
     }
 
-    /** It will not take on work the focus does not offer, nor a second piece while it is busy. */
     @GameTest(template = TEMPLATE)
     public static void theBenchRefusesWhatTheFocusWillNotTake(GameTestHelper helper) {
         FocalManipulatorBlockEntity bench = bench(helper, new BlockPos(2, 2, 2));
@@ -227,7 +208,6 @@ public class FocusUpgradeTests {
         helper.succeed();
     }
 
-    /** Taking the focus off the bench part-way loses the work, which is the only honest answer. */
     @GameTest(template = TEMPLATE, timeoutTicks = 100)
     public static void takingTheFocusOffLosesTheWork(GameTestHelper helper) {
         FocalManipulatorBlockEntity bench = bench(helper, new BlockPos(2, 2, 2));
@@ -241,7 +221,7 @@ public class FocusUpgradeTests {
         helper.succeed();
     }
 
-    /** A bench with the air round it topped up, since a rank costs a good deal more than a chunk holds. */
+    // aura topped up: a rank costs more than a chunk holds
     private static FocalManipulatorBlockEntity bench(GameTestHelper helper, BlockPos at) {
         helper.setBlock(at, ModBlocks.FOCAL_MANIPULATOR.get());
         BlockPos here = helper.absolutePos(at);
@@ -252,7 +232,6 @@ public class FocusUpgradeTests {
         return (FocalManipulatorBlockEntity) helper.getLevel().getBlockEntity(here);
     }
 
-    /** A wand with an upgraded focus on it: what the spells themselves read when they go off. */
     private static ItemStack wand(String kind, FocusUpgrade... worked) {
         ItemStack wand = WandItem.of(ModWandParts.SILVERWOOD, ModWandParts.GOLD);
         ItemStack focus = focus(kind);
@@ -268,7 +247,6 @@ public class FocusUpgradeTests {
         return wand;
     }
 
-    /** Force makes a bolt hurt more, which is the plainest thing any of the twenty-three does. */
     @GameTest(template = TEMPLATE)
     public static void forceMakesABoltHurtMore(GameTestHelper helper) {
         Player caster = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -287,7 +265,6 @@ public class FocusUpgradeTests {
         helper.succeed();
     }
 
-    /** Chaining carries the bolt on to whatever is standing beside what it struck. */
     @GameTest(template = TEMPLATE)
     public static void chainingJumpsToWhatIsStandingNear(GameTestHelper helper) {
         Player caster = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -303,7 +280,6 @@ public class FocusUpgradeTests {
         helper.succeed();
     }
 
-    /** Earth shock throws a ball at the floor rather than a bolt at a face, so it needs no mark. */
     @GameTest(template = TEMPLATE)
     public static void earthShockNeedsNothingToAimAt(GameTestHelper helper) {
         Player caster = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -318,7 +294,6 @@ public class FocusUpgradeTests {
         helper.succeed();
     }
 
-    /** A widened builder lays a longer row, and an architect's eye lets that be turned down again. */
     @GameTest(template = TEMPLATE)
     public static void anArchitectSetsHowFarItWorks(GameTestHelper helper) {
         Player caster = helper.makeMockPlayer(GameType.CREATIVE);
@@ -335,7 +310,6 @@ public class FocusUpgradeTests {
         helper.succeed();
     }
 
-    /** A focus with no architect's eye in it does not listen to the key at all. */
     @GameTest(template = TEMPLATE)
     public static void withoutAnArchitectTheKeyDoesNothing(GameTestHelper helper) {
         Player caster = helper.makeMockPlayer(GameType.CREATIVE);
@@ -346,7 +320,6 @@ public class FocusUpgradeTests {
         helper.succeed();
     }
 
-    /** Silk touch on a digging focus takes the block up as it stood. */
     @GameTest(template = TEMPLATE, timeoutTicks = 400)
     public static void silkTouchTakesTheBlockUpWhole(GameTestHelper helper) {
         Player caster = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -367,7 +340,6 @@ public class FocusUpgradeTests {
         });
     }
 
-    /** A focus with nothing in it is still the focus it was, which everything else leans on. */
     @GameTest(template = TEMPLATE)
     public static void aPlainFocusIsUnchanged(GameTestHelper helper) {
         for (String kind : ModItems.FOCI.keySet()) {

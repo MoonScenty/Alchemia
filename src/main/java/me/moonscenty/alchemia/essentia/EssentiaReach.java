@@ -15,27 +15,12 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.Vec3;
 
-/**
- * Drawing essentia out of whatever is holding it nearby, with nothing laid between.
- * <p>
- * This is how a matrix is fed, and it is deliberately not how everything else is fed. A works is plumbed: the
- * smelter fills jars through tubes and the tubes are the interesting part. But a matrix wants a point of this and
- * a point of that from a dozen jars at once, and piping twelve jars into one block would be a knot nobody enjoys
- * tying. So the altar reaches, and a shelf of jars standing round it is the whole of the plumbing.
- * <p>
- * A braced jar is passed over, since a brace is exactly the instruction not to take from this one.
- */
+// Pipeless essentia draw for the matrix and similar; braced jars are skipped.
 public final class EssentiaReach {
     private EssentiaReach() {
     }
 
-    /**
-     * Takes a point of an aspect for an infusion, the original's way: out of a jar or an essentia mirror within a box
-     * reaching so far each way, nearest first. Nothing else an altar stands among -- alembics, smelters, pipes -- is
-     * drunk from.
-     *
-     * @return where it came from, or null if nothing in reach had any
-     */
+    // only jars and essentia mirrors feed an infusion, nearest first, within a cube of range
     public static BlockPos drainForInfusion(Level level, BlockPos from, Holder<Aspect> aspect, int range) {
         for (BlockEntity holding : nearby(level, from, range * 2)) {
             BlockPos at = holding.getBlockPos();
@@ -53,7 +38,6 @@ public final class EssentiaReach {
         return null;
     }
 
-    /** Everything that holds essentia within reach, nearest first, for anything else that reaches. */
     public static List<BlockEntity> holders(Level level, BlockPos from, int range) {
         return nearby(level, from, range);
     }
@@ -77,13 +61,8 @@ public final class EssentiaReach {
         return found;
     }
 
-    /** How many drops make one run of essentia from one thing to another. */
     private static final int DROPS = 3;
 
-    /**
-     * A run of drops of the essentia's colour, from where it came from to whatever asked for it. Each drop of a run
-     * wobbles a little differently, so they do not move as one.
-     */
     public static void thread(ServerLevel level, BlockPos source, BlockPos sink, int colour) {
         Vec3 from = Vec3.atCenterOf(source);
         Vector3f to = Vec3.atCenterOf(sink).toVector3f();

@@ -9,10 +9,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
-/**
- * A construct with one slot its owner fills by opening it. The slot is the main hand, which is where a mob's one held
- * thing lives and where it syncs from.
- */
 public abstract class ConstructWithSlot extends Construct implements Container, MenuProvider {
     protected ConstructWithSlot(EntityType<? extends ConstructWithSlot> type, Level level) {
         super(type, level);

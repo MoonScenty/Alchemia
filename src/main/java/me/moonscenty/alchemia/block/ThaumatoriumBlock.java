@@ -37,18 +37,10 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-/**
- * One half of a thaumatorium: a crucible with two alchemical constructs stacked on it, worked with a wand, as the
- * original built it. The crucible stays as it is underneath and carries the heat. Take away either half or the
- * crucible and what is left falls back to a construct. It faces the way the face clicked
- * faced, and that is where what it makes comes out.
- */
 public class ThaumatoriumBlock extends BaseEntityBlock {
     public static final MapCodec<ThaumatoriumBlock> CODEC = simpleCodec(ThaumatoriumBlock::new);
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
-    /** Whether this is the upper half, which does nothing but hand everything to the lower. */
     public static final BooleanProperty TOP = BooleanProperty.create("top");
-    /** What the wand pays to make one, the original's price. */
     public static final java.util.function.Supplier<AspectList> COSTS = () -> AspectList.of(ModAspects.FIRE, 50)
             .add(ModAspects.ORDER, 100).add(ModAspects.WATER, 100);
 
@@ -67,7 +59,6 @@ public class ThaumatoriumBlock extends BaseEntityBlock {
         builder.add(FACING, TOP);
     }
 
-    /** Drawn whole by the lower half's renderer, two blocks tall. */
     @Override
     protected RenderShape getRenderShape(BlockState state) {
         return RenderShape.INVISIBLE;
@@ -103,7 +94,6 @@ public class ThaumatoriumBlock extends BaseEntityBlock {
         return InteractionResult.sidedSuccess(level.isClientSide);
     }
 
-    /** Falls back to a construct when the other half or the crucible under it is gone. */
     @Override
     protected BlockState updateShape(BlockState state, Direction direction, BlockState neighbour,
             LevelAccessor level, BlockPos pos, BlockPos neighbourPos) {
@@ -123,7 +113,6 @@ public class ThaumatoriumBlock extends BaseEntityBlock {
         super.onRemove(state, level, pos, replacement, moving);
     }
 
-    /** The comparator reads how much catalyst is left in it. */
     @Override
     protected boolean hasAnalogOutputSignal(BlockState state) {
         return true;
@@ -135,12 +124,6 @@ public class ThaumatoriumBlock extends BaseEntityBlock {
                 ? net.minecraft.world.inventory.AbstractContainerMenu.getRedstoneSignalFromContainer(half) : 0;
     }
 
-    /**
-     * Makes one out of a crucible with two alchemical constructs on it, if the wand can pay and its bearer has worked out
-     * how. Any of the three can be clicked, on any side but the top or bottom; the side clicked becomes the front.
-     *
-     * @return whether it was made
-     */
     public static boolean form(Level level, BlockPos clicked, Direction side, Player player, ItemStack wand) {
         if (!side.getAxis().isHorizontal()
                 || !PlayerKnowledge.of(player).hasResearch(Alchemia.id("thaumatorium"))) {
@@ -169,7 +152,6 @@ public class ThaumatoriumBlock extends BaseEntityBlock {
         level.setBlock(base, made, Block.UPDATE_CLIENTS);
         level.setBlock(base.above(), made.setValue(TOP, true), Block.UPDATE_ALL);
         level.playSound(null, base, ModSounds.WAND.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
-        // a puff off each of the two blocks it was made of
         for (BlockPos puff : new BlockPos[] {base, base.above()}) {
             level.playSound(null, puff, ModSounds.POOF.get(), SoundSource.BLOCKS, 0.4F,
                     1.0F + (float) level.random.nextGaussian() * 0.05F);

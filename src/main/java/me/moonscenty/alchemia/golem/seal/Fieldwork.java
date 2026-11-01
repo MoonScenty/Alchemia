@@ -23,10 +23,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.common.util.FakePlayerFactory;
 
-/**
- * What golems working the land and timber need: telling a grown crop, finding the far end of a tree, and breaking
- * or planting as a player would, through a stand-in player of their own.
- */
 public final class Fieldwork {
     private static final GameProfile GOLEM = new GameProfile(UUID.fromString("5e1c9a77-2b4f-4c1e-9a64-0f3d7c1b2a90"),
             "[AlchemiaGolem]");
@@ -34,7 +30,6 @@ public final class Fieldwork {
     private Fieldwork() {
     }
 
-    /** The stand-in player, put where the golem is and facing as it faces, with nothing in its hands. */
     public static FakePlayer hands(ServerLevel level, Golem golem) {
         FakePlayer player = FakePlayerFactory.get(level, GOLEM);
         player.moveTo(golem.getX(), golem.getY(), golem.getZ(), golem.getYRot(), golem.getXRot());
@@ -43,11 +38,7 @@ public final class Fieldwork {
         return player;
     }
 
-    /**
-     * Whether a block is a crop ready to take, as the original judged it: a plant that will grow no further (but not
-     * a stem, which only feeds its melon or pumpkin), any melon or pumpkin, ripe nether wart, and the upper parts of
-     * sugar cane and cactus, which leave the lowest to grow again.
-     */
+    // the original's ripeness test: stems never count; cane and cactus only above the lowest block
     public static boolean grown(Level level, BlockPos pos) {
         BlockState state = level.getBlockState(pos);
         if (state.isAir()) {
@@ -68,12 +59,10 @@ public final class Fieldwork {
                 && !growing.isValidBonemealTarget(level, pos, state);
     }
 
-    /** Crops picked by hand rather than cut down, which stay planted. */
     public static boolean picked(BlockState state) {
         return state.getBlock() instanceof SweetBerryBushBlock;
     }
 
-    /** What a crop is grown from, for planting it again, or nothing for crops that grow again by themselves. */
     public static ItemStack seed(BlockState state) {
         Block block = state.getBlock();
         if (block == Blocks.MELON || block == Blocks.PUMPKIN || block == Blocks.SUGAR_CANE || block == Blocks.CACTUS) {
@@ -86,10 +75,7 @@ public final class Fieldwork {
         return level.getBlockState(pos).is(BlockTags.LOGS);
     }
 
-    /**
-     * Breaks a block as a golem does: whatever it drops falls where it stood, tool or no tool, and anything with
-     * experience in it lets that go too.
-     */
+    // drops fall where the block stood, tool or no tool
     public static boolean harvest(ServerLevel level, BlockPos pos, Golem golem) {
         BlockState state = level.getBlockState(pos);
         if (state.isAir() || state.getDestroySpeed(level, pos) < 0) {
@@ -106,10 +92,7 @@ public final class Fieldwork {
         return true;
     }
 
-    /**
-     * Fells a tree from the far end: of the logs joined to this one, follows the one furthest away again and again,
-     * a log or two at a step, and breaks the last. The tree is taken down from its crown, so it never floats.
-     */
+    // fells from the crown down so the tree never floats
     public static boolean breakFurthest(ServerLevel level, BlockPos pos, Golem golem) {
         BlockState kind = level.getBlockState(pos);
         int reach = log(level, pos) ? 2 : 1;

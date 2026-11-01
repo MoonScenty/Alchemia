@@ -14,21 +14,14 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
-/**
- * Writing a reader a fresh note.
- * <p>
- * Paper and ink are spent in the asking, so everything that could go wrong is checked before anything is taken.
- */
+// Everything is checked before paper and ink are spent.
 public final class NoteRequests {
     private NoteRequests() {
     }
 
-    /** Why a note could not be written, or that it was. */
     public enum Result {
         WRITTEN("written"),
-        /** The reader is already carrying this one, so there is nothing to write. */
         ALREADY_CARRIED("already_carried"),
-        /** Finished, or not yet reachable, or the aspects it needs have not all been met. */
         NOT_READY("not_ready"),
         NO_PAPER("no_paper"),
         NO_INK("no_ink");
@@ -48,10 +41,6 @@ public final class NoteRequests {
         }
     }
 
-    /**
-     * Whether a subject is one the reader could take on now: not already finished, everything it follows from done,
-     * and every aspect it calls for already met. Kept free of the player so it can be exercised on its own.
-     */
     public static boolean isReady(PlayerKnowledge knowledge, ResourceLocation id, ResearchEntry entry) {
         return !knowledge.hasResearch(id)
                 && !entry.onlyGiven()
@@ -118,7 +107,6 @@ public final class NoteRequests {
         return -1;
     }
 
-    /** Scribing tools with ink still in them. A dry quill is no use for drawing up a board. */
     private static int findScribingTools(ServerPlayer player) {
         Inventory inventory = player.getInventory();
         for (int slot = 0; slot < inventory.getContainerSize(); slot++) {

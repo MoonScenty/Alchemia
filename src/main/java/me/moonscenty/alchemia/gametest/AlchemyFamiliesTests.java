@@ -8,7 +8,6 @@ import net.minecraft.resources.ResourceKey;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/** The original's crucible families and the crystal farmer: their recipes and research are all there. */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class AlchemyFamiliesTests {

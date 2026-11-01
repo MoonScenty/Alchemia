@@ -8,10 +8,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 
-/**
- * A dart from a golem's launchers: an arrow in all but size, made as it is fired and never picked up again. Stuck
- * in something, it is gone after a second.
- */
 public class GolemDart extends AbstractArrow {
     private static final int STAYS = 20;
 

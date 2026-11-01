@@ -19,21 +19,12 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
-/**
- * Draws the crystallizer as the original did: its body on the original's mesh, laid along the way the essentia
- * goes through it, and round its far end four of the vis relay's crystals, spinning while it works, tinted toward
- * the colour of what it holds, and glowing a little brighter and dimmer in turn.
- */
 public class CrystallizerRenderer implements BlockEntityRenderer<CrystallizerBlockEntity> {
     static final ResourceLocation BODY = Alchemia.id("textures/entity/crystallizer.png");
     private static final ResourceLocation CRYSTAL = Alchemia.id("textures/entity/vis_relay.png");
     private static final int GLOW_DIM = 50;
     private static final int GLOW_RANGE = 150;
 
-    /**
-     * The original's body mesh, once per import. Its renderer read it with the older loader, which turned the texture
-     * corners over, so it is turned over here too.
-     */
     private static final LegacyCached<LegacyMesh> BODY_MESH = LegacyCached.flippedMesh(LegacyAssets.CRYSTALLIZER_MESH);
 
     public CrystallizerRenderer(BlockEntityRendererProvider.Context context) {
@@ -47,7 +38,6 @@ public class CrystallizerRenderer implements BlockEntityRenderer<CrystallizerBlo
                 crystallizer.spin(partial), crystallizer.tint(), age, light, overlay);
     }
 
-    /** The crystallizer facing a given way, its crystals at a given turn and colour. Shared with the item. */
     static void draw(PoseStack pose, MultiBufferSource buffers, Direction facing, float spin, int tint, float age,
             int light, int overlay) {
         LegacyMesh body = BODY_MESH.get();
@@ -57,7 +47,7 @@ public class CrystallizerRenderer implements BlockEntityRenderer<CrystallizerBlo
         }
         pose.pushPose();
         pose.translate(0.5F, 0.5F, 0.5F);
-        // the mesh runs from the way in at z=0 to the way out at z=1, and is turned so the way in is where it faces
+        // mesh runs from the inlet at z=0 to the outlet at z=1
         switch (facing) {
             case DOWN -> pose.mulPose(Axis.XP.rotationDegrees(-90.0F));
             case UP -> pose.mulPose(Axis.XP.rotationDegrees(90.0F));
@@ -91,7 +81,6 @@ public class CrystallizerRenderer implements BlockEntityRenderer<CrystallizerBlo
         pose.popPose();
     }
 
-    /** The age the item uses, there being no block to ask. */
     static float clientAge(float partial) {
         var player = Minecraft.getInstance().player;
         return player == null ? 0.0F : player.tickCount + partial;

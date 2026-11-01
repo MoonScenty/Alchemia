@@ -13,7 +13,6 @@ import net.minecraft.world.entity.monster.Monster;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/** Some kinds are likelier champions than others, as the original's whitelist weighted them; and a pech may be one. */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class ChampionRollTests {

@@ -23,10 +23,6 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 
-/**
- * A banner in the hand. Put on the top of something it stands, turned whichever of sixteen ways its placer faced; put
- * on the side of something it hangs there. The dyed one comes in sixteen colours; the Crimson Cult's has none.
- */
 public class BannerItem extends Item {
     private final boolean cult;
 
@@ -35,7 +31,6 @@ public class BannerItem extends Item {
         this.cult = cult;
     }
 
-    /** A banner of this colour with this painted on it, or the cult's if there is no colour. */
     public static ItemStack of(@Nullable DyeColor colour, @Nullable Holder<Aspect> aspect) {
         if (colour == null) {
             return new ItemStack(ModItems.CRIMSON_BANNER.get());

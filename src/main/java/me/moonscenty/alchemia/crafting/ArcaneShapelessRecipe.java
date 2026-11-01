@@ -19,7 +19,6 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 
-/** An arcane recipe whose ingredients may be laid anywhere on the grid. */
 public record ArcaneShapelessRecipe(String group, NonNullList<Ingredient> ingredients, ItemStack result,
                                     AspectList cost, Optional<ResourceLocation> research) implements ArcaneRecipe {
 
@@ -64,7 +63,6 @@ public record ArcaneShapelessRecipe(String group, NonNullList<Ingredient> ingred
     }
 
     public static class Serializer implements RecipeSerializer<ArcaneShapelessRecipe> {
-        /** At least one ingredient and at most nine, since nine is the whole grid. */
         private static final Codec<NonNullList<Ingredient>> INGREDIENTS = Ingredient.CODEC_NONEMPTY
                 .listOf()
                 .flatXmap(list -> list.isEmpty() ? com.mojang.serialization.DataResult.error(() -> "no ingredients")

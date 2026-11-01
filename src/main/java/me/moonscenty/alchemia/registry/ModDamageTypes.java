@@ -10,11 +10,6 @@ import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 
-/**
- * The mod's own ways of being hurt: the original's air, fire and order arrows, each its own kind of harm. The air
- * and order arrows go through armour and count as magic; the fire arrow is fire. The other three primal arrows hurt
- * as an arrow does.
- */
 public final class ModDamageTypes {
     public static final ResourceKey<DamageType> AIR_ARROW = key("air_arrow");
     public static final ResourceKey<DamageType> FIRE_ARROW = key("fire_arrow");
@@ -33,7 +28,6 @@ public final class ModDamageTypes {
         context.register(ORDER_ARROW, new DamageType("alchemia.order_arrow", 0.1F));
     }
 
-    /** What a primal arrow of this kind hurts with. */
     public static DamageSource arrow(Level level, CrystalType kind, Entity arrow, Entity shooter) {
         ResourceKey<DamageType> type = switch (kind) {
             case AIR -> AIR_ARROW;

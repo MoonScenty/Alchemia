@@ -21,14 +21,6 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 
-/**
- * What the taint makes of what dies of its poison.
- *
- * <p>A creeper, sheep, cow, pig, chicken, villager or rabbit gets up again as the tainted kind of itself. Any other
- * animal, or anything that crawls, bursts into taint crawlers, more the bigger it was. Anything else -- a player
- * among them -- leaves an alchemic slime the size of what it was, up to seven; a player dies as ever, but anything
- * else is gone, taken over whole. Golems, constructs, and what the taint has made already are left as they are.
- */
 @EventBusSubscriber(modid = Alchemia.MODID)
 public final class TaintConversion {
     private TaintConversion() {
@@ -65,12 +57,7 @@ public final class TaintConversion {
         }
     }
 
-    /**
-     * The tainted kind of what died, or nothing if it has none.
-     * <p>
-     * <b>Different from the original</b>, which asked after rabbits only once it had already sent every animal to
-     * crawlers, so that a tainted rabbit never came of a rabbit. Rabbits are asked after first here.
-     */
+    // unlike the original, rabbits are checked before the generic animal case, so a rabbit can become a tainted rabbit
     private static Mob madeOver(ServerLevel level, LivingEntity dead) {
         if (dead instanceof Creeper) {
             return new TaintedCreeper(level);
@@ -98,7 +85,6 @@ public final class TaintConversion {
         return null;
     }
 
-    /** What died is not left behind: the taint has it. */
     private static void takeOver(Entity dead, LivingDeathEvent event) {
         dead.discard();
         event.setCanceled(true);

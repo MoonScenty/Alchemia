@@ -29,10 +29,6 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/**
- * Staves: wands on a staff core, which hold more, hit harder, work their focus cheaper, will not lie on a workbench,
- * and in the primal staff's case make every primal and lend the focus a step of potency.
- */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class StaffTests {
@@ -42,7 +38,6 @@ public class StaffTests {
         return WandItem.of(ModWandParts.GREATWOOD_STAFF, ModWandParts.GOLD);
     }
 
-    /** A staff core laid between two caps makes a staff, named as one and holding what the core holds. */
     @GameTest(template = TEMPLATE)
     public static void aStaffCoreMakesAStaff(GameTestHelper helper) {
         ItemStack cap = new ItemStack(ModItems.WAND_CAPS.get("gold").get());
@@ -58,7 +53,6 @@ public class StaffTests {
         helper.succeed();
     }
 
-    /** A staff is a club; a wand is not. */
     @GameTest(template = TEMPLATE)
     public static void aStaffHitsHarder(GameTestHelper helper) {
         double[] added = new double[1];
@@ -74,7 +68,6 @@ public class StaffTests {
         helper.succeed();
     }
 
-    /** What a staff's focus costs comes a tenth cheaper than the same working through a wand. */
     @GameTest(template = TEMPLATE)
     public static void aStaffWorksItsFocusCheaper(GameTestHelper helper) {
         Player bearer = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -94,7 +87,6 @@ public class StaffTests {
         helper.succeed();
     }
 
-    /** A wooden table becomes a workbench under a wand, and not under a staff. */
     @GameTest(template = TEMPLATE)
     public static void aStaffWillNotMakeAWorkbench(GameTestHelper helper) {
         Player bearer = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -109,7 +101,6 @@ public class StaffTests {
         helper.succeed();
     }
 
-    /** The primal staff lends whatever focus is on it a step of potency, and makes every primal. */
     @GameTest(template = TEMPLATE)
     public static void thePrimalStaffIsPotentAndMakesEveryPrimal(GameTestHelper helper) {
         ItemStack primal = WandItem.of(ModWandParts.PRIMAL_STAFF, ModWandParts.GOLD);

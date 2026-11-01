@@ -21,10 +21,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/**
- * Goo is the seed of the taint, so it has to move like a liquid without ever making more of itself, and it has to
- * dry into something.
- */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class FluxGooTests {
@@ -45,7 +41,6 @@ public class FluxGooTests {
         return FluxGooBlock.of(ModBlocks.FLUX_GOO.get(), depth);
     }
 
-    /** Runs the flow tick on every puddle in a small box, as the scheduler would over a few seconds. */
     private static void flow(GameTestHelper helper, int rounds) {
         RandomSource random = RandomSource.create(1L);
         for (int round = 0; round < rounds; round++) {
@@ -58,7 +53,6 @@ public class FluxGooTests {
         }
     }
 
-    /** Every depth counts one, so a film is one and a full block is eight; the sum must never change by flowing. */
     private static int volume(GameTestHelper helper) {
         int total = 0;
         for (BlockPos at : BlockPos.betweenClosed(HERE.offset(-4, -4, -4), HERE.offset(4, 2, 4))) {
@@ -77,7 +71,6 @@ public class FluxGooTests {
 
         flow(helper, 4);
         helper.assertBlockPresent(Blocks.AIR, HERE);
-        // it lands on the stone and, the stone being a single block, at once starts running off the sides of it
         helper.assertBlockPresent(ModBlocks.FLUX_GOO.get(), HERE.below(2));
         helper.assertTrue(volume(helper) == FluxGooBlock.FULL + 1, "falling should not change how much there is");
         helper.succeed();
@@ -105,7 +98,6 @@ public class FluxGooTests {
         helper.succeed();
     }
 
-    /** A film of goo dries away, and what it leaves is either flux in the air or the first fibres. */
     @GameTest(template = TEMPLATE)
     public static void aFilmOfGooDriesIntoFluxOrFibres(GameTestHelper helper) {
         flux(helper, 0);
@@ -123,13 +115,7 @@ public class FluxGooTests {
         helper.succeed();
     }
 
-    /**
-     * Lightning is what starts a patch in the open: it leaves a full puddle where it lands.
-     * <p>
-     * Its tries clear away every cloud and creature for forty blocks round, since a cloud keeps lightning off for
-     * thirty-two and a creature draws the bolt. Forty blocks reaches into the tests laid out beside it, so it runs in
-     * a batch of its own: once it shared one with the taint bottle's test and took that test's pig away.
-     */
+    // own batch: clearing 40 blocks around reaches into neighbouring tests
     @GameTest(template = TEMPLATE, batch = "flux_lightning")
     public static void lightningLeavesAPuddle(GameTestHelper helper) {
         flux(helper, BASE * 4);
@@ -140,8 +126,7 @@ public class FluxGooTests {
         FluxEvents.Trouble happened = null;
         for (int i = 0; i < 200 && (happened == null || !happened.name().equals("lightning")); i++) {
             happened = FluxEvents.strikeAt(helper.getLevel(), at, random);
-            // a cloud that gathers first would keep lightning off, and a creature let out first would draw the bolt
-            // to itself, so they are sent away again
+            // clear clouds and mobs: a cloud blocks lightning and a mob draws the bolt
             helper.getLevel().getEntitiesOfClass(TaintCloud.class, helper.getBounds().inflate(40)).forEach(TaintCloud::discard);
             helper.getLevel().getEntitiesOfClass(net.minecraft.world.entity.Mob.class, helper.getBounds().inflate(40))
                     .forEach(net.minecraft.world.entity.Entity::discard);
@@ -152,7 +137,6 @@ public class FluxGooTests {
         helper.succeed();
     }
 
-    /** A cloud drops films of goo and the land pays a point of flux for each one. */
     @GameTest(template = TEMPLATE)
     public static void aCloudRainsGooAtThePriceOfFlux(GameTestHelper helper) {
         flux(helper, BASE);
@@ -165,7 +149,6 @@ public class FluxGooTests {
         helper.assertBlockPresent(ModBlocks.FLUX_GOO.get(), HERE);
         helper.assertTrue(fluxLeft(helper) == before - 1, "and the land should have paid one flux for it");
 
-        // it will not rain on what is already tainted
         helper.assertTrue(!cloud.rain(helper.absolutePos(HERE)), "and it should not pile goo on goo");
         helper.succeed();
     }

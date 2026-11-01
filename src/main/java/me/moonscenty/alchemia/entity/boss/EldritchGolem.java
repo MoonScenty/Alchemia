@@ -39,18 +39,6 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
-/**
- * The Eldritch Construct: a great stone golem left standing in its hall.
- * <p>
- * It stands frozen five seconds when it wakes, mending as it does. Then it walks its enemy down and strikes a heavy
- * blow that throws the struck a little into the air, smashing urns and crates and whatever else is soft enough
- * underfoot; fire does nothing to it.
- * <p>
- * The blow that would have killed it takes its head off instead: an explosion at its neck that breaks nothing, and
- * another five seconds frozen and mending. Headless it is worse. It gathers a charge over seven and a half seconds,
- * crackling, then lets it go in bolts that seek their mark, every quarter second while the charge lasts; and its
- * blows now throw things back as well as up.
- */
 public class EldritchGolem extends ThaumcraftBoss implements EldritchMob, RangedAttackMob {
     private static final EntityDataAccessor<Boolean> HEADLESS = SynchedEntityData.defineId(EldritchGolem.class,
             EntityDataSerializers.BOOLEAN);
@@ -62,7 +50,7 @@ public class EldritchGolem extends ThaumcraftBoss implements EldritchMob, Ranged
     private int beamCharge;
     private boolean chargingBeam;
     private int attackTimer;
-    /** For the drawing: how long the arc to the floor still crackles, and where it goes. */
+    // client-side, for rendering
     public int arcing;
     public BlockPos arcTo = BlockPos.ZERO;
     private boolean ranged;
@@ -123,7 +111,6 @@ public class EldritchGolem extends ThaumcraftBoss implements EldritchMob, Ranged
         return true;
     }
 
-    /** Headless, it shoots as well. */
     private void loseHead() {
         entityData.set(HEADLESS, true);
         if (!ranged) {

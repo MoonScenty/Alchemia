@@ -20,12 +20,6 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 
-/**
- * A golem as it comes off the press, or as a wand takes one back up: set it down on solid ground and it is yours.
- *
- * <p>It is tinted the colour of what the golem is made of, and says what that is and what the golem is like. A
- * smart one also says how far it has come on.
- */
 public class GolemItem extends Item implements me.moonscenty.alchemia.golem.seal.SealDisplayer {
     public GolemItem(Properties properties) {
         super(properties);
@@ -35,7 +29,6 @@ public class GolemItem extends Item implements me.moonscenty.alchemia.golem.seal
         return stack.getOrDefault(ModDataComponents.GOLEM_DESIGN.get(), GolemDesign.BASIC);
     }
 
-    /** One of this design, fresh off the press. */
     public static ItemStack of(GolemDesign design) {
         ItemStack stack = new ItemStack(me.moonscenty.alchemia.registry.ModItems.GOLEM.get());
         stack.set(ModDataComponents.GOLEM_DESIGN.get(), design);

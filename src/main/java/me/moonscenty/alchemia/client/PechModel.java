@@ -13,14 +13,7 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.HumanoidArm;
 
-/**
- * The pech's body, which is the original's {@code ModelPech} read out of its code: a biped's head, body, arms and
- * legs, a jaw that works as it mutters, and a pack in two pieces on its back that sways as it walks.
- * <p>
- * How it moves is the original's, which is mostly a biped's with shorter arms that hang a little out and drift.
- */
 public class PechModel extends EntityModel<Pech> implements ArmedModel {
-    /** The original's parts, as of the import {@link #bakedFrom} names. */
     private static int bakedFrom = -1;
     private static ModelPart head;
     private static ModelPart body;
@@ -64,7 +57,6 @@ public class PechModel extends EntityModel<Pech> implements ArmedModel {
         }
         rightArm.yRot = 0.0F;
         leftArm.yRot = 0.0F;
-        // a swing of the right arm, as a biped's
         float swing = 1.0F - attackTime;
         swing *= swing;
         swing *= swing;
@@ -77,7 +69,6 @@ public class PechModel extends EntityModel<Pech> implements ArmedModel {
             rightArm.xRot += 0.4F;
             leftArm.xRot += 0.4F;
         }
-        // the arms hang a little out and drift
         float drift = Mth.cos(ageInTicks * 0.09F) * 0.05F + 0.05F;
         rightArm.zRot += drift;
         leftArm.zRot -= drift;
@@ -104,7 +95,6 @@ public class PechModel extends EntityModel<Pech> implements ArmedModel {
         }
     }
 
-    /** Bakes the original's parts again whenever the import has changed what there is. */
     private static boolean refresh() {
         int generation = LegacyModels.generation();
         if (generation != bakedFrom) {

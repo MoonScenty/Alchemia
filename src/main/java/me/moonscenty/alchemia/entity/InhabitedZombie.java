@@ -29,14 +29,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
 
-/**
- * A shambling husk: a dead man in crimson plate with an eldritch crab living in him. A zombie otherwise -- a tougher
- * one, at 30 health and a bite of 5 -- that talks like a crab.
- * <p>
- * It always has the cult's helm on and, more often than not, the chestplate and greaves. When it dies none of it is
- * left: the body bursts and the crab comes out of it in its shell. Out of the Outer Lands, where one walks now and then
- * and never within thirty-two blocks of another, only an egg brings one.
- */
 public class InhabitedZombie extends Zombie implements EldritchMob {
     public InhabitedZombie(EntityType<? extends InhabitedZombie> type, Level level) {
         super(type, level);
@@ -53,7 +45,6 @@ public class InhabitedZombie extends Zombie implements EldritchMob {
                 .add(Attributes.SPAWN_REINFORCEMENTS_CHANCE, 0.0);
     }
 
-    /** Somewhere one may walk: dark, as for any monster, and no other husk anywhere near. */
     public static boolean checkSpawnRules(EntityType<InhabitedZombie> type, ServerLevelAccessor level,
             MobSpawnType reason, BlockPos pos, RandomSource random) {
         return level.getEntitiesOfClass(InhabitedZombie.class, new AABB(pos).inflate(32.0, 16.0, 32.0)).isEmpty()
@@ -86,12 +77,10 @@ public class InhabitedZombie extends Zombie implements EldritchMob {
         return super.finalizeSpawn(level, difficulty, reason, data);
     }
 
-    /** Nothing it wore or carried is left: it bursts. */
     @Override
     protected void dropCustomDeathLoot(ServerLevel level, DamageSource source, boolean recentlyHit) {
     }
 
-    /** No slow fall: the body bursts at once and the crab in it comes out shelled. */
     @Override
     protected void tickDeath() {
         if (!level().isClientSide && !isRemoved()) {

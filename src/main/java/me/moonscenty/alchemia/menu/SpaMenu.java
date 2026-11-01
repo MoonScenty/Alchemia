@@ -16,14 +16,9 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.material.Fluid;
 
-/**
- * Standing at a spa: the pocket for bath salts, the tank, and the switch between mixing and pouring as it is.
- */
 public class SpaMenu extends AlchemiaMenu {
-    /** The one button on the panel: mix, or pour what is in the tank as it is. */
     public static final int TOGGLE_MIXING = 0;
 
-    // Where the pieces sit on the original's panel.
     private static final int SALTS_X = 65;
     private static final int SALTS_Y = 31;
     private static final int PACK_X = 8;
@@ -34,7 +29,6 @@ public class SpaMenu extends AlchemiaMenu {
     private final ContainerLevelAccess access;
     private final SpaBlockEntity block;
 
-    /** What the client builds. */
     public SpaMenu(int id, Inventory inventory) {
         this(id, inventory, new SimpleContainer(1), new SimpleContainerData(SpaBlockEntity.READINGS),
                 ContainerLevelAccess.NULL, null);

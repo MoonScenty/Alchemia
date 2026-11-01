@@ -38,25 +38,15 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-/**
- * A glass jar for keeping one essentia in, with a wooden lid.
- * <p>
- * The state says only how high the liquid stands, since that is all the model needs. What the essentia is lives in
- * the block entity, and the colour is asked for separately when the liquid is drawn.
- */
 public class JarBlock extends BaseEntityBlock {
-    /** How high the liquid is drawn. Zero is an empty jar. */
     public static final IntegerProperty FILL = IntegerProperty.create("fill", 0, JarBlockEntity.STEPS);
 
-    /** Whether a label is stuck on it, which the model draws and the jar takes its orders from. */
     public static final BooleanProperty LABELLED = BooleanProperty.create("labelled");
 
-    /** Which side the label is stuck to: whichever side the person who stuck it on was standing. */
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
     public static final MapCodec<JarBlock> CODEC = simpleCodec(JarBlock::new);
 
-    // the glass, and the lid on top of it
     private static final VoxelShape SHAPE = net.minecraft.world.phys.shapes.Shapes.or(
             Block.box(3, 0, 3, 13, 13, 13),
             Block.box(5, 13, 5, 11, 14, 11));
@@ -79,7 +69,6 @@ public class JarBlock extends BaseEntityBlock {
         builder.add(FILL, LABELLED, FACING);
     }
 
-    /** Set down facing whoever put it there, so a label stuck on later has a sensible side to start from. */
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         return defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
@@ -100,15 +89,6 @@ public class JarBlock extends BaseEntityBlock {
         return new JarBlockEntity(pos, state);
     }
 
-    /**
-     * Fits a brace, or sticks a label on.
-     * <p>
-     * A blank label takes its word from whatever the jar is already holding, so labelling a working jar is one
-     * click and no thinking. A label already written on can go on an empty jar, or on one holding that same thing;
-     * on anything else it would be a lie, so it does not go on at all.
-     * <p>
-     * Anything else in hand is handed on. A phial is poured by the phial, not by the jar.
-     */
     @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
             Player player, InteractionHand hand, BlockHitResult hit) {
@@ -125,7 +105,6 @@ public class JarBlock extends BaseEntityBlock {
         }
         if (stack.is(ModItems.JAR_LABEL.get()) && jar.label().isEmpty()) {
             Optional<Holder<Aspect>> word = PhialItem.inside(stack).or(jar::holding);
-            // it may say what is in there already, or anything at all when there is nothing in there to contradict
             boolean honest = word.isPresent() && (jar.amount() == 0
                     || jar.holding().orElseThrow().value() == word.get().value());
             if (!honest) {
@@ -133,7 +112,6 @@ public class JarBlock extends BaseEntityBlock {
             }
             if (!level.isClientSide) {
                 jar.label(word.get());
-                // the label ends up on the side you were standing on, which is the side you will read it from
                 level.setBlock(pos, level.getBlockState(pos)
                         .setValue(FACING, player.getDirection().getOpposite()), Block.UPDATE_ALL);
                 stack.consume(1, player);
@@ -144,21 +122,13 @@ public class JarBlock extends BaseEntityBlock {
         return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
     }
 
-    /**
-     * Says what is in it, or takes the label back off.
-     * <p>
-     * A jar is read at a glance by its colour, but not by how much is left, so it is worth asking. Crouching with
-     * an empty hand peels the label instead: that is the only way to change what a labelled jar will take.
-     */
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player,
             BlockHitResult hit) {
         if (!(level.getBlockEntity(pos) instanceof JarBlockEntity jar)) {
             return InteractionResult.PASS;
         }
-        // a block that only reports what is in it must not swallow the click: Minecraft asks the block with
-        // the item first, then the block on its own, and only then the item itself. A jar that answers a phial
-        // with a sentence about its contents is a jar the phial can never be used on.
+        // empty hand only: answering a held item would block that item's own use
         if (!player.getMainHandItem().isEmpty()) {
             return InteractionResult.PASS;
         }
@@ -179,19 +149,12 @@ public class JarBlock extends BaseEntityBlock {
         return InteractionResult.CONSUME;
     }
 
-    /** A label with an aspect written on it, for handing back. */
     public static ItemStack labelFor(Holder<Aspect> aspect) {
         ItemStack label = new ItemStack(ModItems.JAR_LABEL.get());
         label.set(ModDataComponents.ESSENTIA.get(), aspect);
         return label;
     }
 
-    /**
-     * What a broken jar leaves behind: the brace, which comes off, and the jar itself.
-     * <p>
-     * The essentia and the label go with the jar rather than falling out of it -- the loot table copies them onto
-     * the dropped item. The brace is a separate thing that was fitted to the outside of it, so it lands separately.
-     */
     @Override
     protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState replacement, boolean moving) {
         if (!state.is(replacement.getBlock()) && level.getBlockEntity(pos) instanceof JarBlockEntity jar

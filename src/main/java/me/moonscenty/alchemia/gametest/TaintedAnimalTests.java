@@ -17,7 +17,6 @@ import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Rabbit;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -25,9 +24,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/**
- * What the taint makes of what dies of it, step eleven: the made-over animals and the alchemic slime.
- */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class TaintedAnimalTests {
@@ -47,7 +43,6 @@ public class TaintedAnimalTests {
                 .map(kind::cast).toList();
     }
 
-    /** A cow that dies of taint poison gets up again a tainted cow, and is gone itself. */
     @GameTest(template = TEMPLATE)
     public static void aPoisonedCowIsMadeOver(GameTestHelper helper) {
         var cow = poisoned(helper, EntityType.COW);
@@ -57,7 +52,6 @@ public class TaintedAnimalTests {
         helper.succeed();
     }
 
-    /** A rabbit is made over as the colour it was. */
     @GameTest(template = TEMPLATE)
     public static void aPoisonedRabbitKeepsItsColour(GameTestHelper helper) {
         var rabbit = poisoned(helper, EntityType.RABBIT);
@@ -69,7 +63,6 @@ public class TaintedAnimalTests {
         helper.succeed();
     }
 
-    /** Another animal bursts into crawlers, more the bigger it was. */
     @GameTest(template = TEMPLATE)
     public static void aPoisonedWolfBurstsIntoCrawlers(GameTestHelper helper) {
         var wolf = poisoned(helper, EntityType.WOLF);
@@ -79,11 +72,10 @@ public class TaintedAnimalTests {
         helper.succeed();
     }
 
-    /** Anything else leaves an alchemic slime the size of what it was. */
     @GameTest(template = TEMPLATE)
     public static void aPoisonedZombieLeavesASlime(GameTestHelper helper) {
         var zombie = poisoned(helper, EntityType.ZOMBIE);
-        // a baby zombie would leave a smaller slime, and a neighbouring test's slime is not this one's
+        // adult only: a baby leaves a smaller slime, and neighbouring tests may leave slimes too
         if (zombie instanceof net.minecraft.world.entity.monster.Zombie grown) {
             grown.setBaby(false);
         }
@@ -93,7 +85,6 @@ public class TaintedAnimalTests {
         helper.succeed();
     }
 
-    /** Without the poison in it, a cow dies a cow. */
     @GameTest(template = TEMPLATE)
     public static void anUnpoisonedCowStaysDead(GameTestHelper helper) {
         helper.setBlock(AT.below(), Blocks.STONE);
@@ -103,7 +94,6 @@ public class TaintedAnimalTests {
         helper.succeed();
     }
 
-    /** A tainted creeper going off breaks nothing, poisons what is near, and is gone. */
     @GameTest(template = TEMPLATE, timeoutTicks = 100)
     public static void aTaintedCreeperSpreadsPoison(GameTestHelper helper) {
         helper.setBlock(AT.below(), Blocks.STONE);
@@ -119,7 +109,6 @@ public class TaintedAnimalTests {
         });
     }
 
-    /** A tainted sheep shears to purple wool. */
     @GameTest(template = TEMPLATE)
     public static void aTaintedSheepShearsPurple(GameTestHelper helper) {
         helper.setBlock(AT.below(), Blocks.STONE);
@@ -133,7 +122,6 @@ public class TaintedAnimalTests {
         helper.succeed();
     }
 
-    /** An alchemic slime wading through deep goo soaks some up and grows. */
     @GameTest(template = TEMPLATE)
     public static void aSlimeGrowsInGoo(GameTestHelper helper) {
         helper.setBlock(AT.below(), Blocks.STONE);
@@ -150,7 +138,6 @@ public class TaintedAnimalTests {
         helper.succeed();
     }
 
-    /** Killed, an alchemic slime bursts into as many little ones as it was big. */
     @GameTest(template = TEMPLATE, timeoutTicks = 100)
     public static void aSlimeBursts(GameTestHelper helper) {
         helper.setBlock(AT.below(), Blocks.STONE);
@@ -164,7 +151,6 @@ public class TaintedAnimalTests {
         });
     }
 
-    /** A deep puddle of goo, left alone under open air, sooner or later congeals into a slime. */
     @GameTest(template = TEMPLATE)
     public static void gooCongeals(GameTestHelper helper) {
         helper.setBlock(AT.below(), Blocks.STONE);
@@ -173,7 +159,6 @@ public class TaintedAnimalTests {
         RandomSource random = RandomSource.create(5L);
         for (int turn = 0; turn < 500 && helper.getLevel().getBlockState(where).is(ModBlocks.FLUX_GOO.get());
                 turn++) {
-            // kept topped up, so that it does not dry away first
             helper.setBlock(AT, ModBlocks.FLUX_GOO.get());
             helper.getLevel().getBlockState(where).randomTick(helper.getLevel(), where, random);
         }

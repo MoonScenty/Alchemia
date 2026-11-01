@@ -12,10 +12,6 @@ import net.minecraft.world.level.biome.FixedBiomeSource;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.dimension.LevelStem;
 
-/**
- * The Outer Lands as datapack content: a dimension a hundred and twenty-eight blocks deep, with no sky light, no
- * beds and no anchors, the time stood still, and one land in it.
- */
 public final class OuterLandsData {
     private OuterLandsData() {
     }

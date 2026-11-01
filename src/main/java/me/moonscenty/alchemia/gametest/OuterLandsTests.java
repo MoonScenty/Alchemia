@@ -20,16 +20,11 @@ import net.minecraft.server.level.ServerLevel;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/** The Outer Lands: their mazes, and how a maze is carved out of their bedrock. */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class OuterLandsTests {
     private static final String TEMPLATE = "empty_32x40x32";
 
-    /**
-     * A maze laid out for an altar has one portal, one key room and a great hall of four cells with one door, and
-     * every cell of it can be walked to from the portal.
-     */
     @GameTest(template = TEMPLATE)
     public static void aMazeHangsTogether(GameTestHelper helper) {
         Labyrinth labyrinth = new Labyrinth();
@@ -83,13 +78,9 @@ public class OuterLandsTests {
         helper.succeed();
     }
 
-    /**
-     * The Outer Lands' kind of dimension and their generator are there, and the chunk a maze's portal is in is
-     * carved: the cap, the portal over it and the obelisk over that.
-     */
     @GameTest(template = TEMPLATE, timeoutTicks = 400)
     public static void theOuterLandsAreCarved(GameTestHelper helper) {
-        // a test server builds its world from its preset alone, so the stem itself is not to be seen here
+        // the test server builds its world from its preset only, so the stem is absent here
         helper.assertTrue(helper.getLevel().registryAccess().registryOrThrow(Registries.DIMENSION_TYPE)
                 .containsKey(OuterLands.TYPE), "the Outer Lands' kind of dimension is there");
         helper.assertTrue(net.minecraft.core.registries.BuiltInRegistries.CHUNK_GENERATOR.get(Alchemia.id("outer_lands"))
@@ -115,7 +106,6 @@ public class OuterLandsTests {
         helper.succeed();
     }
 
-    /** A guardian is warded only in the Outer Lands, and there it wears half its health as absorption. */
     @GameTest(template = TEMPLATE)
     public static void aGuardianIsWardedOnlyInTheOuterLands(GameTestHelper helper) {
         var difficulty = new net.minecraft.world.DifficultyInstance(net.minecraft.world.Difficulty.NORMAL, 0L, 0L, 0.0F);
@@ -125,7 +115,7 @@ public class OuterLandsTests {
         helper.assertValueEqual(home.getAbsorptionAmount(), 0.0F, "no ward at home");
 
         helper.assertFalse(home.warded(), "home is not the Outer Lands");
-        // the test server has no Outer Lands to spawn one in, so the ward it would get there is put on by hand
+        // the test server has no Outer Lands, so the ward is applied by hand
         home.putOnWard();
         helper.assertValueEqual(home.getAbsorptionAmount(), (float) home.ward(), "half its health as a ward");
         helper.assertTrue(home.ward() > 0, "which is something");

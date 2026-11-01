@@ -10,20 +10,17 @@ import me.moonscenty.alchemia.registry.ModBlocks;
 import me.moonscenty.alchemia.registry.ModItems;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
-import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/** Step 14D-3: what was left off because it did not exist then, put back. */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class FillInTests {
     private static final String TEMPLATE = "empty_32x40x32";
 
-    /** The primal focus asks ten to eighteen of each primal, even, the same within a fifth of a second. */
     @GameTest(template = TEMPLATE)
     public static void primalPriceShimmers(GameTestHelper helper) {
         long now = 1_000_000L;
@@ -42,7 +39,6 @@ public class FillInTests {
         helper.succeed();
     }
 
-    /** The stalker has its candles back, fifteen colours, at the lowest worth. */
     @GameTest(template = TEMPLATE)
     public static void stalkerSellsCandles(GameTestHelper helper) {
         long candles = PechTrades.list(2).stream()
@@ -55,7 +51,6 @@ public class FillInTests {
         helper.succeed();
     }
 
-    /** Liquid death is made, the boots take any fish, the rings take a fragment. */
     @GameTest(template = TEMPLATE)
     public static void recipesUseWhatNowExists(GameTestHelper helper) {
         var recipes = helper.getLevel().getRecipeManager();

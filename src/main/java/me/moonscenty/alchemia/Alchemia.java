@@ -73,7 +73,6 @@ public class Alchemia {
 
     private void commonSetup(FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
-            // thrown alumentum, from a dispenser as from a hand
             net.minecraft.world.level.block.DispenserBlock.registerProjectileBehavior(
                     me.moonscenty.alchemia.registry.ModItems.ALUMENTUM.get());
             int forest = AlchemiaConfig.MAGICAL_FOREST_WEIGHT.get();

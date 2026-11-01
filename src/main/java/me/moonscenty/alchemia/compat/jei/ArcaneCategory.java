@@ -29,7 +29,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
 
-/** The arcane workbench: three by three, what it makes, and what it asks of the wand along the foot. */
 public class ArcaneCategory implements IRecipeCategory<RecipeHolder<ArcaneRecipe>> {
     public static final RecipeType<RecipeHolder<ArcaneRecipe>> TYPE =
             RecipeType.createRecipeHolderType(Alchemia.id("arcane"));
@@ -94,7 +93,6 @@ public class ArcaneCategory implements IRecipeCategory<RecipeHolder<ArcaneRecipe
                 .addItemStack(recipe.getResultItem(Minecraft.getInstance().level.registryAccess()));
     }
 
-    /** Every rod but the staff cores with every cap, cycling together, and the charm at the corner. */
     private static void sceptre(IRecipeLayoutBuilder builder) {
         List<ItemStack> caps = new ArrayList<>();
         List<ItemStack> rods = new ArrayList<>();
@@ -129,7 +127,6 @@ public class ArcaneCategory implements IRecipeCategory<RecipeHolder<ArcaneRecipe
         builder.createFocusLink(top, rod, side, low, made);
     }
 
-    /** Every rod with every cap, cycling together. */
     private static void wand(IRecipeLayoutBuilder builder) {
         List<ItemStack> caps = new ArrayList<>();
         List<ItemStack> rods = new ArrayList<>();

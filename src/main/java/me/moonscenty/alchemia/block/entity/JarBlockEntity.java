@@ -20,25 +20,15 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
-/**
- * A jar of one essentia, with a lid on it.
- * <p>
- * It fills and empties through the lid and nowhere else. A jar is a vessel, not a junction: a pipe run has to come
- * down onto it, which is what makes a wall of jars something you lay out rather than something you scatter.
- */
 public class JarBlockEntity extends SyncedBlockEntity implements EssentiaHolder {
-    /** How much one holds. */
     public static final int CAPACITY = 64;
-    /** How many heights the liquid is drawn at. */
     public static final int STEPS = 4;
-    /** One point a full void jar lets go in this many turns to flux. The original's odds. */
+    // original's odds
     public static final int SPILLS_ONE_IN = 100;
 
     private Holder<Aspect> holding;
     private int amount;
-    /** The aspect written on the label stuck to it, if there is one. */
     private Holder<Aspect> label;
-    /** Whether a brace has been fitted, which stops anything being drawn back out. */
     private boolean braced;
 
     public JarBlockEntity(BlockPos pos, BlockState state) {
@@ -61,12 +51,7 @@ public class JarBlockEntity extends SyncedBlockEntity implements EssentiaHolder 
         return braced;
     }
 
-    /**
-     * Sticks a label on, or takes it off again.
-     * <p>
-     * A labelled jar keeps the aspect whether or not there is any of it left, which is the whole point: an empty jar
-     * on a shelf still says what belongs in it, and a tube that would otherwise drop something else in cannot.
-     */
+    // a labelled jar keeps its aspect even when empty
     public void label(Holder<Aspect> aspect) {
         label = aspect;
         if (aspect != null) {
@@ -87,12 +72,10 @@ public class JarBlockEntity extends SyncedBlockEntity implements EssentiaHolder 
         return holding == null ? AspectList.EMPTY : AspectList.of(holding, amount);
     }
 
-    /** Whether this is a void jar, which takes more than it holds and lets the rest go. */
     public boolean voids() {
         return getBlockState().getBlock() instanceof me.moonscenty.alchemia.block.VoidJarBlock;
     }
 
-    /** A labelled jar takes what its label says and nothing else, full or empty. A void jar takes it even full. */
     @Override
     public boolean wants(Holder<Aspect> aspect) {
         if (amount >= CAPACITY && !voids()) {
@@ -107,7 +90,6 @@ public class JarBlockEntity extends SyncedBlockEntity implements EssentiaHolder 
             return false;
         }
         if (amount >= CAPACITY) {
-            // a full void jar lets it go, one time in a hundred as a point of flux in the air
             if (level instanceof ServerLevel served && served.random.nextInt(SPILLS_ONE_IN) == 0) {
                 AuraHandler.add(served, worldPosition, ModAspects.FLUX, 1);
             }
@@ -119,7 +101,6 @@ public class JarBlockEntity extends SyncedBlockEntity implements EssentiaHolder 
         return true;
     }
 
-    /** A braced jar is a jar you fill and leave. Nothing comes back out of one until the brace comes off. */
     @Override
     public boolean release(Holder<Aspect> aspect) {
         if (braced || holding == null || holding.value() != aspect.value() || amount <= 0) {
@@ -133,19 +114,11 @@ public class JarBlockEntity extends SyncedBlockEntity implements EssentiaHolder 
         return true;
     }
 
-    /** The lid is the only way in or out. Glass does not take a pipe through its side. */
     @Override
     public boolean reachableFrom(Direction side) {
         return side == Direction.UP;
     }
 
-    /**
-     * What a jar taken up off the floor carries with it: what is in it, and what is written on it.
-     * <p>
-     * A warded jar is warded whether or not it is standing on anything. Breaking one and finding the essentia
-     * gone into the air would make a jar a thing you dare not move, and a shelf of jars something you build once
-     * and never touch again.
-     */
     @Override
     protected void collectImplicitComponents(DataComponentMap.Builder components) {
         super.collectImplicitComponents(components);
@@ -157,7 +130,6 @@ public class JarBlockEntity extends SyncedBlockEntity implements EssentiaHolder 
         }
     }
 
-    /** And what it carried back out when it is set down again. */
     @Override
     protected void applyImplicitComponents(DataComponentInput components) {
         super.applyImplicitComponents(components);
@@ -172,17 +144,10 @@ public class JarBlockEntity extends SyncedBlockEntity implements EssentiaHolder 
         }
     }
 
-    /** The colour the liquid is drawn in. */
     public int colour() {
         return holding == null ? 0xFFFFFF : holding.value().color();
     }
 
-    /**
-     * Keeps the block state in step with how full it looks.
-     * <p>
-     * The state carries the height of the liquid and nothing else, since that is all the model needs; what the
-     * essentia actually is lives here, and the colour is asked for separately.
-     */
     @Override
     protected void changed() {
         setChanged();

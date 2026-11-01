@@ -21,25 +21,8 @@ import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.AABB;
 
-/**
- * The eight stones a matrix is made of, turning in the air.
- * <p>
- * One stone is drawn eight times: pushed out to each corner of a small cube, shrunk, and each one turned a quarter
- * differently from the last, so the same six runes read as a different face wherever you stand. The whole cluster
- * leans and spins.
- * <p>
- * Idle, it hangs still and square. Once a working starts it winds up over a few seconds rather than snapping into
- * motion, and the shakier the work the further each stone wanders off its corner -- which is the only warning
- * anybody gets before the lightning.
- */
 public class InfusionMatrixRenderer implements BlockEntityRenderer<InfusionMatrixBlockEntity> {
-    /**
-     * Where each pillar stands, and how far it is turned.
-     * <p>
-     * The mesh leans towards its own south-east corner, so each of the four is turned to lean back in towards the
-     * middle. A quarter turn here is counter-clockwise seen from above, the other way round from the turn a
-     * blockstate gives a model, which is why these are written out rather than worked out.
-     */
+    // mesh leans to its south-east; these turns are counter-clockwise, unlike blockstate rotation
     private static final float[][] PILLARS = {
             {1, -2, -1, 270},
             {1, -2, 1, 180},
@@ -47,30 +30,22 @@ public class InfusionMatrixRenderer implements BlockEntityRenderer<InfusionMatri
             {-1, -2, -1, 0},
     };
 
-    /** How far each stone sits from the middle, and how big it is drawn. */
     private static final float OUT = 0.25F;
     private static final float SMALL = 0.45F;
-    /** How the cluster is tipped, and how far it turns in a tick once it is up to speed. */
     private static final float TIP_X = 35.0F, TIP_Z = 45.0F;
     private static final float TURNS_BY = 1.0F;
-    /** How long the working takes to wind up to full speed, in ticks. */
     private static final float WINDS_UP = 60.0F;
-    /** How far a stone wanders at its worst, and how fast it wanders there and back. */
     private static final float WANDER = 0.09F;
     private static final float[] WANDERS_IN = {15.0F, 14.0F, 13.0F};
 
-    /** The original's pictures for its cube and its pillar. */
     private static final ResourceLocation STONE_TEXTURE = Alchemia.id("textures/entity/infusion_matrix.png");
     private static final ResourceLocation PILLAR_TEXTURE = Alchemia.id("textures/entity/arcane_pillar.png");
-    /** The same for an altar built of ancient or eldritch stone, as the original chose them by the first corner. */
     private static final ResourceLocation ANCIENT_STONE_TEXTURE = Alchemia.id("textures/entity/infusion_matrix_ancient.png");
     private static final ResourceLocation ANCIENT_PILLAR_TEXTURE = Alchemia.id("textures/entity/ancient_pillar.png");
     private static final ResourceLocation ELDRITCH_STONE_TEXTURE = Alchemia.id("textures/entity/infusion_matrix_eldritch.png");
     private static final ResourceLocation ELDRITCH_PILLAR_TEXTURE = Alchemia.id("textures/entity/eldritch_pillar.png");
-    /** The colour the original gave the glow. */
     private static final float GLOW_R = 0.8F, GLOW_G = 0.1F, GLOW_B = 1.0F;
 
-    /** The original's cube, its glow and its pillar, read again whenever the import changes. */
     private static final LegacyCached<ModelPart> STONE = LegacyCached.field(LegacyAssets.INFUSER, "cube");
     private static final LegacyCached<ModelPart> GLOW = LegacyCached.field(LegacyAssets.INFUSER_GLOW, "cube");
     private static final LegacyCached<LegacyMesh> PILLAR = LegacyCached.mesh(LegacyAssets.PILLAR_MESH);
@@ -88,9 +63,7 @@ public class InfusionMatrixRenderer implements BlockEntityRenderer<InfusionMatri
             return;
         }
         float ticks = matrix.getLevel().getGameTime() + partial;
-        // how long the stones have been turning, taken from the world clock so that every frame agrees
         float since = matrix.awake() ? Math.max(0.0F, ticks - matrix.wokenAt()) : 0.0F;
-        // nothing snaps into motion: a woken altar takes a few seconds to come up to speed
         float running = Math.min(1.0F, since / WINDS_UP);
         float shake = matrix.busy() ? matrix.instability() * running : 0.0F;
         var first = matrix.getLevel().getBlockState(matrix.getBlockPos().offset(-1, -2, -1));
@@ -108,14 +81,13 @@ public class InfusionMatrixRenderer implements BlockEntityRenderer<InfusionMatri
             default -> PILLAR_TEXTURE;
         };
 
-        // the altar itself, drawn by the matrix because it is the matrix that knows it is an altar
         if (matrix.awake()) {
             for (float[] corner : PILLARS) {
                 pose.pushPose();
                 pose.translate(corner[0] + 0.5, corner[1], corner[2] + 0.5);
                 pose.mulPose(Axis.YP.rotationDegrees(corner[3]));
                 pose.translate(-0.5, 0.0, -0.5);
-                // the mesh is modelled from the block's corner, two blocks tall
+                // mesh is modelled from the block's corner, two blocks tall
                 pillarMesh.render(pose.last(), buffers.getBuffer(RenderType.entityCutoutNoCull(pillarTexture)),
                         0xFFFFFFFF, light, OverlayTexture.NO_OVERLAY);
                 pose.popPose();
@@ -136,7 +108,6 @@ public class InfusionMatrixRenderer implements BlockEntityRenderer<InfusionMatri
                             wander(ticks, east, 0, shake) + (east == 0 ? -OUT : OUT),
                             wander(ticks, up, 1, shake) + (up == 0 ? -OUT : OUT),
                             wander(ticks, south, 2, shake) + (south == 0 ? -OUT : OUT));
-                    // each stone turned differently, so one cube of six runes never reads the same twice
                     if (east > 0) {
                         pose.mulPose(Axis.XP.rotationDegrees(90.0F));
                     }
@@ -147,7 +118,7 @@ public class InfusionMatrixRenderer implements BlockEntityRenderer<InfusionMatri
                         pose.mulPose(Axis.ZP.rotationDegrees(90.0F));
                     }
                     pose.scale(SMALL, SMALL, SMALL);
-                    // the original's cube is a whole block about its own middle
+                    // original's cube is a whole block about its own middle
                     legacyStone.render(pose, buffers.getBuffer(RenderType.entityCutoutNoCull(stoneTexture)),
                             light, OverlayTexture.NO_OVERLAY);
                     if (legacyGlow != null && matrix.awake()) {
@@ -162,54 +133,30 @@ public class InfusionMatrixRenderer implements BlockEntityRenderer<InfusionMatri
         pose.popPose();
     }
 
-    /**
-     * The original's violet glow over one stone of a working matrix, breathing a little out of step with the next
-     * stone. It is light added over the stone by how opaque each pixel of the glow is, as the original blended it.
-     */
     private static int glow(float ticks, int east, int up, int south, float running) {
         float strength = (Mth.sin((ticks + east * 2 + up * 3 + south * 4) / 4.0F) * 0.1F + 0.2F) * running;
         return FastColor.ARGB32.colorFromFloat(strength, GLOW_R, GLOW_G, GLOW_B);
     }
 
-    /**
-     * How far round the cluster has come since it woke.
-     * <p>
-     * Worked out from how far it has turned rather than from how fast it is turning, because the two are not the
-     * same thing while it is still winding up: multiplying the angle by the speed would wind the whole turn
-     * backwards every time the speed rose, which is a stutter rather than a start.
-     */
+    // integrated angle: angle * speed would spin backwards while winding up
     private static float turned(float since) {
         return since < WINDS_UP
                 ? TURNS_BY * since * since / (2.0F * WINDS_UP)
                 : TURNS_BY * (since - WINDS_UP / 2.0F);
     }
 
-    /** How far one stone has wandered off its corner just now. Shaky work shakes itself apart slowly. */
     private static float wander(float ticks, int which, int axis, float shake) {
         return shake <= 0.0F ? 0.0F
                 : Mth.sin((ticks + which * 10.0F) / WANDERS_IN[axis]) * WANDER * shake
                         / InfusionMatrixBlockEntity.WORST;
     }
 
-    /**
-     * How much room the drawing takes, which is a good deal more than the block it belongs to.
-     * <p>
-     * The matrix draws the whole altar: eight stones turning in its own block, and four pillars standing two
-     * blocks down, one block out and two blocks tall. Left at the usual single block, the drawing is thrown away
-     * the moment that one block falls outside the view, and the pillars vanish at certain angles while you are
-     * standing among them.
-     */
+    // covers the pillars below too, or they get culled at some angles
     @Override
     public AABB getRenderBoundingBox(InfusionMatrixBlockEntity matrix) {
         return new AABB(matrix.getBlockPos()).inflate(2.0, 3.0, 2.0);
     }
 
-    /**
-     * How far off a matrix is still drawn.
-     * <p>
-     * Further than the usual sixty-four: an altar is a thing you walk up to across a room you built for it, and
-     * the pillars popping in at the door would give that away.
-     */
     @Override
     public int getViewDistance() {
         return 96;

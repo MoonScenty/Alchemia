@@ -24,23 +24,17 @@ import net.minecraft.world.level.GameType;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/**
- * Sceptres, which hold half as much again and make everything a tenth cheaper, and the half-second swing the
- * original gave its own fighters.
- */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class SceptreTests {
     private static final String TEMPLATE = "empty_32x40x32";
 
-    /** The sceptre's layout: a cap above, beside and below the rod, and a primal charm in the top corner. */
     private static CraftingInput bench(ItemStack cap, ItemStack rod) {
         ItemStack charm = new ItemStack(ModItems.PRIMAL_CHARM.get());
         return CraftingInput.of(3, 3, List.of(ItemStack.EMPTY, cap, charm, ItemStack.EMPTY, rod, cap, cap,
                 ItemStack.EMPTY, ItemStack.EMPTY));
     }
 
-    /** Gold caps on a greatwood rod make a gold greatwood sceptre, at ten times three times three of every primal. */
     @GameTest(template = TEMPLATE)
     public static void aSceptreIsMadeAndPricedByWhatWentIn(GameTestHelper helper) {
         ItemStack gold = new ItemStack(ModItems.WAND_CAPS.get("gold").get());
@@ -64,7 +58,6 @@ public class SceptreTests {
         helper.succeed();
     }
 
-    /** A sceptre pays a tenth less for everything, at a bench as through a focus. */
     @GameTest(template = TEMPLATE)
     public static void aSceptrePaysLess(GameTestHelper helper) {
         Player bearer = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -76,7 +69,6 @@ public class SceptreTests {
         helper.succeed();
     }
 
-    /** The original's own fighters swing every half second; the taint crawler alone at the game's pace. */
     @GameTest(template = TEMPLATE)
     public static void theOriginalsFightersSwingQuickly(GameTestHelper helper) {
         for (EntityType<? extends Mob> type : List.<EntityType<? extends Mob>>of(ModEntities.TAINTED_COW.get(),

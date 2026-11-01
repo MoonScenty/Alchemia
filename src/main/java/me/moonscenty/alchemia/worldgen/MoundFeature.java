@@ -25,27 +25,14 @@ import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 
-/**
- * A barrow: a grassy mound with a way down into it, a burial chamber of cobblestone, and two spawners -- skeletons
- * and zombies -- keeping a chest of dungeon loot, two urns or crates beside it, and a sinister node hanging above,
- * half as big again as its kind. One chest in three is a trap, with TNT under it.
- * <p>
- * The shape is the original's own, read out of the player's jar by {@link MoundLayout}; without the jar there is
- * no mound. It is put down nine below the ground, as the original did, and only where the ground at its middle and
- * its four corners is grass, earth or stone (or snow or grass on them) with air above.
- * <p>
- * The original put it with its corner on the spot it was given. It reaches eighteen blocks across, which from the
- * far side of a chunk is further than a feature may build, so here the spot is its middle.
- */
+// Needs the Thaumcraft 5 jar for its shape. Placed by its middle, not the original's corner:
+// at 18 wide, a corner origin would build past the feature's chunk reach.
 public class MoundFeature extends Feature<NoneFeatureConfiguration> {
-    /** How far the middle is from the corner the original built from, across and up. */
+    // corner to middle
     public static final int HALF = 9;
-    /** Where the node hangs, from the corner. */
     private static final BlockPos NODE = new BlockPos(9, 8, 9);
-    /** The places the ground must be right, from the corner: the middle and the four corners, all at ground level. */
     private static final List<BlockPos> FOOTINGS = List.of(new BlockPos(9, 9, 9), new BlockPos(0, 9, 0),
             new BlockPos(18, 9, 0), new BlockPos(18, 9, 18), new BlockPos(0, 9, 18));
-    /** The ground a footing may stand on. */
     private static final List<Block> GROUND = List.of(Blocks.STONE, Blocks.GRASS_BLOCK, Blocks.DIRT);
 
     public MoundFeature(Codec<NoneFeatureConfiguration> codec) {
@@ -62,7 +49,6 @@ public class MoundFeature extends Feature<NoneFeatureConfiguration> {
         return build(level, corner, context.random());
     }
 
-    /** Puts the mound down with its corner here, whatever is there; false when there is no layout to build. */
     public static boolean build(WorldGenLevel level, BlockPos corner, RandomSource random) {
         MoundLayout layout = MoundLayout.get().orElse(null);
         if (layout == null) {
@@ -71,7 +57,7 @@ public class MoundFeature extends Feature<NoneFeatureConfiguration> {
         for (MoundLayout.Placement placement : layout.blocks()) {
             level.setBlock(corner.offset(placement.offset()), placement.state(), Block.UPDATE_CLIENTS);
         }
-        // the stairs were all set straight; let them turn their corners now that everything is in
+        // stairs were placed straight; let them form corners now that everything is in
         for (MoundLayout.Placement placement : layout.blocks()) {
             if (placement.state().getBlock() instanceof StairBlock) {
                 BlockPos at = corner.offset(placement.offset());
@@ -117,10 +103,6 @@ public class MoundFeature extends Feature<NoneFeatureConfiguration> {
         return true;
     }
 
-    /**
-     * Whether the ground is right here: within three blocks up there is air, and what is under that air is grass,
-     * earth or stone, or snow or grass standing on one of them.
-     */
     static boolean footing(WorldGenLevel level, BlockPos at) {
         int up = 0;
         while (!level.isEmptyBlock(at.above(up)) && up < 3) {

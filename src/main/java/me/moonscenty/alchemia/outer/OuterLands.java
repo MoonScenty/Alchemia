@@ -20,15 +20,6 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.level.LevelEvent;
 import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 
-/**
- * The Outer Lands: a dimension of solid ancient bedrock with mazes carved in it, under a fog of dark purple, no sky,
- * no weather, no night. One comes in through the portal over an opened eldritch altar and goes out through the
- * portal at the heart of the maze.
- * <p>
- * Going in, one arrives beside the portal of the nearest maze -- a step to one side of it on each axis, as the
- * original put one. Going out, one arrives beside the portal that maze was opened from, or at the world's spawn
- * when that is not known. Anyone standing in a portal waits five seconds before it takes them again.
- */
 @EventBusSubscriber(modid = Alchemia.MODID)
 public final class OuterLands {
     public static final ResourceKey<Level> LEVEL = ResourceKey.create(Registries.DIMENSION, Alchemia.id("outer_lands"));
@@ -36,9 +27,8 @@ public final class OuterLands {
             Alchemia.id("outer_lands"));
     public static final ResourceKey<DimensionType> TYPE = ResourceKey.create(Registries.DIMENSION_TYPE,
             Alchemia.id("outer_lands"));
-    /** What a player learns on first coming in. */
     public static final ResourceLocation ENTERED = Alchemia.id("enter_outer");
-    /** How long before a portal will take the same player again. */
+    // ticks
     public static final int COOLDOWN = 100;
 
     private OuterLands() {
@@ -60,7 +50,6 @@ public final class OuterLands {
         Labyrinth.forget();
     }
 
-    /** Nobody but the creative builds in a great hall while what it holds is alive within thirty-two blocks. */
     @SubscribeEvent
     public static void placing(net.neoforged.neoforge.event.level.BlockEvent.EntityPlaceEvent event) {
         if (!(event.getLevel() instanceof ServerLevel level) || !isOuterLands(level)
@@ -78,7 +67,6 @@ public final class OuterLands {
         }
     }
 
-    /** Sends a player standing in the portal here through it, whichever way it goes. */
     public static void travel(ServerPlayer player, BlockPos portal) {
         if (player.isPassenger() || player.isVehicle()) {
             return;
@@ -124,7 +112,6 @@ public final class OuterLands {
         }
     }
 
-    /** To a step beside this portal on each axis, at its own height. */
     private static void send(ServerPlayer player, ServerLevel to, BlockPos portal) {
         double x = portal.getX() + 0.5 + (to.random.nextBoolean() ? 1 : -1);
         double z = portal.getZ() + 0.5 + (to.random.nextBoolean() ? 1 : -1);

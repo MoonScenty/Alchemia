@@ -11,10 +11,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 
-/**
- * The bellows in a hand or a slot: the same model the block draws, facing west and breathing on a slow clock of
- * its own, as the original drew it when there was no block to ask how full the bag was.
- */
 public class BellowsItemRenderer extends BlockEntityWithoutLevelRenderer {
     public static final BellowsItemRenderer INSTANCE = new BellowsItemRenderer();
 

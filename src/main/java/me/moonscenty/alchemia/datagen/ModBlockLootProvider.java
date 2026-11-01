@@ -54,7 +54,6 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
             dropSelf(wood.sapling().get());
             add(wood.slab().get(), this::createSlabItemTable);
         }
-        // Greatwood saplings are about as common as oak ones, silverwood saplings are rare
         add(ModBlocks.GREATWOOD.leaves().get(), block -> createLeavesDrops(block, ModBlocks.GREATWOOD.sapling().get(),
                 1 / 44F, 1 / 36F, 1 / 28F, 1 / 20F));
         add(ModBlocks.SILVERWOOD.leaves().get(), block -> createSilverwoodLeavesDrops(block, ModBlocks.SILVERWOOD.sapling().get()));
@@ -72,14 +71,12 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
         dropSelf(ModBlocks.TUBE_RESTRICT.get());
         dropSelf(ModBlocks.TUBE_FILTER.get());
         dropSelf(ModBlocks.TUBE_BUFFER.get());
-        // a jar keeps what is in it and what is written on it when it is taken up off the floor
         for (var jar : java.util.List.of(ModBlocks.JAR, ModBlocks.VOID_JAR)) {
             add(jar.get(), block -> createSingleItemTable(block).apply(
                     CopyComponentsFunction.copyComponents(CopyComponentsFunction.Source.BLOCK_ENTITY)
                             .include(ModDataComponents.CONTENTS.get())
                             .include(ModDataComponents.ESSENTIA.get())));
         }
-        // a brain in a jar keeps what it has eaten
         add(ModBlocks.BRAIN_JAR.get(), block -> createSingleItemTable(block).apply(
                 CopyComponentsFunction.copyComponents(CopyComponentsFunction.Source.BLOCK_ENTITY)
                         .include(ModDataComponents.STORED_XP.get())));
@@ -93,13 +90,11 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
         dropSelf(ModBlocks.FOCAL_MANIPULATOR.get());
         dropSelf(ModBlocks.BELLOWS.get());
         dropSelf(ModBlocks.CENTRIFUGE.get());
-        // a mirror taken down from a pair remembers its partner
         for (var mirror : java.util.List.of(ModBlocks.MIRROR.get(), ModBlocks.MIRROR_ESSENTIA.get())) {
             add(mirror, block -> createSingleItemTable(block).apply(
                     CopyComponentsFunction.copyComponents(CopyComponentsFunction.Source.BLOCK_ENTITY)
                             .include(ModDataComponents.MIRROR_LINK.get())));
         }
-        // the heart gives nothing; the shell gives back what it was
         add(ModBlocks.INFERNAL_FURNACE.get(), noDrop());
         add(ModBlocks.FURNACE_SHELL.get(), block -> LootTable.lootTable()
                 .withPool(applyExplosionCondition(block, LootPool.lootPool().setRolls(ConstantValue.exactly(1))
@@ -109,7 +104,6 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
                                                 .hasProperty(me.moonscenty.alchemia.block.FurnaceShellBlock.OBSIDIAN,
                                                         true)))
                                 .otherwise(LootItem.lootTableItem(Blocks.NETHER_BRICKS))))));
-        // the stone table gives itself; a golem press gives back what each part of it was made from
         dropSelf(ModBlocks.STONE_TABLE.get());
         dropSelf(ModBlocks.WOODEN_TABLE.get());
         dropSelf(ModBlocks.ETHEREAL_BLOOM.get());
@@ -128,7 +122,6 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
         });
         dropSelf(ModBlocks.ARCANE_BORE.get());
         dropSelf(ModBlocks.ARCANE_BORE_BASE.get());
-        // each half of a thaumatorium was a block of brass, and gives it back
         dropOther(ModBlocks.THAUMATORIUM.get(), ModBlocks.ALCHEMICAL_CONSTRUCT.get());
         dropSelf(ModBlocks.ALCHEMICAL_CONSTRUCT.get());
         dropSelf(ModBlocks.ADVANCED_ALCHEMICAL_CONSTRUCT.get());
@@ -161,8 +154,6 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
         dropSelf(ModBlocks.NODE_STABILIZER.get());
         dropSelf(ModBlocks.ARCANE_PEDESTAL.get());
         dropSelf(ModBlocks.INFUSION_MATRIX.get());
-        // a corner is arcane stone that has been told what it is for; broken, it is arcane stone again
-        // a pillar gives back the stone it was built of
         add(ModBlocks.ARCANE_PILLAR.get(), block -> {
             net.minecraft.world.level.storage.loot.LootTable.Builder table =
                     net.minecraft.world.level.storage.loot.LootTable.lootTable();
@@ -181,16 +172,13 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
                 ModBlocks.CRUSTED_STONE, ModBlocks.GLOWING_CRUSTED_STONE)) {
             dropSelf(stone.get());
         }
-        // what it drops it works out for itself
         add(ModBlocks.POROUS_STONE.get(), noDrop());
         add(ModBlocks.LOOT_URN.get(), noDrop());
         add(ModBlocks.LOOT_CRATE.get(), noDrop());
         dropSelf(ModBlocks.ANCIENT_PEDESTAL.get());
-        // a banner works out for itself which banner it is
         add(ModBlocks.BANNER.get(), noDrop());
         dropSelf(ModBlocks.ELDRITCH_PEDESTAL.get());
 
-        // nothing tainted is worth keeping; what the growths gave in the original arrives with those items
         add(ModBlocks.TAINT_FIBRE.get(), noDrop());
         add(ModBlocks.TAINT_SOIL.get(), noDrop());
         add(ModBlocks.TAINT_CRUST.get(), noDrop());
@@ -216,7 +204,6 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
                 .apply(ApplyBonusCount.addOreBonusCount(fortune))));
     }
 
-    /** Silverwood leaves occasionally shed a drop of quicksilver. */
     private LootTable.Builder createSilverwoodLeavesDrops(Block leaves, Block sapling) {
         Holder<Enchantment> fortune = registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FORTUNE);
         return createLeavesDrops(leaves, sapling, 1 / 200F, 1 / 160F, 1 / 120F, 1 / 80F)
@@ -226,7 +213,6 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
                                 .when(BonusLevelTableCondition.bonusLevelFlatChance(fortune, 1 / 100F, 1 / 85F, 1 / 70F, 1 / 50F))));
     }
 
-    /** One shard, plus one more per growth stage. */
     private LootTable.Builder createCrystalDrops(Block block, Item shard) {
         LootPoolSingletonContainer.Builder<?> entry = LootItem.lootTableItem(shard);
         for (int age = 1; age <= CrystalBlock.MAX_AGE; age++) {

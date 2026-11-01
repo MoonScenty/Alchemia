@@ -18,15 +18,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
-/**
- * The wand on a recharge pedestal, and the filling of it.
- *
- * <p>Twice a second it draws for the wand from the aura of its chunk, as much as a wand in the hand draws -- five
- * points and the cap's bonus -- and a full draw shows as a mote of the last vis drawn, drifting in to the wand from
- * somewhere round about. A hopper can set a wand on it from any side, and take one off.
- */
 public class RechargePedestalBlockEntity extends SyncedBlockEntity implements WorldlyContainer {
-    /** How often it draws, in ticks, and how much it asks for each time. The original's. */
+    // original's values
     private static final int EVERY = 10;
     private static final int AMOUNT = 5;
     private static final int[] SLOTS = {0};
@@ -64,8 +57,6 @@ public class RechargePedestalBlockEntity extends SyncedBlockEntity implements Wo
                     from.getZ() + random.nextDouble(), 1, 0.0, 0.0, 0.0, 0.0);
         }
     }
-
-    // --- the one place on top ------------------------------------------------------------------------------
 
     @Override
     public int getContainerSize() {

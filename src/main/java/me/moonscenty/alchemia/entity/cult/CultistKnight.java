@@ -22,12 +22,6 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 
-/**
- * The cult's soldier: 30 health, the crimson plate head to foot, and an iron sword. Now and then -- one in twenty
- * on hard, one in a hundred otherwise -- something better: one in five of those a void sword under a hood, the rest
- * an alchemium sword, half of them bareheaded. A quarter of the time, as the region gets harder, the sword is
- * enchanted. It swings twice as often as anything else that swings.
- */
 public class CultistKnight extends Cultist {
     public CultistKnight(EntityType<? extends CultistKnight> type, Level level) {
         super(type, level);

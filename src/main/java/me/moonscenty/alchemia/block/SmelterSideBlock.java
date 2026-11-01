@@ -7,7 +7,6 @@ import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 
-/** A pump or vent fixed to the side or back of an essentia smelter, facing into it. */
 public abstract class SmelterSideBlock extends HorizontalDirectionalBlock {
     protected SmelterSideBlock(Properties properties) {
         super(properties);
@@ -19,7 +18,6 @@ public abstract class SmelterSideBlock extends HorizontalDirectionalBlock {
         builder.add(FACING);
     }
 
-    /** Only on the side or back of a smelter, facing into it. */
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         Direction side = context.getClickedFace();

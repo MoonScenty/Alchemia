@@ -22,13 +22,11 @@ import net.minecraft.world.level.GameType;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/** The angry zombies, their brains, and champions. */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class MobTests {
     private static final String TEMPLATE = "empty_32x40x32";
 
-    /** Spawns one already rolled ordinary, so that no test meets a champion by chance. */
     private static <T extends Mob> T ordinary(GameTestHelper helper, EntityType<T> type, BlockPos at) {
         T mob = type.create(helper.getLevel());
         mob.setData(ModAttachments.CHAMPION, Champions.ORDINARY);
@@ -38,7 +36,6 @@ public class MobTests {
         return mob;
     }
 
-    /** Tougher than a zombie, and a harder bite. */
     @GameTest(template = TEMPLATE)
     public static void anAngryZombieIsTougherThanAZombie(GameTestHelper helper) {
         AngryZombie zombie = ordinary(helper, ModEntities.ANGRY_ZOMBIE.get(), new BlockPos(4, 2, 4));
@@ -48,7 +45,6 @@ public class MobTests {
         helper.succeed();
     }
 
-    /** Every blow makes it angrier, and the angrier it is the bigger it is and the harder it bites. */
     @GameTest(template = TEMPLATE)
     public static void aFuriousZombieGrowsWithItsAnger(GameTestHelper helper) {
         FuriousZombie zombie = ordinary(helper, ModEntities.FURIOUS_ZOMBIE.get(), new BlockPos(4, 2, 4));
@@ -65,7 +61,6 @@ public class MobTests {
         });
     }
 
-    /** Eating a brain leaves warp behind, one way or the other. */
     @GameTest(template = TEMPLATE)
     public static void eatingABrainLeavesWarp(GameTestHelper helper) {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -74,7 +69,6 @@ public class MobTests {
         helper.succeed();
     }
 
-    /** A champion has a hundred more health, three times the bite, and a name that says so. */
     @GameTest(template = TEMPLATE)
     public static void aChampionIsStrongerAndNamed(GameTestHelper helper) {
         Zombie zombie = ordinary(helper, EntityType.ZOMBIE, new BlockPos(4, 2, 4));
@@ -87,7 +81,6 @@ public class MobTests {
         helper.succeed();
     }
 
-    /** A warded champion has a ward of half its own health, and an armored one takes a quarter less. */
     @GameTest(template = TEMPLATE)
     public static void wardedAndArmoredChampionsTakeLess(GameTestHelper helper) {
         Zombie warded = ordinary(helper, EntityType.ZOMBIE, new BlockPos(4, 2, 4));

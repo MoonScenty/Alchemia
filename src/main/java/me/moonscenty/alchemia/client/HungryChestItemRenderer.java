@@ -10,7 +10,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 
-/** A hungry chest in a hand or a slot: shut, facing whoever is looking at it. */
 public class HungryChestItemRenderer extends BlockEntityWithoutLevelRenderer {
     private static HungryChestItemRenderer instance;
 
@@ -18,7 +17,6 @@ public class HungryChestItemRenderer extends BlockEntityWithoutLevelRenderer {
         super(Minecraft.getInstance().getBlockEntityRenderDispatcher(), Minecraft.getInstance().getEntityModels());
     }
 
-    /** Made when first asked for, once the game has the parts a renderer needs. */
     public static HungryChestItemRenderer get() {
         if (instance == null) {
             instance = new HungryChestItemRenderer();

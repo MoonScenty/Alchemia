@@ -14,18 +14,11 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
-/**
- * Hangs a node somewhere in the open.
- * <p>
- * It looks at a spot from a little above the floor up to the sky, rising until it finds air, which puts most nodes
- * underground where the caves are and leaves a few of them in the open.
- */
+// Climbs from FLOOR until it finds air, so most nodes end up in caves.
 public class NodeFeature extends Feature<NoneFeatureConfiguration> {
-    /** Nothing is hung lower than this, so nodes do not end up buried in bedrock. */
     private static final int FLOOR = 8;
-    /** How far it will climb looking for somewhere open before giving up. */
     private static final int CLIMB = 64;
-    /** A tainted node arrives having already spoiled the land around it. */
+    // a tainted node arrives having already spoiled its chunk
     private static final int TAINT_ON_ARRIVAL = AuraGeneration.BASE;
 
     public NodeFeature(Codec<NoneFeatureConfiguration> codec) {

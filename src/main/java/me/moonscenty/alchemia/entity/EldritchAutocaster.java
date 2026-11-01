@@ -23,16 +23,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 
-/**
- * The ancient autocaster: a turret of the Outer Lands, set on a pillar in the floor or hanging from the ceiling of a
- * maze's passages. It belongs to nobody and minds everything alive that is not of the Outer Lands -- except the
- * undead, which the original meant it to pass over -- and shoots it with whatever focus it was built with: the
- * shard four times in ten, frost, shock or fire otherwise.
- * <p>
- * It holds fifty of each primal, starts with ten to nineteen of each, and draws more out of the air as any autocaster
- * does. It is harder than a made one (fifty-five to wear down, eight of plating). Broken, it may give up a zombie
- * brain, a void ingot or two, and its focus.
- */
+// Ownerless maze turret; it passes over the undead, as the original meant to.
 public class EldritchAutocaster extends Autocaster implements EldritchMob {
     private static final List<String> FOCI = List.of("shard", "shard", "frost", "shock", "fire");
 
@@ -45,7 +36,6 @@ public class EldritchAutocaster extends Autocaster implements EldritchMob {
         return Autocaster.attributes().add(Attributes.MAX_HEALTH, 55.0);
     }
 
-    /** Puts one in a maze, against this face, armed. */
     public static void place(ServerLevelAccessor level, BlockPos at, Direction face) {
         EldritchAutocaster turret = ModEntities.ELDRITCH_AUTOCASTER.get().create(level.getLevel());
         if (turret == null) {
@@ -58,7 +48,6 @@ public class EldritchAutocaster extends Autocaster implements EldritchMob {
         level.addFreshEntity(turret);
     }
 
-    /** A focus out of the original's four, and a little of each primal to start on. */
     public void arm(RandomSource random) {
         String focus = FOCI.get(random.nextInt(FOCI.size()));
         setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.FOCI.get(focus).get()));

@@ -37,15 +37,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.common.Tags;
 
-/**
- * The molten heart of an infernal furnace: thirty-two squares of whatever has been dropped into it, smelted one at
- * a time with no fuel at all and spat out of the mouth.
- * <p>
- * It is slow on its own -- seven seconds an item -- and quick on fire drawn from the air, four seconds, five items to
- * every point of fire; every pair of bellows blowing into it takes a second off either. Ores and their clusters come
- * out with a nugget besides, now and then, and more often the more bellows there are. Anything that will not smelt
- * is burned to nothing. One smelt in twelve lets a point of flux out of the mouth.
- */
 public class InfernalFurnaceBlockEntity extends BlockEntity implements WorldlyContainer {
     public static final int SIZE = 32;
     private static final int[] ALL = java.util.stream.IntStream.range(0, SIZE).toArray();
@@ -55,7 +46,6 @@ public class InfernalFurnaceBlockEntity extends BlockEntity implements WorldlyCo
     private static final int DRAWS = 5;
     private static final int A_POINT_SMELTS = 5;
     private static final int FLUX_ONE_IN = 12;
-    /** The block event the client's sparks and pops are sent as. */
     public static final int SMELTED = 3;
 
     private final NonNullList<ItemStack> contents = NonNullList.withSize(SIZE, ItemStack.EMPTY);
@@ -67,7 +57,6 @@ public class InfernalFurnaceBlockEntity extends BlockEntity implements WorldlyCo
         super(ModBlockEntities.INFERNAL_FURNACE.get(), pos, state);
     }
 
-    /** The way out: the side the bars were on. */
     private Direction mouth() {
         return getBlockState().getValue(InfernalFurnaceBlock.FACING).getOpposite();
     }
@@ -133,7 +122,6 @@ public class InfernalFurnaceBlockEntity extends BlockEntity implements WorldlyCo
         return (speedy > 0 ? FAST : SLOW) - A_BELLOWS_SAVES * bellows(level);
     }
 
-    /** Bellows two blocks out on any side but the top, blowing in and not held still by redstone; three at most. */
     private int bellows(Level level) {
         int count = 0;
         for (Direction side : Direction.values()) {
@@ -149,7 +137,6 @@ public class InfernalFurnaceBlockEntity extends BlockEntity implements WorldlyCo
         return Math.min(3, count);
     }
 
-    /** What was made, out of the mouth; a nugget besides now and then; and the experience a furnace would give. */
     private void eject(ServerLevel level, BlockPos pos, RecipeHolder<SmeltingRecipe> recipe, ItemStack input) {
         Direction out = mouth();
         RandomSource random = level.random;
@@ -197,7 +184,7 @@ public class InfernalFurnaceBlockEntity extends BlockEntity implements WorldlyCo
         level.addFreshEntity(item);
     }
 
-    /** The original's table of what comes out besides: a nugget off an ore or a cluster of it, a chunk off meat. */
+    // original's table
     public static ItemStack bonus(ItemStack input) {
         Item nugget = null;
         if (input.is(Tags.Items.ORES_IRON) || input.is(ModItems.IRON_CLUSTER.get())) {
@@ -222,7 +209,6 @@ public class InfernalFurnaceBlockEntity extends BlockEntity implements WorldlyCo
         return nugget == null ? ItemStack.EMPTY : new ItemStack(nugget);
     }
 
-    /** Something that will not smelt is burned to nothing, with a hiss. */
     private void burn(Level level, int slot) {
         contents.set(slot, ItemStack.EMPTY);
         level.playSound(null, worldPosition, SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, 0.3F,
@@ -234,10 +220,6 @@ public class InfernalFurnaceBlockEntity extends BlockEntity implements WorldlyCo
         setChanged();
     }
 
-    /**
-     * Takes a whole stack thrown in, or none of it: into a square with the same thing and room, or an empty one.
-     * Something that will not smelt is burned the moment it lands.
-     */
     public boolean take(ItemStack stack) {
         if (level == null) {
             return false;
@@ -284,8 +266,6 @@ public class InfernalFurnaceBlockEntity extends BlockEntity implements WorldlyCo
         return true;
     }
 
-    // --- the thirty-two squares --------------------------------------------
-
     public NonNullList<ItemStack> contents() {
         return contents;
     }
@@ -331,7 +311,6 @@ public class InfernalFurnaceBlockEntity extends BlockEntity implements WorldlyCo
         contents.clear();
     }
 
-    /** Fed only from the top, through the hole over the molten heart; nothing is ever taken back out. */
     @Override
     public int[] getSlotsForFace(Direction side) {
         return side == Direction.UP ? ALL : new int[0];
@@ -346,8 +325,6 @@ public class InfernalFurnaceBlockEntity extends BlockEntity implements WorldlyCo
     public boolean canTakeItemThroughFace(int slot, ItemStack stack, Direction side) {
         return false;
     }
-
-    // --- saving ------------------------------------------------------------
 
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {

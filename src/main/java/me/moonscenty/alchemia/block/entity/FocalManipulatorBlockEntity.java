@@ -28,25 +28,12 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
-/**
- * A focus laid on the bench, and the working of one more thing into it.
- *
- * <p>Work is a bill of primals that has to be drawn out of the air a little at a time. Nothing is held in
- * reserve: five of each aspect every five ticks, out of the chunk the bench is standing in, until the bill is
- * clear. That is what makes a manipulator want a thick sky and makes it take a while.
- *
- * <p>Taking the focus off the bench part-way through throws the work away, vis and levels and all. The original
- * did the same, and it is the only answer that does not leave half an upgrade written on a focus somebody has
- * walked off with.
- */
 public class FocalManipulatorBlockEntity extends SyncedBlockEntity implements Container, MenuProvider {
-    /** How often it draws, and how much of any one aspect it can pull at a time. */
     private static final int DRAWS_EVERY = 5;
     private static final int DRAWS = 5;
 
     private final NonNullList<ItemStack> laid = NonNullList.withSize(1, ItemStack.EMPTY);
 
-    /** What is still owed, what the whole bill was, and what is being worked in where. */
     private AspectList owed = AspectList.EMPTY;
     private int bill;
     private FocusUpgrade working;
@@ -57,13 +44,6 @@ public class FocalManipulatorBlockEntity extends SyncedBlockEntity implements Co
         super(ModBlockEntities.FOCAL_MANIPULATOR.get(), pos, state);
     }
 
-    // --- the work ---------------------------------------------------------------------------------------
-
-    /**
-     * Takes on a piece of work, if the focus will have it and the one asking can pay the levels.
-     *
-     * @return whether anything was started, which is also whether the levels were taken
-     */
     public boolean start(FocusUpgrade upgrade, Player asking) {
         if (bill > 0 || level == null || !(getItem(0).getItem() instanceof FocusItem)) {
             return false;
@@ -73,7 +53,7 @@ public class FocalManipulatorBlockEntity extends SyncedBlockEntity implements Co
             return false;
         }
         int levels = FocusUpgrades.levels(next);
-        // asked of the player rather than of their abilities, for the reason written in Swapping.takeOne
+        // checked on the player, not abilities (see Swapping.takeOne)
         if (!asking.isCreative() && asking.experienceLevel < levels) {
             return false;
         }
@@ -123,6 +103,7 @@ public class FocalManipulatorBlockEntity extends SyncedBlockEntity implements Co
         clear();
     }
 
+    // removing or swapping the focus mid-work discards all progress, as the original did
     private void giveUp() {
         if (level != null) {
             level.playSound(null, worldPosition, ModSounds.CRAFT_FAIL.get(), SoundSource.BLOCKS, 0.33F, 1.0F);
@@ -138,22 +119,18 @@ public class FocalManipulatorBlockEntity extends SyncedBlockEntity implements Co
         changed();
     }
 
-    /** What is still owed, which is what the screen draws its bar from. */
     public AspectList owed() {
         return owed;
     }
 
-    /** What the whole bill was, so a part-paid one can be drawn as a share of it. */
     public int bill() {
         return bill;
     }
 
-    /** What is being worked in, or nothing when the bench is idle. */
     public FocusUpgrade working() {
         return working;
     }
 
-    /** Which rank is being worked on now, counting from one. */
     public int rank() {
         return rank;
     }
@@ -162,8 +139,6 @@ public class FocalManipulatorBlockEntity extends SyncedBlockEntity implements Co
     protected void changed() {
         changed(Block.UPDATE_ALL);
     }
-
-    // --- the one square it has --------------------------------------------------------------------------
 
     @Override
     public int getContainerSize() {
@@ -204,7 +179,6 @@ public class FocalManipulatorBlockEntity extends SyncedBlockEntity implements Co
         setChanged();
     }
 
-    /** A focus taken off, or swapped for one this piece of work means nothing to, is work abandoned. */
     @Override
     public void setChanged() {
         super.setChanged();
@@ -213,13 +187,7 @@ public class FocalManipulatorBlockEntity extends SyncedBlockEntity implements Co
         }
     }
 
-    /**
-     * Whether what is on the bench now is still something this piece of work can be finished on.
-     * <p>
-     * Asked of the focus rather than of the stack it came in: a focus of the same kind with the same ranks
-     * filled is the same piece of work by any measure that matters, and asking it this way survives the world
-     * being closed and opened again, which holding on to the stack itself would not.
-     */
+    // compares focus kind and ranks, not the stack, so it survives a reload
     private boolean stillGood() {
         return working != null && getItem(0).getItem() instanceof FocusItem
                 && FocusUpgrades.nextRank(getItem(0)) == rank
@@ -245,8 +213,6 @@ public class FocalManipulatorBlockEntity extends SyncedBlockEntity implements Co
     public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
         return new FocalManipulatorMenu(id, inventory, this);
     }
-
-    // --- saving -----------------------------------------------------------------------------------------
 
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {

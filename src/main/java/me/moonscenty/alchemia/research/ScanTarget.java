@@ -13,14 +13,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
-/**
- * Something a player can hold an alchemometer up to.
- */
 public sealed interface ScanTarget {
-    /** What the thing is made of, which is what a scan actually teaches. */
     AspectList aspects();
 
-    /** What to call it in the message that follows a scan. */
     Component displayName();
 
     record OfItem(ItemStack stack) implements ScanTarget {
@@ -38,7 +33,7 @@ public sealed interface ScanTarget {
     record OfBlock(Level level, BlockPos pos, BlockState state) implements ScanTarget {
         @Override
         public AspectList aspects() {
-            // a block is read through the item it would drop, which is what the aspects are written against
+            // read via the block's item, which is what aspects are keyed on
             return Aspects.of(state.getBlock().asItem());
         }
 
@@ -60,12 +55,7 @@ public sealed interface ScanTarget {
         }
     }
 
-    /**
-     * A node, which is nothing but the aspect it is made of.
-     * <p>
-     * There is no entry for it in the data map because no two nodes hold the same thing. What it teaches is read
-     * off the node in front of the player, and how much of it there is says how large the node has grown.
-     */
+    // no data-map entry: read off the node itself, the amount scaling with its size
     record OfNode(AuraNode node) implements ScanTarget {
         @Override
         public AspectList aspects() {
@@ -79,7 +69,7 @@ public sealed interface ScanTarget {
         }
     }
 
-    /** Reads whatever is in front of the player, preferring a dropped item's contents over the item entity itself. */
+    // a dropped item is read as its stack
     static ScanTarget of(Entity entity) {
         if (entity instanceof ItemEntity item) {
             return new OfItem(item.getItem());

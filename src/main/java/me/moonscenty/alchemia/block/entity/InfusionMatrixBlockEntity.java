@@ -33,98 +33,60 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 
-/**
- * The working of an infusion: what is being made, what is still owed for it, and how badly it wants to go wrong.
- * <p>
- * A step of the work is half a cycle, ten ticks on a bare altar, the original's. On each step it drinks a single point
- * of essentia out of the jars standing round it, and once nothing is owed it eats the ring a thing at a time, each
- * thing taking six steps and leaving its container behind. A thing missing from the ring stalls it: the work wants
- * more essentia for the wait and grows shakier. Take the thing on the pedestal beneath away, or put something else
- * there, and the whole working comes apart. When the ring is eaten the thing beneath becomes what was being made.
- * <p>
- * It is slow on purpose. An infusion is meant to be something you stand and watch, partly because watching is the
- * only warning you get that it is about to go wrong.
- */
 public class InfusionMatrixBlockEntity extends SyncedBlockEntity {
-    /** How long a turn of the work takes when nothing has been built to change it. */
+    // ticks per cycle with no altar upgrades; one step is half a cycle
     public static final int CYCLE = 20;
-    /** What a working costs when nothing has been built to change it, in hundredths. */
+    // costs are percentages of the recipe price
     public static final int FULL_COST = 100;
-    /** Nothing an altar can be built out of takes a working below half price. */
     public static final int CHEAPEST = 50;
 
-    /** What one stone under a corner does to the length of a turn and to the price, per the original. */
+    // original's values
     private static final int SPEED_STONE_CYCLE = -2;
     private static final int SPEED_STONE_COST = 1;
     private static final int COST_STONE_CYCLE = 1;
     private static final int COST_STONE_COST = -2;
-    /** What four ancient or four eldritch corners do. The original's. */
+    // original's values
     private static final int ANCIENT_CORNERS_CYCLE = -2;
     private static final int ANCIENT_CORNERS_COST = -10;
     private static final int ANCIENT_CORNERS_SHAKE = 2;
     private static final int ELDRITCH_CORNERS_CYCLE = -4;
     private static final int ELDRITCH_CORNERS_COST = 5;
     private static final int ELDRITCH_CORNERS_SHAKE = -4;
-    /** How far out the ring of pedestals may stand, and how far below the matrix they may be. */
     private static final int RING = 8;
     private static final int DEEP = 10;
-    /** How far out the matrix counts skulls and candles, and how far above itself it bothers looking. */
     private static final int STEADIED = 12;
     private static final int STEADIED_UP = 5;
-    /** How far the matrix reaches for essentia. No pipe is needed: a shelf of jars nearby is the plumbing. */
     private static final int JARS = 12;
-    /** How far under the matrix the thing being worked on stands. */
     private static final int UNDER = 2;
-    /** How many steps it takes to eat one thing off the ring. The original's. */
+    // original's value
     private static final int EATS_FOR = 5;
-    /** One step in this many goes wrong, per point of instability. */
+    // mishap chance per step: instability in MISHAP
     private static final int MISHAP = 500;
-    /** No work is ever worse than this, however it is laid out. */
+    // instability cap
     public static final int WORST = 25;
-    /** How often the hum of a working comes round again, in ticks. The original's. */
     private static final int HUMS_EVERY = 65;
 
-    /**
-     * How often a matrix that is awake looks around to see whether its altar is still standing.
-     * <p>
-     * Once a second. A corner stone is not a neighbour of the matrix, so nothing tells it when one is broken, and
-     * five seconds of pillars still standing over a hole is long enough for somebody to break a second one trying
-     * to work out what went wrong.
-     */
+    // corner stones are not neighbours, so nothing notifies the matrix when one breaks; poll
     private static final int LOOKS_ROUND = 20;
 
-    /** Whether the altar under it is built and the stones have been woken. */
     private boolean awake;
     private ResourceLocation working;
-    /** Who started the working under way, who the warp of making it falls on. Not saved. */
+    // receives the warp; not saved
     private java.util.UUID worker;
     private AspectList owed = AspectList.EMPTY;
     private List<BlockPos> ring = List.of();
     private int instability;
-    /** What was on the pedestal beneath when the working began, and what the recipe itself added to the shake. */
     private ItemStack central = ItemStack.EMPTY;
     private int recipeShake;
-    /** What is still to be eaten off the ring, and how far through eating the current thing it is. */
     private List<ItemStack> remaining = List.of();
     private int eating;
-    /** The aspects the working was asked for, any of which it may want more of while it waits. */
     private List<ResourceLocation> asked = List.of();
-    /** How long this working's turns are and what it is paying, read off the altar when the work began. */
     private int cycle = CYCLE;
     private int cost = FULL_COST;
     private int counter;
-    /**
-     * When it woke, by the world clock.
-     * <p>
-     * The drawing needs to know how long the stones have been turning, and a counter ticked up on the server is
-     * no use for that: a client only hears about it when something else happens to be synced, so the number it
-     * draws with jumps about and the stones shiver in place instead of turning. A moment in time is sent once and
-     * stays true.
-     */
+    // a timestamp, not a counter, so the client can animate without per-tick sync
     private long woken;
-    /** Ticks since it woke, for looking round at the altar now and then. */
     private int watch;
-    /** On the client: ticks since the working now under way began to hum, or -1 while there is none. */
     private int humming = -1;
 
     public InfusionMatrixBlockEntity(BlockPos pos, BlockState state) {
@@ -143,58 +105,32 @@ public class InfusionMatrixBlockEntity extends SyncedBlockEntity {
         return instability;
     }
 
-    /** How long a turn of the working now under way takes. */
     public int cycle() {
         return cycle;
     }
 
-    /** What the working now under way is paying, in hundredths of the recipe's price. */
     public int cost() {
         return cost;
     }
 
-    /** When the stones began to turn, by the world clock. */
     public long wokenAt() {
         return woken;
     }
 
-    /** What is still to be drunk, for anything that wants to say so. */
     public AspectList owed() {
         return owed;
     }
 
-    // --- building it -------------------------------------------------------
-
-    /**
-     * Where the four pillars stand, and which way each is turned.
-     * <p>
-     * What stands there is a picture the matrix draws. The stone under it is turned into a corner block that
-     * draws nothing at all, because a pillar drawn over an arcane stone leaves the top half of the stone standing
-     * out around the shaft, and a whole block does not hide behind a tapering one.
-     * <p>
-     * So the corner is invisible but solid: the foot of the picture is the part you can break, the two blocks of
-     * shaft above it are air, and breaking the corner gives the stone back.
-     */
     public static final List<Vec3i> CORNERS = List.of(
             new Vec3i(1, -2, -1),
             new Vec3i(1, -2, 1),
             new Vec3i(-1, -2, 1),
             new Vec3i(-1, -2, -1));
 
-    /**
-     * Whether there is an altar under this at all: a pedestal to work on and a stone at each corner.
-     * <p>
-     * A matrix with nothing under it is eight stones hanging in a room. It will not wake and, if the altar is
-     * pulled apart under a working, it will not go on with it.
-     */
     public boolean built(Level level) {
         return corners(level) != null;
     }
 
-    /**
-     * What the four corners are built of, if they are all the one thing, whether still stone or already woken.
-     * Null if they are not.
-     */
     public me.moonscenty.alchemia.block.PillarKind corners(Level level) {
         for (me.moonscenty.alchemia.block.PillarKind kind : me.moonscenty.alchemia.block.PillarKind.values()) {
             if (standing(level, kind.stone()) || standingPillars(level, kind)) {
@@ -216,12 +152,6 @@ public class InfusionMatrixBlockEntity extends SyncedBlockEntity {
         return true;
     }
 
-    /**
-     * A pedestal to work on, and the same thing standing two high at each of the four corners.
-     * <p>
-     * Two high because a pillar is two blocks tall, which is the shape the original altar is built to and the
-     * shape the picture is drawn at. One block to a corner would be a different building.
-     */
     private boolean standing(Level level, Block corner) {
         if (!(level.getBlockEntity(worldPosition.below(UNDER)) instanceof ArcanePedestalBlockEntity)) {
             return false;
@@ -234,17 +164,7 @@ public class InfusionMatrixBlockEntity extends SyncedBlockEntity {
         return true;
     }
 
-    /**
-     * How badly the ring is laid out, which is most of what makes a working dangerous.
-     * <p>
-     * Every pedestal counts against the work, and every pedestal with an opposite number -- the same pedestal
-     * standing the same distance the other side of the matrix -- cancels itself out again. Lay the ring out in
-     * pairs and the working is as steady as the recipe allows; hang one pedestal off the end of it and the whole
-     * thing starts twitching.
-     * <p>
-     * Symmetry rather than tidiness, and about the matrix rather than about any wall, so a works can be built into
-     * whatever room it has. The one rule is that it be built both sides at once.
-     */
+    // each pedestal adds instability; an identical pedestal mirrored across the matrix cancels it
     public int symmetry(Level level) {
         int against = 0;
         for (BlockPos at : around(level, worldPosition)) {
@@ -278,20 +198,9 @@ public class InfusionMatrixBlockEntity extends SyncedBlockEntity {
         return against + ancientStands / 4 + steadying(level);
     }
 
-    /** How many ancient pedestals the ring has, counted when the price was. */
     private int ancientStands;
 
-    /**
-     * What the four stones under the altar's corners do to a working.
-     * <p>
-     * One stone to a corner, a course below the pillar's foot, and each pulls the length of a turn one way and
-     * the price the other: haste is paid for and thrift is waited for. Four of a kind is the whole of either --
-     * twelve ticks to a turn, or eight parts in a hundred off the bill -- and they can be mixed, which is the
-     * only reason there are two of them rather than one with a switch.
-     * <p>
-     * Read once when the work begins and not again. An altar rebuilt under a working keeps the bargain it was
-     * started on, which is the same rule the ring and the instability already follow.
-     */
+    // read once when a working starts; rebuilding mid-work does not change its terms
     private void reckon(Level level) {
         cycle = CYCLE;
         cost = FULL_COST;
@@ -303,7 +212,7 @@ public class InfusionMatrixBlockEntity extends SyncedBlockEntity {
             cycle += ELDRITCH_CORNERS_CYCLE;
             cost += ELDRITCH_CORNERS_COST;
         }
-        // each ancient pedestal a part in a hundred off, each eldritch one a quarter part on
+        // each ancient pedestal -1%, each eldritch one +0.25%
         int quarters = 0;
         ancientStands = 0;
         for (BlockPos at : around(level, worldPosition)) {
@@ -330,7 +239,7 @@ public class InfusionMatrixBlockEntity extends SyncedBlockEntity {
         cost = Math.max(CHEAPEST, cost);
     }
 
-    /** What a recipe actually costs on this altar. A price cut below a whole point is no cut at all. */
+    // discounts round down; an aspect discounted to zero is dropped
     private AspectList priced(AspectList asked) {
         if (cost == FULL_COST) {
             return asked;
@@ -345,22 +254,12 @@ public class InfusionMatrixBlockEntity extends SyncedBlockEntity {
         return paying;
     }
 
-    /** Straight through the matrix and the same distance out the other side, at the same height. */
     private BlockPos mirror(BlockPos at) {
         return new BlockPos(2 * worldPosition.getX() - at.getX(), at.getY(),
                 2 * worldPosition.getZ() - at.getZ());
     }
 
-    /**
-     * What the skulls and candles round about are doing, in tenths.
-     * <p>
-     * A pair set either side of the matrix takes something off the working. A single one adds a little instead:
-     * one skull on one side of an altar is not a decoration, it is a lump on one side of a spinning thing.
-     * <p>
-     * It is counted in tenths and then cut down to whole numbers, so a couple of candles are worth nothing and it
-     * takes ten paired skulls to be worth a point. They are meant to be the last thing you reach for, not the
-     * first.
-     */
+    // in tenths, truncated: mirrored pairs steady, unpaired ones destabilise
     private int steadying(Level level) {
         int tenths = 0;
         for (int east = -STEADIED; east <= STEADIED; east++) {
@@ -380,7 +279,6 @@ public class InfusionMatrixBlockEntity extends SyncedBlockEntity {
         return tenths / 10;
     }
 
-    /** Both blocks of all four corners. */
     private List<BlockPos> columns() {
         List<BlockPos> all = new ArrayList<>();
         for (Vec3i corner : CORNERS) {
@@ -391,7 +289,6 @@ public class InfusionMatrixBlockEntity extends SyncedBlockEntity {
         return all;
     }
 
-    /** Wakes the corners: the stone stops being drawn and the matrix draws a pillar standing where it was. */
     private void raise(Level level) {
         me.moonscenty.alchemia.block.PillarKind kind = corners(level);
         if (kind == null) {
@@ -403,7 +300,6 @@ public class InfusionMatrixBlockEntity extends SyncedBlockEntity {
         }
     }
 
-    /** And gives the stone back, whichever stone it was. */
     private void lower(Level level) {
         for (BlockPos at : columns()) {
             BlockState there = level.getBlockState(at);
@@ -414,22 +310,11 @@ public class InfusionMatrixBlockEntity extends SyncedBlockEntity {
         }
     }
 
-    /** What a pedestal is built of. */
     private static me.moonscenty.alchemia.block.PillarKind kindOf(Level level, BlockPos at) {
         return level.getBlockState(at).getBlock() instanceof me.moonscenty.alchemia.block.ArcanePedestalBlock stand
                 ? stand.kind() : me.moonscenty.alchemia.block.PillarKind.NORMAL;
     }
 
-    /**
-     * What a wand does when it is pointed at the matrix.
-     * <p>
-     * The first touch wakes the altar: the corner stones become pillars and the stones begin to turn. Every touch
-     * after that sets a working going. Two touches rather than one because waking is a thing you do once to a
-     * building and starting is a thing you do every time, and it would be a poor altar that could not tell you
-     * which of the two it had just done.
-     *
-     * @return what happened, for the wand to say out loud
-     */
     public Woken wake(Player player) {
         if (level == null || level.isClientSide) {
             return Woken.NOTHING;
@@ -451,27 +336,14 @@ public class InfusionMatrixBlockEntity extends SyncedBlockEntity {
         return start(player) ? Woken.STARTED : Woken.NOTHING;
     }
 
-    /** What came of pointing a wand at it. */
     public enum Woken {
-        /** The altar is not finished, so nothing happened. */
         UNBUILT,
-        /** The stones have begun to turn. */
         WOKEN,
-        /** A working has started. */
         STARTED,
-        /** It is already at work. */
         BUSY,
-        /** What is laid out makes nothing. */
         NOTHING
     }
 
-    // --- starting ----------------------------------------------------------
-
-    /**
-     * Looks at what is laid out and starts on it, if it makes anything.
-     *
-     * @return whether the work started
-     */
     public boolean start(Player player) {
         if (level == null || level.isClientSide || busy() || !awake) {
             return false;
@@ -509,8 +381,7 @@ public class InfusionMatrixBlockEntity extends SyncedBlockEntity {
         central = under.held().copy();
         remaining = standing.stream().map(ItemStack::copy).toList();
         eating = 0;
-        // what the recipe asks for, and what the altar around it is doing about that; the original set it down
-        // as it came and only held it under the worst once it began to grow
+        // not capped at WORST here; only shake() caps it (original)
         recipeShake = recipe.instabilityFor(under.held());
         instability = recipeShake + symmetry(level);
         counter = 0;
@@ -525,13 +396,10 @@ public class InfusionMatrixBlockEntity extends SyncedBlockEntity {
                 .orElse(true);
     }
 
-    // --- working -----------------------------------------------------------
-
     public static void tick(Level level, BlockPos pos, BlockState state, InfusionMatrixBlockEntity matrix) {
         if (!matrix.awake) {
             return;
         }
-        // an altar taken apart under a working stops being an altar, and what is left of it goes back to stone
         if (++matrix.watch % (matrix.busy() ? matrix.cycle : LOOKS_ROUND) == 0 && !matrix.built(level)) {
             matrix.sleep(level);
             return;
@@ -546,10 +414,6 @@ public class InfusionMatrixBlockEntity extends SyncedBlockEntity {
         matrix.turn((ServerLevel) level, pos);
     }
 
-    /**
-     * The hum of a working, on the client: the original's infuser winding up on the first tick of a working and
-     * droning on every {@link #HUMS_EVERY} ticks after, for as long as the synced working says it is at it.
-     */
     public static void clientTick(Level level, BlockPos pos, BlockState state, InfusionMatrixBlockEntity matrix) {
         if (!matrix.busy()) {
             matrix.humming = -1;
@@ -565,17 +429,15 @@ public class InfusionMatrixBlockEntity extends SyncedBlockEntity {
         }
     }
 
-    /** One step of the work, the original's {@code craftCycle}. */
     private void turn(ServerLevel level, BlockPos pos) {
         ArcanePedestalBlockEntity under = stand(level, pos.below(UNDER));
         InfusionRecipe recipe = recipe(level);
-        // the thing being worked on has to still be there, and still be the same thing
         boolean valid = recipe != null && under != null && !under.held().isEmpty()
                 && ItemStack.isSameItemSameComponents(under.held(), central);
         if (!valid || instability > 0 && level.random.nextInt(MISHAP) <= instability) {
             InfusionMishaps.strike(level, pos);
+            // a mishap uses up the whole step
             if (valid) {
-                // something went wrong this step, and that is all the step does
                 return;
             }
         }
@@ -595,10 +457,6 @@ public class InfusionMatrixBlockEntity extends SyncedBlockEntity {
         eat(level);
     }
 
-    /**
-     * Takes a single point of whatever is still owed out of the jars within reach. Every aspect that cannot be found
-     * has a small chance of shaking the work a little more, and more so the shakier the recipe was to begin with.
-     */
     private void drink(ServerLevel level, BlockPos pos) {
         for (Holder<Aspect> aspect : owed.sortedByAmount()) {
             BlockPos from = EssentiaReach.drainForInfusion(level, pos, aspect, JARS);
@@ -615,11 +473,7 @@ public class InfusionMatrixBlockEntity extends SyncedBlockEntity {
         changed();
     }
 
-    /**
-     * Eats the ring, a thing at a time and six steps to a thing, each off whichever pedestal holds it now. A thing
-     * the ring is missing holds the work up: the original asked for a little more essentia while it waited, one of
-     * whatever it had been asked for, and let the wait shake it.
-     */
+    // a missing ring item stalls the work: it asks for extra essentia and may shake (original)
     private void eat(ServerLevel level) {
         List<BlockPos> stands = around(level, worldPosition);
         for (int index = 0; index < remaining.size(); index++) {
@@ -656,17 +510,15 @@ public class InfusionMatrixBlockEntity extends SyncedBlockEntity {
         }
     }
 
-    /** A little shakier, never past the worst. */
     private void shake() {
         instability = Math.min(WORST, instability + 1);
     }
 
-    /** The work is done: what was on the pedestal becomes what was being made. */
     private void finish(ServerLevel level, BlockPos pos, ArcanePedestalBlockEntity under, InfusionRecipe recipe) {
-        // asked rather than read off the recipe: a working that enchants hands back the very thing it was given
+        // assembled rather than read off the recipe: enchanting recipes return the input itself
         ItemStack before = under.held();
         ItemStack made = recipe.assemble(new InfusionInput(before, List.of()), level.registryAccess());
-        // each working after the first on a thing has a chance in ten, per working already on it, of leaving warp
+        // each prior infusion enchantment gives a 1 in 10 chance of warp
         if (recipe.enchants().isPresent()) {
             int already = me.moonscenty.alchemia.enchantment.InfusionEnchantments.on(before).size();
             if (level.random.nextInt(10) < already) {
@@ -679,19 +531,16 @@ public class InfusionMatrixBlockEntity extends SyncedBlockEntity {
             me.moonscenty.alchemia.player.CraftWarp.made(level.getPlayerByUUID(worker), made);
         }
         level.playSound(null, pos, ModSounds.WAND.get(), SoundSource.BLOCKS, 0.5F, 1.0F);
-        // and a puff off the pedestal, where the made thing now stands
         level.playSound(null, pos.below(UNDER), ModSounds.POOF.get(), SoundSource.BLOCKS, 0.4F,
                 1.0F + (float) level.random.nextGaussian() * 0.05F);
         stop();
     }
 
-    /** The work has come apart: whatever was owed is simply lost. */
     private void fail(ServerLevel level, BlockPos pos) {
         level.playSound(null, pos, ModSounds.CRAFT_FAIL.get(), SoundSource.BLOCKS, 1.0F, 0.6F);
         stop();
     }
 
-    /** The working is over, one way or another. The altar stays awake: it is still an altar. */
     private void stop() {
         working = null;
         owed = AspectList.EMPTY;
@@ -703,21 +552,12 @@ public class InfusionMatrixBlockEntity extends SyncedBlockEntity {
         recipeShake = 0;
         instability = 0;
         counter = 0;
-        // an idle altar keeps no bargain; the next working reads the stones again for itself
         cycle = CYCLE;
         cost = FULL_COST;
         changed();
     }
 
-    /**
-     * Back to sleep.
-     * <p>
-     * An altar is only an altar while all of it is standing. Take one corner out and the pillars stop being drawn
-     * and the other three corners are arcane stone again, which is both the tidying up and the clearest possible
-     * way of saying what broke.
-     */
     public void sleep(Level level) {
-        // a working needs an altar under it, so whatever was being made comes apart with the building
         if (busy() && level instanceof ServerLevel served) {
             fail(served, worldPosition);
         }
@@ -728,13 +568,10 @@ public class InfusionMatrixBlockEntity extends SyncedBlockEntity {
         changed();
     }
 
-    /** Steadied all the way, for a test that wants a working to run without anything going wrong. */
     public void steady() {
         instability = 0;
         changed();
     }
-
-    // --- what is laid out --------------------------------------------------
 
     private InfusionRecipe recipe(Level level) {
         if (working == null) {
@@ -751,12 +588,7 @@ public class InfusionMatrixBlockEntity extends SyncedBlockEntity {
         return level.getBlockEntity(at) instanceof ArcanePedestalBlockEntity stand ? stand : null;
     }
 
-    /**
-     * The pedestals a matrix can see: one to a column, out to the ring and down as far as the work reaches.
-     * <p>
-     * One to a column so that a stack of pedestals is one place rather than ten, which is also how a works built
-     * on a hillside stays readable.
-     */
+    // only the topmost pedestal in each column counts
     public static List<BlockPos> around(Level level, BlockPos pos) {
         List<BlockPos> found = new ArrayList<>();
         for (int east = -RING; east <= RING; east++) {
@@ -775,8 +607,6 @@ public class InfusionMatrixBlockEntity extends SyncedBlockEntity {
         }
         return found;
     }
-
-    // --- writing it down ---------------------------------------------------
 
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {

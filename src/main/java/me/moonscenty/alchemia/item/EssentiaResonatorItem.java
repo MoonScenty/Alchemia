@@ -23,14 +23,7 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
-/**
- * Held to a vessel or a length of pipe, says what is in it and what it draws, through the side it is held to. It
- * gets in ahead of whatever the block would do with a click, as the original's did, so a tube or a jar can be
- * sounded without being worked.
- * <p>
- * The original also said how hard the thing drew. The pipes here pull from the far end rather than by suction, so
- * there is no strength to tell; it says which essentia it would take instead, which is the half that was useful.
- */
+// runs before the block's own use, so pipes and jars can be read without being worked
 public class EssentiaResonatorItem extends Item {
     public EssentiaResonatorItem(Properties properties) {
         super(properties);
@@ -52,10 +45,6 @@ public class EssentiaResonatorItem extends Item {
         return InteractionResult.sidedSuccess(level.isClientSide);
     }
 
-    /**
-     * What the resonator has to say about a block through one of its sides, a line to a thing: everything it holds,
-     * and then what it draws. Nothing at all if the block is neither a vessel nor a pipe.
-     */
     public static List<Component> report(Level level, BlockPos pos, Direction side) {
         List<Component> lines = new ArrayList<>();
         BlockState state = level.getBlockState(pos);
@@ -85,7 +74,6 @@ public class EssentiaResonatorItem extends Item {
         return lines;
     }
 
-    /** The line for what something draws: any essentia, a few kinds by name, or none. */
     private static Component draws(List<Holder<Aspect>> wanted) {
         Component what;
         if (wanted.isEmpty()) {

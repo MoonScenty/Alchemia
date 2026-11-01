@@ -14,12 +14,6 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.ExtraCodecs;
 
-/**
- * What a vis sparkle is asked for: the colour of the vis it carries, and where it is headed.
- *
- * @param colour the vis's colour, as {@code 0xRRGGBB}
- * @param target where in the world it is drawn to
- */
 public record SparkleOptions(int colour, Vector3f target) implements ParticleOptions {
     public static final MapCodec<SparkleOptions> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
                     Codec.INT.fieldOf("color").forGetter(SparkleOptions::colour),

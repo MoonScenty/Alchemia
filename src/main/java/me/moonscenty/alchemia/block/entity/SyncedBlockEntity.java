@@ -11,13 +11,11 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
-/** A block entity whose whole saved state is sent to clients watching it. */
 public abstract class SyncedBlockEntity extends BlockEntity {
     protected SyncedBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
     }
 
-    /** Saves, and on the server sends the new state to clients. */
     protected void changed() {
         changed(Block.UPDATE_CLIENTS);
     }

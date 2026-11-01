@@ -23,23 +23,18 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
-/**
- * Turning an alchemometer on something and seeing what comes of it.
- */
 public final class Scanning {
-    /** How far an alchemometer reaches. */
     public static final double REACH = 9.0;
 
     private Scanning() {
     }
 
-    /** Whatever the player is looking at, if it is something that can be read at all. */
     public static Optional<ScanTarget> lookingAt(Player player) {
         Level level = player.level();
         Vec3 eye = player.getEyePosition();
         Vec3 aim = eye.add(player.getLookAngle().scale(REACH));
 
-        // a creature in the way is read before whatever is behind it
+        // an entity in the way is read before the block behind it
         BlockHitResult block = level.clip(new ClipContext(eye, aim, ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, player));
         double blockDistance = block.getType() == HitResult.Type.MISS ? REACH * REACH : eye.distanceToSqr(block.getLocation());
 
@@ -53,18 +48,13 @@ public final class Scanning {
         return Optional.empty();
     }
 
-    /** Whether there is anything left to learn from this, so the scanner can say so before the player bothers. */
     public static boolean hasAnythingToTeach(Player player, ScanTarget target) {
         PlayerKnowledge knowledge = PlayerKnowledge.of(player);
         return target.aspects().sortedByName().stream().anyMatch(aspect -> !knowledge.knows(aspect))
                 || !Clues.newIn(knowledge, target).isEmpty();
     }
 
-    /**
-     * Reads the target and adds whatever was new to the player's knowledge.
-     *
-     * @return the aspects the player did not know before
-     */
+    // returns the aspects that were new
     public static AspectList scan(Player player, ScanTarget target) {
         PlayerKnowledge before = PlayerKnowledge.of(player);
         AspectList aspects = target.aspects();
@@ -79,7 +69,6 @@ public final class Scanning {
         if (!learned.isEmpty()) {
             player.setData(ModAttachments.KNOWLEDGE, before.withAspects(learned));
         }
-        // and anything this thing is a clue to, found as the original found it
         List<ResourceLocation> clues = Clues.newIn(before, target);
         if (clues.isEmpty() || !learned.isEmpty()) {
             report(player, target, aspects, learned);
@@ -108,12 +97,7 @@ public final class Scanning {
         player.sendSystemMessage(message.copy().withStyle(colour));
     }
 
-    /**
-     * Whether an alchemometer can be held up to something.
-     * <p>
-     * Being pickable is the usual test, but a node deliberately is not: it cannot be hit or stood on. It is still
-     * the one thing most worth reading, so it is let through by name.
-     */
+    // nodes aren't pickable, so they are let through by type
     public static boolean readable(Entity entity) {
         return !entity.isSpectator() && (entity.isPickable() || entity instanceof AuraNode);
     }

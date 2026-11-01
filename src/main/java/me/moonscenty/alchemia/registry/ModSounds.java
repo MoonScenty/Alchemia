@@ -6,125 +6,84 @@ import net.minecraft.sounds.SoundEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
-/**
- * The craft's own sounds.
- *
- * <p>What each is made of is said in {@code sounds.json}, which names the original's recordings; those are read out
- * of the player's own copy of the original at start-up, as its pictures are, and never shipped here.
- */
 public final class ModSounds {
     public static final DeferredRegister<SoundEvent> SOUNDS = DeferredRegister.create(Registries.SOUND_EVENT,
             Alchemia.MODID);
 
-    /** A wisp drifting about, and one going out. */
     public static final DeferredHolder<SoundEvent, SoundEvent> WISP_LIVE = sound("wisp.live");
     public static final DeferredHolder<SoundEvent, SoundEvent> WISP_DEAD = sound("wisp.dead");
-    /** A spark jumping to what it strikes. */
     public static final DeferredHolder<SoundEvent, SoundEvent> ZAP = sound("zap");
-    /** A frosty crack, as of a pech mage's blast going off. */
     public static final DeferredHolder<SoundEvent, SoundEvent> ICE = sound("ice");
-    /** A pech muttering, struck, dying, working itself up to a fight, and pleased with a trade. */
     public static final DeferredHolder<SoundEvent, SoundEvent> PECH_IDLE = sound("pech.idle");
     public static final DeferredHolder<SoundEvent, SoundEvent> PECH_HIT = sound("pech.hit");
     public static final DeferredHolder<SoundEvent, SoundEvent> PECH_DEATH = sound("pech.death");
     public static final DeferredHolder<SoundEvent, SoundEvent> PECH_CHARGE = sound("pech.charge");
     public static final DeferredHolder<SoundEvent, SoundEvent> PECH_TRADE = sound("pech.trade");
-    /** A pech rolling the bones over what it has been offered. */
     public static final DeferredHolder<SoundEvent, SoundEvent> PECH_DICE = sound("pech.dice");
-    /** A taint swarm humming, biting, and one of its flies buzzing past. */
     public static final DeferredHolder<SoundEvent, SoundEvent> SWARM = sound("swarm");
     public static final DeferredHolder<SoundEvent, SoundEvent> SWARM_ATTACK = sound("swarm.attack");
     public static final DeferredHolder<SoundEvent, SoundEvent> FLY = sound("fly");
-    /** A taintacle creaking like roots, and lashing. */
     public static final DeferredHolder<SoundEvent, SoundEvent> ROOTS = sound("roots");
     public static final DeferredHolder<SoundEvent, SoundEvent> TENTACLE = sound("tentacle");
-    /** Something bursting wetly. */
     public static final DeferredHolder<SoundEvent, SoundEvent> GORE = sound("gore");
-    /** A handful of coins. */
     public static final DeferredHolder<SoundEvent, SoundEvent> COINS = sound("coins");
-    /** The Construct crackling as it charges. */
     public static final DeferredHolder<SoundEvent, SoundEvent> JACOBS = sound("jacobs");
-    /** A runic shield flaring under a blow. */
     public static final DeferredHolder<SoundEvent, SoundEvent> RUNIC_SHIELD_EFFECT = sound("runicshieldeffect");
-    /** A low wind, out of the void. */
     public static final DeferredHolder<SoundEvent, SoundEvent> WIND = sound("wind");
-    /** A lock of the Outer Lands turning: a heave and a hiss. */
     public static final DeferredHolder<SoundEvent, SoundEvent> PUMP = sound("pump");
-    /** Runes catching: a tablet going into a lock. */
     public static final DeferredHolder<SoundEvent, SoundEvent> RUNIC_SHIELD_CHARGE = sound("runicshieldcharge");
-    /** The hum of an open way to the Outer Lands. */
     public static final DeferredHolder<SoundEvent, SoundEvent> EVIL_PORTAL = sound("evilportal");
-    /** Pottery smashing: an urn broken open. */
     public static final DeferredHolder<SoundEvent, SoundEvent> URN_BREAK = sound("urnbreak");
 
-    /** A shutter clacking: a golem going about, or hurt. */
     public static final DeferredHolder<SoundEvent, SoundEvent> CAMERA_CLACK = sound("cameraclack");
-    /** Tools going down: a golem falling apart. */
     public static final DeferredHolder<SoundEvent, SoundEvent> TOOL = sound("tool");
-    /** A rising chirp, as a golem takes in what it is told. */
     public static final DeferredHolder<SoundEvent, SoundEvent> SCAN = sound("scan");
-    /** A wand's flourish, as something is made. */
     public static final DeferredHolder<SoundEvent, SoundEvent> WAND = sound("wand");
-    /** Something starting to be made. */
     public static final DeferredHolder<SoundEvent, SoundEvent> CRAFT_START = sound("craftstart");
 
-    /** The Crimson Cult: a cleric's chanting, a portal's hum, a summons gone through, an orb cast and landing. */
     public static final DeferredHolder<SoundEvent, SoundEvent> CHANT = sound("chant");
     public static final DeferredHolder<SoundEvent, SoundEvent> MONOLITH = sound("monolith");
     public static final DeferredHolder<SoundEvent, SoundEvent> WAND_FAIL = sound("wandfail");
     public static final DeferredHolder<SoundEvent, SoundEvent> EG_ATTACK = sound("egattack");
     public static final DeferredHolder<SoundEvent, SoundEvent> SHOCK = sound("shock");
-    /** The eldritch crab's chatter, the snap of its claws and its last. */
     public static final DeferredHolder<SoundEvent, SoundEvent> CRAB_TALK = sound("crabtalk");
     public static final DeferredHolder<SoundEvent, SoundEvent> CRAB_CLAW = sound("crabclaw");
     public static final DeferredHolder<SoundEvent, SoundEvent> CRAB_DEATH = sound("crabdeath");
-    /** The guardian's breathing, its screech and its last. */
     public static final DeferredHolder<SoundEvent, SoundEvent> EG_IDLE = sound("egidle");
     public static final DeferredHolder<SoundEvent, SoundEvent> EG_SCREECH = sound("egscreech");
     public static final DeferredHolder<SoundEvent, SoundEvent> EG_DEATH = sound("egdeath");
-    /** Something learnt off a page. */
     public static final DeferredHolder<SoundEvent, SoundEvent> LEARN = sound("learn");
 
-    /** A brass dial clicking round. */
     public static final DeferredHolder<SoundEvent, SoundEvent> KEY = sound("key");
 
-    /** A puff of smoke: something made, or gone. */
     public static final DeferredHolder<SoundEvent, SoundEvent> POOF = sound("poof");
     public static final DeferredHolder<SoundEvent, SoundEvent> SPILL = sound("spill");
     public static final DeferredHolder<SoundEvent, SoundEvent> BUBBLE = sound("bubble");
 
-    /** Glass knocking on glass: jars, mirrors, the brain in its jar. */
     public static final DeferredHolder<SoundEvent, SoundEvent> JAR = sound("jar");
-    /** A knuckle on an alembic: the essentia resonator sounding something out. */
     public static final DeferredHolder<SoundEvent, SoundEvent> ALEMBIC_KNOCK = sound("alembicknock");
     public static final DeferredHolder<SoundEvent, SoundEvent> PAGE = sound("page");
     public static final DeferredHolder<SoundEvent, SoundEvent> CRYSTAL = sound("crystal");
 
-    /** Something that was being made, given up. */
     public static final DeferredHolder<SoundEvent, SoundEvent> CRAFT_FAIL = sound("craftfail");
 
-    /** A focus fitted, or taken off. */
     public static final DeferredHolder<SoundEvent, SoundEvent> CAMERA_TICKS = sound("cameraticks");
     public static final DeferredHolder<SoundEvent, SoundEvent> SQUEEK = sound("squeek");
     public static final DeferredHolder<SoundEvent, SoundEvent> CREAK = sound("creak");
 
-    /** Stone giving way: the excavation focus and the bore. */
     public static final DeferredHolder<SoundEvent, SoundEvent> RUMBLE = sound("rumble");
     public static final DeferredHolder<SoundEvent, SoundEvent> FIRE_LOOP = sound("fireloop");
     public static final DeferredHolder<SoundEvent, SoundEvent> BRAIN = sound("brain");
 
-    /** An infusion starting, and humming along. */
     public static final DeferredHolder<SoundEvent, SoundEvent> INFUSER_START = sound("infuserstart");
     public static final DeferredHolder<SoundEvent, SoundEvent> INFUSER = sound("infuser");
 
-    /** The research table and the thaumatorium: brass engaging and letting go, a quill writing and scraping. */
     public static final DeferredHolder<SoundEvent, SoundEvent> HH_ON = sound("hhon");
     public static final DeferredHolder<SoundEvent, SoundEvent> HH_OFF = sound("hhoff");
     public static final DeferredHolder<SoundEvent, SoundEvent> WRITE = sound("write");
     public static final DeferredHolder<SoundEvent, SoundEvent> ERASE = sound("erase");
     public static final DeferredHolder<SoundEvent, SoundEvent> SWING = sound("swing");
 
-    /** Warp: a heart pounding as it comes on, and whispers as it settles in. */
     public static final DeferredHolder<SoundEvent, SoundEvent> HEARTBEAT = sound("heartbeat");
     public static final DeferredHolder<SoundEvent, SoundEvent> WHISPERS = sound("whispers");
 

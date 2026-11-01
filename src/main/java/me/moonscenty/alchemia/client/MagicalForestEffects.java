@@ -10,7 +10,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.Blocks;
 
-/** The glimmer of the magical forest's grass at night. */
 public final class MagicalForestEffects {
     private static final int MOTE_AGE = 400;
     private static final int TRAVEL_MOTE_AGE = 30;
@@ -18,11 +17,6 @@ public final class MagicalForestEffects {
     private MagicalForestEffects() {
     }
 
-    /**
-     * Now and then, the darker the night the more often, a mote rises off some grass within eight blocks: the
-     * original's reckoning of how dark the sky over the grass is.
-     */
-    /** A pale mote rising off a paving stone of travel where something trod, as the original drew it. */
     public static void travelMote(Level level, BlockPos pos, RandomSource random) {
         if (level instanceof ClientLevel client) {
             Minecraft.getInstance().particleEngine.add(new MoteParticle(client, pos.getX() + random.nextFloat(),

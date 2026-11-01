@@ -30,13 +30,11 @@ import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/** Golems, step twelve continued: seals, the tasks they give out, and golems doing them. */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class SealTests {
     private static final String TEMPLATE = "empty_32x40x32";
 
-    /** A stone floor nine by nine to walk on, its middle at this height. */
     private static void floor(GameTestHelper helper, int y) {
         for (int x = 1; x <= 9; x++) {
             for (int z = 1; z <= 9; z++) {
@@ -61,7 +59,6 @@ public class SealTests {
         return Seals.get(helper.getLevel(), new SealPos(pos, face));
     }
 
-    /** A seal sticks where it can, and falls off as its item once what it was on is gone. */
     @GameTest(template = TEMPLATE, timeoutTicks = 60)
     public static void aSealFallsOffWhatIsGone(GameTestHelper helper) {
         Player owner = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -80,7 +77,6 @@ public class SealTests {
         });
     }
 
-    /** A golem goes and picks up what lies in front of a collecting seal. */
     @GameTest(template = TEMPLATE, timeoutTicks = 400)
     public static void aGolemCollectsForASeal(GameTestHelper helper) {
         floor(helper, 1);
@@ -96,7 +92,6 @@ public class SealTests {
                 "the golem has the cobblestone"));
     }
 
-    /** A golem carrying something puts it into a chest with a storing seal on it. */
     @GameTest(template = TEMPLATE, timeoutTicks = 400)
     public static void aGolemStoresForASeal(GameTestHelper helper) {
         floor(helper, 1);
@@ -113,7 +108,6 @@ public class SealTests {
         });
     }
 
-    /** A golem takes what is in a chest with an emptying seal on it. */
     @GameTest(template = TEMPLATE, timeoutTicks = 400)
     public static void aGolemEmptiesForASeal(GameTestHelper helper) {
         floor(helper, 1);
@@ -128,7 +122,6 @@ public class SealTests {
                 && golem.getMainHandItem().getCount() == 12 && box.isEmpty(), "the golem has emptied the chest"));
     }
 
-    /** A smart golem fetches out of a providing chest what another seal has asked for. */
     @GameTest(template = TEMPLATE, timeoutTicks = 400)
     public static void aGolemFetchesWhatASealAskedFor(GameTestHelper helper) {
         floor(helper, 1);
@@ -147,7 +140,6 @@ public class SealTests {
                 "the golem has fetched the torches"));
     }
 
-    /** A seal set for golems of one colour gives its work to no golem of another. */
     @GameTest(template = TEMPLATE)
     public static void aColouredSealWantsGolemsOfItsColour(GameTestHelper helper) {
         Player owner = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -165,7 +157,6 @@ public class SealTests {
         helper.succeed();
     }
 
-    /** A locked seal is worked only by its owner's golems, and a seal wanting smart golems only by smart ones. */
     @GameTest(template = TEMPLATE)
     public static void aSealChoosesItsGolems(GameTestHelper helper) {
         Player owner = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -186,7 +177,6 @@ public class SealTests {
         helper.succeed();
     }
 
-    /** The panel's buttons change the seal, and only its owner may lock it. */
     @GameTest(template = TEMPLATE)
     public static void aSealsPanelSetsItUp(GameTestHelper helper) {
         Player owner = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -212,7 +202,6 @@ public class SealTests {
         helper.succeed();
     }
 
-    /** A filter square takes a picture of what is in hand, and a counting seal counts it. */
     @GameTest(template = TEMPLATE)
     public static void aFilterTakesAPicture(GameTestHelper helper) {
         Player owner = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -230,7 +219,6 @@ public class SealTests {
         helper.succeed();
     }
 
-    /** Things are alike by item, and by damage and data only when asked; by common tag or mod when asked. */
     @GameTest(template = TEMPLATE)
     public static void thingsAreToldApartAsAsked(GameTestHelper helper) {
         ItemStack worn = new ItemStack(Items.IRON_PICKAXE);

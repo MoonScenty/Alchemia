@@ -6,12 +6,10 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 
-/** The looting level of whatever dealt a killing blow. */
 public final class Looting {
     private Looting() {
     }
 
-    /** Nought when nothing living dealt it. */
     public static int of(DamageSource source) {
         return source.getEntity() instanceof LivingEntity killer ? of(killer) : 0;
     }

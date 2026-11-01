@@ -18,12 +18,6 @@ import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
-/**
- * The one thing a client has to ask the server for.
- * <p>
- * Everything else a player knows travels as an attachment, which syncs itself; only this is an action rather than a
- * fact, so it needs saying out loud.
- */
 @EventBusSubscriber(modid = Alchemia.MODID)
 public class ModNetwork {
     private ModNetwork() {
@@ -60,10 +54,6 @@ public class ModNetwork {
                         context.player().registryAccess())));
     }
 
-    /**
-     * Pressing a golem. The press is the one whose menu the player has open, and the menu checks they know every
-     * part of what they asked for.
-     */
     private static void onStartGolem(StartGolem payload, IPayloadContext context) {
         context.enqueueWork(() -> {
             if (context.player() instanceof ServerPlayer player
@@ -73,12 +63,7 @@ public class ModNetwork {
         });
     }
 
-    /**
-     * Swapping a focus on a wand.
-     * <p>
-     * The wand is taken from the hand rather than named in the packet, so a client that is a tick behind about
-     * which item is selected cannot put a focus on the wrong thing.
-     */
+    // the wand comes from the server-side hand, not the packet, so a lagging client cannot target the wrong item
     private static void onChangeFocus(ChangeFocus payload, IPayloadContext context) {
         withWand(context, (player, wand) -> {
             if (payload.remove()) {
@@ -89,16 +74,10 @@ public class ModNetwork {
         });
     }
 
-    /**
-     * Fitting the focus picked off the wheel.
-     * <p>
-     * The wand comes from the hand rather than the packet, for the same reason the cycle takes it from there.
-     */
     private static void onChooseFocus(ChooseFocus payload, IPayloadContext context) {
         withWand(context, (player, wand) -> Foci.fit(player, wand, payload.focus()));
     }
 
-    /** Does the work on the server with the wand in the player's main hand, if there is one. */
     private static void withWand(IPayloadContext context, BiConsumer<ServerPlayer, ItemStack> work) {
         context.enqueueWork(() -> {
             if (context.player() instanceof ServerPlayer player
@@ -108,12 +87,6 @@ public class ModNetwork {
         });
     }
 
-    /**
-     * Turning the setting of whatever is in hand.
-     * <p>
-     * A wand: how far an architect's focus works, one less each press and round to the most it can do. The
-     * shovel of the earthmover: which way it lays its square. Anything else does not listen.
-     */
     private static void onToolSetting(ToolSetting payload, IPayloadContext context) {
         context.enqueueWork(() -> {
             if (!(context.player() instanceof ServerPlayer player)) {
@@ -142,10 +115,8 @@ public class ModNetwork {
         atTable(context, (player, table) -> table.spendFragment(player));
     }
 
-    /** Does the work on the server at the research table the player has open, if they have one open. */
     private static void atTable(IPayloadContext context, BiConsumer<ServerPlayer, ResearchTableMenu> work) {
         context.enqueueWork(() -> {
-            // the menu is the reader's claim on a particular desk, so nothing else needs saying about where they are
             if (context.player() instanceof ServerPlayer player
                     && player.containerMenu instanceof ResearchTableMenu table) {
                 work.accept(player, table);

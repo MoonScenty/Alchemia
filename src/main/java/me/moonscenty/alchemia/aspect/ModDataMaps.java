@@ -9,10 +9,6 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.registries.datamaps.DataMapType;
 import net.neoforged.neoforge.registries.datamaps.RegisterDataMapTypesEvent;
 
-/**
- * Where the aspects of items and mobs are written down. Anything not listed here has its aspects worked out from the
- * recipes that make it, so only the things at the root of the tree need spelling out.
- */
 @EventBusSubscriber(modid = Alchemia.MODID)
 public class ModDataMaps {
     public static final DataMapType<Item, AspectList> ITEM_ASPECTS = DataMapType

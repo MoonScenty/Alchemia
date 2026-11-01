@@ -5,11 +5,7 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
 
-/**
- * The poison the taint gives. A point of harm every forty ticks, and the gap halves with each level above the first,
- * so a bad case is a steady drain rather than a shock. It passes over the undead, who have nothing left to spoil,
- * and does the taint's own creatures good: the original's {@code PotionFluxTaint} healed them a point instead.
- */
+// Skips the undead and heals the taint's own creatures instead (original's PotionFluxTaint).
 public class TaintPoisonEffect extends MobEffect {
     private static final int PERIOD = 40;
     private static final float DOSE = 1.0F;

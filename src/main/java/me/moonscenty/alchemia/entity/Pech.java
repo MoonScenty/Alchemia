@@ -69,22 +69,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
 
-/**
- * A pech: a little hunched forager with a pack on its back, who picks up whatever it thinks is worth having.
- *
- * <p>There are three. A forager fights with whatever it has in hand, a mage with a wand that throws curses, and a
- * stalker with a bow. Untamed, a pech keeps clear of players; hit one, and every pech for thirty-two blocks about
- * comes for whoever did it, for twenty to forty seconds.
- *
- * <p>Drop it something it prizes -- gold, a golden apple, a pearl, a diamond, an emerald, or anything full enough of
- * desire -- and it may take to you. A pech that has taken to you will trade: it rolls the bones over what is offered
- * and pays out its worth in things off its own list, now and then something out of its pack, now and then something
- * out of a dungeon chest. It may tire of you over a good trade and go back to being wild.
- *
- * <p>Anything else it finds lying about goes in its pack, nine stacks of it, and comes out when it dies -- a third of
- * the time; otherwise a gold coin. It drops a wisp's essence or two besides, and now and then a fragment of
- * knowledge.
- */
 public class Pech extends Monster implements RangedAttackMob, OwnAspects {
     private static final EntityDataAccessor<Byte> KIND = SynchedEntityData.defineId(Pech.class,
             EntityDataSerializers.BYTE);
@@ -93,36 +77,31 @@ public class Pech extends Monster implements RangedAttackMob, OwnAspects {
     private static final EntityDataAccessor<Boolean> TAMED = SynchedEntityData.defineId(Pech.class,
             EntityDataSerializers.BOOLEAN);
 
-    /** The three kinds. */
     public static final int FORAGER = 0;
     public static final int MAGE = 1;
     public static final int STALKER = 2;
 
-    /** The original's numbers. */
+    // original's values
     private static final double LIVES = 30.0;
     private static final double HITS = 6.0;
     private static final double SPEED = 0.5;
     private static final double ARMOUR = 2.0;
     private static final int PACK = 9;
-    /** How far a struck pech's fellows hear of it, across and up. */
     private static final double FELLOWS_ACROSS = 32.0;
     private static final double FELLOWS_UP = 16.0;
-    /** How long a pech stays angry, at least and at most besides. */
     private static final int ANGRY_FOR = 400;
-    /** Entity events: two kinds of mutter, pleased, and angry. */
+    // entity event ids
     private static final byte MUTTERS = 16;
     private static final byte CHATTERS = 17;
     private static final byte PLEASED = 18;
     private static final byte ANGERED = 19;
 
-    /** A tag on what a pech hands back after a trade, so that it does not go straight after it again. */
+    // marks what a pech hands back so it does not pick it straight up again
     public static final String HANDED_BACK = "alchemia.pech_drop";
 
     private final NonNullList<ItemStack> pack = NonNullList.withSize(PACK, ItemStack.EMPTY);
-    /** Being traded with, which holds it still. */
     public boolean trading;
     private boolean rethink;
-    /** How far its jaw is working, client-side; it closes by a quarter a tick. */
     public float mumble;
     private int growls;
 
@@ -172,7 +151,6 @@ public class Pech extends Monster implements RangedAttackMob, OwnAspects {
         });
     }
 
-    /** How it fights, by what it holds, and whether it keeps clear of players, by whether it has taken to them. */
     private void fight() {
         goalSelector.removeGoal(hitting);
         goalSelector.removeGoal(shooting);
@@ -228,7 +206,6 @@ public class Pech extends Monster implements RangedAttackMob, OwnAspects {
         return pack;
     }
 
-    /** Each kind is called after what it does. */
     @Override
     protected Component getTypeName() {
         return switch (getKind()) {
@@ -238,7 +215,6 @@ public class Pech extends Monster implements RangedAttackMob, OwnAspects {
         };
     }
 
-    /** What a pech is besides being one: a forager wants, a mage wards off, a stalker is all aura. */
     @Override
     public AspectList ownAspects() {
         return switch (getKind()) {
@@ -248,9 +224,6 @@ public class Pech extends Monster implements RangedAttackMob, OwnAspects {
         };
     }
 
-    // --- coming into the world ---------------------------------------------------------------------------
-
-    /** What a new pech has in hand: a wand one time in ten, a bow one in four, a tool or a blade now and then. */
     @Override
     protected void populateDefaultEquipmentSlots(RandomSource random, DifficultyInstance difficulty) {
         super.populateDefaultEquipmentSlots(random, difficulty);
@@ -269,7 +242,6 @@ public class Pech extends Monster implements RangedAttackMob, OwnAspects {
         setItemSlot(EquipmentSlot.MAINHAND, held);
     }
 
-    /** A plain wand with the pech's own focus in it, and a little vis, mostly of earth, entropy and water. */
     private static ItemStack wand(RandomSource random) {
         ItemStack wand = WandItem.of(ModWandParts.WOOD, ModWandParts.IRON);
         WandItem.setFocus(wand, new ItemStack(ModItems.FOCI.get("pech").get()));
@@ -300,7 +272,6 @@ public class Pech extends Monster implements RangedAttackMob, OwnAspects {
         return super.finalizeSpawn(level, difficulty, reason, data);
     }
 
-    /** Never where too many already are. */
     public static boolean checkSpawnRules(EntityType<Pech> type, ServerLevelAccessor level, MobSpawnType reason,
             net.minecraft.core.BlockPos pos, RandomSource random) {
         return level.getEntitiesOfClass(Pech.class, new AABB(pos).inflate(16.0)).size() < 4
@@ -315,9 +286,6 @@ public class Pech extends Monster implements RangedAttackMob, OwnAspects {
         }
     }
 
-    // --- fighting ----------------------------------------------------------------------------------------
-
-    /** A stalker looses an arrow; a mage throws a curse. */
     @Override
     public void performRangedAttack(LivingEntity target, float pull) {
         if (getKind() == STALKER) {
@@ -343,7 +311,6 @@ public class Pech extends Monster implements RangedAttackMob, OwnAspects {
         swing(InteractionHand.MAIN_HAND);
     }
 
-    /** Hit by a player, it and every pech about it goes for them. */
     @Override
     public boolean hurt(DamageSource source, float amount) {
         if (isInvulnerableTo(source)) {
@@ -368,8 +335,6 @@ public class Pech extends Monster implements RangedAttackMob, OwnAspects {
         setAnger(ANGRY_FOR + random.nextInt(ANGRY_FOR));
         setTamed(false);
     }
-
-    // --- ticking -----------------------------------------------------------------------------------------
 
     @Override
     public void tick() {
@@ -440,7 +405,6 @@ public class Pech extends Monster implements RangedAttackMob, OwnAspects {
         }
     }
 
-    /** It mutters as it goes, and now and then chatters with another pech near it. */
     @Override
     public void playAmbientSound() {
         if (!level().isClientSide) {
@@ -480,9 +444,6 @@ public class Pech extends Monster implements RangedAttackMob, OwnAspects {
         return ModSounds.PECH_DEATH.get();
     }
 
-    // --- picking things up -------------------------------------------------------------------------------
-
-    /** Whether it would pick this up: something it prizes while it is still wild, or anything with room for it. */
     public boolean wants(ItemStack stack) {
         if (stack.isEmpty()) {
             return false;
@@ -499,12 +460,6 @@ public class Pech extends Monster implements RangedAttackMob, OwnAspects {
         return false;
     }
 
-    /**
-     * Takes what it can of this. Something it prizes, while it is still wild, it eats, and may take to whoever left it
-     * for it; anything else goes in its pack.
-     *
-     * @return what it left
-     */
     public ItemStack take(ItemStack stack) {
         if (stack.isEmpty()) {
             return stack;
@@ -533,7 +488,6 @@ public class Pech extends Monster implements RangedAttackMob, OwnAspects {
         return stack;
     }
 
-    /** One thing out of its pack, at random, if it has anything. */
     public ItemStack fromPack() {
         List<Integer> full = new ArrayList<>();
         for (int slot = 0; slot < PACK; slot++) {
@@ -544,9 +498,6 @@ public class Pech extends Monster implements RangedAttackMob, OwnAspects {
         return full.isEmpty() ? ItemStack.EMPTY : pack.get(full.get(random.nextInt(full.size()))).split(1);
     }
 
-    // --- trading -----------------------------------------------------------------------------------------
-
-    /** A pech that has taken to whoever it is trades with them; a wild one is any other mob to them. */
     @Override
     protected InteractionResult mobInteract(Player player, InteractionHand hand) {
         if (player.isSecondaryUseActive() || player.getItemInHand(hand).getItem() instanceof NameTagItem) {
@@ -562,15 +513,11 @@ public class Pech extends Monster implements RangedAttackMob, OwnAspects {
         return InteractionResult.sidedSuccess(level().isClientSide);
     }
 
-    /** It gets bored of a trader now and then, over a good enough trade. */
     public void tireOfTrading() {
         setTamed(false);
         playSound(ModSounds.PECH_TRADE.get(), 0.4F, 1.0F);
     }
 
-    // --- going and dying ---------------------------------------------------------------------------------
-
-    /** Not while it has much in its pack. */
     @Override
     public boolean removeWhenFarAway(double distance) {
         return pack.stream().filter(stack -> !stack.isEmpty()).count() < 5;
@@ -597,8 +544,6 @@ public class Pech extends Monster implements RangedAttackMob, OwnAspects {
         }
         super.dropCustomDeathLoot(level, source, recentlyHit);
     }
-
-    // --- saving ------------------------------------------------------------------------------------------
 
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
@@ -627,9 +572,6 @@ public class Pech extends Monster implements RangedAttackMob, OwnAspects {
         rethink = true;
     }
 
-    // --- its own ways --------------------------------------------------------------------------------------
-
-    /** Stands still while somebody is trading with it, so long as it is on firm, dry ground. */
     private static final class HoldStillToTrade extends Goal {
         private final Pech pech;
 
@@ -655,7 +597,6 @@ public class Pech extends Monster implements RangedAttackMob, OwnAspects {
         }
     }
 
-    /** Goes after whatever is lying about within sixteen blocks that it would pick up, and picks it up. */
     private static final class FetchItems extends Goal {
         private static final double LOOKS = 16.0;
         private final Pech pech;

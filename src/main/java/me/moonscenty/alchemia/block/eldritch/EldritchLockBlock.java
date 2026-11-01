@@ -20,7 +20,6 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 
-/** The lock on the great hall's door. A runed tablet turns it; nothing breaks it. */
 public class EldritchLockBlock extends BaseEntityBlock {
     public static final MapCodec<EldritchLockBlock> CODEC = simpleCodec(EldritchLockBlock::new);
 

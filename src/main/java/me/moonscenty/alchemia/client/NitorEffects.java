@@ -9,13 +9,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.Level;
 
-/**
- * A nitor's flame, as the original's ticking block let it off: two sorts of the original's wisp welling up from the
- * middle of the block. Now and then a big one in the colour of the nitor's dye, and less often a small pale yellow
- * one, both drifting a little way upwards and out as they go.
- * <p>
- * How often turns on the particle setting, as it did in the original: the fewer particles asked for, the rarer.
- */
 public final class NitorEffects {
     private NitorEffects() {
     }

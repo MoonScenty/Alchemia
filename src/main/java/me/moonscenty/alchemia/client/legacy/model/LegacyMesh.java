@@ -8,19 +8,6 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 
 import org.joml.Vector3f;
 
-/**
- * A mesh the original kept as an OBJ file and baked with its own loader, rather than through the game's.
- *
- * <p>Only what that loader read is read here: positions, texture corners, faces and the groups they fall in. Its
- * normals were not used, so they are worked out from each face instead. Texture corners are taken as written, top
- * down, as the original's loader took them; the game's own OBJ loader would want them turned over.
- *
- * <p>Each {@code g} line starts a group, as it started a part in the original's loader, which could then bake only
- * some of them: that is how a crystal shows more shards as it grows.
- *
- * <p>Faces are drawn as quads, since that is what the game's buffers take: a triangle is a quad with its last corner
- * twice, as the original baked it.
- */
 public final class LegacyMesh {
     private final List<List<float[][]>> groups;
     private final List<String> names;
@@ -30,10 +17,6 @@ public final class LegacyMesh {
         this.names = List.copyOf(names);
     }
 
-    /**
-     * Reads an OBJ file. Each face comes out as up to four corners of {@code x, y, z, u, v, n}, where {@code n} is
-     * which texture corner of the file it was, counted from nought: the original sometimes moved some of them.
-     */
     public static LegacyMesh parse(String obj) {
         List<float[]> positions = new ArrayList<>();
         List<float[]> corners = new ArrayList<>();
@@ -48,7 +31,6 @@ public final class LegacyMesh {
                         Float.parseFloat(words[3])});
                 case "vt" -> corners.add(new float[] {Float.parseFloat(words[1]), Float.parseFloat(words[2])});
                 case "g", "o" -> {
-                    // a group with nothing in it yet takes the new name rather than leaving an empty part behind
                     String name = words.length > 1 ? words[1] : "";
                     if (faces == null || !faces.isEmpty()) {
                         faces = new ArrayList<>();
@@ -95,27 +77,21 @@ public final class LegacyMesh {
         return new LegacyMesh(groups, names);
     }
 
-    /** OBJ counts from one, and from the end when negative. */
+    // OBJ indices count from one, and from the end when negative
     private static int index(String ref, int size) {
         int n = Integer.parseInt(ref);
         return n < 0 ? size + n : n - 1;
     }
 
-    /** How many groups the file had, in the order it had them. */
     public int groups() {
         return groups.size();
     }
 
-    /** The faces of one group, each up to four corners of {@code x, y, z, u, v, n}, as {@link #parse} reads them. */
     public List<float[][]> faces(int group) {
         return groups.get(group);
     }
 
-    /**
-     * The same mesh with its texture corners turned over. The original read its meshes two ways: its own loader took
-     * the corners as written, and the older loader it kept for its renderers' models turned them over as the game
-     * does. Which one a mesh wants depends on which of the two drew it.
-     */
+    // the old loader the original's renderers used flipped V; its own OBJ loader did not
     public LegacyMesh flippedV() {
         List<List<float[][]>> flipped = new ArrayList<>();
         for (List<float[][]> group : groups) {
@@ -133,24 +109,20 @@ public final class LegacyMesh {
         return new LegacyMesh(flipped, names);
     }
 
-    /** What the file called a group. */
     public String name(int group) {
         return names.get(group);
     }
 
-    /** Which group has this name, or -1. */
     public int group(String name) {
         return names.indexOf(name);
     }
 
-    /** Draws the whole mesh in block units, as it was modelled. */
     public void render(PoseStack.Pose pose, VertexConsumer consumer, int colour, int light, int overlay) {
         for (int group = 0; group < groups.size(); group++) {
             render(group, pose, consumer, colour, light, overlay);
         }
     }
 
-    /** Draws one group in block units, as it was modelled. */
     public void render(int group, PoseStack.Pose pose, VertexConsumer consumer, int colour, int light, int overlay) {
         Vector3f normal = new Vector3f();
         for (float[][] face : groups.get(group)) {
@@ -167,7 +139,6 @@ public final class LegacyMesh {
         }
     }
 
-    /** Draws the group with this name, or nothing when there is none. */
     public void render(String group, PoseStack.Pose pose, VertexConsumer consumer, int colour, int light,
             int overlay) {
         int found = group(group);
@@ -176,7 +147,6 @@ public final class LegacyMesh {
         }
     }
 
-    /** The way a face looks out, from its first three corners. */
     public static Vector3f normal(float[][] face, Vector3f into) {
         float[] a = face[0];
         float[] b = face[1];

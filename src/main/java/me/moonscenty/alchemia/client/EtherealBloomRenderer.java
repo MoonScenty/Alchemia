@@ -22,11 +22,6 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
-/**
- * Draws an ethereal bloom as the original's {@code TileEtherealBloomRenderer} did, growing in over its first five
- * seconds: a pale glow from the node sheet over it, a small crystal at its heart, two rings of four leaves, and four
- * blades of stalk at its foot, the leaves stirring a little all the while.
- */
 public class EtherealBloomRenderer implements BlockEntityRenderer<EtherealBloomBlockEntity> {
     private static final ResourceLocation GLOW = Alchemia.id("textures/entity/bloom_glow.png");
     private static final ResourceLocation CRYSTAL = Alchemia.id("textures/entity/crystal_capacitor.png");
@@ -34,13 +29,13 @@ public class EtherealBloomRenderer implements BlockEntityRenderer<EtherealBloomB
     private static final ResourceLocation STALK = Alchemia.id("textures/entity/bloom_stalk.png");
     private static final int GLOW_FRAMES = 32;
     private static final int GLOW_COLOUR = 0xAADDFF;
-    /** The original drew its leaves at a brightness of 200 of 240. */
+    // original's brightness, 200 of 240
     private static final int LEAF_LIGHT = 0xC800C8;
 
     private final ModelPart cube;
 
     public EtherealBloomRenderer(BlockEntityRendererProvider.Context context) {
-        // the original's ModelCube: a whole block of a cube, on a 64 by 32 sheet
+        // original's ModelCube: one block, on a 64x32 sheet
         MeshDefinition mesh = new MeshDefinition();
         mesh.getRoot().addOrReplaceChild("cube", CubeListBuilder.create().texOffs(0, 0).mirror()
                 .addBox(-8.0F, -8.0F, -8.0F, 16, 16, 16), PartPose.offset(8.0F, 8.0F, 8.0F));
@@ -60,7 +55,6 @@ public class EtherealBloomRenderer implements BlockEntityRenderer<EtherealBloomB
         float scale3 = rc3 / 33.0F;
         float scale4 = rc4 / 33.0F * 0.7F;
 
-        // the glow, facing whoever looks at it
         pose.pushPose();
         pose.translate(0.5, scale1, 0.5);
         pose.mulPose(Minecraft.getInstance().getEntityRenderDispatcher().cameraOrientation());
@@ -68,7 +62,6 @@ public class EtherealBloomRenderer implements BlockEntityRenderer<EtherealBloomB
                 scale1);
         pose.popPose();
 
-        // the crystal at its heart
         pose.pushPose();
         pose.translate(0.5 - scale4 / 8.0F, scale1 - scale4 / 6.0F, 0.5 - scale4 / 8.0F);
         pose.scale(scale4 / 4.0F, scale4 / 3.0F, scale4 / 4.0F);
@@ -81,7 +74,6 @@ public class EtherealBloomRenderer implements BlockEntityRenderer<EtherealBloomB
         ring(pose, leaves, 0.25, 0.0F, scale3, scale1, scale3, r1, r2);
         ring(pose, leaves, 0.6, 45.0F, scale4, scale1 * 0.7F, scale4, r2, r1);
 
-        // and the stalk, four blades standing out from the middle
         VertexConsumer stalk = buffers.getBuffer(RenderType.entityTranslucent(STALK));
         pose.pushPose();
         pose.translate(0.5, 0.0, 0.5);
@@ -98,7 +90,6 @@ public class EtherealBloomRenderer implements BlockEntityRenderer<EtherealBloomB
         pose.popPose();
     }
 
-    /** Four leaves round the stem at some height, each turned a quarter from the last and stirring. */
     private static void ring(PoseStack pose, VertexConsumer buffer, double height, float turn, float sx, float sy,
             float sz, float first, float second) {
         pose.pushPose();
@@ -118,7 +109,6 @@ public class EtherealBloomRenderer implements BlockEntityRenderer<EtherealBloomB
         pose.popPose();
     }
 
-    /** The original's centred quad: a unit square about the origin in the XY plane. */
     private static void centred(PoseStack pose, VertexConsumer buffer) {
         Matrix4f matrix = pose.last().pose();
         vertex(buffer, matrix, -0.5F, 0.5F, 1.0F, 1.0F, 0xFF, LEAF_LIGHT);
@@ -127,7 +117,6 @@ public class EtherealBloomRenderer implements BlockEntityRenderer<EtherealBloomB
         vertex(buffer, matrix, -0.5F, -0.5F, 0.0F, 1.0F, 0xFF, LEAF_LIGHT);
     }
 
-    /** One frame of the glow, as big as the bloom has grown and as bright. */
     private static void facing(PoseStack pose, VertexConsumer buffer, int frame, float size, float alpha) {
         Matrix4f matrix = pose.last().pose();
         float u0 = frame / (float) GLOW_FRAMES;

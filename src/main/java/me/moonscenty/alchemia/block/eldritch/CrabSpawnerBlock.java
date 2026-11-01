@@ -12,7 +12,6 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
-/** A crab vent: a block of crust with a vent in one face, that breeds eldritch crabs. Hard to break, and gives nothing. */
 public class CrabSpawnerBlock extends BaseEntityBlock {
     public static final MapCodec<CrabSpawnerBlock> CODEC = simpleCodec(CrabSpawnerBlock::new);
 

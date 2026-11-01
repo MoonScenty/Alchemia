@@ -14,15 +14,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
-/**
- * The axe of the stream: an alchemium axe with water bound into it.
- *
- * <p>Water is what moves things along, and what the axe does is move things along. It comes with two workings
- * built in -- a tree comes down from its top rather than its foot, and what it drops comes to whoever felled it --
- * and holding the use button draws every loose thing nearby in as well, felled or not.
- */
 public class ElementalAxeItem extends AxeItem {
-    /** How far it reaches for loose things, how hard it pulls, and the most any one thing is pulled in a tick. */
+    // pull radius and strength, upward lift so items clear steps, and per-tick speed cap
     private static final double REACHES = 10.0;
     private static final double PULLS = 0.3;
     private static final double LIFTS = 0.1;
@@ -48,12 +41,6 @@ public class ElementalAxeItem extends AxeItem {
         return ElementalTools.HELD_FOREVER;
     }
 
-    /**
-     * Everything loose within ten blocks drifts towards whoever is holding the button down.
-     * <p>
-     * A little at a time and never faster than a quarter of a block a tick, so it arrives rather than hits, and
-     * a little upward as well so it comes over the edge of a step rather than piling against it.
-     */
     @Override
     public void onUseTick(Level level, LivingEntity holder, ItemStack stack, int left) {
         Vec3 middle = holder.position().add(0.0, holder.getBbHeight() / 2.0, 0.0);

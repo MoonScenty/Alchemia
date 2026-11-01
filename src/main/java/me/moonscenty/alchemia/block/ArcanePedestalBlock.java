@@ -23,20 +23,9 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-/**
- * A stone stand that holds up one thing.
- * <p>
- * It is not a container and has no opinion about what is put on it. What matters is that whatever is on it can be
- * seen from across the room and reached by a matrix that wants it: a ring of these is what an infusion is laid out
- * on, and reading the ring at a glance is how you tell whether you have laid it out right.
- * <p>
- * One thing, never a stack. Three ingots on a pedestal would look exactly like one and make a liar of every count
- * taken of the ring afterwards.
- */
 public class ArcanePedestalBlock extends BaseEntityBlock {
     public static final MapCodec<ArcanePedestalBlock> CODEC = simpleCodec(ArcanePedestalBlock::new);
 
-    /** The foot, the stem and the plate on top, which is what the model is made of. */
     private static final VoxelShape SHAPE = Shapes.or(
             Block.box(0, 0, 0, 16, 4, 16),
             Block.box(4, 4, 4, 12, 12, 12),
@@ -49,7 +38,6 @@ public class ArcanePedestalBlock extends BaseEntityBlock {
         this.kind = kind;
     }
 
-    /** What it is built of. */
     public PillarKind kind() {
         return kind;
     }
@@ -78,7 +66,6 @@ public class ArcanePedestalBlock extends BaseEntityBlock {
         return new ArcanePedestalBlockEntity(pos, state);
     }
 
-    /** Sets one thing down, or takes back what is already there. */
     @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
             Player player, InteractionHand hand, BlockHitResult hit) {
@@ -99,7 +86,6 @@ public class ArcanePedestalBlock extends BaseEntityBlock {
         return ItemInteractionResult.sidedSuccess(level.isClientSide);
     }
 
-    /** Takes back what is standing on it. */
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player,
             BlockHitResult hit) {
@@ -119,7 +105,6 @@ public class ArcanePedestalBlock extends BaseEntityBlock {
         return InteractionResult.CONSUME;
     }
 
-    /** Whatever was standing on it falls off when it goes. */
     @Override
     protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState replacement, boolean moving) {
         if (!state.is(replacement.getBlock())

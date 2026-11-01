@@ -38,26 +38,13 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-/**
- * The molten heart of an infernal furnace, where the lava was. Its model is the whole furnace, three blocks every
- * way; the shell round it is placeholder blocks that draw nothing.
- * <p>
- * It is made with a wand out of a three-by-three-by-three of nether brick at the corners, obsidian on the edges and
- * the floor, still lava in the middle, air over it, and iron bars in place of one of the four middle-layer edges.
- * The bars become the mouth, and the heart faces away from it. Break any of it and the rest goes back to what it
- * was, bars and lava and all.
- * <p>
- * Things dropped through the top land on the lava and are taken in; anything living that touches it is burned.
- */
 public class InfernalFurnaceBlock extends BaseEntityBlock {
     public static final MapCodec<InfernalFurnaceBlock> CODEC = simpleCodec(InfernalFurnaceBlock::new);
-    /** Away from the mouth. */
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
-    /** The lava's surface, which is what things land on. */
     private static final VoxelShape SURFACE = Block.box(0.0, 0.0, 0.0, 16.0, 8.0, 16.0);
     public static final java.util.function.Supplier<AspectList> COSTS =
             () -> AspectList.of(ModAspects.FIRE, 50).add(ModAspects.EARTH, 50);
-    /** Set while the furnace is taking itself apart, so that the parts do not each try to take it apart again. */
+    // guards against each shell block re-triggering undo while the furnace comes apart
     private static boolean undoing;
 
     public InfernalFurnaceBlock(Properties properties) {
@@ -97,7 +84,6 @@ public class InfernalFurnaceBlock extends BaseEntityBlock {
                 : createTickerHelper(type, ModBlockEntities.INFERNAL_FURNACE.get(), InfernalFurnaceBlockEntity::tick);
     }
 
-    /** Things that land on it are drawn to the middle and taken in; the living are burned. */
     @Override
     protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
         Vec3 moving = entity.getDeltaMovement();
@@ -128,10 +114,6 @@ public class InfernalFurnaceBlock extends BaseEntityBlock {
         super.onRemove(state, level, pos, replacement, moving);
     }
 
-    /**
-     * Takes the furnace apart round its heart: the shell back to nether brick and obsidian, bars back in the mouth if
-     * it is open, and the heart back to lava unless it is already being made so.
-     */
     public static void undo(Level level, BlockPos heart, BlockState state, boolean heartDone) {
         if (undoing || level.isClientSide) {
             return;
@@ -158,10 +140,6 @@ public class InfernalFurnaceBlock extends BaseEntityBlock {
         }
     }
 
-    /**
-     * Makes one out of the blocks round what was clicked, if they are laid out right, the wand can pay, and its
-     * bearer has worked out how. Any of the solid blocks of it may be clicked.
-     */
     public static boolean form(Level level, BlockPos clicked, Player player, ItemStack wand) {
         if (!PlayerKnowledge.of(player).hasResearch(Alchemia.id("infernal_furnace"))) {
             return false;
@@ -186,7 +164,6 @@ public class InfernalFurnaceBlock extends BaseEntityBlock {
         return false;
     }
 
-    /** Whether the three-by-three-by-three with this corner is laid out as the original's blueprint, bars and all. */
     public static boolean fits(Level level, BlockPos base) {
         boolean bars = false;
         for (int y = 0; y < 3; y++) {
@@ -221,7 +198,6 @@ public class InfernalFurnaceBlock extends BaseEntityBlock {
         return bars;
     }
 
-    /** Builds the furnace on a corner already known to fit, without asking anyone to pay for it. */
     public static void build(Level level, BlockPos base) {
         BlockPos heart = base.offset(1, 1, 1);
         Direction mouth = Direction.NORTH;

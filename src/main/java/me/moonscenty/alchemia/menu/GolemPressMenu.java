@@ -16,12 +16,7 @@ import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 
-/**
- * Standing at a golem press: the slot the golem drops into, and the gauge of how much more it has to press. The
- * choosing is all the screen's; it only says what it chose when somebody asks for it to be made.
- */
 public class GolemPressMenu extends AlchemiaMenu {
-    // Where the pieces sit on the original's panel.
     private static final int SLOT_X = 160;
     private static final int SLOT_Y = 104;
     private static final int PACK_X = 24;
@@ -33,7 +28,6 @@ public class GolemPressMenu extends AlchemiaMenu {
     @Nullable
     private final GolemPressBlockEntity block;
 
-    /** What the client builds. */
     public GolemPressMenu(int id, Inventory inventory) {
         this(id, inventory, new SimpleContainer(1), new SimpleContainerData(GolemPressBlockEntity.READINGS),
                 ContainerLevelAccess.NULL, null);
@@ -63,12 +57,10 @@ public class GolemPressMenu extends AlchemiaMenu {
         addPlayerInventory(inventory, PACK_X, PACK_Y);
     }
 
-    /** Asked for by the screen: press this golem, if its maker knows how and has what it takes. */
     public boolean start(GolemDesign design, Player player) {
         return block != null && design.rank() == 0 && design.known(player) && block.start(design, player);
     }
 
-    /** How many measures of machina are left to press in. */
     public int cost() {
         return readings.get(GolemPressBlockEntity.READING_COST);
     }
@@ -85,7 +77,6 @@ public class GolemPressMenu extends AlchemiaMenu {
         }
         ItemStack held = slot.getItem();
         ItemStack copy = held.copy();
-        // the slot is only for taking golems out of
         if (index != 0 || !moveItemStackTo(held, 1, slots.size(), true)) {
             return ItemStack.EMPTY;
         }

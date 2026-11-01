@@ -12,16 +12,9 @@ import me.moonscenty.alchemia.golem.seal.Seals;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 
-/**
- * One thing that wants doing: going to a block, or going to something that moves, on behalf of the seal that asked.
- *
- * <p>A golem takes one on by reserving it, and gives it up when it is done or cannot go on. A task lives five
- * minutes, two more each time it is taken up or given up, and is let go of when that runs out or it is suspended.
- */
 public final class Task {
     private static final AtomicInteger NEXT = new AtomicInteger();
 
-    /** Whether the task is about a place or about something that moves. */
     public enum Kind {
         BLOCK,
         ENTITY
@@ -41,7 +34,7 @@ public final class Task {
     private boolean suspended;
     private boolean completed;
     private int data;
-    /** In seconds, counted down once a second. */
+    // seconds
     private int lifespan = 300;
     private int priority;
 
@@ -72,7 +65,6 @@ public final class Task {
         return seal;
     }
 
-    /** Where it is to be done: the block, or where the thing it is about stands now. */
     public BlockPos pos() {
         return kind == Kind.ENTITY ? entity.blockPosition() : pos;
     }
@@ -82,7 +74,6 @@ public final class Task {
         return entity;
     }
 
-    /** Only this golem may take it, if any is named. */
     @Nullable
     public UUID golem() {
         return golem;
@@ -104,7 +95,6 @@ public final class Task {
         return reserved;
     }
 
-    /** Taking it up or giving it up gives it two minutes more to live. */
     public void setReserved(boolean reserved) {
         this.reserved = reserved;
         this.lifespan += 120;
@@ -143,10 +133,7 @@ public final class Task {
         this.data = data;
     }
 
-    /**
-     * Whether a golem may do it: not if the seal is set for golems of another colour, and otherwise if the seal that
-     * asked says so. A task no seal asked for any golem may do.
-     */
+    // a task no seal asked for may be done by any golem
     public boolean canBeDoneBy(Golem golem) {
         SealEntity asked = Seals.get(golem.level(), seal);
         if (asked == null) {

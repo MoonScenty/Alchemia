@@ -11,16 +11,7 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
-/**
- * The window on a focal manipulator: one square for the focus, and a button for every upgrade the next rank
- * offers.
- *
- * <p>The bench itself is the container, so the focus stays on it when the window is closed and goes on being
- * worked on. The buttons are the menu's own: which upgrade was picked is the button's number, and the bench
- * answers for whether it will take it.
- */
 public class FocalManipulatorMenu extends AlchemiaMenu {
-    /** Where the original's container put the focus and the player's own bag. */
     private static final int FOCUS_X = 88;
     private static final int FOCUS_Y = 60;
     private static final int PACK_X = 16;
@@ -59,7 +50,6 @@ public class FocalManipulatorMenu extends AlchemiaMenu {
         return there instanceof FocalManipulatorBlockEntity bench ? bench : null;
     }
 
-    /** The buttons, numbered as the upgrade they stand for. */
     @Override
     public boolean clickMenuButton(Player player, int which) {
         var upgrades = me.moonscenty.alchemia.wand.FocusUpgrade.values();
@@ -69,7 +59,6 @@ public class FocalManipulatorMenu extends AlchemiaMenu {
         if (bench.start(upgrades[which], player)) {
             return true;
         }
-        // refused: not enough levels, or nothing on the bench that could take it
         if (!player.level().isClientSide) {
             player.level().playSound(null, bench.getBlockPos(),
                     me.moonscenty.alchemia.registry.ModSounds.CRAFT_FAIL.get(),

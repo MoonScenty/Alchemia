@@ -15,12 +15,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
-/**
- * A chicken the taint has made over. It leaps at what it goes for, flutters down rather than falls, and is never
- * hurt by a fall.
- */
 public class TaintedChicken extends TaintedBeast {
-    /** How its wings are going, for the renderer, as a chicken's are. */
+    // client-side, for the renderer
     public float flap;
     public float flapSpeed;
     public float oFlapSpeed;
@@ -35,7 +31,7 @@ public class TaintedChicken extends TaintedBeast {
         this(ModEntities.TAINTED_CHICKEN.get(), level);
     }
 
-    /** The original's numbers. */
+    // original's values
     public static AttributeSupplier.Builder attributes() {
         return Monster.createMonsterAttributes()
                 .add(Attributes.MAX_HEALTH, 8.0)
@@ -93,7 +89,6 @@ public class TaintedChicken extends TaintedBeast {
         playSound(SoundEvents.CHICKEN_STEP, 0.15F, 1.0F);
     }
 
-    /** A scrap of goo one time in four, or else a tendril. */
     @Override
     protected void dropCustomDeathLoot(ServerLevel level, DamageSource source, boolean recentlyHit) {
         super.dropCustomDeathLoot(level, source, recentlyHit);

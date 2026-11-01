@@ -10,9 +10,7 @@ import me.moonscenty.alchemia.block.ResearchTableBlock;
 import me.moonscenty.alchemia.block.taint.FluxGooBlock;
 import me.moonscenty.alchemia.block.taint.TaintFibreBlock;
 import me.moonscenty.alchemia.block.taint.TaintLogBlock;
-import me.moonscenty.alchemia.block.AlembicBlock;
 import me.moonscenty.alchemia.block.EssentiaSmelterBlock;
-import me.moonscenty.alchemia.block.CrucibleBlock;
 import me.moonscenty.alchemia.block.JarBlock;
 import me.moonscenty.alchemia.registry.ModBlocks;
 import me.moonscenty.alchemia.registry.StoneSet;
@@ -72,7 +70,6 @@ public class ModBlockStateProvider extends BlockStateProvider {
         ModBlocks.STONE_SETS.forEach(this::stoneSet);
         simpleBlockWithItem(ModBlocks.INFUSION_SPEED_STONE);
         simpleBlockWithItem(ModBlocks.INFUSION_COST_STONE);
-        // the original's amber block wears its own picture on top and bottom
         simpleBlockWithItem(ModBlocks.AMBER_BLOCK.get(), models().cubeBottomTop("amber_block",
                 modLoc("block/amber_block"), modLoc("block/amber_block_top"), modLoc("block/amber_block_top"))
                 .renderType("translucent"));
@@ -83,16 +80,10 @@ public class ModBlockStateProvider extends BlockStateProvider {
         simpleBlockWithItem(block.get(), cubeAll(block.get()));
     }
 
-    /**
-     * The taint, picked at random by position as the original's blockstates picked it: ground in three looks, mostly
-     * the plain one (crust eight to one, soil sixteen to one), and every look, the rock's too, laid at any of four
-     * turns so a patch is not a tiled repeat.
-     */
     private void taint() {
         spotted(ModBlocks.TAINT_CRUST, 8);
         spotted(ModBlocks.TAINT_SOIL, 16);
         spotted(ModBlocks.TAINT_ROCK, 0);
-        // the geyser is the original's two pictures, its vent on top
         var geyser = models().cubeColumn("taint_geyser", modLoc("block/taint_geyser_side"),
                 modLoc("block/taint_geyser_top"));
         simpleBlock(ModBlocks.TAINT_GEYSER.get(), geyser);
@@ -102,12 +93,6 @@ public class ModBlockStateProvider extends BlockStateProvider {
         fluxGoo();
     }
 
-    /**
-     * Sixteen flames off one drawing.
-     * <p>
-     * The picture is grey and the colour is put on when it is drawn, so all sixteen name the same model and the
-     * same two pictures. The item is the flame and its bead as two flat layers, the first of which takes the dye.
-     */
     private void nitor() {
         ModelFile flame = models().getExistingFile(modLoc("block/nitor"));
         ModBlocks.NITOR.forEach((colour, block) -> {
@@ -119,13 +104,8 @@ public class ModBlockStateProvider extends BlockStateProvider {
         });
     }
 
-    /** The four turns the original laid a taint block at. */
     private static final int[][] TURNS = {{0, 0}, {90, 0}, {0, 90}, {90, 90}};
 
-    /**
-     * A block in its plain look and, if {@code plain} is not zero, two spotted ones, each at the four turns; the plain
-     * one {@code plain} times as likely as each spotted one.
-     */
     private void spotted(DeferredBlock<? extends Block> block, int plain) {
         String name = block.getId().getPath();
         List<ConfiguredModel> looks = new ArrayList<>();
@@ -141,10 +121,6 @@ public class ModBlockStateProvider extends BlockStateProvider {
         simpleBlockItem(block.get(), models().getExistingFile(modLoc("block/" + name)));
     }
 
-    /**
-     * The tainted log, as the original's: plain bark all round, except that one side, any of the four, wears one of
-     * the two blistered pictures. The item and the plain model are bark all round.
-     */
     private void taintLog() {
         ResourceLocation top = modLoc("block/taint_log_top");
         ResourceLocation bark = modLoc("block/taint_log");
@@ -172,7 +148,6 @@ public class ModBlockStateProvider extends BlockStateProvider {
         simpleBlockItem(ModBlocks.TAINT_LOG.get(), models().getExistingFile(modLoc("block/taint_log")));
     }
 
-    /** Goo is a slab of varying height wearing the animated ripple on every face. */
     private void fluxGoo() {
         ResourceLocation still = modLoc("block/flux_goo_still");
         getVariantBuilder(ModBlocks.FLUX_GOO.get()).forAllStates(state -> {
@@ -191,12 +166,6 @@ public class ModBlockStateProvider extends BlockStateProvider {
         simpleBlockItem(ModBlocks.FLUX_GOO.get(), models().getExistingFile(modLoc("block/flux_goo_7")));
     }
 
-    /** Fibres are a vine: a face for each side they cling to, and a sprout on top of that for the growths. */
-    /**
-     * The fibre as the original put it together: its crust, a flat sheet lying on the floor, turned onto each side
-     * the fibre clings to as the original turned it, and over that whichever of its four growths stands there. The
-     * crust and the growths are the original's model files, imported.
-     */
     private void taintFibre() {
         ModelFile crust = models().getExistingFile(modLoc("block/taint_fibre"));
         var builder = getMultipartBuilder(ModBlocks.TAINT_FIBRE.get());
@@ -212,23 +181,11 @@ public class ModBlockStateProvider extends BlockStateProvider {
         }
     }
 
-    /**
-     * The pot is the original's model file at every depth. Its water is not part of the model: the original drew it
-     * as a surface that rises and darkens with what is in it ({@code CrucibleRenderer}).
-     */
     private void crucible() {
         simpleBlock(ModBlocks.CRUCIBLE.get(), models().getExistingFile(modLoc("block/crucible")));
     }
 
-    /**
-     * The jar, the essentia standing in it at four heights, and the label stuck on it.
-     * <p>
-     * The label is drawn on the north face of the model, so the side it ends up on is a matter of how far the whole
-     * jar is turned. An unlabelled jar is turned too, and nobody can tell.
-     */
     private void jar() {
-        // the void jar's models are the warded jar's, and the original's void glass is laid under them by the
-        // importer; without it the void jar is drawn as the plain one
         for (String fill : List.of("", "_1", "_2", "_3", "_4")) {
             for (String kind : List.of("jar", "jar_labelled")) {
                 models().withExistingParent("block/void_jar/" + kind + fill, modLoc("block/jar/" + kind + fill))
@@ -246,19 +203,13 @@ public class ModBlockStateProvider extends BlockStateProvider {
             return ConfiguredModel.builder()
                     .modelFile(models().getExistingFile(
                             modLoc("block/" + folder + "/" + label + (fill == 0 ? "" : "_" + fill))))
-                    // the label is drawn facing north, so every other bearing is that far round from it
+                    // the label faces north in the model
                     .rotationY(((int) state.getValue(JarBlock.FACING).toYRot() + 180) % 360)
                     .build();
         });
     }
 
-    /**
-     * The tubes. Their pipe is the original's mesh, put together a side at a time by LegacyTubeModel, and the marks
-     * the original drew separately are drawn separately here too: the valve's wheel by ValveHandleRenderer and the
-     * one-way's stub by OnewayMarkRenderer. The blockstate only gives each a model to build on.
-     */
     private void tube() {
-        // nothing in it but the picture a broken tube throws about
         ModelFile bare = models().getBuilder("tube").texture("particle", modLoc("block/legacy/tube"));
         for (var tube : List.of(ModBlocks.TUBE, ModBlocks.TUBE_VALVE, ModBlocks.TUBE_ONEWAY, ModBlocks.TUBE_RESTRICT,
                 ModBlocks.TUBE_FILTER, ModBlocks.TUBE_BUFFER)) {
@@ -266,24 +217,14 @@ public class ModBlockStateProvider extends BlockStateProvider {
         }
     }
 
-    /**
-     * The pedestal, and the matrix that has no model of its own.
-     * <p>
-     * The pillars are not here because they are not blocks. A woken matrix draws four of them over the corners of
-     * its altar, and the corner it draws over is a block that draws nothing at all.
-     */
     private void altar() {
         simpleBlock(ModBlocks.ARCANE_PEDESTAL.get(), models().getExistingFile(modLoc("block/pedestal")));
         simpleBlock(ModBlocks.INFUSION_MATRIX.get(), models().getExistingFile(modLoc("block/infusion_matrix")));
-        // the corner draws nothing either: the pillar standing on it is drawn by the matrix
         outerStone();
-        // a hole is the absence of a block, so there is nothing to draw and nothing to draw it with
         simpleBlock(ModBlocks.HOLE.get(), models().getExistingFile(mcLoc("block/air")));
-        // the bloom is drawn by its renderer; the block model only gives what it breaks into
         simpleBlock(ModBlocks.ETHEREAL_BLOOM.get(), models().getBuilder("ethereal_bloom")
                 .texture("particle", modLoc("block/ethereal_bloom")));
         simpleBlock(ModBlocks.WARDING_AURA.get(), models().getExistingFile(mcLoc("block/air")));
-        // the original's barrier stone: farmland's shape, its rune on top and arcane brick round the sides
         var barrier = models().withExistingParent("barrier_stone", mcLoc("block/farmland"))
                 .texture("dirt", modLoc("block/arcane_stone_bricks"))
                 .texture("top", modLoc("block/barrier_stone"))
@@ -298,14 +239,11 @@ public class ModBlockStateProvider extends BlockStateProvider {
         simpleBlockItem(ModBlocks.TRAVEL_STONE.get(), travel);
     }
 
-    /** A furnace in every way the blockstate cares about: it faces somewhere, and it is lit or it is not. */
     private void essentiaSmelter() {
-        // the original's underside is the furnace's top for the plain one, and its own metal for the other two
         smelter(ModBlocks.ESSENTIA_SMELTER.get(), "essentia_smelter", "smelter", mcLoc("block/furnace_top"));
         smelter(ModBlocks.ALCHEMIUM_SMELTER.get(), "alchemium_smelter", "alchemium_smelter",
                 modLoc("block/alchemium_block"));
         smelter(ModBlocks.VOID_SMELTER.get(), "void_smelter", "void_smelter", modLoc("block/legacy/void_metal"));
-        // the pump and the vent are the original's model files, drawn facing north into the smelter
         horizontalBlock(ModBlocks.SMELTER_AUX.get(), models().getExistingFile(modLoc("block/smelter_aux")));
         horizontalBlock(ModBlocks.SMELTER_VENT.get(), models().getExistingFile(modLoc("block/smelter_vent")));
     }
@@ -318,28 +256,18 @@ public class ModBlockStateProvider extends BlockStateProvider {
         horizontalBlock(block, state -> state.getValue(EssentiaSmelterBlock.LIT) ? on : off);
     }
 
-    /**
-     * A block the original drew wholly in its renderer, as ours does too: a model with nothing in it but the picture
-     * a broken one throws about.
-     */
     private void drawnElsewhere(DeferredBlock<? extends Block> block, String particle) {
         simpleBlock(block.get(), models().getBuilder(block.getId().getPath()).texture("particle", modLoc(particle)));
     }
 
-    /** Drawn by AlembicRenderer, on Thaumcraft 4's mesh. */
     private void alembic() {
         drawnElsewhere(ModBlocks.ALEMBIC, "item/legacy/alembic");
     }
 
-    /** The original's own model file, read from its jar. */
     private void arcaneWorkbench() {
         simpleBlock(ModBlocks.ARCANE_WORKBENCH.get(), models().getExistingFile(modLoc("block/arcane_workbench")));
     }
 
-    /**
-     * The three lamps: the original's lamp body, lit or dark, and its stand turned to the face it hangs from.
-     * The turns are the original's own.
-     */
     private void lamps() {
         lamp(ModBlocks.ARCANE_LAMP, "lamp_on", "lamp_off");
         lamp(ModBlocks.GROWTH_LAMP, "lamp_grow_on", "lamp_grow_off");
@@ -369,7 +297,6 @@ public class ModBlockStateProvider extends BlockStateProvider {
         }
     }
 
-    /** The jug is the original's own model file; the chest and the lamp's lights are drawn some other way. */
     private void smallDevices() {
         lamps();
         simpleBlock(ModBlocks.WATER_JUG.get(), new net.neoforged.neoforge.client.model.generators.ModelFile
@@ -378,10 +305,6 @@ public class ModBlockStateProvider extends BlockStateProvider {
         drawnElsewhere(ModBlocks.LAMP_LIGHT, "block/legacy/lamp_on");
     }
 
-    /**
-     * The levitator and the ear, the original's lit and dark models turned to the way they face, and the relay, the
-     * original's model with today's names for the vanilla pictures it borrows. The turns are the original's own.
-     */
     private void signalDevices() {
         facingSix(ModBlocks.LEVITATOR.get(), me.moonscenty.alchemia.block.LevitatorBlock.FACING,
                 me.moonscenty.alchemia.block.LevitatorBlock.ENABLED, "levitator");
@@ -411,7 +334,6 @@ public class ModBlockStateProvider extends BlockStateProvider {
         }, me.moonscenty.alchemia.block.RedstoneRelayBlock.IN, me.moonscenty.alchemia.block.RedstoneRelayBlock.OUT);
     }
 
-    /** The spa is a plain block on the original's faces, a furnace's top under it; the fluid is drawn as water is. */
     private void spa() {
         simpleBlock(ModBlocks.SPA.get(), models().cube("spa", mcLoc("block/furnace_top"),
                 modLoc("block/legacy/spa_top"), modLoc("block/legacy/spa_side"), modLoc("block/legacy/spa_side"),
@@ -423,7 +345,6 @@ public class ModBlockStateProvider extends BlockStateProvider {
                 .texture("particle", modLoc("block/legacy/liquid_death")));
     }
 
-    /** The recharge pedestal and the dioptra, on the original's model files. */
     private void auraDevices() {
         simpleBlock(ModBlocks.RECHARGE_PEDESTAL.get(), new net.neoforged.neoforge.client.model.generators.ModelFile
                 .UncheckedModelFile(modLoc("block/legacy/recharge_pedestal")));
@@ -436,10 +357,6 @@ public class ModBlockStateProvider extends BlockStateProvider {
                 .modelFile(state.getValue(me.moonscenty.alchemia.block.DioptraBlock.ENABLED) ? lit : dark).build());
     }
 
-    /**
-     * The totems and poles: the original's totem and pole models, each kind with its own face as the original's
-     * block states gave it, drawn the way the original drew them.
-     */
     private void totems() {
         totem(ModBlocks.AURA_TOTEM_PUSH, "aura_totem", null);
         totem(ModBlocks.AURA_TOTEM_PULL, "aura_totem", "aura_totem_pull");
@@ -481,18 +398,14 @@ public class ModBlockStateProvider extends BlockStateProvider {
         });
     }
 
-    /** Drawn by BellowsRenderer; the block itself only has to say what it breaks into. */
     private void bellows() {
         drawnElsewhere(ModBlocks.BELLOWS, "block/greatwood_planks");
-        // the original's two essentia devices threw greatwood about when broken, having no model of their own
         drawnElsewhere(ModBlocks.CENTRIFUGE, "block/greatwood_planks");
-        // the mirrors are drawn by their renderer; broken, they throw their frames about
         for (var mirror : java.util.List.of(ModBlocks.MIRROR, ModBlocks.MIRROR_ESSENTIA)) {
             String frame = mirror == ModBlocks.MIRROR ? "block/legacy/mirrorframe" : "block/legacy/mirrorframe2";
             getVariantBuilder(mirror.get()).partialState().setModels(new ConfiguredModel(
                     models().getBuilder(mirror.getId().getPath()).texture("particle", modLoc(frame))));
         }
-        // the glimmering grass looks like any other grass, turned about as grass is
         ModelFile grass = models().getExistingFile(mcLoc("block/grass_block"));
         ModelFile snowy = models().getExistingFile(mcLoc("block/grass_block_snow"));
         getVariantBuilder(ModBlocks.AMBIENT_GRASS.get()).forAllStates(state -> state.getValue(
@@ -500,31 +413,25 @@ public class ModBlockStateProvider extends BlockStateProvider {
                 ? ConfiguredModel.builder().modelFile(snowy).build()
                 : ConfiguredModel.allYRotations(grass, 0, false));
         simpleBlockItem(ModBlocks.AMBIENT_GRASS.get(), grass);
-        // the stone table is the original's model; a golem press is drawn by its renderer, all of it
         simpleBlock(ModBlocks.STONE_TABLE.get(), models().getExistingFile(modLoc("block/table_stone")));
         simpleBlockWithItem(ModBlocks.WOODEN_TABLE.get(), models().getExistingFile(modLoc("block/table_wood")));
         getVariantBuilder(ModBlocks.GOLEM_PRESS.get()).partialState().setModels(new ConfiguredModel(
                 models().getBuilder("golem_press").texture("particle", modLoc("block/legacy/base_stone"))));
         getVariantBuilder(ModBlocks.GOLEM_PRESS_PART.get()).partialState().setModels(new ConfiguredModel(
                 models().getBuilder("golem_press_part").texture("particle", modLoc("block/legacy/base_metal"))));
-        // the infernal furnace's heart wears the original's model of the whole furnace; the shell draws nothing
         horizontalBlock(ModBlocks.INFERNAL_FURNACE.get(), models().getExistingFile(modLoc("block/infernal_furnace")));
         ModelFile brick = models().getBuilder("furnace_shell_brick").texture("particle", mcLoc("block/nether_bricks"));
         ModelFile obsidian = models().getBuilder("furnace_shell_obsidian").texture("particle", mcLoc("block/obsidian"));
         getVariantBuilder(ModBlocks.FURNACE_SHELL.get()).forAllStates(state -> ConfiguredModel.builder()
                 .modelFile(state.getValue(me.moonscenty.alchemia.block.FurnaceShellBlock.OBSIDIAN) ? obsidian : brick)
                 .build());
-        // the bore and its base are drawn by their renderers and threw greatwood about when broken
         for (var bore : java.util.List.of(ModBlocks.ARCANE_BORE, ModBlocks.ARCANE_BORE_BASE)) {
             getVariantBuilder(bore.get()).partialState().setModels(new ConfiguredModel(
                     models().getBuilder(bore.getId().getPath()).texture("particle", modLoc("block/greatwood_planks"))));
         }
-        // the brain jar is the warded jar's glass; the brain and the brine are drawn by its renderer
         simpleBlock(ModBlocks.BRAIN_JAR.get(), models().getExistingFile(modLoc("block/jar/jar")));
-        // the thaumatorium is drawn whole by its renderer; broken, it throws brass about, which is what it was
         getVariantBuilder(ModBlocks.THAUMATORIUM.get()).partialState().setModels(new ConfiguredModel(
                 models().getBuilder("thaumatorium").texture("particle", modLoc("block/brass_block"))));
-        // the matrix is the original's model file, turned as the original's blockstate turned it
         ModelFile matrix = models().getExistingFile(modLoc("block/mnemonic_matrix"));
         getVariantBuilder(ModBlocks.MNEMONIC_MATRIX.get()).forAllStates(state -> {
             Direction facing = state.getValue(me.moonscenty.alchemia.block.MnemonicMatrixBlock.FACING);
@@ -545,32 +452,25 @@ public class ModBlockStateProvider extends BlockStateProvider {
                 models().getBuilder("crystallizer").texture("particle", modLoc("block/greatwood_planks"))));
     }
 
-    /** The original's own model file again, with the other skin on it. */
     private void focalManipulator() {
         simpleBlock(ModBlocks.FOCAL_MANIPULATOR.get(), models().getExistingFile(modLoc("block/focal_manipulator")));
     }
 
-    /** Drawn by ChargerRenderer, as the original's vis relay. */
     private void arcaneWorkbenchCharger() {
         drawnElsewhere(ModBlocks.ARCANE_WORKBENCH_CHARGER, "item/legacy/vis_relay");
     }
 
-    /** Drawn by NodeStabilizerRenderer, on the original's mesh. */
     private void nodeStabilizer() {
         drawnElsewhere(ModBlocks.NODE_STABILIZER, "item/legacy/node_stabilizer");
     }
 
-    /**
-     * The desk alone. What stands on it is drawn by its renderer, which knows whether to draw the original's inkwell
-     * and scroll or our own.
-     */
     private void researchTable() {
         ResearchTableBlock block = ModBlocks.RESEARCH_TABLE.get();
         ModelFile desk = models().getExistingFile(modLoc("block/research_table"));
 
         var builder = getMultipartBuilder(block);
         for (Direction facing : Direction.Plane.HORIZONTAL) {
-            // the model is drawn facing north, whose yaw is 180, so take that back out
+            // the model faces north (yaw 180), so take that back out
             int turn = ((int) facing.toYRot() + 180) % 360;
             builder.part().modelFile(desk).rotationY(turn).addModel()
                     .condition(ResearchTableBlock.FACING, facing).end();
@@ -599,17 +499,11 @@ public class ModBlockStateProvider extends BlockStateProvider {
         simpleBlockItem(set.slab().get(), models().getExistingFile(set.slab().getId().withPrefix("block/")));
     }
 
-    /**
-     * Arcane stone, as the original laid its three pictures: the first on top and bottom, the second east and west,
-     * the third north and south, the block at any of four turns. Its stairs and slab take the first underneath, the second on top and the third
-     * round the sides.
-     */
     private void arcaneStone(StoneSet set) {
         ResourceLocation one = modLoc("block/arcane_stone");
         ResourceLocation two = modLoc("block/arcane_stone_2");
         ResourceLocation three = modLoc("block/arcane_stone_3");
         ModelFile block = models().cube("arcane_stone", one, one, three, three, two, two).texture("particle", one);
-        // laid at any of four turns, as the original's blockstate laid it
         getVariantBuilder(set.block().get()).partialState().setModels(Arrays.stream(TURNS)
                 .map(turn -> ConfiguredModel.builder().modelFile(block).rotationX(turn[0]).rotationY(turn[1])
                         .buildLast())
@@ -621,11 +515,6 @@ public class ModBlockStateProvider extends BlockStateProvider {
         simpleBlockItem(set.slab().get(), models().getExistingFile(set.slab().getId().withPrefix("block/")));
     }
 
-    /**
-     * Ancient stone, as the original laid its six pictures -- a tile on top, five worn faces round the rest -- at
-     * any of sixteen turns.
-     */
-    /** An urn or crate: boxes with the one top and a side for each rarity, as the original drew them. */
     private void lootBlock(net.minecraft.world.level.block.Block block, String name, int[][] boxes) {
         var states = getVariantBuilder(block);
         for (int rarity = 0; rarity <= 2; rarity++) {
@@ -667,7 +556,6 @@ public class ModBlockStateProvider extends BlockStateProvider {
         simpleBlockItem(set.slab().get(), models().getExistingFile(set.slab().getId().withPrefix("block/")));
     }
 
-    /** Eldritch stone, laid as arcane stone is: three pictures, any of four turns. */
     private void eldritchStone(StoneSet set) {
         ResourceLocation one = modLoc("block/eldritch_stone");
         ResourceLocation two = modLoc("block/eldritch_stone_2");
@@ -684,9 +572,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         simpleBlockItem(set.slab().get(), models().getExistingFile(set.slab().getId().withPrefix("block/")));
     }
 
-    /** The rest of the Outer Lands' stone, and the two pedestals. */
     private void outerStone() {
-        // drawn by their renderers; the model is only for the dust they throw up when struck
         for (var drawn : java.util.List.of(ModBlocks.ELDRITCH_ALTAR, ModBlocks.ELDRITCH_CAP, ModBlocks.ELDRITCH_OBELISK,
                 ModBlocks.ELDRITCH_OBELISK_BODY, ModBlocks.ELDRITCH_PORTAL)) {
             simpleBlock(drawn.get(), models().getBuilder(drawn.getId().getPath())
@@ -694,7 +580,6 @@ public class ModBlockStateProvider extends BlockStateProvider {
         }
         simpleBlock(ModBlocks.BANNER.get(), models().getBuilder("banner")
                 .texture("particle", mcLoc("block/oak_planks")));
-        // the Outer Lands' bedrock with the stars in it; the void, the door and the lock are not drawn as blocks
         simpleBlockWithItem(ModBlocks.ANCIENT_BEDROCK.get(), models().cubeAll("ancient_bedrock",
                 modLoc("block/legacy/ancient_bedrock")));
         for (var unseen : java.util.List.of(ModBlocks.VACUUM, ModBlocks.ELDRITCH_DOOR, ModBlocks.ELDRITCH_LOCK)) {
@@ -716,13 +601,10 @@ public class ModBlockStateProvider extends BlockStateProvider {
         simpleBlockWithItem(ModBlocks.ALCHEMICAL_CONSTRUCT);
         simpleBlockWithItem(ModBlocks.ADVANCED_ALCHEMICAL_CONSTRUCT);
         simpleBlockWithItem(ModBlocks.FLESH_BLOCK.get(), models().cubeAll("flesh_block", modLoc("block/legacy/flesh")));
-        // the original's one candle model for every colour, turned a quarter more for each so a row of them is not
-        // a row of the same drips
         ModelFile candle = models().getExistingFile(modLoc("block/candle"));
         ModBlocks.TALLOW_CANDLES.forEach((dye, block) -> getVariantBuilder(block.get()).partialState()
                 .modelForState().modelFile(candle).rotationY(90 * (dye.getId() % 4)).addModel());
         horizontalBlock(ModBlocks.PATTERN_CRAFTER.get(), models().getExistingFile(modLoc("block/pattern_crafter")));
-        // taint dust lies in four depths, a quarter block each, as snow does
         ModelFile[] heaps = new ModelFile[4];
         for (int depth = 0; depth < 3; depth++) {
             heaps[depth] = models().withExistingParent("taint_dust_" + depth, mcLoc("block/snow_height" + 4 * (depth + 1)))
@@ -733,7 +615,6 @@ public class ModBlockStateProvider extends BlockStateProvider {
         getVariantBuilder(ModBlocks.TAINT_DUST.get()).forAllStates(state -> ConfiguredModel.builder()
                 .modelFile(heaps[state.getValue(me.moonscenty.alchemia.block.taint.TaintDustBlock.LEVEL)]).build());
         simpleBlockItem(ModBlocks.TAINT_DUST.get(), heaps[3]);
-        // the transfusers point out of the face they are set on, turned as the original's were
         for (var transfuser : java.util.List.of(ModBlocks.ESSENTIA_INPUT, ModBlocks.ESSENTIA_OUTPUT)) {
             ModelFile fitting = models().getExistingFile(modLoc("block/" + transfuser.getId().getPath()));
             getVariantBuilder(transfuser.get()).forAllStates(state -> {
@@ -761,7 +642,6 @@ public class ModBlockStateProvider extends BlockStateProvider {
                 .texture("top", modLoc("block/legacy/ancient_tile"))
                 .texture("particle", modLoc("block/legacy/pedestal_ancient_side"));
         simpleBlockWithItem(ModBlocks.ANCIENT_PEDESTAL.get(), ancient);
-        // the pillar is drawn by the matrix whatever it is built of
         getVariantBuilder(ModBlocks.ARCANE_PILLAR.get()).partialState()
                 .setModels(new ConfiguredModel(models().getExistingFile(modLoc("block/infusion_matrix"))));
     }
@@ -787,15 +667,10 @@ public class ModBlockStateProvider extends BlockStateProvider {
         slabBlock(wood.slab().get(), planks, planks);
         simpleBlockItem(wood.slab().get(), models().getExistingFile(wood.slab().getId().withPrefix("block/")));
 
-        // the leaf color is part of the texture, so there is no biome tint
         simpleBlockWithItem(wood.leaves().get(), models().leaves(wood.leaves().getId().getPath(), blockTexture(wood.leaves().get())).renderType("cutout_mipped"));
         simpleBlock(wood.sapling().get(), models().cross(wood.sapling().getId().getPath(), blockTexture(wood.sapling().get())).renderType("cutout"));
     }
 
-    /**
-     * One model for every crystal and every state of it, with nothing in it but its picture: the shards themselves
-     * are the original's mesh, chosen and baked by LegacyCrystalModel from the state and the place.
-     */
     private void crystal(DeferredBlock<CrystalBlock> block) {
         simpleBlock(block.get(), models().getBuilder("crystal")
                 .texture("particle", modLoc("block/legacy/crystal")).renderType("cutout"));

@@ -16,11 +16,6 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
-/**
- * The portal as the original drew it: one sheet of sixteen frames played backwards at twenty a second, turned to
- * face whoever looks. It opens out over its first fifty ticks awake, flinches when struck, swells when it lets one
- * through, and flickers and thins as it is worn down. Asleep, it is not drawn at all.
- */
 public class CultistPortalRenderer extends EntityRenderer<CultistPortal> {
     private static final ResourceLocation SHEET = Alchemia.id("textures/entity/cultist_portal.png");
     private static final int FRAMES = 16;

@@ -15,19 +15,11 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
-/**
- * What an ethereal bloom does, the original's {@code TileEtherealBloom}. Once a second it casts a line of light seven
- * blocks out each way through itself, turning a little further round each time and slowly tilting, and where the
- * line comes down on the ground it puts the land back as it was made and kills whatever taint is there. After fifteen
- * seconds of finding nothing it goes to sleep for a minute, and starts again.
- */
 public class EtherealBloomBlockEntity extends SyncedBlockEntity {
-    /** How long it searches in vain before it sleeps, in passes, and how long it sleeps, in ticks. */
+    // RESTLESS in passes, SLEEPS in ticks
     public static final int RESTLESS = 300;
     public static final int SLEEPS = RESTLESS * 4;
-    /** How far its line reaches each way. */
     public static final int REACH = 8;
-    /** How long a freshly planted one takes to grow, in ticks; the drawing grows with it. */
     public static final int GROWS = 100;
 
     public int counter;
@@ -42,7 +34,6 @@ public class EtherealBloomBlockEntity extends SyncedBlockEntity {
         super(ModBlockEntities.ETHEREAL_BLOOM.get(), pos, state);
     }
 
-    /** Planted just now: it grows in from nothing. */
     public void planted() {
         growthCounter = 0;
         changed(Block.UPDATE_ALL);
@@ -78,7 +69,6 @@ public class EtherealBloomBlockEntity extends SyncedBlockEntity {
         bloom.growthCounter++;
     }
 
-    /** One pass of the line: further round, a little more tilted, and down to the ground at each step out. */
     private void sweep(ServerLevel level, BlockPos pos) {
         rad = (int) (rad + 5.0 + Math.sqrt(1 + rad1) * 5.0 + level.random.nextInt(5));
         if (rad > 360) {
@@ -91,7 +81,6 @@ public class EtherealBloomBlockEntity extends SyncedBlockEntity {
         Vec3 source = Vec3.atCenterOf(pos);
         boolean found = false;
         for (int q = 1; q < REACH; q++) {
-            // out along x, tipped up by rad1 and turned round by rad, as the original turned its vector
             Vec3 out = new Vec3(q, 0.0, 0.0).zRot(rad1 * Mth.DEG_TO_RAD).yRot(rad * Mth.DEG_TO_RAD);
             if (clear(level, ground(level, source.add(out))) | clear(level, ground(level, source.subtract(out)))) {
                 found = true;
@@ -114,7 +103,6 @@ public class EtherealBloomBlockEntity extends SyncedBlockEntity {
         return pos;
     }
 
-    /** Puts the land back as it was made, and kills any taint standing there; whether it did either. */
     public static boolean clear(ServerLevel level, BlockPos at) {
         boolean cleared = false;
         var made = BiomePaint.generated(level, at);

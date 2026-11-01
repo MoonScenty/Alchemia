@@ -10,17 +10,10 @@ import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
-/**
- * The bellows working: pushing a furnace along on the server, and breathing in and out on the client.
- *
- * <p>The breathing is only for looking at. A pair of bellows that is pumping is a pair that is blowing, whatever
- * the bag happens to be doing at that moment, so nothing the server does waits on it.
- */
 public class BellowsBlockEntity extends BlockEntity {
-    /** How often they give a furnace an extra tick of cooking: every second tick, so half again as fast. */
+    // one extra cook tick every 2 ticks = 50% faster
     private static final int PUSHES_EVERY = 2;
 
-    /** How full the bag is, from the emptiest it gets to quite full, and which way it is going. */
     public static final float EMPTIEST = 0.35F;
     private static final float EMPTIES = 0.075F;
     private static final float FILLS = 0.025F;
@@ -35,11 +28,6 @@ public class BellowsBlockEntity extends BlockEntity {
         super(ModBlockEntities.BELLOWS.get(), pos, state);
     }
 
-    /**
-     * One extra tick of cooking for the furnace in front, every other tick, while there is something in it to
-     * hurry. Never the very last tick: the furnace finishes its own work, so what comes out of it comes out the
-     * way a furnace's work always does.
-     */
     public static void serverTick(Level level, BlockPos pos, BlockState state, BellowsBlockEntity bellows) {
         if (!state.getValue(BellowsBlock.ENABLED) || ++bellows.since < PUSHES_EVERY) {
             return;
@@ -47,19 +35,18 @@ public class BellowsBlockEntity extends BlockEntity {
         bellows.since = 0;
         if (level.getBlockEntity(pos.relative(state.getValue(BellowsBlock.FACING)))
                 instanceof AbstractFurnaceBlockEntity furnace
+                // never push the final tick, so the furnace completes the item itself
                 && furnace.cookingProgress > 0 && furnace.cookingProgress < furnace.cookingTotalTime - 1) {
             furnace.cookingProgress++;
         }
     }
 
-    /** The bag emptying quickly and filling slowly, with a puff at the top of every breath. */
     public static void clientTick(Level level, BlockPos pos, BlockState state, BellowsBlockEntity bellows) {
         bellows.wasInflated = bellows.inflation;
         if (!state.getValue(BellowsBlock.ENABLED)) {
             return;
         }
         if (!bellows.begun) {
-            // each pair starts somewhere of its own, so a row of them does not breathe in step
             bellows.inflation = EMPTIEST + level.random.nextFloat() * 0.55F;
             bellows.wasInflated = bellows.inflation;
             bellows.begun = true;
@@ -79,7 +66,6 @@ public class BellowsBlockEntity extends BlockEntity {
         }
     }
 
-    /** How full the bag is this frame. */
     public float inflation(float partial) {
         return wasInflated + (inflation - wasInflated) * partial;
     }

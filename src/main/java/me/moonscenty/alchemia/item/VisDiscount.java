@@ -5,49 +5,27 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
-/**
- * Something that makes a wand spend less while it is worn.
- *
- * <p>This is the whole worth of a robe, and half the worth of the goggles. It is also the one thing worn armour
- * has never done in this game, so there is nothing to hook into: a wand asks what its bearer has on at the moment
- * it is made to pay, and that is what this answers.
- *
- * <p>The discount is given in whole parts of a hundred and simply added up across everything worn. Three pieces
- * of a void robe are fifteen parts off every bill, which is a great deal and meant to be.
- */
+// worn discounts are whole percentages, summed across armour and baubles
 public interface VisDiscount {
-    /**
-     * The least of an asking price a wand can be brought down to.
-     * <p>
-     * A tenth, as the original had it. Without a floor a deep enough pile of discounts would make working free,
-     * and a craft whose prices can reach nothing has no prices.
-     */
+    // price floor, original's value: stacked discounts never make work free
     float LEAST = 0.1F;
 
-    /** How much less a wand spends while this piece is worn, in whole parts of a hundred. */
     int visDiscount(ItemStack stack, Player wearer);
 
-    /**
-     * How much less a wand spends of this one primal while this is worn, over and above {@link #visDiscount}: the
-     * apprentice's ring of a primal is five parts off that primal and nothing off the rest.
-     */
     default int visDiscount(ItemStack stack, Player wearer,
             net.minecraft.core.Holder<me.moonscenty.alchemia.aspect.Aspect> aspect) {
         return 0;
     }
 
-    /** The tooltip line saying how much this takes off. */
     default Component discountLine(ItemStack stack) {
         return Component.translatable("item.alchemia.vis_discount", visDiscount(stack, null))
                 .withStyle(ChatFormatting.AQUA);
     }
 
-    /** Everything the player has on, armour and baubles, added up. */
     static int worn(Player wearer) {
         return worn(wearer, null);
     }
 
-    /** The same, with what is off this one primal besides, when there is a primal to ask about. */
     static int worn(Player wearer, net.minecraft.core.Holder<me.moonscenty.alchemia.aspect.Aspect> aspect) {
         if (wearer == null) {
             return 0;
@@ -61,20 +39,16 @@ public interface VisDiscount {
                 }
             }
         }
-        // vis exhaustion takes ten parts back per level, the worse of the flu and the phage
         total -= me.moonscenty.alchemia.player.effect.ModEffects.exhaustion(wearer) * EXHAUSTED;
         return total;
     }
 
-    /** What each level of vis exhaustion takes back off the discount, in parts of a hundred. */
     int EXHAUSTED = 10;
 
-    /** What share of an asking price actually gets paid: the cap's own rate, less what the bearer is wearing. */
     static float rate(float cap, Player wearer) {
         return Math.max(LEAST, cap - worn(wearer) / 100.0F);
     }
 
-    /** The same, for one primal: the general discount and that primal's own. */
     static float rate(float cap, Player wearer,
             net.minecraft.core.Holder<me.moonscenty.alchemia.aspect.Aspect> aspect) {
         return Math.max(LEAST, cap - worn(wearer, aspect) / 100.0F);

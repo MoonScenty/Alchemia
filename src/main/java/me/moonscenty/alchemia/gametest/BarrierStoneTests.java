@@ -20,7 +20,6 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/** The barrier stone: a ward two blocks high that stops creatures but not players, and goes off with a signal. */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class BarrierStoneTests {
@@ -51,13 +50,11 @@ public class BarrierStoneTests {
         helper.assertValueEqual(helper.getLevel().getBlockState(ward).getShape(helper.getLevel(), ward).isEmpty(),
                 true, "cannot be struck");
 
-        // a signal holds the stone off
         helper.setBlock(stone.east(), Blocks.REDSTONE_BLOCK);
         helper.assertBlockProperty(stone, BarrierStoneBlock.POWERED, true);
         helper.assertTrue(state.getCollisionShape(helper.getLevel(), ward, CollisionContext.of(zombie)).isEmpty(),
                 "open while powered");
 
-        // and without the stone the ward goes
         helper.setBlock(stone, Blocks.AIR);
         helper.assertBlockNotPresent(ModBlocks.WARDING_AURA.get(), stone.above());
         helper.assertBlockNotPresent(ModBlocks.WARDING_AURA.get(), stone.above(2));

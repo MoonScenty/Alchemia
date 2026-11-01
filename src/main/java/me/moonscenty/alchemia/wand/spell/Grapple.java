@@ -15,43 +15,27 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
-/**
- * A hook thrown at a wall, which then hauls whoever threw it towards itself.
- *
- * <p>It flies out, bites whatever it reaches first, and from then on pulls. The pull is gentle and constant
- * rather than a yank: a little towards the hook every tick, plus a lift at the moment it bites so that the first
- * thing a climber does is clear the ledge rather than slide up the face of it.
- *
- * <p>It lets go when the thrower is on top of it, when they crouch, or when they have stopped getting any nearer
- * for a while -- which is what happens to somebody hooked round a corner. All three are the original's.
- *
- * <p>While it is falling it is short-lived. A hook that bit nothing is a hook not worth leaving in the air.
- */
+// lets go on arrival, on crouch, or after a stretch of no progress; original's rules
 public class Grapple extends ThrowableProjectile {
-    /** Whether it has bitten. Sent to the client so the line can be drawn taut rather than slack. */
     private static final EntityDataAccessor<Boolean> BITING =
             SynchedEntityData.defineId(Grapple.class, EntityDataSerializers.BOOLEAN);
 
-    /** How long a hook that has bitten nothing stays in the air, in ticks. */
     private static final int IN_FLIGHT = 10;
-    /** How hard it hauls, as a share of the distance left, and the most it will haul in one tick. */
+    // pull as a share of the remaining distance, and the per-tick cap
     private static final double HAULS = 5.0;
     private static final double AT_MOST = 0.25;
-    /** The lift the moment it bites, so a climber clears the ledge instead of scraping it. */
+    // upward kick on biting so the climber clears the ledge
     private static final double LIFTS = 0.4;
-    /** A little extra upward every tick, to hold against the fall. */
+    // per-tick lift against gravity
     private static final double HOLDS_UP = 0.033;
-    /** Close enough to have arrived. */
     private static final double ARRIVED = 2.0;
-    /** How many ticks of getting no nearer before it gives up. */
     private static final int STUCK_FOR = 20;
 
-    /** How much longer a hook stays in the air per rank of force, which is how much further it reaches. */
+    // extra flight ticks per rank of potency
     private static final int FURTHER = 5;
-    /** How close a sticky hook starts hauling harder, and what the hauling is divided by inside that. */
+    // sticky: range where the pull strengthens, and its divisor
     private static final double CLOSE = 8.0;
 
-    /** Ranks of force, and whether it holds on after the climber has arrived. */
     private int potency;
     private boolean sticky;
 
@@ -81,13 +65,6 @@ public class Grapple extends ThrowableProjectile {
         sticky = tag.getBoolean("sticky");
     }
 
-    /**
-     * What is worked into the focus that threw it.
-     * <p>
-     * Force is reach: a hook that stays in the air longer is a hook that gets further before it falls. Sticky
-     * is the climber's own business -- it will not let go on arrival, and it hauls harder once they are close,
-     * which is what makes it a thing to hang from rather than a thing to climb.
-     */
     public Grapple hauling(int potency, boolean sticky) {
         this.potency = potency;
         this.sticky = sticky;
@@ -99,7 +76,6 @@ public class Grapple extends ThrowableProjectile {
         builder.define(BITING, false);
     }
 
-    /** A hook flies flat. Whatever it is made of, it is not thrown like a stone. */
     @Override
     protected double getDefaultGravity() {
         return biting() ? 0.0 : 0.03;
@@ -130,12 +106,6 @@ public class Grapple extends ThrowableProjectile {
         haul(thrower);
     }
 
-    /**
-     * One tick of pulling.
-     * <p>
-     * The hook does not move; the thrower does. What is added is a share of the way there rather than a step of
-     * fixed size, so a long swing starts fast and settles as it closes.
-     */
     private void haul(Entity thrower) {
         Vec3 towards = position().subtract(thrower.position());
         double away = towards.length();
@@ -145,7 +115,7 @@ public class Grapple extends ThrowableProjectile {
             return;
         }
 
-        // a sticky hook pulls harder the closer it is held, which is what holds somebody against a ceiling
+        // sticky hooks pull harder up close, holding the climber against a ceiling
         double share = sticky && away < CLOSE ? away * (CLOSE - away) : away;
         Vec3 pull = towards.scale(1.0 / (Math.max(0.01, share) * HAULS));
         if (pull.length() > AT_MOST) {
@@ -159,19 +129,17 @@ public class Grapple extends ThrowableProjectile {
             lifted = true;
         }
 
-        // getting no nearer for a while means the line is caught on something, and a line caught is a line let go
+        // no progress for a while means the line is snagged: let go
         int step = (int) (away / 2.0);
         sameDistance = step == wasDistance ? sameDistance + 1 : 0;
         wasDistance = step;
     }
 
-    /** Biting: it stops dead where it struck and starts pulling from there. */
     @Override
     protected void onHit(HitResult where) {
         bite(where);
     }
 
-    /** Taking hold, which anything may set off and a test may watch. */
     public void bite(HitResult where) {
         if (biting() || level().isClientSide) {
             return;

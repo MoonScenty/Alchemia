@@ -14,10 +14,6 @@ import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.world.item.ItemStack;
 
-/**
- * A crumb of an item that hops up, falls and fades out, as the original's {@code FXBreakingFade}: the game's own
- * crumb of a broken item, tinted, and fading evenly over however long it was given.
- */
 public class CrumbParticle extends TextureSheetParticle {
     private final float uo;
     private final float vo;
@@ -39,7 +35,6 @@ public class CrumbParticle extends TextureSheetParticle {
         this.vo = random.nextFloat() * 3.0F;
     }
 
-    /** Sent off this way, rather than the game's random hop. */
     public CrumbParticle moving(double x, double y, double z) {
         this.xd = x;
         this.yd = y;
@@ -53,7 +48,6 @@ public class CrumbParticle extends TextureSheetParticle {
         alpha = opacity * (1.0F - age / (float) lifetime);
     }
 
-    /** The game's crumbs are drawn solid; these fade, so they are laid over the world instead. */
     private static final ParticleRenderType SEE_THROUGH = new ParticleRenderType() {
         @Override
         public BufferBuilder begin(Tesselator tesselator, TextureManager textures) {
@@ -74,8 +68,6 @@ public class CrumbParticle extends TextureSheetParticle {
     public ParticleRenderType getRenderType() {
         return SEE_THROUGH;
     }
-
-    // a random quarter of the item's picture, as the game's own crumbs are
 
     @Override
     protected float getU0() {

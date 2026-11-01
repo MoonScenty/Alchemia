@@ -19,16 +19,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 
-/**
- * An alchemic slime: a slime of flux, purple and wet.
- *
- * <p>It is what congeals out of a puddle of flux goo, what the taint makes of something it kills that is not an
- * animal, and it grows by wading through more goo. Bigger than two, it spits pieces of itself at a player more than
- * four blocks off, every five seconds, shrinking by one for each; those pieces land as little slimes of their own.
- * Killed, it bursts into as many little slimes as it was big.
- */
 public class AlchemicSlime extends Slime implements TaintedMob {
-    /** How long between spits, and how long a spat piece reaches further than its size. The original's. */
+    // original's values
     private static final int SPITS_EVERY = 100;
     private static final int FLUNG_FOR = 10;
     private static final double LOOKS = 16.0;
@@ -44,7 +36,6 @@ public class AlchemicSlime extends Slime implements TaintedMob {
         this(ModEntities.ALCHEMIC_SLIME.get(), level);
     }
 
-    /** A piece of a slime, spat from it at what it is after. */
     public AlchemicSlime(Level level, LivingEntity from, LivingEntity at) {
         this(level);
         setSize(1, true);
@@ -68,7 +59,6 @@ public class AlchemicSlime extends Slime implements TaintedMob {
                 (dz / length + random.nextGaussian() * 0.0075) * 1.5);
     }
 
-    /** A slime's size as a slime's, and worth two more in experience than it is big. */
     @Override
     public void setSize(int size, boolean resetHealth) {
         super.setSize(size, resetHealth);
@@ -99,7 +89,6 @@ public class AlchemicSlime extends Slime implements TaintedMob {
         }
     }
 
-    /** At a player more than four blocks off, every five seconds, while it is bigger than two. */
     private void spit(ServerLevel level) {
         Player player = level.getNearestPlayer(this, LOOKS);
         if (player == null) {
@@ -117,7 +106,6 @@ public class AlchemicSlime extends Slime implements TaintedMob {
         }
     }
 
-    /** Even the smallest bites, a point harder than it is big. */
     @Override
     protected boolean isDealsDamage() {
         return isEffectiveAi();
@@ -128,7 +116,6 @@ public class AlchemicSlime extends Slime implements TaintedMob {
         return getSize() + 1;
     }
 
-    /** As a slime bites, reaching further while it is still flying from a spit. */
     @Override
     protected void dealDamage(LivingEntity target) {
         if (!isAlive()) {
@@ -145,16 +132,12 @@ public class AlchemicSlime extends Slime implements TaintedMob {
         }
     }
 
-    /** What it splashes as it lands: its own goo. */
     @Override
     protected ParticleOptions getParticleType() {
         return new ItemParticleOption(ParticleTypes.ITEM, new ItemStack(ModItems.TAINTED_GOO.get()));
     }
 
-    /**
-     * Killed, it bursts into as many little slimes as it was big, laid out in pairs, rather than splitting in halves
-     * as a slime does.
-     */
+    // bursts into as many small slimes as its size, rather than splitting in halves
     @Override
     public void remove(RemovalReason reason) {
         int size = getSize();
@@ -173,7 +156,6 @@ public class AlchemicSlime extends Slime implements TaintedMob {
         super.remove(reason);
     }
 
-    /** Bigger than one, a little goo; more with looting. */
     @Override
     protected void dropCustomDeathLoot(ServerLevel level, DamageSource source, boolean recentlyHit) {
         super.dropCustomDeathLoot(level, source, recentlyHit);
@@ -187,7 +169,6 @@ public class AlchemicSlime extends Slime implements TaintedMob {
         }
     }
 
-    /** It is never left in the world of itself; it is made. */
     @Override
     public boolean checkSpawnRules(net.minecraft.world.level.LevelAccessor level,
             net.minecraft.world.entity.MobSpawnType reason) {

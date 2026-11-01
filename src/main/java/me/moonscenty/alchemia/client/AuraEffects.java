@@ -24,11 +24,7 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-/**
- * What the aura's plants and the taint cloud show, as the original showed them.
- */
 public final class AuraEffects {
-    /** How far across the cloud's puffs and its rain spread. */
     private static final int PUFFS_WITHIN = 18;
     private static final int RAIN_WITHIN = 16;
 
@@ -37,7 +33,6 @@ public final class AuraEffects {
     private AuraEffects() {
     }
 
-    /** A shimmerleaf gives off a pale blue-green glow now and then, which hangs where it is and fades. */
     public static void shimmerleaf(Level level, BlockPos pos, RandomSource random) {
         if (!(level instanceof ClientLevel client) || random.nextInt(3) != 0) {
             return;
@@ -50,7 +45,6 @@ public final class AuraEffects {
                 pos.getZ() + 0.5 + (random.nextFloat() - random.nextFloat()) * 0.1F, 0.2F, r, g, b, false, 0.0F));
     }
 
-    /** A vishroom lets go a little purple glow now and then, which dwindles and sinks. */
     public static void vishroom(Level level, BlockPos pos, RandomSource random) {
         if (!(level instanceof ClientLevel client) || random.nextInt(3) != 0) {
             return;
@@ -60,10 +54,6 @@ public final class AuraEffects {
                 0.1F, 0.5F, 0.3F, 0.8F, true, 0.015F));
     }
 
-    /**
-     * A taint cloud, every tick: its rain, falling as the game's own rain falls but splashing up crumbs of slime, and
-     * great slow puffs of its cloud.
-     */
     public static void taintCloud(TaintCloud cloud) {
         if (!(cloud.level() instanceof ClientLevel level)) {
             return;
@@ -87,7 +77,6 @@ public final class AuraEffects {
         }
     }
 
-    /** The cloud's rain, as the game's rain lands: on lava it smokes, on anything else it splashes. */
     private static void rain(ClientLevel level, TaintCloud cloud, RandomSource random) {
         int drops = switch (Minecraft.getInstance().options.particles().get()) {
             case ALL -> 5;
@@ -134,7 +123,6 @@ public final class AuraEffects {
         }
     }
 
-    /** A drop of flux rain landing: a crumb of slime, flung up a little off the ground, that fades as it goes. */
     private static void splash(ClientLevel level, BlockPos top, RandomSource random) {
         float angle = random.nextFloat() * Mth.TWO_PI;
         float out = random.nextFloat() * 0.5F + 0.5F;

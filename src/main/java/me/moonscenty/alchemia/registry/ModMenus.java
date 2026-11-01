@@ -25,17 +25,13 @@ public class ModMenus {
             MENUS.register("arcane_workbench",
                     () -> new MenuType<>(ArcaneWorkbenchMenu::new, FeatureFlags.VANILLA_SET));
 
-    /** Carries the block's position across, since the screen reads what is dissolved off the block itself. */
-    /** Carries which pech is being traded with. */
     public static final DeferredHolder<MenuType<?>, MenuType<me.moonscenty.alchemia.menu.PechMenu>> PECH =
             MENUS.register("pech", () -> IMenuTypeExtension.create(me.moonscenty.alchemia.menu.PechMenu::new));
 
-    /** Reads how long the shard has left off the readings. */
     public static final DeferredHolder<MenuType<?>, MenuType<me.moonscenty.alchemia.menu.AuraTotemMenu>> AURA_TOTEM =
             MENUS.register("aura_totem", () -> new MenuType<>(me.moonscenty.alchemia.menu.AuraTotemMenu::new,
                     FeatureFlags.VANILLA_SET));
 
-    /** Reads the tank off the readings, so needs nothing sent when it opens. */
     public static final DeferredHolder<MenuType<?>, MenuType<me.moonscenty.alchemia.menu.SpaMenu>> SPA =
             MENUS.register("spa", () -> new MenuType<>(me.moonscenty.alchemia.menu.SpaMenu::new,
                     FeatureFlags.VANILLA_SET));
@@ -56,22 +52,18 @@ public class ModMenus {
             MENUS.register("essentia_smelter",
                     () -> IMenuTypeExtension.create(EssentiaSmelterMenu::new));
 
-    /** Carries which hand the pouch was opened from, since the pouch is an item and not a place. */
     public static final DeferredHolder<MenuType<?>, MenuType<FocusPouchMenu>> FOCUS_POUCH =
             MENUS.register("focus_pouch",
                     () -> IMenuTypeExtension.create(FocusPouchMenu::new));
 
-    /** Carries which turret was opened, since a turret is an entity and not a place. */
     public static final DeferredHolder<MenuType<?>, MenuType<AutocasterMenu>> AUTOCASTER =
             MENUS.register("autocaster",
                     () -> IMenuTypeExtension.create(AutocasterMenu::new));
 
-    /** Carries which crossbow was opened, since it is an entity and not a place. */
     public static final DeferredHolder<MenuType<?>, MenuType<me.moonscenty.alchemia.menu.CrossbowMenu>>
             AUTOMATED_CROSSBOW = MENUS.register("automated_crossbow",
                     () -> IMenuTypeExtension.create(me.moonscenty.alchemia.menu.CrossbowMenu::new));
 
-    /** Carries which bench was opened, since the focus stays on the bench rather than in a hand. */
     public static final DeferredHolder<MenuType<?>, MenuType<me.moonscenty.alchemia.menu.FocalManipulatorMenu>>
             FOCAL_MANIPULATOR = MENUS.register("focal_manipulator",
                     () -> IMenuTypeExtension.create(me.moonscenty.alchemia.menu.FocalManipulatorMenu::new));
@@ -80,7 +72,6 @@ public class ModMenus {
             GOLEM_PRESS = MENUS.register("golem_press",
                     () -> new MenuType<>(me.moonscenty.alchemia.menu.GolemPressMenu::new, FeatureFlags.VANILLA_SET));
 
-    /** Carries where the seal is, since the panel belongs to it. */
     public static final DeferredHolder<MenuType<?>, MenuType<me.moonscenty.alchemia.menu.SealMenu>> SEAL =
             MENUS.register("seal", () -> IMenuTypeExtension.create(me.moonscenty.alchemia.menu.SealMenu::new));
 

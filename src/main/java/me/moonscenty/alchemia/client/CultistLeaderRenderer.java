@@ -13,7 +13,6 @@ import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
 import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
 import net.minecraft.resources.ResourceLocation;
 
-/** The Crimson Praetor: a cultist's body, a quarter as big again, in the Praetor's plate. */
 public class CultistLeaderRenderer extends HumanoidMobRenderer<CultistLeader, HumanoidModel<CultistLeader>> {
     private static final ResourceLocation SKIN = Alchemia.id("textures/entity/cultist.png");
 

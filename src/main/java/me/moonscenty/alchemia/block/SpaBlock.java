@@ -21,12 +21,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.neoforge.fluids.FluidUtil;
 
-/**
- * An arcane spa: a tank that mixes water and bath salts and pumps the purifying fluid it makes into a pool above it.
- *
- * <p>Pour into it with a bucket, or pipe into it from any side. Salts go in through its screen, or from a hopper on
- * any side but the top. A redstone signal stops it.
- */
 public class SpaBlock extends BaseEntityBlock {
     public static final MapCodec<SpaBlock> CODEC = simpleCodec(SpaBlock::new);
 
@@ -39,7 +33,6 @@ public class SpaBlock extends BaseEntityBlock {
         return CODEC;
     }
 
-    /** Something that holds liquid is emptied into it, or filled from it; anything else opens it. */
     @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
             Player player, InteractionHand hand, BlockHitResult hit) {

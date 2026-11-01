@@ -19,17 +19,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
 
-/**
- * The thaumostatic harness, the original's {@code ItemThaumostaticHarness}: a harness worn on the chest that anchors
- * its wearer to the aura and lets them fly while it is switched on (H). It runs on vis: a point each of air and
- * fire, drawn in at a recharge pedestal or by an amulet of vis, keeps it going a second, and it holds five minutes'
- * worth. Sprinting while flying costs three times as much. While it is worn, a wand pays three parts in a hundred
- * less of air and one less of everything else.
- */
 public class ThaumostaticHarnessItem extends ArmorItem implements VisDiscount, Rechargeable {
-    /** Fuel, in ticks of flight: five minutes. */
     public static final int FUEL_MAX = 6000;
-    /** What a point each of air and fire buys, in ticks. */
     public static final int PER_CHARGE = 20;
 
     public ThaumostaticHarnessItem(Properties properties) {
@@ -48,12 +39,6 @@ public class ThaumostaticHarnessItem extends ArmorItem implements VisDiscount, R
         return stack.getOrDefault(ModDataComponents.HOVERING.get(), false);
     }
 
-    /**
-     * Draws air and fire out of the aura here into the harness, a point of each at a time and only both together,
-     * unless the aura here is to be spared.
-     *
-     * @return whether anything went in
-     */
     public static boolean recharge(ItemStack stack, ServerLevel level, BlockPos at, int amount) {
         if (AuraHandler.shouldSpare(level, at, ModAspects.AIR) && AuraHandler.shouldSpare(level, at, ModAspects.FIRE)) {
             return false;
@@ -83,7 +68,6 @@ public class ThaumostaticHarnessItem extends ArmorItem implements VisDiscount, R
         return 1;
     }
 
-    /** Air three in all, everything else one. */
     @Override
     public int visDiscount(ItemStack stack, Player wearer, Holder<Aspect> aspect) {
         return aspect.value() == ModAspects.AIR.value() ? 2 : 0;
@@ -94,7 +78,6 @@ public class ThaumostaticHarnessItem extends ArmorItem implements VisDiscount, R
         return true;
     }
 
-    /** The bar shows what is left to fly on, not wear. */
     @Override
     public int getBarWidth(ItemStack stack) {
         return Math.round(13.0F * fuel(stack) / FUEL_MAX);

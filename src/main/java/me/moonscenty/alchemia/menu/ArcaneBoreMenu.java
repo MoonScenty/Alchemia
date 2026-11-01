@@ -12,7 +12,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 
-/** Standing at an arcane bore: its focus on the left, its pickaxe on the right, laid out as the original's. */
 public class ArcaneBoreMenu extends AlchemiaMenu {
     private static final int FOCUS_X = 26;
     private static final int PICK_X = 74;

@@ -8,16 +8,8 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.util.Mth;
 
-/**
- * A drop of essentia making its way to whatever drew on it, as the original's {@code FXEssentiaTrail}: a little
- * sphere of its aspect's colour that wobbles off, then is pulled in, harder the nearer it is, and dwindles away as it
- * arrives.
- * <p>
- * The original moved essentia between things as a snaking tube drawn with a geometry library it carried with it;
- * this simpler drop it also had, and is drawn here instead. Every number in it is the original's.
- */
+// numbers are the original's
 public class EssenceParticle extends LegacyParticle {
-    /** The droplet's cell on the sheet. */
     private static final int CELL = 25;
     private static final double DRAG = 0.985;
     private static final double TOP_SPEED = 0.05;

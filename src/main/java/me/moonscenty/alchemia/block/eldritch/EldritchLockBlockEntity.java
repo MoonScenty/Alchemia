@@ -14,16 +14,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 
-/**
- * The lock on the great hall's door: which way the door faces, and, once a runed tablet is in it, how long it has
- * been turning. It pumps every quarter second for five seconds, then whatever is in the hall wakes, the door melts
- * away and the lock with it.
- */
 public class EldritchLockBlockEntity extends SyncedBlockEntity {
-    /** How long the lock turns before the hall opens. */
     public static final int TURNING = 100;
 
-    /** -1 while it waits for a tablet; then the ticks since. */
+    // -1 until a tablet is inserted, then ticks since
     private int count = -1;
     private Direction facing = Direction.NORTH;
 
@@ -44,7 +38,6 @@ public class EldritchLockBlockEntity extends SyncedBlockEntity {
         changed();
     }
 
-    /** Whether a tablet can go in: only while it is still shut. */
     public boolean waiting() {
         return count < 0;
     }

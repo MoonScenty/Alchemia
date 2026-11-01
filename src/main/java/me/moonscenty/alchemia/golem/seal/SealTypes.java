@@ -10,7 +10,7 @@ import javax.annotation.Nullable;
 import me.moonscenty.alchemia.registry.ModItems;
 import net.minecraft.world.item.ItemStack;
 
-/** Every kind of seal, by name, in the order the original listed them. Each has an item of its own name. */
+// in the original's listing order
 public final class SealTypes {
     private static final Map<String, Supplier<Seal>> KINDS = new LinkedHashMap<>();
 
@@ -38,14 +38,12 @@ public final class SealTypes {
         return List.copyOf(KINDS.keySet());
     }
 
-    /** A fresh seal of this kind, or null if there is no such kind. */
     @Nullable
     public static Seal make(String key) {
         Supplier<Seal> kind = KINDS.get(key);
         return kind == null ? null : kind.get();
     }
 
-    /** The item of a seal of this kind. */
     public static ItemStack item(String key) {
         var item = ModItems.SEALS.get(key);
         return item == null ? ItemStack.EMPTY : new ItemStack(item.get());

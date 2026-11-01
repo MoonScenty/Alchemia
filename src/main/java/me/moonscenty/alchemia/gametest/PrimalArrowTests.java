@@ -22,7 +22,6 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/** Primal arrows: what each kind is, what it leaves on what it hits, and how a bow takes them. */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class PrimalArrowTests {
@@ -34,7 +33,6 @@ public class PrimalArrowTests {
                 new ItemStack(Items.BOW));
     }
 
-    /** Each kind hits for its share of an arrow, and none can be picked up. */
     @GameTest(template = TEMPLATE)
     public static void eachKindHitsForItsShare(GameTestHelper helper) {
         Player shooter = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -53,7 +51,6 @@ public class PrimalArrowTests {
         helper.succeed();
     }
 
-    /** A water arrow leaves what it hits slowed. */
     @GameTest(template = TEMPLATE, timeoutTicks = 100)
     public static void waterArrowSlows(GameTestHelper helper) {
         Pig pig = helper.spawnWithNoFreeWill(EntityType.PIG, new BlockPos(4, 2, 8));
@@ -66,7 +63,6 @@ public class PrimalArrowTests {
         helper.succeedWhen(() -> helper.assertTrue(pig.hasEffect(MobEffects.MOVEMENT_SLOWDOWN), "slowed"));
     }
 
-    /** A bow reaches for a primal arrow before a plain one. */
     @GameTest(template = TEMPLATE)
     public static void bowPrefersPrimalArrows(GameTestHelper helper) {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);

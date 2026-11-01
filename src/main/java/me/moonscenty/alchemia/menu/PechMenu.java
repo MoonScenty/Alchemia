@@ -19,21 +19,12 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
-/**
- * Trading with a pech: one place for what is offered, four for what it gives back, and the bones to roll.
- *
- * <p>Nothing is kept between trades. What is left in the places when the trade is shut is handed back, and the pech
- * will not go after it.
- */
 public class PechMenu extends AlchemiaMenu {
-    /** The one button: roll the bones over what is offered. */
     public static final int ROLL = 0;
     public static final int OFFER = 0;
     public static final int GIVEN = 4;
-    /** How far a trader may stand from the pech. */
     private static final double REACH = 8.0;
 
-    // Where the pieces sit on the original's panel.
     private static final int OFFER_X = 36;
     private static final int OFFER_Y = 29;
     private static final int GIVEN_X = 106;
@@ -47,7 +38,6 @@ public class PechMenu extends AlchemiaMenu {
     private final Player player;
     private final SimpleContainer trade = new SimpleContainer(1 + GIVEN);
 
-    /** What the client builds, from the pech's number. */
     public PechMenu(int id, Inventory inventory, RegistryFriendlyByteBuf extra) {
         this(id, inventory, inventory.player.level().getEntity(extra.readVarInt()) instanceof Pech found
                 ? found : null);
@@ -81,7 +71,6 @@ public class PechMenu extends AlchemiaMenu {
         return pech;
     }
 
-    /** Whether the bones can be rolled: something it prizes offered, and nothing waiting to be taken. */
     public boolean canRoll() {
         if (!PechTrades.valued(trade.getItem(OFFER))) {
             return false;
@@ -103,10 +92,6 @@ public class PechMenu extends AlchemiaMenu {
         return true;
     }
 
-    /**
-     * The trade: the offer's worth, give or take, paid out in lots. A lot of one is now and then something out of
-     * the pech's pack; a lot of four or five, now and then something out of a dungeon chest.
-     */
     private void roll() {
         if (pech == null || !(player.level() instanceof ServerLevel level) || !canRoll()) {
             return;
@@ -140,7 +125,6 @@ public class PechMenu extends AlchemiaMenu {
         trade.setChanged();
     }
 
-    /** Into the four places for what it gives: onto a like stack where there is room, or into an empty place. */
     private void give(ItemStack given) {
         for (int slot = 1; slot <= GIVEN && !given.isEmpty(); slot++) {
             ItemStack there = trade.getItem(slot);
@@ -158,7 +142,6 @@ public class PechMenu extends AlchemiaMenu {
         }
     }
 
-    /** One thing out of what a dungeon chest might hold. */
     private ItemStack fromDungeon(ServerLevel level, RandomSource random) {
         var table = level.getServer().reloadableRegistries().getLootTable(BuiltInLootTables.SIMPLE_DUNGEON);
         var rolled = table.getRandomItems(new LootParams.Builder(level)
@@ -172,7 +155,6 @@ public class PechMenu extends AlchemiaMenu {
         return pech != null && pech.isAlive() && pech.isTamed() && who.distanceToSqr(pech) <= REACH * REACH;
     }
 
-    /** Whatever is left in the places goes back to the trader, marked so that the pech leaves it alone. */
     @Override
     public void removed(Player who) {
         super.removed(who);

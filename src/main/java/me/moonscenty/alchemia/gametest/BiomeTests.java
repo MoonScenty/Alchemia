@@ -26,12 +26,6 @@ import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/**
- * The mod's three lands: that they are there and sorted as the original sorted them, that a place can be turned into
- * one and back, and that the taint and the dark nodes do the turning.
- * <p>
- * Every test that paints puts the land back before it finishes, so nothing it leaves behind can colour another test.
- */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class BiomeTests {
@@ -56,7 +50,6 @@ public class BiomeTests {
         BiomePaint.paint(level, where, BiomePaint.generated(level, where), false);
     }
 
-    /** All three lands are there, and sorted as the original sorted them. */
     @GameTest(template = TEMPLATE)
     public static void theLandsAreThereAndSorted(GameTestHelper helper) {
         for (ResourceKey<Biome> land : java.util.List.of(ModBiomes.MAGICAL_FOREST, ModBiomes.EERIE,
@@ -71,7 +64,6 @@ public class BiomeTests {
         helper.succeed();
     }
 
-    /** A dark node has the eerie land to make. */
     @GameTest(template = TEMPLATE)
     public static void darkNodesMakeTheLandEerie(GameTestHelper helper) {
         Holder<Biome> into = BiomePaint.oneOf(helper.getLevel(), ModTags.Biomes.NODE_DARKENS_INTO,
@@ -80,7 +72,6 @@ public class BiomeTests {
         helper.succeed();
     }
 
-    /** A patch of land painted over is given back what it was made as, and only if it is still what was painted. */
     @GameTest(template = TEMPLATE)
     public static void paintedLandCanBeGivenBack(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
@@ -98,7 +89,6 @@ public class BiomeTests {
         helper.succeed();
     }
 
-    /** Where the taint is spreading, the land under it turns to tainted land. */
     @GameTest(template = TEMPLATE)
     public static void spreadingTaintSpoilsTheLand(GameTestHelper helper) {
         flux(helper, AuraGeneration.BASE);
@@ -111,7 +101,6 @@ public class BiomeTests {
         helper.succeed();
     }
 
-    /** When tainted soil starves and dies, the land it had spoiled is given back. */
     @GameTest(template = TEMPLATE)
     public static void starvingTaintGivesTheLandBack(GameTestHelper helper) {
         flux(helper, 0);
@@ -129,7 +118,6 @@ public class BiomeTests {
         helper.succeed();
     }
 
-    /** The glimmering grass is grass: flowers grow on it, and covered over it dies back to dirt. */
     @GameTest(template = TEMPLATE)
     public static void ambientGrassIsGrass(GameTestHelper helper) {
         helper.setBlock(HERE, ModBlocks.AMBIENT_GRASS.get());
@@ -142,10 +130,7 @@ public class BiomeTests {
         helper.succeed();
     }
 
-    /**
-     * Flux in the air of the one chunk the taint here asks about. Only that one, so as to leave the aura of any test
-     * sharing the chunks round about alone.
-     */
+    // only this chunk, so neighbouring tests' aura is left alone
     private static void flux(GameTestHelper helper, int amount) {
         helper.getLevel().getChunkAt(helper.absolutePos(HERE)).setData(ModAuraAttachment.AURA,
                 new AuraChunk(AuraGeneration.BASE, AspectList.EMPTY.add(ModAspects.FLUX, amount)));

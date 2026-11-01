@@ -38,15 +38,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Inventory;
 import net.neoforged.neoforge.network.PacketDistributor;
 
-/**
- * The desk as the reader sees it, laid out as the original laid it out.
- * <p>
- * A wooden panel with the scribing tools and the note in the two holders at the top, what the note still holds
- * racked in a five by five grid down the left, the two dishes and the button that mixes them at its foot, and the
- * note itself spread on a sheet of parchment over the leather. The places, the sizes and the way the sheet is drawn
- * are the original's, read out of its screen; the pictures are the original's when its jar is there and ours,
- * painted to the same layout, when it is not.
- */
 public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMenu> {
     private static final ResourceLocation PANEL = Alchemia.id("textures/gui/research_table.png");
     private static final ResourceLocation PARCHMENT = Alchemia.id("textures/gui/research_parchment.png");
@@ -56,7 +47,6 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
     private static final ResourceLocation SCRIPT = Alchemia.id("textures/misc/script.png");
 
     private static final int SHEET = 256;
-    /** The panel proper, and under it the narrower plate the inventory sits in. */
     private static final int PANEL_W = 255;
     private static final int PANEL_H = 167;
     private static final int PLATE_X = 40;
@@ -64,28 +54,22 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
     private static final int PLATE_W = 184;
     private static final int PLATE_H = 88;
 
-    /** The parchment the note is spread on, and the middle of it, where the note's centre cell sits. */
     private static final int BOARD_X = 94;
     private static final int BOARD_Y = 8;
     private static final int BOARD_SIZE = 150;
     private static final int CENTRE_X = BOARD_X + BOARD_SIZE / 2;
     private static final int CENTRE_Y = BOARD_Y + BOARD_SIZE / 2;
-    /** How big a cell is: the distance from its middle to a corner. */
     private static final double CELL = 9.0;
-    /** A cell's plate is drawn this wide, overlapping its neighbours a little, as the original's were. */
     private static final int PLATE = 16;
     private static final float EMPTY_ALPHA = 0.25F;
-    /** A written aspect that does not yet join up with anything the subject pinned is drawn this faintly. */
     private static final float LOOSE_ALPHA = 0.66F;
 
-    /** The rack: five down and five across, filled a column at a time, and turned a column at a time. */
     private static final int POOL_X = 10;
     private static final int POOL_Y = 40;
     private static final int POOL_SIDE = 5;
     private static final int POOL_STEP = 16;
     private static final int POOL_PAGE = POOL_SIDE * POOL_SIDE;
 
-    // The page arrows under the rack. They are only drawn while there is a column that way to turn to.
     private static final int ARROW_W = 24;
     private static final int ARROW_H = 8;
     private static final int PREV_X = 27;
@@ -95,7 +79,6 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
     private static final int NEXT_FROM_X = 208;
     private static final int ARROW_FROM_Y = 208;
 
-    // The two dishes, and the button between them that mixes what is in them.
     private static final int DISH_A_X = 13;
     private static final int DISH_B_X = 71;
     private static final int DISH_Y = 139;
@@ -109,33 +92,24 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
 
     private static final int ICON = 16;
 
-    // The knowledge fragment the original drew at the top of the rack for a researcher carrying one, and its box.
     private static final int FRAGMENT_X = 40;
     private static final int FRAGMENT_Y = 6;
     private static final int FRAGMENT_SIZE = 20;
 
-    // The script that settles on the parchment. It says nothing: it is there so the sheet looks written on rather
-    // than blank. Sixteen letters, as many as the original's strip has, each drawn small and turned on its side.
     private static final int LETTERS = 16;
     private static final int LETTER = 16;
     private static final int LETTER_DRAWN = 10;
-    /** How often another letter is tried for, and how far out one may land. */
     private static final long SETTLES = 250L;
     private static final int SPAN = 60;
-    /** A letter lasts somewhere in here, then is gone. */
     private static final long LASTS = 15_000L;
     private static final long LASTS_UP_TO = 10_000L;
-    /** How dark a letter ever gets. Faint enough to read the sheet straight through it. */
     private static final float FAINTEST = 0.33F;
 
-    /** What the reader has picked up and is about to write down. */
     private Holder<Aspect> held;
     private Holder<Aspect> dishA;
     private Holder<Aspect> dishB;
-    /** How many columns the rack has been turned. Clamped every time it is read, as the sheet's stock changes. */
     private int page;
 
-    /** A letter on the parchment, and when it settled and when it will have gone. */
     private record Rune(long born, long gone, int letter) {
     }
 
@@ -152,7 +126,6 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
 
     @Override
     protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
-        // the original's panels have soft, half-clear edges, which come out solid without blending
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         graphics.blit(PANEL, leftPos, topPos, 0, 0, PANEL_W, PANEL_H, SHEET, SHEET);
@@ -170,14 +143,10 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
         renderTooltip(graphics, mouseX, mouseY);
     }
 
-    /** The panel is already labelled in its own painting, so no words are put over it. */
     @Override
     protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
     }
 
-    // --- the board ---------------------------------------------------------
-
-    /** Where the middle of a cell lands on the screen, worked out the way the original worked it out. */
     private double cellX(HexGrid.Hex at) {
         return leftPos + CENTRE_X + CELL * 1.5 * at.q();
     }
@@ -194,7 +163,6 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         graphics.blit(PARCHMENT, leftPos + BOARD_X, topPos + BOARD_Y, 0, 0, BOARD_SIZE, BOARD_SIZE, SHEET, SHEET);
-        // clipped to the sheet, so nothing can ever creep onto the wood around it
         graphics.enableScissor(leftPos + BOARD_X, topPos + BOARD_Y,
                 leftPos + BOARD_X + BOARD_SIZE, topPos + BOARD_Y + BOARD_SIZE);
         drawScript(graphics, note);
@@ -223,7 +191,6 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
         graphics.disableScissor();
     }
 
-    /** Every cell that hangs off something the subject pinned, by a chain of aspects that hold together. */
     private static Set<HexGrid.Hex> joinedToPinned(ResearchNote note) {
         Set<HexGrid.Hex> joined = new HashSet<>();
         for (ResearchNote.Cell pinned : note.pinnedCells()) {
@@ -232,7 +199,6 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
         return joined;
     }
 
-    /** One cell's plate, centred on the cell. A lit one is added on rather than laid over, so it glows. */
     private void drawPlate(GuiGraphics graphics, HexGrid.Hex at, ResourceLocation plate, float alpha, boolean glow) {
         RenderSystem.enableBlend();
         if (glow) {
@@ -249,7 +215,6 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
         RenderSystem.defaultBlendFunc();
     }
 
-    /** A pinned cell sits on a soft light that breathes, each channel at its own pace. */
     private void drawOrb(GuiGraphics graphics, HexGrid.Hex at, float ticks) {
         float red = 0.7F + Mth.sin((float) (ticks / 10.0)) * 0.15F;
         float green = 0.7F + Mth.sin((float) (ticks / 11.0)) * 0.15F;
@@ -265,7 +230,6 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
         RenderSystem.defaultBlendFunc();
     }
 
-    /** A line between every two neighbouring cells of a chain off a pinned aspect, glowing a little in and out. */
     private void drawLinks(GuiGraphics graphics, ResearchNote note, Set<HexGrid.Hex> joined, float ticks) {
         float bright = 0.3F + Mth.sin(ticks * 0.3F) * 0.3F + 0.3F;
         int colour = 0xCC000000 | Math.round(bright * 255) << 16 | Math.round(0.6F * 255) << 8 | Math.round(0.8F * 255);
@@ -294,17 +258,8 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
         graphics.pose().popPose();
     }
 
-    // --- the script on the parchment ---------------------------------------
-
-    /**
-     * Letters settling on the empty parts of the sheet and fading off again.
-     * <p>
-     * They spell nothing and mean nothing. They land on the board's own grid, so they stay out from under the cells
-     * and line up with what is written; a place is picked anywhere within reach of the middle, as the original did.
-     */
     private void drawScript(GuiGraphics graphics, ResearchNote note) {
         if (!note.research().equals(written)) {
-            // a different note is a different page; what settled on the last one does not carry over
             runes.clear();
             written = note.research();
         }
@@ -317,7 +272,6 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
         for (Map.Entry<HexGrid.Hex, Rune> entry : runes.entrySet()) {
             Rune rune = entry.getValue();
             float through = (float) (now - rune.born()) / (rune.gone() - rune.born());
-            // up over the first quarter, held, then away over the last half
             float alpha = through < 0.25F ? through * 2F : through > 0.5F ? 1F - through : 0.5F;
 
             graphics.setColor(0F, 0F, 0F, alpha * FAINTEST);
@@ -331,7 +285,6 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
         graphics.setColor(1F, 1F, 1F, 1F);
     }
 
-    /** Tries to put one more letter down. Nothing happens most of the time, which is what makes them drift in. */
     private void settle(ResearchNote note, long now) {
         if (now < nextRune) {
             return;
@@ -344,11 +297,9 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
         runes.put(at, new Rune(now, now + LASTS + random.nextInt((int) LASTS_UP_TO), random.nextInt(LETTERS)));
     }
 
-    /** The cell a point lies in, measured from the middle of the sheet. */
     private static HexGrid.Hex toHex(double x, double y) {
         double q = 2.0 / 3.0 * x / CELL;
         double r = (Math.sqrt(3.0) / 3.0 * y - x / 3.0) / CELL;
-        // round in cube coordinates, so a point near an edge goes to the nearer cell rather than a far one
         double s = -q - r;
         long rq = Math.round(q);
         long rr = Math.round(r);
@@ -364,7 +315,6 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
         return new HexGrid.Hex((int) rq, (int) rr);
     }
 
-    /** The cell the pointer is over, if the note has one there. */
     private HexGrid.Hex cellUnder(int mouseX, int mouseY) {
         ResearchNote note = menu.note();
         if (note == null || !within(mouseX, mouseY, BOARD_X, BOARD_Y, BOARD_SIZE, BOARD_SIZE)) {
@@ -374,12 +324,6 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
         return note.cellAt(at).isPresent() ? at : null;
     }
 
-    // --- what the sheet still holds ----------------------------------------
-
-    /**
-     * The sheet's own stock, in a steady order. There is no filtering by what the reader has met: the sheet starts
-     * with the primals and only grows by mixing, so everything in here came from the sheet itself.
-     */
     private List<Holder<Aspect>> pool() {
         ResearchNote note = menu.note();
         if (note == null) {
@@ -394,31 +338,22 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
         return stock;
     }
 
-    /** How many columns the rack can be turned by before its last column is in view. */
     private int lastPage() {
         int over = pool().size() - POOL_PAGE;
         return over <= 0 ? 0 : (over + POOL_SIDE - 1) / POOL_SIDE;
     }
 
-    /**
-     * The turn being shown, brought back within range first.
-     * <p>
-     * Mixing takes two aspects off the sheet and puts one back, so the stock can shrink out from under a turn that
-     * was made, and the last column can stop existing while the reader is looking at it.
-     */
     private int page() {
         page = Math.max(0, Math.min(page, lastPage()));
         return page;
     }
 
-    /** What is in view. */
     private List<Holder<Aspect>> shown() {
         List<Holder<Aspect>> stock = pool();
         int from = page() * POOL_SIDE;
         return stock.subList(Math.min(from, stock.size()), Math.min(from + POOL_PAGE, stock.size()));
     }
 
-    /** Where the nth aspect in view is drawn: down a column first, then on to the next. */
     private int poolX(int place) {
         return leftPos + POOL_X + (place / POOL_SIDE) * POOL_STEP;
     }
@@ -450,9 +385,6 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
         }
     }
 
-    // --- the three buttons -------------------------------------------------
-
-    /** The arrows and the mixing button, drawn only while they would do something. */
     private void drawButtons(GuiGraphics graphics, int mouseX, int mouseY) {
         ResearchNote note = menu.note();
         if (note == null || note.complete()) {
@@ -473,20 +405,17 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
         }
     }
 
-    /** Whether the reader has done this research, as far as this side has heard. */
     private boolean knows(ResourceLocation research) {
         return minecraft != null && minecraft.player != null
                 && ResearchTableMenu.knows(minecraft.player, research);
     }
 
-    /** Whether the fragment is there to be spent: research expertise, a note in hand and a fragment carried. */
     private boolean fragmentOffered() {
         ResearchNote note = menu.note();
         return note != null && !note.complete() && knows(ResearchTableMenu.RESEARCHER_1)
                 && minecraft.player.getInventory().contains(new ItemStack(ModItems.KNOWLEDGE_FRAGMENT.get()));
     }
 
-    /** The fragment, swelling and shrinking a little as the original's did. */
     private void drawFragment(GuiGraphics graphics, float partialTick) {
         if (!fragmentOffered()) {
             return;
@@ -500,7 +429,6 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
         graphics.pose().popPose();
     }
 
-    /** With research expertise, a compound's two parts are shown beside its name. */
     private void drawParts(GuiGraphics graphics, Holder<Aspect> aspect, int mouseX, int mouseY) {
         if (!knows(ResearchTableMenu.RESEARCHER_1)) {
             return;
@@ -515,7 +443,6 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
         });
     }
 
-    /** Whether the pointer is over a box given in panel coordinates. */
     private boolean within(double mouseX, double mouseY, int x, int y, int wide, int tall) {
         return mouseX >= leftPos + x && mouseX < leftPos + x + wide
                 && mouseY >= topPos + y && mouseY < topPos + y + tall;
@@ -534,7 +461,6 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
         }
     }
 
-    /** What the two dishes would make, if anything. */
     private Optional<Holder<Aspect>> mixResult() {
         if (dishA == null || dishB == null || minecraft == null || minecraft.level == null) {
             return Optional.empty();
@@ -544,13 +470,7 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
                 dishA, dishB);
     }
 
-    /**
-     * One aspect, painted in its own colour.
-     * <p>
-     * Blending is turned on every single time rather than once for the lot. Drawing a string ends the font's batch,
-     * and ending a batch puts back the state that batch wanted, which for text means blending off. So the first
-     * aspect in a row would come out soft and every one after it hard.
-     */
+    // blend re-enabled per call: drawing text turns it back off
     private void drawAspect(GuiGraphics graphics, Holder<Aspect> aspect, double x, double y, float alpha) {
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
@@ -567,8 +487,6 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
     private static boolean over(double mouseX, double mouseY, int x, int y) {
         return mouseX >= x && mouseX < x + ICON && mouseY >= y && mouseY < y + ICON;
     }
-
-    // --- clicking ----------------------------------------------------------
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
@@ -597,7 +515,6 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
         List<Holder<Aspect>> shown = shown();
         for (int place = 0; place < shown.size(); place++) {
             if (over(mouseX, mouseY, poolX(place), poolY(place))) {
-                // with research mastery, a shifted click makes one more of it out of its parts, if they are there
                 if (hasShiftDown() && knows(ResearchTableMenu.RESEARCHER_2)
                         && makeFromParts(note, shown.get(place))) {
                     return true;
@@ -608,7 +525,6 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
             }
         }
 
-        // the dishes take whatever has been picked up, and give it back when clicked empty-handed
         if (over(mouseX, mouseY, leftPos + DISH_A_X, topPos + DISH_Y)) {
             dishA = held;
             pick();
@@ -632,7 +548,6 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
 
         HexGrid.Hex at = cellUnder((int) mouseX, (int) mouseY);
         if (at != null) {
-            // the right button rubs a space out; the left writes whatever has been picked up
             if (button == 1) {
                 PacketDistributor.sendToServer(new PlaceAspect(at, Optional.empty()));
                 click(ModSounds.HH_ON.get(), 0.3F, 1.0F);
@@ -647,7 +562,6 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
         return super.mouseClicked(mouseX, mouseY, button);
     }
 
-    /** Asks for one of this mixed out of its two parts, when the sheet holds both. */
     private boolean makeFromParts(ResearchNote note, Holder<Aspect> aspect) {
         List<Holder<Aspect>> parts = aspect.value().components().orElse(List.of());
         if (parts.size() != 2 || note.budget().get(parts.get(0)) <= 0 || note.budget().get(parts.get(1)) <= 0) {
@@ -663,22 +577,15 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
         return aspect.value().id();
     }
 
-    /**
-     * The original's table had a noise for each thing done at it: a dial for the page arrows, brass letting go as
-     * an aspect is picked up, brass engaging and a shutter for a mix, and a quill writing or scraping on the note.
-     */
     private void click(SoundEvent sound, float volume, float pitch) {
         if (minecraft != null && minecraft.player != null) {
             minecraft.player.playSound(sound, volume, pitch);
         }
     }
 
-    /** An aspect picked up off the pool, or set into a dish. */
     private void pick() {
         click(ModSounds.HH_OFF.get(), 0.2F, 1.0F + random.nextFloat() * 0.1F);
     }
-
-    // --- notes to the reader -----------------------------------------------
 
     @Override
     protected void renderTooltip(GuiGraphics graphics, int mouseX, int mouseY) {
@@ -707,7 +614,6 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
                 graphics.renderTooltip(font, Component.translatable("note.alchemia.spend_fragment"), mouseX, mouseY);
                 return;
             }
-            // what the two dishes would make between them, read off the button that would make it
             if (within(mouseX, mouseY, MIX_X, MIX_Y, MIX_W, MIX_H)) {
                 graphics.renderTooltip(font, mixResult()
                         .map(result -> result.value().displayName())

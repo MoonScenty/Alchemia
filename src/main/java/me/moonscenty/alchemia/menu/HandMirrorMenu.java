@@ -14,10 +14,6 @@ import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 
-/**
- * Looking into a hand mirror: one square, and whatever is put in it goes straight through to the mirror it is
- * linked to. The hand mirror itself cannot be moved while it is open.
- */
 public class HandMirrorMenu extends AlchemiaMenu {
     private static final int SLOT_X = 80;
     private static final int SLOT_Y = 24;
@@ -51,7 +47,6 @@ public class HandMirrorMenu extends AlchemiaMenu {
         addPlayerInventory(inventory, PACK_X, PACK_Y, this::pocket);
     }
 
-    /** The hand mirror's own square of the belt cannot be picked up while it is open. */
     private Slot pocket(Inventory inventory, int index, int x, int y) {
         if (index >= Inventory.getSelectionSize()) {
             return new Slot(inventory, index, x, y);
@@ -64,12 +59,10 @@ public class HandMirrorMenu extends AlchemiaMenu {
         };
     }
 
-    /** Which square of the belt the hand mirror is in, for the panel to mark. */
     public int heldIn() {
         return heldIn;
     }
 
-    /** Whatever is in the square goes through, all at once, to come out of the mirror a piece at a time. */
     private void sendThrough() {
         ItemStack sending = through.getItem(0);
         if (sending.isEmpty() || player.level().isClientSide) {
@@ -108,7 +101,6 @@ public class HandMirrorMenu extends AlchemiaMenu {
         return viewer.getInventory().getItem(heldIn).getItem() instanceof HandMirrorItem;
     }
 
-    /** Anything left in the square when it is closed goes back to the one holding it. */
     @Override
     public void removed(Player closer) {
         super.removed(closer);

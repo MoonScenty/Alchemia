@@ -15,11 +15,6 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.world.level.block.Blocks;
 
-/**
- * The water in a crucible, as the original drew it: not part of the pot's model, but one sheet of the water picture
- * laid across the pot at the height {@link CrucibleBlockEntity#surface()} works out, in the colour
- * {@link CrucibleBlockEntity#colour()} gives it.
- */
 public class CrucibleRenderer implements BlockEntityRenderer<CrucibleBlockEntity> {
     public CrucibleRenderer(BlockEntityRendererProvider.Context context) {
     }

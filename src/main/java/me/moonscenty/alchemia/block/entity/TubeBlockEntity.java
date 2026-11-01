@@ -28,36 +28,18 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import net.neoforged.neoforge.client.model.data.ModelProperty;
 
-/**
- * Moves one point of essentia along a run of pipe, now and then.
- * <p>
- * The pull is done by the far end rather than the near one. A tube next to something that has room looks back
- * along the pipe for something that will give a point up, and takes it. Pushing instead would mean every source
- * shoving into the first thing it found, and a run with two ends on it would fill whichever end it reached first
- * rather than whichever end still had room.
- * <p>
- * The walk back is where the odd kinds of pipe have their say. Every tube along the way is asked whether anything
- * gets through it at all, whether it insists on one aspect, and whether it wants the run to wait a turn. What comes
- * back decides which sources the pull may take from, and when.
- * <p>
- * Any side can be shut with a wand, the original's {@code openSides}: nothing passes a shut side, and the arm is not
- * drawn, though it can still be clicked to open it again.
- */
+// the sink end pulls rather than the source pushing, so a run fills whichever end still has room
 public class TubeBlockEntity extends SyncedBlockEntity {
-    /** How often a point moves, in ticks. */
     private static final int PULLS_EVERY = 10;
-    /** How far along the pipe a pull will look. A run longer than this simply needs a second pump of its own. */
     private static final int REACH = 96;
-    /** One point moved in this many makes the pipe creak. The original's odds. */
+    // original's odds
     private static final int CREAKS_ONE_IN = 100;
 
-    /** The model's word for which sides are shut, one bit to a side in the game's order. */
+    // shut sides, one bit per Direction ordinal
     public static final ModelProperty<Integer> SHUT = new ModelProperty<>();
 
     private int counter;
-    /** Which sides are shut, one bit to a side. */
     private int shut;
-    /** How many turns this tube has taken. A run held up along the way only moves on some of them. */
     private long turns;
 
     public TubeBlockEntity(BlockPos pos, BlockState state) {
@@ -86,24 +68,21 @@ public class TubeBlockEntity extends SyncedBlockEntity {
         changed();
     }
 
-    /** Whether this tube, as a vessel, may fill itself through that side. Only a buffer is ever particular. */
     protected boolean drawsThrough(Direction side) {
         return true;
     }
 
-    /** Whether bellows blowing on this tube make it pull harder through that side. Only a buffer's do. */
     protected boolean blownThrough(Direction side) {
         return false;
     }
 
-    /** Finds something this tube can fill, and something along the pipe that will fill it. */
     private void pull(Level level, BlockPos pos, BlockState state) {
         if (!(state.getBlock() instanceof TubeBlock)) {
             return;
         }
-        // a buffer is a length of pipe that is also a vessel, so the first thing it fills is itself
+        // a buffer fills itself before its neighbours
         if (this instanceof EssentiaHolder self && draw(level, pos, self, null, this::drawsThrough)) {
-            // and bellows blowing on it make it pull that much harder, as the original's suction did
+            // each bellows adds a pull (original)
             int bellows = BellowsBlock.blowingOn(level, pos, Direction.values());
             for (int more = 0; more < bellows; more++) {
                 draw(level, pos, self, null, this::blownThrough);
@@ -123,23 +102,17 @@ public class TubeBlockEntity extends SyncedBlockEntity {
         }
     }
 
-    /**
-     * Moves one point into the given vessel if anything up the pipe will part with one.
-     *
-     * @param into the side of this tube the vessel sits on, or null when the vessel is this tube itself
-     * @param through which sides of this tube the essentia may come in by
-     */
     private boolean draw(Level level, BlockPos pos, EssentiaHolder sink, Direction into,
             Predicate<Direction> through) {
         for (Route route : upstreamOf(level, pos, into)) {
             if (route.from() == sink || !through.test(route.via())) {
                 continue;
             }
-            // a buffer standing on essentia is not somewhere for another buffer to move it to
+            // buffers never feed each other, or two would pass a point back and forth forever
             if (sink instanceof BufferTubeBlockEntity && route.from() instanceof BufferTubeBlockEntity) {
                 continue;
             }
-            // nor does a void jar drink other jars dry: the original's drew too weakly to take from one
+            // a void jar does not drain other jars (original's suction was too weak)
             if (sink instanceof JarBlockEntity jar && jar.voids() && route.from() instanceof JarBlockEntity) {
                 continue;
             }
@@ -154,40 +127,29 @@ public class TubeBlockEntity extends SyncedBlockEntity {
                     continue;
                 }
                 if (sink.accept(aspect)) {
-                    // and now and then the pipe creaks with it, as the original's did
                     if (level.random.nextInt(CREAKS_ONE_IN) == 0) {
                         level.playSound(null, pos, ModSounds.CREAK.get(), SoundSource.BLOCKS, 1.0F,
                                 1.3F + level.random.nextFloat() * 0.2F);
                     }
                     return true;
                 }
-                // the sink changed its mind between being asked and being handed it; put it back
+                // the sink refused after all; give it back
                 route.from().accept(aspect);
             }
         }
         return false;
     }
 
-    /** One tube the walk has reached, what the way back from it allows, and which side of the first it left by. */
     private record Step(BlockPos at, Direction out, Holder<Aspect> only, int waits, Direction via) {
     }
 
-    /** A tube the walk has been at, reached from a particular side. */
     private record Seen(BlockPos at, Direction out) {
     }
 
-    /** Something the pipe can draw from, with what the way there allows and which side of the first it is by. */
     private record Route(EssentiaHolder from, Holder<Aspect> only, int waits, Direction via) {
     }
 
-    /**
-     * Everything the pipe can reach from here, walked against the flow.
-     * <p>
-     * Walked rather than cached: a pipe run is a handful of blocks and is pulled from six times a second, and a
-     * cache would have to be torn up every time anyone placed or broke anything anywhere along it.
-     *
-     * @param out the side of the first tube essentia would leave by, or null when it stops in that tube
-     */
+    // walked every pull, not cached: runs are short and a cache would need invalidating on every edit
     private static List<Route> upstreamOf(Level level, BlockPos start, Direction out) {
         Set<Seen> seen = new HashSet<>();
         Deque<Step> todo = new ArrayDeque<>();
@@ -205,7 +167,7 @@ public class TubeBlockEntity extends SyncedBlockEntity {
             Holder<Aspect> only = step.only();
             Optional<Holder<Aspect>> insists = tube.insistsOn(level, step.at());
             if (insists.isPresent()) {
-                // two filters set to different things in one run are a wall, not a choice
+                // two filters set to different aspects block the run
                 if (only != null && only.value() != insists.get().value()) {
                     continue;
                 }
@@ -213,7 +175,7 @@ public class TubeBlockEntity extends SyncedBlockEntity {
             }
             int waits = step.waits() + tube.holdsUp();
 
-            // a buffer standing in the run is itself something to draw from
+            // a buffer along the run is itself a source
             if (!step.at().equals(start) && level.getBlockEntity(step.at()) instanceof EssentiaHolder holder) {
                 found.add(new Route(holder, only, waits, step.via()));
             }
@@ -258,7 +220,7 @@ public class TubeBlockEntity extends SyncedBlockEntity {
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
         shut = tag.getInt("shut");
-        // a side shut or opened changes the picture, which is made from the model data and so needs asking again
+        // shut sides live in model data, which must be requested again before a re-render
         if (level != null && level.isClientSide) {
             requestModelDataUpdate();
             level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_IMMEDIATE);

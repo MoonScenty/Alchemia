@@ -15,14 +15,6 @@ import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.util.Mth;
 
-/**
- * The crab's body, the original's {@code ModelEldritchCrab} read out of its code: a shelled tail, a torso, two heads,
- * two claws of three joints and eight legs of two. The tail wears the crimson shell while the crab has one and goes
- * bare once it has broken.
- * <p>
- * How it moves is the original's: the legs scuttle in two sets, the tail sways with the stride, and the claws snap
- * idly whatever it is doing.
- */
 public class EldritchCrabModel extends EntityModel<EldritchCrab> {
     private static final List<String> REST = List.of("RFLeg1", "RClaw1", "Head1", "RClaw0", "RClaw2", "LClaw2",
             "LClaw1", "RArm", "Torso", "RRLeg1", "Head0", "LRLeg1", "LFLeg1", "RRLeg0", "RFLeg0", "LFLeg0", "LRLeg0",
@@ -96,7 +88,6 @@ public class EldritchCrabModel extends EntityModel<EldritchCrab> {
         }
     }
 
-    /** Bakes the original's parts again whenever the import has changed what there is. */
     private static boolean refresh() {
         int generation = LegacyModels.generation();
         if (generation != bakedFrom) {

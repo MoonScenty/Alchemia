@@ -2,10 +2,6 @@ package me.moonscenty.alchemia.client.particle;
 
 import net.minecraft.client.multiplayer.ClientLevel;
 
-/**
- * A mote of light rising off the magical forest's grass, as the original's {@code FXWispyOrb}: a random pale colour,
- * drifting and bobbing upward, twinkling through a row of the sheet and fading out over its life. It glows.
- */
 public class MoteParticle extends LegacyParticle {
     private static final int ROW = 8;
     private static final double RISE = 0.002;

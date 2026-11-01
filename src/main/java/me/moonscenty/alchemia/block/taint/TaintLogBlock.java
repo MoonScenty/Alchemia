@@ -9,10 +9,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
-/**
- * A log the taint has got into. It keeps the grain of the tree it was, spreads like the rest, and rots away to
- * nothing when the flux runs out. The original left tainted dust behind; that arrives with the flux goo.
- */
 public class TaintLogBlock extends RotatedPillarBlock implements Tainted {
     private static final int DIE_CHANCE = 10;
 

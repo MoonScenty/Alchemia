@@ -7,12 +7,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 
-/**
- * The one thing a pedestal is holding up.
- * <p>
- * It is synced as it changes rather than only on load, because the whole point of a pedestal is that what is on it
- * is visible from where you are standing.
- */
 public class ArcanePedestalBlockEntity extends SyncedBlockEntity {
     private ItemStack held = ItemStack.EMPTY;
 

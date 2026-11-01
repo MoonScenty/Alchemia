@@ -14,10 +14,6 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.Mth;
 import net.minecraft.resources.ResourceLocation;
 
-/**
- * The Eldritch Warden: the guardian's model in the Warden's own skin, half as big again, rising out of the floor
- * while it wakes. The eye under its hood glows, brightening and dimming.
- */
 public class EldritchWardenRenderer extends MobRenderer<EldritchWarden, EldritchGuardianModel<EldritchWarden>> {
     private static final ResourceLocation SKIN = Alchemia.id("textures/entity/eldritch_warden.png");
 
@@ -46,7 +42,6 @@ public class EldritchWardenRenderer extends MobRenderer<EldritchWarden, Eldritch
         return RenderType.entityTranslucent(SKIN);
     }
 
-    /** The hood's eye, drawn added on top, lit from within by the original's pulse. */
     private static class Eye extends RenderLayer<EldritchWarden, EldritchGuardianModel<EldritchWarden>> {
         Eye(RenderLayerParent<EldritchWarden, EldritchGuardianModel<EldritchWarden>> parent) {
             super(parent);

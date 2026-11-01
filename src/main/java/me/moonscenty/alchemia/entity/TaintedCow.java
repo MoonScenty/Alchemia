@@ -13,9 +13,6 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
-/**
- * A cow the taint has made over: big and slow, and it hits hard.
- */
 public class TaintedCow extends TaintedBeast {
     public TaintedCow(EntityType<? extends TaintedCow> type, Level level) {
         super(type, level);
@@ -25,7 +22,7 @@ public class TaintedCow extends TaintedBeast {
         this(ModEntities.TAINTED_COW.get(), level);
     }
 
-    /** The original's numbers. */
+    // original's values
     public static AttributeSupplier.Builder attributes() {
         return Monster.createMonsterAttributes()
                 .add(Attributes.MAX_HEALTH, 40.0)

@@ -14,23 +14,11 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.HitResult;
 
-/**
- * What the shock focus becomes once earth shock is worked into it: a ball lobbed at the ground rather than a
- * bolt sent at a face.
- *
- * <p>It is the answer to a crowd. A bolt picks one thing and hurts it badly; this picks the floor and hurts
- * everything standing on it.
- *
- * <p><b>Different from the original.</b> The original also left the ground itself live for a while afterwards,
- * which it did by setting a block of its own down in a scatter round the blast. There is no such block in this
- * mod yet, so what is left behind is only the flash.
- */
+// the original also electrified the ground with a custom block; not ported yet
 public class ShockOrb extends Bolt {
-    /** How far the blast reaches and what it does, before anything is worked in. */
     private static final int REACHES = 4;
     private static final float HURTS = 5.0F;
     private static final int BURNS_OUT = 500;
-    /** How many sparks are thrown off, and how fast they scatter. */
     private static final int SPARKS = 60;
 
     private int reaches = REACHES;
@@ -44,7 +32,6 @@ public class ShockOrb extends Bolt {
         super(ModEntities.SHOCK_ORB.get(), level, thrower);
     }
 
-    /** How wide and how hard, which is what force and widening are worth to it. */
     public ShockOrb striking(int reaches, float hurts) {
         this.reaches = reaches;
         this.hurts = hurts;
@@ -66,7 +53,6 @@ public class ShockOrb extends Bolt {
         return BURNS_OUT;
     }
 
-    /** Everything round where it fell that can be seen from it. */
     @Override
     protected void land(ServerLevel level, HitResult where) {
         Entity thrower = getOwner();

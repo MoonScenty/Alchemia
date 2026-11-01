@@ -17,13 +17,6 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
-/**
- * An eldritch ring: a bowl of obsidian and eldritch stone sunk into open ground, an altar at its heart with the shut
- * way to the Outer Lands over it and an obelisk over that, and eight capstones standing round. Two in five are a
- * Crimson Cult altar with the cult's banners about it, one in five a guardian's; the rest are only stone.
- * <p>
- * The original also began building the Outer Lands the moment it raised a ring. That comes with the Outer Lands.
- */
 public class EldritchRingFeature extends Feature<NoneFeatureConfiguration> {
     public EldritchRingFeature(Codec<NoneFeatureConfiguration> codec) {
         super(codec);
@@ -33,14 +26,13 @@ public class EldritchRingFeature extends Feature<NoneFeatureConfiguration> {
     public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
         WorldGenLevel level = context.level();
         RandomSource random = context.random();
-        // the top block of the ground, not the air over it
+        // the ground block, not the air above it
         BlockPos o = context.origin().below();
         for (int[] at : new int[][] {{-3, -3}, {0, 0}, {3, 0}, {3, 3}, {0, 3}}) {
             if (!ground(level, o.offset(at[0], 0, at[1]))) {
                 return false;
             }
         }
-        // the bowl, and clear air over it
         for (int dx = -3; dx <= 3; dx++) {
             for (int dz = -3; dz <= 3; dz++) {
                 for (int dy = -3; dy <= 4; dy++) {
@@ -57,7 +49,6 @@ public class EldritchRingFeature extends Feature<NoneFeatureConfiguration> {
                 }
             }
         }
-        // the heart: stone, altar, the shut way, the obelisk
         set(level, o, ModBlocks.ELDRITCH_STONE.block().get().defaultBlockState());
         set(level, o.above(), ModBlocks.ELDRITCH_ALTAR.get().defaultBlockState());
         set(level, o.above(2), ModBlocks.ELDRITCH_PORTAL.get().defaultBlockState());
@@ -66,7 +57,6 @@ public class EldritchRingFeature extends Feature<NoneFeatureConfiguration> {
         if (level.getBlockEntity(o.above()) instanceof EldritchAltarBlockEntity altar) {
             if (kind >= 1 && kind <= 4) {
                 altar.setSpawner(true, 0);
-                // the cult's banners, each turned toward the altar
                 banner(level, o.offset(0, 1, -3), 0);
                 banner(level, o.offset(3, 1, 0), 4);
                 banner(level, o.offset(0, 1, 3), 8);
@@ -75,7 +65,6 @@ public class EldritchRingFeature extends Feature<NoneFeatureConfiguration> {
                 altar.setSpawner(true, 1);
             }
         }
-        // eight capstones round the edge
         for (int[] cap : new int[][] {{3, 1}, {3, -1}, {-3, 1}, {-3, -1}, {1, 3}, {-1, 3}, {1, -3}, {-1, -3}}) {
             set(level, o.offset(cap[0], 1, cap[1]), ModBlocks.ELDRITCH_CAP.get().defaultBlockState());
         }
@@ -93,7 +82,6 @@ public class EldritchRingFeature extends Feature<NoneFeatureConfiguration> {
         level.setBlock(at, state, Block.UPDATE_CLIENTS);
     }
 
-    /** Ground the original would build on: stone, sand, ice, grass, gravel or dirt, with open air above. */
     static boolean ground(WorldGenLevel level, BlockPos at) {
         BlockState there = level.getBlockState(at);
         BlockPos top = at;

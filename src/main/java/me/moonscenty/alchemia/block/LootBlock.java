@@ -18,13 +18,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-/**
- * An old urn or crate, left where the dead were put, and worth breaking: it gives up one to three things -- one more
- * for each step of rarity -- out of the same tables as the bags of loot, common, uncommon or rare. It takes no tool
- * and almost no effort, and an urn breaks with a crash of pottery.
- */
 public class LootBlock extends Block {
-    /** Common, uncommon or rare, as a bag of loot is. */
     public static final IntegerProperty RARITY = IntegerProperty.create("rarity", 0, 2);
 
     private static final VoxelShape URN = Shapes.or(box(3, 0, 3, 13, 1, 13), box(2, 1, 2, 14, 13, 14),
@@ -65,7 +59,7 @@ public class LootBlock extends Block {
         return drops;
     }
 
-    /** The original's odds for what a mound holds: rare one time in ten, uncommon a further one in four or so. */
+    // original's odds
     public static int rollRarity(RandomSource random) {
         float roll = random.nextFloat();
         return roll < 0.1F ? 2 : roll < 0.33F ? 1 : 0;

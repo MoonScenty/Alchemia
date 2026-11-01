@@ -23,17 +23,10 @@ import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
-/** What an item carries beyond being itself. */
 public class ModDataComponents {
     public static final DeferredRegister<DataComponentType<?>> COMPONENTS =
             DeferredRegister.create(Registries.DATA_COMPONENT_TYPE, Alchemia.MODID);
 
-    /**
-     * What has been worked into a focus, rank by rank.
-     * <p>
-     * A plain list rather than five slots: ranks are filled in order and never left with a gap, so the length
-     * says how many are spoken for and the position says which rank each one went into.
-     */
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<java.util.List<FocusUpgrade>>>
             FOCUS_UPGRADES = COMPONENTS.register("focus_upgrades",
                     () -> DataComponentType.<java.util.List<FocusUpgrade>>builder()
@@ -42,20 +35,12 @@ public class ModDataComponents {
                                     .apply(ByteBufCodecs.list()).cast())
                             .build());
 
-    /**
-     * How far a focus with an architect's eye in it has been set to work, in blocks.
-     * <p>
-     * Only meaningful on a focus that has one. Without the component the focus simply works as far as it can,
-     * which is what every other focus does and what this one does until somebody turns it down.
-     */
-    /** Where a mirror's partner is, or the mirror a hand mirror sends to: carried on the item. */
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<net.minecraft.core.GlobalPos>>
             MIRROR_LINK = COMPONENTS.register("mirror_link", () -> DataComponentType.<net.minecraft.core.GlobalPos>builder()
                     .persistent(net.minecraft.core.GlobalPos.CODEC)
                     .networkSynchronized(net.minecraft.core.GlobalPos.STREAM_CODEC)
                     .build());
 
-    /** What a golem item is: its material, its parts and its rank, packed as the golem itself keeps them. */
     public static final DeferredHolder<DataComponentType<?>,
             DataComponentType<me.moonscenty.alchemia.golem.GolemDesign>> GOLEM_DESIGN = COMPONENTS.register(
                     "golem_design",
@@ -64,25 +49,18 @@ public class ModDataComponents {
                             .networkSynchronized(me.moonscenty.alchemia.golem.GolemDesign.STREAM_CODEC)
                             .build());
 
-    /** How far a smart golem taken up with a wand had come on towards its next rank. */
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> GOLEM_XP =
             COMPONENTS.register("golem_xp", () -> DataComponentType.<Integer>builder()
                     .persistent(Codec.INT)
                     .networkSynchronized(ByteBufCodecs.VAR_INT)
                     .build());
 
-    /**
-     * Warp worked into a thing by the altar, carried while it is held or worn on top of any it has of its own. Each
-     * infusion enchantment after the first has a chance of leaving a point behind, as the original's {@code TC.WARP}.
-     */
-    /** What a thaumostatic harness has left to fly on, in ticks. */
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> HARNESS_FUEL =
             COMPONENTS.register("harness_fuel", () -> DataComponentType.<Integer>builder()
                     .persistent(Codec.INT)
                     .networkSynchronized(ByteBufCodecs.VAR_INT)
                     .build());
 
-    /** Whether a thaumostatic harness is switched on. */
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Boolean>> HOVERING =
             COMPONENTS.register("hovering", () -> DataComponentType.<Boolean>builder()
                     .persistent(Codec.BOOL)
@@ -95,7 +73,6 @@ public class ModDataComponents {
                     .networkSynchronized(ByteBufCodecs.VAR_INT)
                     .build());
 
-    /** What a brain in a jar has eaten, kept on the jar when it is picked up. */
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> STORED_XP =
             COMPONENTS.register("stored_xp", () -> DataComponentType.<Integer>builder()
                     .persistent(Codec.INT)
@@ -108,130 +85,79 @@ public class ModDataComponents {
                     .networkSynchronized(ByteBufCodecs.VAR_INT)
                     .build());
 
-    /**
-     * Which way the shovel of the earthmover lays its three-by-three: flat against the face, or standing out of
-     * it one way or the other. Nought, one or two, turned with the same key an architect's focus is set with.
-     */
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> SHOVEL_LAYING =
             COMPONENTS.register("shovel_laying", () -> DataComponentType.<Integer>builder()
                     .persistent(Codec.intRange(0, 2))
                     .networkSynchronized(ByteBufCodecs.VAR_INT)
                     .build());
 
-    /** The puzzle drawn on a sheet of research notes, and the research it stands for. */
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<ResearchNote>> RESEARCH_NOTE =
             COMPONENTS.register("research_note", () -> DataComponentType.<ResearchNote>builder()
                     .persistent(ResearchNote.CODEC)
                     .networkSynchronized(ResearchNote.STREAM_CODEC)
                     .build());
 
-    /** The shaft a wand is built on, which says how much it can hold. */
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Holder<WandRod>>> WAND_ROD =
             COMPONENTS.register("wand_rod", () -> DataComponentType.<Holder<WandRod>>builder()
                     .persistent(ModWandParts.RODS.holderByNameCodec())
                     .networkSynchronized(ByteBufCodecs.holderRegistry(ModWandParts.RODS_KEY))
                     .build());
 
-    /** The metal at its ends, which says what it charges and how fast it fills. */
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Holder<WandCap>>> WAND_CAP =
             COMPONENTS.register("wand_cap", () -> DataComponentType.<Holder<WandCap>>builder()
                     .persistent(ModWandParts.CAPS.holderByNameCodec())
                     .networkSynchronized(ByteBufCodecs.holderRegistry(ModWandParts.CAPS_KEY))
                     .build());
 
-    /**
-     * The focus fitted to a wand, kept as the focus item itself rather than as which kind it is.
-     * <p>
-     * A focus is a thing a player owns: it came out of their bag, it goes back into their bag, and once upgrades
-     * arrive two foci of the same kind will differ. Storing which kind it is would lose all of that, so what is
-     * stored is the item. A wand with nothing fitted simply has no component.
-     * <p>
-     * It is held in a one-slot {@link ItemContainerContents} rather than as a bare {@code ItemStack}, because a
-     * component has to be immutable and compare by what it holds, and an item stack is neither. This is the same
-     * box vanilla puts a shulker box's contents in, with one thing in it.
-     */
+    // ItemContainerContents, not ItemStack: a component must be immutable with value equality
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<ItemContainerContents>> WAND_FOCUS =
             COMPONENTS.register("wand_focus", () -> DataComponentType.<ItemContainerContents>builder()
                     .persistent(ItemContainerContents.CODEC)
                     .networkSynchronized(ItemContainerContents.STREAM_CODEC)
                     .build());
 
-    /** Marks a wand with a crossbar: a sceptre. Nothing else about it, so it carries nothing. */
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<net.minecraft.util.Unit>> SCEPTRE =
             COMPONENTS.register("sceptre", () -> DataComponentType.<net.minecraft.util.Unit>builder()
                     .persistent(net.minecraft.util.Unit.CODEC)
                     .networkSynchronized(net.minecraft.network.codec.StreamCodec.unit(net.minecraft.util.Unit.INSTANCE))
                     .build());
 
-    /** The eighteen squares of a focus pouch, kept on the item so that a pouch in a chest is still full. */
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<ItemContainerContents>> POUCH_CONTENTS =
             COMPONENTS.register("pouch_contents", () -> DataComponentType.<ItemContainerContents>builder()
                     .persistent(ItemContainerContents.CODEC)
                     .networkSynchronized(ItemContainerContents.STREAM_CODEC)
                     .build());
 
-    /**
-     * What has been worked into a fortress helm: goggles, or one of the masks when there are any.
-     * <p>
-     * A helm wears one of them or none. The altar refuses a helm that already has something on it, so this is
-     * only ever set once, and nothing takes it off again.
-     */
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<HelmFitting>> HELM_FITTING =
             COMPONENTS.register("helm_fitting", () -> DataComponentType.<HelmFitting>builder()
                     .persistent(HelmFitting.CODEC)
                     .networkSynchronized(HelmFitting.STREAM_CODEC)
                     .build());
 
-    /**
-     * The block a builder's or a trader's focus has been shown and told to copy.
-     * <p>
-     * The block rather than the state it was in: a wall laid by a wand comes out facing whichever way the block
-     * faces by default, which is tidier than every stair in it pointing wherever the one that was copied did.
-     */
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Holder<Block>>> PICKED_BLOCK =
             COMPONENTS.register("picked_block", () -> DataComponentType.<Holder<Block>>builder()
                     .persistent(BuiltInRegistries.BLOCK.holderByNameCodec())
                     .networkSynchronized(ByteBufCodecs.holderRegistry(Registries.BLOCK))
                     .build());
 
-    /** What a wand is carrying, in hundredths of a point so that a cap's discount is not rounded away. */
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<AspectList>> VIS =
             COMPONENTS.register("vis", () -> DataComponentType.<AspectList>builder()
                     .persistent(AspectList.CODEC)
                     .networkSynchronized(AspectList.STREAM_CODEC)
                     .build());
 
-    /**
-     * The one aspect a phial or a label names.
-     * <p>
-     * How much of it is not written down: a phial is always eight and a label is a word rather than a measure.
-     * An item without this component is an empty phial or a blank label, which is also what makes the two models
-     * easy to pick between.
-     */
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Holder<Aspect>>> ESSENTIA =
             COMPONENTS.register("essentia", () -> DataComponentType.<Holder<Aspect>>builder()
                     .persistent(ModAspects.REGISTRY.holderByNameCodec())
                     .networkSynchronized(ByteBufCodecs.holderRegistry(ModAspects.KEY))
                     .build());
 
-    /**
-     * What a vessel taken up off the floor still has in it.
-     * <p>
-     * A warded jar is warded whether or not it is standing on anything, so breaking one hands back the jar with
-     * its essentia still inside rather than letting the lot go into the air.
-     */
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<AspectList>> CONTENTS =
             COMPONENTS.register("contents", () -> DataComponentType.<AspectList>builder()
                     .persistent(AspectList.CODEC)
                     .networkSynchronized(AspectList.STREAM_CODEC)
                     .build());
 
-    /**
-     * What an altar has put on a tool, and how far.
-     * <p>
-     * A map rather than a list because a tool may carry several and never two of the same, and because working
-     * the same one again raises what is already there rather than adding beside it.
-     */
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Map<InfusionEnchantment, Integer>>>
             INFUSION_ENCHANTMENTS = COMPONENTS.register("infusion_enchantments",
                     () -> DataComponentType.<Map<InfusionEnchantment, Integer>>builder()
@@ -240,11 +166,9 @@ public class ModDataComponents {
                                     InfusionEnchantment.STREAM_CODEC, ByteBufCodecs.VAR_INT))
                             .build());
 
-    /** How many times runic augmentation has hardened a piece of gear: a point of shield each. */
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> RUNIC_HARDENING =
             COMPONENTS.register("runic_hardening", () -> DataComponentType.<Integer>builder()
                     .persistent(Codec.intRange(0, 127)).networkSynchronized(ByteBufCodecs.VAR_INT).build());
-    /** What a verdant heart band has been worked into: nothing more, a lifegiver, or a sustainer. */
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> VERDANT_KIND =
             COMPONENTS.register("verdant_kind", () -> DataComponentType.<Integer>builder()
                     .persistent(Codec.intRange(0, 2)).networkSynchronized(ByteBufCodecs.VAR_INT).build());

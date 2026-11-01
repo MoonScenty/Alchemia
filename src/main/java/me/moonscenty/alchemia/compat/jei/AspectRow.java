@@ -13,10 +13,6 @@ import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
 
-/**
- * A row of aspects in their colours, each with how much is wanted in its corner, as the research book draws them;
- * and which of them is under the mouse, for its name.
- */
 final class AspectRow {
     static final int ICON = 16;
     static final int STEP = 18;
@@ -24,7 +20,6 @@ final class AspectRow {
     private AspectRow() {
     }
 
-    /** Draws the aspects from here along, as many to a row as fit in this width. */
     static void draw(GuiGraphics graphics, AspectList aspects, int x, int y, int across) {
         List<Holder<Aspect>> order = aspects.sortedByAmount();
         Font font = Minecraft.getInstance().font;
@@ -47,7 +42,6 @@ final class AspectRow {
         }
     }
 
-    /** The name of the aspect under the mouse, if one is. */
     @Nullable
     static Component under(AspectList aspects, int x, int y, int across, double mouseX, double mouseY) {
         List<Holder<Aspect>> order = aspects.sortedByAmount();

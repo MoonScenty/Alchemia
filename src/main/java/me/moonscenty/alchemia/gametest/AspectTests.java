@@ -38,7 +38,6 @@ public class AspectTests {
         helper.succeed();
     }
 
-    /** Every compound must break down into primals; a cycle or a dangling part would hang or throw here. */
     @GameTest(template = TEMPLATE)
     public static void everyCompoundReducesToPrimals(GameTestHelper helper) {
         for (Holder<Aspect> holder : ModAspects.compounds()) {
@@ -52,7 +51,7 @@ public class AspectTests {
 
     @GameTest(template = TEMPLATE)
     public static void aspectsCombineEitherWayRound(GameTestHelper helper) {
-        // the registry hands back its own holder, so compare the aspects themselves rather than the holders
+        // compare aspects, not holders: the registry hands back its own holder
         helper.assertTrue(ModAspects.combine(ModAspects.AIR, ModAspects.ENTROPY).map(Holder::value).orElse(null) == ModAspects.VOID.get(),
                 "aer + perditio should make vacuos");
         helper.assertTrue(ModAspects.combine(ModAspects.ENTROPY, ModAspects.AIR).map(Holder::value).orElse(null) == ModAspects.VOID.get(),
@@ -75,10 +74,8 @@ public class AspectTests {
         helper.succeed();
     }
 
-    /** The cull keeps the six most telling aspects, favouring intricate ones over plentiful plain ones. */
     @GameTest(template = TEMPLATE)
     public static void cullKeepsTheTellingAspects(GameTestHelper helper) {
-        // given the same amount of each, the intricate aspect is the telling one and the plain primal goes
         AspectList tied = AspectList.EMPTY
                 .add(ModAspects.AIR, 10).add(ModAspects.EARTH, 10).add(ModAspects.FIRE, 10)
                 .add(ModAspects.WATER, 10).add(ModAspects.ORDER, 10).add(ModAspects.ENTROPY, 10)
@@ -89,7 +86,6 @@ public class AspectTests {
         helper.assertTrue(culled.size() == AspectList.MAX_ASPECTS, "the cull should leave 6, left " + culled.size());
         helper.assertTrue(culled.contains(ModAspects.MAN), "humanus outweighs a primal at the same amount");
 
-        // but sheer quantity still wins: a single point of humanus is not worth keeping over twenty of a primal
         AspectList lopsided = AspectList.EMPTY
                 .add(ModAspects.AIR, 20).add(ModAspects.EARTH, 20).add(ModAspects.FIRE, 20)
                 .add(ModAspects.WATER, 20).add(ModAspects.ORDER, 20).add(ModAspects.ENTROPY, 20)
@@ -108,7 +104,6 @@ public class AspectTests {
         AspectList loaded = AspectList.CODEC.parse(NbtOps.INSTANCE, saved).getOrThrow();
         helper.assertTrue(loaded.equals(original), "the list changed on the way through nbt: " + loaded);
 
-        // an empty list has to survive the trip too, since most things carry no aspects at all
         Tag emptySaved = AspectList.CODEC.encodeStart(NbtOps.INSTANCE, AspectList.EMPTY).getOrThrow();
         helper.assertTrue(AspectList.CODEC.parse(NbtOps.INSTANCE, emptySaved).getOrThrow().isEmpty(), "an empty list should stay empty");
 
@@ -122,32 +117,27 @@ public class AspectTests {
         AspectList iron = Aspects.of(Items.IRON_INGOT);
         helper.assertTrue(iron.get(ModAspects.METAL) == 4, "an iron ingot should be metallum 4, was " + iron);
 
-        // the entry was written against the tag, so every ingot in it answers the same way
         helper.assertTrue(Aspects.of(Items.APPLE).get(ModAspects.PLANT) == 2, "an apple should be herba 2");
         helper.assertTrue(Aspects.of(Items.STICK).get(ModAspects.PLANT) == 1, "a stick should be herba 1");
         helper.succeed();
     }
 
-    /** Nothing writes down a pickaxe, so its aspects have to come from the iron and sticks that make it. */
     @GameTest(template = TEMPLATE)
     public static void craftedItemsTraceBackThroughTheirRecipe(GameTestHelper helper) {
         AspectList pickaxe = Aspects.of(Items.IRON_PICKAXE);
         Alchemia.LOGGER.info("iron pickaxe traced back to {}", pickaxe);
 
-        // three ingots at metallum 4 and two sticks at herba 1, less the quarter that crafting always loses
         helper.assertTrue(pickaxe.get(ModAspects.METAL) == 9, "the pickaxe should carry metallum 9, was " + pickaxe);
         helper.assertTrue(pickaxe.get(ModAspects.PLANT) == 1, "the pickaxe should carry herba 1, was " + pickaxe);
         helper.succeed();
     }
 
-    /** A recipe making more than one splits its ingredients between them. */
     @GameTest(template = TEMPLATE)
     public static void makingSeveralAtOnceSplitsTheAspects(GameTestHelper helper) {
         AspectList plank = Aspects.of(Items.OAK_PLANKS);
         AspectList stairs = Aspects.of(Items.OAK_STAIRS);
         Alchemia.LOGGER.info("oak planks {} -> oak stairs {}", plank, stairs);
 
-        // six planks make four stairs, so a stair is worth less than the plank it came from
         helper.assertTrue(stairs.total() <= plank.total(), "stairs should not out-weigh the planks they came from");
         helper.succeed();
     }
@@ -166,12 +156,10 @@ public class AspectTests {
     public static void mobsCarryTheirOwnAspects(GameTestHelper helper) {
         helper.assertTrue(Aspects.of(EntityType.ZOMBIE).get(ModAspects.UNDEAD) == 4, "a zombie should be exanimis 4");
         helper.assertTrue(Aspects.of(EntityType.COW).get(ModAspects.BEAST) == 4, "a cow should be bestia 4");
-        // nothing is written down for the ender dragon, and there is no recipe to fall back on
         helper.assertTrue(Aspects.of(EntityType.ENDER_DRAGON).isEmpty(), "an unlisted mob should come back empty");
         helper.succeed();
     }
 
-    /** Bedrock has no entry and no recipe, so it must come back empty rather than blow up. */
     @GameTest(template = TEMPLATE)
     public static void unknownThingsComeBackEmpty(GameTestHelper helper) {
         helper.assertTrue(Aspects.of(Items.BEDROCK).isEmpty(), "bedrock should have no aspects");
@@ -179,7 +167,6 @@ public class AspectTests {
         helper.succeed();
     }
 
-    /** A tool carries instrumentum for being a tool, on top of whatever it was forged from. */
     @GameTest(template = TEMPLATE)
     public static void toolsAndArmourEarnTheirOwnAspects(GameTestHelper helper) {
         AspectList pickaxe = Aspects.of(Items.IRON_PICKAXE);
@@ -189,7 +176,6 @@ public class AspectTests {
         helper.assertTrue(Aspects.of(Items.WOODEN_PICKAXE).get(ModAspects.TOOL) == 1, "a wooden pickaxe should be instrumentum 1");
         helper.assertTrue(Aspects.of(Items.DIAMOND_PICKAXE).get(ModAspects.TOOL) == 4, "a diamond pickaxe should be instrumentum 4");
 
-        // a sword bristles rather than digs
         AspectList sword = Aspects.of(Items.IRON_SWORD);
         helper.assertTrue(sword.get(ModAspects.AVERSION) == 3, "an iron sword should be aversio 3, was " + sword);
         helper.assertTrue(sword.get(ModAspects.TOOL) == 0, "a sword is no tool");
@@ -202,12 +188,6 @@ public class AspectTests {
         helper.succeed();
     }
 
-    /**
-     * What a thing was steeped in counts as much as what it was made from.
-     * <p>
-     * A void seed traced through its ingredients alone is a wheat seed, which is the one thing it is no longer:
-     * the whole of what happened to it happened in the water.
-     */
     @GameTest(template = TEMPLATE)
     public static void whatWasBoiledIntoItCounts(GameTestHelper helper) {
         AspectList seed = Aspects.of(new ItemStack(ModItems.VOID_SEED.get()));
@@ -222,7 +202,6 @@ public class AspectTests {
         helper.succeed();
     }
 
-    /** And what was drunk out of the jars at a matrix counts the same way. */
     @GameTest(template = TEMPLATE)
     public static void whatWasInfusedIntoItCounts(GameTestHelper helper) {
         AspectList rod = Aspects.of(new ItemStack(ModItems.WAND_RODS.get("obsidian").get()));
@@ -236,7 +215,6 @@ public class AspectTests {
         helper.succeed();
     }
 
-    /** Enchantments belong to the one stack, so they must not leak into every other copy of the item. */
     @GameTest(template = TEMPLATE)
     public static void enchantmentsAddToTheOneStack(GameTestHelper helper) {
         Holder<Enchantment> sharpness = helper.getLevel().registryAccess()

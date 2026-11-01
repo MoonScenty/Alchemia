@@ -15,12 +15,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 
-/**
- * A workbench with a cloth laid over it and a place to set a wand down.
- * <p>
- * What is on it stays there when the screen is closed, wand and all: the charger that goes above the bench tops the
- * wand up while nobody is working, which it could not do if closing the screen swept the bench clear.
- */
 public class ArcaneWorkbenchBlock extends BaseEntityBlock {
     public static final MapCodec<ArcaneWorkbenchBlock> CODEC = simpleCodec(ArcaneWorkbenchBlock::new);
 

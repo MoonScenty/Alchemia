@@ -22,17 +22,12 @@ import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/**
- * A crucible is worth having only if it takes things apart reliably and spills reliably, since the first is what it
- * is for and the second is what makes leaving one unattended cost something.
- */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class CrucibleTests {
     private static final String TEMPLATE = "empty_32x40x32";
     private static final BlockPos WHERE = new BlockPos(2, 2, 2);
 
-    /** A pot set up over a fire, full of water and already hot enough to work. */
     private static CrucibleBlockEntity lit(GameTestHelper helper) {
         helper.setBlock(WHERE.below(), Blocks.LAVA);
         helper.setBlock(WHERE, ModBlocks.CRUCIBLE.get());
@@ -40,7 +35,6 @@ public class CrucibleTests {
                 (CrucibleBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(WHERE));
         crucible.fill();
         BlockPos at = helper.absolutePos(WHERE);
-        // it takes a while to come up to heat, which is the point of the heat, but not of this test
         for (int tick = 0; tick < 220; tick++) {
             CrucibleBlockEntity.tick(helper.getLevel(), at, helper.getLevel().getBlockState(at), crucible);
         }
@@ -61,7 +55,6 @@ public class CrucibleTests {
         }
     }
 
-    /** A cold pot does nothing at all, however much is thrown into it. */
     @GameTest(template = TEMPLATE)
     public static void aColdPotDoesNothing(GameTestHelper helper) {
         helper.setBlock(WHERE, ModBlocks.CRUCIBLE.get());
@@ -75,7 +68,6 @@ public class CrucibleTests {
         helper.succeed();
     }
 
-    /** Things thrown into a hot pot come apart into what they are made of, the whole stack at once. */
     @GameTest(template = TEMPLATE)
     public static void itTakesThingsApart(GameTestHelper helper) {
         CrucibleBlockEntity crucible = lit(helper);
@@ -88,17 +80,12 @@ public class CrucibleTests {
         helper.succeed();
     }
 
-    /**
-     * A pot filled past what it holds runs over, and what runs over turns up in the air as flux. Losing it quietly
-     * would make a crucible free to leave alone, which is the one thing it should not be.
-     */
     @GameTest(template = TEMPLATE)
     public static void whatRunsOverBecomesFlux(GameTestHelper helper) {
         CrucibleBlockEntity crucible = lit(helper);
         BlockPos at = helper.absolutePos(WHERE);
         int before = AuraHandler.get(helper.getLevel(), at, ModAspects.FLUX);
 
-        // enough iron to push it well past what the pot holds, all at once
         drop(helper, new ItemStack(Items.IRON_INGOT, 40));
         run(helper, crucible, 1);
         int over = crucible.dissolved().total();
@@ -114,7 +101,6 @@ public class CrucibleTests {
         helper.succeed();
     }
 
-    /** Breaking a full pot lets the lot go at once rather than losing it quietly. */
     @GameTest(template = TEMPLATE)
     public static void breakingItLetsTheLotGo(GameTestHelper helper) {
         CrucibleBlockEntity crucible = lit(helper);
@@ -132,10 +118,6 @@ public class CrucibleTests {
         helper.succeed();
     }
 
-    /**
-     * A recipe wants only a little water left, and drinks what there is. What it makes is thrown up out of the pot
-     * and is not taken back in when it falls. Things can be put in by hand as well as thrown.
-     */
     @GameTest(template = TEMPLATE, timeoutTicks = 200)
     public static void aLittleWaterStillWorksAndTheWorkIsLeftBe(GameTestHelper helper) {
         helper.setBlock(WHERE.below(), Blocks.LAVA);
@@ -160,7 +142,6 @@ public class CrucibleTests {
         });
     }
 
-    /** Something alive standing in a hot pot is scalded one touch in ten. */
     @GameTest(template = TEMPLATE)
     public static void aHotPotScalds(GameTestHelper helper) {
         CrucibleBlockEntity crucible = lit(helper);
@@ -175,7 +156,6 @@ public class CrucibleTests {
         helper.succeed();
     }
 
-    /** What is dissolved darkens the water, which is how a pot is read across a room. */
     @GameTest(template = TEMPLATE)
     public static void theWaterDarkensWithWhatIsInIt(GameTestHelper helper) {
         CrucibleBlockEntity crucible = lit(helper);

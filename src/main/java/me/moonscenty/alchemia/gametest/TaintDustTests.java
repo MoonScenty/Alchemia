@@ -10,13 +10,11 @@ import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/** Taint dust: what dead taint leaves, falling and settling like poured sand. */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class TaintDustTests {
     private static final String TEMPLATE = "empty_32x40x32";
 
-    /** A full heap over open air falls, and on flat ground spreads a depth to the side. */
     @GameTest(template = TEMPLATE, timeoutTicks = 400)
     public static void dustFallsAndSettles(GameTestHelper helper) {
         for (int x = 2; x <= 6; x++) {
@@ -38,7 +36,6 @@ public class TaintDustTests {
         });
     }
 
-    /** A dead tainted log crumbles to a full heap. */
     @GameTest(template = TEMPLATE)
     public static void deadLogCrumbles(GameTestHelper helper) {
         BlockPos at = new BlockPos(4, 2, 4);

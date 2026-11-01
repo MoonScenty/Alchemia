@@ -33,10 +33,6 @@ import net.minecraft.world.entity.animal.Rabbit;
 import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.item.DyeColor;
 
-/**
- * The animals the taint has made over, drawn as the original drew them: the game's own models, which have not changed
- * shape since, in the original's tainted skins.
- */
 public final class TaintedAnimalRenderers {
     private TaintedAnimalRenderers() {
     }
@@ -71,7 +67,6 @@ public final class TaintedAnimalRenderers {
         }
     }
 
-    /** A chicken, its wings beating as a chicken's do. */
     public static class Chicken extends MobRenderer<TaintedChicken, ChickenModel<TaintedChicken>> {
         private static final ResourceLocation SKIN = skin("chicken");
 
@@ -92,13 +87,12 @@ public final class TaintedAnimalRenderers {
         }
     }
 
-    /** A villager, a sixteenth smaller, as the original drew it. */
     public static class Villager extends MobRenderer<TaintedVillager, VillagerModel<TaintedVillager>> {
         private static final ResourceLocation SKIN = skin("villager");
 
         public Villager(EntityRendererProvider.Context context) {
             super(context, new VillagerModel<>(context.bakeLayer(ModelLayers.VILLAGER)), 0.5F);
-            // the original's skin was drawn before villagers wore hats, and has nothing where the hat would be
+            // the original's skin predates villager hats
             getModel().hatVisible(false);
         }
 
@@ -113,7 +107,6 @@ public final class TaintedAnimalRenderers {
         }
     }
 
-    /** A creeper, swelling and flashing white as it comes to going off, as a creeper does. */
     public static class Creeper extends MobRenderer<TaintedCreeper, CreeperModel<TaintedCreeper>> {
         private static final ResourceLocation SKIN = skin("creeper");
 
@@ -145,7 +138,6 @@ public final class TaintedAnimalRenderers {
         }
     }
 
-    /** A sheep, its head going down to graze, its fleece dyed purple unless it has been shorn. */
     public static class Sheep extends MobRenderer<TaintedSheep, SheepBody> {
         private static final ResourceLocation SKIN = skin("sheep");
 
@@ -160,7 +152,6 @@ public final class TaintedAnimalRenderers {
         }
     }
 
-    /** A sheep's body or its fleece, laid on a made-over sheep: its head lowered to graze as the sheep's is. */
     public static class SheepBody extends QuadrupedModel<TaintedSheep> {
         private float headXRot;
 
@@ -183,7 +174,6 @@ public final class TaintedAnimalRenderers {
         }
     }
 
-    /** The purple fleece, the original's picture of it dyed as the original dyed it. */
     private static final class Fleece extends RenderLayer<TaintedSheep, SheepBody> {
         private static final ResourceLocation FUR = Alchemia.id("textures/entity/tainted_sheep_fur.png");
         private final SheepBody fur;
@@ -205,7 +195,6 @@ public final class TaintedAnimalRenderers {
         }
     }
 
-    /** A rabbit of whatever colour it was, with the taint laid over it. */
     public static class TaintedRabbit extends RabbitRenderer {
         private static final ResourceLocation OVERLAY = Alchemia.id("textures/entity/tainted_rabbit.png");
 
@@ -231,7 +220,6 @@ public final class TaintedAnimalRenderers {
         }
     }
 
-    /** A slime in the original's purple. */
     public static class AlchemicSlime extends SlimeRenderer {
         private static final ResourceLocation SKIN = Alchemia.id("textures/entity/alchemic_slime.png");
 

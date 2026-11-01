@@ -19,7 +19,6 @@ import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/** A villager leaves a coin when it dies: a tenth of the time, and a tenth more for each level of looting. */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class VillagerCoinTests {
@@ -29,7 +28,6 @@ public class VillagerCoinTests {
     public static void aVillagerKilledWithLootingLeavesACoin(GameTestHelper helper) {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         ItemStack sword = new ItemStack(Items.DIAMOND_SWORD);
-        // nine levels of looting make it certain
         sword.enchant(helper.getLevel().registryAccess().registryOrThrow(Registries.ENCHANTMENT)
                 .getHolderOrThrow(Enchantments.LOOTING), 9);
         player.setItemInHand(InteractionHand.MAIN_HAND, sword);

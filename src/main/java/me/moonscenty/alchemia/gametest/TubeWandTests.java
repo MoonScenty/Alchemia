@@ -15,14 +15,12 @@ import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/** A wand on a tube's arm shuts that side; crouching, it chokes a buffer's; bellows make a buffer pull harder. */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class TubeWandTests {
@@ -52,7 +50,6 @@ public class TubeWandTests {
         }
     }
 
-    /** Clicks a wand on one arm of a tube, out towards that side of the middle. */
     private static void wandOn(GameTestHelper helper, Player player, BlockPos at, Direction arm) {
         BlockPos where = helper.absolutePos(at);
         player.setItemInHand(InteractionHand.MAIN_HAND, WandItem.of(ModWandParts.SILVERWOOD, ModWandParts.GOLD));
@@ -61,7 +58,6 @@ public class TubeWandTests {
                 InteractionHand.MAIN_HAND, new BlockHitResult(hit, arm, where, false));
     }
 
-    /** A shut joint carries nothing, from either end, until it is opened again. */
     @GameTest(template = TEMPLATE)
     public static void aWandShutsAJoint(GameTestHelper helper) {
         AlembicBlockEntity from = alembic(helper, START, 6);
@@ -88,7 +84,6 @@ public class TubeWandTests {
         return helper.<TubeBlockEntity>getBlockEntity(at).shut(side);
     }
 
-    /** A wand on the middle of a tube is not a wand on any of its arms. */
     @GameTest(template = TEMPLATE)
     public static void theMiddleIsNoArm(GameTestHelper helper) {
         alembic(helper, START, 1);
@@ -104,7 +99,6 @@ public class TubeWandTests {
         helper.succeed();
     }
 
-    /** Crouching, a buffer's arm turns open, choked, shut: a shut one does not fill it. */
     @GameTest(template = TEMPLATE)
     public static void aCrouchingWandChokesABuffer(GameTestHelper helper) {
         alembic(helper, START, 6);
@@ -128,7 +122,6 @@ public class TubeWandTests {
         helper.succeed();
     }
 
-    /** A bellows blowing on a buffer makes it pull two to a turn; choked, the bellows count for nothing. */
     @GameTest(template = TEMPLATE)
     public static void bellowsHurryABuffer(GameTestHelper helper) {
         alembic(helper, START, 8);
@@ -137,7 +130,6 @@ public class TubeWandTests {
                 .setValue(BellowsBlock.FACING, Direction.SOUTH));
         BufferTubeBlockEntity buffer = entity(helper, START.east());
 
-        // the eleventh tick is the first turn
         run(helper, START.east(), 11);
         helper.assertValueEqual(buffer.held().total(), 2, "one for the turn and one for the bellows");
 

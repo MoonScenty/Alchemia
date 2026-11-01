@@ -12,19 +12,8 @@ import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.DyedItemColor;
 
-/**
- * A robe: cloth over a wand-bearer rather than plate over a soldier.
- *
- * <p>It stops almost nothing. What it is worth is that a wand spends less while it is on, which is a thing worn
- * armour has never done in this game and so has to be plumbed in rather than declared.
- *
- * <p>Both robes are dyed the way leather is, and both start out the original's violet. The cloth robe is worn as
- * plain armour; the void robe is worn on the original's own model when its jar is there.
- *
- * @param discount how much less a wand spends while this piece is worn, in whole parts of a hundred
- */
 public class RobeItem extends ArmorItem implements VisDiscount {
-    /** The colour of a robe nobody has dyed: the original's. */
+    // original's undyed colour
     public static final int UNDYED = 0x6A3880;
 
     private final int discount;
@@ -41,7 +30,6 @@ public class RobeItem extends ArmorItem implements VisDiscount {
         return discount;
     }
 
-    /** The same number without a wearer, for anything that only wants to say what the piece is worth. */
     public int discount() {
         return discount;
     }
@@ -51,12 +39,10 @@ public class RobeItem extends ArmorItem implements VisDiscount {
         lines.add(discountLine(stack));
     }
 
-    /** Whether this piece is a void robe. */
     public boolean drab() {
         return drab;
     }
 
-    /** What colour the cloth is: whatever dye was worked into it, or the violet it was woven in. */
     public static int dyed(ItemStack stack) {
         return DyedItemColor.getOrDefault(stack, UNDYED);
     }

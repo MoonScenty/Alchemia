@@ -10,16 +10,13 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 
-/** What the Outer Lands' creatures leave in the air: the guardian's trail of black smoke and the orb's dark burst. */
 public final class EldritchEffects {
-    /** The original's dark wisp run: thirteen frames on the fourth row of the old sheet. */
     private static final int WISP_CELLS = 48;
     private static final int WISP_FRAMES = 13;
 
     private EldritchEffects() {
     }
 
-    /** A wisp or two of black smoke off the waist each tick, as many as the particle setting allows. */
     public static void smoke(EldritchGuardian guardian) {
         if (!(guardian.level() instanceof ClientLevel level)) {
             return;
@@ -43,7 +40,6 @@ public final class EldritchEffects {
         }
     }
 
-    /** A dark wisp from somewhere on an obelisk's shaft down to something from the Outer Lands it is keeping. */
     public static void obeliskWisp(net.minecraft.world.level.Level world, net.minecraft.core.BlockPos pos,
             net.minecraft.world.entity.LivingEntity kept) {
         if (!(world instanceof ClientLevel level)) {
@@ -68,7 +64,6 @@ public final class EldritchEffects {
                 .size(1.0F, 0.2F));
     }
 
-    /** A dark wisp drifting up off the Warden, every tick. */
     public static void wardenWisp(me.moonscenty.alchemia.entity.boss.EldritchWarden warden) {
         if (!(warden.level() instanceof ClientLevel level)) {
             return;
@@ -87,7 +82,6 @@ public final class EldritchEffects {
                 .size(1.0F, 0.3F));
     }
 
-    /** The smoke the Warden rises out of the floor in: spirals, higher the further it has risen. */
     public static void wardenRise(me.moonscenty.alchemia.entity.boss.EldritchWarden warden) {
         if (!(warden.level() instanceof ClientLevel level)) {
             return;
@@ -113,7 +107,6 @@ public final class EldritchEffects {
         }
     }
 
-    /** The Warden's screech: a ring going out from it. */
     public static void screech(me.moonscenty.alchemia.entity.boss.EldritchWarden warden) {
         if (!(warden.level() instanceof ClientLevel level)) {
             return;
@@ -132,7 +125,6 @@ public final class EldritchEffects {
         }
     }
 
-    /** The headless Construct: smoke out of its neck, now and then a spark, and its crackling while it charges. */
     public static void golemNeck(me.moonscenty.alchemia.entity.boss.EldritchGolem golem) {
         if (!(golem.level() instanceof ClientLevel level)) {
             return;
@@ -158,7 +150,6 @@ public final class EldritchEffects {
         }
     }
 
-    /** The glow of a primal arrow's element about it as it flies, in the element's colour. */
     public static void arrowGlow(net.minecraft.world.level.Level world, double x, double y, double z, int colour) {
         if (!(world instanceof ClientLevel level)) {
             return;
@@ -182,7 +173,6 @@ public final class EldritchEffects {
                 .size(0.3F, 0.1F));
     }
 
-    /** A block arc from the server: from the middle of the block's top to the middle of what it strikes. */
     public static void blockArc(me.moonscenty.alchemia.network.BlockArc arc) {
         ClientLevel level = Minecraft.getInstance().level;
         if (level == null) {
@@ -196,7 +186,6 @@ public final class EldritchEffects {
                 to.getY() + to.getBbHeight() / 2.0, to.getZ(), arc.r(), arc.g(), arc.b());
     }
 
-    /** A crooked line of light from one point to another, gone in a moment. */
     public static void arc(ClientLevel level, double x, double y, double z, double tx, double ty, double tz,
             float r, float g, float b) {
         RandomSource random = level.random;
@@ -210,7 +199,6 @@ public final class EldritchEffects {
         }
     }
 
-    /** A purple bubble rising off liquid death, lower the further it has flowed. */
     public static void deathBubble(net.minecraft.world.level.Level world, net.minecraft.core.BlockPos pos, int flowed,
             RandomSource random) {
         if (!(world instanceof ClientLevel level)) {
@@ -224,7 +212,6 @@ public final class EldritchEffects {
                 me.moonscenty.alchemia.client.particle.BubbleParticle.Kind.BUBBLE));
     }
 
-    /** A puff out of a crab vent, the way it faces. */
     public static void vent(net.minecraft.world.level.Level world, net.minecraft.core.BlockPos pos,
             net.minecraft.core.Direction facing) {
         if (!(world instanceof ClientLevel level)) {
@@ -243,7 +230,6 @@ public final class EldritchEffects {
                 facing.getStepY() / 3.0F + vy, facing.getStepZ() / 3.0F + vz, 0x9988AA).scaled(2.0F));
     }
 
-    /** A faint dark stream from somewhere in a void down to where it pours from, and now and then the wind. */
     public static void voidDraw(net.minecraft.world.level.Level world, net.minecraft.core.BlockPos from,
             net.minecraft.core.BlockPos to) {
         if (!(world instanceof ClientLevel level)) {
@@ -271,7 +257,6 @@ public final class EldritchEffects {
         }
     }
 
-    /** Thirty dark wisps thrown out from where an orb burst, shrinking as they go. */
     public static void burst(EldritchOrb orb) {
         if (!(orb.level() instanceof ClientLevel level)) {
             return;

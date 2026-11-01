@@ -23,10 +23,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 
-/**
- * A rabbit the taint has made over. It still hops as a rabbit does, of whatever colour it was, but it goes for
- * players and animals now, and does not breed. A killer rabbit made over is harder still, and bites twice as hard.
- */
 public class TaintedRabbit extends Rabbit implements TaintedMob {
     public TaintedRabbit(EntityType<? extends TaintedRabbit> type, Level level) {
         super(type, level);
@@ -36,7 +32,7 @@ public class TaintedRabbit extends Rabbit implements TaintedMob {
         this(ModEntities.TAINTED_RABBIT.get(), level);
     }
 
-    /** The original's numbers. */
+    // original's values
     public static AttributeSupplier.Builder attributes() {
         return Rabbit.createAttributes()
                 .add(Attributes.MAX_HEALTH, 15.0)
@@ -44,7 +40,6 @@ public class TaintedRabbit extends Rabbit implements TaintedMob {
                 .add(Attributes.MOVEMENT_SPEED, 0.3);
     }
 
-    /** None of a rabbit's own ways: only hunting. */
     @Override
     protected void registerGoals() {
         goalSelector.addGoal(1, new FloatGoal(this));
@@ -66,13 +61,11 @@ public class TaintedRabbit extends Rabbit implements TaintedMob {
         return TaintedMob.allied(other) || super.isAlliedTo(other);
     }
 
-    /** Armoured as a killer rabbit is, or a little less. */
     @Override
     public int getArmorValue() {
         return getVariant() == Variant.EVIL ? 8 : 3;
     }
 
-    /** Twice as hard for a killer, and with the taint's poison in it. */
     @Override
     public boolean doHurtTarget(Entity target) {
         float damage = (float) getAttributeValue(Attributes.ATTACK_DAMAGE);
@@ -101,7 +94,6 @@ public class TaintedRabbit extends Rabbit implements TaintedMob {
         return false;
     }
 
-    /** A little goo, more with looting. */
     @Override
     protected void dropCustomDeathLoot(ServerLevel level, DamageSource source, boolean recentlyHit) {
         super.dropCustomDeathLoot(level, source, recentlyHit);

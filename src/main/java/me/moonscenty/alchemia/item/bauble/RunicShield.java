@@ -32,37 +32,19 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
-/**
- * The runic shield, as the original kept it: golden hearts that are not food's but the gear's.
- * <p>
- * Everything worn -- the four pieces of armour and every bauble -- is added up every five seconds, or at once when
- * a bauble goes on or comes off; that is the most the shield holds, and its hearts are the player's absorption. A
- * point of it comes back every two seconds, for a point each of air and earth out of the aura where the player
- * stands, and none while the aura is to be spared. Once it has been beaten down to nothing it waits four seconds
- * before it begins again. A charged ring brings each point a quarter second sooner.
- * <p>
- * When a blow beats the shield down: a kinetic girdle throws out a blast that breaks nothing, a revitalising ring
- * mends its wearer for twelve seconds, an emergency amulet puts eight points back at once -- each no oftener than
- * its own while. Whoever is near sees the runes flare where the blow landed.
- * <p>
- * The original timed all this by the clock on the wall; here it is in ticks. Its emergency amulet only played its
- * sound and forgot to give the eight points its research promised; here it gives them.
- */
 @EventBusSubscriber(modid = Alchemia.MODID)
 public final class RunicShield {
-    /** How long between points, and how long after it breaks before it mends, in ticks. */
+    // ticks between points, the charged ring's speed-up, and the delay after breaking
     public static final int RECHARGE = 40;
     public static final int CHARGED_RING_QUICKER = 10;
     public static final int BROKEN_WAIT = 80;
     private static final int RECOUNT = 100;
     private static final ResourceLocation HOLDS = Alchemia.id("runic_shield");
 
-    /** What a shield's bauble adds to it, beyond its points. */
     public enum Upgrade {
         NONE, CHARGED, KINETIC, HEALING, EMERGENCY
     }
 
-    /** One player's shield: what it holds, what it has, and when it may next do what. */
     private static final class State {
         int most;
         int charged;
@@ -80,14 +62,12 @@ public final class RunicShield {
     private RunicShield() {
     }
 
-    /** Recounts the player's shield on its next tick. */
     public static void markDirty(LivingEntity wearer) {
         if (wearer instanceof Player player && !player.level().isClientSide) {
             STATES.computeIfAbsent(player.getUUID(), id -> new State()).dirty = true;
         }
     }
 
-    /** The most the player's shield holds, as last counted. */
     public static int most(Player player) {
         State state = STATES.get(player.getUUID());
         return state == null ? 0 : state.most;
@@ -103,7 +83,6 @@ public final class RunicShield {
         tick(event.getEntity());
     }
 
-    /** One tick of a player's shield: counted again if it is time, and a point back if one is due. */
     public static void tick(Player player) {
         if (!(player.level() instanceof ServerLevel level)) {
             return;
@@ -130,7 +109,6 @@ public final class RunicShield {
         }
     }
 
-    /** Adds up what is worn, and lets the player's hearts hold that much. */
     private static void recount(Player player, State state) {
         int most = 0;
         int charged = 0;
@@ -170,7 +148,6 @@ public final class RunicShield {
         }
     }
 
-    /** A blow on the shield: the runes flare, and if it breaks, the upgrades answer. */
     @SubscribeEvent
     public static void struck(LivingIncomingDamageEvent event) {
         LivingEntity struck = event.getEntity();
@@ -185,7 +162,7 @@ public final class RunicShield {
             target = -3;
         }
         if (!(struck instanceof Player player)) {
-            // a warded champion or something of the Outer Lands behind its own shield
+            // warded champions and eldritch mobs flash runes on their own absorption
             if (struck instanceof net.minecraft.world.entity.monster.Monster && (me.moonscenty.alchemia.entity.Champions
                     .modifier(struck) == me.moonscenty.alchemia.entity.ChampionModifier.WARDED
                     || struck instanceof me.moonscenty.alchemia.entity.EldritchMob)) {
@@ -217,14 +194,13 @@ public final class RunicShield {
         }
         if (state.emergency > 0 && ready(state, Upgrade.EMERGENCY, now, 1200)) {
             float restored = Math.min(state.most, 8 * state.emergency);
-            // after the blow is taken, so the eight points stand against the next one
+            // deferred past this blow so the points stand against the next; the original never restored them
             level.getServer().execute(() -> player.setAbsorptionAmount(Math.max(player.getAbsorptionAmount(),
                     restored)));
             level.playSound(null, player, ModSounds.RUNIC_SHIELD_CHARGE.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
         }
     }
 
-    /** What any runic gear says of itself: how much shield it holds. */
     @SubscribeEvent
     public static void tooltip(net.neoforged.neoforge.event.entity.player.ItemTooltipEvent event) {
         int charge = RunicGear.charge(event.getItemStack());

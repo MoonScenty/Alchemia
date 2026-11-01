@@ -9,10 +9,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
-/**
- * An apprentice's ring of one primal: five parts in a hundred off what a wand spends of that primal, and nothing
- * off the rest. Found, never made. Its band takes its primal's colour.
- */
 public class ApprenticeRingItem extends BaubleItem implements VisDiscount {
     public static final int OFF = 5;
     private final Supplier<Holder<Aspect>> primal;

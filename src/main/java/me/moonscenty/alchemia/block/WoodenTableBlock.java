@@ -15,11 +15,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 
-/**
- * A wooden table, the original's {@code BlockTable}: where a thaumaturge starts. Set scribing tools down on it and it
- * becomes a research table with the tools in their place; lay a wand on it and it becomes an arcane workbench with
- * the wand in its slot.
- */
 public class WoodenTableBlock extends Block {
     public WoodenTableBlock(Properties properties) {
         super(properties);

@@ -40,10 +40,6 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/**
- * What a wand is made of has to actually change what it does, and the cap's fraction has to survive being paid out
- * — those are the two places where storing vis in whole points instead of hundredths would quietly go wrong.
- */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class WandTests {
@@ -56,7 +52,6 @@ public class WandTests {
         return stack;
     }
 
-    /** The rod alone decides how much fits. */
     @GameTest(template = TEMPLATE)
     public static void theRodSaysHowMuchItHolds(GameTestHelper helper) {
         helper.assertValueEqual(WandItem.capacity(WandItem.of(ModWandParts.WOOD, ModWandParts.IRON)),
@@ -66,10 +61,6 @@ public class WandTests {
         helper.succeed();
     }
 
-    /**
-     * An iron cap pays a tenth over the asking price and an alchemium one a tenth under, so the same wand with the
-     * same vis in it can afford the work with one and not the other.
-     */
     @GameTest(template = TEMPLATE)
     public static void theCapChangesWhatItCosts(GameTestHelper helper) {
         AspectList price = AspectList.of(ModAspects.FIRE, 100);
@@ -82,13 +73,11 @@ public class WandTests {
                 "an alchemium cap asks for less");
 
         ((WandItem) alchemium.getItem()).take(alchemium, price, null, me.moonscenty.alchemia.item.VisHolder.Spending.WORKING);
-        // ninety paid out of a hundred, so ten left over and none of it rounded away
         helper.assertValueEqual(((WandItem) alchemium.getItem()).held(alchemium, ModAspects.FIRE),
                 10, "the tenth it saved is still in the wand");
         helper.succeed();
     }
 
-    /** A wand fills itself from the aura around it, and stops at what the rod holds. */
     @GameTest(template = TEMPLATE)
     public static void itDrawsFromTheAura(GameTestHelper helper) {
         BlockPos where = helper.absolutePos(new BlockPos(2, 1, 2));
@@ -103,13 +92,6 @@ public class WandTests {
         helper.succeed();
     }
 
-    /**
-     * The recipe that puts a wand together has to survive being sent to a client.
-     * <p>
-     * It carries nothing, so it is written with a codec that sends no bytes at all — but that codec refuses to
-     * write anything that is not the very value it was built around, and the recipe read back out of the file is a
-     * different object. Every one of these has to count as the same one, or joining a world throws.
-     */
     @GameTest(template = TEMPLATE)
     @SuppressWarnings({"unchecked", "rawtypes"})
     public static void theWandRecipeSurvivesBeingSent(GameTestHelper helper) {
@@ -123,12 +105,6 @@ public class WandTests {
         helper.succeed();
     }
 
-    /**
-     * Twelve foci, each with a price, and every one of them in the tag a pouch slot will ask.
-     * <p>
-     * A focus with no price would be free to use and a focus outside the tag could not be put away, and neither
-     * would show up anywhere until the thing that reads it was written.
-     */
     @GameTest(template = TEMPLATE)
     public static void thereAreTwelveFociAndEachCostsSomething(GameTestHelper helper) {
         helper.assertValueEqual(ModItems.FOCI.size(), 12, "twelve foci");
@@ -140,13 +116,6 @@ public class WandTests {
         helper.succeed();
     }
 
-    /**
-     * The numbers the original gave a few of them, spot-checked.
-     * <p>
-     * These are the two kinds of price there are -- one charged when the wand goes off, one charged every tick it
-     * is held down -- and getting the flag the wrong way round would make a portable hole cost its whole bill
-     * sixty times a second.
-     */
     @GameTest(template = TEMPLATE)
     public static void theFociKeptTheirNumbers(GameTestHelper helper) {
         Focus fire = ModItems.FOCI.get("fire").get().base();
@@ -165,12 +134,6 @@ public class WandTests {
         helper.succeed();
     }
 
-    /**
-     * Fitting a focus takes it out of the bag, and taking it off puts it back.
-     * <p>
-     * Nothing may be made or lost on the way. A swap that forgot to put the old focus somewhere would eat it, and
-     * one that forgot to empty the slot it came from would hand out a second copy.
-     */
     @GameTest(template = TEMPLATE)
     public static void fittingAFocusMovesItRatherThanCopyingIt(GameTestHelper helper) {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -189,19 +152,6 @@ public class WandTests {
         helper.succeed();
     }
 
-    /**
-     * The cycle runs by name and comes back round, and never leaves two foci where there was one.
-     * <p>
-     * Sorting by name rather than by where they sit means tidying a bag does not change which comes next. Coming
-     * back round means a player carrying one focus can put it on and take it off with the same key.
-     */
-    /**
-     * Two foci of the same kind are two foci once one of them has been worked on.
-     * <p>
-     * They are told apart by name, and what is worked in is part of the name. Without that the cycle would get
-     * to the first shock focus and never reach the second, and the ring would show two of the same picture with
-     * no way of saying which was which.
-     */
     @GameTest(template = TEMPLATE)
     public static void twoOfAKindAreToldApartByWhatIsInThem(GameTestHelper helper) {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -210,7 +160,7 @@ public class WandTests {
         ItemStack worked = new ItemStack(ModItems.FOCI.get("shock").get());
         me.moonscenty.alchemia.wand.FocusUpgrades.apply(worked,
                 me.moonscenty.alchemia.wand.FocusUpgrade.POTENCY);
-        // the names are taken first: putting a stack in a bag empties the stack that was handed over
+        // read the names first: inserting a stack into the bag empties the stack passed in
         String plainly = Foci.name(plain);
         String workedly = Foci.name(worked);
         player.getInventory().add(plain);
@@ -226,7 +176,6 @@ public class WandTests {
         helper.succeed();
     }
 
-    /** The ring names what it picked, and the server finds one of that name among what is carried. */
     @GameTest(template = TEMPLATE)
     public static void theRingFitsWhatItNames(GameTestHelper helper) {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -252,7 +201,7 @@ public class WandTests {
     public static void theCycleGoesRoundInOrderAndLosesNothing(GameTestHelper helper) {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         ItemStack wand = WandItem.of(ModWandParts.WOOD, ModWandParts.IRON);
-        // put in backwards, to prove the order comes from the names and not from the slots
+        // inserted in reverse to prove the order comes from names, not slots
         player.getInventory().add(new ItemStack(ModItems.FOCI.get("frost").get()));
         player.getInventory().add(new ItemStack(ModItems.FOCI.get("fire").get()));
         player.getInventory().add(new ItemStack(ModItems.FOCI.get("builder").get()));
@@ -270,7 +219,6 @@ public class WandTests {
         helper.succeed();
     }
 
-    /** A focus survives being written down and read back, which is what carrying it between sessions is. */
     @GameTest(template = TEMPLATE)
     public static void aFittedFocusSurvivesBeingSaved(GameTestHelper helper) {
         ItemStack wand = WandItem.of(ModWandParts.WOOD, ModWandParts.IRON);
@@ -286,12 +234,6 @@ public class WandTests {
         helper.succeed();
     }
 
-    /**
-     * A pouch carries what is put in it, and an emptied one is the same item as a new one.
-     * <p>
-     * If an emptied pouch kept a component full of nothing it would no longer stack with or compare equal to a
-     * fresh one, which is the sort of difference nobody can see and everybody trips over.
-     */
     @GameTest(template = TEMPLATE)
     public static void aPouchCarriesWhatIsPutInIt(GameTestHelper helper) {
         ItemStack pouch = new ItemStack(ModItems.FOCUS_POUCH.get());
@@ -313,12 +255,6 @@ public class WandTests {
         helper.succeed();
     }
 
-    /**
-     * A focus in a pouch is a focus the player is carrying.
-     * <p>
-     * That is the whole of what a pouch is worth: every focus on one key without eighteen squares gone out of the
-     * bag. Taking one off again goes back into the pouch rather than loose, or the bag fills up anyway.
-     */
     @GameTest(template = TEMPLATE)
     public static void theWandReachesIntoAPouch(GameTestHelper helper) {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -347,12 +283,6 @@ public class WandTests {
         helper.succeed();
     }
 
-    /**
-     * What a wand bearer has on comes off the bill.
-     * <p>
-     * The original gave this to robes and to the goggles, and it is the whole of what a robe is worth. A piece
-     * worn in the wrong slot counts for nothing, so each is asked for where it actually goes.
-     */
     @GameTest(template = TEMPLATE)
     public static void wornGearTakesSomethingOffThePrice(GameTestHelper helper) {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -373,12 +303,6 @@ public class WandTests {
         helper.succeed();
     }
 
-    /**
-     * The discount reaches the wand, and the floor under it holds.
-     * <p>
-     * Nothing may make a working free. Enough worn discount to wipe out a price has to stop at a tenth of it, or
-     * a craft with prices becomes a craft without.
-     */
     @GameTest(template = TEMPLATE)
     public static void aWandNeverSpendsLessThanATenth(GameTestHelper helper) {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -398,14 +322,12 @@ public class WandTests {
         helper.succeed();
     }
 
-    /** What a wand actually lost paying a price, in whole vis. */
     private static int spent(ItemStack wand, AspectList price, Player player) {
         WandItem item = (WandItem) wand.getItem();
         int before = item.held(wand, ModAspects.FIRE);
         item.take(wand, price, player, me.moonscenty.alchemia.item.VisHolder.Spending.WORKING);
         return before - item.held(wand, ModAspects.FIRE);
     }
-    /** Both robes take dye, as the original's both did, and start out the original's violet. */
     @GameTest(template = TEMPLATE)
     public static void bothRobesTakeDye(GameTestHelper helper) {
         ItemStack cloth = new ItemStack(ModItems.ROBES.get("cloth_chest").get());
@@ -414,7 +336,6 @@ public class WandTests {
         helper.assertTrue(drab.is(ItemTags.DYEABLE), "so can a void robe");
 
         helper.assertValueEqual(RobeItem.dyed(cloth), RobeItem.UNDYED, "undyed, it is the violet it was woven in");
-        // the dye is worked into a copy and handed back; the robe that went in is untouched
         ItemStack red = DyedItemColor.applyDyes(cloth, List.of((DyeItem) Items.RED_DYE));
         helper.assertTrue(RobeItem.dyed(red) != RobeItem.UNDYED, "dyed, it is drawn in the dye");
         helper.succeed();

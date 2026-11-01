@@ -10,13 +10,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 
-/**
- * Whether the way is open, and how far it has opened, for the drawing. In the Outer Lands it is always open. Every
- * quarter second it takes whoever stands in it through, to the Outer Lands or back out of them.
- */
 public class EldritchPortalBlockEntity extends SyncedBlockEntity {
     private boolean open;
-    /** How long it has stood open, counted on the client up to thirty for the drawing. */
     public int opened = -1;
     private int count;
 
@@ -24,7 +19,6 @@ public class EldritchPortalBlockEntity extends SyncedBlockEntity {
         super(ModBlockEntities.ELDRITCH_PORTAL.get(), pos, state);
     }
 
-    /** A portal the client has loaded is one a sinister lodestone can feel, open or shut. */
     @Override
     public void onLoad() {
         super.onLoad();

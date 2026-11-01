@@ -35,7 +35,6 @@ import net.minecraft.world.level.block.piston.PistonBaseBlock;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/** Golems, step twelve: what they are pressed from, what that makes them, and the press itself. */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class GolemTests {
@@ -52,7 +51,6 @@ public class GolemTests {
         return golem;
     }
 
-    /** A brass golem with a smart head and armour on is only smart: the armour and the weight each cancel. */
     @GameTest(template = TEMPLATE)
     public static void pairedTraitsCancel(GameTestHelper helper) {
         GolemDesign design = GolemDesign.BASIC.withMaterial(GolemParts.Material.BRASS)
@@ -61,7 +59,6 @@ public class GolemTests {
         helper.succeed();
     }
 
-    /** A design packs into one number and back out the same, rank and all. */
     @GameTest(template = TEMPLATE)
     public static void aDesignPacksAndUnpacks(GameTestHelper helper) {
         GolemDesign design = new GolemDesign(GolemParts.Material.VOID, GolemParts.Head.SMART_SCOUT,
@@ -70,7 +67,6 @@ public class GolemTests {
         helper.succeed();
     }
 
-    /** The plainest golem takes three planks, two gears and a clockwork mind, and eight measures of machina. */
     @GameTest(template = TEMPLATE)
     public static void thePlainestGolemTakesWhatItShould(GameTestHelper helper) {
         List<ItemStack> needs = GolemDesign.BASIC.components();
@@ -83,7 +79,6 @@ public class GolemTests {
         helper.succeed();
     }
 
-    /** What it is made of says how much it takes and how well it is armoured. */
     @GameTest(template = TEMPLATE)
     public static void aGolemIsWhatItIsMadeOf(GameTestHelper helper) {
         Player owner = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -96,7 +91,6 @@ public class GolemTests {
         helper.succeed();
     }
 
-    /** Fire does nothing to an iron golem, and burns a wooden one. */
     @GameTest(template = TEMPLATE)
     public static void aFireproofGolemDoesNotBurn(GameTestHelper helper) {
         Player owner = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -109,7 +103,6 @@ public class GolemTests {
         helper.succeed();
     }
 
-    /** A wand folds a golem back into an item that remembers what it was. */
     @GameTest(template = TEMPLATE)
     public static void aWandTakesAGolemBackUp(GameTestHelper helper) {
         Player owner = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -125,7 +118,6 @@ public class GolemTests {
         helper.succeed();
     }
 
-    /** Somebody else's golem does nothing for them. */
     @GameTest(template = TEMPLATE)
     public static void aGolemAnswersOnlyItsOwner(GameTestHelper helper) {
         Player owner = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -137,7 +129,6 @@ public class GolemTests {
         helper.succeed();
     }
 
-    /** Once its owner knows how, a bell sends it after them, and again keeps it where it is. */
     @GameTest(template = TEMPLATE)
     public static void aBellSendsAGolemAfterItsOwner(GameTestHelper helper) {
         Player owner = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -154,7 +145,6 @@ public class GolemTests {
         helper.succeed();
     }
 
-    /** A hauler carries two stacks; any other golem one. */
     @GameTest(template = TEMPLATE)
     public static void aHaulerCarriesTwoStacks(GameTestHelper helper) {
         Player owner = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -170,7 +160,6 @@ public class GolemTests {
         helper.succeed();
     }
 
-    /** A smart golem comes on a rank with enough learned, and is the stronger for it. */
     @GameTest(template = TEMPLATE)
     public static void aSmartGolemComesOnARank(GameTestHelper helper) {
         Player owner = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -185,7 +174,6 @@ public class GolemTests {
         helper.succeed();
     }
 
-    /** Lays out the blocks of a press round a piston here, its table to the north. */
     private static void layOut(GameTestHelper helper, BlockPos heart) {
         helper.setBlock(heart.below(), Blocks.STONE);
         helper.setBlock(heart, Blocks.PISTON.defaultBlockState().setValue(PistonBaseBlock.FACING, Direction.UP));
@@ -195,7 +183,6 @@ public class GolemTests {
         helper.setBlock(heart.east(), Blocks.CAULDRON);
     }
 
-    /** Laid out right, the blocks make a press facing its table; break one and the rest go back. */
     @GameTest(template = TEMPLATE)
     public static void aPressIsMadeAndUnmade(GameTestHelper helper) {
         BlockPos heart = new BlockPos(5, 2, 5);
@@ -213,7 +200,6 @@ public class GolemTests {
         helper.succeed();
     }
 
-    /** Without the clockwork mind learned, a wand does nothing to the blocks. */
     @GameTest(template = TEMPLATE)
     public static void aPressNeedsTheClockworkMind(GameTestHelper helper) {
         BlockPos heart = new BlockPos(5, 2, 5);
@@ -226,7 +212,6 @@ public class GolemTests {
         helper.succeed();
     }
 
-    /** A press takes what the golem needs from its maker, presses it a measure at a time, and drops it out. */
     @GameTest(template = TEMPLATE, timeoutTicks = 200)
     public static void aPressPressesAGolem(GameTestHelper helper) {
         BlockPos heart = new BlockPos(5, 2, 5);
@@ -243,7 +228,6 @@ public class GolemTests {
         helper.succeedWhen(() -> helper.assertTrue(press.getItem(0).is(ModItems.GOLEM.get()), "a golem came out"));
     }
 
-    /** A golem with a name tells its owner how it died; one without a name does not. */
     @GameTest(template = TEMPLATE)
     public static void aNamedGolemTellsItsOwnerOfItsDeath(GameTestHelper helper) {
         Player owner = helper.makeMockPlayer(GameType.SURVIVAL);

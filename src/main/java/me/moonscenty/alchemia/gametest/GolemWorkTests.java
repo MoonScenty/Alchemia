@@ -29,7 +29,6 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/** Golems, step twelve finished: golems guarding, farming, felling, breaking and using things, and shooting darts. */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class GolemWorkTests {
@@ -63,7 +62,6 @@ public class GolemWorkTests {
         return Seals.get(helper.getLevel(), new SealPos(pos, Direction.UP));
     }
 
-    /** A creature that has had its champion roll and come up ordinary, and stands still. */
     private static <T extends Mob> T still(GameTestHelper helper, EntityType<T> type, BlockPos at) {
         T mob = type.create(helper.getLevel());
         mob.setData(ModAttachments.CHAMPION, Champions.ORDINARY);
@@ -74,7 +72,6 @@ public class GolemWorkTests {
         return mob;
     }
 
-    /** A fighting golem goes for a monster that comes into a guarding seal's area. */
     @GameTest(template = TEMPLATE, timeoutTicks = 200)
     public static void aGuardSendsAGolemAtAMonster(GameTestHelper helper) {
         floor(helper);
@@ -85,7 +82,6 @@ public class GolemWorkTests {
         helper.succeedWhen(() -> helper.assertTrue(golem.getTarget() == zombie, "the golem is after the zombie"));
     }
 
-    /** A guarding seal never sets a golem on its own owner. */
     @GameTest(template = TEMPLATE)
     public static void aGuardSparesTheOwner(GameTestHelper helper) {
         Player owner = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -96,7 +92,6 @@ public class GolemWorkTests {
         helper.succeed();
     }
 
-    /** A butchering seal sends a golem after one of a herd of three, and not after one of a pair. */
     @GameTest(template = TEMPLATE, timeoutTicks = 500)
     public static void aButcherThinsAHerd(GameTestHelper helper) {
         floor(helper);
@@ -110,7 +105,6 @@ public class GolemWorkTests {
                 "the golem is after a cow"));
     }
 
-    /** A harvesting golem cuts ripe wheat and, carrying seed, plants it again. */
     @GameTest(template = TEMPLATE, timeoutTicks = 600)
     public static void aHarvesterCutsAndReplants(GameTestHelper helper) {
         floor(helper);
@@ -128,7 +122,6 @@ public class GolemWorkTests {
         });
     }
 
-    /** A breaking golem grinds away whatever is in a breaking seal's area, and it drops. */
     @GameTest(template = TEMPLATE, timeoutTicks = 400)
     public static void aBreakerBreaksWhatIsThere(GameTestHelper helper) {
         floor(helper);
@@ -143,7 +136,6 @@ public class GolemWorkTests {
         });
     }
 
-    /** A smart golem with grinders takes a tree down from the top, log by log, until none is left. */
     @GameTest(template = TEMPLATE, timeoutTicks = 600)
     public static void aLumberjackFellsATree(GameTestHelper helper) {
         floor(helper);
@@ -160,7 +152,6 @@ public class GolemWorkTests {
         });
     }
 
-    /** A deft, smart golem uses what it carries on the block a using seal is on: here, putting a block on it. */
     @GameTest(template = TEMPLATE, timeoutTicks = 400)
     public static void aUserUsesWhatItCarries(GameTestHelper helper) {
         floor(helper);
@@ -176,7 +167,6 @@ public class GolemWorkTests {
         });
     }
 
-    /** A golem with dart launchers shoots at what it is set on, from a distance. */
     @GameTest(template = TEMPLATE, timeoutTicks = 300)
     public static void aDartLauncherShoots(GameTestHelper helper) {
         floor(helper);

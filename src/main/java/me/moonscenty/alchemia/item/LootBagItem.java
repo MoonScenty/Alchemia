@@ -23,14 +23,6 @@ import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 
-/**
- * A bag of loot, common, uncommon or rare, as a champion leaves or a chest holds. Opened, it spills eight to twelve
- * things at its owner's feet, picked from the original's tables: coins above all, then gold and ender pearls, gems,
- * fragments of knowledge, enchanted books, potions, golden apples, bottles of experience -- and in the rare bag, once
- * in a long while, a nether star or a primordial pearl.
- * <p>
- * The original's bags also held its trinkets -- amulets, rings and girdles -- which this mod does not have yet.
- */
 public class LootBagItem extends Item {
     private final int rarity;
 
@@ -56,7 +48,6 @@ public class LootBagItem extends Item {
         return InteractionResultHolder.sidedSuccess(bag, level.isClientSide);
     }
 
-    /** The bag a champion leaves: common or uncommon, rare only with looting. */
     public static ItemStack forChampion(RandomSource random, int looting) {
         int rarity = Math.min(2, (random.nextInt(9) + looting) / 5);
         return new ItemStack(bag(rarity));
@@ -70,7 +61,6 @@ public class LootBagItem extends Item {
         };
     }
 
-    /** One thing out of a bag of this rarity. */
     public static ItemStack loot(ServerLevel level, int rarity, RandomSource random) {
         List<ItemStack> things = new ArrayList<>();
         List<Integer> weights = new ArrayList<>();
@@ -99,7 +89,6 @@ public class LootBagItem extends Item {
             add(things, weights, new ItemStack(ModItems.VIS_STONE.get()), 6);
             add(things, weights, new ItemStack(ModItems.PROTECTION_RING.get()), 5);
         }
-        // every drinkable and splash potion there is, the stronger and longer ones weighted higher
         for (Holder.Reference<Potion> potion : BuiltInRegistries.POTION.holders().toList()) {
             if (potion.value().getEffects().isEmpty()) {
                 continue;

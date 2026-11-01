@@ -13,12 +13,6 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 
-/**
- * Hangs a node in the air off whatever face is clicked. Creative only: there is no recipe, and it is never used up.
- * <p>
- * The node is drawn up the way a wild one is, so it is anybody's guess what comes out. Something particular is what
- * the command is for.
- */
 public class NodePlacerItem extends Item {
     public NodePlacerItem(Properties properties) {
         super(properties);

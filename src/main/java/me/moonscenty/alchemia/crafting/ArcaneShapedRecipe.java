@@ -19,7 +19,6 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.ShapedRecipePattern;
 import net.minecraft.world.level.Level;
 
-/** An arcane recipe whose ingredients have to be laid out in a particular shape. */
 public record ArcaneShapedRecipe(String group, ShapedRecipePattern pattern, ItemStack result,
                                  AspectList cost, Optional<ResourceLocation> research) implements ArcaneRecipe {
 

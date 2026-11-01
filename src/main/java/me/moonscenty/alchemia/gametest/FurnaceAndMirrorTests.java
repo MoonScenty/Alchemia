@@ -19,14 +19,12 @@ import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/** The infernal furnace and the mirrors: the last of the large devices. */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class FurnaceAndMirrorTests {
     private static final String TEMPLATE = "empty_32x40x32";
     private static final BlockPos CORNER = new BlockPos(4, 2, 4);
 
-    /** Nether brick at the corners, obsidian on the edges and floor, lava in the middle, bars on the north side. */
     private static void layOut(GameTestHelper helper) {
         for (int y = 0; y < 3; y++) {
             for (int x = 0; x < 3; x++) {
@@ -45,7 +43,6 @@ public class FurnaceAndMirrorTests {
         helper.setBlock(CORNER.offset(1, 1, 0), Blocks.IRON_BARS);
     }
 
-    /** Laid out right, it is made into a furnace whose mouth is where the bars were. */
     @GameTest(template = TEMPLATE)
     public static void anInfernalFurnaceIsMadeFromItsBlueprint(GameTestHelper helper) {
         layOut(helper);
@@ -59,7 +56,6 @@ public class FurnaceAndMirrorTests {
         helper.succeed();
     }
 
-    /** Something smeltable put in comes out smelted, out of the mouth. */
     @GameTest(template = TEMPLATE, timeoutTicks = 300)
     public static void anInfernalFurnaceSmeltsWhatIsPutInIt(GameTestHelper helper) {
         layOut(helper);
@@ -75,7 +71,6 @@ public class FurnaceAndMirrorTests {
         helper.succeed();
     }
 
-    /** Breaking any of its shell puts the rest back as it was, lava and bars too. */
     @GameTest(template = TEMPLATE)
     public static void breakingAnInfernalFurnacePutsItBack(GameTestHelper helper) {
         layOut(helper);
@@ -94,7 +89,6 @@ public class FurnaceAndMirrorTests {
         return (MirrorBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(at));
     }
 
-    /** A stack that comes into one of a pair comes out of the other, an item at a time. */
     @GameTest(template = TEMPLATE, timeoutTicks = 200)
     public static void aPairOfMirrorsPassesItems(GameTestHelper helper) {
         MirrorBlockEntity near = mirror(helper, new BlockPos(2, 2, 2), false);
@@ -116,7 +110,6 @@ public class FurnaceAndMirrorTests {
         helper.succeed();
     }
 
-    /** An essentia mirror stands in for the jar in front of its partner. */
     @GameTest(template = TEMPLATE)
     public static void anEssentiaMirrorDrawsOnTheJarsByItsPartner(GameTestHelper helper) {
         MirrorBlockEntity near = mirror(helper, new BlockPos(2, 2, 2), true);

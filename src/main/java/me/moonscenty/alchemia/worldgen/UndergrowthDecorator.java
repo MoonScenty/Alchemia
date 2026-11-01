@@ -14,9 +14,6 @@ import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvi
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecorator;
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecoratorType;
 
-/**
- * Scatters a plant across the ground around the foot of a tree.
- */
 public class UndergrowthDecorator extends TreeDecorator {
     public static final MapCodec<UndergrowthDecorator> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             BlockStateProvider.CODEC.fieldOf("plant").forGetter(decorator -> decorator.plant),
@@ -25,7 +22,7 @@ public class UndergrowthDecorator extends TreeDecorator {
             Codec.intRange(1, 16).fieldOf("radius").forGetter(decorator -> decorator.radius))
             .apply(instance, UndergrowthDecorator::new));
 
-    /** How far up and down a sample looks for the surface, so the plants follow sloping ground. */
+    // lets the plants follow sloping ground
     private static final int VERTICAL_REACH = 3;
 
     private final BlockStateProvider plant;
@@ -51,7 +48,7 @@ public class UndergrowthDecorator extends TreeDecorator {
             return;
         }
 
-        // the logs are sorted by height, so the first one sits at the foot of the trunk
+        // logs come sorted by height
         BlockPos base = context.logs().getFirst();
         RandomSource random = context.random();
         for (int i = 0; i < tries; i++) {
@@ -66,7 +63,6 @@ public class UndergrowthDecorator extends TreeDecorator {
         }
     }
 
-    /** The highest open spot near {@code around} whose ground the plant can take root in, or null if there is none. */
     private BlockPos findSurface(TreeDecorator.Context context, BlockPos around) {
         for (int y = VERTICAL_REACH; y >= -VERTICAL_REACH; y--) {
             BlockPos pos = around.above(y);

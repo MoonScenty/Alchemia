@@ -9,12 +9,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
-/**
- * The book of everything worked out so far. Opening it is a client matter, so the client hands in what to do on
- * startup and a server is left with nothing to run.
- */
 public class AlchemonomiconItem extends Item {
-    /** Set by the client when it starts. Stays a no-op on a server, which has no screens to open. */
+    // set by the client at startup; stays a no-op on the server
     public static Runnable opener = () -> {
     };
 

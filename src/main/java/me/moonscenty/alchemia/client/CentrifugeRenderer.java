@@ -15,19 +15,11 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 
-/**
- * Draws the centrifuge as the original did: two plates that stand still, and between them a core with a weight on
- * either arm, spun about the upright while it has something in it.
- * <p>
- * The parts are the original's model ({@code ModelCentrifuge}), read out of its code. The original drew it the
- * right way up without the flip models usually get, so its "top" plate is at the bottom; the two are the same.
- */
 public class CentrifugeRenderer implements BlockEntityRenderer<CentrifugeBlockEntity> {
     static final ResourceLocation TEXTURE = Alchemia.id("textures/entity/centrifuge.png");
     private static final String[] STILL = {"Top", "Bottom"};
     private static final String[] SPINNING = {"Crossbar", "Dingus1", "Dingus2", "Core"};
 
-    /** The original's parts, baked again whenever the import changes. */
     private static final LegacyCached<ModelPart[]> STILL_PARTS = LegacyCached.fields(LegacyAssets.CENTRIFUGE, STILL);
     private static final LegacyCached<ModelPart[]> SPINNING_PARTS =
             LegacyCached.fields(LegacyAssets.CENTRIFUGE, SPINNING);
@@ -42,7 +34,6 @@ public class CentrifugeRenderer implements BlockEntityRenderer<CentrifugeBlockEn
                 overlay);
     }
 
-    /** The centrifuge with its rotor at a given turn. Shared with the item, which stands still. */
     static void draw(PoseStack pose, VertexConsumer buffer, float rotation, int light, int overlay) {
         ModelPart[] still = STILL_PARTS.get();
         ModelPart[] spinning = SPINNING_PARTS.get();

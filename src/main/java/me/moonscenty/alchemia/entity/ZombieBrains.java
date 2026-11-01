@@ -9,11 +9,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingDropsEvent;
 
-/**
- * Every other kind of zombie has a brain as well, only less often: one time in ten when a player killed it, and one
- * more in ten for each level of looting. Husks, drowned, zombie villagers and zombified piglins are all zombies to
- * the game, as pigmen were to the original. An angry zombie's brain is in its own loot table.
- */
+// Brains for the other zombie kinds; the angry zombie has its own loot table.
 @EventBusSubscriber(modid = Alchemia.MODID)
 public final class ZombieBrains {
     private ZombieBrains() {

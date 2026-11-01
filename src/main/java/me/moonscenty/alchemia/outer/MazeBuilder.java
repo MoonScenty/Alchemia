@@ -33,22 +33,11 @@ import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.SlabType;
 
-/**
- * Builds a chunk of a maze as the original built it: the rooms and passages of {@code GenCommon} and its kin, with
- * the same shapes, the same odds and the dice thrown in the same order.
- * <p>
- * Every cell is one chunk, built at height fifty. Like the original, a cell's openings reach one block into the
- * next chunk, and the four quarters of the great hall run into each other. Two dice are thrown: the chunk's own, for
- * the shape of things, and the world's, for what grows on them (the crust, the glyphs, the crystals, the urns); here
- * both are seeded from the world and the chunk.
- * <p>
- * Where the original left a doorway with no door to a great-hall quarter with no way in -- which put a stray door
- * frame at the corner of the world -- this leaves it out.
- */
+// Builds one maze cell per chunk with the original's shapes, odds and dice order.
 public final class MazeBuilder {
     public static final int Y = 50;
 
-    // what placeBlock was told to put
+    // the original placeBlock's block codes
     private static final int PUNCTURE = 1;
     private static final int STONE = 2;
     private static final int CORNER_LOW_LEFT = 3;
@@ -67,7 +56,7 @@ public final class MazeBuilder {
     private static final int TILE = 19;
     private static final int CRUST = 21;
 
-    /** A tunnel's cross-section, rows top to bottom. */
+    // rows top to bottom
     private static final int[][] CONNECT = {
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
             {0, 0, 8, 8, 8, 8, 8, 8, 8, 0, 0},
@@ -81,7 +70,7 @@ public final class MazeBuilder {
             {0, 0, 8, 8, 8, 8, 8, 8, 8, 0, 0},
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
 
-    /** The great hall's round door, across and up. */
+    // across and up
     private static final int[][] DOORWAY_PATTERN = {
             {0, 2, 2, 2, 2, 2, 0},
             {2, 2, 9, 9, 9, 2, 2},
@@ -91,7 +80,7 @@ public final class MazeBuilder {
             {2, 2, 9, 9, 9, 2, 2},
             {0, 2, 2, 2, 2, 2, 0}};
 
-    /** The order the original went round a block's sides in. */
+    // the original's order, which keeps the dice in step
     private static final Direction[] SIDES = {Direction.DOWN, Direction.UP, Direction.NORTH, Direction.SOUTH,
             Direction.WEST, Direction.EAST};
 
@@ -112,7 +101,6 @@ public final class MazeBuilder {
         this.cell = cell;
     }
 
-    /** Builds this chunk's cell, if it is one. */
     public static void generate(WorldGenLevel level, Labyrinth labyrinth, int cx, int cz) {
         Cell cell = labyrinth.get(cx, cz);
         if (cell == null) {
@@ -147,8 +135,6 @@ public final class MazeBuilder {
         }
     }
 
-    // --- the blocks ----------------------------------------------------------
-
     private static BlockState ancientStone() {
         return ModBlocks.ANCIENT_STONE.block().get().defaultBlockState();
     }
@@ -170,7 +156,6 @@ public final class MazeBuilder {
                 .setValue(net.minecraft.world.level.block.SlabBlock.TYPE, top ? SlabType.TOP : SlabType.BOTTOM);
     }
 
-    /** The stone of the Outer Lands, any of it: what the decorations must touch to grow. */
     private static boolean isStone(BlockState state) {
         return state.is(ModBlocks.ANCIENT_STONE.block().get()) || state.is(ModBlocks.ANCIENT_ROCK.get())
                 || state.is(ModBlocks.ANCIENT_TILE.get()) || state.is(ModBlocks.ANCIENT_DOORWAY.get())
@@ -293,8 +278,6 @@ public final class MazeBuilder {
         OuterBlocks.obelisk(pos, this::set);
     }
 
-    // --- what grows on it ----------------------------------------------------
-
     private void decorate() {
         for (BlockPos at : decoUrn) {
             if (level.isEmptyBlock(at.above())) {
@@ -343,7 +326,7 @@ public final class MazeBuilder {
                 if (level.getBlockState(at.relative(side)).is(ModBlocks.ANCIENT_ROCK.get())
                         && level.getBlockState(at.relative(side, 2)).is(ModBlocks.ANCIENT_BEDROCK.get())) {
                     level.setBlock(at.relative(side), Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS);
-                    // the original's world told the bedrock behind it that it had been laid bare
+                    // the original notified the bedrock behind it that it was exposed
                     AncientBedrockBlock.open(level, at.relative(side, 2));
                     break;
                 }
@@ -351,7 +334,6 @@ public final class MazeBuilder {
         }
     }
 
-    /** How many of its sides are open to something it can be seen through. */
     private int exposed(BlockPos pos) {
         int open = 0;
         for (Direction side : SIDES) {
@@ -383,14 +365,11 @@ public final class MazeBuilder {
         return false;
     }
 
-    /** Inclusive, as the original's helper. */
+    // inclusive, as the original's helper
     private int between(int low, int high) {
         return low >= high ? low : world.nextInt(high - low + 1) + low;
     }
 
-    // --- the shared shapes ---------------------------------------------------
-
-    /** The tunnels out of a cell on its open sides, so deep; a room's taper at the inner end. */
     private void connections(int cx, int cz, int y, int depth, boolean tip) {
         int x = cx * 16;
         int z = cz * 16;
@@ -430,7 +409,6 @@ public final class MazeBuilder {
         }
     }
 
-    /** The outer wall of a thirteen-square room, with a doorway on each open side. */
     private boolean outerWall(int a, int b, int c, int edge, int far, int gapLow, int gapHigh, int gapTop) {
         return (a == edge || a == far || b == edge || b == far)
                 && (a != edge || b <= gapLow || b >= gapHigh || !cell.west || c >= gapTop)
@@ -467,7 +445,6 @@ public final class MazeBuilder {
         }
     }
 
-    /** A room with a rock ring and a window cross in each wall, and stepped floor and ceiling. */
     private void chamberA(int cx, int cz, int y) {
         int x = cx * 16;
         int z = cz * 16;
@@ -512,7 +489,6 @@ public final class MazeBuilder {
         }
     }
 
-    /** A room with a stone ring, a lower ceiling and tiled pads in its corners. */
     private void chamberB(int cx, int cz, int y) {
         int x = cx * 16;
         int z = cz * 16;
@@ -548,9 +524,6 @@ public final class MazeBuilder {
         floorStairs(x, y, z, 9, STAIRS_HIGH);
     }
 
-    // --- the rooms -----------------------------------------------------------
-
-    /** A passage: a small box, tunnels out of its open sides, walls with fillets on the others. */
     private void passage(int cx, int cz) {
         int x = cx * 16;
         int z = cz * 16;
@@ -752,7 +725,6 @@ public final class MazeBuilder {
         }
     }
 
-    /** A punctured passage's walls, floor and ceiling are holed a third of the time. */
     private int punctured() {
         return cell.feature == Cell.PUNCTURED && random.nextInt(3) == 0 ? PUNCTURE : STONE;
     }
@@ -982,7 +954,6 @@ public final class MazeBuilder {
         }
     }
 
-    /** The heart of a maze: the portal, on a cap, under an obelisk, in a room with doorway-stone corners. */
     private void portal(int cx, int cz) {
         int x = cx * 16;
         int z = cz * 16;
@@ -1028,7 +999,7 @@ public final class MazeBuilder {
         obelisk(new BlockPos(x + 8, y + 4, z + 8));
     }
 
-    /** One quarter of the great hall, and its round door if this quarter is the one with the way in. */
+    // the original also built a stray door frame on a quarter with no way in; skipped here
     private void bossRoom(int cx, int cz) {
         int x = cx * 16;
         int z = cz * 16;
@@ -1078,7 +1049,6 @@ public final class MazeBuilder {
         }
     }
 
-    /** One of the four fourteen-square quarters of the twenty-eight-square hall. */
     private void hallQuarter(int cx, int cz, int y) {
         int x = cx * 16;
         int z = cz * 16;

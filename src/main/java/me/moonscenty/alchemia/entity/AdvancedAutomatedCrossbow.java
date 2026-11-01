@@ -13,11 +13,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
-/**
- * The automated crossbow plated in iron with a bioalchemic mind, the original's
- * {@code EntityTurretCrossbowAdvanced}: sturdier, quicker to reload, harder to shove about, and it can be told what to
- * shoot at as an autocaster can -- animals, monsters, people, and whether that means its owner's own.
- */
 public class AdvancedAutomatedCrossbow extends AutomatedCrossbow {
     private static final double LIVES = 40.0;
     private static final int PLATING = 8;
@@ -54,7 +49,6 @@ public class AdvancedAutomatedCrossbow extends AutomatedCrossbow {
         return PLATING;
     }
 
-    /** Heavier on its feet than the basic one's slide, though less sure of it: a shove moves it half as far. */
     @Override
     protected double slides() {
         return 0.5;
@@ -68,14 +62,12 @@ public class AdvancedAutomatedCrossbow extends AutomatedCrossbow {
     @Override
     public void tick() {
         super.tick();
-        // a person it was set on, once the server stops allowing people to fight, is let be unless it is its owner
         if (!level().isClientSide && getTarget() instanceof Player player && !pvp()
                 && !player.getUUID().equals(getOwnerUUID())) {
             setTarget(null);
         }
     }
 
-    /** People are fair game only where the server lets people fight. */
     @Override
     protected boolean shootsStrangers() {
         return pvp();

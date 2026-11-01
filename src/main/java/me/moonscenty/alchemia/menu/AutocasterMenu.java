@@ -8,15 +8,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 
-/**
- * The inside of an autocaster: one square for the focus, and the four things it may be told to mind.
- *
- * <p>The turret is its own container of one, so the square is the turret's hand and nothing has to be copied in
- * or written back. The four toggles are not slots and not a packet of their own either -- they are the menu's own
- * buttons, and what they are set to rides along on the entity, which the screen can see as well as the server.
- */
 public class AutocasterMenu extends AlchemiaMenu {
-    /** Where the original's container put the focus square and the player's own bag. */
+    // original's layout
     private static final int FOCUS_X = 36;
     private static final int FOCUS_Y = 29;
     private static final int PACK_X = 8;
@@ -24,7 +17,6 @@ public class AutocasterMenu extends AlchemiaMenu {
 
     private final Autocaster turret;
 
-    /** Opened from the client's side, where all that came across the wire is which entity it was. */
     public AutocasterMenu(int id, Inventory inventory, RegistryFriendlyByteBuf buffer) {
         this(id, inventory, found(inventory, buffer.readVarInt()));
     }
@@ -47,7 +39,6 @@ public class AutocasterMenu extends AlchemiaMenu {
         addPlayerInventory(inventory, PACK_X, PACK_Y);
     }
 
-    /** The turret this window belongs to, which the screen reads its health and its toggles off. */
     public Autocaster turret() {
         return turret;
     }
@@ -56,7 +47,6 @@ public class AutocasterMenu extends AlchemiaMenu {
         return inventory.player.level().getEntity(id) instanceof Autocaster turret ? turret : null;
     }
 
-    /** The four buttons, numbered as the bits they set. */
     @Override
     public boolean clickMenuButton(Player player, int which) {
         if (turret == null || !turret.stillValid(player) || which < 0 || which > Autocaster.FRIENDS) {

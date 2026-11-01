@@ -8,7 +8,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 
-/** The wisp a full brain in a jar lets off, as the original's: the nitor's big wisp, in the colour of death. */
 public final class BrainJarEffects {
     private BrainJarEffects() {
     }

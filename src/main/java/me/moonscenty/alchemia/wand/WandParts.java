@@ -13,12 +13,6 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
-/**
- * Which item is which piece of a wand.
- * <p>
- * The plain wooden rod is a vanilla stick, as it was in the original. Every other piece has an item of its own,
- * wearing the same picture it wears on a finished wand.
- */
 public final class WandParts {
     private static Map<Item, Holder<WandRod>> rods;
     private static Map<Item, Holder<WandCap>> caps;
@@ -26,7 +20,6 @@ public final class WandParts {
     private WandParts() {
     }
 
-    /** The rod an item would make, or nothing if it would make none. */
     public static Holder<WandRod> rodOf(ItemStack stack) {
         return rodItems().get(stack.getItem());
     }
@@ -50,7 +43,6 @@ public final class WandParts {
         return caps;
     }
 
-    /** Each part matched to the item registered under the same name. */
     private static <T> Map<Item, Holder<T>> byItem(DeferredRegister<T> parts, Map<String, DeferredItem<Item>> items) {
         Map<Item, Holder<T>> map = new HashMap<>();
         for (DeferredHolder<T, ? extends T> part : parts.getEntries()) {

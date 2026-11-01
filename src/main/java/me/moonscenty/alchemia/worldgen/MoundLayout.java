@@ -35,26 +35,12 @@ import net.minecraft.world.level.block.LadderBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.fml.loading.FMLPaths;
 
-/**
- * The shape of the original's mound, read out of the player's own Thaumcraft 5 jar.
- *
- * <p>The original wrote its mound down as some two and a half thousand calls of {@code setBlockState}, one per block,
- * split over two methods because one was too long. There is nothing to read but that code, and writing its numbers
- * down here would be copying the original. Instead this walks those two methods' bytecode in the jar in the
- * {@code mods} folder, the same way the original's models are read, and keeps what each call would have put where: a
- * tiny stack machine that knows constants, adding and taking away, a new {@code BlockPos}, a block from
- * {@code Blocks} and its state, and the call that sets it. Anything else empties the stack, so the checks before
- * and the treasure after (which this mod writes out itself, as logic) leave nothing behind.
- *
- * <p>The corner the original was handed is read as nought, so every position comes out as an offset from it. The
- * game's blocks are known by their obfuscated field names, which this turns into this game's states; a block
- * this does not know is left out and said once in the log. The spawners and the chest are kept apart, by where
- * they are, for {@link MoundFeature} to fill in.
- */
+// The original mound's block placements, read from the Thaumcraft 5 jar's bytecode by a tiny stack machine
+// rather than copied into this mod. Positions are offsets from the original's corner.
 public final class MoundLayout {
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final String CLASS = "thaumcraft/common/lib/world/objects/WorldGenMound";
-    /** The whole of it is in the first method and the second it hands on to, in that order. */
+    // the original split the mound across these two methods
     private static final List<String> METHODS = List.of("func_180709_b", "generate2");
 
     private static final String BLOCKS = "net/minecraft/init/Blocks";
@@ -65,14 +51,13 @@ public final class MoundLayout {
 
     private static final String SPAWNER = "field_150474_ac";
     private static final String CHEST = "field_150486_ae";
-    /** The trap the chest is sometimes swapped for, and what is under it: the feature does both itself. */
+    // the trap swap and what's under it; MoundFeature places those itself
     private static final List<String> TREASURE = List.of("field_150447_bR", "field_150335_W");
 
     private static final Object OPAQUE = new Object();
 
     private static volatile Optional<MoundLayout> loaded;
 
-    /** One block of the mound, from the corner the original was handed. */
     public record Placement(BlockPos offset, BlockState state) {
     }
 
@@ -86,22 +71,20 @@ public final class MoundLayout {
         this.chest = chest;
     }
 
-    /** Every block, in the order the original set them; a later one can overwrite an earlier. */
+    // in the original's order; a later entry can overwrite an earlier one
     public List<Placement> blocks() {
         return blocks;
     }
 
-    /** Where the spawners stand, the skeletons' first and the zombies' second. */
+    // skeleton spawner first, then zombie
     public List<BlockPos> spawners() {
         return spawners;
     }
 
-    /** Where the chest goes, at the far end of the burial chamber. */
     public BlockPos chest() {
         return chest;
     }
 
-    /** The mound, or nothing when there is no Thaumcraft 5 jar in {@code mods} or it could not be read. */
     public static Optional<MoundLayout> get() {
         Optional<MoundLayout> found = loaded;
         if (found == null) {
@@ -123,7 +106,7 @@ public final class MoundLayout {
         }
         try (Stream<Path> files = Files.list(folder)) {
             for (Path jar : files.filter(path -> path.toString().endsWith(".jar")).sorted().toList()) {
-                // every other mod is in the same folder; one that will not open is simply not the one wanted
+                // unreadable jars are skipped
                 Optional<byte[]> bytes;
                 try {
                     bytes = readClass(jar);
@@ -196,11 +179,10 @@ public final class MoundLayout {
         void set(BlockPos pos, String block, int meta);
     }
 
-    /** A block out of {@code Blocks}, and its metadata once asked for (or -1 for its default state). */
+    // meta -1 means the default state
     private record Legacy(String block, int meta) {
     }
 
-    /** A block out of {@code Blocks}, before its state is asked for. */
     private record Field(String block) {
     }
 
@@ -238,7 +220,6 @@ public final class MoundLayout {
         }
     }
 
-    /** The calls a block's placing is made of; false for anything else, or when the stack is not what they need. */
     private static boolean call(MethodInsnNode call, Deque<Object> stack, Sink sink) {
         if (call.owner.equals(BLOCK_POS) && call.name.equals("<init>") && call.desc.equals("(III)V")) {
             if (stack.size() < 5 || !(stack.pop() instanceof Integer z) || !(stack.pop() instanceof Integer y)
@@ -276,7 +257,7 @@ public final class MoundLayout {
         return false;
     }
 
-    /** The 1.8.9 block and metadata, as this game's state; null for one the mound does not use. */
+    // 1.8.9 block and meta to a modern state; null for blocks the mound doesn't use
     static BlockState state(String block, int meta) {
         return switch (block) {
             case "field_150350_a" -> Blocks.AIR.defaultBlockState();
@@ -305,7 +286,6 @@ public final class MoundLayout {
         };
     }
 
-    /** A facing from its old number, which is this game's own; up or down was taken as the fallback. */
     private static Direction horizontal(int meta, Direction fallback) {
         Direction direction = Direction.from3DDataValue(Math.max(meta, 0));
         return direction.getAxis().isHorizontal() ? direction : fallback;

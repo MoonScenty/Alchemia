@@ -20,15 +20,10 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
-/**
- * An eldritch capstone, and the altar, which the original drew the same way: the original's carved cap, and on the
- * altar whatever eyes have been set into it, one to a side. The original meant the altar to have a picture of its
- * own and by a slip drew the capstone's on both; so does this.
- */
+// the altar wears the capstone's texture too, as in the original
 public class EldritchCapRenderer<T extends BlockEntity> implements BlockEntityRenderer<T> {
     static final ResourceLocation CAP = Alchemia.id("textures/entity/obelisk_cap.png");
 
-    /** The original's cap mesh and which of its groups is the cap, read again whenever the import changes. */
     private static final LegacyCached<Cap> MESH = new LegacyCached<>(() -> LegacyModels.mesh(
             LegacyAssets.OBELISK_CAP_MESH).map(LegacyMesh::flippedV).map(mesh -> new Cap(mesh,
             Math.max(0, mesh.group("Cap")))).orElse(null));
@@ -67,7 +62,6 @@ public class EldritchCapRenderer<T extends BlockEntity> implements BlockEntityRe
         }
     }
 
-    /** The cap, for the obelisk to draw at its two ends. */
     static void drawCap(PoseStack pose, MultiBufferSource buffers, ResourceLocation texture, int light, int overlay) {
         Cap cap = MESH.get();
         if (cap != null) {

@@ -21,25 +21,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
-/**
- * A levitator at work: finding how far it can reach, and pushing what is in that reach.
- *
- * <p>It feels along the way it faces a block a tick, and stops short at the first solid block, so that what it
- * reaches settles over a few ticks after anything is built or broken in front of it. What it pushes it pushes a
- * tenth of a block a tick faster, to no more than a third of a block a tick; pushing sideways it holds things up
- * as well, and facing up it lets down slowly anyone crouching. Nothing it holds takes a fall.
- *
- * <p>Every thing it pushes for a tick costs it twice its range in hundredths of a point of aer, a point of aer
- * buying twelve hundred of them. It draws a point from the aura whenever it is down to its last ten.
- *
- * <p>Both sides run it: the server pushes what the server moves, and each player's own game pushes that player,
- * since a player's game is the one that says where the player goes.
- */
 public class LevitatorBlockEntity extends SyncedBlockEntity {
-    /** The ranges the toggle steps through, and how many hundredths a point of aer buys. The original's. */
+    // original's values; PER_POINT is hundredths of upkeep per point of aer
     private static final int[] RANGES = {4, 8, 16, 32};
     private static final int PER_POINT = 1200;
-    /** How hard it pushes, the most it lets anything go, and how it holds up what it pushes sideways. */
     private static final double PUSH = 0.1;
     private static final double MOST = 0.35;
     private static final double HOLD_UP = 0.08;
@@ -54,6 +39,7 @@ public class LevitatorBlockEntity extends SyncedBlockEntity {
         super(ModBlockEntities.LEVITATOR.get(), pos, state);
     }
 
+    // ticks on both sides: each client moves its own player
     public static void tick(Level level, BlockPos pos, BlockState state, LevitatorBlockEntity levitator) {
         Direction facing = state.getValue(LevitatorBlock.FACING);
         levitator.feel(level, facing);
@@ -68,7 +54,6 @@ public class LevitatorBlockEntity extends SyncedBlockEntity {
         }
     }
 
-    /** One block further along, or back to the first when it meets something solid. */
     private void feel(Level level, Direction facing) {
         int most = RANGES[range];
         if (reach > most) {
@@ -148,7 +133,6 @@ public class LevitatorBlockEntity extends SyncedBlockEntity {
         return Math.max(-MOST, Math.min(MOST, speed));
     }
 
-    /** A mote of aer drifting off its face, the way it pushes. */
     private void drift(Level level, Direction facing) {
         BlockPos front = worldPosition.relative(facing);
         double x = front.getX() + (facing.getStepX() != 0 ? 0.5 - facing.getStepX() * 0.5 : 0.25 + level.random.nextFloat() * 0.5);
@@ -159,24 +143,20 @@ public class LevitatorBlockEntity extends SyncedBlockEntity {
         level.addParticle(new SparkleOptions(ModAspects.AIR.value().color(), to), x, y, z, 0, 0, 0);
     }
 
-    /** The next range along, starting again from the shortest after the longest. */
     public void stepRange() {
         range = (range + 1) % RANGES.length;
         reach = 0;
         changed();
     }
 
-    /** How far it reaches at most, as set. */
     public int range() {
         return RANGES[range];
     }
 
-    /** What lifting one thing for a tick costs, in hundredths of a point of aer; also points of aer a minute. */
     public int cost() {
         return RANGES[range] * 2;
     }
 
-    /** How far it reaches now, short of anything solid. */
     public int reach() {
         return reach;
     }
@@ -185,7 +165,6 @@ public class LevitatorBlockEntity extends SyncedBlockEntity {
         return vis;
     }
 
-    /** Hundredths of a point of aer, as though drawn from the air. */
     public void given(int hundredths) {
         boolean was = vis > 0;
         vis += hundredths;

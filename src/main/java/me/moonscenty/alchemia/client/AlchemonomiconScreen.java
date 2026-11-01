@@ -29,56 +29,35 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.neoforged.neoforge.network.PacketDistributor;
 
-/**
- * The alchemonomicon, laid out as the original laid it out: the whole window is the page, framed in wood, with a
- * branch's research spread over its sky on a grid of twenty-four, the tabs down the left edge, and a wheel that
- * draws the tree back to see more of it.
- * <p>
- * The places, the sizes, which plate a node sits on, how bright it is, and how the lines between nodes are pieced
- * together out of straight runs and turns are all the original's, read out of its screen. The pictures are the
- * original's when its jar is there and ours, painted to the same sheet layout, when it is not.
- */
 public class AlchemonomiconScreen extends Screen {
-    /** Frame pieces, node plates, arrow heads and line pieces, all on one sheet. */
     private static final ResourceLocation SHEET = Alchemia.id("textures/gui/research_browser.png");
     private static final ResourceLocation OVERLAY = Alchemia.id("textures/gui/research_overlay.png");
     private static final int SHEET_SIZE = 256;
 
-    /** The page leaves this much of its box to the frame on every side. */
     private static final int MARGIN = 16;
-    /**
-     * The largest the framed box is drawn. The original stretched it over the whole window, which on a big screen
-     * is a wall of sky; past this size it stays this size, in the middle of the window.
-     */
     private static final int BOX_MAX_W = 352;
     private static final int BOX_MAX_H = 240;
-    /** One step of the research grid, and the size of the plate a node sits on. */
     private static final int GRID = 24;
     private static final int PLATE = 32;
     private static final int ICON = 16;
-    /** The skies are a quarter of their size per repeat, as the original drew them, and move at their own pace. */
     private static final int SKY_REPEAT = 256;
     private static final double BACK_DRIFT = 2.0;
     private static final double OVER_DRIFT = 1.5;
-    /** How far the tree can be drawn back, and by how much a turn of the wheel does it. */
     private static final float ZOOM_MIN = 1F;
     private static final float ZOOM_MAX = 2F;
     private static final float ZOOM_STEP = 0.25F;
 
-    // the frame: a corner, and the runs between corners, which are laid down a piece at a time
     private static final int FRAME_CORNER = 22;
     private static final int FRAME_RUN = 64;
     private static final int FRAME_FROM = 13;
     private static final int FRAME_RUN_FROM = 48;
 
-    // the plates, a row for the outstanding and a row for the hidden
     private static final int PLATE_SQUARE = 80;
     private static final int PLATE_HEX = 112;
     private static final int PLATE_ROUND = 144;
     private static final int PLATE_BRACKETS = 176;
     private static final int PLATE_ROW = 48;
 
-    // the tabs, down the left edge, each on a frame corner
     private static final int TAB_X = 1;
     private static final int TAB_Y = 10;
     private static final int TAB_STEP = 24;
@@ -86,13 +65,11 @@ public class AlchemonomiconScreen extends Screen {
     private final List<ResourceKey<ResearchCategory>> categories = new ArrayList<>();
     private ResourceKey<ResearchCategory> openCategory;
 
-    /** The middle of the view, in the tree's own pixels, and how far the tree is drawn back. */
     private double viewX;
     private double viewY;
     private float zoom = ZOOM_MIN;
     private boolean dragging;
 
-    /** Whatever the mouse is over this frame, remembered so its note can be drawn after the frame. */
     private ResearchEntry hovered;
     private ResourceLocation hoveredId;
 
@@ -119,9 +96,6 @@ public class AlchemonomiconScreen extends Screen {
         return minecraft.level.registryAccess().registryOrThrow(ModResearch.ENTRY_KEY);
     }
 
-    // --- the page in window coordinates
-
-    /** The framed box: the whole window while it is small, never larger than its cap, always in the middle. */
     private int boxWidth() {
         return Math.min(width, BOX_MAX_W);
     }
@@ -154,7 +128,6 @@ public class AlchemonomiconScreen extends Screen {
         return boxHeight() - 2 * MARGIN;
     }
 
-    /** Where a point of the tree lands in the window. */
     private double toWindowX(double treeX) {
         return pageLeft() + pageWidth() / 2.0 + (treeX - viewX) / zoom;
     }
@@ -171,7 +144,6 @@ public class AlchemonomiconScreen extends Screen {
         return viewY + (windowY - pageTop() - pageHeight() / 2.0) * zoom;
     }
 
-    /** Vanilla blurs the world behind a screen; past the box it is only dimmed, the way an open book shades it. */
     @Override
     public void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         graphics.fillGradient(0, 0, width, height, 0xB0101018, 0xC0101018);
@@ -184,7 +156,6 @@ public class AlchemonomiconScreen extends Screen {
         drawFrame(graphics);
         drawTabs(graphics);
 
-        // notes come last of all, or the frame would be laid over them
         if (hovered != null) {
             graphics.renderComponentTooltip(font,
                     describe(hovered, hoveredId, PlayerKnowledge.of(minecraft.player)), mouseX, mouseY);
@@ -193,14 +164,11 @@ public class AlchemonomiconScreen extends Screen {
         }
     }
 
-    // --- the page
-
     private void drawPage(GuiGraphics graphics, int mouseX, int mouseY) {
         graphics.enableScissor(pageLeft(), pageTop(), pageLeft() + pageWidth(), pageTop() + pageHeight());
         drawSky(graphics);
 
         graphics.pose().pushPose();
-        // from here on everything is in the tree's own pixels, drawn back by the zoom
         graphics.pose().translate(toWindowX(0), toWindowY(0), 0);
         graphics.pose().scale(1F / zoom, 1F / zoom, 1F);
 
@@ -252,10 +220,6 @@ public class AlchemonomiconScreen extends Screen {
         graphics.disableScissor();
     }
 
-    /**
-     * A branch's sky behind, and the shared field of stars in front, each repeating every quarter of its picture and
-     * each sliding at its own pace as the tree is dragged, which is what gives the page its depth.
-     */
     private void drawSky(GuiGraphics graphics) {
         ResearchCategory open = openCategory == null ? null : categoryRegistry().get(openCategory);
         RenderSystem.enableBlend();
@@ -271,15 +235,11 @@ public class AlchemonomiconScreen extends Screen {
         int h = pageHeight();
         float u = (float) ((viewX - w * zoom / 2.0) / drift);
         float v = (float) ((viewY - h * zoom / 2.0) / drift);
-        // the sheet is said to be a quarter of its real size, so it repeats that often and the tree shows through it
+        // sheet is declared at a quarter of its size so it tiles
         graphics.blit(texture, pageLeft(), pageTop(), w, h, u, v, Math.round(w * zoom), Math.round(h * zoom),
                 SKY_REPEAT, SKY_REPEAT);
     }
 
-    /**
-     * How a line into a node is coloured: bright once the node is known, dim while it can be taken up, and nearly
-     * gone while it is still out of reach.
-     */
     private static float[] lineColour(ResearchEntry research, ResourceLocation id, PlayerKnowledge knowledge) {
         if (knowledge.hasResearch(id)) {
             return new float[] {0.6F, 0.6F, 0.7F};
@@ -290,12 +250,6 @@ public class AlchemonomiconScreen extends Screen {
         return new float[] {0.1F, 0.1F, 0.15F};
     }
 
-    /**
-     * A node: its plate, chosen by its shape, and the thing it is about on top.
-     * <p>
-     * Known research is drawn at full strength. Research that can be taken up now breathes in and out, so it is the
-     * first thing the eye goes to, and research still out of reach is left dark.
-     */
     private void drawNode(GuiGraphics graphics, ResearchEntry research, ResourceLocation id,
             PlayerKnowledge knowledge, int x, int y) {
         float bright;
@@ -318,7 +272,7 @@ public class AlchemonomiconScreen extends Screen {
         graphics.setColor(1F, 1F, 1F, 1F);
         graphics.renderItem(research.iconStack(), x, y);
         if (bright < 1F) {
-            // an item cannot be tinted, so a node that is not yet known is shaded over instead
+            // items cannot be tinted, so unknown nodes are shaded over instead
             int shade = Math.round((1F - bright) * 0xC0);
             graphics.pose().pushPose();
             graphics.pose().translate(0, 0, 200);
@@ -327,11 +281,6 @@ public class AlchemonomiconScreen extends Screen {
         }
     }
 
-    /**
-     * The line from a node back to one it rests on, pieced together the way the original pieced it: a run down or up
-     * from the node, a turn, and a run across to the other; the turn wide when both runs are long and tight when
-     * either is a single step; and an arrow head at the node the line leads into.
-     */
     private void drawLine(GuiGraphics graphics, int fromColumn, int fromRow, int toColumn, int toRow,
             float[] colour) {
         int across = Math.abs(fromColumn - toColumn);
@@ -346,7 +295,6 @@ public class AlchemonomiconScreen extends Screen {
         RenderSystem.defaultBlendFunc();
         graphics.setColor(colour[0], colour[1], colour[2], 1F);
 
-        // the head, at the edge of the node the line comes into, pointing in
         int head = stepY < 0 ? 64 : stepY > 0 ? 96 : stepX > 0 ? 160 : stepX < 0 ? 128 : -1;
         if (head >= 0) {
             piece(graphics, x - 4, y - 4, head, 112, 32);
@@ -389,9 +337,6 @@ public class AlchemonomiconScreen extends Screen {
         graphics.blit(SHEET, x, y, fromX, fromY, size, size, SHEET_SIZE, SHEET_SIZE);
     }
 
-    // --- the frame and the tabs
-
-    /** The frame around the box: a corner at each corner and the runs between them a piece at a time. */
     private void drawFrame(GuiGraphics graphics) {
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
@@ -429,7 +374,6 @@ public class AlchemonomiconScreen extends Screen {
         return boxTop() + TAB_Y + index * TAB_STEP;
     }
 
-    /** Each tab is a frame corner with the branch's picture on it; the open one is drawn at full strength. */
     private void drawTabs(GuiGraphics graphics) {
         for (int index = 0; index < categories.size(); index++) {
             ResourceKey<ResearchCategory> key = categories.get(index);
@@ -458,8 +402,6 @@ public class AlchemonomiconScreen extends Screen {
         return mouseX >= tabX() && mouseX < tabX() + ICON && mouseY >= y && mouseY < y + ICON;
     }
 
-    // --- words
-
     private List<Component> describe(ResearchEntry research, ResourceLocation id, PlayerKnowledge knowledge) {
         List<Component> lines = new ArrayList<>();
         lines.add(ResearchEntry.displayName(id));
@@ -470,7 +412,6 @@ public class AlchemonomiconScreen extends Screen {
         } else if (!research.parentsKnown(knowledge)) {
             lines.add(Component.translatable("research.alchemia.locked").withStyle(ChatFormatting.DARK_GRAY));
         } else if (!research.cluesMet(knowledge)) {
-            // what is still to be found out in the world: the aspects by name, anything else only as a hint
             List<Component> aspects = research.clues().stream()
                     .filter(clue -> !me.moonscenty.alchemia.research.Clues.met(knowledge, clue))
                     .flatMap(clue -> me.moonscenty.alchemia.registry.ModAspects.REGISTRY.getOptional(clue).stream())
@@ -507,8 +448,6 @@ public class AlchemonomiconScreen extends Screen {
         return joined;
     }
 
-    // --- input
-
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         for (int index = 0; index < categories.size(); index++) {
@@ -528,7 +467,6 @@ public class AlchemonomiconScreen extends Screen {
                 return true;
             }
             if (NoteRequests.isReady(knowledge, hoveredId, hovered)) {
-                // the server writes the note, since it is the one holding the paper and the ink
                 PacketDistributor.sendToServer(new RequestNote(hoveredId));
                 return true;
             }
@@ -554,7 +492,6 @@ public class AlchemonomiconScreen extends Screen {
         return super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
     }
 
-    /** The wheel draws the tree back or brings it near, by quarter steps between life size and half of it. */
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
         if (scrollY != 0) {
@@ -565,7 +502,6 @@ public class AlchemonomiconScreen extends Screen {
         return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
     }
 
-    /** The view cannot be dragged further than the branch's research reaches, so the tree is never lost. */
     private void keepInBounds() {
         int left = 0;
         int right = 0;

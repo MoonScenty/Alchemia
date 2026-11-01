@@ -22,14 +22,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 
-/**
- * The bench as the maker sees it, laid out as the original laid it out: a green cloth with the grid spread across
- * it, the six primal aspects in their circles round the edge, the wand in its holder top right and the work coming
- * out below it.
- * <p>
- * The circles are the price. A recipe on the grid puts each aspect it costs in its circle: steady when the wand can
- * cover it, faint and breathing when it cannot, with the original's warning beside the result.
- */
 public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkbenchMenu> {
     private static final ResourceLocation PANEL = Alchemia.id("textures/gui/arcane_workbench.png");
     private static final int SHEET = 256;
@@ -38,12 +30,7 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
 
     private static final int ICON = 16;
 
-    /**
-     * The middle of each primal's circle, in the order the original gave the primals: air at the top, then earth,
-     * fire, water at the foot, order and entropy, going round anticlockwise.
-     */
     private static final int[][] CIRCLES = {{72, 21}, {24, 43}, {24, 102}, {72, 124}, {120, 102}, {120, 43}};
-    /** Where the warning goes when the wand falls short: to the right of the result, at half size. */
     private static final int WARNING_X = 168;
     private static final int WARNING_Y = 46;
     private static final int WARNING_COLOUR = 0xFFEE6E6E;
@@ -56,7 +43,6 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
 
     @Override
     protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
-        // the original's panels have soft, half-clear edges, which come out solid without blending
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         graphics.blit(PANEL, leftPos, topPos, 0, 0, PANEL_W, PANEL_H, SHEET, SHEET);
@@ -69,12 +55,9 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
         renderTooltip(graphics, mouseX, mouseY);
     }
 
-    /** The panel is already labelled in its own painting, so no words are put over it. */
     @Override
     protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
     }
-
-    // --- the price ---------------------------------------------------------
 
     private static List<Holder<Aspect>> primals() {
         return List.of(ModAspects.AIR, ModAspects.EARTH, ModAspects.FIRE,
@@ -97,7 +80,6 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
             }
             boolean paid = holder != null && holder.held(wand, aspect) >= want;
             shortAnywhere |= !paid;
-            // the original let what cannot be paid breathe, each circle a little out of step with the last
             float alpha = paid ? 1F : 0.5F + Mth.sin((ticks + place * 10) / 2F) * 0.2F - 0.2F;
             int x = leftPos + CIRCLES[place][0] - ICON / 2;
             int y = topPos + CIRCLES[place][1] - ICON / 2;
@@ -120,12 +102,7 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
         }
     }
 
-    /**
-     * One aspect, painted in its own colour.
-     * <p>
-     * Blending is turned on every single time rather than once for the six: drawing a string ends the font batch,
-     * and that puts blending back off, which would leave every aspect after the first as a solid disc.
-     */
+    // blend re-enabled per call: drawing text turns it back off
     private void drawAspect(GuiGraphics graphics, Holder<Aspect> aspect, int x, int y, float alpha) {
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
@@ -135,8 +112,6 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
         graphics.blit(aspect.value().icon(), x, y, 0, 0, ICON, ICON, ICON, ICON);
         graphics.setColor(1F, 1F, 1F, 1F);
     }
-
-    // --- notes to the maker ------------------------------------------------
 
     @Override
     protected void renderTooltip(GuiGraphics graphics, int mouseX, int mouseY) {
@@ -162,7 +137,6 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
             return;
         }
 
-        // why the result square is empty, when the grid clearly spells something out
         if (over(mouseX, mouseY, leftPos + ArcaneWorkbenchMenu.RESULT_X, topPos + ArcaneWorkbenchMenu.RESULT_Y)
                 && menu.getSlot(ArcaneWorkbenchMenu.SLOT_RESULT).getItem().isEmpty()) {
             menu.matching().ifPresent(found -> {

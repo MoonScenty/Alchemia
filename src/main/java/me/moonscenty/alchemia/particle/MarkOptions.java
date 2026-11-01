@@ -11,12 +11,6 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 
-/**
- * What a sounding mark is asked for: how long it waits before it shows, so that the marks spread out from where the
- * tool struck as a wave.
- *
- * @param waits ticks before it shows
- */
 public record MarkOptions(int waits) implements ParticleOptions {
     public static final MapCodec<MarkOptions> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
                     Codec.INT.fieldOf("waits").forGetter(MarkOptions::waits))

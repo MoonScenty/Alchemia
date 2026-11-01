@@ -13,27 +13,17 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 
-/**
- * One of the four things a turret may be told to mind: a frame that fills in when it is on, with its name beside
- * it. Shared by the autocaster's and the crossbows' panels, which also share the layout and the strip of hearts.
- *
- * <p>It reads what it is set to straight off the turret rather than keeping its own copy, so somebody else changing
- * it is seen here the tick after.
- */
 final class TurretToggle extends AbstractButton {
     static final int SHEET = 256;
     static final int PANEL_W = 175;
-    /** What the panel actually covers. The original declared it taller and painted nothing down there. */
     static final int PANEL_H = 166;
 
-    /** The strip of red hearts on the sheet, laid over the dark ones painted into the panel. */
     private static final int HEARTS_U = 192;
     private static final int HEARTS_V = 48;
     private static final int HEARTS_W = 39;
     private static final int HEARTS_H = 6;
     static final int HEARTS_Y = 59;
 
-    /** The toggles: a frame, a tick to lay in it when it is on, and where the four of them stand. */
     private static final int BUTTON = 8;
     private static final int FRAME_V = 16;
     private static final int TICK_V = 24;
@@ -55,14 +45,12 @@ final class TurretToggle extends AbstractButton {
         this.minds = minds;
     }
 
-    /** The panel itself, blended since it is painted on clear glass. */
     static void drawPanel(GuiGraphics graphics, ResourceLocation panel, int x, int y) {
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         graphics.blit(panel, x, y, 0, 0, PANEL_W, PANEL_H, SHEET, SHEET);
     }
 
-    /** As many red hearts as the turret has health left, from the left. */
     static void drawHearts(GuiGraphics graphics, ResourceLocation panel, int x, int y, LivingEntity turret) {
         int left = (int) (HEARTS_W * (turret.getHealth() / turret.getMaxHealth()));
         graphics.blit(panel, x, y, HEARTS_U, HEARTS_V, left, HEARTS_H, SHEET, SHEET);

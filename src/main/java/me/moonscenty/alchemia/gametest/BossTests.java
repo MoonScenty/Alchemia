@@ -18,13 +18,11 @@ import net.minecraft.world.level.GameType;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/** The great halls: the lock a runed tablet turns, and what wakes behind it. */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class BossTests {
     private static final String TEMPLATE = "empty_32x40x32";
 
-    /** A runed tablet turns a lock; nothing else does. */
     @GameTest(template = TEMPLATE)
     public static void aTabletTurnsTheLock(GameTestHelper helper) {
         BlockPos at = new BlockPos(16, 2, 16);
@@ -38,7 +36,6 @@ public class BossTests {
         helper.succeed();
     }
 
-    /** The Warden wakes slowly, untouchable while it does, with a shield two thirds of its health deep. */
     @GameTest(template = TEMPLATE)
     public static void theWardenWakesShielded(GameTestHelper helper) {
         EldritchWarden warden = ModEntities.ELDRITCH_WARDEN.get().create(helper.getLevel());
@@ -55,7 +52,6 @@ public class BossTests {
         helper.succeed();
     }
 
-    /** The blow that would kill the Construct takes its head instead; and no blow does a boss more than thirty-five. */
     @GameTest(template = TEMPLATE)
     public static void theConstructLosesItsHead(GameTestHelper helper) {
         EldritchGolem golem = ModEntities.ELDRITCH_GOLEM.get().create(helper.getLevel());

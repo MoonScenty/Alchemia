@@ -11,10 +11,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 
-/**
- * The centrifuge and the crystallizer in a hand or a slot: what their blocks draw, standing still, as the original
- * drew them from a block entity with no world. A crystallizer with no world faced up, so this one does too.
- */
 public class DeviceItemRenderer extends BlockEntityWithoutLevelRenderer {
     public static final DeviceItemRenderer INSTANCE = new DeviceItemRenderer();
 

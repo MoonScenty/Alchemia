@@ -8,7 +8,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.codec.StreamCodec;
 
-/** Where a seal is: the block it is stuck to, and which face of it. */
 public record SealPos(BlockPos pos, Direction face) {
     public static final Codec<SealPos> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             BlockPos.CODEC.fieldOf("pos").forGetter(SealPos::pos),
@@ -24,7 +23,6 @@ public record SealPos(BlockPos pos, Direction face) {
         pos = pos.immutable();
     }
 
-    /** The block in front of the face the seal is on. */
     public BlockPos front() {
         return pos.relative(face);
     }

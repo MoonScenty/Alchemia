@@ -23,17 +23,7 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.stream.JsonReader;
 import com.mojang.blaze3d.platform.NativeImage;
 
-/**
- * One of our files, and where in the original to find it.
- *
- * @param target    the path under {@code assets/alchemia/} this replaces
- * @param sources   where to look, in order: the first release that has the file wins
- * @param transform what to do to it on the way. The original tinted many greys in code; we bake the colour in, since
- *                  our own fallback pictures are already coloured and a tint in the model would colour them twice
- * @param model     the key of a model in {@link LegacyAssets#MODELS} this file is only any good with, or null
- */
 public record LegacyAsset(String target, List<Source> sources, Transform transform, @Nullable String model) {
-    /** A path under the original's {@code assets/thaumcraft/}. */
     public record Source(LegacyEdition edition, String path) {
     }
 
@@ -62,10 +52,7 @@ public record LegacyAsset(String target, List<Source> sources, Transform transfo
         return from(LegacyEdition.FOUR, path);
     }
 
-    /**
-     * Multiplies every pixel by an RGB colour, which is what the game does to a tinted quad. The colour is asked for
-     * at import time rather than now, so it can come from a registry that is not filled yet when this table is built.
-     */
+    // colour supplied lazily: registries aren't filled when this table is built
     public LegacyAsset tinted(IntSupplier rgb) {
         return new LegacyAsset(target, sources, bytes -> tint(bytes, rgb.getAsInt()), model);
     }
@@ -74,10 +61,7 @@ public record LegacyAsset(String target, List<Source> sources, Transform transfo
         return tinted(() -> rgb);
     }
 
-    /**
-     * Turns a JPEG into a PNG. The original kept its large backgrounds as JPEGs; this game reads nothing but PNG, and
-     * its own image reader refuses anything else at the first byte, so Java's reader does the decoding.
-     */
+    // the game reads PNG only, so Java's reader decodes the JPEG
     public LegacyAsset fromJpeg() {
         return new LegacyAsset(target, sources, LegacyAsset::jpegToPng, model);
     }
@@ -92,7 +76,6 @@ public record LegacyAsset(String target, List<Source> sources, Transform transfo
         return png.toByteArray();
     }
 
-    /** Cuts one picture out of a sheet the original kept many in, after whatever else was done to it. */
     public LegacyAsset cropped(int x, int y, int width, int height) {
         Transform before = transform;
         return new LegacyAsset(target, sources, bytes -> crop(before.apply(bytes), x, y, width, height), model);
@@ -110,29 +93,14 @@ public record LegacyAsset(String target, List<Source> sources, Transform transfo
         }
     }
 
-    /**
-     * Only taken when the model of that key was read too. A sheet laid out for the original's model is nonsense on
-     * the shape our own fallback draws, so the two come in together or not at all.
-     */
     public LegacyAsset forModel(String key) {
         return new LegacyAsset(target, sources, transform, key);
     }
 
-    /**
-     * A model file of the original, made one this game reads. 1.8.9 read its model files loosely, so some have a word
-     * left unquoted; they are read loosely here too and written back out properly. Every texture is pointed at where
-     * {@link LegacyAssets} imports the original's pictures ({@code block/legacy/}, {@code item/legacy/}), and a model
-     * at our own of the same name. The old display settings meant something else then and are dropped: a block model
-     * takes the game's ordinary block ones instead, and a flat item the game's flat item ones.
-     */
     public LegacyAsset asModel() {
         return new LegacyAsset(target, sources, LegacyAsset::model, model);
     }
 
-    /**
-     * {@link #asModel()}, drawn with the given kind of render. The old game settled that on the block rather than in
-     * the model file, so the original's files do not say it.
-     */
     public LegacyAsset asModel(String renderType) {
         return new LegacyAsset(target, sources, original -> {
             JsonObject read = JsonParser.parseString(new String(model(original), StandardCharsets.UTF_8))
@@ -142,12 +110,6 @@ public record LegacyAsset(String target, List<Source> sources, Transform transfo
         }, model);
     }
 
-    /**
-     * One of our model files with the original model laid in under it: the original's elements and textures, then
-     * ours. Ours holds only what the original drew some other way (a liquid, a label), so the two make one model.
-     *
-     * @param ours the model under {@code assets/alchemia/} this is built over
-     */
     public LegacyAsset asModelOver(String ours) {
         return new LegacyAsset(target, sources, original -> over(original, ours), model);
     }
@@ -216,7 +178,6 @@ public record LegacyAsset(String target, List<Source> sources, Transform transfo
             if (lower.equals("builtin/generated")) {
                 return new JsonPrimitive("minecraft:item/generated");
             }
-            // and the game's own pictures without one too, some under names they have since lost
             if (lower.startsWith("blocks/")) {
                 String name = value.substring("blocks/".length());
                 return new JsonPrimitive("minecraft:block/" + (name.equals("fire_layer_0") ? "fire_0" : name));
@@ -232,7 +193,7 @@ public record LegacyAsset(String target, List<Source> sources, Transform transfo
         try (NativeImage image = NativeImage.read(new ByteArrayInputStream(png))) {
             for (int y = 0; y < image.getHeight(); y++) {
                 for (int x = 0; x < image.getWidth(); x++) {
-                    // NativeImage keeps its pixels as ABGR
+                    // NativeImage pixels are ABGR
                     int abgr = image.getPixelRGBA(x, y);
                     int a = abgr >>> 24;
                     int pb = (abgr >> 16 & 0xFF) * b / 255;

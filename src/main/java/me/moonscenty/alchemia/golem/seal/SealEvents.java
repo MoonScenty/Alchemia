@@ -13,10 +13,6 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 import net.neoforged.neoforge.event.tick.LevelTickEvent;
 
-/**
- * Keeps seals and tasks going: every tick each world's seals work, once a second its tasks age, and a player coming
- * into a world is told of its seals.
- */
 @EventBusSubscriber(modid = Alchemia.MODID)
 public final class SealEvents {
     private static final Map<ServerLevel, Integer> TICKS = new WeakHashMap<>();

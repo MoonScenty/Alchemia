@@ -22,13 +22,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.items.IItemHandler;
 
-/**
- * What a seal does: how it finds work for golems, and what a golem does when it gets there.
- *
- * <p>Every seal keeps its own filter, if it has one, and its own options. Which of the pages of a seal's panel it
- * shows, and in what order, is its own business too: priority and locking, filter, area, options, and what golems
- * it wants or will not have.
- */
 public abstract class Seal {
     public static final int PRIORITY = 0;
     public static final int FILTER = 1;
@@ -38,12 +31,11 @@ public abstract class Seal {
 
     private final String key;
     private final NonNullList<ItemStack> filter;
-    /** How many of each whitelisted thing is wanted, nought for no limit, where the seal counts at all. */
+    // 0 means no limit
     private final int[] limits;
     private boolean blacklist = true;
     private final List<Toggle> toggles;
 
-    /** One of a seal's options, on or off. */
     public static final class Toggle {
         private final String key;
         private boolean value;
@@ -77,76 +69,58 @@ public abstract class Seal {
         this.toggles = List.of(toggles);
     }
 
-    /** Its name among seals, which is also its item's. */
     public String key() {
         return key;
     }
 
-    /** The picture it is drawn with where it is stuck, which is its item's. */
     public ResourceLocation icon() {
         return Alchemia.id("item/legacy/seal_" + key);
     }
 
-    /** Whether it can stay stuck here. Checked once a second; one that cannot falls off. */
+    // checked once a second; a seal that fails drops off
     public abstract boolean canPlaceAt(Level level, BlockPos pos, Direction face);
 
-    /** Every tick it is in a loaded place and not stopped by redstone. */
+    // every tick while loaded and not stopped by redstone
     public abstract void tick(ServerLevel level, SealEntity seal);
 
-    /** A golem has taken up one of its tasks. */
     public void onTaskStarted(ServerLevel level, Golem golem, Task task) {
     }
 
-    /** A golem has got to one of its tasks: do it, and say whether it was done. */
+    // returns whether the task is done
     public abstract boolean onTaskCompletion(ServerLevel level, Golem golem, Task task);
 
-    /** One of its tasks has been let go of. */
     public void onTaskSuspension(ServerLevel level, Task task) {
     }
 
-    /** Whether this golem can do this task just now. */
     public abstract boolean canGolemPerform(Golem golem, Task task);
 
-    /** It has been taken off. */
     public void onRemoval(ServerLevel level, BlockPos pos, Direction face) {
     }
 
-    /** Which pages its panel has, in order. */
     public abstract int[] categories();
 
-    /** Golems without all of these will not take its tasks. */
     public List<GolemTrait> required() {
         return List.of();
     }
 
-    /** Golems with any of these will not take its tasks. */
     public List<GolemTrait> forbidden() {
         return List.of();
     }
 
-    /** Whether it works over an area in front of it, rather than on the block it is on. */
     public boolean usesArea() {
         return false;
     }
 
-    /** Whether a whitelisted filter entry also says how many of it, as filling and the like do. */
     public boolean hasStacksizeLimiters() {
         return false;
     }
 
-    // --- handling things -------------------------------------------------------------------------------------
-
-    /** The pop of a golem taking or giving something, and its arm going out for it. */
     protected static void handled(ServerLevel level, Golem golem, float pitch) {
         level.playSound(null, golem, SoundEvents.ITEM_PICKUP, SoundSource.NEUTRAL, 0.125F,
                 ((level.random.nextFloat() - level.random.nextFloat()) * 0.7F + 1.0F) * pitch);
         golem.swing(InteractionHand.MAIN_HAND);
     }
 
-    /**
-     * Takes up to so much of a thing out of a container into the golem's hands, leaving one behind if asked; what it
-     * cannot hold goes back. Says whether it took any.
-     */
     protected static boolean takeOut(ServerLevel level, Golem golem, IItemHandler container, ItemStack stack,
             Matching.Rule rule, boolean leaveOne) {
         if (leaveOne) {
@@ -169,8 +143,6 @@ public abstract class Seal {
         return true;
     }
 
-    // --- the filter -----------------------------------------------------------------------------------------
-
     public int filterSize() {
         return filter.size();
     }
@@ -179,7 +151,6 @@ public abstract class Seal {
         return filter;
     }
 
-    /** Sets a filter entry, one of a thing, and its limit to how many were put there. */
     public void setFilter(int slot, ItemStack stack) {
         filter.set(slot, stack.isEmpty() ? ItemStack.EMPTY : stack.copyWithCount(1));
         limits[slot] = stack.isEmpty() ? 0 : stack.getCount();
@@ -201,8 +172,6 @@ public abstract class Seal {
         this.blacklist = blacklist;
     }
 
-    // --- options --------------------------------------------------------------------------------------------
-
     public List<Toggle> toggles() {
         return toggles;
     }
@@ -211,13 +180,11 @@ public abstract class Seal {
         return toggles.get(which).value();
     }
 
-    /** How strictly it tells things apart: its first four options, where it has them. */
+    // the first four toggles, where the seal has them
     public Matching.Rule rule() {
         return toggles.size() < 4 ? new Matching.Rule(true, true, false, false)
                 : new Matching.Rule(toggle(0), toggle(1), toggle(2), toggle(3));
     }
-
-    // --- saving ---------------------------------------------------------------------------------------------
 
     public void save(CompoundTag tag, HolderLookup.Provider registries) {
         ListTag items = new ListTag();

@@ -10,7 +10,6 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 
-/** A taint crawler as the original drew it: a silverfish, seven tenths the size, in the original's skin. */
 public class TaintCrawlerRenderer extends MobRenderer<TaintCrawler, SilverfishModel<TaintCrawler>> {
     private static final ResourceLocation SKIN = Alchemia.id("textures/entity/taint_crawler.png");
 
@@ -23,7 +22,6 @@ public class TaintCrawlerRenderer extends MobRenderer<TaintCrawler, SilverfishMo
         pose.scale(0.7F, 0.7F, 0.7F);
     }
 
-    /** It rolls right over as it dies, as a silverfish does. */
     @Override
     protected float getFlipDegrees(TaintCrawler crawler) {
         return 180.0F;

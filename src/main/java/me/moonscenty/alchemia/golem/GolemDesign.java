@@ -23,18 +23,11 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
-/**
- * One golem as it was pressed: its material and four parts, and how far a smart one has come on since.
- *
- * <p>It packs into a single number a byte to a slot, as the original's did, which is how it rides on the golem item
- * and on the golem itself without anything more to keep in step.
- */
+// Packs into one long, a byte per slot, as the original's.
 public record GolemDesign(Material material, Head head, Arms arms, Legs legs, Addon addon, int rank) {
-    /** The plainest golem: wood, a clockwork head, plain arms, walking legs, nothing fitted. */
     public static final GolemDesign BASIC = fromLong(0L);
-    /** How far a smart golem can come on. */
     public static final int TOP_RANK = 10;
-    /** What it takes to come on one rank, times the square of the rank it is reaching for. */
+    // times the square of the rank being reached
     public static final int RANK_XP = 1000;
 
     public static final Codec<GolemDesign> CODEC = Codec.LONG.xmap(GolemDesign::fromLong, GolemDesign::toLong);
@@ -51,7 +44,7 @@ public record GolemDesign(Material material, Head head, Arms arms, Legs legs, Ad
         return (int) (packed >>> (slot * 8) & 0xFF);
     }
 
-    /** A slot that names nothing, from some later version or a damaged item, comes back as the first. */
+    // unknown ids fall back to the first value
     private static <T> T pick(T[] values, long packed, int slot) {
         int at = slot(packed, slot);
         return at < values.length ? values[at] : values[0];
@@ -86,15 +79,11 @@ public record GolemDesign(Material material, Head head, Arms arms, Legs legs, Ad
         return new GolemDesign(material, head, arms, legs, addon, Math.clamp(rank, 0, TOP_RANK));
     }
 
-    /** The five things it is made of, in the order their traits are added. */
     public List<Part> parts() {
         return List.of(material, head, arms, legs, addon);
     }
 
-    /**
-     * What its parts make of it, a pair cancelling where one part brings what another takes away. The order is the
-     * original's, which matters only for which of a cancelled pair is left out.
-     */
+    // a trait and its opposite cancel; the original's part order decides which is left out
     public Set<GolemTrait> traits() {
         Set<GolemTrait> traits = EnumSet.noneOf(GolemTrait.class);
         for (Part part : parts()) {
@@ -113,12 +102,11 @@ public record GolemDesign(Material material, Head head, Arms arms, Legs legs, Ad
         return traits().contains(trait);
     }
 
-    /** Whether somebody knows enough to press it. */
     public boolean known(Player player) {
         return parts().stream().allMatch(part -> part.known(player));
     }
 
-    /** What the press takes for it, alike things counted together, in the order the original listed them. */
+    // in the original's listing order
     public List<ItemStack> components() {
         List<ItemStack> all = new ArrayList<>();
         for (Part part : List.of(material, arms, legs, head, addon)) {
@@ -143,7 +131,6 @@ public record GolemDesign(Material material, Head head, Arms arms, Legs legs, Ad
         all.add(stack);
     }
 
-    /** How many measures of machina it takes to press: two for every trait, and one for every thing put in. */
     public int cost() {
         int cost = traits().size() * 2;
         for (ItemStack stack : components()) {
@@ -152,7 +139,6 @@ public record GolemDesign(Material material, Head head, Arms arms, Legs legs, Ad
         return cost;
     }
 
-    /** Ten, and what its material adds, cut by a quarter if it is fragile, and one for each rank. */
     public int maxHealth() {
         int health = 10 + material.health();
         if (has(GolemTrait.FRAGILE)) {
@@ -172,7 +158,6 @@ public record GolemDesign(Material material, Head head, Arms arms, Legs legs, Ad
         return armour;
     }
 
-    /** How hard it hits: nothing unless it fights, and a quarter more for every rank it has come on. */
     public double damage() {
         if (!has(GolemTrait.FIGHTER)) {
             return 0.0;
@@ -184,7 +169,6 @@ public record GolemDesign(Material material, Head head, Arms arms, Legs legs, Ad
         return damage + rank * 0.25;
     }
 
-    /** How fast it goes, against a plain golem's one. */
     public float speed() {
         return 1.0F + rank * 0.025F
                 + (has(GolemTrait.LIGHT) ? 0.2F : 0.0F)
@@ -193,12 +177,10 @@ public record GolemDesign(Material material, Head head, Arms arms, Legs legs, Ad
                 + (has(GolemTrait.WHEELED) ? 0.25F : 0.0F);
     }
 
-    /** How far from home it will go about its work. */
     public int reach() {
         return has(GolemTrait.SCOUT) ? 32 : 16;
     }
 
-    /** How much it has to learn before it comes on another rank. */
     public int xpToNextRank() {
         return (rank + 1) * (rank + 1) * RANK_XP;
     }

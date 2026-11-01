@@ -16,12 +16,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.items.IItemHandler;
 
-/**
- * Empty: stuck on a container, once a second offers a short task to take out the first thing in it the filter lets
- * by, and a golem with room takes as much of it as it can carry out through the face the seal is on. With its last
- * option set, it always leaves one behind. The advanced seal has nine filter entries and lets its options be set,
- * among them working through a whitelist one entry at a time, and wants a smart golem. Clumsy golems cannot.
- */
 public class EmptySeal extends Seal {
     private static final int CYCLE = 4;
     private static final int LEAVE = 5;
@@ -29,7 +23,6 @@ public class EmptySeal extends Seal {
     private final boolean advanced;
     private int delay;
     private int turn;
-    /** What each of its tasks is to take out. */
     private final Map<Integer, ItemStack> wanted = new HashMap<>();
 
     public EmptySeal(boolean advanced) {
@@ -40,7 +33,6 @@ public class EmptySeal extends Seal {
         this.delay = java.util.concurrent.ThreadLocalRandom.current().nextInt(30);
     }
 
-    /** The filter to go by this time: with cycling on a whitelist, one entry at a time in turn. */
     private List<ItemStack> filterNow() {
         if (advanced && toggle(CYCLE) && !blacklist()) {
             List<ItemStack> entries = new ArrayList<>();

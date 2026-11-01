@@ -3,7 +3,6 @@ package me.moonscenty.alchemia.block.eldritch;
 import com.mojang.serialization.MapCodec;
 
 import me.moonscenty.alchemia.registry.ModBlockEntities;
-import me.moonscenty.alchemia.registry.ModBlocks;
 import me.moonscenty.alchemia.registry.ModItems;
 import me.moonscenty.alchemia.registry.ModSounds;
 import me.moonscenty.alchemia.registry.ModTags;
@@ -23,16 +22,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 
-/**
- * The stonework of an eldritch ring: its altar, the capstones about it, and the two parts of its obelisk. All of it is
- * drawn by its own renderer rather than as a block, gives off a little light, takes a long time to break and leaves
- * nothing behind.
- * <p>
- * Breaking any part of an obelisk brings the whole ring down with it -- every piece of eldritch stonework within three
- * blocks across and two up or down -- in a few blasts that hurt whoever stands near and break nothing else.
- */
 public class EldritchStoneworkBlock extends BaseEntityBlock {
-    /** What the piece is. */
     public enum Part {
         ALTAR,
         CAP,
@@ -83,7 +73,6 @@ public class EldritchStoneworkBlock extends BaseEntityBlock {
         };
     }
 
-    /** An eye goes into the altar. */
     @Override
     protected ItemInteractionResult useItemOn(ItemStack held, BlockState state, Level level, BlockPos pos,
             Player player, InteractionHand hand, BlockHitResult hit) {
@@ -110,7 +99,6 @@ public class EldritchStoneworkBlock extends BaseEntityBlock {
         if (!obelisk || state.is(replacement.getBlock()) || !(level instanceof ServerLevel served)) {
             return;
         }
-        // the whole ring comes down with it
         for (BlockPos at : BlockPos.betweenClosed(pos.offset(-3, -2, -3), pos.offset(3, 2, 3))) {
             if (level.getBlockState(at).is(ModTags.Blocks.ELDRITCH_STONEWORK)) {
                 level.removeBlock(at, false);

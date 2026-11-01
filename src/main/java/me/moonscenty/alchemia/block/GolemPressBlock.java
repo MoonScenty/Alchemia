@@ -34,23 +34,12 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
 
-/**
- * The golem press, where the piston was: the heart of a two-by-two of piston, stone table, anvil and cauldron with
- * iron bars over the piston. Its renderer draws the whole press; the other four blocks are placeholders that draw
- * nothing, and any of them opens it.
- *
- * <p>It is made with a wand by somebody who knows the clockwork mind, out of a piston facing up with bars on it, a
- * stone table beside it, an anvil beside the table and a cauldron beside the anvil and the piston, round the square
- * clockwise. Break any of it and the rest goes back to what it was.
- */
 public class GolemPressBlock extends BaseEntityBlock {
     public static final MapCodec<GolemPressBlock> CODEC = simpleCodec(GolemPressBlock::new);
-    /** Towards the table. */
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
-    /** What it takes from a wand to make one: the original's price. */
     public static final java.util.function.Supplier<AspectList> COSTS =
             () -> AspectList.of(ModAspects.FIRE, 50).add(ModAspects.ORDER, 50).add(ModAspects.AIR, 50);
-    /** Set while a press is taking itself apart, so that its parts do not each try to take it apart again. */
+    // guards against each part re-triggering undo while the press comes apart
     private static boolean undoing;
 
     public GolemPressBlock(Properties properties) {
@@ -92,7 +81,6 @@ public class GolemPressBlock extends BaseEntityBlock {
         return open(level, pos, player);
     }
 
-    /** Opens the press whose heart is here. */
     static InteractionResult open(Level level, BlockPos heart, Player player) {
         if (!level.isClientSide && level.getBlockEntity(heart) instanceof GolemPressBlockEntity press) {
             player.openMenu(press, heart);
@@ -111,28 +99,19 @@ public class GolemPressBlock extends BaseEntityBlock {
         super.onRemove(state, level, pos, replacement, moving);
     }
 
-    // --- making and unmaking ----------------------------------------------------------------------------------
-
-    /** Where the table is, beside the heart. */
     public static BlockPos table(BlockPos heart, Direction facing) {
         return heart.relative(facing);
     }
 
-    /** Where the anvil is, beside the table. */
     public static BlockPos anvil(BlockPos heart, Direction facing) {
         return heart.relative(facing).relative(facing.getClockWise());
     }
 
-    /** Where the cauldron is, beside the anvil and the heart. */
     public static BlockPos cauldron(BlockPos heart, Direction facing) {
         return heart.relative(facing.getClockWise());
     }
 
-    /**
-     * Takes the press apart round its heart, each placeholder back to what it stood in for and the heart back to a
-     * piston facing up, unless it is the heart itself that was broken. The block that was broken is left alone: it
-     * drops as what it stood in for, and putting it back as well would give it twice.
-     */
+    // the broken block is skipped: it drops as what it stood in for
     public static void undo(Level level, BlockPos heart, @Nullable BlockPos broken) {
         if (undoing || level.isClientSide) {
             return;
@@ -161,10 +140,6 @@ public class GolemPressBlock extends BaseEntityBlock {
         return undoing;
     }
 
-    /**
-     * Makes one out of the blocks round what was clicked, if they are laid out right, the wand can pay, and its
-     * bearer knows the clockwork mind. Any of the five may be clicked.
-     */
     public static boolean form(Level level, BlockPos clicked, Player player, ItemStack wand) {
         if (!PlayerKnowledge.of(player).hasResearch(Alchemia.id("clockwork_mind"))) {
             return false;
@@ -186,11 +161,6 @@ public class GolemPressBlock extends BaseEntityBlock {
         return false;
     }
 
-    /**
-     * Which way a press with its heart here would face, if the blocks round it are laid out for one, or null. The
-     * original looked for the table on each side in turn and took the first, so a heart with two tables beside it
-     * faces whichever comes first.
-     */
     @Nullable
     public static Direction fits(Level level, BlockPos heart) {
         BlockState piston = level.getBlockState(heart);
@@ -211,7 +181,6 @@ public class GolemPressBlock extends BaseEntityBlock {
         return null;
     }
 
-    /** Builds the press on a heart already known to fit, without asking anyone to pay for it. */
     public static void build(Level level, BlockPos heart, Direction facing) {
         undoing = true;
         try {

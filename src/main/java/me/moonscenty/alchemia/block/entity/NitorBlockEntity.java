@@ -8,16 +8,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
-/**
- * A nitor's ticking, which is the whole of what makes one visible.
- * <p>
- * It holds nothing and saves nothing. It exists because the block has no model at all -- what is there to see is
- * wisps coming off the spot, as the original's own ticking block let them off, and something has to let them off every tick. The hook the game offers for idle
- * scenery is called a few times a minute for any one block, which is fine for a torch that is already drawn and
- * useless for a thing that is nothing but its own sparks.
- * <p>
- * Client side only. Nothing about a nitor needs the server to think about it.
- */
+// client-only ticker for the flame particles; animateTick fires too rarely
 public class NitorBlockEntity extends BlockEntity {
     public NitorBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.NITOR.get(), pos, state);

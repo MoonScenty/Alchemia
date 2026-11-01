@@ -12,30 +12,17 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.HitResult;
 
-/**
- * All six primals at once, wound into a ball and thrown.
- *
- * <p>It is the dearest of the twelve and it is a bomb. Where it lands it goes off and takes the ground with it,
- * which is the original's doing and not a decision taken lightly here: a focus that costs sixty vis a throw and
- * leaves a scratch would be a focus nobody threw.
- *
- * <p>Once in a hundred it goes wrong instead, and what comes out of it is taint. Six primals held against each
- * other is not a stable thing to be carrying.
- */
 public class PrimalOrb extends Bolt {
-    /** How big a hole it makes. */
     private static final float BLAST = 2.0F;
-    /** How often, out of a hundred, it goes wrong instead of merely going off. */
+    // one in this many plain orbs bursts into taint instead
     private static final int WRONG_IN = 100;
-    /** How many places the taint tries to take hold, and how far out it looks. */
+    // taint placement attempts and search radius
     private static final int TRIES = 15;
     private static final int SPREADS = 6;
     private static final int BURNS_OUT = 100;
-    /** How far a seeking orb looks for something to go at, and how hard it steers towards it. */
     private static final double LOOKS = 16.0;
     private static final double STEERS = 0.2;
 
-    /** Whether it has been settled enough to aim itself, which is also what stops it going wrong. */
     private boolean seeker;
 
     public PrimalOrb(EntityType<? extends PrimalOrb> type, Level level) {
@@ -58,7 +45,6 @@ public class PrimalOrb extends Bolt {
         seeker = tag.getBoolean("seeker");
     }
 
-    /** Wound tight enough to steer: it goes at the nearest living thing, and nothing unusual befalls it. */
     public PrimalOrb seeking() {
         this.seeker = true;
         return this;
@@ -69,12 +55,7 @@ public class PrimalOrb extends Bolt {
         return 0.0;
     }
 
-    /**
-     * A seeker leans towards whatever is nearest.
-     * <p>
-     * The original gave the plain orb a small random wander and the seeker this instead. Ours flies straight to
-     * begin with, so only the steering is added.
-     */
+    // the original's plain orb wandered randomly; ours flies straight, so only the seeker steers
     @Override
     public void tick() {
         if (seeker && !level().isClientSide) {
@@ -104,13 +85,11 @@ public class PrimalOrb extends Bolt {
     @Override
     protected void land(ServerLevel level, HitResult where) {
         level.explode(getOwner(), getX(), getY(), getZ(), BLAST, Level.ExplosionInteraction.TNT);
-        // a seeker is wound tight enough that nothing unusual happens to it, which is half of what it is for
         if (!seeker && random.nextInt(WRONG_IN) == 0) {
             goesWrong(level);
         }
     }
 
-    /** The once in a hundred: taint takes hold wherever there is air with something solid to cling to. */
     private void goesWrong(ServerLevel level) {
         BlockPos middle = blockPosition();
         for (int tries = 0; tries < TRIES; tries++) {

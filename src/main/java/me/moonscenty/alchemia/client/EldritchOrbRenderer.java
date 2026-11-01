@@ -19,11 +19,6 @@ import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 
-/**
- * The orb as the original drew it: a dozen thin rays of light turning slowly out of a dark swirling knot, the rays
- * growing in over its first half second. The rays are drawn as the dragon's dying rays are, which is where the
- * original took them from.
- */
 public class EldritchOrbRenderer extends EntityRenderer<EldritchOrb> {
     private static final ResourceLocation SHEET = Alchemia.id("textures/misc/legacy_particles.png");
     private static final float HALF_SQRT_3 = (float) (Math.sqrt(3.0) / 2.0);

@@ -29,15 +29,11 @@ import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 
-/**
- * Working at a research table: the tools and the note laid out on it, with the reader's own pockets below.
- */
 public class ResearchTableMenu extends AlchemiaMenu {
     public static final int SLOT_TOOLS = ResearchTableBlockEntity.SLOT_TOOLS;
     public static final int SLOT_NOTES = ResearchTableBlockEntity.SLOT_NOTES;
     private static final int TABLE_SLOTS = 2;
 
-    // Where the slots sit on the drawn panel: the original's places, so its panel and ours both fit
     private static final int TOOLS_X = 14;
     private static final int NOTES_X = 70;
     private static final int TABLE_Y = 10;
@@ -47,7 +43,6 @@ public class ResearchTableMenu extends AlchemiaMenu {
     private final Container table;
     private final ContainerLevelAccess access;
 
-    /** What the client builds: the table is a stand-in, filled in by the slots syncing across. */
     public ResearchTableMenu(int id, Inventory inventory) {
         this(id, inventory, new SimpleContainer(TABLE_SLOTS), ContainerLevelAccess.NULL);
     }
@@ -78,7 +73,6 @@ public class ResearchTableMenu extends AlchemiaMenu {
         return getSlot(SLOT_NOTES).getItem();
     }
 
-    /** The note being worked through, or nothing if the desk is bare. */
     public ResearchNote note() {
         return ResearchNoteItem.noteOn(noteStack());
     }
@@ -87,13 +81,11 @@ public class ResearchTableMenu extends AlchemiaMenu {
         return getSlot(SLOT_TOOLS).getItem();
     }
 
-    /** Whether there is ink left to write with. A dry quill leaves the board untouchable. */
     public boolean hasInk() {
         ItemStack tools = toolStack();
         return !tools.isEmpty() && tools.getDamageValue() < tools.getMaxDamage() - 1;
     }
 
-    /** The original's research expertise and mastery, which make the table kinder to whoever has them. */
     public static final ResourceLocation RESEARCHER_1 = Alchemia.id("researcher1");
     public static final ResourceLocation RESEARCHER_2 = Alchemia.id("researcher2");
 
@@ -101,12 +93,6 @@ public class ResearchTableMenu extends AlchemiaMenu {
         return PlayerKnowledge.of(player).hasResearch(research);
     }
 
-    /**
-     * Lays an aspect down, or lifts one back off. Runs on the server: the client only says where it clicked.
-     * <p>
-     * The original's researcher perks are here: with mastery a point laid down is free one time in ten, and a point
-     * rubbed out comes back one time in four with expertise or one in two with mastery.
-     */
     public void place(Player player, HexGrid.Hex at, Optional<Holder<Aspect>> aspect) {
         ResearchNote note = note();
         if (note == null || !hasInk()) {
@@ -127,14 +113,12 @@ public class ResearchTableMenu extends AlchemiaMenu {
         }
         if (NoteSolving.isSolved(written)) {
             written = NoteSolving.settle(written);
-            // the table's own sound of a thing worked out, heard by everyone standing round it
             access.execute((level, pos) -> level.playSound(null, pos, ModSounds.LEARN.get(), SoundSource.BLOCKS,
                     1.0F, 1.0F));
         }
         write(written);
     }
 
-    /** A point put back on the sheet, with the little chime the original gave it. */
     private ResearchNote giveBack(Player player, ResearchNote note, Holder<Aspect> aspect) {
         player.level().playSound(null, player.getX(), player.getY(), player.getZ(),
                 SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 0.2F,
@@ -142,10 +126,6 @@ public class ResearchTableMenu extends AlchemiaMenu {
         return new ResearchNote(note.research(), note.budget().add(aspect, 1), note.cells(), note.complete());
     }
 
-    /**
-     * With research expertise, a knowledge fragment carried can be spent on the note for a point of every primal,
-     * the original's fifth button.
-     */
     public void spendFragment(Player player) {
         ResearchNote note = note();
         if (note == null || note.complete() || !hasInk() || !knows(player, RESEARCHER_1)) {
@@ -166,7 +146,6 @@ public class ResearchTableMenu extends AlchemiaMenu {
         }
     }
 
-    /** Mixes two of what is on the sheet into the one thing they make between them. */
     public void mix(Player player, Holder<Aspect> one, Holder<Aspect> other) {
         ResearchNote note = note();
         if (note == null || !hasInk()) {
@@ -180,7 +159,6 @@ public class ResearchTableMenu extends AlchemiaMenu {
         write(NoteSolving.mix(note, one, other, result.get()));
     }
 
-    /** Every change to the note costs a point of ink, which is what keeps guessing from being free. */
     private void write(ResearchNote note) {
         noteStack().set(ModDataComponents.RESEARCH_NOTE.get(), note);
         if (table instanceof ResearchTableBlockEntity desk) {

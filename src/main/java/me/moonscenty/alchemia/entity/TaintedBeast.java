@@ -16,14 +16,6 @@ import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 
-/**
- * An animal the taint has made over: the same shape, but a monster now, going for players, villagers and whatever
- * animals have not been made over yet. It comes into the world in a burst of taint, and its bite can carry taint
- * poison.
- *
- * <p>The tainted cow, pig, chicken, sheep and villager are all this, as the original's were all one pattern; each
- * says how big and hard it is, what it sounds like and what it leaves.
- */
 public abstract class TaintedBeast extends Monster implements TaintedMob {
     protected TaintedBeast(EntityType<? extends TaintedBeast> type, Level level) {
         super(type, level);
@@ -49,12 +41,10 @@ public abstract class TaintedBeast extends Monster implements TaintedMob {
         }
     }
 
-    /** Whether it goes after villagers, as all but a made-over villager do. */
     protected boolean huntsVillagers() {
         return true;
     }
 
-    /** Whether it goes after animals that are not yet made over, as most of them do. */
     protected boolean huntsAnimals() {
         return true;
     }
@@ -69,7 +59,6 @@ public abstract class TaintedBeast extends Monster implements TaintedMob {
         return TaintedMob.allied(other) || super.isAlliedTo(other);
     }
 
-    /** It comes into the world in a burst of taint. */
     @Override
     public void aiStep() {
         super.aiStep();

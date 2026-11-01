@@ -18,14 +18,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 
-/**
- * A crab vent in the crust of the Outer Lands. While someone is within sixteen blocks and there are no more than five
- * crabs within thirty-two, it hisses and, a little after, pushes out a crab -- without a helmet -- every seven to
- * twelve seconds.
- */
 public class CrabSpawnerBlockEntity extends SyncedBlockEntity {
     private int count = 150;
-    /** For the drawing: an animation counter with a random start, and how much longer it is venting hard. */
     public int ticks;
     private int venting;
     private Direction facing = Direction.UP;

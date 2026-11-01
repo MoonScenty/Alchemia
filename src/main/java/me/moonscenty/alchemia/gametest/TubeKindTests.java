@@ -20,19 +20,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/**
- * The five kinds of pipe that are not plain pipe.
- * <p>
- * Every one of them is the same length of brass to look at, so what tells them apart is only what they do to what
- * passes through, and that is what is written down here. Each test lays a run from a full vessel to an empty one
- * with the odd length in the middle, and watches what arrives.
- */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class TubeKindTests {
     private static final String TEMPLATE = "empty_32x40x32";
     private static final BlockPos START = new BlockPos(2, 1, 2);
-    /** Eleven ticks to a turn: ten of waiting and the one it moves on. */
     private static final int TURN = 11;
 
     private static AlembicBlockEntity alembic(GameTestHelper helper, BlockPos at) {
@@ -40,7 +32,6 @@ public class TubeKindTests {
         return (AlembicBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(at));
     }
 
-    /** A run of pipe laid east from a spot, of whatever lengths are handed in. */
     private static void pipe(GameTestHelper helper, BlockPos from, Block... lengths) {
         for (int step = 0; step < lengths.length; step++) {
             helper.setBlock(from.east(step), lengths[step]);
@@ -61,7 +52,6 @@ public class TubeKindTests {
         }
     }
 
-    /** A shut valve is a wall; the same valve opened is pipe again. */
     @GameTest(template = TEMPLATE)
     public static void aShutValveStopsTheRun(GameTestHelper helper) {
         AlembicBlockEntity from = alembic(helper, START);
@@ -80,12 +70,6 @@ public class TubeKindTests {
         helper.succeed();
     }
 
-    /**
-     * A handle is not a socket. Nothing joins to the side a valve's handle stands on, from either end.
-     * <p>
-     * Both ends have to agree about it, or a tube laid against the handle would grow an arm into it and the pipe
-     * would look joined while nothing went through.
-     */
     @GameTest(template = TEMPLATE)
     public static void aValveHandleIsNotASocket(GameTestHelper helper) {
         helper.setBlock(START, ModBlocks.TUBE_VALVE.get().defaultBlockState()
@@ -103,7 +87,6 @@ public class TubeKindTests {
         helper.succeed();
     }
 
-    /** A signal arriving shuts a valve, and the signal leaving opens it again. */
     @GameTest(template = TEMPLATE)
     public static void redstoneWorksTheValve(GameTestHelper helper) {
         BlockPos valve = START;
@@ -118,7 +101,6 @@ public class TubeKindTests {
         helper.succeed();
     }
 
-    /** A one-way length carries only the way it is pointed. */
     @GameTest(template = TEMPLATE)
     public static void aOneWayCarriesOneWay(GameTestHelper helper) {
         AlembicBlockEntity from = alembic(helper, START);
@@ -138,7 +120,6 @@ public class TubeKindTests {
         helper.succeed();
     }
 
-    /** A filter passes the one aspect it was told and turns the rest back. */
     @GameTest(template = TEMPLATE)
     public static void aFilterLetsOneAspectBy(GameTestHelper helper) {
         AlembicBlockEntity from = alembic(helper, START);
@@ -158,7 +139,6 @@ public class TubeKindTests {
         helper.succeed();
     }
 
-    /** Two filters that disagree are a wall between them, not a choice. */
     @GameTest(template = TEMPLATE)
     public static void twoFiltersThatDisagreePassNothing(GameTestHelper helper) {
         AlembicBlockEntity from = alembic(helper, START);
@@ -176,7 +156,6 @@ public class TubeKindTests {
         helper.succeed();
     }
 
-    /** A restrict halves what gets down a run: five turns in ten carry nothing. */
     @GameTest(template = TEMPLATE)
     public static void aRestrictHalvesTheFlow(GameTestHelper helper) {
         AlembicBlockEntity from = alembic(helper, START);
@@ -189,7 +168,6 @@ public class TubeKindTests {
         helper.succeed();
     }
 
-    /** A buffer draws into itself whatever the run has to spare, up to the little it holds. */
     @GameTest(template = TEMPLATE)
     public static void aBufferFillsItself(GameTestHelper helper) {
         AlembicBlockEntity from = alembic(helper, START);
@@ -204,7 +182,6 @@ public class TubeKindTests {
         helper.succeed();
     }
 
-    /** What a buffer is sitting on can be drawn back out of it. */
     @GameTest(template = TEMPLATE)
     public static void aBufferGivesItBack(GameTestHelper helper) {
         pipe(helper, START, ModBlocks.TUBE_BUFFER.get(), ModBlocks.TUBE.get());

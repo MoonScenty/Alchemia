@@ -19,11 +19,6 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import org.joml.Quaternionf;
 
-/**
- * What goggles show of a note block or an arcane ear looked at: the note it is tuned to, written in the air a block
- * and a half above it and turned to face whoever is looking, as the original's {@code drawTextInAir} wrote it. It
- * is the raw note, nought to twenty-four, and, as in the original, simply "Note: " and the number.
- */
 @EventBusSubscriber(modid = Alchemia.MODID, value = Dist.CLIENT)
 public final class NoteSight {
     private static final float SCALE = 0.02F;
@@ -52,7 +47,6 @@ public final class NoteSight {
         Vec3 camera = event.getCamera().getPosition();
         PoseStack pose = new PoseStack();
         pose.translate(pos.getX() + 0.5 - camera.x, pos.getY() + 1.5 - camera.y, pos.getZ() + 0.5 - camera.z);
-        // turned about the upright only, as a name is
         pose.mulPose(new Quaternionf().rotationY((float) Math.PI - event.getCamera().getYRot() * ((float) Math.PI / 180F)));
         pose.scale(SCALE, -SCALE, SCALE);
         Font font = minecraft.font;

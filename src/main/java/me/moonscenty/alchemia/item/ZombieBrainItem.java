@@ -11,11 +11,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
-/**
- * A zombie's brain. It can be eaten, as the original's could, and like rotten flesh it will likely make the eater
- * hungry; what it leaves behind is worse. One time in ten it is a point of warp for good, otherwise one to three
- * that will pass.
- */
 public class ZombieBrainItem extends Item {
     public static final FoodProperties FOOD = new FoodProperties.Builder()
             .nutrition(4)

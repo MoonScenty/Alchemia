@@ -15,10 +15,6 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RenderGuiEvent;
 
-/**
- * While an alchemometer is in hand, says whether whatever is in front of the player still has anything to teach, and
- * how far along a reading is.
- */
 @EventBusSubscriber(modid = Alchemia.MODID, value = Dist.CLIENT)
 public class ScanHintOverlay {
     private static final int BAR_WIDTH = 60;

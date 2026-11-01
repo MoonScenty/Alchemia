@@ -19,11 +19,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeManager;
 
-/**
- * What JEI is told: the arcane workbench, the crucible and the infusion altar, each with its recipes, the block it
- * is done at, and, for the workbench, filling its grid from the bag. JEI is not needed to play; this is only read
- * when it is there.
- */
 @JeiPlugin
 public class AlchemiaJeiPlugin implements IModPlugin {
     private static final ResourceLocation ID = Alchemia.id("jei");

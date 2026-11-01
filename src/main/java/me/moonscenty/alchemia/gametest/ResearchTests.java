@@ -36,7 +36,6 @@ public class ResearchTests {
         helper.succeed();
     }
 
-    /** A reader has to start somewhere, so at least one entry is handed over rather than researched. */
     @GameTest(template = TEMPLATE)
     public static void somethingStartsUnlocked(GameTestHelper helper) {
         Registry<ResearchEntry> entries = helper.getLevel().registryAccess().registryOrThrow(ModResearch.ENTRY_KEY);
@@ -45,7 +44,6 @@ public class ResearchTests {
         helper.succeed();
     }
 
-    /** Handing out the starting entries twice must not differ from handing them out once. */
     @GameTest(template = TEMPLATE)
     public static void startingResearchIsHandedOutOnceOnly(GameTestHelper helper) {
         Registry<ResearchEntry> entries = helper.getLevel().registryAccess().registryOrThrow(ModResearch.ENTRY_KEY);
@@ -64,7 +62,6 @@ public class ResearchTests {
         helper.succeed();
     }
 
-    /** Clearing one half of what a player knows must leave the other half alone. */
     @GameTest(template = TEMPLATE)
     public static void forgettingOneHalfKeepsTheOther(GameTestHelper helper) {
         Registry<ResearchEntry> entries = helper.getLevel().registryAccess().registryOrThrow(ModResearch.ENTRY_KEY);
@@ -81,7 +78,6 @@ public class ResearchTests {
         helper.succeed();
     }
 
-    /** Every entry must point at a branch that exists and at parents that exist, or the book would dead-end. */
     @GameTest(template = TEMPLATE)
     public static void everyEntryPointsSomewhereReal(GameTestHelper helper) {
         Registry<ResearchEntry> entries = helper.getLevel().registryAccess().registryOrThrow(ModResearch.ENTRY_KEY);
@@ -101,7 +97,6 @@ public class ResearchTests {
         helper.succeed();
     }
 
-    /** The first entry has to be reachable from a standing start, or nothing else ever opens up. */
     @GameTest(template = TEMPLATE)
     public static void somethingIsReachableFromTheStart(GameTestHelper helper) {
         Registry<ResearchEntry> entries = helper.getLevel().registryAccess().registryOrThrow(ModResearch.ENTRY_KEY);
@@ -113,7 +108,6 @@ public class ResearchTests {
         helper.succeed();
     }
 
-    /** Requirements are what a player has yet to discover, so a fresh player must be short of the harder entries. */
     @GameTest(template = TEMPLATE)
     public static void requirementsTrackWhatIsStillUnknown(GameTestHelper helper) {
         Registry<ResearchEntry> entries = helper.getLevel().registryAccess().registryOrThrow(ModResearch.ENTRY_KEY);
@@ -128,21 +122,18 @@ public class ResearchTests {
         helper.succeed();
     }
 
-    /** A scan reads what a thing is made of, and an item and the block it comes from must agree. */
     @GameTest(template = TEMPLATE)
     public static void scanningReadsWhatAThingIsMadeOf(GameTestHelper helper) {
         ScanTarget iron = new ScanTarget.OfItem(new ItemStack(Items.IRON_INGOT));
         AspectList aspects = iron.aspects();
         helper.assertTrue(aspects.get(ModAspects.METAL) == 4, "an iron ingot should read as metallum 4, read " + aspects);
 
-        // a block is read through the item it drops, so the ore and its item must agree
         BlockPos pos = helper.absolutePos(BlockPos.ZERO);
         ScanTarget ore = new ScanTarget.OfBlock(helper.getLevel(), pos, ModBlocks.AMBER_ORE.get().defaultBlockState());
         helper.assertTrue(ore.aspects().get(ModAspects.TRAP) > 0, "amber ore should read as vinculum, read " + ore.aspects());
         helper.succeed();
     }
 
-    /** What is left on the desk has to show up on it, since the inkwell and note are part of the block's model. */
     @GameTest(template = TEMPLATE)
     public static void theDeskShowsWhatIsLeftOnIt(GameTestHelper helper) {
         BlockPos pos = new BlockPos(2, 1, 2);
@@ -163,7 +154,6 @@ public class ResearchTests {
         helper.succeed();
     }
 
-    /** The desk only takes the two things that belong on it. */
     @GameTest(template = TEMPLATE)
     public static void theDeskIsFussyAboutWhatGoesOnIt(GameTestHelper helper) {
         BlockPos pos = new BlockPos(4, 1, 4);
@@ -179,7 +169,6 @@ public class ResearchTests {
         helper.succeed();
     }
 
-    /** Ink runs down as a note is worked through, and the tools vanish once the bottle is dry. */
     @GameTest(template = TEMPLATE)
     public static void inkRunsOutEventually(GameTestHelper helper) {
         BlockPos pos = new BlockPos(6, 1, 6);
@@ -192,7 +181,6 @@ public class ResearchTests {
         int capacity = tools.getMaxDamage();
         table.put(ResearchTableBlockEntity.SLOT_TOOLS, tools);
 
-        // a bottle holding 64 points is good for 64 strokes, the last of which empties it
         for (int used = 1; used <= capacity; used++) {
             helper.assertTrue(table.useInk(), "the ink gave out early, after " + used);
         }

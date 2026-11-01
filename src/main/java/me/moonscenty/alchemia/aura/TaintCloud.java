@@ -17,19 +17,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.material.Fluids;
 
-/**
- * A cloud of flux hanging over the land, raining goo.
- * <p>
- * It has no body: it is a spot in the air that lasts a minute or so, drops a puddle now and then on the ground
- * beneath, and shows itself as the original's cloud did: great slow purple puffs, and a rain that splashes up slime.
- * Each puddle costs the chunk a point of flux, and when the chunk cannot pay the cloud thins out sooner.
- */
+// Bodiless; each puddle costs the chunk a point of flux, and it thins out sooner when the chunk can't pay.
 public class TaintCloud extends Entity {
-    /** How far a puddle may land from the middle. */
     private static final int SPREAD = 16;
-    /** How often, per tick, it drops a puddle. */
+    // 1 in N per tick
     private static final int POOL_CHANCE = 20;
-    /** How much sooner it goes when the land has no flux to give. */
     private static final int THINS_BY = 20;
 
 
@@ -66,7 +58,6 @@ public class TaintCloud extends Entity {
         }
     }
 
-    /** Drops a puddle somewhere on the ground under the cloud. */
     private void rain() {
         int x = getBlockX() + random.nextInt(SPREAD) - random.nextInt(SPREAD);
         int z = getBlockZ() + random.nextInt(SPREAD) - random.nextInt(SPREAD);
@@ -76,11 +67,6 @@ public class TaintCloud extends Entity {
         }
     }
 
-    /**
-     * Drops a puddle on a spot, paid for by the land it lands on.
-     *
-     * @return whether a puddle was left
-     */
     public boolean rain(BlockPos onto) {
         BlockState ground = level().getBlockState(onto.below());
         BlockState there = level().getBlockState(onto);

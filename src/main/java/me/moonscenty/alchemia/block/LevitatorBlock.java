@@ -33,22 +33,10 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-/**
- * An arcane levitator: a box of wood and brass that lifts whatever is in front of it.
- *
- * <p>It pushes along the way it faces -- up, if it was put down on the ground -- as far as its range or the first
- * solid block, and holds anything it pushes sideways aloft as it goes. It burns aer from the aura to do it, more the
- * further it reaches. A redstone signal stops it.
- *
- * <p>It faces the way a piston would, back at whoever put it down; crouching turns it round. An empty hand on it
- * steps its range through four, eight, sixteen and thirty-two blocks.
- */
 public class LevitatorBlock extends BaseEntityBlock {
     public static final MapCodec<LevitatorBlock> CODEC = simpleCodec(LevitatorBlock::new);
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
-    /** Working, which is what it does unless a redstone signal is holding it still. */
     public static final BooleanProperty ENABLED = BlockStateProperties.ENABLED;
-    /** The body, an eighth short at the back, and the toggle in the gap there. The original's measures. */
     private static final Map<Direction, VoxelShape> SHAPES = new EnumMap<>(Direction.class);
 
     static {
@@ -67,7 +55,6 @@ public class LevitatorBlock extends BaseEntityBlock {
         registerDefaultState(stateDefinition.any().setValue(FACING, Direction.UP).setValue(ENABLED, true));
     }
 
-    /** The toggle on the back, a quarter wide and a sixteenth deep. */
     private static VoxelShape toggle(Direction facing) {
         double low = 6.0;
         double high = 10.0;
@@ -91,7 +78,6 @@ public class LevitatorBlock extends BaseEntityBlock {
         builder.add(FACING, ENABLED);
     }
 
-    /** Facing back at whoever put it down, as a piston does; crouching turns it round. */
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         Direction facing = context.getNearestLookingDirection().getOpposite();
@@ -111,7 +97,6 @@ public class LevitatorBlock extends BaseEntityBlock {
         super.neighborChanged(state, level, pos, from, fromPos, moving);
     }
 
-    /** Something in hand is put down against it as against any block; only an empty hand works the toggle. */
     @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
             Player player, InteractionHand hand, BlockHitResult hit) {
@@ -119,13 +104,7 @@ public class LevitatorBlock extends BaseEntityBlock {
                 : ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION;
     }
 
-    /**
-     * Steps the range on.
-     * <p>
-     * <b>Different from the original</b>, which only did this for a click on the toggle itself, a sixteenth of a
-     * block deep in the gap at the back -- which on a levitator set on the ground could only be reached from the
-     * side, at a slant. Here any face will do, for an empty hand.
-     */
+    // any face steps the range (original required clicking the small toggle at the back)
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player,
             BlockHitResult hit) {
@@ -144,7 +123,6 @@ public class LevitatorBlock extends BaseEntityBlock {
         return SHAPES.get(state.getValue(FACING));
     }
 
-    /** What stands on it stands on a whole block, as it did in the original. */
     @Override
     protected VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos,
             CollisionContext context) {

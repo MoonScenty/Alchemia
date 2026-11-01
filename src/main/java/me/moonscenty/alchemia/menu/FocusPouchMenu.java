@@ -15,19 +15,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 
-/**
- * The inside of a focus pouch.
- *
- * <p>The pouch is not a block, so there is nowhere in the world for its contents to live: the slots are a working
- * copy that is written back onto the item every time anything moves. That is more writing than a chest does, but a
- * pouch holds eighteen things at most and the alternative is a bag that forgets itself when the game is closed
- * mid-shuffle.
- *
- * <p>The pouch being edited cannot be moved while it is open. Its own slot in the bag is nailed down, so there is
- * no way to shift-click the pouch into itself or to drop it and leave the window looking at nothing.
- */
 public class FocusPouchMenu extends AlchemiaMenu {
-    // where the slots sit on the original's panel, as its container placed them
+    // original's layout
     private static final int FOCI_X = 37;
     private static final int FOCI_Y = 51;
     private static final int PACK_X = 8;
@@ -36,7 +25,6 @@ public class FocusPouchMenu extends AlchemiaMenu {
 
     private final Player player;
     private final InteractionHand hand;
-    /** Which slot of the bag the pouch is in, or -1 when it is in the off hand and so not on the screen. */
     private final int locked;
     private final Container inside;
 
@@ -60,12 +48,10 @@ public class FocusPouchMenu extends AlchemiaMenu {
         addPlayerInventory(inventory, PACK_X, PACK_Y, this::held);
     }
 
-    /** Which square of the bag the pouch is in, or -1 when it is in the off hand. */
     public int locked() {
         return locked;
     }
 
-    /** The pouch being edited, taken from the hand it was opened with rather than remembered as a stack. */
     private ItemStack pouch() {
         return player.getItemInHand(hand);
     }
@@ -84,9 +70,8 @@ public class FocusPouchMenu extends AlchemiaMenu {
         return container;
     }
 
-    /** Writes the slots back onto the item. */
     private void save() {
-        // the slots are still being filled from the pouch; writing them back now would be writing half a pouch
+        // still loading the slots from the pouch; writing back now would save half a pouch
         if (inside == null) {
             return;
         }
@@ -101,7 +86,6 @@ public class FocusPouchMenu extends AlchemiaMenu {
         FocusPouchItem.setContents(pouch, items);
     }
 
-    /** A slot of the player's own bag, with the pouch's own square nailed down while it is open. */
     private Slot held(Inventory inventory, int index, int x, int y) {
         if (index != locked) {
             return new Slot(inventory, index, x, y);
@@ -125,7 +109,6 @@ public class FocusPouchMenu extends AlchemiaMenu {
         save();
     }
 
-    /** Only while the pouch is still in the hand it was opened from. */
     @Override
     public boolean stillValid(Player taker) {
         return pouch().getItem() instanceof FocusPouchItem;
@@ -136,7 +119,6 @@ public class FocusPouchMenu extends AlchemiaMenu {
         return quickMoveBetween(index, FocusPouchItem.SIZE);
     }
 
-    /** A square that takes a focus and nothing else, one to a square. */
     private class FocusSlot extends Slot {
         FocusSlot(Container container, int index, int x, int y) {
             super(container, index, x, y);

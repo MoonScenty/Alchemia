@@ -6,10 +6,6 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
-/**
- * The aura rides on the chunk itself, so it is saved and loaded with the land it belongs to and nothing has to keep
- * a separate map of the world.
- */
 public class ModAuraAttachment {
     public static final DeferredRegister<AttachmentType<?>> ATTACHMENTS =
             DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, Alchemia.MODID);

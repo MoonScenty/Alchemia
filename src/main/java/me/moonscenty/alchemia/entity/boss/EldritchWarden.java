@@ -43,19 +43,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Block;
 
-/**
- * The Eldritch Warden, keeper of a great hall: a guardian grown huge, with one of fifteen old names.
- * <p>
- * It rises out of the floor over seven and a half seconds in a swirl of smoke. A shield two thirds of its health
- * deep stands over it and comes back a point every second and a quarter when it is not being hit. Further off than
- * three blocks it throws dark orbs, from alternate hands -- or one time in five, if it can see its mark, screeches:
- * a blast that throws the mark back, withers and weakens it for twenty seconds, and leaves warp in a player's mind.
- * Close up it strikes. Where it walks it leaves sapping.
- * <p>
- * The first time a blow finds it with its shield down, it goes into a frenzy: seven and a half seconds untouchable
- * and still, in which it goes home and lays ring after widening ring of sapping round itself, each gone again in
- * thirteen to twenty seconds. Drowning and withering do nothing to it.
- */
 public class EldritchWarden extends ThaumcraftBoss implements RangedAttackMob, EldritchMob, ArmLifting {
     public static final List<String> TITLES = List.of("Aphoom-Zhah", "Basatan", "Chaugnar Faugn", "Mnomquah",
             "Nyogtha", "Oorn", "Shaikorth", "Rhan-Tegoth", "Rhogog", "Shudde M'ell", "Vulthoom", "Yag-Kosha",
@@ -187,7 +174,6 @@ public class EldritchWarden extends ThaumcraftBoss implements RangedAttackMob, E
         }
     }
 
-    /** One of the frenzy's rings, every half second, each wider and finer than the last. */
     private void rings() {
         if (frenzy < 121 && frenzy % 10 == 0) {
             level().broadcastEntityEvent(this, BOTH);
@@ -214,7 +200,6 @@ public class EldritchWarden extends ThaumcraftBoss implements RangedAttackMob, E
         frenzy--;
     }
 
-    /** Back to the middle of its hall, as an enderman goes, if there is room there. */
     private void goHome() {
         if (!hasRestriction()) {
             return;

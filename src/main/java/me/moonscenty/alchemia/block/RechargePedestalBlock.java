@@ -26,14 +26,9 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-/**
- * A pedestal that fills a wand set on it from the aura, the way a wand fills itself in the hand but without the
- * holding.
- */
 public class RechargePedestalBlock extends BaseEntityBlock {
     public static final MapCodec<RechargePedestalBlock> CODEC = simpleCodec(RechargePedestalBlock::new);
 
-    /** The foot, the step on it and the column, which is what the model is made of. */
     private static final VoxelShape SHAPE = Shapes.or(
             Block.box(0, 0, 0, 16, 4, 16),
             Block.box(2, 4, 2, 14, 8, 14),
@@ -48,7 +43,6 @@ public class RechargePedestalBlock extends BaseEntityBlock {
         return CODEC;
     }
 
-    /** A wand, or anything else that takes vis back, in hand is set down on it, if there is nothing there already. */
     @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
             Player player, InteractionHand hand, BlockHitResult hit) {
@@ -63,7 +57,6 @@ public class RechargePedestalBlock extends BaseEntityBlock {
         return ItemInteractionResult.sidedSuccess(level.isClientSide);
     }
 
-    /** Takes back whatever is on it. */
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player,
             BlockHitResult hit) {

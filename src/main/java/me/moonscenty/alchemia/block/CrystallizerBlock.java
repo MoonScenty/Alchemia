@@ -22,13 +22,8 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 
-/**
- * The essentia crystallizer. It faces into whatever it was set against, which is where its essentia comes from;
- * its crystals come out of the other end. Drawn wholly by its renderer.
- */
 public class CrystallizerBlock extends BaseEntityBlock {
     public static final MapCodec<CrystallizerBlock> CODEC = simpleCodec(CrystallizerBlock::new);
-    /** The way in: the face it was set against. */
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
 
     public CrystallizerBlock(Properties properties) {
@@ -46,7 +41,6 @@ public class CrystallizerBlock extends BaseEntityBlock {
         builder.add(FACING);
     }
 
-    /** Facing into what it was put against, whichever way the player was looking. */
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         return defaultBlockState().setValue(FACING, context.getClickedFace().getOpposite());

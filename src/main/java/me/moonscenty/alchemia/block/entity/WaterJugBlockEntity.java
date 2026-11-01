@@ -21,22 +21,11 @@ import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
-/**
- * A jug that is never empty: it draws water out of the air and pours it into whatever round it will take it.
- *
- * <p>It holds a bucket's worth at a time and fills itself again from the aura, a point of aqua for every bucket.
- * Anything within two blocks to the sides and one up or down that holds liquid -- a crucible, a cauldron, a tank
- * of somebody else's -- is found in time and topped up, a quarter of a bucket every quarter of a second. And
- * anybody holding an empty bucket or bottle can fill it from the jug by hand.
- *
- * <p>It finds what is round it slowly, one place every quarter of a second, and remembers what it found.
- */
 public class WaterJugBlockEntity extends BlockEntity {
-    /** How much a fill from the air brings, what it pours at a time, and how often it works. The original's. */
+    // original's values
     public static final int FILL = 1000;
     private static final int POURS = 25;
     private static final int EVERY = 5;
-    /** How far it looks: five across, three high, five deep, about the jug. */
     private static final int ACROSS = 5;
     private static final int HIGH = 3;
 
@@ -61,7 +50,6 @@ public class WaterJugBlockEntity extends BlockEntity {
         }
     }
 
-    /** One more place round it, to see whether it holds liquid. */
     private void look(ServerLevel level) {
         looked = (looked + 1) % (ACROSS * ACROSS * HIGH);
         if (!pouringInto.contains(looked) && handler(level, looked) != null) {
@@ -70,7 +58,6 @@ public class WaterJugBlockEntity extends BlockEntity {
         }
     }
 
-    /** A quarter of a bucket into the first of what it knows of that will take some. */
     private void pour(ServerLevel level) {
         for (int i = 0; i < pouringInto.size() && charge > 0; i++) {
             int place = pouringInto.get(i);
@@ -93,7 +80,6 @@ public class WaterJugBlockEntity extends BlockEntity {
         }
     }
 
-    /** What holds liquid at one of the places round it, poured into from above. Nothing for the jug itself. */
     private IFluidHandler handler(ServerLevel level, int place) {
         BlockPos at = placeOf(place);
         return at.equals(worldPosition) ? null : level.getCapability(Capabilities.FluidHandler.BLOCK, at, Direction.UP);
@@ -106,10 +92,7 @@ public class WaterJugBlockEntity extends BlockEntity {
         return worldPosition.offset(x - ACROSS / 2, y - HIGH / 2, z - ACROSS / 2);
     }
 
-    /**
-     * Water taken out by hand. It may go below empty: a jug is not refused because it was low, it only owes the
-     * air the more before it fills again.
-     */
+    // may go negative; the deficit is refilled from the aura first
     public void drawn(int amount) {
         charge -= amount;
         setChanged();

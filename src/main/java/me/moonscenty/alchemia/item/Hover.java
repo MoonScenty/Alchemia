@@ -12,19 +12,10 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
-/**
- * Flying on the thaumostatic harness, the original's {@code Hover}.
- * <p>
- * Switched on, the harness lets its wearer fly as a creative player does, burning a tick of fuel each tick (three
- * while sprinting) and slowing them across the ground and through the air to a little over four fifths of their
- * speed -- more with haste on it, all of it with a thaumostatic girdle in the belt slot. Run dry, it switches off. Switched off, it still
- * takes a quarter off a fall every tick it is worn. It does nothing for a creative player, who flies anyway.
- */
 @EventBusSubscriber(modid = Alchemia.MODID)
 public final class Hover {
-    /** Marks a player the harness has let fly, so the flight can be taken back when it comes off. */
     private static final String LIFTED = Alchemia.MODID + ":hover_lifted";
-    /** How much of their speed a flier keeps, and what the girdle gives back. */
+    // share of speed a flier keeps, and what the girdle gives back
     private static final float DRAG = 0.825F;
     private static final float GIRDLE = 0.175F;
     private static final float HASTE = 0.075F;
@@ -32,13 +23,11 @@ public final class Hover {
     private Hover() {
     }
 
-    /** The harness the player has on, or nothing. */
     public static ItemStack worn(Player player) {
         ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
         return chest.getItem() instanceof ThaumostaticHarnessItem ? chest : ItemStack.EMPTY;
     }
 
-    /** H: on, if there is anything to fly on, or off. */
     public static void toggle(Player player) {
         ItemStack harness = worn(player);
         if (harness.isEmpty() || player.getAbilities().instabuild) {
@@ -90,7 +79,6 @@ public final class Hover {
         }
     }
 
-    /** Lets the player fly, or takes it back, and tells their client. */
     private static void lift(Player player, boolean up) {
         player.getPersistentData().putBoolean(LIFTED, up);
         if (player.getAbilities().mayfly == up) {
@@ -103,9 +91,7 @@ public final class Hover {
         player.onUpdateAbilities();
     }
 
-    /** Slower on the harness than off it, unless the girdle makes it up; and a hum as it works. */
     private static void drag(Player player) {
-        // each level of haste on the harness takes some of the drag off
         float keep = DRAG + HASTE * me.moonscenty.alchemia.enchantment.ModEnchantments.haste(player, worn(player));
         if (wearsGirdle(player)) {
             keep += GIRDLE;

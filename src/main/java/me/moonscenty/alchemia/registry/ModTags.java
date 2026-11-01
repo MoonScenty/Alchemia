@@ -10,33 +10,21 @@ import net.minecraft.world.level.block.Block;
 
 public class ModTags {
     public static class Blocks {
-        /** An eldritch ring's stonework, which an obelisk brings down with it. */
         public static final TagKey<Block> ELDRITCH_STONEWORK = mod("eldritch_stonework");
         public static final TagKey<Block> CRYSTALS = mod("crystals");
-        /** Blocks a naturally generated crystal can grow on. */
         public static final TagKey<Block> CRYSTAL_GROWABLE = mod("crystal_growable");
 
-        /** Sand, dirt and terracotta: the dry ground a cinderpearl takes root in. */
         public static final TagKey<Block> CINDERPEARL_PLACEABLE = mod("cinderpearl_placeable");
 
-        /** Everything the taint has already got: what the spread counts as its own when it looks around. */
         public static final TagKey<Block> TAINT = mod("taint");
-        /** What the taint turns into soil, rock and crust when it has a block surrounded. */
         public static final TagKey<Block> TAINT_ROTS_TO_SOIL = mod("taint_rots_to_soil");
         public static final TagKey<Block> TAINT_ROTS_TO_ROCK = mod("taint_rots_to_rock");
         public static final TagKey<Block> TAINT_ROTS_TO_CRUST = mod("taint_rots_to_crust");
 
-        /** What counts as a fire under a crucible. Anything with a light to it only counts while it is lit. */
         public static final TagKey<Block> HEATS_CRUCIBLE = mod("heats_crucible");
 
-        /**
-         * What holds an infusion steady, when a pair of them is set either side of the matrix.
-         * <p>
-         * A tag rather than a list in code, so that a pack can decide what its own altars are decorated with.
-         */
         public static final TagKey<Block> STABILISES_INFUSION = mod("stabilises_infusion");
 
-        /** What the primal crusher is the right tool for: whatever a pickaxe or a shovel is. */
         public static final TagKey<Block> MINEABLE_PRIMAL_CRUSHER = mod("mineable/primal_crusher");
 
         public static final TagKey<Block> ORES_AMBER = common("ores/amber");
@@ -57,52 +45,27 @@ public class ModTags {
     }
 
     public static class Entities {
-        /** What may be rolled for a champion when it comes into a world. */
         public static final TagKey<net.minecraft.world.entity.EntityType<?>> CHAMPION_CANDIDATES =
                 TagKey.create(Registries.ENTITY_TYPE, Alchemia.id("champion_candidates"));
     }
 
     public static class Biomes {
-        /** Where angry zombies walk with the others: the original's warm, cool, icy and dry lands. */
         public static final TagKey<Biome> HAS_ANGRY_ZOMBIES = TagKey.create(Registries.BIOME, Alchemia.id("has_angry_zombies"));
         public static final TagKey<Biome> HAS_GREATWOOD = TagKey.create(Registries.BIOME, Alchemia.id("has_greatwood"));
         public static final TagKey<Biome> HAS_SILVERWOOD = TagKey.create(Registries.BIOME, Alchemia.id("has_silverwood"));
         public static final TagKey<Biome> HAS_CINDERPEARL = TagKey.create(Registries.BIOME, Alchemia.id("has_cinderpearl"));
 
-        /**
-         * What a dark node turns the land around it into.
-         * <p>
-         * A tag rather than a named biome, so that a pack can give dark nodes other lands to make; the mod puts its
-         * eerie land in it.
-         */
         public static final TagKey<Biome> NODE_DARKENS_INTO = TagKey.create(Registries.BIOME, Alchemia.id("node_darkens_into"));
     }
 
     public static class Items {
-        /**
-         * Worn or carried, anything in here shows aura nodes without an instrument in hand.
-         * <p>
-         * Empty until the goggles of revealing arrive; the sight is written against the tag so they only have to
-         * join it.
-         */
         public static final TagKey<Item> REVEALS = mod("reveals");
-        /** All sixteen flames, so that a dye can be put to any of them without naming all sixteen. */
         public static final TagKey<Item> NITOR = mod("nitor");
-        /** What runic augmentation will harden: every piece of the mod's armour, and every bauble. */
         public static final TagKey<Item> RUNIC_AUGMENTABLE = mod("runic_augmentable");
 
-        /**
-         * The twelve foci, so that a slot can ask for "a focus" rather than naming all twelve.
-         * <p>
-         * The original asked whether the item was an {@code ItemFocusBasic}. A tag says the same thing and lets
-         * an add-on's focus into the pouch without it having to extend anything of ours.
-         */
         public static final TagKey<Item> FOCI = mod("foci");
-        /** What haste goes on: boots of any kind, and the thaumostatic harness. */
         public static final TagKey<Item> HASTE_ENCHANTABLE = mod("enchantable/haste");
-        /** What repair goes on: the original's own tools, weapons and armour, the ones it called repairable. */
         public static final TagKey<Item> REPAIR_ENCHANTABLE = mod("enchantable/repair");
-        /** Things whose making leaves a point of sticking warp on whoever made them. */
         public static final TagKey<Item> WARPS_WHEN_MADE = mod("warps_when_made");
 
         public static final TagKey<Item> SHARDS = mod("shards");

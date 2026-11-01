@@ -23,20 +23,12 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 
-/**
- * The thaumatorium's panel, laid out as the original's: the catalyst slot top left, and beside it the recipe on
- * offer, with arrows to step through the others, and under them what it needs and how much of each is in.
- * <p>
- * Clicking the recipe chooses it, or unchooses it if it was chosen. A ring pulses round the recipe square while
- * anything is chosen; a recipe shown dim cannot be chosen until something else is let go of.
- */
 public class ThaumatoriumScreen extends AbstractContainerScreen<ThaumatoriumMenu> {
     private static final ResourceLocation PANEL = Alchemia.id("textures/gui/thaumatorium.png");
     private static final int SHEET = 256;
     private static final int ICON = 16;
     private static final int SHOWN = 6;
 
-    /** Which recipe on offer is being looked at, and how far along its aspects the row is scrolled. */
     private int index;
     private int firstAspect;
     private int offeredLast = -1;
@@ -134,7 +126,6 @@ public class ThaumatoriumScreen extends AbstractContainerScreen<ThaumatoriumMenu
         graphics.setColor(1F, 1F, 1F, 1F);
     }
 
-    /** When what is on offer changes, look at the first one already chosen, if any. */
     private void refresh(List<RecipeHolder<CrucibleRecipe>> offered) {
         if (offered.size() == offeredLast) {
             index = Mth.clamp(index, 0, Math.max(0, offered.size() - 1));
@@ -154,7 +145,6 @@ public class ThaumatoriumScreen extends AbstractContainerScreen<ThaumatoriumMenu
         }
     }
 
-    /** No words; the panel says what each part is. */
     @Override
     protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
     }

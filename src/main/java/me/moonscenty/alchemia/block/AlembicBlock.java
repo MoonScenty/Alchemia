@@ -32,20 +32,12 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-/**
- * A vessel that catches essentia rising out of a smelter, and stacks with others of its kind.
- * <p>
- * Its legs are not part of the vessel but of the stand it sits on, so a vessel with another underneath has none:
- * it is standing on that one instead. The state says which, and the blockstate picks the model to match.
- */
 public class AlembicBlock extends BaseEntityBlock {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
-    /** True when there is nothing underneath to stand on, so it has to stand on its own legs. */
     public static final BooleanProperty LEGS = BooleanProperty.create("legs");
 
     public static final MapCodec<AlembicBlock> CODEC = simpleCodec(AlembicBlock::new);
 
-    // the body, which is a shade wider than a block; the legs underneath are not worth catching a click on
     private static final VoxelShape SHAPE = Block.box(0, 0, 1, 16, 16, 15);
 
     public AlembicBlock(Properties properties) {
@@ -87,18 +79,11 @@ public class AlembicBlock extends BaseEntityBlock {
                 .setValue(LEGS, needsLegs(context.getLevel(), context.getClickedPos()));
     }
 
-    /** A vessel sat on another does not put its own legs down through it. */
     private static boolean needsLegs(BlockGetter level, BlockPos pos) {
         return !(level.getBlockState(pos.below()).getBlock() instanceof AlembicBlock);
     }
 
-    /**
-     * Sets the legs right for a vessel that arrived without being placed by hand.
-     * <p>
-     * Only a player's placement goes through {@link #getStateForPlacement}; a structure, a command or another mod
-     * sets the block as it stands, and a vessel that turns up already stacked would otherwise have legs through
-     * the one below it.
-     */
+    // structures and commands skip getStateForPlacement
     @Override
     protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState before, boolean moving) {
         boolean legs = needsLegs(level, pos);
@@ -125,19 +110,13 @@ public class AlembicBlock extends BaseEntityBlock {
         return state.rotate(mirror.getRotation(state.getValue(FACING)));
     }
 
-    /**
-     * Says what has been caught, since there is nowhere else to read it. Crouching, it is tipped out instead, the
-     * original's {@code BlockAlembic.onBlockActivated}: whatever was in it goes into the air as flux.
-     */
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player,
             BlockHitResult hit) {
         if (!(level.getBlockEntity(pos) instanceof AlembicBlockEntity alembic)) {
             return InteractionResult.PASS;
         }
-        // a block that only reports what is in it must not swallow the click: Minecraft asks the block with
-        // the item first, then the block on its own, and only then the item itself. A jar that answers a phial
-        // with a sentence about its contents is a jar the phial can never be used on.
+        // empty hand only: answering a held item would block that item's own use
         if (!player.getMainHandItem().isEmpty()) {
             return InteractionResult.PASS;
         }

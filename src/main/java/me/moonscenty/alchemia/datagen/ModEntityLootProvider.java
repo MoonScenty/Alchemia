@@ -18,9 +18,6 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCon
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceWithEnchantedBonusCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 
-/**
- * What the mobs drop, in the original's numbers. Looting does nothing for the flesh, as it did nothing there.
- */
 public class ModEntityLootProvider extends EntityLootSubProvider {
     public ModEntityLootProvider(HolderLookup.Provider registries) {
         super(FeatureFlags.REGISTRY.allFlags(), registries);
@@ -28,7 +25,6 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
 
     @Override
     public void generate() {
-        // three tosses for a piece of flesh each, and a brain half the time and a tenth more for each looting
         LootTable.Builder angry = LootTable.lootTable();
         for (int i = 0; i < 3; i++) {
             angry.withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1))
@@ -41,7 +37,6 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
                         0.1F)));
         add(ModEntities.ANGRY_ZOMBIE.get(), rare(angry));
 
-        // twelve tosses for two pieces each, and no brain
         add(ModEntities.FURIOUS_ZOMBIE.get(), rare(LootTable.lootTable().withPool(LootPool.lootPool()
                 .setRolls(ConstantValue.exactly(12))
                 .add(LootItem.lootTableItem(Items.ROTTEN_FLESH)
@@ -49,7 +44,6 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
                         .when(LootItemRandomChanceCondition.randomChance(0.5F))))));
     }
 
-    /** A zombie's rare drop, which was the zombie's own and so theirs as well. */
     private LootTable.Builder rare(LootTable.Builder table) {
         return table.withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1))
                 .add(LootItem.lootTableItem(Items.IRON_INGOT))

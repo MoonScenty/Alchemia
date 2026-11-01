@@ -21,14 +21,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
-/**
- * Draws a hungry chest as the original did: the game's chest as it was built when the original was written, on
- * the original's own sheet.
- *
- * <p>The game's chest has been rebuilt since, and the pictures painted for the old one come out wrong on the new
- * one -- faces upside down, the latch on backwards. So the old chest is put together here, box for box, and the
- * old picture goes on it as it was meant to.
- */
+// the old vanilla chest model: the original's texture maps wrongly onto the current one
 public class HungryChestRenderer implements BlockEntityRenderer<HungryChestBlockEntity> {
     static final ResourceLocation TEXTURE = Alchemia.id("textures/entity/hungry_chest.png");
 
@@ -40,7 +33,6 @@ public class HungryChestRenderer implements BlockEntityRenderer<HungryChestBlock
     public HungryChestRenderer(BlockEntityRendererProvider.Context context) {
     }
 
-    /** The chest of that time: a lid, a latch on its front, and the box underneath. */
     private static ModelPart build() {
         MeshDefinition mesh = new MeshDefinition();
         PartDefinition root = mesh.getRoot();
@@ -61,10 +53,9 @@ public class HungryChestRenderer implements BlockEntityRenderer<HungryChestBlock
         draw(pose, buffers.getBuffer(RenderType.entityCutout(TEXTURE)), facing, chest.lid(partial), light, overlay);
     }
 
-    /** The chest facing a given way with its lid so far open. Shared with the item, which is always shut. */
     static void draw(PoseStack pose, VertexConsumer buffer, Direction facing, float open, int light, int overlay) {
         pose.pushPose();
-        // the old renderer's turns, in its order: upside down into model space, then round to face
+        // old renderer's order: flip into model space, then turn to face
         pose.translate(0.0F, 1.0F, 1.0F);
         pose.scale(1.0F, -1.0F, -1.0F);
         pose.translate(0.5F, 0.5F, 0.5F);

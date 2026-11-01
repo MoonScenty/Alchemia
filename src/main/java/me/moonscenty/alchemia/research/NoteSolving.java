@@ -18,36 +18,21 @@ import me.moonscenty.alchemia.aspect.AspectList;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 
-/**
- * Working a note out.
- * <p>
- * Two aspects lying next to each other hold together only when one is made partly of the other, so a run across the
- * board is a chain of reasoning: this comes from that, which comes from the other. The note is solved once every
- * aspect the subject pinned down is part of one such chain.
- * <p>
- * All of this is decided without a player or a level, so it can be exercised on its own.
- */
+// Neighbouring aspects link only when one is a component of the other; solved once every pinned aspect is on one chain.
 public final class NoteSolving {
     private NoteSolving() {
     }
 
-    /** Whether two aspects hold together, which is to say one is made partly of the other. */
     public static boolean linked(Holder<Aspect> one, Holder<Aspect> other) {
         return one.value().hasComponent(other) || other.value().hasComponent(one);
     }
 
-    /** Why an aspect could not be laid down, or that it can. */
     public enum Refusal {
         OK,
-        /** The note is already worked out, so there is nothing left to do to it. */
         SOLVED,
-        /** There is no space there: either off the board, or a tear in the sheet. */
         NO_SPACE,
-        /** The subject pinned that one down; it is not the reader's to move. */
         PINNED,
-        /** None of that aspect is left on the sheet to spend. */
         SPENT,
-        /** Those two make nothing between them. */
         NO_SUCH_MIX;
 
         public boolean allowed() {
@@ -55,12 +40,8 @@ public final class NoteSolving {
         }
     }
 
-    /**
-     * What the sheet holds is the whole of what may be written on it. There is deliberately no check that the reader
-     * has met the aspect: the pool starts as the six primals and only grows by mixing, so a reader can only ever lay
-     * down something the sheet itself gave them. Gating on what they have met besides would leave notes that cannot
-     * be worked out at all, since the aspects a chain passes through are rarely ones the subject named.
-     */
+    // deliberately no "has the reader met this aspect" check: the sheet only offers what mixing can make,
+    // and the gate would leave notes whose chains pass through unseen aspects unsolvable
     public static Refusal check(ResearchNote note, HexGrid.Hex at, Optional<Holder<Aspect>> aspect) {
         if (note.complete()) {
             return Refusal.SOLVED;
@@ -78,7 +59,6 @@ public final class NoteSolving {
         return note.budget().get(aspect.get()) < 1 ? Refusal.SPENT : Refusal.OK;
     }
 
-    /** The aspect made of exactly these two, whichever way round they are named. */
     public static Optional<Holder<Aspect>> mixOf(Registry<Aspect> aspects, Holder<Aspect> one, Holder<Aspect> other) {
         return aspects.holders()
                 .filter(holder -> holder.value().hasComponent(one) && holder.value().hasComponent(other))
@@ -103,16 +83,12 @@ public final class NoteSolving {
         return Refusal.OK;
     }
 
-    /** Spends one of each and puts what they make back on the sheet. */
     public static ResearchNote mix(ResearchNote note, Holder<Aspect> one, Holder<Aspect> other, Holder<Aspect> result) {
         AspectList budget = note.budget().reduce(one, 1).reduce(other, 1).add(result, 1);
         return new ResearchNote(note.research(), budget, note.cells(), note.complete());
     }
 
-    /**
-     * The note with one cell rewritten. Laying an aspect down spends one from the sheet; lifting one back off does
-     * not hand it back, so a guess costs something.
-     */
+    // lifting an aspect back off does not refund it
     public static ResearchNote place(ResearchNote note, HexGrid.Hex at, Optional<Holder<Aspect>> aspect) {
         List<ResearchNote.Cell> cells = new ArrayList<>(note.cells().size());
         for (ResearchNote.Cell cell : note.cells()) {
@@ -123,7 +99,6 @@ public final class NoteSolving {
         return new ResearchNote(note.research(), budget, List.copyOf(cells), note.complete());
     }
 
-    /** Whether every pinned aspect now hangs off the same chain. */
     public static boolean isSolved(ResearchNote note) {
         Set<HexGrid.Hex> pinned = new HashSet<>();
         note.pinnedCells().forEach(cell -> pinned.add(cell.at()));
@@ -133,10 +108,6 @@ public final class NoteSolving {
         return reach(note, note.pinnedCells().getFirst().at()).containsAll(pinned);
     }
 
-    /**
-     * Every cell that can be walked to from a starting one, stepping only between aspects that hold together. The
-     * start is included whether or not anything leads out of it.
-     */
     public static Set<HexGrid.Hex> reach(ResearchNote note, HexGrid.Hex from) {
         Set<HexGrid.Hex> seen = new HashSet<>();
         Deque<HexGrid.Hex> queue = new ArrayDeque<>();
@@ -163,19 +134,10 @@ public final class NoteSolving {
         return seen;
     }
 
-
-    // --- working one out ------------------------------------------------------
-
-    /** One aspect written into one cell. */
     public record Placement(HexGrid.Hex at, Holder<Aspect> aspect) {
     }
 
-    /**
-     * What it takes off the sheet to end up with one of an aspect: the aspect itself if it is primal, otherwise
-     * everything its parts take, since a compound is mixed up from them.
-     */
     public static AspectList primalCost(Holder<Aspect> aspect) {
-        // the search asks this of every aspect at every step, and the answer never changes
         return COSTS.computeIfAbsent(aspect, held -> Optional.ofNullable(primalCost(held, new HashSet<>()))).orElse(null);
     }
 
@@ -185,7 +147,7 @@ public final class NoteSolving {
         if (aspect.value().isPrimal()) {
             return AspectList.of(aspect, 1);
         }
-        // a compound that somehow lists itself among its parts would never come out, so it costs nothing knowable
+        // a compound that lists itself among its parts
         if (!seen.add(aspect)) {
             return null;
         }
@@ -201,16 +163,7 @@ public final class NoteSolving {
         return total;
     }
 
-    /**
-     * A cheap way of working a note out: which aspect goes in which cell so that every pinned one ends up on the
-     * same chain.
-     * <p>
-     * Pinned cells are joined to the chain one at a time, each by the cheapest run of cells that reaches it, cost
-     * being the primals the aspects along it take to mix up. That is not provably the cheapest answer overall, but
-     * it is an answer, which is what the drawing of a note needs in order to promise there is one.
-     *
-     * @return the placements, or nothing if no run of aspects joins them at all
-     */
+    // greedy: joins pinned cells one at a time by the cheapest run; not optimal, but proves the note solvable
     public static Optional<List<Placement>> solve(Registry<Aspect> aspects, ResearchNote note) {
         List<ResearchNote.Cell> pinned = note.pinnedCells();
         if (pinned.size() <= 1) {
@@ -240,7 +193,6 @@ public final class NoteSolving {
         return isSolved(working) ? Optional.of(List.copyOf(answer)) : Optional.empty();
     }
 
-    /** What a whole answer costs off the sheet. */
     public static AspectList costOf(List<Placement> answer) {
         AspectList total = AspectList.EMPTY;
         for (Placement step : answer) {
@@ -252,21 +204,13 @@ public final class NoteSolving {
         return total;
     }
 
-    /** Where a search has got to: a cell and what was written in it, since that decides what may come next. */
     private record Reached(HexGrid.Hex at, Holder<Aspect> aspect) {
     }
 
-    /**
-     * A place in the search's queue and what it cost when it was queued. The cost travels with it so the queue's
-     * order never changes under it; a place found cheaper later is queued again and the dearer copy passed over.
-     */
+    // cost stored with the entry so queue order never shifts; a dearer stale copy is skipped
     private record Queued(Reached reached, int cost) {
     }
 
-    /**
-     * Which aspects may follow which, and what each costs, worked out once for a whole solving rather than asked of
-     * every aspect at every step of the search.
-     */
     private record Links(List<Holder<Aspect>> writable, Map<Aspect, List<Holder<Aspect>>> after,
             Map<Aspect, Integer> cost) {
         static Links of(Registry<Aspect> aspects) {
@@ -284,18 +228,13 @@ public final class NoteSolving {
         }
     }
 
-    /** What may be written next to an aspect; worked out on the spot for one that cannot itself be written. */
     private static List<Holder<Aspect>> following(Links links, Holder<Aspect> aspect) {
         List<Holder<Aspect>> known = links.after().get(aspect.value());
         return known != null ? known
                 : links.writable().stream().filter(other -> linked(aspect, other)).toList();
     }
 
-    /**
-     * The cheapest run of blank cells from anywhere on the chain to a pinned cell, every step holding to the one
-     * before it. Searched over cell and aspect together and by cost rather than by length, so a long run of cheap
-     * aspects is preferred to a short run of dear ones.
-     */
+    // searched over (cell, aspect) by primal cost, so a long cheap run beats a short dear one
     private static List<Placement> cheapestRun(Links links, ResearchNote note, Set<HexGrid.Hex> chain,
             HexGrid.Hex target) {
         Holder<Aspect> goal = note.cellAt(target).flatMap(ResearchNote.Cell::aspect).orElse(null);
@@ -321,7 +260,6 @@ public final class NoteSolving {
             Reached here = polled.reached();
             int spent = polled.cost();
             if (spent > best.get(here)) {
-                // already gone over at a lower cost
                 continue;
             }
             for (HexGrid.Hex next : here.at().neighbours()) {
@@ -335,7 +273,6 @@ public final class NoteSolving {
                     }
                     continue;
                 }
-                // a cell that is pinned, or already written in, is not the reader's to use on the way past
                 if (cell.pinned() || cell.aspect().isPresent()) {
                     continue;
                 }
@@ -361,10 +298,7 @@ public final class NoteSolving {
         return run;
     }
 
-    /**
-     * Marks the note worked out and rubs off anything left lying about that no chain runs through, which is how the
-     * original left a solved sheet looking like the answer rather than the working.
-     */
+    // rubs off anything no chain runs through, as the original did
     public static ResearchNote settle(ResearchNote note) {
         Set<HexGrid.Hex> kept = note.pinnedCells().isEmpty()
                 ? Set.of()

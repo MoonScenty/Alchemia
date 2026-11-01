@@ -22,24 +22,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 
-/**
- * What happens when an infusion goes wrong, the original's twenty-one-way table.
- * <p>
- * More than half the time something is shaken off a pedestal: dropped, dropped with a splash, dropped in a puff of
- * flux, dropped with a small bang, or gone altogether, with or without the flux. Otherwise a creature near the altar is
- * struck by an arc, or every creature is; a creature is sickened, or every one is; the altar goes off; or somebody
- * watching takes a little warp. The work is not made any shakier by it, but a step that goes wrong does nothing else.
- */
 public final class InfusionMishaps {
-    /** How far a mishap reaches for a creature to trouble. */
     private static final double NEAR = 10.0;
-    /** How far out the pedestals are looked over for one to shake something off. */
     private static final int TRIES = 50;
 
     private InfusionMishaps() {
     }
 
-    /** One thing goes wrong, picked off the original's table. */
     public static void strike(ServerLevel level, BlockPos pos) {
         switch (level.random.nextInt(21)) {
             case 0, 2, 10, 13 -> eject(level, pos, Eject.DROP);
@@ -58,7 +47,6 @@ public final class InfusionMishaps {
         }
     }
 
-    /** The ways a thing can leave its pedestal. */
     private enum Eject {
         DROP(false, false, false, false),
         DROP_SPLASH(false, true, false, false),
@@ -80,7 +68,6 @@ public final class InfusionMishaps {
         }
     }
 
-    /** Something comes off one of the pedestals round the altar, picked at random among those holding anything. */
     private static void eject(ServerLevel level, BlockPos pos, Eject how) {
         List<BlockPos> stands = InfusionMatrixBlockEntity.around(level, pos);
         for (int tries = 0; tries < TRIES && !stands.isEmpty(); tries++) {
@@ -109,7 +96,6 @@ public final class InfusionMishaps {
         }
     }
 
-    /** An arc off the altar into a creature near it, or every creature: four to seven magic damage. */
     private static void zap(ServerLevel level, BlockPos pos, boolean all) {
         for (LivingEntity target : near(level, pos)) {
             BlockArc.send(level, pos, target, 0.3F - level.random.nextFloat() * 0.1F, 0.0F,
@@ -121,7 +107,6 @@ public final class InfusionMishaps {
         }
     }
 
-    /** A creature near the altar, or every creature, sickened: taint poison or two minutes of vis exhaustion. */
     private static void harm(ServerLevel level, BlockPos pos, boolean all) {
         for (LivingEntity target : near(level, pos)) {
             if (level.random.nextBoolean()) {
@@ -135,10 +120,7 @@ public final class InfusionMishaps {
         }
     }
 
-    /**
-     * Something looks back, at one of whoever is within ten blocks: a point of warp for good one time in four,
-     * otherwise two to five that pass. The original's.
-     */
+    // original's odds
     private static void twist(ServerLevel level, BlockPos pos) {
         List<Player> watching = level.getEntitiesOfClass(Player.class, around(pos));
         if (watching.isEmpty()) {

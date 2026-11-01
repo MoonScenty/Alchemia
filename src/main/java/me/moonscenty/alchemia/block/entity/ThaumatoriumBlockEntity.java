@@ -46,33 +46,17 @@ import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
 
-/**
- * The thaumatorium: a crucible that works on its own.
- * <p>
- * It is told which crucible recipes to make, one plus two for every mnemonic matrix fixed to it. Given a catalyst
- * in its slot, it takes the first of those that catalyst finishes, draws the essentia it needs up the pipes one
- * aspect at a time in order of name, and when everything is in, uses one of the catalyst and puts out what was
- * made, into a container in front of it if there is one with room and onto the ground if there is none. A full
- * container in front stops it.
- * <p>
- * It works on the heat under its crucible -- lava, fire or a nitor directly below -- and a redstone signal at
- * either half or at the crucible stops it. Nothing is lost and no flux is made: everything that goes in comes out.
- * <p>
- * Both halves have one of these, and the upper one hands everything to the lower, which is the one that works.
- */
+// both halves have one; the upper hands everything to the lower, which does the work
 public class ThaumatoriumBlockEntity extends SyncedBlockEntity implements EssentiaHolder, WorldlyContainer, MenuProvider {
     private static final int LOOKS_ROUND_EVERY = 40;
     private static final int WORKS_EVERY = 5;
-    /** The block event that sets the client's steam going, and for how long. */
     public static final int VENTS = 0;
     private static final int VENTS_FOR = 7;
-    /** How many recipes it holds with no matrices, and how many each matrix adds. */
     private static final int REMEMBERS = 1;
     private static final int A_MATRIX_ADDS = 2;
 
     private final NonNullList<ItemStack> catalyst = NonNullList.withSize(1, ItemStack.EMPTY);
     private AspectList essentia = AspectList.EMPTY;
-    /** The recipes it has been told to make, in the order it was told. */
     private final List<ResourceLocation> recipes = new ArrayList<>();
     private int remembers = REMEMBERS;
     @Nullable
@@ -85,13 +69,10 @@ public class ThaumatoriumBlockEntity extends SyncedBlockEntity implements Essent
         super(ModBlockEntities.THAUMATORIUM.get(), pos, state);
     }
 
-    // --- the two halves ----------------------------------------------------
-
     private boolean isTop() {
         return getBlockState().getBlock() instanceof ThaumatoriumBlock && getBlockState().getValue(ThaumatoriumBlock.TOP);
     }
 
-    /** The half that works: this one, or the one below it. */
     @Nullable
     public ThaumatoriumBlockEntity main() {
         if (!isTop()) {
@@ -104,8 +85,6 @@ public class ThaumatoriumBlockEntity extends SyncedBlockEntity implements Essent
     private Direction front() {
         return getBlockState().getValue(ThaumatoriumBlock.FACING);
     }
-
-    // --- ticking -----------------------------------------------------------
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, ThaumatoriumBlockEntity it) {
         if (it.isTop()) {
@@ -163,7 +142,6 @@ public class ThaumatoriumBlockEntity extends SyncedBlockEntity implements Essent
         return 0.1 - random.nextFloat() * 0.2;
     }
 
-    /** Heat directly under the crucible: lava, fire, or a nitor. */
     private static boolean heated(Level level, BlockPos pos) {
         BlockPos under = pos.below(2);
         BlockState state = level.getBlockState(under);
@@ -176,7 +154,6 @@ public class ThaumatoriumBlockEntity extends SyncedBlockEntity implements Essent
                 || level.hasNeighborSignal(pos.above());
     }
 
-    /** One plus two for every matrix fixed to it facing in: on either half's sides, and on top of the upper one. */
     private void countMatrices(Level level, BlockPos pos) {
         int matrices = 0;
         for (int layer = 0; layer < 2; layer++) {
@@ -201,7 +178,6 @@ public class ThaumatoriumBlockEntity extends SyncedBlockEntity implements Essent
         }
     }
 
-    /** The first recipe it was told to make that the catalyst in its slot finishes. */
     @Nullable
     private RecipeHolder<CrucibleRecipe> current(Level level) {
         for (ResourceLocation id : recipes) {
@@ -225,7 +201,6 @@ public class ThaumatoriumBlockEntity extends SyncedBlockEntity implements Essent
         return level.getCapability(Capabilities.ItemHandler.BLOCK, pos.relative(front()), front().getOpposite());
     }
 
-    /** One point straight out of a vessel set against a side; a pipe there fills it on its own. */
     private void drawFromBeside(Level level, BlockPos pos) {
         for (int layer = 0; layer < 2; layer++) {
             for (Direction side : Direction.values()) {
@@ -266,8 +241,6 @@ public class ThaumatoriumBlockEntity extends SyncedBlockEntity implements Essent
         return super.triggerEvent(id, param);
     }
 
-    // --- what it is told to make --------------------------------------------
-
     public List<ResourceLocation> recipes() {
         ThaumatoriumBlockEntity main = main();
         return main == null ? List.of() : List.copyOf(main.recipes);
@@ -278,7 +251,6 @@ public class ThaumatoriumBlockEntity extends SyncedBlockEntity implements Essent
         return main == null ? REMEMBERS : main.remembers;
     }
 
-    /** Tells it to make this, or to stop making it if it already was. No more than it can remember. */
     public void toggle(ResourceLocation recipe) {
         ThaumatoriumBlockEntity main = main();
         if (main == null) {
@@ -298,14 +270,11 @@ public class ThaumatoriumBlockEntity extends SyncedBlockEntity implements Essent
         return main == null ? AspectList.EMPTY : main.essentia;
     }
 
-    // --- essentia ----------------------------------------------------------
-
     @Override
     public AspectList held() {
         return AspectList.EMPTY;
     }
 
-    /** Only the aspect it is drawing on now, and only as much of it as the recipe still wants. */
     @Override
     public boolean wants(Holder<Aspect> aspect) {
         ThaumatoriumBlockEntity main = main();
@@ -327,7 +296,6 @@ public class ThaumatoriumBlockEntity extends SyncedBlockEntity implements Essent
         return true;
     }
 
-    /** Pipes meet it on every face but the front. */
     @Override
     public boolean reachableFrom(Direction side) {
         return side != front();
@@ -337,8 +305,6 @@ public class ThaumatoriumBlockEntity extends SyncedBlockEntity implements Essent
     public boolean givesTo(Direction side) {
         return false;
     }
-
-    // --- the catalyst slot -------------------------------------------------
 
     public NonNullList<ItemStack> contents() {
         ThaumatoriumBlockEntity main = main();
@@ -420,8 +386,6 @@ public class ThaumatoriumBlockEntity extends SyncedBlockEntity implements Essent
         ThaumatoriumBlockEntity main = main();
         return main == null ? null : new ThaumatoriumMenu(id, inventory, main);
     }
-
-    // --- saving ------------------------------------------------------------
 
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {

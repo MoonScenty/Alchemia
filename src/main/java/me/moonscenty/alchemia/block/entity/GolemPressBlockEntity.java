@@ -35,21 +35,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.core.NonNullList;
 
-/**
- * The working heart of a golem press.
- *
- * <p>Somebody picks a golem at the press and it takes what that golem is made of out of their pack there and then.
- * Then it presses, a measure of machina at a time every quarter of a second, until it has had as many measures as
- * the golem cost; and then the golem item drops into the press's one slot. The machina comes up a tube, which may
- * meet it on any side but the top, or straight out of a jar set against it. A press with its slot full of something
- * else waits.
- */
 public class GolemPressBlockEntity extends SyncedBlockEntity implements EssentiaHolder, Container, MenuProvider {
-    /** What the menu reads: how many measures are left, and how many there were. */
     public static final int READINGS = 2;
     public static final int READING_COST = 0;
     public static final int READING_MAX = 1;
-    /** How far down the press comes, in degrees of its swing, when it is working. */
     public static final int PRESS_DOWN = 90;
 
     private final NonNullList<ItemStack> slot = NonNullList.withSize(1, ItemStack.EMPTY);
@@ -57,10 +46,8 @@ public class GolemPressBlockEntity extends SyncedBlockEntity implements Essentia
     private GolemDesign pressing;
     private int cost;
     private int maxCost;
-    /** A measure that came up a tube and has not been pressed in yet. */
     private boolean buffered;
     private int ticks;
-    /** How far the press has come down, for drawing it. Only the client moves it. */
     public int press;
 
     private final ContainerData readings = new ContainerData() {
@@ -116,10 +103,6 @@ public class GolemPressBlockEntity extends SyncedBlockEntity implements Essentia
         }
     }
 
-    /**
-     * The press coming down while it works and going back up when it is done, hissing steam all the while, as the
-     * original drew it.
-     */
     public static void clientTick(Level level, BlockPos pos, BlockState state, GolemPressBlockEntity it) {
         boolean working = it.cost > 0 && it.pressing != null;
         if (it.press < PRESS_DOWN && working) {
@@ -139,10 +122,6 @@ public class GolemPressBlockEntity extends SyncedBlockEntity implements Essentia
         }
     }
 
-    /**
-     * Starts pressing a golem, if the slot can take one and the player has everything it is made of, which is taken
-     * from them now.
-     */
     public boolean start(GolemDesign design, Player player) {
         ItemStack made = GolemItem.of(design);
         ItemStack there = slot.get(0);
@@ -169,7 +148,6 @@ public class GolemPressBlockEntity extends SyncedBlockEntity implements Essentia
         return true;
     }
 
-    /** How many of a thing a player has about them, whatever else is on it. */
     public static int carried(Player player, ItemStack wanted) {
         int count = 0;
         for (ItemStack stack : player.getInventory().items) {
@@ -199,7 +177,6 @@ public class GolemPressBlockEntity extends SyncedBlockEntity implements Essentia
         return pressing != null && cost > 0;
     }
 
-    /** One measure of machina straight out of a vessel against a side; a tube there brings it on its own. */
     private boolean draw(Level level, BlockPos pos) {
         for (Direction side : Direction.values()) {
             if (side != Direction.UP && EssentiaHolder.drawFrom(level, pos, side, ModAspects.MECHANISM)) {
@@ -209,21 +186,17 @@ public class GolemPressBlockEntity extends SyncedBlockEntity implements Essentia
         return false;
     }
 
-    /** What it has in it, for when it is broken. */
     public void spill() {
         if (level != null) {
             Containers.dropContents(level, worldPosition, this);
         }
     }
 
-    // --- essentia -----------------------------------------------------------------------------------------
-
     @Override
     public AspectList held() {
         return AspectList.EMPTY;
     }
 
-    /** One measure of machina at a time, while it is pressing. */
     @Override
     public boolean wants(Holder<Aspect> aspect) {
         return working() && !buffered && aspect.value() == ModAspects.MECHANISM.value();
@@ -238,7 +211,6 @@ public class GolemPressBlockEntity extends SyncedBlockEntity implements Essentia
         return true;
     }
 
-    /** Tubes meet it on its sides and from below; the top is the press. */
     @Override
     public boolean reachableFrom(Direction side) {
         return side != Direction.UP;
@@ -248,8 +220,6 @@ public class GolemPressBlockEntity extends SyncedBlockEntity implements Essentia
     public boolean givesTo(Direction side) {
         return false;
     }
-
-    // --- the slot -----------------------------------------------------------------------------------------
 
     @Override
     public int getContainerSize() {
@@ -286,7 +256,6 @@ public class GolemPressBlockEntity extends SyncedBlockEntity implements Essentia
         setChanged();
     }
 
-    /** Only golems belong in it, and only the press puts them there. */
     @Override
     public boolean canPlaceItem(int index, ItemStack stack) {
         return stack.getItem() instanceof GolemItem;
@@ -302,8 +271,6 @@ public class GolemPressBlockEntity extends SyncedBlockEntity implements Essentia
         slot.clear();
     }
 
-    // --- the menu -----------------------------------------------------------------------------------------
-
     @Override
     public Component getDisplayName() {
         return Component.translatable("block.alchemia.golem_press");
@@ -314,8 +281,6 @@ public class GolemPressBlockEntity extends SyncedBlockEntity implements Essentia
         return new GolemPressMenu(id, inventory, this, readings,
                 ContainerLevelAccess.create(player.level(), worldPosition));
     }
-
-    // --- saving -------------------------------------------------------------------------------------------
 
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {

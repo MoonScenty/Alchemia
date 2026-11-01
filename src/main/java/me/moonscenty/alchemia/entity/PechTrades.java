@@ -25,17 +25,8 @@ import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 
-/**
- * What a pech will take, and what it gives for it.
- *
- * <p>A pech prizes gold, golden apples, ender pearls, diamonds and emeralds, from two to five; anything else is worth
- * as much desire as there is in it, if there is more than one. A trade is worth what was offered, give or take, and
- * the pech pays it out in lots of one to five, each lot a thing from its own list of that worth.
- *
- * <p>Each kind of pech keeps its own list, the original's. A lot nothing on the list is worth is paid in the nearest worth there is.
- */
+// Each pech kind's trade list is the original's.
 public final class PechTrades {
-    /** A lot: what it is worth, and how to make one. */
     public record Lot(int worth, Function<Level, ItemStack> makes) {
     }
 
@@ -44,7 +35,6 @@ public final class PechTrades {
     private PechTrades() {
     }
 
-    /** What a pech prizes this at: nothing at all if it does not care for it. */
     public static int value(ItemStack stack) {
         if (stack.isEmpty()) {
             return 0;
@@ -69,7 +59,6 @@ public final class PechTrades {
         return value(stack) > 0;
     }
 
-    /** One thing of this worth off a pech's list, or of the nearest worth the list has. */
     public static ItemStack lot(Level level, int kind, int worth, RandomSource random) {
         List<Lot> list = LISTS.get(Math.floorMod(kind, LISTS.size()));
         int nearest = list.getFirst().worth();
@@ -88,12 +77,9 @@ public final class PechTrades {
         return of.get(random.nextInt(of.size())).makes().apply(level);
     }
 
-    /** Every lot of a kind of pech, for what would show them. */
     public static List<Lot> list(int kind) {
         return LISTS.get(Math.floorMod(kind, LISTS.size()));
     }
-
-    // --- the three lists ---------------------------------------------------------------------------------
 
     private static List<Lot> forager() {
         List<Lot> lots = new ArrayList<>();
@@ -147,13 +133,11 @@ public final class PechTrades {
 
     private static List<Lot> stalker() {
         List<Lot> lots = new ArrayList<>();
-        // tallow candles, every colour but black, as the original counted them out
         for (net.minecraft.world.item.DyeColor colour : net.minecraft.world.item.DyeColor.values()) {
             if (colour != net.minecraft.world.item.DyeColor.BLACK) {
                 lots.add(item(1, me.moonscenty.alchemia.registry.ModBlocks.TALLOW_CANDLES.get(colour).get().asItem()));
             }
         }
-        // a bundle of eight primal arrows of each kind
         for (var arrow : ModItems.PRIMAL_ARROWS.values()) {
             lots.add(new Lot(2, level -> new ItemStack(arrow.get(), 8)));
         }

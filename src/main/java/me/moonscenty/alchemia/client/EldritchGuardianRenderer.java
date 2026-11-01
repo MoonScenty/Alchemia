@@ -12,10 +12,6 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Difficulty;
 
-/**
- * The guardian as the original drew it: never quite there. Within sixteen blocks it is six tenths solid, and from
- * there it fades to nothing at thirty-two (twenty-four on hard).
- */
 public class EldritchGuardianRenderer extends MobRenderer<EldritchGuardian, EldritchGuardianModel<EldritchGuardian>> {
     private static final ResourceLocation SKIN = Alchemia.id("textures/entity/eldritch_guardian.png");
     private static final float NEAR = 256.0F;

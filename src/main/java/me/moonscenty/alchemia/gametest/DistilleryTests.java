@@ -32,12 +32,6 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/**
- * The fittings of the distillery: what carries essentia by hand, and what a jar is told to do.
- * <p>
- * The pipes have tests of their own. These are about the things a person picks up and uses on a vessel, which is
- * the other half of how essentia moves about.
- */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class DistilleryTests {
@@ -49,13 +43,6 @@ public class DistilleryTests {
         return (JarBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(at));
     }
 
-    /**
-     * Right-clicks the top of a block with something in hand, the whole way round.
-     * <p>
-     * The whole way round matters. Minecraft asks the block about the item first, then asks the block on its own,
-     * and only if both pass does it ask the item -- so a block that answers every click with a sentence about its
-     * contents is a block no item can ever be used on. Calling the item straight would prove nothing about that.
-     */
     private static void useOn(GameTestHelper helper, BlockPos at, ItemStack held) {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, held);
@@ -79,7 +66,6 @@ public class DistilleryTests {
         return PhialItem.filled(new ItemStack(ModItems.PHIAL.get()), aspect);
     }
 
-    /** A phial draws a whole draught out of a jar and pours the same draught back in. */
     @GameTest(template = TEMPLATE)
     public static void aPhialCarriesADraught(GameTestHelper helper) {
         JarBlockEntity jar = jar(helper, START);
@@ -95,13 +81,6 @@ public class DistilleryTests {
         helper.succeed();
     }
 
-    /**
-     * A vessel that answers every click with a sentence about itself is a vessel nothing can be used on.
-     * <p>
-     * The jar and the alembic both say what is in them when you click them, which is worth having. What is not
-     * worth having is that sentence eating the click: for a while a phial held against a jar did nothing at all,
-     * because the jar got there first and said "Fire, 8 of 64" instead.
-     */
     @GameTest(template = TEMPLATE)
     public static void aVesselDoesNotTalkOverThePhial(GameTestHelper helper) {
         JarBlockEntity jar = jar(helper, START);
@@ -123,7 +102,6 @@ public class DistilleryTests {
         helper.succeed();
     }
 
-    /** Nothing happens by halves: a jar with less than a draught in it will not fill a phial. */
     @GameTest(template = TEMPLATE)
     public static void aPhialWillNotTakeHalfADraught(GameTestHelper helper) {
         JarBlockEntity jar = jar(helper, START);
@@ -136,7 +114,6 @@ public class DistilleryTests {
         helper.succeed();
     }
 
-    /** A labelled jar takes the one thing it is labelled with, whether or not there is any of it in there. */
     @GameTest(template = TEMPLATE)
     public static void aLabelledJarTakesOneThing(GameTestHelper helper) {
         JarBlockEntity jar = jar(helper, START);
@@ -155,7 +132,6 @@ public class DistilleryTests {
         helper.succeed();
     }
 
-    /** A braced jar is filled and never emptied, whatever asks. */
     @GameTest(template = TEMPLATE)
     public static void aBracedJarGivesNothingUp(GameTestHelper helper) {
         JarBlockEntity jar = jar(helper, START);
@@ -172,12 +148,6 @@ public class DistilleryTests {
         helper.succeed();
     }
 
-    /**
-     * A warded jar keeps what is in it when it is broken, and gives it back when it is set down again.
-     * <p>
-     * That is what being warded means. A jar that spilled its essentia on being moved would be a jar nobody dares
-     * move, and a shelf of them something you build once and then build the room around.
-     */
     @GameTest(template = TEMPLATE)
     public static void aBrokenJarKeepsWhatIsInIt(GameTestHelper helper) {
         JarBlockEntity jar = jar(helper, START);
@@ -196,7 +166,6 @@ public class DistilleryTests {
                 "with the fire still in it, was " + inside);
         helper.assertTrue(picked.get(ModDataComponents.ESSENTIA.get()) != null, "and its label still on it");
 
-        // and set down again it is the same jar
         helper.setBlock(START.east(), ModBlocks.JAR.get());
         JarBlockEntity back = (JarBlockEntity) helper.getLevel()
                 .getBlockEntity(helper.absolutePos(START.east()));
@@ -206,7 +175,6 @@ public class DistilleryTests {
         helper.succeed();
     }
 
-    /** A blank label held up to a full phial takes its name, and the phial comes back empty rather than used up. */
     @GameTest(template = TEMPLATE)
     public static void aLabelIsWrittenFromAPhial(GameTestHelper helper) {
         LabelRecipe recipe = new LabelRecipe(CraftingBookCategory.MISC);
@@ -225,7 +193,6 @@ public class DistilleryTests {
         helper.succeed();
     }
 
-    /** A written label laid down on its own is rubbed out. */
     @GameTest(template = TEMPLATE)
     public static void aLabelIsRubbedOut(GameTestHelper helper) {
         LabelRecipe recipe = new LabelRecipe(CraftingBookCategory.MISC);
@@ -240,7 +207,6 @@ public class DistilleryTests {
         helper.succeed();
     }
 
-    /** Crouching with nothing in hand tips an alembic out: what it held goes into the air as flux. */
     @GameTest(template = TEMPLATE)
     public static void crouchingTipsAnAlembicOut(GameTestHelper helper) {
         helper.setBlock(START, ModBlocks.ALEMBIC.get());

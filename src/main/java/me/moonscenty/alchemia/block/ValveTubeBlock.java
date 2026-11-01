@@ -20,21 +20,11 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
 
-/**
- * A length of pipe that can be shut.
- * <p>
- * It is worked by hand or by redstone, and the two do not fight: a signal arriving shuts it and a signal leaving
- * opens it again, while a click in between does as it says for as long as nothing else happens. That is why the
- * power is remembered in the state — without it there would be no telling a signal that has just arrived from one
- * that has been there all along, and every redstone update would undo the click.
- */
 public class ValveTubeBlock extends TubeBlock {
-    /** Whether anything gets through. */
     public static final BooleanProperty OPEN = BlockStateProperties.OPEN;
-    /** What the redstone was doing last time anyone looked. */
+    // last seen redstone, so only signal edges toggle the valve and a manual turn is not undone
     public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
 
-    /** Which side the handle stands on. Nothing joins to that side: a handle is not a socket. */
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
 
     public static final MapCodec<ValveTubeBlock> CODEC = simpleCodec(ValveTubeBlock::new);
@@ -58,24 +48,16 @@ public class ValveTubeBlock extends TubeBlock {
         builder.add(OPEN, POWERED, FACING);
     }
 
-    /** A shut valve is not a way through, whichever way you came at it. */
     @Override
     public boolean passes(BlockState state, Direction in, Direction out) {
         return state.getValue(OPEN);
     }
 
-    /** The side a handle stands on is no use for joining, so it is worked out before the sides are. */
     @Override
     public boolean spare(BlockState state, Direction side) {
         return state.getValue(FACING) != side;
     }
 
-    /**
-     * Laid with the handle towards whoever laid it.
-     * <p>
-     * A valve is a thing you come back to and turn, so the handle faces the way you were standing. It is worked
-     * out before the sides are, since the side it lands on stops being a side at all.
-     */
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         boolean powered = context.getLevel().hasNeighborSignal(context.getClickedPos());
@@ -90,7 +72,6 @@ public class ValveTubeBlock extends TubeBlock {
         return stood;
     }
 
-    /** Opened and shut by hand. */
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player,
             BlockHitResult hit) {
@@ -98,7 +79,6 @@ public class ValveTubeBlock extends TubeBlock {
         return level.isClientSide ? InteractionResult.SUCCESS : InteractionResult.CONSUME;
     }
 
-    /** Power arriving shuts it; power leaving opens it. Nothing happens while the signal merely stays as it was. */
     @Override
     protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighbour, BlockPos from,
             boolean moving) {
@@ -111,7 +91,6 @@ public class ValveTubeBlock extends TubeBlock {
         }
     }
 
-    /** Worked, and the moment written down so the handle can be seen swinging round to its new place. */
     private static void turn(Level level, BlockPos pos, BlockState state, boolean open) {
         if (level.isClientSide) {
             return;

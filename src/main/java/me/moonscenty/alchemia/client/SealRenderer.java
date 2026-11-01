@@ -28,12 +28,6 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 
-/**
- * Seals, as the original showed them to whoever was holding a seal, a golem or a bell: each seal's picture flat on
- * the face it is stuck to, a slowly turning ring over it in the colour of the golems it is set for, and the corners
- * of the area it works over. They fade with distance and are not shown past sixteen blocks. Crouching, they show
- * through walls. A seal stopped by redstone is drawn dim and gives off the odd red spark.
- */
 @EventBusSubscriber(modid = Alchemia.MODID, value = Dist.CLIENT)
 public final class SealRenderer {
     private static final ResourceLocation RING = Alchemia.id("textures/misc/seal_area.png");
@@ -41,7 +35,6 @@ public final class SealRenderer {
     private static final double SEEN_SQUARED = 256.0;
     private static final int GLOW = 0xF000F0;
 
-    /** The faces of each corner of an area its frame is drawn on, and how far each is turned: the original's. */
     private static final Direction[][] CORNER_FACES = {
             {Direction.DOWN, Direction.NORTH, Direction.WEST},
             {Direction.UP, Direction.NORTH, Direction.WEST},
@@ -103,7 +96,6 @@ public final class SealRenderer {
                 0.0, 0.0, 0.0);
     }
 
-    /** The seal's own picture, half a block across, laid just off the face it is on. */
     private static void icon(PoseStack pose, MultiBufferSource buffers, SealEntity seal, float alpha, boolean dim,
             boolean through) {
         TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS)
@@ -140,12 +132,11 @@ public final class SealRenderer {
         float shade = dim ? 0.5F : 1.0F;
         int colour = colour(shade, shade, shade, alpha);
         VertexConsumer consumer = buffers.getBuffer(LegacyRenderTypes.seal(TextureAtlas.LOCATION_BLOCKS, through));
-        // the original drew the picture with its sides swapped, and the turns above allow for it
+        // the original drew it with U swapped; the turns above allow for it
         quad(consumer, pose, 0.0F, 1.0F, sprite.getU1(), sprite.getU0(), sprite.getV0(), sprite.getV1(), colour);
         pose.popPose();
     }
 
-    /** The turning ring on the face, and for an area seal the corners of its area. */
     private static void ring(PoseStack pose, MultiBufferSource buffers, SealEntity seal, float alpha, float ticks,
             boolean through) {
         float r;
@@ -196,7 +187,6 @@ public final class SealRenderer {
         }
     }
 
-    /** Turns a flat picture facing south round to face this way, as the original turned it. */
     private static void turnTo(PoseStack pose, Direction face) {
         float x = -face.getStepY();
         float y = face.getStepX();
@@ -211,7 +201,6 @@ public final class SealRenderer {
                 | (int) (Mth.clamp(g, 0.0F, 1.0F) * 255) << 8 | (int) (Mth.clamp(b, 0.0F, 1.0F) * 255);
     }
 
-    /** A square about the middle, with its picture laid on turned a quarter, as the original's centred quads were. */
     private static void centred(VertexConsumer consumer, PoseStack pose, float half, int colour) {
         Matrix4f matrix = pose.last().pose();
         PoseStack.Pose at = pose.last();
@@ -223,7 +212,6 @@ public final class SealRenderer {
         }
     }
 
-    /** A square from {@code low} to {@code high} each way, at no depth, lit full. */
     private static void quad(VertexConsumer consumer, PoseStack pose, float low, float high, float u0, float u1,
             float v0, float v1, int colour) {
         Matrix4f matrix = pose.last().pose();

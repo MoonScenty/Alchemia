@@ -18,19 +18,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 
-/**
- * An eldritch altar: the heart of a ring of standing stones, and sometimes of something living there.
- *
- * <h3>What may come of it</h3>
- * A cult altar first calls up four clerics, one at each diagonal two out, who stand about it chanting; then, every
- * two seconds while there are fewer than eight of the cult about, a knight. Kill the clerics -- every one within
- * twenty-four blocks -- and it falls silent for good. A guardian altar keeps a guardian somewhere near, in the dark,
- * and never falls silent.
- *
- * <h3>Its eyes</h3>
- * It takes up to four eldritch eyes. The third makes it a guardian altar whatever it was. With four, and the rite
- * known, a wand opens the way above it.
- */
 public class EldritchAltarBlockEntity extends SyncedBlockEntity {
     public static final int MOST_EYES = 4;
     private static final int[][] CLERICS = {{-2, -2}, {-2, 2}, {2, -2}, {2, 2}};
@@ -38,7 +25,7 @@ public class EldritchAltarBlockEntity extends SyncedBlockEntity {
     private boolean spawner;
     private boolean open;
     private boolean spawnedClerics;
-    /** 0 the cult, 1 a guardian. */
+    // 0 = cult, 1 = guardian
     private byte spawnType;
     private byte eyes;
     private int counter;
@@ -59,14 +46,12 @@ public class EldritchAltarBlockEntity extends SyncedBlockEntity {
         return spawner;
     }
 
-    /** Makes it call up the cult (0) or a guardian (1), or nothing. */
     public void setSpawner(boolean spawner, int type) {
         this.spawner = spawner;
         this.spawnType = (byte) type;
         setChanged();
     }
 
-    /** One more eye in its socket. The third makes it a guardian altar, whatever it was. */
     public void addEye() {
         if (eyes >= 2) {
             setSpawner(true, 1);
@@ -118,7 +103,6 @@ public class EldritchAltarBlockEntity extends SyncedBlockEntity {
         }
     }
 
-    /** Knights while the clerics live; silence once they are gone. */
     private void spawnGuards(ServerLevel level) {
         AABB about = new AABB(worldPosition).inflate(24.0, 16.0, 24.0);
         if (level.getEntitiesOfClass(CultistCleric.class, about).isEmpty()) {
@@ -152,7 +136,6 @@ public class EldritchAltarBlockEntity extends SyncedBlockEntity {
         }
     }
 
-    /** Four to ten blocks off along each way or none, up to three up or down. */
     private BlockPos aside(ServerLevel level) {
         return worldPosition.offset(Mth.randomBetweenInclusive(level.random, 4, 10)
                         * Mth.randomBetweenInclusive(level.random, -1, 1),
@@ -160,7 +143,6 @@ public class EldritchAltarBlockEntity extends SyncedBlockEntity {
                 Mth.randomBetweenInclusive(level.random, 4, 10) * Mth.randomBetweenInclusive(level.random, -1, 1));
     }
 
-    /** Puts it there if it stands on something and has room. */
     private static boolean place(ServerLevel level, Mob mob, double x, double y, double z) {
         BlockPos under = BlockPos.containing(x, y - 1, z);
         if (!level.getBlockState(under).isFaceSturdy(level, under, Direction.UP)) {
@@ -169,8 +151,6 @@ public class EldritchAltarBlockEntity extends SyncedBlockEntity {
         mob.moveTo(x, y, z, level.random.nextFloat() * 360.0F, 0.0F);
         return level.noCollision(mob) && level.isUnobstructed(mob) && !level.containsAnyLiquid(mob.getBoundingBox());
     }
-
-    // --- saving and telling -------------------------------------------------
 
     @Override
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {

@@ -11,11 +11,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
-/**
- * An automated crossbow opened: the square its arrows go in and how battered it is, and on the advanced one the four
- * things it may be told to mind. The original's two panels, laid out as it laid them, which share the autocaster's
- * strip of hearts and toggles.
- */
 public class CrossbowScreen extends AbstractContainerScreen<CrossbowMenu> {
     private static final ResourceLocation BASIC = Alchemia.id("textures/gui/automated_crossbow.png");
     private static final ResourceLocation ADVANCED = Alchemia.id("textures/gui/advanced_automated_crossbow.png");
@@ -60,7 +55,6 @@ public class CrossbowScreen extends AbstractContainerScreen<CrossbowMenu> {
                 topPos + TurretToggle.HEARTS_Y, turret);
     }
 
-    /** The original wrote nothing on these panels, not even their names. */
     @Override
     protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
     }

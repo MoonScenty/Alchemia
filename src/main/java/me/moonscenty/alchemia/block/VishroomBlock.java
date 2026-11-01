@@ -18,9 +18,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-/**
- * A mushroom swollen with raw vis. Brushing past one leaves the head swimming.
- */
 public class VishroomBlock extends BushBlock {
     public static final MapCodec<VishroomBlock> CODEC = simpleCodec(VishroomBlock::new);
     private static final VoxelShape SHAPE = Block.box(3, 0, 3, 13, 10, 13);
@@ -40,7 +37,6 @@ public class VishroomBlock extends BushBlock {
         return SHAPE;
     }
 
-    /** Unlike the other plants this one takes root on any solid block, in caves as readily as on grass. */
     @Override
     protected boolean mayPlaceOn(BlockState state, BlockGetter level, BlockPos pos) {
         return state.isFaceSturdy(level, pos, Direction.UP);

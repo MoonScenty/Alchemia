@@ -30,26 +30,15 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
-/**
- * The arcane pattern crafter, the original's {@code BlockPatternCrafter}: a hopper-topped box with a brass dial on
- * its face. It takes from the inventory above, lays what it took in the pattern the dial is set to, and puts what
- * that makes into the inventory below. A redstone signal stops it.
- * <p>
- * It is set down facing the way its placer looks, so its face, with the dial and the window showing the pattern,
- * is turned back to them. Turning the dial is a click on the dial itself; a click anywhere else does nothing.
- */
 public class PatternCrafterBlock extends BaseEntityBlock {
     public static final MapCodec<PatternCrafterBlock> CODEC = simpleCodec(PatternCrafterBlock::new);
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
-    /** Working, which is to say not held off by redstone. */
     public static final BooleanProperty ENABLED = BlockStateProperties.ENABLED;
-    /** The dial, in the block's own measures, for each way it can face. The original's. */
     private static final Map<Direction, AABB> DIALS = new EnumMap<>(Map.of(
             Direction.EAST, new AABB(0.125, 0.125, 0.375, 0.25, 0.375, 0.625),
             Direction.NORTH, new AABB(0.375, 0.125, 0.75, 0.625, 0.375, 0.875),
             Direction.SOUTH, new AABB(0.375, 0.125, 0.125, 0.625, 0.375, 0.25),
             Direction.WEST, new AABB(0.75, 0.125, 0.375, 0.875, 0.375, 0.625)));
-    /** A little give round the dial, so a click on its edge still finds it. */
     private static final double GIVE = 1.0 / 32.0;
 
     public PatternCrafterBlock(Properties properties) {
@@ -82,7 +71,6 @@ public class PatternCrafterBlock extends BaseEntityBlock {
         }
     }
 
-    /** Whether a point on the block, in its own measures, is on the dial. */
     public static boolean onDial(BlockState state, Vec3 local) {
         return DIALS.get(state.getValue(FACING)).inflate(GIVE).contains(local);
     }

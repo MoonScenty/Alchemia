@@ -22,14 +22,8 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 
-/**
- * Aspects a thing earns from what it is rather than what it is made of.
- * <p>
- * A sword carries aversion however it was forged, and armour carries protection. Enchantments add their own on top.
- * These are merged rather than added, so a stronger source replaces a weaker one instead of piling up.
- */
+// Aspects earned from the item's kind and enchantments; merged by max, not added.
 public final class AspectBonuses {
-    /** Which aspect each enchantment lends, at its own level. */
     private static final Map<ResourceKey<Enchantment>, Holder<Aspect>> FROM_ENCHANTMENT = new HashMap<>();
 
     static {
@@ -78,7 +72,6 @@ public final class AspectBonuses {
     private AspectBonuses() {
     }
 
-    /** What the kind of item itself is worth. The same for every copy, so this can be worked out once. */
     public static AspectList ofItem(Item item, AspectList base) {
         if (item instanceof ArmorItem armor) {
             return base.mergeMax(ModAspects.PROTECT, armor.getDefense());
@@ -101,7 +94,6 @@ public final class AspectBonuses {
         return base;
     }
 
-    /** What this particular copy is worth on top, which for now means its enchantments. */
     public static AspectList ofStack(ItemStack stack, AspectList base) {
         ItemEnchantments enchantments = EnchantmentHelper.getEnchantmentsForCrafting(stack);
         if (enchantments.isEmpty()) {
@@ -119,14 +111,10 @@ public final class AspectBonuses {
             }
         }
 
-        // the magic worked into the item shows up as energy, however it was spent
         return levels > 0 ? result.mergeMax(ModAspects.ENERGY, levels) : result;
     }
 
-    /**
-     * How hard a tier can dig, on the original's scale where wood and gold are 0 and diamond is 3.
-     * Anything sturdier than diamond, including modded tiers, counts as 4.
-     */
+    // original's scale: wood/gold 0 .. diamond 3; anything stronger, modded tiers included, is 4
     private static int harvestRank(Tier tier) {
         if (tier == Tiers.WOOD || tier == Tiers.GOLD) {
             return 0;

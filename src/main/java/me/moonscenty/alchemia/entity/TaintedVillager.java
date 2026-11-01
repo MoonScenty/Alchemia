@@ -13,9 +13,6 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
-/**
- * A villager the taint has made over. It still keeps to doors and houses, and now and then has a coin about it.
- */
 public class TaintedVillager extends TaintedBeast {
     public TaintedVillager(EntityType<? extends TaintedVillager> type, Level level) {
         super(type, level);
@@ -25,7 +22,7 @@ public class TaintedVillager extends TaintedBeast {
         this(ModEntities.TAINTED_VILLAGER.get(), level);
     }
 
-    /** The original's numbers. */
+    // original's values
     public static AttributeSupplier.Builder attributes() {
         return Monster.createMonsterAttributes()
                 .add(Attributes.MAX_HEALTH, 30.0)
@@ -65,7 +62,6 @@ public class TaintedVillager extends TaintedBeast {
         }
     }
 
-    /** It keeps to houses as it did: through doors, home again, looking at people. It hunts no animals. */
     @Override
     protected void registerGoals() {
         super.registerGoals();

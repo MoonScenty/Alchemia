@@ -22,36 +22,23 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 
-/**
- * A focus on the bench, what can still be worked into it, and what that would cost.
- *
- * <p>Laid out as the original laid it: what is already in the focus along the top, what the next rank offers
- * along the bottom, and between them the bill — the levels on the right of the slot and the vis listed beside
- * the bar that has to be filled before anything happens.
- *
- * <p>Picking an upgrade is the screen's own business and costs nothing. Only clicking the bar asks the bench to
- * start, and from then on the bench is the one that knows anything: the bar is drawn from what it still owes.
- */
 public class FocalManipulatorScreen extends AbstractContainerScreen<FocalManipulatorMenu> {
     private static final ResourceLocation PANEL = Alchemia.id("textures/gui/focal_manipulator.png");
     private static final int SHEET = 256;
     private static final int PANEL_W = 192;
     private static final int PANEL_H = 233;
 
-    /** The small pictures, and the two marks drawn from the right-hand edge of the sheet. */
     private static final int ICON = 16;
     private static final int PICKED_U = 200;
     private static final int PICKED_V = 0;
     private static final int READY_U = 200;
     private static final int READY_V = 16;
 
-    /** What is already in the focus, and what the next rank offers. */
     private static final int WORKED_X = 56;
     private static final int WORKED_Y = 32;
     private static final int OFFERED_X = 48;
     private static final int OFFERED_Y = 104;
 
-    /** The bar that has to fill before the work is done, and the two strips it is drawn from. */
     private static final int BAR_X = 48;
     private static final int BAR_Y = 88;
     private static final int BAR_W = 96;
@@ -60,7 +47,6 @@ public class FocalManipulatorScreen extends AbstractContainerScreen<FocalManipul
     private static final int BAR_FULL_U = 112;
     private static final int BAR_V = 240;
 
-    /** Where the levels and the list of vis are written. */
     private static final int LEVELS_X = 125;
     private static final int LEVELS_Y = 64;
     private static final int READY_X = 108;
@@ -71,7 +57,6 @@ public class FocalManipulatorScreen extends AbstractContainerScreen<FocalManipul
     private static final int LINE = 10;
     private static final int AMOUNT_X = 48;
 
-    /** What the player has picked but not yet set the bench to do. */
     private FocusUpgrade picked;
 
     public FocalManipulatorScreen(FocalManipulatorMenu menu, Inventory inventory, Component title) {
@@ -88,7 +73,6 @@ public class FocalManipulatorScreen extends AbstractContainerScreen<FocalManipul
         return menu.getSlot(0).getItem();
     }
 
-    /** What the next rank of this focus offers, which is nothing at all while the bench is busy. */
     private List<FocusUpgrade> offered() {
         return FocusUpgrades.offers(focus(), FocusUpgrades.nextRank(focus()), minecraft.player);
     }
@@ -103,7 +87,6 @@ public class FocalManipulatorScreen extends AbstractContainerScreen<FocalManipul
         if (bench == null) {
             return;
         }
-        // a focus taken off the bench takes the choice with it
         if (!offered().contains(picked)) {
             picked = null;
         }
@@ -113,7 +96,6 @@ public class FocalManipulatorScreen extends AbstractContainerScreen<FocalManipul
         bill(graphics, bench);
     }
 
-    /** What is already in it, along the top. */
     private void worked(GuiGraphics graphics) {
         List<FocusUpgrade> fitted = FocusUpgrades.on(focus());
         for (int rank = 0; rank < fitted.size(); rank++) {
@@ -122,7 +104,6 @@ public class FocalManipulatorScreen extends AbstractContainerScreen<FocalManipul
         }
     }
 
-    /** What the next rank offers, along the bottom, with a mark behind whichever is picked. */
     private void offers(GuiGraphics graphics) {
         List<FocusUpgrade> offered = offered();
         for (int which = 0; which < offered.size(); which++) {
@@ -134,12 +115,6 @@ public class FocalManipulatorScreen extends AbstractContainerScreen<FocalManipul
         }
     }
 
-    /**
-     * The bill: the levels, the vis, and the bar.
-     * <p>
-     * While the bench is working the bar is what it still owes, drawn in the colours of what it owes. Before it
-     * has started the bar is only an invitation, and is shown only when the levels can actually be found.
-     */
     private void bill(GuiGraphics graphics, FocalManipulatorBlockEntity bench) {
         boolean busy = bench.bill() > 0;
         int rank = busy ? bench.rank() : FocusUpgrades.nextRank(focus());
@@ -181,7 +156,6 @@ public class FocalManipulatorScreen extends AbstractContainerScreen<FocalManipul
         graphics.pose().popPose();
     }
 
-    /** Picking one of the offered upgrades, or setting the bench to work on what is picked. */
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         FocalManipulatorBlockEntity bench = bench();
@@ -203,7 +177,6 @@ public class FocalManipulatorScreen extends AbstractContainerScreen<FocalManipul
         return super.mouseClicked(mouseX, mouseY, button);
     }
 
-    /** The original's shutter clack, for every button on the bench. */
     private void clack() {
         if (minecraft != null) {
             minecraft.getSoundManager().play(SimpleSoundInstance.forUI(ModSounds.CAMERA_CLACK.get(), 1.0F, 0.4F));
@@ -222,7 +195,6 @@ public class FocalManipulatorScreen extends AbstractContainerScreen<FocalManipul
         return inX >= 0 && inY >= 0 && inX < width && inY < height;
     }
 
-    /** What each of the small pictures means, which is the only way anybody learns what they do. */
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partial) {
         super.render(graphics, mouseX, mouseY, partial);
@@ -252,7 +224,6 @@ public class FocalManipulatorScreen extends AbstractContainerScreen<FocalManipul
                 mouseX, mouseY);
     }
 
-    /** The panel is already labelled in its own painting, so no words are put over it. */
     @Override
     protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
     }

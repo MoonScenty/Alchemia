@@ -20,11 +20,6 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
-/**
- * The Eldritch Construct on the original's own model, twice and a bit the size it was built at: its arms smash down
- * when it strikes and swing as it walks, its cloak and front cloth swing with its stride, its head turns a little
- * with where it looks -- and once it has lost it, the stump turns all the way.
- */
 public class EldritchGolemRenderer extends MobRenderer<EldritchGolem, EldritchGolemRenderer.Model> {
     private static final ResourceLocation SKIN = Alchemia.id("textures/entity/eldritch_golem.png");
     private static final float SCALE = 2.15F;
@@ -76,7 +71,6 @@ public class EldritchGolemRenderer extends MobRenderer<EldritchGolem, EldritchGo
             }
         }
 
-        /** The original's triangle wave. */
         private static float swing(float a, float b) {
             return (Math.abs(a % b - b * 0.5F) - b * 0.25F) / (b * 0.25F);
         }

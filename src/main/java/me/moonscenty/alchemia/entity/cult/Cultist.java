@@ -29,21 +29,8 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.common.util.FakePlayer;
 
-/**
- * A member of the Crimson Cult: the knight or the cleric. Never anything by itself.
- *
- * <h3>What they share</h3>
- * They are the size of a player, walk a little faster than one and open doors. They never turn on each other, and
- * one that is hurt calls every other cultist within sixty-four blocks to it. They are not out after dark of their own
- * accord -- nothing calls them up but a portal or an altar.
- *
- * <h3>What they leave</h3>
- * One in five leaves a void seed; otherwise a coin, two times in ten and once more for each level of looting. Killed
- * by a player, now and then a knowledge fragment, and the cult's book: one time in four until the killer has read it,
- * one in fifty after, one in a hundred while they carry a copy. Each piece they wear falls one time in twenty.
- */
 public abstract class Cultist extends Monster {
-    /** How far a hurt cultist's cry carries, out and up. The original's: twice its following range, and ten. */
+    // original's: twice the follow range across, 10 up
     private static final double CALLS_ACROSS = 64.0;
     private static final double CALLS_UP = 10.0;
 
@@ -65,8 +52,6 @@ public abstract class Cultist extends Monster {
                 .add(Attributes.ATTACK_DAMAGE, 4.0);
     }
 
-    // --- one of us -----------------------------------------------------------
-
     @Override
     public boolean isAlliedTo(Entity other) {
         return other instanceof Cultist || super.isAlliedTo(other);
@@ -77,8 +62,6 @@ public abstract class Cultist extends Monster {
         return false;
     }
 
-    // --- dressing ------------------------------------------------------------
-
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason,
             SpawnGroupData data) {
@@ -87,7 +70,7 @@ public abstract class Cultist extends Monster {
         return result;
     }
 
-    /** What this kind of cultist goes about in. The game's own random armour is not theirs, so it is never rolled. */
+    // vanilla's random armour is never rolled for cultists
     protected abstract void dress(ServerLevelAccessor level, DifficultyInstance difficulty);
 
     @Override
@@ -99,8 +82,6 @@ public abstract class Cultist extends Monster {
     protected void populateDefaultEquipmentEnchantments(ServerLevelAccessor level,
             net.minecraft.util.RandomSource random, DifficultyInstance difficulty) {
     }
-
-    // --- what they leave -----------------------------------------------------
 
     @Override
     protected void dropCustomDeathLoot(ServerLevel level, DamageSource source, boolean recentlyHit) {
@@ -126,9 +107,6 @@ public abstract class Cultist extends Monster {
         }
     }
 
-    // --- a summons -----------------------------------------------------------
-
-    /** The red puff a cultist arrives in. */
     @Override
     public void spawnAnim() {
         if (level().isClientSide) {
@@ -137,8 +115,6 @@ public abstract class Cultist extends Monster {
             level().broadcastEntityEvent(this, (byte) 20);
         }
     }
-
-    // --- where it keeps to ---------------------------------------------------
 
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
@@ -152,9 +128,6 @@ public abstract class Cultist extends Monster {
         Home.load(this, tag);
     }
 
-    /**
-     * Turns on whatever hurt it, and calls every cultist in reach that has nothing better to do to turn on it too.
-     */
     protected static class CallForHelp extends TargetGoal {
         private int lastHurtAt = Integer.MIN_VALUE;
 
@@ -182,10 +155,7 @@ public abstract class Cultist extends Monster {
         }
     }
 
-    /**
-     * Sets every cultist in reach that has nothing better to do on the attacker. A cleric at its rite is only called
-     * on, and may or may not come.
-     */
+    // a cleric at its rite is only called on, and may not come
     public static void callTheCult(Mob caller, LivingEntity attacker, double across, double up) {
         AABB reach = new AABB(caller.blockPosition()).inflate(across, up, across);
         for (Cultist other : caller.level().getEntitiesOfClass(Cultist.class, reach)) {

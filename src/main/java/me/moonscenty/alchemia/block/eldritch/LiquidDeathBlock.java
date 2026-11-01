@@ -12,10 +12,6 @@ import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FlowingFluid;
 
-/**
- * Liquid death: a purple, glowing ooze that dissolves whatever lives and stands in it -- five a hit at its source,
- * a point less with each step it has flowed. It bubbles, and now and then pops.
- */
 public class LiquidDeathBlock extends LiquidBlock {
     public LiquidDeathBlock(FlowingFluid fluid, Properties properties) {
         super(fluid, properties);

@@ -4,11 +4,7 @@ import me.moonscenty.alchemia.registry.ModTags;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
-/**
- * The warp of making something that should not be made, as the original's {@code addWarpToItem}: a point of sticking
- * warp on whoever made it, at the arcane workbench, the crucible or the altar. What is in the tag is the original's
- * list.
- */
+// Original's addWarpToItem: crafting a tagged item gives the crafter a point of sticky warp.
 public final class CraftWarp {
     private CraftWarp() {
     }

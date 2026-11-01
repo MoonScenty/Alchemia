@@ -53,27 +53,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.network.PacketDistributor;
 
-/**
- * An eldritch guardian: a hooded thing from the Outer Lands, tall and floating, trailing black smoke.
- *
- * <h3>How it fights</h3>
- * Further off than eight blocks it casts, every one to two seconds: nine times in ten a dark orb from one hand or the
- * other that bursts on whatever it meets, weakening everything about it that is alive and not undead; otherwise, if it
- * can see its target, a screech that withers for twenty seconds and leaves a player one to three points of warp that
- * pass. Nearer, it strikes twice a second. Magic does it half the harm it would.
- *
- * <h3>What follows it</h3>
- * Out of its own lands it brings a fog with it: every five seconds whoever is within sixteen blocks (twenty-four on
- * hard) finds the fog closing in. It is drawn faint, and fainter with distance.
- *
- * <h3>Where it comes from</h3>
- * Warp calls them up in the fog. One walks the eerie lands now and then, never within thirty-two blocks of another.
- *
- * <h3>Where this differs from the original</h3>
- * The original's screech was a ripple drawn on a hemisphere of its own; here it is the game's own sonic boom.
- */
 public class EldritchGuardian extends Monster implements RangedAttackMob, EldritchMob, ArmLifting {
-    /** How far an arm is raised, for the drawing. */
     public float armLiftL;
     public float armLiftR;
 
@@ -106,7 +86,6 @@ public class EldritchGuardian extends Monster implements RangedAttackMob, Eldrit
                 .add(Attributes.ARMOR, 4.0);
     }
 
-    /** Somewhere one may walk of itself: not where another already is, and not in the full light of day. */
     public static boolean checkSpawnRules(EntityType<EldritchGuardian> type, ServerLevelAccessor level,
             MobSpawnType reason, BlockPos pos, RandomSource random) {
         return level.getDifficulty() != Difficulty.PEACEFUL
@@ -148,18 +127,14 @@ public class EldritchGuardian extends Monster implements RangedAttackMob, Eldrit
         return super.hurt(source, amount);
     }
 
-    // --- the Outer Lands' ward -------------------------------------------------
-
-    /** How often its ward mends a point, in ticks, while nothing is hurting it. */
     public static final int WARD_MENDS_EVERY = 25;
     private static final ResourceLocation WARD = Alchemia.id("outer_lands_ward");
 
-    /** In the Outer Lands it is warded, the original's: half its health more, worn as absorption. */
+    // original's: in the Outer Lands it gets half its base health again as absorption
     public boolean warded() {
         return level().dimension() == OuterLands.LEVEL;
     }
 
-    /** How much its ward holds: half its health before anything else was added. */
     public int ward() {
         return (int) getAttribute(Attributes.MAX_HEALTH).getBaseValue() / 2;
     }
@@ -171,7 +146,6 @@ public class EldritchGuardian extends Monster implements RangedAttackMob, Eldrit
         }
     }
 
-    /** It arrives with the ward whole. */
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason,
             @Nullable SpawnGroupData data) {
@@ -182,13 +156,11 @@ public class EldritchGuardian extends Monster implements RangedAttackMob, Eldrit
         return spawned;
     }
 
-    /** Gives it the whole ward at once. */
     public void putOnWard() {
         makeRoomForWard();
         setAbsorptionAmount(getAbsorptionAmount() + ward());
     }
 
-    /** And mends it a point at a time while it is not being hurt. */
     @Override
     protected void customServerAiStep() {
         super.customServerAiStep();
@@ -204,8 +176,6 @@ public class EldritchGuardian extends Monster implements RangedAttackMob, Eldrit
     public boolean removeWhenFarAway(double distance) {
         return !hasRestriction();
     }
-
-    // --- every tick ----------------------------------------------------------
 
     @Override
     public void tick() {
@@ -226,8 +196,6 @@ public class EldritchGuardian extends Monster implements RangedAttackMob, Eldrit
             }
         }
     }
-
-    // --- casting -------------------------------------------------------------
 
     @Override
     public void performRangedAttack(LivingEntity target, float distance) {
@@ -265,8 +233,6 @@ public class EldritchGuardian extends Monster implements RangedAttackMob, Eldrit
         }
     }
 
-    // --- what it leaves ------------------------------------------------------
-
     @Override
     protected void dropCustomDeathLoot(ServerLevel level, DamageSource source, boolean recentlyHit) {
         super.dropCustomDeathLoot(level, source, recentlyHit);
@@ -281,8 +247,6 @@ public class EldritchGuardian extends Monster implements RangedAttackMob, Eldrit
             spawnAtLocation(new ItemStack(ModItems.ELDRITCH_EYE.get()));
         }
     }
-
-    // --- its voice -----------------------------------------------------------
 
     @Override
     protected SoundEvent getAmbientSound() {
@@ -303,8 +267,6 @@ public class EldritchGuardian extends Monster implements RangedAttackMob, Eldrit
     protected float getSoundVolume() {
         return 1.5F;
     }
-
-    // --- where it keeps to ---------------------------------------------------
 
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {

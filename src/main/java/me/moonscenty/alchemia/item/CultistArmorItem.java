@@ -11,21 +11,14 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
 
-/**
- * What the Crimson Cult wears. Iron to the last number, and nobody makes it: it comes off a cultist or not at all.
- * <p>
- * The robe and the boots are a cultist's own and carry a little of the cult with them: a point of warp each while
- * worn, and a wand spends a hundredth less. The plate is a knight's and is only plate.
- */
 public class CultistArmorItem extends ArmorItem implements WarpingGear, VisDiscount {
-    /** Which of the three the piece belongs to. */
     public enum Kind {
         ROBE(1),
         PLATE(0),
         PRAETOR(0),
         BOOTS(1);
 
-        /** Warp carried, and parts of a hundred off a wand's bill. The original's: the same for both. */
+        // warp carried and vis discount percent; original's value
         private final int mark;
 
         Kind(int mark) {
@@ -54,7 +47,6 @@ public class CultistArmorItem extends ArmorItem implements WarpingGear, VisDisco
         return kind.mark;
     }
 
-    /** A husk's plate is the same plate, stained by what has been living in it. */
     @Override
     public net.minecraft.resources.ResourceLocation getArmorTexture(ItemStack stack, net.minecraft.world.entity.Entity entity,
             net.minecraft.world.entity.EquipmentSlot slot, ArmorMaterial.Layer layer, boolean innerModel) {

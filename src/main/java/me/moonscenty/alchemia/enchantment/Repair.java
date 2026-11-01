@@ -17,15 +17,8 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
-/**
- * Repair, the original's {@code EnchantmentRepair} and {@code PlayerEvents.doRepair}: every two seconds a worn thing
- * with it, or one in the hotbar, mends a point a level, paid for out of the aura. What is paid is one primal of what the
- * thing is made of, or earth, picked at random, as much as the level; where that runs thin, or there is not enough, it
- * waits. Not for anyone in creative. An arcane bore mends its pickaxe the same way.
- */
 @EventBusSubscriber(modid = Alchemia.MODID)
 public final class Repair {
-    /** How often it mends, in ticks. */
     public static final int EVERY = 40;
 
     private Repair() {
@@ -46,7 +39,6 @@ public final class Repair {
         }
     }
 
-    /** Mends this a little if it has repair on it and the aura here will pay; whether it did. */
     public static boolean mend(ItemStack stack, Level level, BlockPos pos, RandomSource random) {
         if (stack.isEmpty() || !stack.isDamaged()) {
             return false;

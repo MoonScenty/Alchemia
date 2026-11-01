@@ -24,11 +24,7 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.RandomState;
 import net.minecraft.world.level.levelgen.blending.Blender;
 
-/**
- * The Outer Lands: every chunk solid ancient bedrock from top to bottom, as the original made them. Where a chunk is
- * a cell of a maze, the maze is carved out of it when the chunk is decorated -- the moment the original's world
- * generator carved it, too.
- */
+// Mazes are carved at decoration time, when the original carved them.
 public class OuterLandsChunkGenerator extends ChunkGenerator {
     public static final MapCodec<OuterLandsChunkGenerator> CODEC = RecordCodecBuilder.mapCodec(instance -> instance
             .group(BiomeSource.CODEC.fieldOf("biome_source").forGetter(ChunkGenerator::getBiomeSource))

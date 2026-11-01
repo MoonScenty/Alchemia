@@ -16,38 +16,20 @@ import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.settings.KeyConflictContext;
 import net.neoforged.neoforge.network.PacketDistributor;
 
-/**
- * The two keys a wand answers to: the one that changes what it is pointed with, and the one that sets how far
- * the focus on it works.
- * <p>
- * Sneak with it to take the focus off. A tap moves to the next focus; holding it opens the wheel the original
- * had -- every focus being carried laid out in a ring, and whichever the cursor is over when the key is let go
- * is the one fitted. The tap is the quicker of the two for anybody carrying three foci, and the ring is the
- * only workable one for anybody carrying a pouch full.
- * <p>
- * The original used F, which was free in its day. It is vanilla's swap-hands key in this one, and two bindings on
- * one key both fire -- a press would change the focus and swap the hands at once. V is free and falls under the
- * same hand, so V it is; anyone who wants F back can say so in the controls screen.
- * <p>
- * The second key is the original's G, which is still free. It turns whatever setting the thing in hand has: how
- * far an architect's focus reaches, or which way the shovel of the earthmover lays its square.
- */
 @EventBusSubscriber(modid = Alchemia.MODID, value = Dist.CLIENT)
 public final class WandKeys {
     private static final String CATEGORY = "key.categories.alchemia";
 
+    // V, not the original's F: F is vanilla's swap-hands and both bindings would fire
     public static final KeyMapping CHANGE_FOCUS = new KeyMapping("key.alchemia.change_focus",
             KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, InputConstants.KEY_V, CATEGORY);
 
-    /** A wand whose focus has an architect's eye, and the shovel of the earthmover, answer to this one. */
     public static final KeyMapping TOOL_SETTING = new KeyMapping("key.alchemia.tool_setting",
             KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, InputConstants.KEY_G, CATEGORY);
 
-    /** The original's H: switches the thaumostatic harness on and off. */
     public static final KeyMapping HOVER = new KeyMapping("key.alchemia.hover",
             KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, InputConstants.KEY_H, CATEGORY);
 
-    /** How long the key has to be held before the ring opens rather than the focus simply moving on. */
     private static final int HELD_FOR = 5;
 
     private static int held;
@@ -62,13 +44,6 @@ public final class WandKeys {
         event.register(HOVER);
     }
 
-    /**
-     * A tap against a hold.
-     * <p>
-     * The key is watched rather than its presses counted: how long it has been down is the whole of what tells
-     * a tap from a hold. Letting go early moves the focus on; holding past {@value #HELD_FOR} ticks opens the
-     * ring, and from then on the ring itself has the keyboard and decides what the letting go means.
-     */
     @SubscribeEvent
     public static void onClientTick(ClientTickEvent.Post event) {
         Minecraft client = Minecraft.getInstance();
@@ -77,7 +52,7 @@ public final class WandKeys {
             return;
         }
         drain(CHANGE_FOCUS);
-        // counted before anything else looks at it: emptying the queue first is what kept this from ever firing
+        // drain before anything else reads it, or this never fires
         boolean setting = drain(TOOL_SETTING);
         if (drain(HOVER) && client.screen == null && !me.moonscenty.alchemia.item.Hover.worn(player).isEmpty()) {
             PacketDistributor.sendToServer(new me.moonscenty.alchemia.network.ToggleHover());
@@ -94,7 +69,6 @@ public final class WandKeys {
 
         if (CHANGE_FOCUS.isDown()) {
             held++;
-            // sneaking is taking the focus off, which is a thing done at once rather than chosen from a ring
             if (held == HELD_FOR && !player.isShiftKeyDown()) {
                 openWheel(client, player);
             }
@@ -108,7 +82,6 @@ public final class WandKeys {
         }
     }
 
-    /** The ring, with every focus being carried on it. Nothing to put on it is nothing to open. */
     private static void openWheel(Minecraft client, LocalPlayer player) {
         var carried = me.moonscenty.alchemia.wand.Foci.carried(player);
         if (carried.isEmpty()) {
@@ -118,7 +91,6 @@ public final class WandKeys {
                 WandItem.focus(player.getMainHandItem()), CHANGE_FOCUS.getKey().getValue()));
     }
 
-    /** Empties a key's queue of presses, and says whether there were any. */
     private static boolean drain(KeyMapping key) {
         boolean any = false;
         while (key.consumeClick()) {

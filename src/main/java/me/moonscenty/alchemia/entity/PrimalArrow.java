@@ -24,26 +24,12 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 
-/**
- * A primal arrow in flight, the original's {@code EntityPrimalArrow}: an arrow with a primal bound into it.
- * <ul>
- * <li>air: an arrow's damage, but as magic that no armour turns
- * <li>fire: fire damage, and sets what it hits alight for five seconds more
- * <li>water: an arrow's damage, and slows what it hits to a crawl for ten seconds
- * <li>earth: half as much again, and knocks back harder
- * <li>order: a little less, through armour, and leaves what it hits weak for ten seconds
- * <li>entropy: a little less, and withers what it hits for five seconds
- * </ul>
- * Nobody picks one back up, and one stuck in the ground is gone in five seconds.
- */
 public class PrimalArrow extends AbstractArrow {
     private static final EntityDataAccessor<Byte> KIND = SynchedEntityData.defineId(PrimalArrow.class,
             EntityDataSerializers.BYTE);
-    /** The original's arrows hit a shade harder than the game's own. */
+    // original's value
     public static final double BASE_DAMAGE = 2.1;
-    /** How long one lies stuck before it goes. */
     private static final int LIES_FOR = 100;
-    /** What the elements leave behind, in ticks. */
     private static final int BURNS = 5;
     private static final int SLOWS_FOR = 200;
     private static final int WEAKENS_FOR = 200;
@@ -62,7 +48,6 @@ public class PrimalArrow extends AbstractArrow {
         pickup = Pickup.DISALLOWED;
     }
 
-    /** How much of an arrow's damage each kind does: earth more, order and entropy less. */
     public static double multiplier(CrystalType kind) {
         return switch (kind) {
             case EARTH -> 1.5;
@@ -95,7 +80,6 @@ public class PrimalArrow extends AbstractArrow {
         }
     }
 
-    /** Gone a few seconds after it sticks, rather than a minute. */
     @Override
     protected void tickDespawn() {
         if (++lying >= LIES_FOR) {
@@ -103,7 +87,6 @@ public class PrimalArrow extends AbstractArrow {
         }
     }
 
-    /** Hits as the original did: the kind's own damage, then whatever the element leaves behind. */
     @Override
     protected void onHitEntity(EntityHitResult hit) {
         Entity target = hit.getEntity();

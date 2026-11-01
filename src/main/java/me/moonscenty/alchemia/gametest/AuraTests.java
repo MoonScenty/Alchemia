@@ -18,10 +18,6 @@ import net.minecraft.world.level.chunk.LevelChunk;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/**
- * The aura is the one thing in the mod that changes on its own, so what matters is that nothing is created or lost
- * by accident and that a chunk drawn dry can come back.
- */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class AuraTests {
@@ -46,7 +42,6 @@ public class AuraTests {
         helper.succeed();
     }
 
-    /** Drawing it up once must not draw it up again, or walking away and back would reset the land. */
     @GameTest(template = TEMPLATE)
     public static void anAuraIsOnlyDrawnUpOnce(GameTestHelper helper) {
         LevelChunk chunk = chunkOf(helper);
@@ -63,7 +58,6 @@ public class AuraTests {
         helper.succeed();
     }
 
-    /** A draw that cannot be met takes nothing at all, so a half-paid cost is impossible. */
     @GameTest(template = TEMPLATE)
     public static void drawingMoreThanIsThereTakesNothing(GameTestHelper helper) {
         LevelChunk chunk = chunkOf(helper);
@@ -82,7 +76,6 @@ public class AuraTests {
         helper.succeed();
     }
 
-    /** Asking for several at once is all or nothing too, however the list is ordered. */
     @GameTest(template = TEMPLATE)
     public static void drawingSeveralAtOnceIsAllOrNothing(GameTestHelper helper) {
         LevelChunk chunk = chunkOf(helper);
@@ -104,7 +97,6 @@ public class AuraTests {
         helper.succeed();
     }
 
-    /** Taking what is available never takes more than is there and says truthfully how much it took. */
     @GameTest(template = TEMPLATE)
     public static void takingWhatIsAvailableIsHonest(GameTestHelper helper) {
         LevelChunk chunk = chunkOf(helper);
@@ -120,10 +112,9 @@ public class AuraTests {
         helper.succeed();
     }
 
-    /** Land run down past a tenth of what it holds is worth leaving alone. */
     @GameTest(template = TEMPLATE)
     public static void thinAuraAsksToBeSpared(GameTestHelper helper) {
-        // freshly drawn up, whatever a test next door has done to this chunk's aura already
+        // reset first: a neighbouring test may already have changed this chunk's aura
         LevelChunk chunk = chunkOf(helper);
         chunk.setData(ModAuraAttachment.AURA, AuraGeneration.drawUp(helper.getLevel(), chunk.getPos(),
                 RandomSource.create(7L)));
@@ -137,21 +128,18 @@ public class AuraTests {
         helper.succeed();
     }
 
-    /** Somewhere with no aura at all must refuse everything rather than pretend. */
     @GameTest(template = TEMPLATE)
     public static void landWithoutAnAuraGivesNothing(GameTestHelper helper) {
         AuraChunk none = AuraChunk.NONE;
         helper.assertTrue(!none.exists(), "an unvisited chunk holds nothing");
         helper.assertTrue(none.get(ModAspects.AIR) == 0, "and reads as empty");
 
-        // a position far outside the loaded area has no chunk to speak of
         BlockPos away = new BlockPos(30_000_000, 64, 30_000_000);
         helper.assertTrue(AuraHandler.get(helper.getLevel(), away, ModAspects.AIR) == 0, "unloaded land reads as empty");
         helper.assertTrue(!AuraHandler.drain(helper.getLevel(), away, ModAspects.AIR, 1), "and gives nothing");
         helper.succeed();
     }
 
-    /** The land is what decides the aura, so a chunk is never blank and never unbounded. */
     @GameTest(template = TEMPLATE)
     public static void whatTheLandHoldsStaysWithinReason(GameTestHelper helper) {
         for (long seed = 0; seed < 50; seed++) {

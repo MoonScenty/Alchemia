@@ -12,18 +12,11 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
-/**
- * The liquids of the craft.
- */
 public final class ModFluids {
     public static final DeferredRegister<FluidType> TYPES =
             DeferredRegister.create(NeoForgeRegistries.Keys.FLUID_TYPES, Alchemia.MODID);
     public static final DeferredRegister<Fluid> FLUIDS = DeferredRegister.create(Registries.FLUID, Alchemia.MODID);
 
-    /**
-     * Water with bath salts dissolved in it: silvery, faintly lit, and a ward against warp for whoever steps into it.
-     * It flows as water does but, like the original's, never makes a new source of itself.
-     */
     public static final DeferredHolder<FluidType, FluidType> PURIFYING_TYPE = TYPES.register("purifying_fluid",
             () -> new FluidType(FluidType.Properties.create()
                     .descriptionId("block.alchemia.purifying_fluid")
@@ -41,7 +34,6 @@ public final class ModFluids {
     public static final DeferredHolder<Fluid, BaseFlowingFluid.Flowing> FLOWING_PURIFYING =
             FLUIDS.register("flowing_purifying_fluid", () -> new BaseFlowingFluid.Flowing(purifying()));
 
-    /** Liquid death: a slow purple ooze, four steps to a source, that dissolves the living. */
     public static final DeferredHolder<FluidType, FluidType> DEATH_TYPE = TYPES.register("liquid_death",
             () -> new FluidType(FluidType.Properties.create()
                     .descriptionId("block.alchemia.liquid_death")

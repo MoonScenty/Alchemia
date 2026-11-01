@@ -30,7 +30,6 @@ public class ModEntities {
     public static final DeferredRegister<EntityType<?>> ENTITIES =
             DeferredRegister.create(Registries.ENTITY_TYPE, Alchemia.MODID);
 
-    /** Small, kept loaded well past the usual distance, and never saved as part of a mob cap. */
     public static final DeferredHolder<EntityType<?>, EntityType<AuraNode>> AURA_NODE =
             ENTITIES.register("aura_node", () -> EntityType.Builder
                     .<AuraNode>of(AuraNode::new, MobCategory.MISC)
@@ -41,7 +40,6 @@ public class ModEntities {
                     .noSummon()
                     .build("aura_node"));
 
-    /** A spot in the air with no body to speak of; it only has to be seen from far enough to see its rain. */
     public static final DeferredHolder<EntityType<?>, EntityType<TaintCloud>> TAINT_CLOUD =
             ENTITIES.register("taint_cloud", () -> EntityType.Builder
                     .<TaintCloud>of(TaintCloud::new, MobCategory.MISC)
@@ -52,11 +50,6 @@ public class ModEntities {
                     .noSummon()
                     .build("taint_cloud"));
 
-    /**
-     * A thrown spite that bursts where it lands.
-     * <p>
-     * Small, short-lived and never saved: a curse in the air when the world closes is a curse that never landed.
-     */
     public static final DeferredHolder<EntityType<?>, EntityType<PechBlast>> PECH_BLAST =
             ENTITIES.register("pech_blast", () -> EntityType.Builder
                     .<PechBlast>of(PechBlast::new, MobCategory.MISC)
@@ -66,7 +59,6 @@ public class ModEntities {
                     .noSummon()
                     .build("pech_blast"));
 
-    /** A hook on no line at all. What holds the climber to it is the pull, not a rope. */
     public static final DeferredHolder<EntityType<?>, EntityType<Grapple>> GRAPPLE =
             ENTITIES.register("grapple", () -> EntityType.Builder
                     .<Grapple>of(Grapple::new, MobCategory.MISC)
@@ -76,12 +68,6 @@ public class ModEntities {
                     .noSummon()
                     .build("grapple"));
 
-    /**
-     * The four a wand throws.
-     * <p>
-     * None is drawn: each is its own trail of particles and a burst where it lands, which is most of
-     * what each of them looked like in the first place.
-     */
     public static final DeferredHolder<EntityType<?>, EntityType<Ember>> EMBER =
             ENTITIES.register("ember", () -> EntityType.Builder
                     .<Ember>of(Ember::new, MobCategory.MISC)
@@ -118,7 +104,6 @@ public class ModEntities {
                     .noSummon()
                     .build("primal_orb"));
 
-    /** What the fire focus throws once a fireball is worked into it, and what the shock focus lobs. */
     public static final DeferredHolder<EntityType<?>, EntityType<FireOrb>> FIRE_ORB =
             ENTITIES.register("fire_orb", () -> EntityType.Builder
                     .<FireOrb>of(FireOrb::new, MobCategory.MISC)
@@ -137,10 +122,6 @@ public class ModEntities {
                     .noSummon()
                     .build("shock_orb"));
 
-    /**
-     * A focus on a bracket. It is a mob rather than a block because the original let one hang off any face, and a
-     * block that can be put on six faces and still turn its head is a block fighting the game.
-     */
     public static final DeferredHolder<EntityType<?>, EntityType<Autocaster>> AUTOCASTER =
             ENTITIES.register("autocaster", () -> EntityType.Builder
                     .<Autocaster>of(Autocaster::new, MobCategory.MISC)
@@ -150,7 +131,6 @@ public class ModEntities {
                     .noSummon()
                     .build("autocaster"));
 
-    /** Constructs on tripods: the two automated crossbows and the node magnet. The original's sizes. */
     public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.entity.AutomatedCrossbow>>
             AUTOMATED_CROSSBOW = ENTITIES.register("automated_crossbow", () -> EntityType.Builder
                     .<me.moonscenty.alchemia.entity.AutomatedCrossbow>of(
@@ -171,7 +151,6 @@ public class ModEntities {
                     .sized(0.9F, 0.9F).eyeHeight(0.8125F).clientTrackingRange(10).noSummon()
                     .build("node_magnet"));
 
-    /** The great halls' bosses. */
     public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.entity.boss.EldritchWarden>> ELDRITCH_WARDEN =
             ENTITIES.register("eldritch_warden", () -> EntityType.Builder
                     .<me.moonscenty.alchemia.entity.boss.EldritchWarden>of(me.moonscenty.alchemia.entity.boss.EldritchWarden::new, MobCategory.MONSTER)
@@ -198,7 +177,6 @@ public class ModEntities {
                     .sized(1.1F, 6.0F).clientTrackingRange(12).updateInterval(3)
                     .build("taintacle_giant"));
 
-    /** The ancient autocaster of the Outer Lands' mazes. */
     public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.entity.EldritchAutocaster>> ELDRITCH_AUTOCASTER =
             ENTITIES.register("eldritch_autocaster", () -> EntityType.Builder
                     .<me.moonscenty.alchemia.entity.EldritchAutocaster>of(me.moonscenty.alchemia.entity.EldritchAutocaster::new,
@@ -209,7 +187,6 @@ public class ModEntities {
                     .updateInterval(3)
                     .build("eldritch_autocaster"));
 
-    /** A lump of alumentum, thrown. */
     public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.entity.ThrownAlumentum>> ALUMENTUM =
             ENTITIES.register("alumentum", () -> EntityType.Builder
                     .<me.moonscenty.alchemia.entity.ThrownAlumentum>of(
@@ -219,7 +196,6 @@ public class ModEntities {
                     .updateInterval(10)
                     .build("alumentum"));
 
-    /** A bottle of taint, thrown. */
     public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.entity.ThrownTaintBottle>> TAINT_BOTTLE =
             ENTITIES.register("bottle_taint", () -> EntityType.Builder
                     .<me.moonscenty.alchemia.entity.ThrownTaintBottle>of(
@@ -229,7 +205,6 @@ public class ModEntities {
                     .updateInterval(10)
                     .build("bottle_taint"));
 
-    /** A primal arrow in flight. */
     public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.entity.PrimalArrow>> PRIMAL_ARROW =
             ENTITIES.register("primal_arrow", () -> EntityType.Builder
                     .<me.moonscenty.alchemia.entity.PrimalArrow>of(me.moonscenty.alchemia.entity.PrimalArrow::new,
@@ -240,10 +215,6 @@ public class ModEntities {
                     .updateInterval(20)
                     .build("primal_arrow"));
 
-    /**
-     * A bat that burns. Small, fire-proof, and followed at the original's distance; it moves too fast and too
-     * often for anything slower than every third tick to keep up with.
-     */
     public static final DeferredHolder<EntityType<?>, EntityType<FireBat>> FIRE_BAT =
             ENTITIES.register("firebat", () -> EntityType.Builder
                     .<FireBat>of(FireBat::new, MobCategory.MONSTER)
@@ -253,7 +224,6 @@ public class ModEntities {
                     .updateInterval(3)
                     .build("firebat"));
 
-    /** A wisp: a knot of light the size of most of a block, followed far, since it is seen from far off. */
     public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.entity.Wisp>> WISP =
             ENTITIES.register("wisp", () -> EntityType.Builder
                     .<me.moonscenty.alchemia.entity.Wisp>of(me.moonscenty.alchemia.entity.Wisp::new,
@@ -264,7 +234,6 @@ public class ModEntities {
                     .updateInterval(3)
                     .build("wisp"));
 
-    /** A pech: a little hunched thing a player's width and height, its eyes low in its face. */
     public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.entity.Pech>> PECH =
             ENTITIES.register("pech", () -> EntityType.Builder
                     .<me.moonscenty.alchemia.entity.Pech>of(me.moonscenty.alchemia.entity.Pech::new,
@@ -274,7 +243,6 @@ public class ModEntities {
                     .clientTrackingRange(8)
                     .build("pech"));
 
-    /** A taint crawler: smaller than a silverfish, its eyes on the ground. */
     public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.entity.TaintCrawler>>
             TAINT_CRAWLER = ENTITIES.register("taint_crawler", () -> EntityType.Builder
                     .<me.moonscenty.alchemia.entity.TaintCrawler>of(me.moonscenty.alchemia.entity.TaintCrawler::new,
@@ -283,7 +251,6 @@ public class ModEntities {
                     .eyeHeight(0.1F)
                     .clientTrackingRange(8)
                     .build("taint_crawler"));
-    /** A taint swarm: a cloud two blocks across. */
     public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.entity.TaintSwarm>>
             TAINT_SWARM = ENTITIES.register("taint_swarm", () -> EntityType.Builder
                     .<me.moonscenty.alchemia.entity.TaintSwarm>of(me.moonscenty.alchemia.entity.TaintSwarm::new,
@@ -292,7 +259,6 @@ public class ModEntities {
                     .clientTrackingRange(8)
                     .updateInterval(3)
                     .build("taint_swarm"));
-    /** A taintacle: three blocks tall, rooted. */
     public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.entity.Taintacle>>
             TAINTACLE = ENTITIES.register("taintacle", () -> EntityType.Builder
                     .<me.moonscenty.alchemia.entity.Taintacle>of(me.moonscenty.alchemia.entity.Taintacle::new,
@@ -300,7 +266,6 @@ public class ModEntities {
                     .sized(0.8F, 3.0F)
                     .clientTrackingRange(8)
                     .build("taintacle"));
-    /** A taint tendril: a taintacle a block tall and a finger thick. */
     public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.entity.TaintacleTiny>>
             TAINTACLE_TINY = ENTITIES.register("taintacle_tiny", () -> EntityType.Builder
                     .<me.moonscenty.alchemia.entity.TaintacleTiny>of(
@@ -310,7 +275,6 @@ public class ModEntities {
                     .noSummon()
                     .build("taintacle_tiny"));
 
-    /** The animals the taint has made over, each the size of what it was. */
     public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.entity.TaintedCow>>
             TAINTED_COW = ENTITIES.register("tainted_cow", () -> EntityType.Builder
                     .<me.moonscenty.alchemia.entity.TaintedCow>of(me.moonscenty.alchemia.entity.TaintedCow::new,
@@ -354,7 +318,6 @@ public class ModEntities {
                     .sized(0.6F, 1.8F)
                     .clientTrackingRange(8)
                     .build("tainted_villager"));
-    /** A made-over rabbit keeps to the world as a rabbit does. */
     public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.entity.TaintedRabbit>>
             TAINTED_RABBIT = ENTITIES.register("tainted_rabbit", () -> EntityType.Builder
                     .<me.moonscenty.alchemia.entity.TaintedRabbit>of(me.moonscenty.alchemia.entity.TaintedRabbit::new,
@@ -362,7 +325,6 @@ public class ModEntities {
                     .sized(0.6F, 0.7F)
                     .clientTrackingRange(8)
                     .build("tainted_rabbit"));
-    /** An alchemic slime: a slime's measure, grown by its size. */
     public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.entity.AlchemicSlime>>
             ALCHEMIC_SLIME = ENTITIES.register("alchemic_slime", () -> EntityType.Builder
                     .<me.moonscenty.alchemia.entity.AlchemicSlime>of(me.moonscenty.alchemia.entity.AlchemicSlime::new,
@@ -372,7 +334,6 @@ public class ModEntities {
                     .clientTrackingRange(10)
                     .build("alchemic_slime"));
 
-    /** A zombie's size and a zombie's reach. */
     public static final DeferredHolder<EntityType<?>, EntityType<AngryZombie>> ANGRY_ZOMBIE =
             ENTITIES.register("angry_zombie", () -> EntityType.Builder
                     .<AngryZombie>of(AngryZombie::new, MobCategory.MONSTER)
@@ -383,7 +344,6 @@ public class ModEntities {
                     .clientTrackingRange(8)
                     .build("angry_zombie"));
 
-    /** A zombie's size to begin with; its anger makes it bigger. */
     public static final DeferredHolder<EntityType<?>, EntityType<FuriousZombie>> FURIOUS_ZOMBIE =
             ENTITIES.register("furious_zombie", () -> EntityType.Builder
                     .<FuriousZombie>of(FuriousZombie::new, MobCategory.MONSTER)
@@ -394,7 +354,6 @@ public class ModEntities {
                     .clientTrackingRange(8)
                     .build("furious_zombie"));
 
-    /** A golem: a small made thing, waist high to a player. */
     public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.golem.Golem>> GOLEM =
             ENTITIES.register("golem", () -> EntityType.Builder
                     .<me.moonscenty.alchemia.golem.Golem>of(me.moonscenty.alchemia.golem.Golem::new,
@@ -404,7 +363,6 @@ public class ModEntities {
                     .clientTrackingRange(10)
                     .build("golem"));
 
-    /** A golem's dart: a small arrow. */
     public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.golem.GolemDart>> GOLEM_DART =
             ENTITIES.register("golem_dart", () -> EntityType.Builder
                     .<me.moonscenty.alchemia.golem.GolemDart>of(me.moonscenty.alchemia.golem.GolemDart::new,
@@ -414,7 +372,6 @@ public class ModEntities {
                     .updateInterval(20)
                     .build("golem_dart"));
 
-    /** The Crimson Cult: a player's size, followed as far as the original followed them. */
     public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.entity.cult.CultistKnight>>
             CULTIST_KNIGHT = ENTITIES.register("cultist_knight", () -> EntityType.Builder
                     .<me.moonscenty.alchemia.entity.cult.CultistKnight>of(
@@ -429,7 +386,6 @@ public class ModEntities {
                     .sized(0.6F, 1.8F)
                     .clientTrackingRange(8)
                     .build("cultist_cleric"));
-    /** A lesser crimson portal: still, fire-proof, and told about seldom, as the original's was. */
     public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.entity.cult.CultistPortal>>
             CULTIST_PORTAL = ENTITIES.register("cultist_portal", () -> EntityType.Builder
                     .<me.moonscenty.alchemia.entity.cult.CultistPortal>of(
@@ -439,7 +395,6 @@ public class ModEntities {
                     .clientTrackingRange(8)
                     .updateInterval(20)
                     .build("cultist_portal"));
-    /** The crab, low and broad, and the husk it lives in, a zombie's shape. */
     public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.entity.EldritchCrab>>
             ELDRITCH_CRAB = ENTITIES.register("eldritch_crab", () -> EntityType.Builder
                     .<me.moonscenty.alchemia.entity.EldritchCrab>of(
@@ -458,7 +413,6 @@ public class ModEntities {
                     .clientTrackingRange(8)
                     .build("inhabited_zombie"));
 
-    /** The guardian, tall and narrow; the mind spider, half a spider; the guardian's orb. */
     public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.entity.EldritchGuardian>>
             ELDRITCH_GUARDIAN = ENTITIES.register("eldritch_guardian", () -> EntityType.Builder
                     .<me.moonscenty.alchemia.entity.EldritchGuardian>of(
@@ -485,7 +439,6 @@ public class ModEntities {
                     .noSummon()
                     .build("eldritch_orb"));
 
-    /** The cleric's orb. */
     public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.entity.cult.GolemOrb>>
             GOLEM_ORB = ENTITIES.register("golem_orb", () -> EntityType.Builder
                     .<me.moonscenty.alchemia.entity.cult.GolemOrb>of(
@@ -496,7 +449,6 @@ public class ModEntities {
                     .noSummon()
                     .build("golem_orb"));
 
-    /** What anything alive needs before the game will make one. */
     public static void attributes(EntityAttributeCreationEvent event) {
         event.put(AUTOCASTER.get(), Autocaster.attributes().build());
         event.put(AUTOMATED_CROSSBOW.get(), me.moonscenty.alchemia.entity.AutomatedCrossbow.attributes().build());
@@ -536,10 +488,6 @@ public class ModEntities {
         event.put(FURIOUS_ZOMBIE.get(), FuriousZombie.attributes().build());
     }
 
-    /**
-     * Where they may come of themselves. The zombies as any monster does, in the dark on solid ground. A firebat
-     * wants it darker still: whatever light there is has to be no more than a throw of seven.
-     */
     public static void spawnPlacements(RegisterSpawnPlacementsEvent event) {
         event.register(INHABITED_ZOMBIE.get(), SpawnPlacementTypes.ON_GROUND,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, me.moonscenty.alchemia.entity.InhabitedZombie::checkSpawnRules,

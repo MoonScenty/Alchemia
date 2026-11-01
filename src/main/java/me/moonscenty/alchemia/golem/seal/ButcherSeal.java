@@ -18,10 +18,6 @@ import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.level.Level;
 
-/**
- * Butcher: every ten seconds, if there are more than two grown, untamed animals of a kind in its area, sends a golem
- * after one of them, and waits until that one is dealt with before looking again. A herd is thinned, never ended.
- */
 public class ButcherSeal extends Seal {
     private int delay;
     private boolean waiting;
@@ -53,7 +49,6 @@ public class ButcherSeal extends Seal {
         }
     }
 
-    /** A grown animal nobody has tamed, that is no monster and no golem. */
     private static boolean wanted(LivingEntity target) {
         boolean animal = target instanceof Animal || target instanceof AmbientCreature || target instanceof WaterAnimal;
         return target.isAlive() && animal && !(target instanceof Enemy)

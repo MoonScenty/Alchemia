@@ -17,24 +17,11 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-/**
- * Flux that has fallen out of the air and lies about as a puddle.
- * <p>
- * It is a finite liquid rather than a proper fluid: there is only ever as much of it as was spilt, in eight depths,
- * and it runs downhill and levels out with its neighbours until it is spread thin. Then it dries, and each depth
- * that goes puts a point of flux back in the aura; the last of it, half the time, is where fibres start.
- * <p>
- * Now and then a deep enough puddle congeals into an alchemic slime instead, and an alchemic slime that wades through
- * goo deeper than it is big may soak some of it up and grow.
- */
 public class FluxGooBlock extends SettlingLayerBlock {
-    /** How deep the puddle is: nothing but a film, up to a full block. */
     public static final IntegerProperty LEVEL = IntegerProperty.create("level", 0, 7);
     public static final int FULL = 7;
 
-    /** How often it thinks about running somewhere, in ticks. */
     private static final int FLOW_EVERY = 5;
-    /** How often, on a random tick, it dries a little instead of lying there. */
     private static final int DRY_CHANCE = 4;
 
     private static final VoxelShape[] SHAPES = new VoxelShape[FULL + 1];
@@ -63,8 +50,6 @@ public class FluxGooBlock extends SettlingLayerBlock {
         return goo.defaultBlockState().setValue(LEVEL, Math.clamp(level, 0, FULL));
     }
 
-    // --- drying up -----------------------------------------------------------
-
     @Override
     protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         if (congeal(state, level, pos, random) || random.nextInt(DRY_CHANCE) != 0) {
@@ -82,12 +67,7 @@ public class FluxGooBlock extends SettlingLayerBlock {
         }
     }
 
-    /**
-     * One time in fifty, with open air over it, a puddle of some depth congeals: a little slime out of a middling one,
-     * a bigger one out of a deep one. The original's depths.
-     *
-     * @return whether it did
-     */
+    // original's depths
     private static boolean congeal(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         int depth = state.getValue(LEVEL);
         if (depth < 2 || !level.isEmptyBlock(pos.above()) || random.nextInt(50) != 0) {
@@ -103,11 +83,8 @@ public class FluxGooBlock extends SettlingLayerBlock {
         return true;
     }
 
-    // --- being waded through -------------------------------------------------
-
     @Override
     protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
-        // an alchemic slime smaller than the goo is deep may soak up a depth of it and grow
         if (entity instanceof me.moonscenty.alchemia.entity.AlchemicSlime slime) {
             int depth = state.getValue(LEVEL);
             if (!level.isClientSide && slime.getSize() < depth && level.random.nextBoolean()) {
@@ -120,9 +97,7 @@ public class FluxGooBlock extends SettlingLayerBlock {
             }
             return;
         }
-        // thick enough to wade through, not to drown in
         entity.makeStuckInBlock(state, new Vec3(0.5, 0.35, 0.5));
-        // and it drains whoever wades in it: half a minute of vis exhaustion, worse the deeper it is
         if (!level.isClientSide && entity instanceof net.minecraft.world.entity.LivingEntity living) {
             living.addEffect(new net.minecraft.world.effect.MobEffectInstance(
                     me.moonscenty.alchemia.player.effect.ModEffects.FLUX_FLU, 600, state.getValue(LEVEL) / 3, true,

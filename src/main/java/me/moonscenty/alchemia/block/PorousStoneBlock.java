@@ -19,13 +19,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
-/**
- * What tainted rock leaves when the taint in it dies: stone gone soft and full of holes.
- * <p>
- * Broken, it is cobblestone fourteen times in fifteen, and once in fifteen -- once more for each level of fortune --
- * something that was caught in it: a shard, amber, a cluster, a gem, a little crystallized essence of some compound
- * aspect. The original's list and weights.
- */
 public class PorousStoneBlock extends Block {
     public PorousStoneBlock(Properties properties) {
         super(properties);
@@ -45,7 +38,7 @@ public class PorousStoneBlock extends Block {
         return drops;
     }
 
-    /** One thing out of the holes, by the original's weights. */
+    // original's weights
     private static ItemStack caught(RandomSource random) {
         List<ItemStack> things = new ArrayList<>();
         List<Integer> weights = new ArrayList<>();

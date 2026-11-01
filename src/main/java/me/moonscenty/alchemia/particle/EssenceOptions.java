@@ -14,13 +14,6 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.ExtraCodecs;
 
-/**
- * What a drop of essentia on its way somewhere is asked for.
- *
- * @param colour its aspect's colour, as {@code 0xRRGGBB}
- * @param target where it is headed
- * @param count  which drop of a run it is, which sets how it wobbles, so a run does not move as one
- */
 public record EssenceOptions(int colour, Vector3f target, int count) implements ParticleOptions {
     public static final MapCodec<EssenceOptions> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
                     Codec.INT.fieldOf("color").forGetter(EssenceOptions::colour),

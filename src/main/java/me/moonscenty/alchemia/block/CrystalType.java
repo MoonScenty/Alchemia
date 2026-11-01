@@ -6,9 +6,6 @@ import me.moonscenty.alchemia.aspect.Aspect;
 import me.moonscenty.alchemia.registry.ModAspects;
 import net.minecraft.core.Holder;
 
-/**
- * The kinds of vis crystal. Each one corresponds to a primal aspect, except {@link #FLUX} which is the tainted form.
- */
 public enum CrystalType {
     AIR,
     FIRE,
@@ -22,7 +19,6 @@ public enum CrystalType {
         return name().toLowerCase(Locale.ROOT);
     }
 
-    /** The aspect a crystal of this kind is set from, and gives back when it wastes away. */
     public Holder<Aspect> aspect() {
         return switch (this) {
             case AIR -> ModAspects.AIR;
@@ -35,7 +31,6 @@ public enum CrystalType {
         };
     }
 
-    /** Flux crystals only appear through corruption, never through world generation. */
     public boolean generatesNaturally() {
         return this != FLUX;
     }

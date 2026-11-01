@@ -11,24 +11,11 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
-/**
- * An autocaster folded up small enough to carry.
- *
- * <p>It goes against any solid face, which is the whole of why it is an entity and not a block: the original let
- * one hang off a ceiling or a wall as readily as stand on the floor, and nothing is gained by making a player
- * build a shelf for it first.
- */
 public class AutocasterItem extends Item {
     public AutocasterItem(Properties properties) {
         super(properties);
     }
 
-    /**
-     * Puts one against the face that was clicked.
-     * <p>
-     * Only against something solid, and only where there is room in front of it. Whoever put it there owns it,
-     * and nobody else can open it or take it down again.
-     */
     @Override
     public InteractionResult useOn(UseOnContext context) {
         Level level = context.getLevel();
@@ -58,7 +45,6 @@ public class AutocasterItem extends Item {
         return InteractionResult.CONSUME;
     }
 
-    /** What it is, in one line: the thing it does that no other item in the mod does. */
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context,
             java.util.List<net.minecraft.network.chat.Component> lines,

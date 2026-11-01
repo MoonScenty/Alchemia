@@ -38,22 +38,15 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-/**
- * A vis crystal growing on a solid face. It has four sizes and drops one shard per size.
- * <p>
- * It lives off the aura, growing and seeding where there is plenty and wasting away where there is none; the rules
- * are in {@link CrystalGrowth}. Which generation a crystal is says how far it is from one the world made.
- */
 public class CrystalBlock extends Block implements SimpleWaterloggedBlock {
     public static final int MAX_AGE = 3;
     public static final IntegerProperty AGE = BlockStateProperties.AGE_3;
-    /** The first generation is what the world made; each seeding is one further on, and the last does not seed. */
+    // generation 1 is worldgen; the last generation does not seed
     public static final int LAST_GENERATION = 4;
     public static final IntegerProperty GENERATION = IntegerProperty.create("generation", 1, LAST_GENERATION);
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
-    // height and horizontal inset per age, matching the amethyst bud/cluster proportions
     private static final int[] HEIGHTS = {3, 4, 5, 7};
     private static final int[] INSETS = {4, 3, 3, 3};
     private static final Map<Direction, VoxelShape[]> SHAPES = makeShapes();
@@ -71,10 +64,6 @@ public class CrystalBlock extends Block implements SimpleWaterloggedBlock {
         return type;
     }
 
-    /**
-     * A wand plucks a shard off it, for whoever knows how to farm them, the original's
-     * {@code BlockCrystal.onWandRightClick}: it shrinks a size, or goes altogether if it was as small as it gets.
-     */
     @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
             Player player, InteractionHand hand, BlockHitResult hit) {

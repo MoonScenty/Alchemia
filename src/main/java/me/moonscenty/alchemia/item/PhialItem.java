@@ -21,25 +21,14 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 
-/**
- * A little glass bottle that holds eight of one essentia.
- * <p>
- * It is the only way to carry essentia about by hand. Everything else in the works is plumbed -- a jar sits where it
- * was put and a tube goes where it was laid -- so a phial is what you use when the thing you want it in is across
- * the room, or not built yet.
- * <p>
- * Eight at a time and nothing in between. A phial is either full or empty, which is why no amount is written on it:
- * the aspect is the whole of what it knows.
- */
+// a phial is always either a full DRAUGHT or empty
 public class PhialItem extends Item {
-    /** What one holds, and so what it takes and what it gives. */
     public static final int DRAUGHT = 8;
 
     public PhialItem(Properties properties) {
         super(properties);
     }
 
-    /** What is in it, if anything. */
     public static Optional<Holder<Aspect>> inside(ItemStack stack) {
         return Optional.ofNullable(stack.get(ModDataComponents.ESSENTIA.get()));
     }
@@ -56,13 +45,6 @@ public class PhialItem extends Item {
         return empty;
     }
 
-    /**
-     * Fills from a vessel, or pours into one.
-     * <p>
-     * Which way round is decided by the phial rather than by the player: a full one pours and an empty one draws.
-     * Nothing happens by halves -- a vessel with seven in it will not fill a phial, and one with seven places left
-     * will not take one. Anything short of a whole draught is put back where it came from.
-     */
     @Override
     public InteractionResult useOn(UseOnContext context) {
         Level level = context.getLevel();
@@ -74,7 +56,7 @@ public class PhialItem extends Item {
         Optional<Holder<Aspect>> carrying = inside(held);
 
         if (level.isClientSide) {
-            // a guess, only so that the arm swings: the server decides whether anything actually moves
+            // client-side guess so the arm swings; the server decides
             return carrying.map(vessel::wants).orElseGet(() -> aFullDraughtIn(vessel).isPresent())
                     ? InteractionResult.SUCCESS
                     : InteractionResult.PASS;
@@ -98,7 +80,6 @@ public class PhialItem extends Item {
         return InteractionResult.CONSUME;
     }
 
-    /** The first thing in the vessel there is a whole draught of. */
     private static Optional<Holder<Aspect>> aFullDraughtIn(EssentiaHolder vessel) {
         return vessel.held().asMap().entrySet().stream()
                 .filter(entry -> entry.getValue() >= DRAUGHT)
@@ -106,13 +87,7 @@ public class PhialItem extends Item {
                 .findFirst();
     }
 
-    /**
-     * Moves a whole draught one way or the other, and says whether it managed the lot.
-     * <p>
-     * Asking first would mean asking eight times and hoping nothing changed in between, and a vessel is allowed to
-     * refuse for reasons of its own -- a braced jar gives nothing up however much is in it. So it is tried, and
-     * anything short of a draught is handed straight back.
-     */
+    // tried rather than checked first: vessels may refuse for their own reasons, so shortfalls are handed back
     private static boolean moved(EssentiaHolder vessel, Holder<Aspect> aspect, boolean pouring) {
         int done = 0;
         while (done < DRAUGHT && (pouring ? vessel.accept(aspect) : vessel.release(aspect))) {
@@ -131,7 +106,6 @@ public class PhialItem extends Item {
         return false;
     }
 
-    /** Hands back one bottle in place of the other, and finds the spare a home. */
     private static void swap(Player player, InteractionHand hand, ItemStack held, ItemStack back) {
         held.shrink(1);
         if (held.isEmpty()) {

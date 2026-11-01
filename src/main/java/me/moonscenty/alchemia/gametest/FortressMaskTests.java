@@ -17,7 +17,6 @@ import net.minecraft.world.level.GameType;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/** The fortress helm's masks: what each one does for whoever wears it. */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class FortressMaskTests {
@@ -35,7 +34,6 @@ public class FortressMaskTests {
         Player player = masked(helper, HelmFitting.ANGRY_GHOST);
         player.moveTo(helper.absoluteVec(new net.minecraft.world.phys.Vec3(4, 2, 4)));
         Zombie zombie = helper.spawn(EntityType.ZOMBIE, new net.minecraft.core.BlockPos(5, 2, 4));
-        // a blow of ten or more is sure to answer
         player.hurt(helper.getLevel().damageSources().mobAttack(zombie), 12.0F);
         helper.assertTrue(zombie.hasEffect(MobEffects.WITHER), "the ghost withered what struck");
         helper.succeed();

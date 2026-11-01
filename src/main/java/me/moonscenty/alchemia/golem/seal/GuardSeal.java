@@ -18,11 +18,6 @@ import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 
-/**
- * Guard: once a second, sends fighting golems at whatever is in its area that it is set against: monsters, and on
- * the advanced seal also animals or, where the server allows it, players. A golem sent goes for it and fights it out
- * as it would anything that struck it. The plain seal only ever minds monsters.
- */
 public class GuardSeal extends Seal {
     private static final int MOBS = 0;
     private static final int ANIMALS = 1;
@@ -53,7 +48,7 @@ public class GuardSeal extends Seal {
         }
     }
 
-    /** Whether it is set against this. Animals, to the original, were anything tame-natured, golems among them. */
+    // to the original, animals were anything tame-natured, golems included
     private boolean wanted(LivingEntity target) {
         if (!target.isAlive()) {
             return false;
@@ -69,7 +64,6 @@ public class GuardSeal extends Seal {
                 && target.level().getServer().isPvpAllowed();
     }
 
-    /** The golem is set on it there and then; the fighting is its own business after that. */
     @Override
     public void onTaskStarted(ServerLevel level, Golem golem, Task task) {
         if (task.entity() instanceof LivingEntity target && wanted(target)) {

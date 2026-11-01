@@ -15,19 +15,14 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 
-/**
- * What is left of a wisp: a wisp of essence, two points of whatever the wisp was, and a breath of auram besides.
- * Pechs carry them too.
- */
 public class WispyEssenceItem extends Item implements ContainedAspects {
-    /** How much of its aspect a wisp leaves. The original's. */
+    // original's value
     public static final int HOLDS = 2;
 
     public WispyEssenceItem(Properties properties) {
         super(properties);
     }
 
-    /** What it is a wisp of, if anything. */
     public static Optional<Holder<Aspect>> inside(ItemStack stack) {
         return Optional.ofNullable(stack.get(ModDataComponents.ESSENTIA.get()));
     }

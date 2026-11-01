@@ -14,15 +14,9 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RenderGuiEvent;
 
-/**
- * While a sanity checker is in the main hand, the original's gauge of warp in the top left corner: a glass tube
- * filled from the bottom with lasting warp in deep purple, then the warp that sticks in a lighter one, then the
- * warp that passes in pink. Past a hundred the three are shrunk to share the tube and a warning sits over the top.
- */
 @EventBusSubscriber(modid = Alchemia.MODID, value = Dist.CLIENT)
 public final class SanityOverlay {
     private static final ResourceLocation HUD = Alchemia.id("textures/gui/hud.png");
-    /** How tall the tube is, and how much warp fills it. */
     private static final int TUBE = 48;
     private static final float FULL = 100.0F;
 
@@ -51,7 +45,6 @@ public final class SanityOverlay {
             shrink = FULL / total;
             total = FULL;
         }
-        // the empty part of the tube, at the top, then the three kinds in from there
         int gap = (int) ((FULL - total) / FULL * TUBE);
         int passing = (int) (warp.temporary() / FULL * TUBE * shrink);
         int sticking = (int) (warp.sticky() / FULL * TUBE * shrink);
@@ -72,7 +65,6 @@ public final class SanityOverlay {
         RenderSystem.disableBlend();
     }
 
-    /** One stretch of the tube, from so far down it, in a colour laid over the sheet's white column. */
     private static void bar(GuiGraphics graphics, int from, int height, float red, float green, float blue) {
         if (height <= 0) {
             return;

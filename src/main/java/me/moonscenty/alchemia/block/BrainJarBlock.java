@@ -25,13 +25,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-/**
- * A brain in a jar: a warded jar with a zombie's brain floating in brine, which eats experience and gives some back
- * when shaken.
- * <p>
- * Shaking it is any click at all. It counts as two bookshelves to an enchanting table near it, and a comparator
- * reads how full it is. When it is full it lets off wisps, so that it can be seen to be.
- */
 public class BrainJarBlock extends BaseEntityBlock {
     public static final MapCodec<BrainJarBlock> CODEC = simpleCodec(BrainJarBlock::new);
     private static final VoxelShape SHAPE = Block.box(3.0, 0.0, 3.0, 13.0, 12.0, 13.0);
@@ -79,7 +72,6 @@ public class BrainJarBlock extends BaseEntityBlock {
         return InteractionResult.sidedSuccess(level.isClientSide);
     }
 
-    /** A full one lets off a wisp now and then, in the colour of death. */
     @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
         if (level.getBlockEntity(pos) instanceof BrainJarBlockEntity jar && jar.xp() >= BrainJarBlockEntity.HOLDS) {

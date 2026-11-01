@@ -32,24 +32,14 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
-/**
- * An aura totem at work.
- *
- * <p>It burns a vis shard for five hundred steps, and the shard says what it moves: the one aspect, or a primal
- * picked at random each step for a balanced shard. A step comes every ten ticks, a tick sooner for every inner or
- * outer pole under it. Each step it takes a point of the aspect from a chunk of one ring and, if there was a point to
- * take, puts it in a chunk of the other -- or, now and then, spoils it into flux in its own chunk instead. The more
- * poles, the likelier that is; stabilising poles make it less so.
- */
 public class AuraTotemBlockEntity extends SyncedBlockEntity implements WorldlyContainer, MenuProvider {
-    /** How many steps a shard lasts, and how long a step is at the slowest. The original's. */
+    // original's values
     public static final int LASTS = 500;
     private static final int SLOWEST = 10;
-    /** How likely a step is to spoil, per pole and to begin with, and how much each stabilising pole takes off. */
+    // flux chance per step: per pole and base, minus per stabilising pole
     private static final float SPOILS = 0.0125F;
     private static final float PURE_PUSHING = 0.1F;
     private static final float PURE_PULLING = 0.025F;
-    /** The most tries at a chunk of the outer ring before giving the step up. */
     private static final int TRIES = 100;
 
     public static final int READING_TIME = 0;
@@ -96,12 +86,10 @@ public class AuraTotemBlockEntity extends SyncedBlockEntity implements WorldlyCo
         }
     }
 
-    /** How many ticks a step takes, with the poles under it. */
     public int every() {
         return SLOWEST - (inner + outer);
     }
 
-    /** The poles under it, counted down to the first block that is not one, five at most. */
     public void countPoles() {
         inner = 0;
         outer = 0;
@@ -140,7 +128,6 @@ public class AuraTotemBlockEntity extends SyncedBlockEntity implements WorldlyCo
         }
     }
 
-    /** One point of the aspect from one ring to the other. */
     private void move(Level level) {
         RandomSource random = level.random;
         int innerX = Mth.nextInt(random, -inner, inner);
@@ -176,7 +163,6 @@ public class AuraTotemBlockEntity extends SyncedBlockEntity implements WorldlyCo
         }
     }
 
-    /** A spark somewhere down the stack, and a mote of vis drawn in to it or sent away from it. */
     private void sparkle(Level level) {
         RandomSource random = level.random;
         int down = random.nextInt(inner + outer + 1);
@@ -226,13 +212,10 @@ public class AuraTotemBlockEntity extends SyncedBlockEntity implements WorldlyCo
         return pure;
     }
 
-    /** The colour its glow takes: the aspect it moves, white for balance, nearly black when it is idle. */
     public int glow() {
         Holder<Aspect> aspect = ShardTuning.aspect(tuning);
         return aspect != null ? aspect.value().color() : tuning == ShardTuning.BALANCED ? 0xF0F0F0 : 0x101010;
     }
-
-    // --- the shard pocket ------------------------------------------------------------------------------------
 
     @Override
     public int getContainerSize() {
@@ -301,8 +284,6 @@ public class AuraTotemBlockEntity extends SyncedBlockEntity implements WorldlyCo
         return true;
     }
 
-    // --- the screen ------------------------------------------------------------------------------------------
-
     @Override
     public Component getDisplayName() {
         return getBlockState().getBlock().getName();
@@ -333,7 +314,6 @@ public class AuraTotemBlockEntity extends SyncedBlockEntity implements WorldlyCo
         tag.putInt("time", time);
     }
 
-    /** Only what it is tuned to is shown to anyone watching; the rest is the screen's business. */
     @Override
     public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
         CompoundTag tag = new CompoundTag();
@@ -353,7 +333,6 @@ public class AuraTotemBlockEntity extends SyncedBlockEntity implements WorldlyCo
         handleUpdateTag(packet.getTag(), registries);
     }
 
-    /** The block drawn again, in its new colour. */
     private void recolour() {
         if (level != null && level.isClientSide) {
             level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_IMMEDIATE);

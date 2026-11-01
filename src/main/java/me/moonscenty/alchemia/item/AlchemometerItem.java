@@ -14,11 +14,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 
-/**
- * Held up to a thing and kept there, until it gives up what it is made of.
- */
 public class AlchemometerItem extends Item {
-    /** How long the player has to hold it steady before the reading takes. */
     public static final int SCAN_TICKS = 30;
 
     public AlchemometerItem(Properties properties) {
@@ -38,14 +34,12 @@ public class AlchemometerItem extends Item {
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         player.startUsingItem(hand);
-        // the original's chirp, every time it is raised to look at something
         if (!level.isClientSide) {
             level.playSound(null, player.blockPosition(), ModSounds.SCAN.get(), SoundSource.PLAYERS, 0.5F, 1.0F);
         }
         return InteractionResultHolder.consume(player.getItemInHand(hand));
     }
 
-    /** The reading lands the moment the scan is complete, rather than when the player lets go. */
     @Override
     public void onUseTick(Level level, LivingEntity entity, ItemStack stack, int remaining) {
         if (level.isClientSide || !(entity instanceof Player player)) {

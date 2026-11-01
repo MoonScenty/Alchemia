@@ -31,23 +31,11 @@ import net.minecraft.world.level.GameType;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/**
- * Letting a wand off: what has to be true before a spell runs, and what it costs when it does.
- * <p>
- * The order is the whole of it. A wand that cannot pay does not cast; a spell that finds nothing to do is not
- * paid for. Getting either backwards empties a wand into the sky.
- */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class CastingTests {
     private static final String TEMPLATE = "empty_32x40x32";
 
-    /**
-     * A wand with a focus on it and as much of every primal in it as asked for.
-     * <p>
-     * Every primal rather than only air: half the foci are priced in things that are not air, and a wand filled
-     * with one of the six is a wand that cannot afford most of what is being tested.
-     */
     private static ItemStack wand(String focus, int each) {
         ItemStack wand = WandItem.of(ModWandParts.SILVERWOOD, ModWandParts.GOLD);
         WandItem.setFocus(wand, new ItemStack(ModItems.FOCI.get(focus).get()));
@@ -59,7 +47,6 @@ public class CastingTests {
         return wand;
     }
 
-    /** A shock finds whatever is in the way, hurts it, and takes the price off the wand. */
     @GameTest(template = TEMPLATE)
     public static void aShockHurtsWhatItIsPointedAtAndIsPaidFor(GameTestHelper helper) {
         Player caster = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -81,11 +68,6 @@ public class CastingTests {
         helper.succeed();
     }
 
-    /**
-     * A shock aimed at nothing costs nothing.
-     * <p>
-     * Air is not a target. A wand that paid for a miss would be a wand emptied by waving it about.
-     */
     @GameTest(template = TEMPLATE)
     public static void aShockAtNothingIsNotPaidFor(GameTestHelper helper) {
         Player caster = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -99,11 +81,6 @@ public class CastingTests {
         helper.succeed();
     }
 
-    /**
-     * An empty wand does not cast at all.
-     * <p>
-     * Checked before the spell runs rather than after, so that a spell is never half done and then unpaid for.
-     */
     @GameTest(template = TEMPLATE)
     public static void anEmptyWandDoesNotCast(GameTestHelper helper) {
         Player caster = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -116,7 +93,6 @@ public class CastingTests {
         helper.succeed();
     }
 
-    /** A wand with nothing fitted is a stick with vis in it. */
     @GameTest(template = TEMPLATE)
     public static void aBareWandCastsNothing(GameTestHelper helper) {
         Player caster = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -126,16 +102,10 @@ public class CastingTests {
         helper.assertFalse(Casting.cast(helper.getLevel(), caster, bare, 0), "so nothing comes of using it");
         helper.succeed();
     }
-    /**
-     * A pech's curse bursts where it lands and leaves what was standing there the worse for it.
-     * <p>
-     * It is thrown, not aimed: whatever is within reach of the burst catches it, and whoever threw it does not.
-     */
     @GameTest(template = TEMPLATE, timeoutTicks = 200)
     public static void aPechsCurseAfflictsWhatItBurstsOn(GameTestHelper helper) {
         Player caster = helper.makeMockPlayer(GameType.SURVIVAL);
-        // a pig rather than a zombie: two of the three afflictions are poison and weakness, and the dead feel
-        // neither. A curse tested on something immune to two thirds of it is a curse tested on nothing
+        // a pig, not an undead mob: undead are immune to poison and weakness
         LivingEntity victim = helper.spawn(EntityType.PIG, new BlockPos(2, 2, 2));
 
         PechBlast blast = new PechBlast(helper.getLevel(), caster);
@@ -150,12 +120,6 @@ public class CastingTests {
         helper.succeed();
     }
 
-    /**
-     * A hook that has bitten hauls whoever threw it towards itself.
-     * <p>
-     * A hook that has not bitten does nothing at all, which is what stops one from towing a climber off the
-     * ground before it has anything to pull against.
-     */
     @GameTest(template = TEMPLATE, timeoutTicks = 200)
     public static void aBittenHookHaulsAndALooseOneDoesNot(GameTestHelper helper) {
         Player caster = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -175,12 +139,6 @@ public class CastingTests {
         helper.assertTrue(caster.getDeltaMovement().y > 0.0, "and now it hauls upwards");
         helper.succeed();
     }
-    /**
-     * A vis shard will not go off without a mark, and never misses once it has one.
-     * <p>
-     * That is the whole of what makes it the cheapest of the twelve. A focus that cannot miss has to be given
-     * something to not miss; otherwise it is a free hit on an empty room.
-     */
     @GameTest(template = TEMPLATE, timeoutTicks = 200)
     public static void aVisShardNeedsAMarkAndThenKeepsIt(GameTestHelper helper) {
         Player caster = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -194,13 +152,11 @@ public class CastingTests {
         shard.setDeltaMovement(0.0, 0.0, 0.0);
         helper.getLevel().addFreshEntity(shard);
 
-        // one tick of steering is enough to tell a shard that chases from one that drifts
         shard.tick();
         helper.assertTrue(shard.getDeltaMovement().length() > 0.0, "it set off after its mark");
         helper.succeed();
     }
 
-    /** Embers come by the handful and burn out on their own, so a long press leaves nothing behind. */
     @GameTest(template = TEMPLATE, timeoutTicks = 200)
     public static void embersGoOutOnTheirOwn(GameTestHelper helper) {
         Player caster = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -215,7 +171,6 @@ public class CastingTests {
         });
     }
 
-    /** A primal orb is a bomb. What it leaves is a hole, which is the original's doing and not a slip here. */
     @GameTest(template = TEMPLATE, timeoutTicks = 200)
     public static void aPrimalOrbGoesOff(GameTestHelper helper) {
         Player caster = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -232,12 +187,6 @@ public class CastingTests {
         helper.assertBlockPresent(net.minecraft.world.level.block.Blocks.AIR, stand);
         helper.succeed();
     }
-    /**
-     * A builder lays a row out from the wall it was clicked, as long as the caster is standing back.
-     * <p>
-     * It will not lay anything until it has been shown what to lay, and being shown costs nothing -- that is a
-     * decision rather than a working.
-     */
     @GameTest(template = TEMPLATE, timeoutTicks = 200)
     public static void aBuilderLaysARowOnceItHasBeenShownWhatToLay(GameTestHelper helper) {
         Player caster = helper.makeMockPlayer(GameType.CREATIVE);
@@ -261,11 +210,6 @@ public class CastingTests {
         helper.succeed();
     }
 
-    /**
-     * A trade turns one kind of block into another and spreads along it.
-     * <p>
-     * It follows the vein rather than filling a box, so what is around the vein is left where it was.
-     */
     @GameTest(template = TEMPLATE, timeoutTicks = 200)
     public static void aTradeFollowsTheVein(GameTestHelper helper) {
         Player caster = helper.makeMockPlayer(GameType.CREATIVE);
@@ -275,7 +219,6 @@ public class CastingTests {
         helper.setBlock(first.east(), Blocks.COAL_ORE);
         helper.setBlock(first.east().east(), Blocks.DIRT);
 
-        // shown a stone, then set on the ore
         helper.setBlock(new BlockPos(2, 3, 2), Blocks.STONE);
         caster.setShiftKeyDown(true);
         Swapping.trade(helper.getLevel(), caster, wand,
@@ -287,16 +230,9 @@ public class CastingTests {
                 "the vein was traded");
         helper.assertBlockPresent(Blocks.STONE, first);
         helper.assertBlockPresent(Blocks.STONE, first.east());
-        // what was not ore is left alone: the trade follows the vein rather than filling a box
         helper.assertBlockPresent(Blocks.DIRT, first.east().east());
         helper.succeed();
     }
-    /**
-     * A portable hole bores through a wall and the wall comes back.
-     * <p>
-     * Nothing is broken and nothing drops. The whole worth of it is that the wall is a wall again a few seconds
-     * later, so what is opened is a way through rather than a way of taking the wall.
-     */
     @GameTest(template = TEMPLATE, timeoutTicks = 400)
     public static void aHoleBoresThroughAndTheWallComesBack(GameTestHelper helper) {
         Player caster = helper.makeMockPlayer(GameType.CREATIVE);
@@ -309,7 +245,6 @@ public class CastingTests {
         helper.assertTrue(Hole.cast(helper.getLevel(), caster, wand, struck, 0), "it bored");
         helper.assertBlockPresent(ModBlocks.HOLE.get(), face);
 
-        // the layer behind it opens a tick later, which is what makes it look bored rather than deleted
         helper.runAfterDelay(2, () -> helper.assertBlockPresent(ModBlocks.HOLE.get(), face.east()));
         helper.runAfterDelay(160, () -> {
             helper.assertBlockPresent(Blocks.STONE, face);
@@ -318,7 +253,6 @@ public class CastingTests {
         });
     }
 
-    /** Nothing to bore through is nothing to pay for. */
     @GameTest(template = TEMPLATE, timeoutTicks = 200)
     public static void aHoleInThinAirDoesNothing(GameTestHelper helper) {
         Player caster = helper.makeMockPlayer(GameType.CREATIVE);

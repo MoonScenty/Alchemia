@@ -28,14 +28,9 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-/**
- * A clay jug that is never empty. See {@link WaterJugBlockEntity} for what it does by itself; what is here is the
- * jug being dipped into by hand.
- */
 public class WaterJugBlock extends BaseEntityBlock {
     public static final MapCodec<WaterJugBlock> CODEC = simpleCodec(WaterJugBlock::new);
     private static final VoxelShape SHAPE = Block.box(3.0, 0.0, 3.0, 13.0, 16.0, 13.0);
-    /** What a bottle holds, against a bucket's thousand. */
     private static final int BOTTLE = 250;
 
     public WaterJugBlock(Properties properties) {
@@ -57,7 +52,6 @@ public class WaterJugBlock extends BaseEntityBlock {
         return RenderShape.MODEL;
     }
 
-    /** An empty bucket comes away full, and an empty bottle comes away a bottle of water. */
     @Override
     protected ItemInteractionResult useItemOn(ItemStack held, BlockState state, Level level, BlockPos pos,
             Player player, InteractionHand hand, BlockHitResult hit) {

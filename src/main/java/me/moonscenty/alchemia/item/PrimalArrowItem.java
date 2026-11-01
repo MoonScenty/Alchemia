@@ -17,12 +17,6 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingGetProjectileEvent;
 
-/**
- * A primal arrow, one of six: eight arrows round a vis shard at the arcane workbench.
- * <p>
- * As in the original, a bow reaches for primal arrows before any other kind, the first it finds in the pack, and
- * only a bow shoots them. Infinity saves one only a time in three.
- */
 @EventBusSubscriber(modid = Alchemia.MODID)
 public class PrimalArrowItem extends ArrowItem {
     private static final float INFINITY_SAVES = 0.33F;
@@ -50,7 +44,6 @@ public class PrimalArrowItem extends ArrowItem {
                 && shooter.getRandom().nextFloat() < INFINITY_SAVES;
     }
 
-    /** A bow takes the first primal arrow in the pack before anything else it could shoot. */
     @SubscribeEvent
     public static void nock(LivingGetProjectileEvent event) {
         if (!(event.getProjectileWeaponItemStack().getItem() instanceof BowItem)

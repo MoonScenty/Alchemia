@@ -18,18 +18,12 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 
-/**
- * Draws a mirror as the original did: its frame, and inside it either a plain silver pane or, when it is paired and
- * someone is near enough to see, a swirl of stars behind a pane of clear glass.
- */
 public class MirrorRenderer implements BlockEntityRenderer<MirrorBlockEntity> {
     private static final ResourceLocation FRAME = Alchemia.id("textures/block/legacy/mirrorframe.png");
     private static final ResourceLocation FRAME_ESSENTIA = Alchemia.id("textures/block/legacy/mirrorframe2.png");
     private static final ResourceLocation PANE = Alchemia.id("textures/block/legacy/mirrorpane.png");
     private static final ResourceLocation PANE_CLEAR = Alchemia.id("textures/block/legacy/mirrorpanetrans.png");
-    /** How near one has to be to see through it, squared. */
     private static final double SEES_WITHIN = 32.0 * 32.0;
-    /** The portal is inset this far from each edge, as the original's was. */
     private static final float INSET = 0.1875F;
 
     public MirrorRenderer(BlockEntityRendererProvider.Context context) {
@@ -45,7 +39,6 @@ public class MirrorRenderer implements BlockEntityRenderer<MirrorBlockEntity> {
 
         pose.pushPose();
         pose.translate(0.5F, 0.5F, 0.5F);
-        // local up is the way the glass looks; the pane lies against what it hangs on
         pose.mulPose(new org.joml.Quaternionf().rotationTo(0.0F, 1.0F, 0.0F, facing.getStepX(), facing.getStepY(),
                 facing.getStepZ()));
         if (open) {
@@ -61,7 +54,6 @@ public class MirrorRenderer implements BlockEntityRenderer<MirrorBlockEntity> {
         pose.popPose();
     }
 
-    /** A square lying flat at a height in the turned frame, facing up, inset from the edges by so much. */
     private static void quad(PoseStack pose, VertexConsumer buffer, float y, float inset, boolean textured,
             int light) {
         Matrix4f matrix = pose.last().pose();

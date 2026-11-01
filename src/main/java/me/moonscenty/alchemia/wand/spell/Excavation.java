@@ -20,45 +20,29 @@ import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 
-/**
- * A beam that chews through whatever block it is held on.
- *
- * <p>Nothing happens at once. A block has to be held in the beam until it gives, and how long that takes is its
- * own hardness against how fast this eats it -- quickly through stone and earth, slowly through anything else.
- * Look away and the block starts again from nothing, which is what stops somebody sweeping a wall down by
- * glancing along it.
- *
- * <p>How far along each digger is is kept here rather than on the wand, because it belongs to the holding of the
- * button rather than to the wand: a wand handed to somebody else mid-dig has not dug anything for them.
- *
- * <p>What is worked into the focus makes it eat faster, take its neighbours with it, give more out of what it
- * breaks, or take the block up whole. The fortune and silk touch of it are the game's own enchantments, laid on
- * a tool nobody holds: the block is asked what it gives up to a pick with them on it.
- */
+// dig progress is per caster and resets when the beam moves off the block
 public final class Excavation {
-    /** How fast it eats an ordinary block, and how fast it eats stone, earth and sand. */
+    // per-tick dig rate; soft means stone, earth and sand by map colour
     private static final float EATS = 0.05F;
     private static final float EATS_SOFT = 0.25F;
-    /** Obsidian goes faster than its hardness would say. The original made a point of it. */
+    // original's obsidian bonus
     private static final float EATS_OBSIDIAN = 3.0F;
 
-    /** How often the rumble is heard, in ticks, rather than once a tick for as long as the button is down. */
     private static final int RUMBLES_EVERY = 24;
 
     private static final Map<UUID, Progress> DIGGING = new HashMap<>();
 
-    /** How far into one block one digger has got. */
     private record Progress(BlockPos at, float eaten, int since) {
     }
 
     private Excavation() {
     }
 
-    /** How often dowsing finds twice as much in an ore, and what a rank of treasure adds to that. */
+    // dowsing cluster chance, and what each rank of treasure adds; original's values
     private static final float DOWSES = 0.2F;
     private static final float DOWSES_BETTER = 0.075F;
 
-    /** What one rank of force adds to how fast it eats, hard going and soft going apiece. */
+    // per rank of potency
     private static final float FASTER = 0.1F;
     private static final float FASTER_SOFT = 0.25F;
 
@@ -73,7 +57,6 @@ public final class Excavation {
         BlockPos at = struck.getBlockPos();
         BlockState block = level.getBlockState(at);
         float hardness = block.getDestroySpeed(level, at);
-        // bedrock and its kind answer to nothing, and neither does a block somebody is not allowed to break
         if (hardness < 0.0F || block.isAir() || !mayBreak(level, caster, at)) {
             DIGGING.remove(caster.getUUID());
             return false;
@@ -100,7 +83,6 @@ public final class Excavation {
             level.destroyBlockProgress(watcher.getId(), at, -1);
         }
         if (take(level, caster, wand, at, block)) {
-            // a widened beam pulls its neighbours out with it, one of the same kind per rank
             int wider = me.moonscenty.alchemia.wand.Casting.worked(wand,
                     me.moonscenty.alchemia.wand.FocusUpgrade.ENLARGE);
             for (int more = 0; more < wider; more++) {
@@ -110,13 +92,7 @@ public final class Excavation {
         return true;
     }
 
-    /**
-     * Breaking one block and handing over what it gives.
-     * <p>
-     * The focus is not a tool and nobody is swinging anything, so a stand-in pick is made carrying whatever the
-     * focus was given -- fortune, or silk touch -- and the block is asked what it drops for that. It is the one
-     * way to get the game's own answer rather than guessing at it block by block.
-     */
+    // drops come from a stand-in pick carrying the focus's fortune or silk touch
     private static boolean take(ServerLevel level, Player caster, ItemStack wand, BlockPos at, BlockState block) {
         if (!mayBreak(level, caster, at)) {
             return false;
@@ -139,12 +115,6 @@ public final class Excavation {
         return true;
     }
 
-    /**
-     * What dowsing does to one drop: now and then the ore comes up as a cluster, which smelts to twice the metal.
-     * <p>
-     * The chance is the original's, and treasure makes it likelier the same way it did. Anything that is not ore
-     * comes up as it would have.
-     */
     private static ItemStack dowsed(ServerLevel level, BlockPos at, BlockState block, ItemStack drop,
             int treasure) {
         ItemStack found = me.moonscenty.alchemia.item.Clusters.maybe(drop, DOWSES + treasure * DOWSES_BETTER,
@@ -155,7 +125,6 @@ public final class Excavation {
         return found;
     }
 
-    /** One more of the same block beside the one just taken, for a beam that has been widened. */
     private static void takeNeighbour(ServerLevel level, Player caster, ItemStack wand, BlockPos at,
             BlockState block) {
         java.util.List<net.minecraft.core.Direction> sides =
@@ -169,12 +138,7 @@ public final class Excavation {
         }
     }
 
-    /**
-     * The pick nobody is holding.
-     * <p>
-     * A diamond pick because it has to be good enough that the block counts it as properly mined; what matters
-     * is the enchantments laid on it, which are the focus's own upgrades spoken in the game's words.
-     */
+    // diamond so every block counts as properly mined
     private static ItemStack digging(ServerLevel level, ItemStack wand) {
         ItemStack pick = new ItemStack(net.minecraft.world.item.Items.DIAMOND_PICKAXE);
         var enchantments = level.registryAccess()
@@ -192,17 +156,14 @@ public final class Excavation {
         return pick;
     }
 
-    /** How much of a block this takes in a tick. Earth and stone give; everything else is slow going. */
     private static float bites(BlockState block, int potency) {
         MapColor colour = block.getMapColor(null, null);
         boolean soft = colour == MapColor.STONE || colour == MapColor.DIRT || colour == MapColor.SAND
                 || colour == MapColor.GRASS || colour == MapColor.COLOR_BROWN;
         float bite = soft ? EATS_SOFT + potency * FASTER_SOFT : EATS + potency * FASTER;
-        // obsidian goes faster than its hardness would say. The original made a point of it
         return block.is(net.minecraft.world.level.block.Blocks.OBSIDIAN) ? bite * EATS_OBSIDIAN : bite;
     }
 
-    /** Whether this digger is allowed to take this block, which a protected world or a spawn may say no to. */
     private static boolean mayBreak(ServerLevel level, Player caster, BlockPos at) {
         if (level.isOutsideBuildHeight(at) || !caster.mayBuild()) {
             return false;
@@ -210,7 +171,6 @@ public final class Excavation {
         return !(caster instanceof ServerPlayer digger) || digger.mayInteract(level, at);
     }
 
-    /** Chips off the face being eaten, and a rumble now and then rather than every tick. */
     private static void chips(ServerLevel level, BlockPos at, BlockState block, int since) {
         level.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, block),
                 at.getX() + 0.5, at.getY() + 0.5, at.getZ() + 0.5, 3, 0.3, 0.3, 0.3, 0.0);

@@ -28,24 +28,8 @@ import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.TypeInsnNode;
 import org.objectweb.asm.tree.VarInsnNode;
 
-/**
- * Reads the shape of one of the original's models out of its constructor.
- *
- * <p>The original built most of its models in code: a constructor that makes {@code ModelRenderer}s, gives each
- * boxes, a pivot and a turn, and hangs them off one another. There is no model file to copy. Instead of writing
- * those numbers down here -- which would be copying the original -- this walks the constructor's bytecode in the
- * player's own jar, one instruction at a time, and records what it would have built.
- *
- * <p>It is a very small interpreter and knows only what model constructors do: constants and arithmetic, locals,
- * loops, arrays, and the handful of {@code ModelRenderer} calls that shape a part. Anything else (a static map, an
- * entity, a call into the game) is carried along as an opaque value and otherwise ignored. Nothing of the original
- * is ever run; its classes reference a game that is not here.
- *
- * <p>Names are the game's obfuscated ones ({@code func_78789_a} is {@code addBox}). Those names did not change
- * between 1.7.10 and 1.8.9 for anything below except the biped's arms and legs, which are listed for both.
- */
+// interprets the constructor's bytecode from the player's jar, so none of the original's numbers live here
 public final class LegacyModelReader {
-    /** Where a class of the original comes from, by internal name; empty when the jar does not have it. */
     @FunctionalInterface
     public interface ClassSource {
         Optional<byte[]> read(String internalName) throws IOException;
@@ -54,11 +38,9 @@ public final class LegacyModelReader {
     private static final String RENDERER = "net/minecraft/client/model/ModelRenderer";
     private static final String BIPED = "net/minecraft/client/model/ModelBiped";
     private static final String BASE = "net/minecraft/client/model/ModelBase";
-    /** Enough for any constructor; a loop that runs longer than this is not building a model. */
     private static final int STEP_LIMIT = 2_000_000;
     private static final int CALL_DEPTH_LIMIT = 32;
 
-    /** A biped's parts: the field each release kept it in, and the name this game gives it. */
     private static final Map<String, String> BIPED_FIELDS = Map.ofEntries(
             Map.entry("field_78116_c", "head"),
             Map.entry("field_178720_f", "hat"),
@@ -73,7 +55,6 @@ public final class LegacyModelReader {
             Map.entry("field_178722_k", "left_leg"),
             Map.entry("field_78124_i", "left_leg"));
 
-    /** Something the interpreter does not model. It flows through and is dropped. */
     private static final Object OPAQUE = new Object() {
         @Override
         public String toString() {
@@ -85,7 +66,6 @@ public final class LegacyModelReader {
     private final Map<String, ClassNode> loaded = new HashMap<>();
     private final List<String> notes = new ArrayList<>();
 
-    // the model being built
     private final Map<String, Object> selfFields = new HashMap<>();
     private final Map<String, LegacyPart> bones = new LinkedHashMap<>();
     private final Map<String, LegacyPart> named = new LinkedHashMap<>();
@@ -100,13 +80,6 @@ public final class LegacyModelReader {
         this.classes = classes;
     }
 
-    /**
-     * Builds the model a constructor would have built.
-     *
-     * @param modelClass the model's internal name, e.g. {@code thaumcraft/client/renderers/models/gear/ModelFortressArmor}
-     * @param descriptor which constructor, e.g. {@code (F)V}
-     * @param arguments  what to call it with: boxed ints and floats, in order
-     */
     public static Result read(ClassSource classes, String modelClass, String descriptor, Object... arguments)
             throws IOException {
         LegacyModelReader reader = new LegacyModelReader(classes);
@@ -124,12 +97,10 @@ public final class LegacyModelReader {
         return new Result(reader.finish(), List.copyOf(reader.notes));
     }
 
-    /** The model, and anything the interpreter had to guess at or skip. An empty list is a clean read. */
     public record Result(LegacyModel model, List<String> notes) {
     }
 
     private LegacyModel finish() {
-        // a part nobody kept in a field still needs a name to be found by; it gets one by where it hangs
         for (Map.Entry<String, LegacyPart> bone : bones.entrySet()) {
             nameChildren(bone.getValue());
         }
@@ -144,8 +115,6 @@ public final class LegacyModelReader {
             nameChildren(child);
         }
     }
-
-    // --- classes and methods
 
     private Optional<ClassNode> load(String name) throws IOException {
         if (loaded.containsKey(name)) {
@@ -176,7 +145,6 @@ public final class LegacyModelReader {
         return Optional.empty();
     }
 
-    /** A virtual call on the model: the most derived class of the original that has the method. */
     private Optional<Map.Entry<String, MethodNode>> dispatch(String name, String descriptor) throws IOException {
         String at = selfClass;
         while (at != null) {
@@ -194,8 +162,6 @@ public final class LegacyModelReader {
         }
         return Optional.empty();
     }
-
-    // --- the interpreter
 
     private Object run(String owner, MethodNode method, Object[] locals, int depth) throws IOException {
         if (depth > CALL_DEPTH_LIMIT) {
@@ -521,8 +487,6 @@ public final class LegacyModelReader {
         };
     }
 
-    // --- fields
-
     private Object getField(FieldInsnNode field, Object target) {
         if (target == Self.INSTANCE) {
             return switch (field.name) {
@@ -615,8 +579,6 @@ public final class LegacyModelReader {
         return value instanceof Number number ? number.floatValue() : otherwise;
     }
 
-    // --- calls
-
     private void invoke(MethodInsnNode call, Deque<Object> stack, int depth) throws IOException {
         Type type = Type.getMethodType(call.desc);
         Type[] parameters = type.getArgumentTypes();
@@ -627,7 +589,7 @@ public final class LegacyModelReader {
         Object target = call.getOpcode() == Opcodes.INVOKESTATIC ? null : stack.pop();
         Object result = call(call, target, arguments, parameters, depth);
         if (call.name.equals("<init>") && target instanceof Unbuilt unbuilt) {
-            // NEW was DUPed before the constructor ran; the copy left behind is the finished object now
+            // NEW was DUPed; swap the leftover copy for the built object
             List<Object> values = new ArrayList<>(stack);
             stack.clear();
             for (int i = values.size() - 1; i >= 0; i--) {
@@ -641,7 +603,6 @@ public final class LegacyModelReader {
 
     private Object call(MethodInsnNode call, Object target, Object[] arguments, Type[] parameters, int depth)
             throws IOException {
-        // a constructor finishing an object that NEW left half-made
         if (call.name.equals("<init>") && target instanceof Unbuilt unbuilt) {
             unbuilt.built = construct(call, arguments);
             return null;
@@ -719,11 +680,6 @@ public final class LegacyModelReader {
         return locals;
     }
 
-    /**
-     * {@code new} something. Only parts are built; anything else is a value nobody will look inside. A part may be of
-     * the original's own kind of part, built on the game's: it is read as a plain part, its corner taken from the same
-     * arguments, since what such a kind changed was how it drew, not what it was made of.
-     */
     private Object construct(MethodInsnNode call, Object[] arguments) throws IOException {
         if (!isPart(call.owner)) {
             return OPAQUE;
@@ -741,7 +697,6 @@ public final class LegacyModelReader {
         return new LegacyPart(null, u, v, textureWidth, textureHeight);
     }
 
-    /** Whether a class is the game's part, or one of the original's built on it. */
     private boolean isPart(String owner) throws IOException {
         String at = owner;
         for (int depth = 0; at != null && depth < CALL_DEPTH_LIMIT; depth++) {
@@ -757,10 +712,6 @@ public final class LegacyModelReader {
         return false;
     }
 
-    /**
-     * The model's own constructor calling up its chain. Classes of the original are read like any other; the game's
-     * {@code ModelBiped} is not in the jar, so the seven parts it would have made are made here, the way it made them.
-     */
     private Object superConstructor(MethodInsnNode call, Object[] arguments, Type[] parameters, int depth)
             throws IOException {
         if (call.owner.equals(BIPED)) {
@@ -782,7 +733,7 @@ public final class LegacyModelReader {
         return null;
     }
 
-    /** What {@code ModelBiped(float, float, int, int)} builds. These are the game's numbers, not the original's. */
+    // vanilla ModelBiped's numbers
     private void biped(float grow, float drop, int width, int height) {
         textureWidth = width;
         textureHeight = height;
@@ -838,7 +789,6 @@ public final class LegacyModelReader {
                 return null;
             }
             default -> {
-                // rendering, compiling a display list, and the like: nothing that changes the shape
                 return OPAQUE;
             }
         }
@@ -853,12 +803,10 @@ public final class LegacyModelReader {
                 w, h, d, grow, part.mirror));
     }
 
-    /** The model under construction. */
     private enum Self {
         INSTANCE
     }
 
-    /** What NEW leaves on the stack until its constructor runs. */
     private static final class Unbuilt {
         final String type;
         Object built;
@@ -868,7 +816,6 @@ public final class LegacyModelReader {
         }
     }
 
-    /** A part's {@code cubeList}, which constructors clear to take a biped's own boxes away. */
     private record Cubes(LegacyPart part) {
     }
 }

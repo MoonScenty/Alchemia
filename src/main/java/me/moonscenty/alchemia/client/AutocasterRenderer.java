@@ -15,22 +15,12 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 
-/**
- * Draws an autocaster as the original drew it: a bracket bolted to whichever face it is on, and a ball sitting in
- * the bracket that turns to look at whatever the thing is aiming at.
- *
- * <p>The focus is a third piece inside the ball, drawn only when one is fitted and tinted whatever colour that
- * focus throws. It is the only way of telling from across a room what a turret is loaded with.
- *
- * <p>Not a {@link net.minecraft.client.renderer.entity.LivingEntityRenderer}: that one turns the world upside
- * down for a model built the way a player's is, and this model is built the right way up.
- */
+// not a LivingEntityRenderer: that flips the pose for player-style models, this mesh is built upright
 public class AutocasterRenderer extends EntityRenderer<Autocaster> {
     private static final ResourceLocation SHEET = Alchemia.id("textures/entity/autocaster.png");
     private static final ResourceLocation ELDRITCH = Alchemia.id("textures/entity/eldritch_autocaster.png");
-    /** How far the ball sits above the thing's feet, which is the middle of the square it stands in. */
     private static final float MIDDLE = 0.5F;
-    /** The original's mesh, turned over for the loader its own renderer read it with. */
+    // flipped: the original's old OBJ loader turned the texture V over
     private static final LegacyCached<LegacyMesh> MESH = LegacyCached.flippedMesh(LegacyAssets.TURRET_MESH);
 
     public AutocasterRenderer(EntityRendererProvider.Context context) {
@@ -49,7 +39,6 @@ public class AutocasterRenderer extends EntityRenderer<Autocaster> {
         super.render(turret, yaw, partialTick, pose, buffers, light);
     }
 
-    /** The part that does not move: stood up, hung upside down or laid against a wall, by the face it is on. */
     private static void drawBracket(LegacyMesh mesh, Autocaster turret, PoseStack pose,
             MultiBufferSource buffers, int light) {
         int bracket = mesh.group("base");
@@ -65,7 +54,7 @@ public class AutocasterRenderer extends EntityRenderer<Autocaster> {
             case WEST -> pose.mulPose(Axis.ZP.rotationDegrees(90.0F));
             case EAST -> pose.mulPose(Axis.ZP.rotationDegrees(-90.0F));
             default -> {
-                // UP is how the mesh was modelled, so there is nothing to turn
+                // UP is how the mesh was modelled
             }
         }
         pose.translate(0.0F, -MIDDLE, 0.0F);
@@ -74,7 +63,6 @@ public class AutocasterRenderer extends EntityRenderer<Autocaster> {
         pose.popPose();
     }
 
-    /** The part that aims, and the focus inside it. */
     private static void drawBall(LegacyMesh mesh, Autocaster turret, float partialTick, PoseStack pose,
             MultiBufferSource buffers, int light) {
         int ball = mesh.group("ball");

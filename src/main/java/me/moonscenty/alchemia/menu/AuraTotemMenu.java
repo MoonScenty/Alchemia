@@ -12,11 +12,7 @@ import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 
-/**
- * Standing at an aura totem: the pocket its shards burn from, and how long the one burning has left.
- */
 public class AuraTotemMenu extends AlchemiaMenu {
-    // Where the pieces sit on the original's panel.
     private static final int SHARDS_X = 80;
     private static final int SHARDS_Y = 24;
     private static final int PACK_X = 8;
@@ -25,7 +21,6 @@ public class AuraTotemMenu extends AlchemiaMenu {
     private final ContainerData readings;
     private final Container totem;
 
-    /** What the client builds. */
     public AuraTotemMenu(int id, Inventory inventory) {
         this(id, inventory, new SimpleContainer(1), new SimpleContainerData(AuraTotemBlockEntity.READINGS));
     }
@@ -46,7 +41,6 @@ public class AuraTotemMenu extends AlchemiaMenu {
         addPlayerInventory(inventory, PACK_X, PACK_Y);
     }
 
-    /** How much of the burning shard is left, as a share. */
     public float left() {
         return readings.get(AuraTotemBlockEntity.READING_TIME) / (float) AuraTotemBlockEntity.LASTS;
     }

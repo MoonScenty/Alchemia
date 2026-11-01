@@ -28,15 +28,6 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.PacketDistributor;
 
-/**
- * The golem press as the original laid it out: the material at top left and the fitting below it, the head, arms
- * and legs down the right, what the golem would be like in the middle, and what it takes along the far right.
- *
- * <p>Only the parts the player has the research for are offered, and the arrows step through them. Underneath are
- * how many hearts, how much armour and how hard a hit the golem would have. The button to press it lights only when
- * everything it takes is in the player's pack; what is missing is marked. While the press is at work nothing can be
- * changed, and a bar fills as it goes.
- */
 public class GolemPressScreen extends AbstractContainerScreen<GolemPressMenu> {
     private static final ResourceLocation PANEL = Alchemia.id("textures/gui/golem_press.png");
     private static final ResourceLocation ARROWS = Alchemia.id("textures/gui/base.png");
@@ -48,7 +39,6 @@ public class GolemPressScreen extends AbstractContainerScreen<GolemPressMenu> {
     private static final int ARROW = 10;
     private static final int WRAP = 150;
 
-    /** What was picked last time, kept between openings as the original kept it. */
     private static int material;
     private static int head;
     private static int arms;
@@ -64,7 +54,6 @@ public class GolemPressScreen extends AbstractContainerScreen<GolemPressMenu> {
     private List<ItemStack> components = List.of();
     private boolean[] owned = new boolean[0];
     private boolean everything;
-    /** Set when the press is asked to start, until it has. */
     private boolean asked;
 
     public GolemPressScreen(GolemPressMenu menu, Inventory inventory, Component title) {
@@ -98,7 +87,6 @@ public class GolemPressScreen extends AbstractContainerScreen<GolemPressMenu> {
         return index >= of.size() || index < 0 ? 0 : index;
     }
 
-    /** The golem as picked. Anything with nothing known stays as the plainest. */
     private void choose() {
         GolemDesign picked = GolemDesign.BASIC;
         if (!materials.isEmpty()) {
@@ -121,7 +109,6 @@ public class GolemPressScreen extends AbstractContainerScreen<GolemPressMenu> {
         count();
     }
 
-    /** Whether the player has each thing it takes, and so whether it can be pressed. */
     private void count() {
         owned = new boolean[components.size()];
         everything = true;
@@ -144,8 +131,6 @@ public class GolemPressScreen extends AbstractContainerScreen<GolemPressMenu> {
             asked = false;
         }
     }
-
-    // --- drawing ------------------------------------------------------------------------------------------
 
     @Override
     protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
@@ -216,7 +201,6 @@ public class GolemPressScreen extends AbstractContainerScreen<GolemPressMenu> {
         graphics.blit(icon, leftPos + x, topPos + y, 0, 0, ICON, ICON, ICON, ICON);
     }
 
-    /** Where the trait tags go, round the middle of the panel, four to a column. */
     private List<int[]> traitPlaces() {
         int count = design.traits().size();
         List<int[]> places = new ArrayList<>();
@@ -245,7 +229,6 @@ public class GolemPressScreen extends AbstractContainerScreen<GolemPressMenu> {
         }
     }
 
-    /** Where each thing it takes goes: the machina first, then four to a column. */
     private List<int[]> wantPlaces() {
         List<int[]> places = new ArrayList<>();
         int row = 1;
@@ -293,7 +276,6 @@ public class GolemPressScreen extends AbstractContainerScreen<GolemPressMenu> {
         graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
     }
 
-    /** Hearts, armour and a hit, as the golem would come off the press. */
     private void stats(GuiGraphics graphics) {
         int health = 10 + design.material().health();
         if (design.has(GolemTrait.FRAGILE)) {
@@ -306,7 +288,6 @@ public class GolemPressScreen extends AbstractContainerScreen<GolemPressMenu> {
                 topPos + 108, 0xFFFFFF);
     }
 
-    /** The panel is a picture of the press, as the original's was; it carries no words. */
     @Override
     protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
     }
@@ -317,7 +298,6 @@ public class GolemPressScreen extends AbstractContainerScreen<GolemPressMenu> {
         renderTooltip(graphics, mouseX, mouseY);
     }
 
-    /** What every picture on the panel is, and for parts and traits, what they do. */
     @Override
     protected void renderTooltip(GuiGraphics graphics, int mouseX, int mouseY) {
         for (int[] spot : new int[][] {{24, 24, 0}, {120, 24, 1}, {120, 48, 2}, {120, 72, 3}, {24, 72, 4}}) {
@@ -361,8 +341,6 @@ public class GolemPressScreen extends AbstractContainerScreen<GolemPressMenu> {
         graphics.renderTooltip(font, lines, mouseX, mouseY);
     }
 
-    // --- clicking -----------------------------------------------------------------------------------------
-
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (!busy() && !asked) {
@@ -393,7 +371,6 @@ public class GolemPressScreen extends AbstractContainerScreen<GolemPressMenu> {
                 && mouseY < topPos + y + tall;
     }
 
-    /** The ten little arrows, a pair to each choice, where the original put them. */
     private enum Arrow {
         HEAD_BACK(101, 19, true, screen -> screen.heads.size(), screen -> head = wrap(head - 1, screen.heads)),
         HEAD_ON(129, 19, false, screen -> screen.heads.size(), screen -> head = wrap(head + 1, screen.heads)),

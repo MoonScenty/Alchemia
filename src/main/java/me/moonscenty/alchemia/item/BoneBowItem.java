@@ -13,26 +13,16 @@ import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
-/**
- * The bow of bone, the original's {@code ItemBowBone}: bone and string with entropy worked into it. It is fully
- * drawn in half the time a bow takes, looses on its own if held past that, sends its arrows a quarter as fast again
- * and half a point harder -- but never as a critical shot.
- */
 public class BoneBowItem extends BowItem {
-    /** Ticks to a full draw: a bow's twenty, halved. */
     public static final int FULL_DRAW = 10;
-    /** Held this long, it looses by itself. */
     public static final int LOOSES_AFTER = 18;
-    /** How hard it sends an arrow at full draw, against a bow's three. */
     public static final float SPEED = 3.75F;
-    /** What it adds to an arrow's damage. */
     public static final double HARDER = 0.5;
 
     public BoneBowItem(Properties properties) {
         super(properties);
     }
 
-    /** How far drawn, out of one, after this many ticks: a bow's curve over half the time. */
     public static float power(int ticks) {
         float f = ticks / (float) FULL_DRAW;
         f = (f * f + f * 2.0F) / 3.0F;

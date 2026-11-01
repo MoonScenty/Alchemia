@@ -1,7 +1,6 @@
 package me.moonscenty.alchemia.entity;
 
 import me.moonscenty.alchemia.aura.BiomePaint;
-import me.moonscenty.alchemia.block.taint.FluxGooBlock;
 import me.moonscenty.alchemia.player.effect.ModEffects;
 import me.moonscenty.alchemia.registry.ModBlocks;
 import me.moonscenty.alchemia.registry.ModEntities;
@@ -24,17 +23,11 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.HitResult;
 
-/**
- * A thrown bottle of taint, the original's {@code EntityBottleTaint}. Where it breaks, everything living within five
- * blocks that is not tainted or undead is poisoned by the taint for five seconds, and the ground about it goes over
- * to tainted land, with flux goo left lying here and there.
- */
 public class ThrownTaintBottle extends ThrowableItemProjectile {
-    /** How far the poison reaches, and how many spots about the break it tries to taint. */
     private static final double REACH = 5.0;
     private static final int SPOTS = 10;
     private static final int POISONS_FOR = 100;
-    /** Told to the client when it breaks, as a thrown potion is. */
+    // entity event id, as a thrown potion's
     private static final byte BROKE = 3;
 
     public ThrownTaintBottle(EntityType<? extends ThrownTaintBottle> type, Level level) {
@@ -72,7 +65,6 @@ public class ThrownTaintBottle extends ThrowableItemProjectile {
         discard();
     }
 
-    /** Ten tries, each a coin toss, at a spot within four: tainted land, and goo where it will lie. */
     private void spread(ServerLevel level) {
         BlockPos here = blockPosition();
         for (int tries = 0; tries < SPOTS; tries++) {
@@ -90,7 +82,6 @@ public class ThrownTaintBottle extends ThrowableItemProjectile {
         }
     }
 
-    /** Lays goo at a spot if the ground under it is solid and nothing much is there. */
     private static boolean goo(ServerLevel level, BlockPos at) {
         BlockPos under = at.below();
         if (level.getBlockState(under).isFaceSturdy(level, under, Direction.UP)
@@ -101,7 +92,6 @@ public class ThrownTaintBottle extends ThrowableItemProjectile {
         return false;
     }
 
-    /** The bottle bursting: shards of it, a spray of taint, and the smash. */
     @Override
     public void handleEntityEvent(byte id) {
         if (id != BROKE) {

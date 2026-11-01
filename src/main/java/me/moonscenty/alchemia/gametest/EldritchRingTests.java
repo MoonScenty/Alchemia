@@ -31,13 +31,11 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/** The eldritch rings: what is built, the altar's eyes, the obelisk, the banners, and what warp teaches. */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class EldritchRingTests {
     private static final String TEMPLATE = "empty_32x40x32";
 
-    /** On open stone, a ring is raised: the altar on the stone, the shut way over it, the obelisk over that. */
     @GameTest(template = TEMPLATE)
     public static void aRingIsRaisedOnOpenGround(GameTestHelper helper) {
         for (int x = 4; x <= 20; x++) {
@@ -57,7 +55,6 @@ public class EldritchRingTests {
         helper.succeed();
     }
 
-    /** Eyes go into an altar, four at most; the third makes it call up guardians. */
     @GameTest(template = TEMPLATE)
     public static void theAltarTakesFourEyes(GameTestHelper helper) {
         BlockPos at = new BlockPos(4, 2, 4);
@@ -77,7 +74,6 @@ public class EldritchRingTests {
         helper.succeed();
     }
 
-    /** What stands near an obelisk from the Outer Lands is kept strong. */
     @GameTest(template = TEMPLATE)
     public static void anObeliskKeepsTheOuterLandsStrong(GameTestHelper helper) {
         BlockPos at = new BlockPos(4, 2, 4);
@@ -94,7 +90,6 @@ public class EldritchRingTests {
         helper.succeed();
     }
 
-    /** A phial paints its aspect on a dyed banner, but not on the cult's. */
     @GameTest(template = TEMPLATE)
     public static void aPhialPaintsABanner(GameTestHelper helper) {
         BlockPos at = new BlockPos(4, 2, 4);
@@ -113,7 +108,6 @@ public class EldritchRingTests {
         helper.succeed();
     }
 
-    /** Warp that has settled in past twenty-five teaches the minor lore, past fifty the major. */
     @GameTest(template = TEMPLATE)
     public static void settledWarpTeaches(GameTestHelper helper) {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);

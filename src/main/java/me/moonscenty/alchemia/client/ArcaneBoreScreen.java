@@ -12,10 +12,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 
-/**
- * The bore's panel, the original's: the focus and the pickaxe, a mark over a pickaxe worn to its last point, and
- * beside them, in small print, how wide it digs, how much faster, and what else it does to what it mines.
- */
 public class ArcaneBoreScreen extends AbstractContainerScreen<ArcaneBoreMenu> {
     private static final ResourceLocation PANEL = Alchemia.id("textures/gui/arcane_bore.png");
     private static final int SHEET = 256;

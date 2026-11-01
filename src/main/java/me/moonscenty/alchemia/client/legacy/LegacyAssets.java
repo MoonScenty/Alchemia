@@ -10,145 +10,82 @@ import me.moonscenty.alchemia.aura.node.NodeType;
 import me.moonscenty.alchemia.registry.ModAspects;
 import me.moonscenty.alchemia.wand.FocusUpgrade;
 
-/**
- * What we take from the original, step by step. Each entry is one of our files; a jar that has it replaces our own
- * picture, and without the jar ours stays. Paths are written without {@code .png}: targets under our
- * {@code textures/}, sources under the original's {@code textures/}.
- *
- * <p>Steps follow {@code docs/PORTING_PLAN.md}. Something we drew because the original had nothing there (the
- * deepslate ores, raw cinnabar) is simply not listed.
- */
 public final class LegacyAssets {
-    /**
-     * The grey the original gave a greatwood leaf in a hand or a slot: {@code ColorizerFoliage.getFoliageColorBasic()}.
-     * In the world it took the biome's foliage colour; ours is baked, so every greatwood is the plains green.
-     */
+    // ColorizerFoliage.getFoliageColorBasic()
     private static final int FOLIAGE = 0x48B518;
-    /** A cell of the original's effect sheet, and where its cells start: the game's own inventory layout. */
     private static final int EFFECT_CELL = 18;
     private static final int EFFECT_TOP = 198;
-    /** A cell of the original's sheet of node frames. */
     private static final int NODE_CELL = 64;
 
-    /** The fortress armour, which the original wrote as code rather than as a model file. */
     public static final String FORTRESS_ARMOUR = "fortress_armour";
 
-    /**
-     * The void robe's model as the original built it for the robe itself, and as it built it for the hood and the
-     * leggings. The constructor hangs different things on the body depending on the size it is given, so the same
-     * class is read twice.
-     */
     public static final String ROBE = "robe";
     public static final String ROBE_SKIRT = "robe_skirt";
-    /** The Crimson Cult's plate, which the original built at full size for the chest and at half for the rest. */
     public static final String KNIGHT_ARMOUR = "knight_armour";
     public static final String KNIGHT_ARMOUR_LOWER = "knight_armour_lower";
-    /** The eldritch crab, which the original built in code. */
     public static final String ELDRITCH_CRAB = "eldritch_crab";
-    /** The banner, which the original built in code. */
     public static final String BANNER = "banner";
     public static final String CUBE = "cube";
     public static final String ELDRITCH_GOLEM = "eldritch_golem";
     public static final String LEADER_ARMOUR = "leader_armour";
     public static final String LEADER_ARMOUR_LOWER = "leader_armour_lower";
     public static final String TAINTACLE_GIANT = "taintacle_giant";
-    /** The capstone the eldritch ring and its obelisk wear. */
     public static final String OBELISK_CAP_MESH = "models/legacy/obelisk_cap.obj";
     public static final String CRAB_VENT_MESH = "models/legacy/crabvent.obj";
     public static final String HEMIS_MESH = "models/legacy/hemis.obj";
-    /** The pack on the back of the thaumostatic harness. */
     public static final String HARNESS_MESH = "models/legacy/hoverharness.obj";
-    /** The eldritch guardian, which the original built in code. */
     public static final String ELDRITCH_GUARDIAN = "eldritch_guardian";
 
-    /**
-     * The stone a matrix is eight of, and the glow laid over it while it works: one class, a sixteen-block cube, read
-     * once for each half of its sheet.
-     */
     public static final String INFUSER = "infuser";
     public static final String INFUSER_GLOW = "infuser_glow";
 
-    /** The two plates, the bag between them and the nozzle: the original's bellows, built in code. */
     public static final String BELLOWS = "bellows";
 
-    /** The inkwell, scroll and ribbon the original stood on its research table. */
     public static final String RESEARCH_TABLE = "research_table";
 
-    /** The pillar the original kept as an OBJ file, served as it is for the matrix to read and draw. */
     public static final String PILLAR_MESH = "models/legacy/pillar.obj";
 
-    /** The eight shards a crystal is grown from, which the original kept as an OBJ file. */
     public static final String CRYSTAL_MESH = "models/legacy/crystal.obj";
 
-    /** The stabiliser's body and its arms, which the original kept as an OBJ file and drew in its renderer. */
     public static final String STABILIZER_MESH = "models/legacy/node_stabilizer.obj";
 
-    /** The vis relay the original drew as its workbench charger, kept as an OBJ file. */
     public static final String RELAY_MESH = "models/legacy/vis_relay.obj";
-    /** The crystallizer's body, which the original kept as an OBJ. */
     public static final String CRYSTALLIZER_MESH = "models/legacy/crystallizer.obj";
-    /** The thaumatorium, two blocks tall, which the original kept as an OBJ. */
     public static final String THAUMATORIUM_MESH = "models/legacy/thaumatorium.obj";
-    /** The centrifuge, which the original built in code. */
     public static final String CENTRIFUGE = "centrifuge";
-    /** The brain in a jar, and the jar whose brine it floats in, both built in code. */
     public static final String BRAIN = "brain";
-    /** The arcane bore, its emitter, and its base, all built in code. */
     public static final String BORE = "bore";
     public static final String BORE_EMITTER = "bore_emitter";
     public static final String BORE_BASE = "bore_base";
     public static final String JAR = "jar";
 
-    /** The wand: a rod, a cap at either end, and room for a sceptre's crossbar and a focus. */
     public static final String WAND_MESH = "models/legacy/wand.obj";
-    /** The staff: the wand's parts on a longer shaft. */
     public static final String STAFF_MESH = "models/legacy/staff.obj";
 
-    /** The autocaster: its bracket, the ball that aims and the focus inside, which the original kept as one OBJ. */
     public static final String TURRET_MESH = "models/legacy/turret.obj";
-    /** The advanced automated crossbow, and the hemisphere a node magnet's ripples are drawn on. */
     public static final String CROSSBOW_ADVANCED_MESH = "models/legacy/crossbow_advanced.obj";
     public static final String HEMISPHERE_MESH = "models/legacy/hemis.obj";
 
-    /** The alembic, from Thaumcraft 4: its pot, panel, legs and the two tubes it can stand on. */
     public static final String ALEMBIC_MESH = "models/legacy/alembic.obj";
 
-    /** The tube: a middle box, a pipe to each side and a larger box for a buffer. */
     public static final String TUBE_MESH = "models/legacy/tube.obj";
 
-    /** The valve's wheel and stem, which the original built in code and also used for the one-way tube's mark. */
     public static final String VALVE = "valve";
-    /** The firebat, which the original built in code: the old bat's shape. */
     public static final String FIREBAT = "firebat";
-    /** The automated crossbow and the node magnet, which the original built in code on the same tripod. */
     public static final String CROSSBOW = "crossbow";
     public static final String NODE_MAGNET = "node_magnet";
-    /** The pech, which the original built in code on a biped: jaw, pack and all. */
     public static final String PECH = "pech";
-    /** The taintacle, which the original built in code as a chain of segments: ten long, and six for a tendril. */
     public static final String TAINTACLE = "taintacle";
     public static final String TAINTACLE_TINY = "taintacle_tiny";
 
-    /** The alchemometer as Thaumcraft 4's thaumometer: a six-sided brass frame. */
     public static final String SCANNER_MESH = "models/legacy/scanner.obj";
 
-    /**
-     * What the original called each of the twenty-three: the same word with the underscores taken out, save for
-     * the one it spelled wrong.
-     */
     private static final Map<FocusUpgrade, String> ORIGINAL_UPGRADE = originalUpgrades();
 
     public static final List<LegacyAsset> ALL = build();
 
-    /**
-     * Models the original wrote as code. Each is read out of a constructor by
-     * {@link me.moonscenty.alchemia.client.legacy.model.LegacyModelReader}; the first release that has the class
-     * wins, as with files.
-     */
     public static final Map<String, List<LegacyModelSource>> MODELS = Map.ofEntries(
             Map.entry(FORTRESS_ARMOUR, List.of(
-                    // the original made it at 1.0 for the helm and cuirass and at 0.5 for the greaves; that only
-                    // grows a biped's own boxes, and this model clears every one of them
                     new LegacyModelSource(LegacyEdition.FIVE,
                             "thaumcraft/client/renderers/models/gear/ModelFortressArmor", "(F)V", 1.0F),
                     new LegacyModelSource(LegacyEdition.FOUR,
@@ -238,12 +175,7 @@ public final class LegacyAssets {
         return List.copyOf(all);
     }
 
-    /**
-     * Step 2: an icon for every aspect, and the plate and question mark drawn under and instead of one. All grey;
-     * the colour is put on in code, ours as the original's. 1.7.10 lacks a few that 1.8.9 added.
-     */
     private static void aspects(List<LegacyAsset> all) {
-        // the holders know their names before the registry is filled, which is all this needs
         ModAspects.ASPECTS.getEntries().forEach(aspect -> {
             String tag = aspect.getId().getPath();
             all.add(LegacyAsset.of("textures/aspect/" + tag + ".png")
@@ -256,20 +188,15 @@ public final class LegacyAssets {
                 .five("textures/aspects/_unknown.png").four("textures/aspects/_unknown.png"));
     }
 
-    /**
-     * Step 3: the ailments warp brings on. The original kept every icon in one sheet laid out as the game's own
-     * inventory was, eighteen pixels a cell from y 198, and each effect named its cell. Ours are one file each, so
-     * each cell is cut out. The cells are the original's; which of our effects is which of its is in the name.
-     */
     private static void effects(List<LegacyAsset> all) {
-        effect(all, "taint_poison", 3, 1); // flux taint
-        effect(all, "flux_flu", 5, 1); // vis exhaust
-        effect(all, "flux_phage", 6, 1); // infectious vis exhaust
+        effect(all, "taint_poison", 3, 1);
+        effect(all, "flux_flu", 5, 1);
+        effect(all, "flux_phage", 6, 1);
         effect(all, "unnatural_hunger", 7, 1);
         effect(all, "sun_scorned", 6, 2);
         effect(all, "blurred_vision", 5, 2);
-        effect(all, "deadly_gaze", 4, 2); // death gaze
-        effect(all, "alchediarrhea", 7, 2); // thaumarhia
+        effect(all, "deadly_gaze", 4, 2);
+        effect(all, "alchediarrhea", 7, 2);
         effect(all, "warp_ward", 3, 2);
     }
 
@@ -279,25 +206,16 @@ public final class LegacyAssets {
                 .cropped(column * EFFECT_CELL, EFFECT_TOP + row * EFFECT_CELL, EFFECT_CELL, EFFECT_CELL));
     }
 
-    /**
-     * Step 4: what research is done with, and the sky the alchemonomicon's tree hangs in. Only what fits our screens
-     * as they are: the panels of the book and the table are laid out differently from the original's and are not
-     * taken until the screens are.
-     */
     private static void research(List<LegacyAsset> all) {
-        // the scanner's lens turns, so its picture is a strip of frames, and the strip's timing comes with it
         all.add(item("alchemometer", "thaumometer", null));
-        // and its shape, from Thaumcraft 4: the frame, its sheet, and the glass screen set in it
         all.add(LegacyAsset.of(SCANNER_MESH).four("textures/models/scanner.obj"));
         all.add(LegacyAsset.of("textures/item/legacy/scanner.png").four("textures/models/scanner.png"));
         all.add(LegacyAsset.of("textures/item/legacy/scanscreen.png").four("textures/models/scanscreen.png"));
         all.add(item("alchemonomicon", "thaumonomicon", "thaumonomicon"));
         all.add(item("research_notes", "researchnotes", "researchnotes"));
         all.add(item("scribing_tools", "scribing_tools", null));
-        // the letters that drift onto the research table's leather
         all.add(LegacyAsset.of("textures/misc/script.png").five("textures/misc/script.png"));
 
-        // each branch's sky, in the original's order of branches, and the field of stars drawn over every one
         String[] branches = {"basics", "arcana", "alchemy", "artifice", "golemancy", "eldritch"};
         for (int i = 0; i < branches.length; i++) {
             all.add(LegacyAsset.of("textures/gui/research_background/" + branches[i] + ".png")
@@ -305,15 +223,11 @@ public final class LegacyAssets {
         }
         all.add(LegacyAsset.of("textures/gui/research_overlay.png").five("textures/gui/gui_research_back_over.png"));
 
-        // the research table: the screen is laid out as the original's was, so its panel goes straight in, with the
-        // parchment the note is spread on and the two plates its cells are drawn with
         all.add(LegacyAsset.of("textures/gui/research_table.png").five("textures/gui/gui_research_table.png"));
         all.add(LegacyAsset.of("textures/gui/research_parchment.png").five("textures/research/parchment3.png"));
         all.add(LegacyAsset.of("textures/gui/research_hex.png").five("textures/gui/hex1.png"));
         all.add(LegacyAsset.of("textures/gui/research_hex_lit.png").five("textures/gui/hex2.png"));
 
-        // the research table itself: the original's desk is a model file, served as it is with its pictures; the
-        // inkwell and the scroll on it it built in code, and the quill is a flat picture stood in the inkwell
         all.add(LegacyAsset.of("models/block/research_table.json").five("models/block/research_table.json").asModel()
                 .forModel(RESEARCH_TABLE));
         all.add(LegacyAsset.of("models/item/research_table.json").five("models/item/research_table.json").asModel()
@@ -326,10 +240,7 @@ public final class LegacyAssets {
                 .forModel(RESEARCH_TABLE));
         all.add(block("research_table_quill", "tablequill", null));
 
-        // the alchemonomicon is laid out as the original's was: its frame pieces, plates, arrow heads and line pieces
-        // all come off the one sheet, and each branch's tab has the original's picture on it
         all.add(LegacyAsset.of("textures/gui/research_browser.png").five("textures/gui/gui_research_browser.png"));
-        // a research page: the open book, and the second sheet of pictures each kind of recipe is drawn over
         all.add(LegacyAsset.of("textures/gui/research_book.png").five("textures/gui/gui_researchbook.png"));
         all.add(LegacyAsset.of("textures/gui/research_book_overlay.png")
                 .five("textures/gui/gui_researchbook_overlay.png"));
@@ -343,20 +254,10 @@ public final class LegacyAssets {
         }
     }
 
-    /**
-     * Step 5: nodes, and the taint and goo that flux leaves behind.
-     * <p>
-     * A node is drawn off the original's one great sheet of frames, sixty-four pixels a cell and thirty-two cells a
-     * row. Ours are two strips cut from it: the aspect-coloured glow is its first row, the beating halo the first
-     * sixteen cells of its twenty-sixth. They were laid out that way to begin with, so the cut is all there is to do.
-     */
     private static void aura(List<LegacyAsset> all) {
-        // the crystals: the original's mesh of eight shards and the grey it was coloured from
         all.add(LegacyAsset.of(CRYSTAL_MESH).five("models/obj/crystal.obj"));
         all.add(LegacyAsset.of("textures/block/legacy/crystal.png").five("textures/blocks/crystal.png"));
-        // a crystal in the hand is the original's grey cluster, coloured by its aspect
         all.add(LegacyAsset.of("textures/item/legacy/crystal_planter.png").five("textures/items/crystal_planter.png"));
-        // the stabiliser: its body and arms, their sheet, and the glow drawn over the arms as they work
         all.add(LegacyAsset.of(STABILIZER_MESH).five("models/obj/node_stabilizer.obj"));
         all.add(LegacyAsset.of("textures/entity/node_stabilizer.png").five("textures/models/node_stabilizer.png"));
         all.add(LegacyAsset.of("textures/item/legacy/node_stabilizer.png")
@@ -368,12 +269,10 @@ public final class LegacyAssets {
                 .cropped(0, 0, 32 * NODE_CELL, NODE_CELL));
         all.add(LegacyAsset.of("textures/entity/node_halo.png").five("textures/misc/nodes.png")
                 .cropped(0, 25 * NODE_CELL, 16 * NODE_CELL, NODE_CELL));
-        // what kind of node it is, as a white knot drawn small over the core: the rows under the first, one a kind
         all.add(LegacyAsset.of("textures/entity/node_types.png").five("textures/misc/nodes.png")
                 .cropped(0, NODE_CELL, 32 * NODE_CELL, NodeType.values().length * NODE_CELL));
         all.add(LegacyAsset.of("textures/entity/node_bubble.png").five("textures/misc/node_bubble.png"));
 
-        // taint, each with the original's own variations in the same order
         for (int variant = 0; variant < 3; variant++) {
             String ours = variant == 0 ? "" : "_" + variant;
             all.add(block("taint_crust" + ours, "taint_crust_" + variant, null));
@@ -382,7 +281,6 @@ public final class LegacyAssets {
         }
         all.add(block("taint_log_top", "log_taintwood_top", null));
         all.add(block("taint_rock", "taint_rock", null));
-        // the fibre is the original's model files: a crust turned onto each side it clings to, and four growths
         for (String part : List.of("taint_fibre", "taint_growth_1", "taint_growth_2", "taint_growth_3",
                 "taint_growth_4")) {
             all.add(LegacyAsset.of("models/block/" + part + ".json").five("models/block/" + part + ".json")
@@ -393,19 +291,11 @@ public final class LegacyAssets {
             all.add(LegacyAsset.of("textures/block/legacy/" + picture + ".png")
                     .five("textures/blocks/" + picture + ".png"));
         }
-        // the original's goo is one strip, still or running; ours asks for two names and gets the same picture
         all.add(block("flux_goo_still", "flux_goo", null));
         all.add(block("flux_goo_flow", "flux_goo", null));
     }
 
-    /**
-     * Step 6: wands, their parts, the foci, and the arcane workbench.
-     * <p>
-     * The original and ours name a part's two pictures the other way round. Its {@code cap_gold} is the picture of a
-     * loose cap and {@code cap_gold_mat} the stuff a wand's cap is made of; ours are {@code cap_gold_mat} for the
-     * loose cap and {@code cap_gold} for the stuff. So each is taken from the other's name. Our wands keep their own
-     * shape and are now dressed in the original's materials.
-     */
+    // the original names a part's loose picture and its material the other way round from ours
     private static void wands(List<LegacyAsset> all) {
         String[][] caps = {{"iron", "iron"}, {"gold", "gold"}, {"brass", "brass"}, {"alchemium", "thaumium"},
                 {"void", "void"}};
@@ -420,9 +310,7 @@ public final class LegacyAssets {
             all.add(wandPart("rod_" + rod + "_mat", "rod_" + rod));
             all.add(wandPart("rod_" + rod, "rod_" + rod + "_mat"));
         }
-        // the plain wooden rod has no loose picture, only the stuff
         all.add(wandPart("rod_wood", "rod_wood_mat"));
-        // a staff core's loose picture, and the primal staff's own stuff, which has no wand of its own
         for (String rod : List.of("greatwood", "silverwood", "obsidian", "ice", "quartz", "reed", "blaze", "bone",
                 "primal")) {
             all.add(wandPart("staff_rod_" + rod, "staff_rod_" + rod));
@@ -436,42 +324,32 @@ public final class LegacyAssets {
         }
         all.add(wandPart("focus_hole", "focus_portablehole"));
 
-        // the bench's screen is laid out as the original's was, so its panel goes straight in
         all.add(LegacyAsset.of("textures/gui/arcane_workbench.png").five("textures/gui/gui_arcaneworkbench.png"));
-        // the bench itself is the original's model file, which names its pictures where the original kept them
         all.add(LegacyAsset.of("models/block/arcane_workbench.json").five("models/block/arcane_workbench.json")
                 .asModel());
         for (String face : List.of("arcane_workbench_top", "arcane_workbench_side")) {
             all.add(LegacyAsset.of("textures/block/legacy/" + face + ".png").five("textures/blocks/" + face + ".png"));
         }
-        // the bench a focus is worked on: the original drew it as the workbench with another skin on it,
-        // so its model file names ours as a parent once the namespaces are rewritten
         all.add(LegacyAsset.of("models/block/focal_manipulator.json")
                 .five("models/block/wand_workbench.json").asModel());
         for (String face : List.of("wand_workbench_top", "wand_workbench_side", "base_stone")) {
             all.add(LegacyAsset.of("textures/block/legacy/" + face + ".png").five("textures/blocks/" + face + ".png"));
         }
         all.add(LegacyAsset.of("textures/gui/focal_manipulator.png").five("textures/gui/gui_wandtable.png"));
-        // the two rings the wheel turns behind the foci, one each way
         all.add(LegacyAsset.of("textures/gui/focus_wheel.png").five("textures/misc/radial.png"));
         all.add(LegacyAsset.of("textures/gui/focus_wheel_back.png").five("textures/misc/radial2.png"));
-        // one small picture for each of the twenty-three, as the original kept them
         for (FocusUpgrade upgrade : FocusUpgrade.values()) {
             all.add(LegacyAsset.of("textures/gui/focus_upgrade/" + upgrade.getSerializedName() + ".png")
                     .five("textures/foci/" + ORIGINAL_UPGRADE.get(upgrade) + ".png"));
         }
 
-        // the charger above it: the vis relay the original drew it as, and its sheet
         all.add(LegacyAsset.of(RELAY_MESH).five("models/obj/vis_relay.obj"));
         all.add(LegacyAsset.of("textures/entity/vis_relay.png").five("textures/models/vis_relay.png"));
         all.add(LegacyAsset.of("textures/item/legacy/vis_relay.png").five("textures/models/vis_relay.png"));
-        // the centrifuge's sheet, and the crystallizer's body and sheet; its crystals are the vis relay's above
         all.add(LegacyAsset.of("textures/entity/centrifuge.png").five("textures/models/centrifuge.png")
                 .forModel(CENTRIFUGE));
         all.add(LegacyAsset.of(CRYSTALLIZER_MESH).five("models/obj/crystallizer.obj"));
-        // the thaumatorium: its mesh, its sheet and its panel; and the matrix, the original's model file
         all.add(LegacyAsset.of(THAUMATORIUM_MESH).five("models/obj/thaumatorium.obj"));
-        // the mirrors: their frames and panes, the hand mirror, its panel, and the two pictures the swirl is made of
         for (String picture : List.of("mirrorframe", "mirrorframe2", "mirrorpane", "mirrorpaneopen", "mirrorpanetrans")) {
             all.add(LegacyAsset.of("textures/block/legacy/" + picture + ".png")
                     .five("textures/blocks/" + picture + ".png"));
@@ -480,18 +358,15 @@ public final class LegacyAssets {
         all.add(LegacyAsset.of("textures/gui/hand_mirror.png").five("textures/gui/gui_handmirror.png"));
         all.add(LegacyAsset.of("textures/misc/mirror_tunnel.png").five("textures/misc/tunnel.png"));
         all.add(LegacyAsset.of("textures/misc/mirror_field.png").five("textures/misc/particlefield.png"));
-        // the infernal furnace: the original's model of the whole furnace, and its sheet
         all.add(LegacyAsset.of("models/block/infernal_furnace.json").five("models/block/infernal_furnace.json")
                 .asModel("cutout"));
         all.add(LegacyAsset.of("textures/block/legacy/infernal_furnace.png")
                 .five("textures/blocks/infernal_furnace.png"));
-        // the arcane bore: its sheet (the base's too), the jar it wears round its middle, its panel, its two beams
         all.add(LegacyAsset.of("textures/entity/bore.png").five("textures/models/bore.png").forModel(BORE));
         all.add(LegacyAsset.of("textures/entity/jar.png").five("textures/models/jar.png").forModel(JAR));
         all.add(LegacyAsset.of("textures/gui/arcane_bore.png").five("textures/gui/gui_arcanebore.png"));
         all.add(LegacyAsset.of("textures/misc/bore_beam_1.png").five("textures/misc/beam1.png"));
         all.add(LegacyAsset.of("textures/misc/bore_beam_2.png").five("textures/misc/beam2.png"));
-        // the brain in a jar: the brain's sheet and the brine's, and its still picture in a hand
         all.add(LegacyAsset.of("textures/entity/brain.png").five("textures/models/brain2.png").forModel(BRAIN));
         all.add(LegacyAsset.of("textures/entity/jar_brine.png").five("textures/models/jarbrine.png")
                 .forModel(JAR));
@@ -506,18 +381,14 @@ public final class LegacyAssets {
         all.add(LegacyAsset.of("models/block/mnemonic_matrix.json").five("models/block/brain_box.json").asModel());
         all.add(LegacyAsset.of("textures/block/legacy/brain_box.png").five("textures/blocks/brain_box.png"));
         all.add(LegacyAsset.of("textures/entity/crystallizer.png").five("textures/models/crystallizer.png"));
-        // the wand itself, built on the original's mesh from the rod and cap pictures above
         all.add(LegacyAsset.of(WAND_MESH).five("models/obj/wand.obj"));
 
-        // the autocaster: the original's mesh, its sheet, the panel it opens as, and its picture in a hand
         all.add(LegacyAsset.of(TURRET_MESH).five("models/obj/turret.obj"));
         all.add(LegacyAsset.of("textures/entity/autocaster.png").five("textures/models/focus_turret.png"));
         all.add(LegacyAsset.of("textures/entity/eldritch_autocaster.png")
                 .five("textures/models/focus_turret_eldritch.png"));
         all.add(LegacyAsset.of("textures/gui/autocaster.png").five("textures/gui/gui_turret_focus.png"));
         all.add(LegacyAsset.of("textures/item/legacy/autocaster.png").five("textures/items/turret_focus.png"));
-        // the two automated crossbows and the node magnet: their sheets, meshes, panels and pictures in a hand, and
-        // the ripples a magnet sends out, fifteen frames on a hemisphere
         all.add(LegacyAsset.of("textures/entity/automated_crossbow.png").five("textures/models/crossbow.png")
                 .forModel(CROSSBOW));
         all.add(LegacyAsset.of(CROSSBOW_ADVANCED_MESH).five("models/obj/crossbow_advanced.obj"));
@@ -539,44 +410,31 @@ public final class LegacyAssets {
                     .five("textures/items/" + placer[1] + ".png"));
         }
 
-        // the firebat Nine Hells lets off, in its two skins, both laid out for the original's model
         for (String skin : List.of("firebat", "vampirebat")) {
             all.add(LegacyAsset.of("textures/entity/" + skin + ".png")
                     .five("textures/models/creature/" + skin + ".png").forModel(FIREBAT));
         }
 
-        // the angry zombie's skin, which the furious one wears as well; a zombie's sheet, so the game's model fits it
         all.add(LegacyAsset.of("textures/entity/angry_zombie.png").five("textures/models/creature/bzombie.png")
                 .four("textures/models/bzombie.png"));
     }
 
-    /**
-     * Step 7: the crucible, the smelter, nitor, and the odds and ends of essentia work, with the jar, the alembic and
-     * the tubes on the original's own shapes.
-     */
     private static void essentia(List<LegacyAsset> all) {
-        // the alembic is Thaumcraft 4's: its mesh and sheet sat with its other models, not under blocks
         all.add(LegacyAsset.of(ALEMBIC_MESH).four("textures/models/alembic.obj"));
         all.add(LegacyAsset.of("textures/entity/alembic.png").four("textures/models/alembic.png"));
         all.add(LegacyAsset.of("textures/item/legacy/alembic.png").four("textures/models/alembic.png"));
 
-        // the jar: the original's glass and lid under each of our jar models, which hold only the liquid and the
-        // label the original drew in its renderer
         for (String fill : List.of("", "_1", "_2", "_3", "_4")) {
             for (String kind : List.of("jar", "jar_labelled")) {
                 String path = "models/block/jar/" + kind + fill + ".json";
                 all.add(LegacyAsset.of(path).five("models/block/jar_normal.json").asModelOver(path));
-                // and the void jar's darker glass under the same liquid and label
                 all.add(LegacyAsset.of("models/block/void_jar/" + kind + fill + ".json")
                         .five("models/block/jar_void.json").asModelOver(path));
             }
         }
-        // the tubes: the original's mesh, and the one sheet every kind is cut from
         all.add(LegacyAsset.of(TUBE_MESH).five("models/obj/tube.obj"));
-        // the valve's wheel and the one-way's mark are drawn off this sheet
         all.add(LegacyAsset.of("textures/entity/valve.png").five("textures/models/valve.png").forModel(VALVE));
         all.add(LegacyAsset.of("textures/block/legacy/tube.png").five("textures/blocks/tube.png"));
-        // a tube in the hand is the original's flat picture of it, one for each kind; our item models name them
         for (String tube : List.of("tube_normal", "tube_valve", "tube_oneway", "tube_restrict", "tube_filter",
                 "tube_buffer")) {
             all.add(LegacyAsset.of("textures/item/legacy/" + tube + ".png").five("textures/items/" + tube + ".png"));
@@ -585,7 +443,6 @@ public final class LegacyAssets {
                 "animatedglow")) {
             all.add(LegacyAsset.of("textures/block/legacy/" + face + ".png").five("textures/blocks/" + face + ".png"));
         }
-        // the crucible is the original's model file, which names its pictures where the original kept them
         all.add(LegacyAsset.of("models/block/crucible.json").five("models/block/crucible.json").asModel());
         for (String face : List.of("bottom", "inner", "side", "top")) {
             all.add(LegacyAsset.of("textures/block/legacy/crucible_" + face + ".png")
@@ -595,14 +452,12 @@ public final class LegacyAssets {
         all.add(block("smelter_front_on", "smelter_basic_front_on", null));
         all.add(block("smelter_side", "smelter_basic_side", null));
         all.add(block("smelter_top", "smelter_top", null));
-        // the two better smelters' faces, under our own names; the alchemium one is the original's thaumium one
         for (String[] tier : new String[][] {{"alchemium_smelter", "thaumium"}, {"void_smelter", "void"}}) {
             all.add(block(tier[0] + "_front", "smelter_" + tier[1] + "_front_off", null));
             all.add(block(tier[0] + "_front_on", "smelter_" + tier[1] + "_front_on", null));
             all.add(block(tier[0] + "_side", "smelter_" + tier[1] + "_side", null));
         }
         all.add(LegacyAsset.of("textures/block/legacy/void_metal.png").five("textures/blocks/void_metal.png"));
-        // the pump and the vent are the original's model files, which name their pictures where it kept them
         for (String part : List.of("smelter_aux", "smelter_vent")) {
             all.add(LegacyAsset.of("models/block/" + part + ".json").five("models/block/" + part + ".json")
                     .asModel());
@@ -611,20 +466,15 @@ public final class LegacyAssets {
             all.add(LegacyAsset.of("textures/block/legacy/" + picture + ".png")
                     .five("textures/blocks/" + picture + ".png"));
         }
-        // the smelter's screen is laid out as the original's was, so its panel goes straight in
         all.add(LegacyAsset.of("textures/gui/essentia_smelter.png").five("textures/gui/gui_smelter.png"));
-        // the flame is grey and dyed in code, the bead is not, as in the original
         all.add(block("nitor", "nitor", null));
         all.add(block("nitor_core", "nitor_core", null));
-        // the original's wisp, one cell in the bottom corner of its particle sheet, for the research screen's orbs
         all.add(LegacyAsset.of("textures/particle/mote.png").five("textures/misc/particles.png")
                 .cropped(0, 224, 32, 32));
-        // the original's two particle sheets whole, for the effects drawn straight off them as it drew them
         all.add(LegacyAsset.of("textures/misc/legacy_particles.png").five("textures/misc/particles.png"));
         all.add(LegacyAsset.of("textures/misc/legacy_particles2.png").five("textures/misc/particles2.png"));
 
         all.add(item("alumentum", "alumentum", null));
-        // grey, and painted by whatever it holds
         all.add(item("crystallized_essence", "crystal_essence", null));
         all.add(item("filter", "filter", null));
         all.add(item("jar_brace", "jar_brace", null));
@@ -638,28 +488,20 @@ public final class LegacyAssets {
         all.add(item("void_plate", "void_plate", null));
     }
 
-    /**
-     * Step 8: the altar. The two stones laid under its corners, and the pedestal, whose model now asks for a side and
-     * a top as the original's did. The matrix and the pillars come with the original's model and mesh they are drawn
-     * on, since their pictures are laid out for those and not for ours.
-     */
     private static void infusion(List<LegacyAsset> all) {
         all.add(block("infusion_cost_stone", "matrix_cost", null));
         all.add(block("infusion_speed_stone", "matrix_speed", null));
-        // the pedestal is the original's model file, which names its pictures where the original kept them
         all.add(LegacyAsset.of("models/block/pedestal.json").five("models/block/pedestal_normal.json").asModel());
         for (String face : List.of("pedestal_side", "pedestal_top")) {
             all.add(LegacyAsset.of("textures/block/legacy/" + face + ".png").five("textures/blocks/" + face + ".png"));
         }
 
-        // the matrix's stones and the pillars, drawn by the matrix on the original's own model and mesh
         all.add(LegacyAsset.of("textures/item/legacy/infuser.png").five("textures/blocks/infuser_normal.png"));
         all.add(LegacyAsset.of("textures/entity/infusion_matrix.png").five("textures/blocks/infuser_normal.png")
                 .forModel(INFUSER));
         all.add(LegacyAsset.of(PILLAR_MESH).five("models/obj/pillar.obj"));
         all.add(LegacyAsset.of("textures/entity/arcane_pillar.png").five("textures/blocks/pillar_normal.png"));
 
-        // 8C: the altar built of ancient or eldritch stone, its pillars, its matrix, its pedestals
         all.add(LegacyAsset.of("textures/entity/ancient_pillar.png").five("textures/blocks/pillar_ancient.png"));
         all.add(LegacyAsset.of("textures/entity/eldritch_pillar.png").five("textures/blocks/pillar_eldritch.png"));
         all.add(LegacyAsset.of("textures/entity/infusion_matrix_ancient.png").five("textures/blocks/infuser_ancient.png")
@@ -673,14 +515,12 @@ public final class LegacyAssets {
             all.add(LegacyAsset.of("textures/block/legacy/" + face + ".png").five("textures/blocks/" + face + ".png"));
         }
 
-        // the eldritch ring: its capstone mesh, its pictures, the way to the Outer Lands, the cult's thread
         all.add(LegacyAsset.of(OBELISK_CAP_MESH).five("models/obj/obelisk_cap.obj"));
         for (String picture : List.of("obelisk_cap", "obelisk_cap_2", "obelisk_side", "obelisk_side_2")) {
             all.add(LegacyAsset.of("textures/entity/" + picture + ".png").five("textures/models/" + picture + ".png"));
         }
         all.add(LegacyAsset.of("textures/entity/eldritch_portal.png").five("textures/misc/eldritch_portal.png"));
         all.add(LegacyAsset.of("textures/misc/wispy.png").five("textures/misc/wispy.png"));
-        // banners: the cloth on the original's model, and the three layers of the one in the hand
         all.add(LegacyAsset.of("textures/entity/banner_cultist.png").five("textures/models/banner_cultist.png")
                 .forModel(BANNER));
         all.add(LegacyAsset.of("textures/entity/banner_blank.png").five("textures/models/banner_blank.png")
@@ -689,13 +529,11 @@ public final class LegacyAssets {
             all.add(item(layer, layer, null));
         }
 
-        // the primordial pearl, which turns through sixteen frames, and the three bags of loot
         all.add(item("primordial_pearl", "primordial_pearl", null));
         all.add(item("loot_bag_common", "loot_bag_common", "lootbag"));
         all.add(item("loot_bag_uncommon", "loot_bag_uncommon", "lootbagunc"));
         all.add(item("loot_bag_rare", "loot_bag_rare", "lootbagrare"));
 
-        // the Outer Lands' stone
         all.add(block("ancient_stone", "ancient_stone_1", null));
         for (int i = 2; i <= 5; i++) {
             all.add(block("ancient_stone_" + i, "ancient_stone_" + i, null));
@@ -712,7 +550,6 @@ public final class LegacyAssets {
         all.add(block("crusted_stone", "crust", null));
         all.add(block("glowing_crusted_stone", "crust_glow", null));
         all.add(block("porous_stone", "porous_stone", null));
-        // the mound's urns and crates, a side for each rarity, and the urn breaking
         for (String kind : List.of("loot_urn", "loot_crate")) {
             all.add(block(kind + "_top", kind + "_top", null));
             for (int rarity = 0; rarity <= 2; rarity++) {
@@ -720,15 +557,12 @@ public final class LegacyAssets {
             }
         }
         all.add(LegacyAsset.of("sounds/legacy/urnbreak.ogg").five("sounds/urnbreak.ogg"));
-        // the Outer Lands: their bedrock with the stars in it, the lock and its arms, the crab vent, the tablet,
-        // and their sounds
         all.add(LegacyAsset.of("textures/block/legacy/ancient_bedrock.png").five("textures/misc/particlefield32.png"));
         all.add(LegacyAsset.of("textures/entity/eldritch_lock.png").five("textures/models/eldritch_lock.png"));
         all.add(LegacyAsset.of("textures/entity/eldritch_cube.png").five("textures/models/eldritch_cube.png"));
         all.add(LegacyAsset.of("textures/entity/crabvent.png").five("textures/models/crabvent.png"));
         all.add(LegacyAsset.of(CRAB_VENT_MESH).five("models/obj/crabvent.obj"));
         all.add(item("runed_tablet", "runed_tablet", null));
-        // the baubles, the runic shield's flare and its sound, the triple meat treat
         String[][] baubles = {{"mundane_amulet", "amulet_mundane"}, {"mundane_ring", "ring_mundane"},
                 {"mundane_belt", "girdle_mundane"}, {"fancy_amulet", "amulet_fancy"}, {"fancy_ring", "ring_fancy"},
                 {"fancy_belt", "girdle_fancy"}, {"apprentice_ring", "ring_apprentice"},
@@ -754,7 +588,6 @@ public final class LegacyAssets {
             all.add(LegacyAsset.of("sounds/legacy/" + sound + ".ogg").five("sounds/" + sound + ".ogg"));
         }
         all.add(LegacyAsset.of("sounds/legacy/runicshieldcharge.ogg").five("sounds/runicShieldCharge.ogg"));
-        // the great halls' bosses: the Warden in the guardian's model, the Construct in its own, the Praetor's plate
         all.add(LegacyAsset.of("textures/entity/eldritch_warden.png").five("textures/models/creature/eldritch_warden.png")
                 .forModel(ELDRITCH_GUARDIAN));
         all.add(LegacyAsset.of("textures/entity/eldritch_golem.png").five("textures/models/creature/eldritch_golem.png")
@@ -782,12 +615,9 @@ public final class LegacyAssets {
         return LegacyAsset.of("textures/item/wand/" + ours + ".png").five("textures/items/wand/" + original + ".png");
     }
 
-    /** Step 9: armour and its sheets. */
     private static void gear(List<LegacyAsset> all) {
-        // the two metals' tools and plain armour: the original called alchemium thaumium
         metalGear(all, "alchemium", "thaumium");
         metalGear(all, "void", "void");
-        // the five elemental tools and the crusher, whose picture is animated and brings its timing with it
         for (String[] tool : new String[][] {{"elemental_axe", "elemental_axe"},
                 {"elemental_pickaxe", "elemental_pick"}, {"elemental_sword", "elemental_sword"},
                 {"elemental_shovel", "elemental_shovel"}, {"elemental_hoe", "elemental_hoe"},
@@ -796,14 +626,12 @@ public final class LegacyAssets {
                     .five("textures/items/" + tool[1] + ".png"));
         }
         all.add(item("enchanted_fabric", "fabric", null));
-        // the parts devices are built from, and the bellows' sheet
         for (String[] part : new String[][] {{"primal_charm", "primal_charm"}, {"mirrored_glass", "mirrored_glass"},
                 {"morphic_resonator", "morphic_resonator"}, {"clockwork_mind", "mind_clockwork"},
                 {"bioalchemic_mind", "mind_biothaumic"}}) {
             all.add(LegacyAsset.of("textures/item/legacy/" + part[0] + ".png").five("textures/items/" + part[1] + ".png"));
         }
         all.add(LegacyAsset.of("textures/entity/bellows.png").five("textures/models/bellows.png"));
-        // the lamps and the jug are the original's model files; the chest is the original's sheet on the old chest
         for (String model : List.of("lamp", "lamp_stand", "water_jug")) {
             all.add(LegacyAsset.of("models/block/legacy/" + model + ".json")
                     .five("models/block/" + model + ".json").asModel());
@@ -813,8 +641,6 @@ public final class LegacyAssets {
             all.add(LegacyAsset.of("textures/block/legacy/" + face + ".png").five("textures/blocks/" + face + ".png"));
         }
         all.add(LegacyAsset.of("textures/entity/hungry_chest.png").five("textures/models/chesthungry.png"));
-        // the levitator and the ear are the original's model files, the dark one built over the lit one, so they keep
-        // the original's names; the relay's names vanilla pictures by their old paths, so ours is built over it
         for (String model : List.of("levitator_on", "levitator_off", "arcane_ear_on", "arcane_ear_off")) {
             all.add(LegacyAsset.of("models/block/" + model + ".json")
                     .five("models/block/" + model + ".json").asModel("cutout"));
@@ -823,8 +649,6 @@ public final class LegacyAssets {
             all.add(LegacyAsset.of("models/block/legacy/" + model + ".json")
                     .five("models/block/" + model + ".json").asModel("cutout"));
         }
-        // the recharge pedestal and the dioptra are the original's model files, the dark dioptra built over the lit
-        // one, so it keeps the original's name; the dioptra's foot names arcane stone where the original kept it
         all.add(LegacyAsset.of("models/block/legacy/recharge_pedestal.json")
                 .five("models/block/recharge_pedestal.json").asModel());
         for (String model : List.of("dioptra_on", "dioptra_off")) {
@@ -837,8 +661,6 @@ public final class LegacyAssets {
         }
         all.add(LegacyAsset.of("textures/entity/dioptra_grid.png").five("textures/misc/gridblock.png"));
         all.add(LegacyAsset.of("textures/entity/dioptra_side.png").five("textures/models/dioptra_side.png"));
-        // the totem and its pole are the original's model files; each kind is ours, built over them with its own
-        // face, as the original's block states did it
         for (String model : List.of("aura_totem", "aura_totem_pole")) {
             all.add(LegacyAsset.of("models/block/legacy/" + model + ".json").five("models/block/" + model + ".json")
                     .asModel());
@@ -848,7 +670,6 @@ public final class LegacyAssets {
             all.add(LegacyAsset.of("textures/block/legacy/" + face + ".png").five("textures/blocks/" + face + ".png"));
         }
         all.add(LegacyAsset.of("textures/gui/aura_totem.png").five("textures/gui/gui_auratotem.png"));
-        // the pech's three skins, laid out for the original's model, its trading panel, and what it hoards
         for (String skin : List.of("pech_forage", "pech_thaum", "pech_stalker")) {
             all.add(LegacyAsset.of("textures/entity/" + skin + ".png")
                     .five("textures/models/creature/" + skin + ".png").forModel(PECH));
@@ -857,13 +678,10 @@ public final class LegacyAssets {
         all.add(LegacyAsset.of("textures/item/legacy/coin.png").five("textures/items/coin.png"));
         all.add(LegacyAsset.of("textures/item/legacy/knowledge_fragment.png")
                 .five("textures/items/knowledge_fragment.png"));
-        // the creatures of the taint: the crawler's skin for the game's silverfish, the taintacle's for the original's
-        // model, what they leave, and the geyser that lets up swarms
         all.add(LegacyAsset.of("textures/entity/taint_crawler.png").five("textures/models/creature/crawler.png"));
         all.add(LegacyAsset.of("textures/entity/taintacle.png").five("textures/models/creature/taintacle.png")
                 .forModel(TAINTACLE));
         all.add(LegacyAsset.of("textures/item/legacy/tainted_goo.png").five("textures/items/taint_slime.png"));
-        // the animals it makes over, in the original's skins for the game's models, and its slime
         for (String[] animal : new String[][] {{"tainted_cow", "cow"}, {"tainted_pig", "pig"},
                 {"tainted_chicken", "chicken"}, {"tainted_sheep", "sheep"}, {"tainted_sheep_fur", "sheep_fur"},
                 {"tainted_creeper", "creeper"}, {"tainted_villager", "villager"}, {"tainted_rabbit", "taintrabbit"},
@@ -878,14 +696,12 @@ public final class LegacyAssets {
                 "roots3", "tentacle1", "tentacle2", "tentacle3", "gore1", "gore2")) {
             all.add(LegacyAsset.of("sounds/legacy/" + sound + ".ogg").five("sounds/" + sound + ".ogg"));
         }
-        // the wisp's essence, and the original's recordings, which sounds.json names
         all.add(LegacyAsset.of("textures/item/legacy/wispy_essence.png").five("textures/items/wispy_essence.png"));
         for (String sound : List.of("wisplive1", "wisplive2", "wisplive3", "wispdead", "zap1", "zap2", "ice1", "ice2",
                 "ice3", "pech_idle1", "pech_idle2", "pech_idle3", "pech_hit1", "pech_hit2", "pech_death",
                 "pech_charge1", "pech_charge2", "pech_trade", "pech_dice", "coins")) {
             all.add(LegacyAsset.of("sounds/legacy/" + sound + ".ogg").five("sounds/" + sound + ".ogg"));
         }
-        // the spa's faces and panel; the salts (which shimmer) and the bucket of what they make
         for (String face : List.of("spa_side", "spa_top")) {
             all.add(LegacyAsset.of("textures/block/legacy/" + face + ".png").five("textures/blocks/" + face + ".png"));
         }
@@ -899,11 +715,9 @@ public final class LegacyAssets {
             all.add(LegacyAsset.of("textures/block/legacy/" + face + ".png").five("textures/blocks/" + face + ".png"));
         }
         all.add(item("focus_pouch", "focus_pouch", "focuspouch"));
-        // the pouch opened is the original's panel; its screen and slots are laid out to match
         all.add(LegacyAsset.of("textures/gui/focus_pouch.png").five("textures/gui/gui_focuspouch.png")
                 .four("textures/gui/gui_focuspouch.png"));
 
-        // the boots and the goggles were plain armour in the original, one sheet each; the goggles' is twice the size
         all.add(item("traveller_boots", "traveller_boots", "bootstraveler"));
         all.add(item("goggles_of_revealing", "goggles_revealing", "gogglesrevealing"));
         all.add(LegacyAsset.of("textures/models/armor/traveller_boots_layer_1.png")
@@ -911,7 +725,6 @@ public final class LegacyAssets {
         all.add(LegacyAsset.of("textures/models/armor/goggles_layer_1.png")
                 .five("textures/models/armor/goggles.png").four("textures/models/goggles.png"));
 
-        // fortress armour is one sheet for every piece; the game asks for it twice, as the outer and inner layer
         for (String layer : List.of("fortress_layer_1", "fortress_layer_2")) {
             all.add(LegacyAsset.of("textures/models/armor/" + layer + ".png")
                     .five("textures/models/armor/fortress_armor.png")
@@ -922,11 +735,9 @@ public final class LegacyAssets {
         all.add(item("fortress_chest", "fortress_chest", "thaumiumfortresschest"));
         all.add(item("fortress_legs", "fortress_legs", "thaumiumfortresslegs"));
 
-        // the cloth robe is plain armour: a sheet that takes the dye and a trim over it that does not
         robeSheets(all, "cloth", 1, "robes_1", "robes_1_overlay", null);
         robeSheets(all, "cloth", 2, "robes_2", "robes_2_overlay", null);
-        // the void robe's sheet is the same for both layers. The original named its two halves the other way
-        // round: the file called "overlay" is the cloth that takes the dye, and the plain one is the trim
+        // the original named these two halves the other way round
         robeSheets(all, "void_robe", 1, "void_robe_armor_overlay", "void_robe_armor", ROBE);
         robeSheets(all, "void_robe", 2, "void_robe_armor_overlay", "void_robe_armor", ROBE);
 
@@ -943,10 +754,6 @@ public final class LegacyAssets {
         all.add(item("void_robe_legs_overlay", "void_robe_legs_over", "voidrobelegsover"));
     }
 
-    /**
-     * A metal's five tools, four pieces of armour and the two sheets it is worn with. 1.8.9 wrote the names apart
-     * ({@code thaumium_pick}), 1.7.10 ran them together ({@code thaumiumpick}).
-     */
     private static void metalGear(List<LegacyAsset> all, String ours, String original) {
         String[][] pieces = {{"sword", "sword"}, {"pickaxe", "pick"}, {"axe", "axe"}, {"shovel", "shovel"},
                 {"hoe", "hoe"}, {"helmet", "helm"}, {"chestplate", "chest"}, {"leggings", "legs"},
@@ -961,10 +768,6 @@ public final class LegacyAssets {
         }
     }
 
-    /**
-     * One layer of a robe: the dyed cloth and its trim. 1.8.9 kept armour sheets under {@code models/armor/},
-     * 1.7.10 straight under {@code models/}.
-     */
     private static void robeSheets(List<LegacyAsset> all, String robe, int layer, String cloth, String trim,
             String model) {
         LegacyAsset dyed = LegacyAsset.of("textures/models/armor/" + robe + "_layer_" + layer + ".png")
@@ -975,20 +778,8 @@ public final class LegacyAssets {
         all.add(model == null ? over : over.forModel(model));
     }
 
-    /** Step 1: ores, metals, the two woods, the three plants, stone. */
-    /**
-     * Golems and their press: the meshes a golem is put together from and the pictures they are drawn in, the press
-     * and its panel, the little pictures of every part and trait on that panel, the items, and the stone table.
-     */
-    /** Step 13B: the Crimson Cult, what it wears and carries, its portal and its sounds. */
-    /**
-     * Step 14C: what was left over. The soap and the lodestone's two faces; the candle's model, its wax (which
-     * flickers through eight frames) and its wick; the pattern crafter's model, its panels and the strip of patterns
-     * its window shows; and the dial's click.
-     */
     private static void leftovers(List<LegacyAsset> all) {
         all.add(item("sanity_soap", "sanity_soap", null));
-        // the essentia resonator and its knock; the sanity checker and the sheet its gauge is drawn from
         all.add(item("essentia_resonator", "resonator", null));
         all.add(LegacyAsset.of("sounds/legacy/alembicknock.ogg").five("sounds/alembicknock.ogg"));
         all.add(item("sanity_checker", "sanity_checker", null));
@@ -999,13 +790,11 @@ public final class LegacyAssets {
         }
         all.add(item("bottle_taint", "bottle_taint", null));
         all.add(LegacyAsset.of("textures/block/legacy/taint_dust.png").five("textures/blocks/taint_dust.png"));
-        // the essentia transfusers, both on the one picture
         for (String transfuser : List.of("essentia_input", "essentia_output")) {
             all.add(LegacyAsset.of("models/block/" + transfuser + ".json").five("models/block/" + transfuser + ".json")
                     .asModel("cutout"));
         }
         all.add(LegacyAsset.of("textures/block/legacy/essentia_input.png").five("textures/blocks/essentia_input.png"));
-        // the thaumostatic harness: its picture, the sheet it is worn in, the pack on its back and the rings
         all.add(item("thaumostatic_harness", "thaumostatic_harness", null));
         all.add(LegacyAsset.of("textures/models/armor/hover_harness_layer_1.png")
                 .five("textures/models/armor/hoverharness.png"));
@@ -1027,7 +816,6 @@ public final class LegacyAssets {
         all.add(LegacyAsset.of("models/block/pattern_crafter_inv.json").five("models/block/pattern_crafter_inv.json")
                 .asModel("cutout"));
         all.add(LegacyAsset.of("sounds/legacy/key.ogg").five("sounds/key.ogg"));
-        // step 14D: the rest of the original's sounds that the code plays
         for (String sound : List.of("poof1", "poof2", "spill", "bubble1", "bubble2", "bubble3", "bubble4", "jar1", "jar2", "jar3", "jar4", "page1", "page2", "crystal", "craftfail", "cameraticks", "squeek1", "squeek2", "creak1", "creak2", "rumble", "fireloop", "brain1", "brain2", "brain3", "brain4", "infuserstart", "infuser", "hhon", "hhoff", "write1", "write2", "erase", "swing1", "swing2", "heartbeat", "whispers")) {
             all.add(LegacyAsset.of("sounds/legacy/" + sound + ".ogg").five("sounds/" + sound + ".ogg"));
         }
@@ -1049,7 +837,6 @@ public final class LegacyAssets {
                 "crimson_rites")) {
             all.add(item(name, name, null));
         }
-        // the husk's own stained plate, and the crab that lives in it
         all.add(LegacyAsset.of("textures/models/armor/crimson_plate_husk.png")
                 .five("textures/models/armor/zombie_plate_armor.png").forModel(KNIGHT_ARMOUR));
         all.add(LegacyAsset.of("textures/entity/inhabited_zombie.png").five("textures/models/creature/czombie.png"));
@@ -1073,7 +860,6 @@ public final class LegacyAssets {
             all.add(LegacyAsset.of("models/legacy/golem/" + mesh + ".obj").five("models/obj/" + mesh + ".obj"));
         }
         all.add(LegacyAsset.of("models/legacy/golem/golem_press.obj").five("models/obj/golembuilder.obj"));
-        // each material's picture; alchemium is the original's thaumium
         for (String[] material : new String[][] {{"wood", "wood"}, {"iron", "iron"}, {"clay", "clay"},
                 {"brass", "brass"}, {"alchemium", "thaumium"}, {"void", "void"}}) {
             all.add(LegacyAsset.of("textures/entity/golem/mat_" + material[0] + ".png")
@@ -1109,14 +895,11 @@ public final class LegacyAssets {
             all.add(LegacyAsset.of("textures/item/legacy/" + item[0] + ".png")
                     .five("textures/items/" + item[1] + ".png"));
         }
-        // the stone table is the original's wooden table model in stone
         all.add(LegacyAsset.of("models/block/table_wood.json").five("models/block/table_wood.json").asModel());
         all.add(LegacyAsset.of("models/block/table_stone.json").five("models/block/table_stone.json").asModel());
         for (String face : List.of("table_stone_top", "table_stone_side", "table_wood_top", "table_wood_side")) {
             all.add(LegacyAsset.of("textures/block/legacy/" + face + ".png").five("textures/blocks/" + face + ".png"));
         }
-        // seals, which shimmer and bring their timing with them, the tallow they are made with, and the ring and
-        // corners drawn round one that is stuck up
         for (String seal : List.of("blank", "pickup", "pickup_advanced", "fill", "fill_advanced", "empty",
                 "empty_advanced", "provider", "guard", "guard_advanced", "butcher", "harvest", "lumber", "breaker",
                 "use")) {
@@ -1133,7 +916,6 @@ public final class LegacyAssets {
     }
 
     private static void baseResources(List<LegacyAsset> all) {
-        // ores and what comes out of them
         all.add(block("amber_ore", "ore_amber", "amberore"));
         all.add(block("cinnabar_ore", "ore_cinnabar", "cinnibar"));
         all.add(item("amber", "amber", "amber"));
@@ -1141,7 +923,6 @@ public final class LegacyAssets {
         all.add(item("quicksilver_drop", "nugget_quicksilver", "nuggetquicksilver"));
         all.add(item("zombie_brain", "brain", "brain"));
         for (String meat : new String[] {"beef", "chicken", "pork", "fish", "rabbit", "mutton"}) {
-            // the 1.7.10 release had the first four, as nuggets
             boolean old = !meat.equals("rabbit") && !meat.equals("mutton");
             all.add(item(meat + "_chunk", "chunk_" + meat, old ? "nugget" + meat : null));
         }
@@ -1150,20 +931,16 @@ public final class LegacyAssets {
         all.add(item("copper_cluster", "cluster_copper", "clustercopper"));
         all.add(item("cinnabar_cluster", "cluster_cinnabar", "clustercinnabar"));
 
-        // the shards are one grey picture the original coloured with the shard's aspect
         all.add(shard("air", ModAspects.AIR));
         all.add(shard("fire", ModAspects.FIRE));
         all.add(shard("water", ModAspects.WATER));
         all.add(shard("earth", ModAspects.EARTH));
         all.add(shard("order", ModAspects.ORDER));
         all.add(shard("entropy", ModAspects.ENTROPY));
-        // flux is the balanced shard's picture in flux's colour, not the plain shard's
         all.add(item("flux_shard", "shard_balanced", "shard_balanced").tinted(() -> ModAspects.FLUX.get().color()));
         all.add(item("balanced_shard", "shard_balanced", "shard_balanced"));
 
-        // metals
         all.add(block("alchemium_block", "thaumium_metal", "thaumiumblock"));
-        // the original's brass block, and its two alchemical constructs, which it called alchemical metal
         all.add(block("brass_block", "base_brass", null));
         all.add(block("alchemical_construct", "alchemical_metal", null));
         all.add(block("advanced_alchemical_construct", "advanced_alchemical_metal", null));
@@ -1178,7 +955,6 @@ public final class LegacyAssets {
         all.add(item("iron_plate", "iron_plate", null));
         all.add(item("salis_mundus", "salis_mundus", "dust"));
 
-        // the two woods
         all.add(block("greatwood_log", "log_greatwood", "greatwoodside"));
         all.add(block("greatwood_log_top", "log_greatwood_top", "greatwoodtop"));
         all.add(block("greatwood_planks", "greatwood_plank", "planks_greatwood"));
@@ -1188,12 +964,9 @@ public final class LegacyAssets {
         all.add(block("silverwood_log_top", "log_silverwood_top", "silverwoodtop"));
         all.add(block("silverwood_planks", "silverwood_plank", "planks_silverwood"));
         all.add(block("silverwood_sapling", "silverwood_sapling", "silverwoodsapling"));
-        // silverwood leaves were never tinted (the original returned white for them)
         all.add(block("silverwood_leaves", "silverwood_leaves", "silverwoodleaves"));
 
-        // the three plants
         all.add(block("shimmerleaf", "shimmerleaf", "shimmerleaf"));
-        // the ethereal bloom: its picture in the hand, and the sheets its renderer grows it from
         all.add(block("ethereal_bloom", "bloom", null));
         all.add(LegacyAsset.of("textures/entity/bloom_leaves.png").five("textures/models/bloom_leaves.png"));
         all.add(LegacyAsset.of("textures/entity/bloom_stalk.png").five("textures/models/bloom_stalk.png"));
@@ -1203,7 +976,6 @@ public final class LegacyAssets {
         all.add(block("cinderpearl", "cinderpearl", "cinderpearl"));
         all.add(block("vishroom", "vishroom", "manashroom"));
 
-        // stone. The amber block has its own top, and the arcane stone three faces, laid as the original laid them
         all.add(block("amber_block", "amber_side", "amberblock"));
         all.add(block("amber_block_top", "amber_top", "amberblock"));
         all.add(block("amber_bricks", "amber_brick", "amberbrick"));
@@ -1227,7 +999,6 @@ public final class LegacyAssets {
         return texture("block/" + target, "blocks/", five, four);
     }
 
-    /** {@code four} may be null: the 1.7.10 release did not have everything 1.8.9 did. */
     private static LegacyAsset texture(String target, String folder, String five, String four) {
         LegacyAsset asset = LegacyAsset.of("textures/" + target + ".png");
         if (five != null) {

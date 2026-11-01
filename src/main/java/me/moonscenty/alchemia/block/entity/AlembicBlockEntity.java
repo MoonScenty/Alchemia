@@ -17,15 +17,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
-/**
- * One vessel of essentia, caught as it rises out of a smelter.
- * <p>
- * An alembic holds one kind and one kind only. That is the whole of the sorting: stack several over a smelter and
- * each takes the first thing it is offered, so what comes out separated is separated by how many pots are there
- * rather than by any setting.
- */
 public class AlembicBlockEntity extends SyncedBlockEntity implements EssentiaHolder, Spills {
-    /** How much one holds. */
     public static final int CAPACITY = 32;
 
     private Holder<Aspect> holding;
@@ -52,7 +44,6 @@ public class AlembicBlockEntity extends SyncedBlockEntity implements EssentiaHol
         return holding == null ? AspectList.EMPTY : AspectList.of(holding, amount);
     }
 
-    /** Gives one up to a tube, and empties out properly when the last one goes. */
     @Override
     public boolean release(Holder<Aspect> aspect) {
         if (holding == null || holding.value() != aspect.value() || amount <= 0) {
@@ -66,13 +57,11 @@ public class AlembicBlockEntity extends SyncedBlockEntity implements EssentiaHol
         return true;
     }
 
-    /** Whether one more of this would fit. An empty vessel will take anything; a full one takes nothing. */
     @Override
     public boolean wants(Holder<Aspect> aspect) {
         return amount < CAPACITY && (holding == null || holding.value() == aspect.value());
     }
 
-    /** Takes one. Says so, since the smelter only lets go of what was actually caught. */
     @Override
     public boolean accept(Holder<Aspect> aspect) {
         if (!wants(aspect)) {
@@ -84,13 +73,11 @@ public class AlembicBlockEntity extends SyncedBlockEntity implements EssentiaHol
         return true;
     }
 
-    /** Tipped out on purpose, the same as breaking it but with the alembic left standing. */
     public void pourOut() {
         spill();
         changed();
     }
 
-    /** What a broken vessel lets go: all of it, into the air. */
     @Override
     public void spill() {
         if (level instanceof ServerLevel served && amount > 0) {
@@ -100,7 +87,6 @@ public class AlembicBlockEntity extends SyncedBlockEntity implements EssentiaHol
         amount = 0;
     }
 
-    /** The colour of what is caught, for whatever wants to show it. */
     public int colour() {
         return holding == null ? 0xFFFFFF : holding.value().color();
     }
@@ -110,13 +96,8 @@ public class AlembicBlockEntity extends SyncedBlockEntity implements EssentiaHol
         changed(Block.UPDATE_ALL);
     }
 
-    /**
-     * Walks up from a spot and gives one aspect to the first vessel that will take it.
-     * <p>
-     * A vessel already holding this aspect is preferred over an empty one, so a stack fills up rather than spreading
-     * a little of everything across every pot. Only once none of them holds it does an empty one open.
-     */
     public static boolean pourInto(Level level, BlockPos from, Holder<Aspect> aspect) {
+        // first pass prefers a vessel already holding this aspect, second allows an empty one
         for (boolean fussy : new boolean[] {true, false}) {
             for (int up = 1; ; up++) {
                 BlockPos at = from.above(up);

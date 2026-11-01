@@ -13,17 +13,8 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 
-/**
- * The hoe of growth: an alchemium hoe with order and entropy bound into it.
- *
- * <p>It tills three by three. Where there is nothing to till it makes things grow instead, as bone meal does, at
- * three points of its edge a time. Crouching puts it back to being an ordinary hoe.
- *
- * <p>It does not take enchantments as well as the other four. The original had it so, and a hoe is not much of a
- * thing to enchant.
- */
 public class ElementalHoeItem extends HoeItem {
-    /** What making something grow costs the edge, and how well it takes enchanting. The original's numbers. */
+    // durability per growth, and enchantability; original's values
     private static final int GROWING_WEARS = 3;
     private static final int ENCHANTS = 5;
 
@@ -61,7 +52,6 @@ public class ElementalHoeItem extends HoeItem {
         return grow(context, player);
     }
 
-    /** Nothing to till, so something to grow: bone meal's own working, paid for out of the edge. */
     private InteractionResult grow(UseOnContext context, Player player) {
         Level level = context.getLevel();
         BlockPos at = context.getClickedPos();

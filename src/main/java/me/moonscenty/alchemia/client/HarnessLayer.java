@@ -21,15 +21,11 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
-/**
- * What the original's {@code ModelHoverHarness} drew over the plain harness: the pack on the back, the original's
- * mesh, and while it is switched on two rings of lightning turning behind it.
- */
 public class HarnessLayer extends RenderLayer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> {
     private static final ResourceLocation PACK = Alchemia.id("textures/entity/hover_harness_pack.png");
     private static final ResourceLocation RING = Alchemia.id("textures/entity/lightning_ring.png");
     private static final int RING_FRAMES = 16;
-    /** How far the original tipped everything forward for a crouch: half a radian. */
+    // original's crouch tilt: half a radian, in degrees
     private static final float CROUCH = 28.64789F;
 
     private static final LegacyCached<LegacyMesh> MESH = LegacyCached.flippedMesh(LegacyAssets.HARNESS_MESH);
@@ -77,7 +73,6 @@ public class HarnessLayer extends RenderLayer<AbstractClientPlayer, PlayerModel<
         pose.popPose();
     }
 
-    /** One frame of the ring, square, facing out of the back. */
     private static void ring(PoseStack pose, VertexConsumer buffer, int frame, float half, int colour) {
         float u0 = frame / (float) RING_FRAMES;
         float u1 = (frame + 1) / (float) RING_FRAMES;

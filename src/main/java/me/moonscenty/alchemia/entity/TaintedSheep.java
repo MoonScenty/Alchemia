@@ -30,15 +30,10 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.common.IShearable;
 
-/**
- * A sheep the taint has made over, its fleece gone purple. It still grazes, now and then, but what it grazes turns to
- * taint where it stood -- grass it pulls up, or grass it stands on -- and its fleece grows back for it. Shorn, it
- * gives one to three purple wool.
- */
 public class TaintedSheep extends TaintedBeast implements IShearable {
     private static final EntityDataAccessor<Boolean> SHEARED = SynchedEntityData.defineId(TaintedSheep.class,
             EntityDataSerializers.BOOLEAN);
-    /** The entity event that starts it grazing, as a sheep's. */
+    // entity event id, as the sheep's
     private static final byte GRAZES = 10;
     private static final int GRAZING_FOR = 40;
 
@@ -53,7 +48,7 @@ public class TaintedSheep extends TaintedBeast implements IShearable {
         this(ModEntities.TAINTED_SHEEP.get(), level);
     }
 
-    /** The original's numbers. */
+    // original's values
     public static AttributeSupplier.Builder attributes() {
         return Monster.createMonsterAttributes()
                 .add(Attributes.MAX_HEALTH, 20.0)
@@ -111,7 +106,6 @@ public class TaintedSheep extends TaintedBeast implements IShearable {
         }
     }
 
-    /** How far its head is lowered to graze, for the renderer, as a sheep's is. */
     public float headEatPositionScale(float partial) {
         if (grazing <= 0) {
             return 0.0F;
@@ -122,7 +116,6 @@ public class TaintedSheep extends TaintedBeast implements IShearable {
         return grazing < 4 ? (grazing - partial) / 4.0F : -(grazing - GRAZING_FOR - partial) / 4.0F;
     }
 
-    /** How its head rocks as it grazes, for the renderer, as a sheep's does. */
     public float headEatAngleScale(float partial) {
         if (grazing > 4 && grazing <= 36) {
             float along = (grazing - 4 - partial) / 32.0F;
@@ -131,7 +124,6 @@ public class TaintedSheep extends TaintedBeast implements IShearable {
         return grazing > 0 ? Mth.PI / 5.0F : getXRot() * Mth.DEG_TO_RAD;
     }
 
-    /** Having grazed, its fleece grows back. */
     public void ate() {
         setSheared(false);
     }
@@ -190,10 +182,6 @@ public class TaintedSheep extends TaintedBeast implements IShearable {
         }
     }
 
-    /**
-     * Grazing, which taints what it grazes: one time in two hundred and fifty, on short grass or standing on a grass
-     * block, it lowers its head for two seconds, and at the end of it the grass goes and fibres are left.
-     */
     private static final class Graze extends Goal {
         private final TaintedSheep sheep;
         private int left;

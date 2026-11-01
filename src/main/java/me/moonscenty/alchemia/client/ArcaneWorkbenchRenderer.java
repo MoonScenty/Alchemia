@@ -14,17 +14,12 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 
-/**
- * A wand left on the bench, lying on its top, as the original's renderer laid it: towards one side, turned a little
- * off square, drawn as a dropped item would be.
- */
 public class ArcaneWorkbenchRenderer implements BlockEntityRenderer<ArcaneWorkbenchBlockEntity> {
-    /** Where on the top the wand lies, and how far it is turned. */
     private static final float X = 0.55F;
     private static final float Y = 1.0625F;
     private static final float Z = 0.2F;
     private static final float TURN = 20.0F;
-    /** How high a dropped item is drawn over where it lies, at rest; the game's own figure for one. */
+    // vanilla's lift for a dropped item
     private static final float DROPPED_LIFT = 0.1F;
 
     public ArcaneWorkbenchRenderer(BlockEntityRendererProvider.Context context) {
@@ -43,7 +38,6 @@ public class ArcaneWorkbenchRenderer implements BlockEntityRenderer<ArcaneWorkbe
         pose.translate(X, Y, Z);
         pose.mulPose(Axis.XP.rotationDegrees(90.0F));
         pose.mulPose(Axis.ZP.rotationDegrees(TURN));
-        // as the game draws an item lying on the ground, before it has bobbed or turned at all
         float lift = model.getTransforms().getTransform(ItemDisplayContext.GROUND).scale.y();
         pose.translate(0.0F, DROPPED_LIFT + 0.25F * lift, 0.0F);
         client.getItemRenderer().render(wand, ItemDisplayContext.GROUND, false, pose, buffers, light,

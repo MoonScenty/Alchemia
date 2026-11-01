@@ -10,10 +10,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 
-/**
- * The inside of an automated crossbow: one square for its arrows, and on the advanced one the four things it may be
- * told to mind, as the menu's own buttons. Laid out as the original's two containers were.
- */
 public class CrossbowMenu extends AlchemiaMenu {
     private static final int AMMO_X = 80;
     private static final int AMMO_X_ADVANCED = 42;
@@ -23,7 +19,6 @@ public class CrossbowMenu extends AlchemiaMenu {
 
     private final AutomatedCrossbow turret;
 
-    /** Opened from the client's side, where all that came across the wire is which entity it was. */
     public CrossbowMenu(int id, Inventory inventory, RegistryFriendlyByteBuf buffer) {
         this(id, inventory, inventory.player.level().getEntity(buffer.readVarInt()) instanceof AutomatedCrossbow found
                 ? found : null);
@@ -48,7 +43,6 @@ public class CrossbowMenu extends AlchemiaMenu {
         return turret;
     }
 
-    /** The advanced one's four buttons, numbered as the bits they set. */
     @Override
     public boolean clickMenuButton(Player player, int which) {
         if (!(turret instanceof AdvancedAutomatedCrossbow advanced) || !turret.stillValid(player) || which < 0

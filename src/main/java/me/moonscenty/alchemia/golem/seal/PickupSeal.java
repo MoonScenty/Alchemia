@@ -19,13 +19,8 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
-/**
- * Collect: once a second, sends a golem after one thing lying still in its area that the filter lets by, and the
- * golem picks up as much of it as it can carry. Clumsy golems cannot. The advanced seal has nine filter entries and
- * lets its options be set, and wants a smart golem.
- */
 public class PickupSeal extends Seal {
-    /** Which item each of its tasks is after, by world, so that no two seals send golems after the same thing. */
+    // shared per world so no two seals chase the same item
     private static final Map<ResourceKey<Level>, Map<Integer, Integer>> CHASED = new ConcurrentHashMap<>();
 
     private final boolean advanced;

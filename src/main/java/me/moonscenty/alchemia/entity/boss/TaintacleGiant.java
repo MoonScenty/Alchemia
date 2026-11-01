@@ -26,14 +26,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
 
-/**
- * A giant taintacle: six blocks of tentacle out of the floor of a great hall, a champion every one.
- * <p>
- * Like any taintacle it is rooted, starves off taint and sends tendrils up under what it cannot reach -- in the
- * Outer Lands, wherever that is. Like the Outer Lands' bosses no blow does it more than thirty-five, one that tries
- * angers it, and it mends a point every second and a half. The last of them in a hall leaves one or two primordial
- * pearls.
- */
 public class TaintacleGiant extends Taintacle implements EldritchMob {
     private static final EntityDataAccessor<Integer> ANGER = SynchedEntityData.defineId(TaintacleGiant.class,
             EntityDataSerializers.INT);

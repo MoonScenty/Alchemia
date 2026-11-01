@@ -14,24 +14,11 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.state.BlockState;
 
-/**
- * A tube that keeps a few points of essentia of its own.
- * <p>
- * It is a vessel as well as a length of pipe, so the pull it does every turn fills itself before it fills anything
- * beside it, and anything further along the run can draw the lot back out again. What it will not do is take from
- * another buffer: two of them side by side would otherwise pass one point back and forth for ever without a thing
- * being moved anywhere.
- * <p>
- * Each side can be choked with a crouching wand, the original's {@code chokedSides}: open, choked or shut, in that
- * turn. A choked side still fills it but bellows do not hurry it through there; a shut one does not fill it at all,
- * though what is in it can still be drawn back out that way.
- */
 public class BufferTubeBlockEntity extends TubeBlockEntity implements EssentiaHolder, Spills {
-    /** How much it keeps, counted across everything in it. */
     public static final int CAPACITY = 8;
 
     private AspectList held = AspectList.EMPTY;
-    /** How choked each side is: 0 open, 1 choked, 2 shut. */
+    // per side: 0 open, 1 choked, 2 shut
     private final byte[] choked = new byte[6];
 
     public BufferTubeBlockEntity(BlockPos pos, BlockState state) {
@@ -72,7 +59,6 @@ public class BufferTubeBlockEntity extends TubeBlockEntity implements EssentiaHo
         return choked[side.ordinal()];
     }
 
-    /** One turn further round: open, choked, shut, open again. */
     public void choke(Direction side) {
         choked[side.ordinal()] = (byte) ((choked[side.ordinal()] + 1) % 3);
         changed();
@@ -88,7 +74,6 @@ public class BufferTubeBlockEntity extends TubeBlockEntity implements EssentiaHo
         return choked[side.ordinal()] == 0;
     }
 
-    /** What a broken buffer lets go: the little it was keeping, into the air. */
     @Override
     public void spill() {
         if (level instanceof ServerLevel served && !held.isEmpty()) {

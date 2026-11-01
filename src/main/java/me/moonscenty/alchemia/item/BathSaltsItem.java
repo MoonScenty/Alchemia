@@ -14,15 +14,9 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.item.ItemExpireEvent;
 
-/**
- * Purifying bath salts. Thrown into still water, they dissolve and the water turns to purifying fluid.
- *
- * <p>They are fragile: dropped, they last ten seconds rather than five minutes, and it is when they are gone that the
- * water they lay in is turned. Lying anywhere else they are simply gone.
- */
 @EventBusSubscriber(modid = Alchemia.MODID)
 public class BathSaltsItem extends Item {
-    /** How long they last on the ground, in ticks. The original's. */
+    // original's value
     private static final int LASTS = 200;
 
     public BathSaltsItem(Properties properties) {
@@ -34,7 +28,6 @@ public class BathSaltsItem extends Item {
         return LASTS;
     }
 
-    /** Dissolved where they lay: in a still pool of water, that pool turns. */
     @SubscribeEvent
     public static void onExpire(ItemExpireEvent event) {
         ItemEntity salts = event.getEntity();

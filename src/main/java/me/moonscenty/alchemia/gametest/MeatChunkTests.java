@@ -16,7 +16,6 @@ import net.minecraft.world.item.crafting.CraftingInput;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/** Meat chunks: what the infernal furnace throws out besides off raw meat, and the treat three kinds make. */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class MeatChunkTests {

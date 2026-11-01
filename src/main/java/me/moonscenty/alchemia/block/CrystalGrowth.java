@@ -15,28 +15,16 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
-/**
- * How a crystal lives off the aura around it.
- * <p>
- * A crystal is aura that has set hard. Where there is more than the land can hold it grows and, once grown, seeds
- * the rock around it; where the land has been run dry it gives itself back, a size at a time, and the last of it
- * goes with a little flux. Where flux has got the upper hand, the crystal turns.
- * <p>
- * Each seeding is a generation on from its parent. Later generations tick less often, stop growing sooner and
- * the fourth does not seed at all, which is what keeps a lucky cave from filling to the roof.
- */
 public final class CrystalGrowth {
-    /** Below this share of the base the land is starved, and above the base by this much it is glutted. */
+    // starved below BASE / STARVED_DIVISOR, glutted above BASE + GLUT_OVER
     private static final int STARVED_DIVISOR = 8;
     private static final int GLUT_OVER = AuraGeneration.BASE / 16;
 
-    /** What a step of growth costs the land, and what a step of shrinking gives back. */
     private static final int GROW_COST = AuraGeneration.BASE / 8;
     private static final int SHRINK_REFUND = AuraGeneration.BASE / 9;
 
-    /** How often a crystal that could seed actually finds somewhere to. */
     private static final int SEED_CHANCE = 16;
-    /** One seeding in this many comes out no further down the line than its parent. */
+    // 1 in N seedings keeps the parent's generation
     private static final int SAME_GENERATION_CHANCE = 8;
 
     private CrystalGrowth() {
@@ -47,7 +35,7 @@ public final class CrystalGrowth {
             return;
         }
         int generation = state.getValue(CrystalBlock.GENERATION);
-        // the further down the line a crystal is, the more slowly it goes about anything
+        // later generations act less often
         if (random.nextInt(3 + generation) != 0) {
             return;
         }
@@ -69,7 +57,6 @@ public final class CrystalGrowth {
         }
     }
 
-    /** With nothing to live on it gives itself back, and the last of it goes when it is the odd one out no longer. */
     private static void starve(BlockState state, ServerLevel level, BlockPos pos, CrystalBlock crystal,
             Holder<Aspect> aspect, int age, RandomSource random) {
         if (age > 0) {
@@ -82,7 +69,6 @@ public final class CrystalGrowth {
         }
     }
 
-    /** With more than the land can hold it grows, and once it has grown as far as it will, it seeds. */
     private static void feast(BlockState state, ServerLevel level, BlockPos pos, CrystalBlock crystal,
             Holder<Aspect> aspect, int age, int generation, RandomSource random) {
         if (age < CrystalBlock.MAX_AGE && age < fullGrown(pos, generation)) {
@@ -110,7 +96,6 @@ public final class CrystalGrowth {
                 .setValue(CrystalBlock.GENERATION, next), Block.UPDATE_ALL);
     }
 
-    /** Where flux has the upper hand over what the crystal is made of, it turns. */
     private static void sour(BlockState state, ServerLevel level, BlockPos pos, Holder<Aspect> aspect, int here,
             int base, int age) {
         int flux = AuraHandler.get(level, pos, ModAspects.FLUX);
@@ -124,11 +109,7 @@ public final class CrystalGrowth {
         }
     }
 
-    /**
-     * How large a crystal of this generation gets, which is less the further down the line it is.
-     * <p>
-     * A little of it depends on where the crystal stands, so a patch is not all cut to the same height.
-     */
+    // position-dependent term so a patch does not grow to one uniform size
     public static int fullGrown(BlockPos pos, int generation) {
         return (5 - generation) + (int) Math.floorMod(pos.asLong(), 3L);
     }
@@ -142,17 +123,11 @@ public final class CrystalGrowth {
         return false;
     }
 
-    /** Somewhere a seed can take: open, and not under water, which a crystal that small would be lost in. */
     private static boolean roomFor(LevelReader level, BlockPos pos) {
         BlockState there = level.getBlockState(pos);
         return (there.isAir() || there.canBeReplaced()) && there.getFluidState().isEmpty();
     }
 
-    /**
-     * A face of rock a crystal could stand on, looked for in no particular order.
-     *
-     * @return which way the rock lies from the spot, or null if there is none
-     */
     public static Direction support(LevelReader level, BlockPos pos, RandomSource random) {
         for (Direction direction : Direction.allShuffled(random)) {
             BlockPos supportPos = pos.relative(direction);

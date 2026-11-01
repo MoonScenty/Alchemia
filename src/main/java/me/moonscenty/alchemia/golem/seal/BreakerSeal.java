@@ -14,17 +14,12 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 
-/**
- * Block Breaker: walks its area a block a tick, and sends golems with grinders to break whatever is there that its
- * one filter entry lets by. A golem grinds away at it for half a second for every three points of the block's
- * hardness, the cracks showing, before it gives way; it drops what it would have dropped to the right tool.
- */
+// grinds half a second per three points of hardness, then drops what the right tool would
 public class BreakerSeal extends AreaBlockSeal {
     public BreakerSeal() {
         super("breaker", 1, 42, new Toggle("meta", true));
     }
 
-    /** Anything that can be broken at all, that its filter lets by. */
     @Override
     protected boolean wanted(Level level, BlockPos at) {
         BlockState state = level.getBlockState(at);

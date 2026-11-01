@@ -2,14 +2,8 @@ package me.moonscenty.alchemia.client.particle;
 
 import net.minecraft.client.multiplayer.ClientLevel;
 
-/**
- * A little wisp of light in some pale colour, as the original's {@code FXWispyOrb}: it drifts up and about, flickers
- * through a row of the sheet a cell a tick, and fades out evenly over its life.
- * <p>
- * Every number here is the original's.
- */
+// numbers are the original's
 public class WispParticle extends LegacyParticle {
-    /** The row it flickers along. */
     private static final int ROW = 8;
     private static final double DRAG = 0.85F;
     private static final double RISE = 0.002;
@@ -19,10 +13,6 @@ public class WispParticle extends LegacyParticle {
     private int left;
     private int frame;
 
-    /**
-     * @param lasts how long it lives at the least; up to half as long again is added
-     * @param alpha how opaque it starts
-     */
     public WispParticle(ClientLevel level, double x, double y, double z, double xd, double yd, double zd,
             int lasts, float alpha) {
         super(level, x, y, z, LegacySheet.GLOW);

@@ -28,13 +28,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
-/**
- * The golemancer's bell. Rung at one of your golems, once you have learned how to direct them, it tells the golem
- * to follow you or to stay where it is; the golem hears it and does the rest.
- *
- * <p>Rung at a seal, on the block or from up to five blocks off, it opens the seal's panel; rung at one crouching, it
- * takes the seal down. Held, it shows where the seals are.
- */
 public class GolemBellItem extends Item implements SealDisplayer {
     private static final double REACH = 5.0;
 
@@ -77,7 +70,6 @@ public class GolemBellItem extends Item implements SealDisplayer {
         return InteractionResultHolder.sidedSuccess(player.getItemInHand(hand), level.isClientSide);
     }
 
-    /** Crouching, takes the seal down; otherwise opens it. */
     private static void handle(ServerLevel level, Player player, SealEntity seal) {
         if (player.isShiftKeyDown()) {
             Seals.remove(level, seal.pos(), false);
@@ -89,10 +81,6 @@ public class GolemBellItem extends Item implements SealDisplayer {
         }
     }
 
-    /**
-     * The first seal along where the player is looking, within five blocks: each block the look passes through is
-     * tried on whichever face the look meets it by, as the original did.
-     */
     @Nullable
     public static SealEntity lookedAt(Level level, Player player) {
         Vec3 from = player.getEyePosition();

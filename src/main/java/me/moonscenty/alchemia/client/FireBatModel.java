@@ -11,15 +11,7 @@ import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.util.Mth;
 
-/**
- * The firebat's body, which is the original's {@code ModelFireBat} read out of its code: a head with two ears, a
- * body, and two wings in two pieces each. The old bat's shape, before the game drew bats differently.
- * <p>
- * How it moves is the original's too: hanging, it is turned over with its wings folded about it; flying, its body
- * rocks slowly and its wings beat.
- */
 public class FireBatModel extends EntityModel<FireBat> {
-    /** The original's parts, as of the import {@link #bakedFrom} names. */
     private static int bakedFrom = -1;
     private static ModelPart head;
     private static ModelPart body;
@@ -72,7 +64,6 @@ public class FireBatModel extends EntityModel<FireBat> {
         body.render(pose, buffer, light, overlay, colour);
     }
 
-    /** Bakes the original's parts again whenever the import has changed what there is. */
     private static boolean refresh() {
         int generation = LegacyModels.generation();
         if (generation != bakedFrom) {

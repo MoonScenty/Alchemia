@@ -29,17 +29,6 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.phys.Vec3;
 
-/**
- * The cult's priest: 24 health, the crimson robe, no weapon, and chanting. Further off than two blocks it casts --
- * every one to two seconds, sooner the nearer its target -- either a red orb that follows what it was thrown at (one
- * time in three) or three small fireballs. Closer, it lays about with its hands like any knight.
- * <p>
- * <h3>At an altar</h3>
- * The clerics an altar calls up stand about it in its rite, floating a little off the ground with a dark thread
- * running from each to the altar, still and chanting. Any hurt at all breaks a cleric's rite, as does wandering more
- * than four blocks from the altar or the altar going; so does being called on for help often enough -- five times, or
- * one time in three each time.
- */
 public class CultistCleric extends Cultist implements RangedAttackMob {
     private static final net.minecraft.network.syncher.EntityDataAccessor<Byte> FLAGS =
             net.minecraft.network.syncher.SynchedEntityData.defineId(CultistCleric.class,
@@ -48,7 +37,6 @@ public class CultistCleric extends Cultist implements RangedAttackMob {
             net.minecraft.network.syncher.SynchedEntityData.defineId(CultistCleric.class,
                     net.minecraft.network.syncher.EntityDataSerializers.OPTIONAL_BLOCK_POS);
     private static final int RITUAL = 1;
-    /** How often it has been called on for help while in its rite. */
     public int rage;
     public CultistCleric(EntityType<? extends CultistCleric> type, Level level) {
         super(type, level);
@@ -69,8 +57,6 @@ public class CultistCleric extends Cultist implements RangedAttackMob {
         builder.define(ALTAR, java.util.Optional.empty());
     }
 
-    // --- its rite ------------------------------------------------------------
-
     public boolean isRitualist() {
         return (entityData.get(FLAGS) & RITUAL) != 0;
     }
@@ -80,12 +66,10 @@ public class CultistCleric extends Cultist implements RangedAttackMob {
         entityData.set(FLAGS, (byte) (ritualist ? flags | RITUAL : flags & ~RITUAL));
     }
 
-    /** The altar it attends, if it is in a rite. */
     public java.util.Optional<net.minecraft.core.BlockPos> altar() {
         return entityData.get(ALTAR);
     }
 
-    /** Sets it to stand in the rite of the altar there. */
     public void attendAltar(net.minecraft.core.BlockPos altar) {
         entityData.set(ALTAR, java.util.Optional.of(altar));
         setRitualist(true);
@@ -112,7 +96,6 @@ public class CultistCleric extends Cultist implements RangedAttackMob {
             }
             return;
         }
-        // in its rite it looks to the altar
         altar().ifPresent(at -> getLookControl().setLookAt(at.getX() + 0.5, at.getY() + 1.5, at.getZ() + 0.5,
                 40.0F, 10.0F));
     }
@@ -122,7 +105,6 @@ public class CultistCleric extends Cultist implements RangedAttackMob {
         return !isRitualist() && super.removeWhenFarAway(distance);
     }
 
-    /** One more call for help in the rite; one time in three, or the fifth, it breaks off and goes. */
     public void calledOn(net.minecraft.world.entity.LivingEntity attacker) {
         rage++;
         level().broadcastEntityEvent(this, (byte) 19);
@@ -217,10 +199,6 @@ public class CultistCleric extends Cultist implements RangedAttackMob {
         return 500;
     }
 
-    /**
-     * Stands still in its rite, doing nothing else; and every two seconds makes sure it still has a rite to be in --
-     * that it is within four blocks of an altar still standing.
-     */
     static class AltarFocus extends net.minecraft.world.entity.ai.goal.Goal {
         private final CultistCleric cleric;
 

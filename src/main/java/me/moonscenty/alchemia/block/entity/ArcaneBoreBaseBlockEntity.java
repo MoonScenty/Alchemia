@@ -14,17 +14,11 @@ import net.minecraft.core.Holder;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
-/**
- * An arcane bore's base: what it stands on or hangs from, where what it mines comes out, and where entropy is piped
- * in to drive it. It takes essentia on its three sides that are not the nozzle, one point at a time, while the bore
- * above or below it has room for more.
- */
 public class ArcaneBoreBaseBlockEntity extends BlockEntity implements EssentiaHolder {
     public ArcaneBoreBaseBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.ARCANE_BORE_BASE.get(), pos, state);
     }
 
-    /** The bore it serves, above it or else below. */
     @Nullable
     private ArcaneBoreBlockEntity bore() {
         if (level == null) {
@@ -61,7 +55,6 @@ public class ArcaneBoreBaseBlockEntity extends BlockEntity implements EssentiaHo
         return true;
     }
 
-    /** Pipes meet it on its three sides that are not the nozzle. */
     @Override
     public boolean reachableFrom(Direction side) {
         return side.getAxis().isHorizontal() && side != nozzle();
@@ -72,7 +65,6 @@ public class ArcaneBoreBaseBlockEntity extends BlockEntity implements EssentiaHo
         return false;
     }
 
-    /** One point straight out of a vessel set against one of its sides; a pipe there fills it on its own. */
     void drawFromBeside(ArcaneBoreBlockEntity bore) {
         if (level == null) {
             return;

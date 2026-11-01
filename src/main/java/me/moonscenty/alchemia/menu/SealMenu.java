@@ -22,15 +22,7 @@ import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 
-/**
- * A seal's panel: whichever of its pages is open, its filter while that page is, and the player's pack below.
- *
- * <p>Every change is made to the seal on the server, which then tells every player of it. The filter's squares are
- * ghosts: what is put in them stays in the player's hand. Where a seal counts what it wants, a left click with the
- * same thing in hand adds that many, with nothing in hand adds one, and a right click takes them off again.
- */
 public class SealMenu extends AlchemiaMenu {
-    // the buttons, numbered as the original numbered them
     public static final int BLACKLIST = 20;
     public static final int WHITELIST = 21;
     public static final int LOCK = 25;
@@ -43,11 +35,9 @@ public class SealMenu extends AlchemiaMenu {
     public static final int PRIORITY_UP = 81;
     public static final int COLOUR_DOWN = 82;
     public static final int COLOUR_UP = 83;
-    /** Up and down by twos from here: height, width, depth. */
     public static final int AREA = 90;
 
     public static final int GHOSTS = 9;
-    /** Where the middle of the round part of the panel is. */
     public static final int MIDDLE_X = 88;
     public static final int MIDDLE_Y = 72;
 
@@ -57,7 +47,6 @@ public class SealMenu extends AlchemiaMenu {
     private final ServerLevel level;
     private int category;
 
-    /** What the client builds, from where the seal is. */
     public SealMenu(int id, Inventory inventory, RegistryFriendlyByteBuf buffer) {
         this(id, inventory, SealPos.STREAM_CODEC.decode(buffer), null);
     }
@@ -122,7 +111,6 @@ public class SealMenu extends AlchemiaMenu {
         return category;
     }
 
-    /** The screen has turned to another page, which it also tells the server. */
     public void setCategory(int category) {
         this.category = category;
     }
@@ -174,10 +162,6 @@ public class SealMenu extends AlchemiaMenu {
         return done;
     }
 
-    /**
-     * The filter's squares take a picture of what is in hand rather than the thing itself, as the original's did;
-     * everything else is clicked as usual.
-     */
     @Override
     public void clicked(int slotId, int button, ClickType type, Player player) {
         if (slotId < 0 || slotId >= GHOSTS) {

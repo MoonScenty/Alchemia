@@ -28,13 +28,8 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
 
-/**
- * An arcane bore. It goes only directly above or below a base, faces the one who put it down as a piston does, and
- * digs the way it faces; a wand on any face turns it to dig that way. Drawn wholly by its renderer.
- */
 public class ArcaneBoreBlock extends BaseEntityBlock {
     public static final MapCodec<ArcaneBoreBlock> CODEC = simpleCodec(ArcaneBoreBlock::new);
-    /** The way it digs. */
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
 
     public ArcaneBoreBlock(Properties properties) {
@@ -52,7 +47,6 @@ public class ArcaneBoreBlock extends BaseEntityBlock {
         builder.add(FACING);
     }
 
-    /** Only against the top or bottom of a base. */
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         Direction side = context.getClickedFace();
@@ -81,7 +75,6 @@ public class ArcaneBoreBlock extends BaseEntityBlock {
                 ? ArcaneBoreBlockEntity::clientTick : ArcaneBoreBlockEntity::serverTick);
     }
 
-    /** A wand goes on to the wand, which turns the bore; anything else opens it. */
     @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
             Player player, InteractionHand hand, BlockHitResult hit) {

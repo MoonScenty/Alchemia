@@ -14,31 +14,17 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.level.biome.Biome;
 
-/**
- * What kind of thing a node is.
- * <p>
- * All of them feed the land their own aspect. What tells them apart is what else they do with it: one eats what is
- * around it, one cleans up after everyone, one makes the mess in the first place.
- */
 public enum NodeType implements StringRepresentable {
-    /** Feeds the land and nothing else. Most nodes. */
     PLAIN("plain"),
-    /** Feeds the land, and turns what is around it into somewhere it is not pleasant to be. */
     DARK("dark"),
-    /** Feeds nothing. Drinks what the land has and grows on it. */
     HUNGRY("hungry"),
-    /** Feeds the land and takes the flux out of it, wearing itself away in the doing. */
     PURE("pure"),
-    /** Feeds the land flux. */
     TAINTED("tainted"),
-    /** Feeds the land, but what it is made of keeps changing. */
     UNSTABLE("unstable"),
-    /** Feeds the land, and is stronger the brighter it is where it hangs. */
     ASTRAL("astral");
 
     public static final com.mojang.serialization.Codec<NodeType> CODEC = StringRepresentable.fromEnum(NodeType::values);
 
-    /** How often the out-of-the-ordinary business happens, in ticks. */
     public static final int PERIOD = 200;
 
     private final String name;
@@ -52,22 +38,15 @@ public enum NodeType implements StringRepresentable {
         return name;
     }
 
-    /** What this kind is called, for the label on a node and for what a reading of one says. */
     public Component displayName() {
         return Component.translatable("node_type.alchemia." + name);
     }
 
-    /** Everything but a hungry node is worth something to the land around it. */
     public boolean feeds() {
         return this != HUNGRY;
     }
 
-    /**
-     * How much a node of this kind gives, or takes, each time round.
-     * <p>
-     * The moon has a say in it: an ordinary node is strongest at full moon, a dark one at new moon, and an astral
-     * one goes by the light where it hangs rather than the sky.
-     */
+    // moon phase sways the strength; astral nodes go by the light where they hang instead
     public int strengthOf(AuraNode node, ServerLevel level) {
         double root = Math.sqrt(node.getSize() / 3.0F);
         float moon = moonSway(level);
@@ -82,7 +61,7 @@ public enum NodeType implements StringRepresentable {
         };
     }
 
-    /** How far the moon pushes a node either way, from a fifth down at new moon to a fifth up at full. */
+    // -20% at new moon to +20% at full
     private static float moonSway(ServerLevel level) {
         return (Math.abs(level.getMoonPhase() - 4) - 2) / 5.0F;
     }
@@ -91,10 +70,7 @@ public enum NodeType implements StringRepresentable {
         return (int) Math.max(1.0, amount);
     }
 
-    /**
-     * The out-of-the-ordinary business, done once every {@link #PERIOD} ticks. Feeding the land is done by the node
-     * itself; this is only what makes each kind different.
-     */
+    // type-specific extras; feeding the land is done by the node itself
     public void doItsThing(AuraNode node, ServerLevel level) {
         BlockPos at = node.blockPosition();
         switch (this) {
@@ -108,7 +84,6 @@ public enum NodeType implements StringRepresentable {
         }
     }
 
-    /** Turns one patch of land near the node into whatever a dark node makes, working outwards. */
     private void darken(AuraNode node, ServerLevel level, BlockPos at) {
         Optional<Holder<Biome>> into = BiomePaint.oneOf(level, ModTags.Biomes.NODE_DARKENS_INTO, level.getRandom());
         if (into.isEmpty()) {
@@ -124,7 +99,6 @@ public enum NodeType implements StringRepresentable {
         }
     }
 
-    /** Drinks from the land and grows on what it takes, so a hungry node leaves a hole around itself. */
     private void feedOnTheLand(AuraNode node, ServerLevel level, BlockPos at) {
         Holder<Aspect> aspect = node.aspect();
         int base = AuraHandler.base(level, at);
@@ -139,7 +113,6 @@ public enum NodeType implements StringRepresentable {
         }
     }
 
-    /** Takes the flux out of the land, and is spent a little at a time for doing it. */
     private void cleanUp(AuraNode node, ServerLevel level, BlockPos at) {
         if (AuraHandler.drain(level, at, ModAspects.FLUX, 1) && level.getRandom().nextFloat() < 0.025F) {
             node.setSize(node.getSize() - 1);
@@ -149,7 +122,6 @@ public enum NodeType implements StringRepresentable {
         }
     }
 
-    /** Feeds the land flux, and the less of it there already is the more it gives. */
     private void spoil(AuraNode node, ServerLevel level, BlockPos at) {
         int base = AuraHandler.base(level, at);
         if (base <= 0) {
@@ -161,7 +133,6 @@ public enum NodeType implements StringRepresentable {
         }
     }
 
-    /** Every so often, forgets what it was made of and becomes something else. */
     private void drift(AuraNode node, ServerLevel level) {
         if (level.getRandom().nextInt(33) == 0) {
             node.setAspect(ModAspects.randomPrimal(level.getRandom()));

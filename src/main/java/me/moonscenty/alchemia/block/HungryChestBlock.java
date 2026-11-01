@@ -34,15 +34,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-/**
- * A chest with an appetite: whatever is dropped on it, it eats.
- *
- * <p>It is a chest in every other way -- it opens, it holds twenty-seven stacks, a hopper can work it -- but loose
- * things that come to rest on its lid are swallowed whole, as much as there is room for, with a snap of the lid
- * and a sound of eating. What will not fit stays where it fell.
- *
- * <p>It never makes a double chest. Two of them side by side are two of them, each hungry on its own account.
- */
 public class HungryChestBlock extends BaseEntityBlock {
     public static final MapCodec<HungryChestBlock> CODEC = simpleCodec(HungryChestBlock::new);
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
@@ -59,10 +50,7 @@ public class HungryChestBlock extends BaseEntityBlock {
         return CODEC;
     }
 
-    /**
-     * Facing, and the chest type that is always single. The game's chest keeps asking which half of a pair it is
-     * when it plays its sounds, so it is given an answer that never changes.
-     */
+    // ChestBlock.TYPE is kept (always SINGLE) because the chest block entity reads it for its sounds
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FACING, ChestBlock.TYPE);
@@ -78,7 +66,6 @@ public class HungryChestBlock extends BaseEntityBlock {
         return SHAPE;
     }
 
-    /** Drawn by its renderer, the lid and all. */
     @Override
     protected RenderShape getRenderShape(BlockState state) {
         return RenderShape.ENTITYBLOCK_ANIMATED;
@@ -106,12 +93,6 @@ public class HungryChestBlock extends BaseEntityBlock {
         return InteractionResult.sidedSuccess(level.isClientSide);
     }
 
-    /**
-     * Swallowing whatever has come to rest on it.
-     * <p>
-     * As a hopper takes things in: whole stacks where there is room, part of one where there is only room for
-     * part, and nothing at all from a stack it cannot fit any of.
-     */
     @Override
     protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
         if (level.isClientSide || !(entity instanceof ItemEntity loose) || !loose.isAlive()

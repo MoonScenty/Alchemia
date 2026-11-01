@@ -24,10 +24,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/**
- * The small instruments and odds and ends the first pass left out: the essentia resonator's reading, and what the
- * pechs' coins are worth.
- */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class InstrumentTests {
@@ -42,7 +38,6 @@ public class InstrumentTests {
         return ((TranslatableContents) line.getContents()).getArgs()[index];
     }
 
-    /** Held to the lid of a jar, the resonator says what is in it and that it draws only more of the same. */
     @GameTest(template = TEMPLATE)
     public static void theResonatorReadsAJar(GameTestHelper helper) {
         helper.setBlock(HERE, ModBlocks.JAR.get());
@@ -60,7 +55,6 @@ public class InstrumentTests {
         helper.assertTrue(draws.getString().equals(ModAspects.FIRE.value().displayName().getString()),
                 "a jar with fire in it draws fire and nothing else, not " + draws.getString());
 
-        // through its glass side there is nothing to be read or drawn
         List<Component> side = EssentiaResonatorItem.report(helper.getLevel(), helper.absolutePos(HERE),
                 Direction.NORTH);
         helper.assertValueEqual(side.size(), 1, "only the line for what it draws");
@@ -69,7 +63,6 @@ public class InstrumentTests {
         helper.succeed();
     }
 
-    /** A plain tube draws anything through an open side, and nothing through a shut one. */
     @GameTest(template = TEMPLATE)
     public static void theResonatorReadsATube(GameTestHelper helper) {
         helper.setBlock(HERE, ModBlocks.TUBE.get());
@@ -89,7 +82,6 @@ public class InstrumentTests {
         helper.succeed();
     }
 
-    /** Nine coins make a gold ingot, and one in a furnace melts to a nugget. */
     @GameTest(template = TEMPLATE)
     public static void coinsAreWorthGold(GameTestHelper helper) {
         var recipes = helper.getLevel().getRecipeManager();

@@ -10,7 +10,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
-/** The hand mirror's panel, the original's: one square, and a mark over the belt square the mirror is in. */
 public class HandMirrorScreen extends AbstractContainerScreen<HandMirrorMenu> {
     private static final ResourceLocation PANEL = Alchemia.id("textures/gui/hand_mirror.png");
     private static final int SHEET = 256;

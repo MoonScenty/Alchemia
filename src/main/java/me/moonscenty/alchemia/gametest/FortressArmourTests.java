@@ -21,19 +21,11 @@ import net.minecraft.world.level.GameType;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/**
- * What fortress armour does once it is on somebody.
- * <p>
- * The arithmetic is worth pinning down because it is the one armour in the mod whose worth is not written on its
- * material: wearing more of it is worth more than the pieces are, and what the blow is made of changes how much
- * of it gets through.
- */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class FortressArmourTests {
     private static final String TEMPLATE = "empty_32x40x32";
 
-    /** Counting what is on, which everything else is worked out from. */
     @GameTest(template = TEMPLATE)
     public static void aSuitIsCountedPieceByPiece(GameTestHelper helper) {
         Player wearer = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -46,18 +38,11 @@ public class FortressArmourTests {
         wearer.setItemSlot(EquipmentSlot.LEGS, new ItemStack(ModItems.FORTRESS.get("fortress_legs").get()));
         helper.assertValueEqual(FortressArmourEvents.worn(wearer), 3, "the whole suit, which is three");
 
-        // somebody else's helmet is somebody else's helmet
         wearer.setItemSlot(EquipmentSlot.HEAD, new ItemStack(ModItems.METAL_ARMOUR.get("void_helmet").get()));
         helper.assertValueEqual(FortressArmourEvents.worn(wearer), 2, "a void helm counts for nothing here");
         helper.succeed();
     }
 
-    /**
-     * Plate turns fire and blasts best, a blade next, and a working worst.
-     * <p>
-     * The leaning is the point, not the exact fractions: a steel shell has an answer to being hit and no answer
-     * at all to a curse. Getting the order wrong would make the suit best at the thing it should be worst at.
-     */
     @GameTest(template = TEMPLATE)
     public static void plateTurnsFireBestAndWorkingsWorst(GameTestHelper helper) {
         var types = helper.getLevel().registryAccess()
@@ -71,18 +56,10 @@ public class FortressArmourTests {
         helper.assertTrue(FortressArmourEvents.turns(blow) > FortressArmourEvents.turns(working),
                 "and a blow better than a working");
 
-        // and a whole suit of it never turns everything, whatever the blow. Four rather than three, because
-        // the count is written for four slots and a fourth piece may yet be made
         helper.assertTrue(4 * FortressArmourEvents.turns(burning) < 1.0F,
                 "a whole suit is not immune even to what it turns best");
         helper.succeed();
     }
-    /**
-     * Goggles worked into a helm: the helm that went in is the helm that comes back.
-     * <p>
-     * That is the whole reason this is a fitting on the item rather than a new item. A fresh helm handed over
-     * instead would take the wearer's enchantments and their half-worn plate with it.
-     */
     @GameTest(template = TEMPLATE)
     public static void gogglesAreWorkedIntoTheHelmThatWentIn(GameTestHelper helper) {
         ItemStack helm = new ItemStack(ModItems.FORTRESS.get("fortress_helm").get());
@@ -97,12 +74,6 @@ public class FortressArmourTests {
         helper.succeed();
     }
 
-    /**
-     * An altar will not sell the same working twice.
-     * <p>
-     * A helm wears one thing. Without this the goggles could be worked in over and over, and when the masks
-     * arrive one could be laid on top of another with only the last of them showing.
-     */
     @GameTest(template = TEMPLATE)
     public static void aHelmTakesOnlyOneThing(GameTestHelper helper) {
         var found = helper.getLevel().getRecipeManager().byKey(Alchemia.id("helm_goggles")).orElse(null);
@@ -118,20 +89,12 @@ public class FortressArmourTests {
         helper.assertFalse(((InfusionRecipe) found.value()).matches(new InfusionInput(fitted, ring),
                 helper.getLevel()), "one already wearing them is not");
 
-        // and a helm wearing a mask is no more free than one wearing the goggles
         ItemStack masked = FortressArmorItem.wearing(plain, HelmFitting.GRINNING_DEVIL);
         helper.assertFalse(((InfusionRecipe) found.value()).matches(new InfusionInput(masked, ring),
                 helper.getLevel()), "nor is one already wearing a mask");
         helper.succeed();
     }
 
-    /**
-     * A mask is worth a little in a fight, and the goggles are worth nothing in one.
-     * <p>
-     * The original gave the masks a sliver of the set bonus and the goggles none, and the sliver was small
-     * enough that nobody built a mask for it. Both halves of that are worth keeping: a mask that was worth
-     * nothing would be a lie, and one worth a lot would make the other two faces a mistake.
-     */
     @GameTest(template = TEMPLATE)
     public static void aMaskIsWorthASliverAndTheGogglesNothing(GameTestHelper helper) {
         var types = helper.getLevel().registryAccess()

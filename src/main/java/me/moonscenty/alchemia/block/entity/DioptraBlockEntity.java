@@ -24,23 +24,15 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 
-/**
- * A dioptra reading the aura: thirteen chunks by thirteen round it, once a second, for the one aspect its shard is
- * tuned to -- or, tuned by a balanced shard, for whichever primal is strongest in each chunk.
- *
- * <p>Each chunk is written down as how much there is, against half again the usual aura and never past a hundred and
- * ten in a hundred, and which aspect it was. A chunk with a node in it is marked as well, and sparkles on the map.
- */
 public class DioptraBlockEntity extends SyncedBlockEntity {
-    /** How many chunks across the map is, and how often it is read. The original's. */
+    // original's values
     public static final int ACROSS = 13;
     public static final int MIDDLE = ACROSS / 2;
     private static final int EVERY = 20;
-    /** The most a chunk is drawn at, in hundredths of half again the usual aura. */
     public static final int TALLEST = 110;
-    /** Added to a chunk's aspect where there is a node. */
+    // added to the aspect code to mark a node
     public static final int NODE = 10;
-    /** Half again the usual aura: what a hundred on the map stands for. */
+    // map value 100 = 1.5x base aura
     public static final float FULL = AuraGeneration.BASE * 1.5F;
 
     private int tuning = ShardTuning.NONE;
@@ -71,7 +63,6 @@ public class DioptraBlockEntity extends SyncedBlockEntity {
         }
     }
 
-    /** Every chunk of the map read over. */
     public void read(Level level) {
         amounts = new byte[ACROSS * ACROSS];
         kinds = blank();
@@ -101,7 +92,6 @@ public class DioptraBlockEntity extends SyncedBlockEntity {
         level.updateNeighbourForOutputSignal(worldPosition, getBlockState().getBlock());
     }
 
-    /** Which chunks of the map have a node in them. */
     private static boolean[] nodes(Level level, ChunkPos middle) {
         boolean[] found = new boolean[ACROSS * ACROSS];
         int west = (middle.x - MIDDLE) << 4;
@@ -118,7 +108,6 @@ public class DioptraBlockEntity extends SyncedBlockEntity {
         return found;
     }
 
-    /** The tuning code an aspect is drawn by: its own, for a primal or flux. */
     private static int code(Holder<Aspect> aspect) {
         for (int tuning = 1; tuning <= 7; tuning++) {
             if (aspect.equals(ShardTuning.aspect(tuning))) {
@@ -128,7 +117,6 @@ public class DioptraBlockEntity extends SyncedBlockEntity {
         return ShardTuning.BALANCED;
     }
 
-    /** Now and then a sparkle over a chunk with a node in it, at the height the map is drawn there. */
     private void sparkle(Level level) {
         RandomSource random = level.random;
         for (int x = 0; x < ACROSS; x++) {
@@ -148,7 +136,6 @@ public class DioptraBlockEntity extends SyncedBlockEntity {
         }
     }
 
-    /** Tuned to a new shard, or to nothing; the map is cleared until it is next read. */
     public void tune(int tuning) {
         this.tuning = tuning;
         amounts = new byte[ACROSS * ACROSS];
@@ -164,18 +151,15 @@ public class DioptraBlockEntity extends SyncedBlockEntity {
         return counter;
     }
 
-    /** How much of a chunk's aspect there is, in hundredths of half again the usual aura. */
     public int amount(int x, int z) {
         return amounts[x + z * ACROSS];
     }
 
-    /** The aspect a chunk is drawn in, or none where nothing was read. */
     public Holder<Aspect> aspect(int x, int z) {
         int kind = kinds[x + z * ACROSS];
         return ShardTuning.aspect(kind > NODE ? kind - NODE : kind);
     }
 
-    /** How strong the aura is in its own chunk, for a comparator. */
     public int signal() {
         float share = amount(MIDDLE, MIDDLE) / (float) TALLEST;
         return (int) Math.floor(share * 14.0F) + (share > 0 ? 1 : 0);

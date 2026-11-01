@@ -6,11 +6,6 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
-/**
- * Data carried by a player and kept across death.
- * <p>
- * Both of these are the player's own business, so they are only ever sent to the player they belong to.
- */
 public class ModAttachments {
     public static final DeferredRegister<AttachmentType<?>> ATTACHMENTS =
             DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, Alchemia.MODID);
@@ -31,11 +26,7 @@ public class ModAttachments {
                     .copyOnDeath()
                     .build());
 
-    /**
-     * Whether a monster is a champion, and of what: {@code -2} never rolled, {@code -1} rolled and ordinary, and
-     * from nought the {@link me.moonscenty.alchemia.entity.ChampionModifier} it has. Everyone who can see it is told,
-     * for the sparks.
-     */
+    // -2 never rolled, -1 rolled and ordinary, else a ChampionModifier index; synced to everyone tracking
     public static final DeferredHolder<AttachmentType<?>, AttachmentType<Integer>> CHAMPION =
             ATTACHMENTS.register("champion", () -> AttachmentType
                     .builder(() -> me.moonscenty.alchemia.entity.Champions.UNROLLED)

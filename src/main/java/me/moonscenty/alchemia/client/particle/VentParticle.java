@@ -3,19 +3,12 @@ package me.moonscenty.alchemia.client.particle;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.util.Mth;
 
-/**
- * A puff of steam let off by a machine, as the original's {@code FXVent}: it shoots off the way it is blown, slows
- * fast and rises a little, swelling by a sixth each tick until it is full size and gone, thinning out as it grows.
- * It plays through the first few cells of the sheet's top row as it swells.
- *
- * <p>Every number here is the original's.
- */
+// numbers are the original's
 public class VentParticle extends LegacyParticle {
     private static final float OPACITY = 0.4F;
     private static final float SPEED = 0.125F;
     private static final float SPREAD = 5.0F;
 
-    /** How big it gets before it is gone. */
     private float full = 1.0F;
     private float scale;
 
@@ -32,7 +25,6 @@ public class VentParticle extends LegacyParticle {
         look();
     }
 
-    /** Bigger or smaller than an ordinary puff, start and end alike. */
     public VentParticle scaled(float by) {
         scale *= by;
         full *= by;

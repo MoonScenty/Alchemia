@@ -10,10 +10,8 @@ import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-/** One jar of the original that the player put in {@code mods/}. Opened for one import, then closed. */
 final class LegacyJar implements AutoCloseable {
     private static final Pattern MC_VERSION = Pattern.compile("\"mcversion\"\\s*:\\s*\"([^\"]+)\"");
-    /** Everything we take sits under the original's own namespace. */
     private static final String ASSETS = "assets/thaumcraft/";
 
     final Path path;
@@ -26,7 +24,6 @@ final class LegacyJar implements AutoCloseable {
         this.zip = zip;
     }
 
-    /** Empty when the file is not a jar of the original we know how to read. */
     static Optional<LegacyJar> open(Path path) throws IOException {
         ZipFile zip = new ZipFile(path.toFile());
         try {
@@ -54,7 +51,6 @@ final class LegacyJar implements AutoCloseable {
         }
     }
 
-    /** A file under {@code assets/thaumcraft/}, or empty when this release does not have it. */
     Optional<byte[]> read(String path) throws IOException {
         ZipEntry entry = zip.getEntry(ASSETS + path);
         if (entry == null || entry.isDirectory()) {
@@ -65,7 +61,6 @@ final class LegacyJar implements AutoCloseable {
         }
     }
 
-    /** One of the original's classes, by internal name, for reading a model that was written as code. */
     Optional<byte[]> readClass(String internalName) throws IOException {
         ZipEntry entry = zip.getEntry(internalName + ".class");
         if (entry == null) {

@@ -7,10 +7,6 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 
-/**
- * The serializer of a recipe that carries nothing of its own: it writes nothing and reads back the one instance.
- * The stream codec refuses any value but that instance, so the recipe must compare equal to it.
- */
 public class UnitSerializer<T extends Recipe<?>> implements RecipeSerializer<T> {
     private final MapCodec<T> codec;
     private final StreamCodec<RegistryFriendlyByteBuf, T> streamCodec;

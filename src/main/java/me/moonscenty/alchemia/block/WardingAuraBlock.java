@@ -19,12 +19,6 @@ import net.minecraft.world.phys.shapes.EntityCollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-/**
- * A warding aura, the original's barrier block: the invisible wall a barrier stone raises over itself, two blocks
- * high. Players pass through it and so does everything that is not a creature; any other creature finds it solid
- * and will not path through it, unless a redstone signal holds the stone off. It cannot be seen or struck, anything
- * may be built into it, and it goes when nothing holds it up from below.
- */
 public class WardingAuraBlock extends Block {
     public WardingAuraBlock(Properties properties) {
         super(properties);

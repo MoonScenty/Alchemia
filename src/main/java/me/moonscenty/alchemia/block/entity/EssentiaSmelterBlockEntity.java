@@ -34,13 +34,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
-/**
- * Burns things down into what they are made of, and lets what comes off rise into whatever is stacked above.
- * <p>
- * It is a furnace in every way that matters: it eats fuel, it takes a while, and what it makes is not an item. The
- * difference is where the work goes — nothing comes out of the front, and a smelter with nothing over it simply
- * fills up and stops.
- */
 public class EssentiaSmelterBlockEntity extends SyncedBlockEntity implements WorldlyContainer, MenuProvider, EssentiaHolder {
     public static final int SLOT_INPUT = 0;
     public static final int SLOT_FUEL = 1;
@@ -52,22 +45,15 @@ public class EssentiaSmelterBlockEntity extends SyncedBlockEntity implements Wor
     public static final int READING_HELD = 4;
     public static final int READINGS = 5;
 
-    /** How much essentia it can hold before it has to wait for the vessels above to take some. */
     public static final int CAPACITY = 50;
-    /** How long a point of essentia takes to boil out of something, in ticks. */
     private static final int PER_ASPECT = 10;
-    /** What each pair of bellows blowing on it takes off the time anything takes to boil down. */
     private static final float BELLOWS_HURRY = 0.125F;
-    /** What alumentum in the fire does to the wait between pours: four fifths of it, as the original had it. */
+    // alumentum scales the pour interval (original's value)
     private static final float HURRIED = 0.8F;
-    /**
-     * How much harder flux is to keep than anything else. The original held on to a point of flux only two thirds
-     * as often as a point of anything else, so it is the first thing a smelter loses.
-     */
+    // flux is kept two thirds as often as other aspects (original)
     private static final float FLUX_KEPT = 0.66F;
-    /** What a vent catches of each point lost, tried vent by vent until one catches it. */
+    // chance per vent, tried in turn
     private static final float VENT_CATCHES = 0.333F;
-    /** The block event a vent's puff is sent to the client as. */
     public static final int VENTED = 1;
 
     private final NonNullList<ItemStack> contents = NonNullList.withSize(2, ItemStack.EMPTY);
@@ -77,15 +63,9 @@ public class EssentiaSmelterBlockEntity extends SyncedBlockEntity implements Wor
     private int cooked;
     private int cooksFor;
     private int counter;
-    /** Whether what is burning now was alumentum, remembered because the fuel is gone by the time it matters. */
     private boolean hurried;
 
-    /**
-     * What the screen needs that is not an item: how far the fuel and the work have got.
-     * <p>
-     * What is dissolved is not in here. A list of aspects will not fit through four integers, and the screen reads
-     * it off the block entity itself, which is synced for the sake of the gauges anyway.
-     */
+    // dissolved aspects do not fit in ContainerData; the screen reads the synced block entity
     private final ContainerData readings = new ContainerData() {
         @Override
         public int get(int index) {
@@ -122,10 +102,6 @@ public class EssentiaSmelterBlockEntity extends SyncedBlockEntity implements Wor
         return held;
     }
 
-    /**
-     * Lets a tube take one. It gives but never takes: a smelter makes essentia, and anything piped back into one
-     * would only sit there, since nothing in it ever reads what it is holding.
-     */
     @Override
     public boolean release(Holder<Aspect> aspect) {
         if (held.get(aspect) <= 0) {
@@ -139,8 +115,6 @@ public class EssentiaSmelterBlockEntity extends SyncedBlockEntity implements Wor
     public boolean lit() {
         return burning > 0;
     }
-
-    // --- ticking -----------------------------------------------------------
 
     public static void tick(Level level, BlockPos pos, BlockState state, EssentiaSmelterBlockEntity smelter) {
         boolean wasLit = smelter.burning > 0;
@@ -156,25 +130,18 @@ public class EssentiaSmelterBlockEntity extends SyncedBlockEntity implements Wor
         if (wasLit != smelter.burning > 0) {
             level.setBlock(pos, state.setValue(EssentiaSmelterBlock.LIT, smelter.burning > 0), Block.UPDATE_ALL);
         }
-        // what is dissolved is read off the block entity by the screen, so a change has to reach the client
         if (!was.equals(smelter.held)) {
             level.sendBlockUpdated(pos, state, state, Block.UPDATE_CLIENTS);
         }
         smelter.setChanged();
     }
 
-    /** What kind of smelter it is, which is settled by the block it is in. */
     private EssentiaSmelterBlock.Tier tier() {
         return getBlockState().getBlock() instanceof EssentiaSmelterBlock smelter
                 ? smelter.tier() : EssentiaSmelterBlock.Tier.BASIC;
     }
 
-    /**
-     * Lets one point go up into the vessels above, now and then, and one more up through every pump beside it.
-     * A full smelter is one nobody emptied.
-     * <p>
-     * It pours whether it is burning or not: what has already boiled off goes on rising after the fire is out.
-     */
+    // keeps pouring after the fire is out
     private void pour(Level level, BlockPos pos) {
         int every = tier().poursEvery();
         if (hurried) {
@@ -194,7 +161,6 @@ public class EssentiaSmelterBlockEntity extends SyncedBlockEntity implements Wor
         }
     }
 
-    /** One point into the column of vessels standing on the given block, if any of them will take one. */
     private void pourUp(Level level, BlockPos from) {
         for (Holder<Aspect> aspect : held.sortedByAmount()) {
             if (held.get(aspect) > 0 && AlembicBlockEntity.pourInto(level, from, aspect)) {
@@ -204,7 +170,6 @@ public class EssentiaSmelterBlockEntity extends SyncedBlockEntity implements Wor
         }
     }
 
-    /** Lights itself from the fuel slot when there is work to do and nothing already burning. */
     private void burn(Level level) {
         if (burning > 0 || !canCook()) {
             return;
@@ -242,10 +207,6 @@ public class EssentiaSmelterBlockEntity extends SyncedBlockEntity implements Wor
         input.shrink(1);
     }
 
-    /**
-     * What survives the boiling. Every point is a chance: a smelter keeps four in five of what goes into it, a
-     * better one more. What is lost goes up as flux, unless a vent beside it catches it first.
-     */
     private AspectList kept(AspectList made) {
         if (level == null) {
             return made;
@@ -274,7 +235,6 @@ public class EssentiaSmelterBlockEntity extends SyncedBlockEntity implements Wor
         return kept;
     }
 
-    /** Whether a vent beside it caught a point of flux, and if one did, its puff. */
     private boolean vented() {
         for (Direction side : SmelterAuxBlock.SIDES) {
             BlockState beside = level.getBlockState(worldPosition.relative(side));
@@ -288,10 +248,6 @@ public class EssentiaSmelterBlockEntity extends SyncedBlockEntity implements Wor
         return false;
     }
 
-    /**
-     * How many bellows are blowing on it: from either side and from behind, never from the front, which is
-     * where the fire is fed. Three at most, as the original counted.
-     */
     private int bellows() {
         if (level == null || !getBlockState().hasProperty(me.moonscenty.alchemia.block.EssentiaSmelterBlock.FACING)) {
             return 0;
@@ -301,7 +257,6 @@ public class EssentiaSmelterBlockEntity extends SyncedBlockEntity implements Wor
                 front.getClockWise(), front.getCounterClockWise(), front.getOpposite());
     }
 
-    /** Whether there is something worth burning, and room for what would come off it. */
     private boolean canCook() {
         ItemStack input = contents.get(SLOT_INPUT);
         if (input.isEmpty()) {
@@ -311,7 +266,6 @@ public class EssentiaSmelterBlockEntity extends SyncedBlockEntity implements Wor
         return !made.isEmpty() && made.total() <= CAPACITY - held.total();
     }
 
-    /** What a broken smelter lets go. The essentia in it has nowhere to go but out, as flux, as the original's did. */
     public void spill() {
         if (level != null && !level.isClientSide && !held.isEmpty()) {
             AuraHandler.add(level, worldPosition, ModAspects.FLUX, held.total());
@@ -333,8 +287,6 @@ public class EssentiaSmelterBlockEntity extends SyncedBlockEntity implements Wor
     public NonNullList<ItemStack> contents() {
         return contents;
     }
-
-    // --- Container, so a hopper can work one ------------------------------
 
     @Override
     public int getContainerSize() {
@@ -384,7 +336,6 @@ public class EssentiaSmelterBlockEntity extends SyncedBlockEntity implements Wor
         contents.clear();
     }
 
-    /** Fed from above like a furnace, fuelled from the side, and nothing ever comes back out of the bottom. */
     @Override
     public int[] getSlotsForFace(Direction side) {
         return switch (side) {
@@ -403,8 +354,6 @@ public class EssentiaSmelterBlockEntity extends SyncedBlockEntity implements Wor
     public boolean canTakeItemThroughFace(int slot, ItemStack stack, Direction side) {
         return false;
     }
-
-    // --- saving ------------------------------------------------------------
 
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {

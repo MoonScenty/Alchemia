@@ -12,7 +12,6 @@ import net.minecraft.tags.EnchantmentTags;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
-/** Where haste and repair turn up: the enchanting table and enchanted books found about the world, as the original's did. */
 public class ModEnchantmentTagsProvider extends TagsProvider<Enchantment> {
     public ModEnchantmentTagsProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider,
             ExistingFileHelper existingFileHelper) {

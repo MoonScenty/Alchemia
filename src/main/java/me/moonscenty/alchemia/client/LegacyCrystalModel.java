@@ -34,30 +34,13 @@ import net.neoforged.neoforge.client.model.BakedModelWrapper;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import net.neoforged.neoforge.client.model.data.ModelProperty;
 
-/**
- * A crystal as the original drew it, when its jar is there: a few shards out of the eight in its mesh, standing out
- * of the face that holds the crystal up, in the crystal's colour.
- * <p>
- * The original shuffled the eight shards by a seed made of the block's place and which face holds it, and showed one
- * more of them for every stage of growth. The place goes into the same sum here and comes out the same, since a
- * block position still hashes as it did then, so a crystal grown where one stood in the original looks as that one
- * did.
- * <p>
- * The original could grow shards from every face that had something solid behind it. Ours grow from one, so only
- * that face's shards are drawn.
- * <p>
- * Until its mesh has been read there is nothing to draw, and the model it wraps holds only the crystal's picture.
- */
 public class LegacyCrystalModel extends BakedModelWrapper<BakedModel> {
-    /** The seed the original took from the block's place. */
+    // original's seed from the BlockPos hash, so shards land where the original's did
     private static final ModelProperty<Integer> SEED = new ModelProperty<>();
-    /** The original's grey crystal, coloured by the tint of index {@link #TINT}. */
     private static final ResourceLocation TEXTURE = Alchemia.id("block/legacy/crystal");
     public static final int TINT = 0;
-    /** How many shards the mesh has to choose from. */
     private static final int SHARDS = 8;
 
-    /** Baked shards by the face holding them and which of the eight they are; emptied when the import changes. */
     private static final Map<Integer, List<BakedQuad>> BAKED = new ConcurrentHashMap<>();
     private static volatile int bakedFrom = -1;
 
@@ -95,12 +78,8 @@ public class LegacyCrystalModel extends BakedModelWrapper<BakedModel> {
         return BAKED.computeIfAbsent(holder.ordinal() << SHARDS | mask, key -> bake(mesh, holder, mask));
     }
 
-    /**
-     * Which shards show, as the original chose them: the eight shuffled by a seed made of the place and of which face
-     * holds the crystal, and the first few taken, one more for each stage of growth.
-     */
     private static int shards(Direction holder, int seed, int count) {
-        // the original counted the faces up, down, east, west, north, south, from one
+        // the original numbered faces up, down, east, west, north, south from one
         int face = switch (holder) {
             case UP -> 1;
             case DOWN -> 2;
@@ -139,10 +118,6 @@ public class LegacyCrystalModel extends BakedModelWrapper<BakedModel> {
         return List.copyOf(quads);
     }
 
-    /**
-     * The mesh stands on the floor. The original turned it onto each other face with a turn and a shift; these are
-     * those, worked out, so that the shards stand out of the face that holds them.
-     */
     private static float[] turn(float[] corner, Direction holder) {
         float x = corner[0];
         float y = corner[1];

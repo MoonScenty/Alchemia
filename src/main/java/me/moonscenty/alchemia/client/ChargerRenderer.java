@@ -16,23 +16,12 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
-/**
- * The charger as the original drew it, when its jar is there: the vis relay's floating ring, four supports a quarter
- * turn apart, and the crystal they hold, half-clear and glowing a little brighter and dimmer in turn.
- * <p>
- * The original drew it in its renderer and never as a block. Without the jar our own model is the block and this
- * draws nothing.
- */
 public class ChargerRenderer implements BlockEntityRenderer<ArcaneWorkbenchChargerBlockEntity> {
     private static final ResourceLocation TEXTURE = Alchemia.id("textures/entity/vis_relay.png");
-    /** The block light the original lit the crystal by, at its dimmest and at the most a beat adds. */
     private static final int GLOW_DIM = 50;
     private static final int GLOW_RANGE = 150;
 
-    /**
-     * The original's vis relay mesh, once per import. Its renderer read it with the older loader, which turned the
-     * texture corners over, so it is turned over here too. Shared with the crystallizer and the dioptra.
-     */
+    // flipped: the original's old OBJ loader turned the texture V over
     static final LegacyCached<LegacyMesh> RELAY = LegacyCached.flippedMesh(LegacyAssets.RELAY_MESH);
 
     public ChargerRenderer(BlockEntityRendererProvider.Context context) {
@@ -55,7 +44,7 @@ public class ChargerRenderer implements BlockEntityRenderer<ArcaneWorkbenchCharg
 
         pose.pushPose();
         pose.translate(0.5F, 0.5F, 0.5F);
-        // the mesh is modelled lying down and the other way up
+        // mesh is modelled lying down and upside down
         pose.mulPose(Axis.XP.rotationDegrees(90.0F));
         pose.mulPose(Axis.ZP.rotationDegrees(45.0F));
         var solid = buffers.getBuffer(RenderType.entityCutoutNoCull(TEXTURE));

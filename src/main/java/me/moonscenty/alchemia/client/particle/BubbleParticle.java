@@ -2,28 +2,15 @@ package me.moonscenty.alchemia.client.particle;
 
 import net.minecraft.client.multiplayer.ClientLevel;
 
-/**
- * A bubble on the crucible, as the original's {@code FXBubble}: a speck of light that drifts up off the surface, or
- * froth that sinks back into it or runs down the outside, and pops through three cells of the sheet in its last
- * ticks.
- * <p>
- * Every number here is the original's. Its life is counted down rather than up, as the original counted it.
- */
+// numbers are the original's
 public class BubbleParticle extends LegacyParticle {
-    /** The cell a bubble is drawn from, and the row it pops along. */
     private static final int FIRST = 16;
-    /** How much of its speed it keeps each tick. */
     private static final double DRAG = 0.85F;
-    /** How hard a rising bubble wanders sideways each tick. */
     private static final float WANDER = 0.01F;
 
-    /** The kinds of bubble the original made. */
     public enum Kind {
-        /** Rising off the surface. */
         BUBBLE,
-        /** Froth on a boiling surface, sinking back. */
         FROTH,
-        /** Froth running down the outside of an overfull pot. */
         FROTH_DOWN
     }
 
@@ -31,11 +18,6 @@ public class BubbleParticle extends LegacyParticle {
     private int left;
     private int frame = FIRST;
 
-    /**
-     * @param colour the bubble's colour, as {@code 0xRRGGBB}
-     * @param lasts  the least it lives, to which a random share is added; the original's "age" argument
-     * @param rise   how hard it is pushed up each tick; negative sinks it
-     */
     public BubbleParticle(ClientLevel level, double x, double y, double z, int colour, int lasts, double rise,
             Kind kind) {
         super(level, x, y, z, LegacySheet.GLOW);

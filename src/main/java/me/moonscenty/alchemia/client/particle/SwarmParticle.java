@@ -11,13 +11,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 
-/**
- * One fly of a taint swarm, as the original drew it: a little purple mote off the first sheet that circles the
- * swarm it belongs to, turning in at it and peeling away again when it is hurt, and drops away and fades when the
- * swarm is gone.
- */
 public class SwarmParticle extends LegacyParticle {
-    /** How many flies at most may be heard buzzing at once, and for how long each buzz counts. */
     private static final int BUZZING = 3;
     private static final long BUZZ_NANOS = 1_500_000L;
     private static final Deque<Long> BUZZES = new ArrayDeque<>();
@@ -103,7 +97,6 @@ public class SwarmParticle extends LegacyParticle {
         return dx * dx + dy * dy + dz * dz;
     }
 
-    /** Turns towards the middle of the swarm by up to so much a tick. */
     private void face(float yawStep, float pitchStep) {
         double dx = swarm.getX() - x;
         double dz = swarm.getZ() - z;
@@ -115,10 +108,7 @@ public class SwarmParticle extends LegacyParticle {
         yaw = turn(yaw, wantYaw, yawStep);
     }
 
-    /**
-     * The original's turn, as it was written: limited to so much either way. Handed a negative limit it does not turn
-     * away so much as keep turning the one way, which is what sets a hurt swarm's flies circling.
-     */
+    // original's turn; a negative limit keeps turning one way, which makes hurt swarms circle
     private static float turn(float from, float to, float most) {
         float by = Mth.wrapDegrees(to - from);
         if (by > most) {
@@ -130,7 +120,6 @@ public class SwarmParticle extends LegacyParticle {
         return from + by;
     }
 
-    /** Off along that heading at its own speed, a little unsteadily. */
     private void head(double hx, double hy, double hz) {
         double length = Math.sqrt(hx * hx + hy * hy + hz * hz);
         float wobble = 15.0F;
@@ -142,7 +131,6 @@ public class SwarmParticle extends LegacyParticle {
         zd = hz * speed;
     }
 
-    /** Now and then a buzz, if somebody is near enough to hear it and not too many are buzzing already. */
     private void buzz() {
         long now = System.nanoTime();
         while (!BUZZES.isEmpty() && BUZZES.peekFirst() < now) {

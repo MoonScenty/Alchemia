@@ -12,13 +12,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
-/**
- * Hands out the entries that are never researched, only had.
- * <p>
- * Each branch opens with something the reader is taken to already know, and the rest of the branch hangs off it. That
- * is handed over on every login rather than once, so an entry added to the pack later still reaches players who were
- * already playing.
- */
+// Re-applied on every login, so entries added to the pack later reach existing players.
 @EventBusSubscriber(modid = Alchemia.MODID)
 public class StartingResearch {
     private StartingResearch() {
@@ -40,10 +34,6 @@ public class StartingResearch {
         }
     }
 
-    /**
-     * The knowledge with every entry that starts unlocked folded into it. Kept apart from the player so it can be
-     * exercised on its own.
-     */
     public static PlayerKnowledge fold(PlayerKnowledge knowledge, Registry<ResearchEntry> entries) {
         PlayerKnowledge result = knowledge;
         for (Map.Entry<ResourceKey<ResearchEntry>, ResearchEntry> entry : entries.entrySet()) {

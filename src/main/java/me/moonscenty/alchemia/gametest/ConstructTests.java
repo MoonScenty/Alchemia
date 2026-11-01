@@ -22,7 +22,6 @@ import net.minecraft.world.entity.animal.Cow;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.UseOnContext;
@@ -35,17 +34,12 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/**
- * The constructs on tripods: the automated crossbows, which shoot what they are told to and reload from a dispenser
- * under them, and the node magnet, which drags a node towards itself.
- */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class ConstructTests {
     private static final String TEMPLATE = "empty_32x40x32";
     private static final BlockPos FLOOR = new BlockPos(8, 1, 8);
 
-    /** Set down from its item by a player standing by, as a player would. */
     private static <T extends net.minecraft.world.entity.Entity> T setDown(GameTestHelper helper, Player owner,
             ItemStack placer, BlockPos on, Class<T> kind) {
         helper.setBlock(on, Blocks.STONE);
@@ -56,7 +50,6 @@ public class ConstructTests {
                 .orElseThrow(() -> new AssertionError("nothing was set down"));
     }
 
-    /** Loaded with arrows, a crossbow shoots a monster it can see. */
     @GameTest(template = TEMPLATE, timeoutTicks = 200)
     public static void aLoadedCrossbowShootsAMonster(GameTestHelper helper) {
         Player owner = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -75,7 +68,6 @@ public class ConstructTests {
         });
     }
 
-    /** Stood on a dispenser that faces up, a dry crossbow takes a whole stack of arrows out of it. */
     @GameTest(template = TEMPLATE)
     public static void aDryCrossbowReloadsFromTheDispenserUnderIt(GameTestHelper helper) {
         helper.setBlock(FLOOR, Blocks.DISPENSER.defaultBlockState().setValue(DispenserBlock.FACING, Direction.UP));
@@ -90,7 +82,6 @@ public class ConstructTests {
         });
     }
 
-    /** Its owner takes it down with a wand, and gets back the crossbow and whatever it was loaded with. */
     @GameTest(template = TEMPLATE)
     public static void aWandTakesACrossbowDown(GameTestHelper helper) {
         Player owner = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -109,7 +100,6 @@ public class ConstructTests {
         helper.succeed();
     }
 
-    /** The advanced one minds monsters until it is told to mind animals too, and its owner only if told to. */
     @GameTest(template = TEMPLATE)
     public static void theAdvancedCrossbowShootsOnlyWhatItIsToldTo(GameTestHelper helper) {
         Player owner = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -129,7 +119,6 @@ public class ConstructTests {
         helper.succeed();
     }
 
-    /** A charged magnet turns on the nearest node that nothing holds still and drags it closer. */
     @GameTest(template = TEMPLATE, timeoutTicks = 200)
     public static void aMagnetDrawsANodeIn(GameTestHelper helper) {
         Player owner = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -151,7 +140,6 @@ public class ConstructTests {
         });
     }
 
-    /** One the server never set down from an item belongs to nobody, and nobody's turret is anybody's to open. */
     @GameTest(template = TEMPLATE)
     public static void aStrayCrossbowIsAnybodys(GameTestHelper helper) {
         Player passer = helper.makeMockPlayer(GameType.SURVIVAL);

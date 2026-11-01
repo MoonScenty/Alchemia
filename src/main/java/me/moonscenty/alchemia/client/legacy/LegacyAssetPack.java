@@ -16,15 +16,10 @@ import net.minecraft.server.packs.PackLocationInfo;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.resources.IoSupplier;
 
-/**
- * The imported files, held in memory and served as a resource pack. Nothing is written to disk: the pictures are
- * the original's, and the only copy of them stays the jar the player brought.
- */
 final class LegacyAssetPack extends AbstractPackResources {
     private final Map<String, byte[]> files;
     private final byte[] meta;
 
-    /** @param files our files by their path under {@code assets/alchemia/} */
     LegacyAssetPack(PackLocationInfo location, Map<String, byte[]> files) {
         super(location);
         this.files = files;

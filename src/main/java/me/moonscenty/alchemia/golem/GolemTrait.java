@@ -5,12 +5,7 @@ import java.util.Locale;
 import me.moonscenty.alchemia.Alchemia;
 import net.minecraft.resources.ResourceLocation;
 
-/**
- * What a golem is like, as its parts make it: each part brings some of these, and a golem is the sum of them.
- *
- * <p>Three pairs cancel. A deft hand on a clumsy frame is neither, a light frame made heavy is neither, and so for
- * fragile and armoured: whichever comes second takes the first away and does not stay itself.
- */
+// Paired traits cancel: whichever comes second removes the first and is not kept itself.
 public enum GolemTrait {
     SMART,
     DEFT,
@@ -45,7 +40,6 @@ public enum GolemTrait {
         other.opposite = one;
     }
 
-    /** The trait this one cancels, if it is one of a pair. */
     public GolemTrait opposite() {
         return opposite;
     }
@@ -62,7 +56,6 @@ public enum GolemTrait {
         return translationKey() + ".text";
     }
 
-    /** The little tag the press shows it by, the original's. */
     public ResourceLocation icon() {
         return Alchemia.id("textures/gui/golem/tag_" + key() + ".png");
     }

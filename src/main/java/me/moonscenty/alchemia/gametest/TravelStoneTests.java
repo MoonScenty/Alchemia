@@ -12,7 +12,6 @@ import net.minecraft.world.entity.animal.Pig;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/** The paving stone of travel: two seconds of speed II and jump boost I for anything living that walks on it. */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class TravelStoneTests {

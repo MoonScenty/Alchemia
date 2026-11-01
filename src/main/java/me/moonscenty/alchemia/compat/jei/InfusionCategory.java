@@ -25,11 +25,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
 
-/**
- * The infusion altar: the thing on the middle pedestal, the ring round it, the essentia below and how unsteady the
- * working is, and what comes of it. A working that adds to what it is given shows what the first thing on its list
- * would come out as.
- */
 public class InfusionCategory implements IRecipeCategory<RecipeHolder<InfusionRecipe>> {
     public static final RecipeType<RecipeHolder<InfusionRecipe>> TYPE =
             RecipeType.createRecipeHolderType(Alchemia.id("infusion"));
@@ -90,7 +85,6 @@ public class InfusionCategory implements IRecipeCategory<RecipeHolder<InfusionRe
         }
         ItemStack result = recipe.getResultItem(Minecraft.getInstance().level.registryAccess());
         if (result.isEmpty()) {
-            // a working that adds to what it is given: show each thing it can be given, worked
             List<ItemStack> givens = List.of(recipe.central().getItems());
             List<ItemStack> worked = new ArrayList<>();
             for (ItemStack given : givens) {

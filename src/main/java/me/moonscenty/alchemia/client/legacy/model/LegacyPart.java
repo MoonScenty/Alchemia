@@ -3,17 +3,11 @@ package me.moonscenty.alchemia.client.legacy.model;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * One {@code ModelRenderer} of the original as its constructor left it: boxes, a pivot, a turn, and parts hung off
- * it. Plain numbers only, so it can be read without the game running.
- */
 public final class LegacyPart {
-    /** One {@code addBox}. The texture corner and mirroring are taken from the part as it stood at that call. */
     public record Box(int u, int v, float x, float y, float z, int width, int height, int depth, float grow,
             boolean mirror) {
     }
 
-    /** The field the original kept it in, or a made-up name when it never had one. */
     String name;
     int u;
     int v;
@@ -67,7 +61,6 @@ public final class LegacyPart {
         return zRot;
     }
 
-    /** {@code isHidden}: the original never drew it, though it kept it. */
     public boolean hidden() {
         return hidden;
     }

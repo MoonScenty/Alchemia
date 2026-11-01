@@ -17,16 +17,12 @@ import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/**
- * The centrifuge and the crystallizer: the two things a run of pipe can end in that are neither a jar nor a lamp.
- */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class EssentiaDeviceTests {
     private static final String TEMPLATE = "empty_32x40x32";
     private static final BlockPos WHERE = new BlockPos(2, 2, 2);
 
-    /** A compound goes in, and one of the two things it was made of comes out. */
     @GameTest(template = TEMPLATE)
     public static void aCentrifugeSplitsACompoundIntoOneOfItsParts(GameTestHelper helper) {
         helper.setBlock(WHERE, ModBlocks.CENTRIFUGE.get());
@@ -45,7 +41,6 @@ public class EssentiaDeviceTests {
         helper.succeed();
     }
 
-    /** A primal has nothing to come apart into, and is not taken. */
     @GameTest(template = TEMPLATE)
     public static void aCentrifugeRefusesThePrimals(GameTestHelper helper) {
         helper.setBlock(WHERE, ModBlocks.CENTRIFUGE.get());
@@ -55,7 +50,6 @@ public class EssentiaDeviceTests {
         helper.succeed();
     }
 
-    /** A point of essentia comes out as a crystal, into the chest at its far end, on earth drawn from the air. */
     @GameTest(template = TEMPLATE, timeoutTicks = 200)
     public static void aCrystallizerSetsEssentiaIntoTheChestBeyondIt(GameTestHelper helper) {
         helper.setBlock(WHERE, ModBlocks.CRYSTALLIZER.get().defaultBlockState()
@@ -79,10 +73,6 @@ public class EssentiaDeviceTests {
         helper.succeed();
     }
 
-    /**
-     * A thaumatorium told to make something, given its catalyst and its essentia, makes it, and puts it in the chest
-     * in front of it.
-     */
     @GameTest(template = TEMPLATE, timeoutTicks = 400)
     public static void aThaumatoriumMakesWhatItIsToldInto(GameTestHelper helper) {
         BlockPos crucible = new BlockPos(2, 2, 2);
@@ -116,7 +106,6 @@ public class EssentiaDeviceTests {
         helper.succeed();
     }
 
-    /** Without heat under its crucible it does nothing at all. */
     @GameTest(template = TEMPLATE)
     public static void aColdThaumatoriumDrawsNothing(GameTestHelper helper) {
         BlockPos crucible = new BlockPos(2, 2, 2);
@@ -136,7 +125,6 @@ public class EssentiaDeviceTests {
         helper.succeed();
     }
 
-    /** Taking the crucible away leaves two blocks of brass. */
     @GameTest(template = TEMPLATE)
     public static void aThaumatoriumWithoutItsCrucibleFallsBackToBrass(GameTestHelper helper) {
         BlockPos crucible = new BlockPos(2, 2, 2);
@@ -150,7 +138,6 @@ public class EssentiaDeviceTests {
         helper.succeed();
     }
 
-    /** A brain in a jar eats an orb that touches it, and gives some back when shaken. */
     @GameTest(template = TEMPLATE)
     public static void aBrainInAJarEatsExperienceAndGivesSomeBack(GameTestHelper helper) {
         helper.setBlock(WHERE, ModBlocks.BRAIN_JAR.get());

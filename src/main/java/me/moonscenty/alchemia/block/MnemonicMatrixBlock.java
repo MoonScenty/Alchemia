@@ -17,11 +17,6 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-/**
- * A mnemonic matrix: a clockwork mind boxed up and fixed to a thaumatorium, so that it can keep two more recipes in
- * mind. It goes on either half's sides, or on top, but not on the front, and it faces into the thaumatorium. It
- * falls off when the thaumatorium is gone.
- */
 public class MnemonicMatrixBlock extends DirectionalBlock {
     public static final MapCodec<MnemonicMatrixBlock> CODEC = simpleCodec(MnemonicMatrixBlock::new);
     private static final VoxelShape SHAPE = Block.box(3.0, 3.0, 3.0, 13.0, 13.0, 13.0);
@@ -52,7 +47,6 @@ public class MnemonicMatrixBlock extends DirectionalBlock {
         return canSurvive(state, context.getLevel(), context.getClickedPos()) ? state : null;
     }
 
-    /** Against a thaumatorium, and not against its front. */
     @Override
     protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
         Direction into = state.getValue(FACING);
@@ -61,7 +55,6 @@ public class MnemonicMatrixBlock extends DirectionalBlock {
                 && against.getValue(ThaumatoriumBlock.FACING) != into.getOpposite();
     }
 
-    /** Falls off, and drops, a tick after what it was fixed to has gone. */
     @Override
     protected BlockState updateShape(BlockState state, Direction direction, BlockState neighbour,
             LevelAccessor level, BlockPos pos, BlockPos neighbourPos) {

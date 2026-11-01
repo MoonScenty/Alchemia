@@ -8,35 +8,16 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.common.Tags;
 
-/**
- * What a piece of ore comes up as when it is mined well enough: a cluster, which smelts to twice the metal.
- *
- * <p>Three things in the mod turn ore into clusters -- a pickaxe worked for refining, the pickaxe of the core and
- * the crusher that carry it, and an excavation focus that has learned to dowse. All three ask here.
- *
- * <p>What counts as ore is read from the common tags rather than listed, so raw iron dug up by anybody's pickaxe
- * is raw iron, and an ore block taken up whole with silk touch counts as much as what it would have broken into.
- * The original kept the same table keyed by item, for the same reason.
- */
+// ore is recognised by common tags, so raw ore and silk-touched ore blocks both count
 public final class Clusters {
     private Clusters() {
     }
 
-    /**
-     * The cluster this drop could have been, or nothing when it is not ore.
-     * <p>
-     * As many clusters as there were pieces: a stack of two raw copper is two copper clusters, not one.
-     */
     public static ItemStack of(ItemStack drop) {
         Item cluster = clusterFor(drop);
         return cluster == null ? ItemStack.EMPTY : new ItemStack(cluster, drop.getCount());
     }
 
-    /**
-     * The drop, or the cluster in its place if the chance comes up.
-     * <p>
-     * A drop that is not ore is handed back untouched whatever the chance; nothing is spent on it.
-     */
     public static ItemStack maybe(ItemStack drop, float chance, RandomSource random) {
         ItemStack cluster = of(drop);
         return cluster.isEmpty() || random.nextFloat() > chance ? drop : cluster;

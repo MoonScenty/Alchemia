@@ -18,7 +18,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 
-/** The crucible: the thing dropped in, what must be dissolved there first, and what comes of it. */
 public class CrucibleCategory implements IRecipeCategory<RecipeHolder<CrucibleRecipe>> {
     public static final RecipeType<RecipeHolder<CrucibleRecipe>> TYPE =
             RecipeType.createRecipeHolderType(Alchemia.id("crucible"));

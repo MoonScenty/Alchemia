@@ -29,12 +29,6 @@ import net.neoforged.neoforge.common.data.DataMapProvider;
 import net.neoforged.neoforge.registries.datamaps.builtin.Compostable;
 import net.neoforged.neoforge.registries.datamaps.builtin.NeoForgeDataMaps;
 
-/**
- * Writes down the aspects of the things at the root of the crafting tree, and the compostables.
- * <p>
- * Only raw materials and mobs are listed. Anything made from them has its aspects worked out from its recipe, so a
- * crafted item needs no entry here — and neither does an item from another mod.
- */
 public class ModDataMapProvider extends DataMapProvider {
     public ModDataMapProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
         super(output, lookupProvider);
@@ -49,21 +43,10 @@ public class ModDataMapProvider extends DataMapProvider {
         biomeAura();
     }
 
-    /**
-     * What the land does to the magic over it, carried over from the original's table of biome types.
-     * <p>
-     * Written against biome tags rather than named biomes, so anything a pack adds is covered by whatever tags it
-     * already carries.
-     * <p>
-     * A biome carrying several of these tags ends up with whichever entry the generated file happens to list last,
-     * and that file is sorted by tag name, so which one wins is arbitrary. It is close enough while every entry is
-     * within half a step of the others; a subject that needs it settled should be given its biome an entry of its
-     * own, which beats any tag.
-     */
+    // a biome in several of these tags gets whichever entry is listed last (sorted by tag name)
     private void biomeAura() {
         var aura = builder(AuraTrait.MAP);
 
-        // wet land holds its magic well
         land(aura, Tags.Biomes.IS_AQUATIC, 1.0F, ModAspects.WATER);
         land(aura, BiomeTags.IS_OCEAN, 1.0F, ModAspects.WATER);
         land(aura, BiomeTags.IS_RIVER, 1.0F, ModAspects.WATER);
@@ -95,7 +78,6 @@ public class ModDataMapProvider extends DataMapProvider {
         land(aura, Tags.Biomes.IS_PLAINS, 0.75F, ModAspects.AIR);
         land(aura, BiomeTags.IS_END, 0.5F, ModAspects.AIR);
 
-        // land that has little left in it, and holds little
         land(aura, Tags.Biomes.IS_DRY, 0.5F, ModAspects.ENTROPY);
         land(aura, Tags.Biomes.IS_SPARSE_VEGETATION, 0.75F, ModAspects.ENTROPY);
         land(aura, Tags.Biomes.IS_SWAMP, 1.2F, ModAspects.ENTROPY);
@@ -116,9 +98,7 @@ public class ModDataMapProvider extends DataMapProvider {
         }
     }
 
-    /** Raw vanilla materials, at the values the original gave them. */
     private void vanillaAspects() {
-        // stone and soil
         tag(Tags.Items.STONES, a(ModAspects.EARTH, 2));
         tag(Tags.Items.COBBLESTONES, a(ModAspects.EARTH, 1).add(ModAspects.ENTROPY, 1));
         tag(ItemTags.DIRT, a(ModAspects.EARTH, 2));
@@ -132,18 +112,15 @@ public class ModDataMapProvider extends DataMapProvider {
         item(Items.CLAY_BALL, a(ModAspects.WATER, 1).add(ModAspects.EARTH, 1));
         item(Items.FLINT, a(ModAspects.EARTH, 1).add(ModAspects.TOOL, 1));
         item(Items.GLASS, a(ModAspects.CRYSTAL, 1));
-        // deepslate has no counterpart in the original, so it is stone with a touch of the dark
         item(Items.DEEPSLATE, a(ModAspects.EARTH, 2).add(ModAspects.DARKNESS, 1));
         item(Items.COBBLED_DEEPSLATE, a(ModAspects.EARTH, 1).add(ModAspects.ENTROPY, 1).add(ModAspects.DARKNESS, 1));
 
-        // wood
         tag(ItemTags.LOGS, a(ModAspects.PLANT, 4));
         tag(ItemTags.PLANKS, a(ModAspects.PLANT, 1));
         tag(ItemTags.SAPLINGS, a(ModAspects.PLANT, 3));
         tag(ItemTags.LEAVES, a(ModAspects.PLANT, 1));
         item(Items.STICK, a(ModAspects.PLANT, 1));
 
-        // metals and gems
         tag(Tags.Items.INGOTS_IRON, a(ModAspects.METAL, 4));
         tag(Tags.Items.INGOTS_GOLD, a(ModAspects.METAL, 3).add(ModAspects.DESIRE, 2));
         tag(Tags.Items.INGOTS_COPPER, a(ModAspects.METAL, 3).add(ModAspects.ENERGY, 1));
@@ -157,7 +134,6 @@ public class ModDataMapProvider extends DataMapProvider {
         item(Items.COAL, a(ModAspects.ENERGY, 2).add(ModAspects.FIRE, 2));
         item(Items.CHARCOAL, a(ModAspects.ENERGY, 2).add(ModAspects.FIRE, 2));
 
-        // what drops off mobs
         item(Items.LEATHER, a(ModAspects.BEAST, 2).add(ModAspects.PROTECT, 1));
         item(Items.FEATHER, a(ModAspects.FLIGHT, 2).add(ModAspects.AIR, 1));
         item(Items.STRING, a(ModAspects.BEAST, 2));
@@ -176,7 +152,6 @@ public class ModDataMapProvider extends DataMapProvider {
                 .forEach(chunk -> item(chunk.get(), a(ModAspects.LIFE, 1)));
         tag(ItemTags.WOOL, a(ModAspects.BEAST, 2).add(ModAspects.CRAFT, 1));
 
-        // what grows
         item(Items.WHEAT, a(ModAspects.PLANT, 2).add(ModAspects.LIFE, 1));
         item(Items.APPLE, a(ModAspects.PLANT, 2).add(ModAspects.LIFE, 1));
         item(Items.CARROT, a(ModAspects.PLANT, 1).add(ModAspects.LIFE, 1).add(ModAspects.SENSES, 1));
@@ -197,7 +172,6 @@ public class ModDataMapProvider extends DataMapProvider {
         }
         tag(ItemTags.FISHES, a(ModAspects.WATER, 1).add(ModAspects.BEAST, 2).add(ModAspects.LIFE, 1));
 
-        // the cold and the bright
         item(Items.ICE, a(ModAspects.COLD, 4));
         item(Items.SNOWBALL, a(ModAspects.COLD, 1));
         item(Items.TORCH, a(ModAspects.LIGHT, 1));
@@ -211,13 +185,11 @@ public class ModDataMapProvider extends DataMapProvider {
         tag(ModTags.Items.ORES_AMBER, a(ModAspects.EARTH, 1).add(ModAspects.TRAP, 3).add(ModAspects.CRYSTAL, 2));
         tag(ModTags.Items.ORES_CINNABAR, cinnabar);
 
-        // a shard and the crystal it broke off carry the aspect they grew from
         for (CrystalType type : CrystalType.values()) {
             Holder<Aspect> aspect = type.aspect();
             item(ModItems.SHARDS.get(type), a(aspect, 2).add(ModAspects.CRYSTAL, 1));
             item(ModBlocks.CRYSTALS.get(type), a(aspect, 4).add(ModAspects.CRYSTAL, 2));
         }
-        // the balanced shard holds a little of all six at once
         AspectList balanced = a(ModAspects.CRYSTAL, 1);
         for (Holder<Aspect> primal : ModAspects.primals()) {
             balanced = balanced.add(primal, 1);
@@ -235,14 +207,12 @@ public class ModDataMapProvider extends DataMapProvider {
         item(ModItems.BRASS_NUGGET, a(ModAspects.METAL, 1));
         item(ModItems.QUICKSILVER_DROP, a(ModAspects.METAL, 1));
         item(ModItems.SALIS_MUNDUS, a(ModAspects.FLUX, 2).add(ModAspects.ENERGY, 2));
-        // a breath of auram, besides the two points of whatever the wisp was
         item(ModItems.WISPY_ESSENCE, a(ModAspects.AURA, 1));
         item(ModItems.COIN, a(ModAspects.DESIRE, 1));
         item(ModItems.TAINTED_GOO, a(ModAspects.FLUX, 2).add(ModAspects.WATER, 1).add(ModAspects.AURA, 1));
         item(ModItems.TAINT_TENDRIL, a(ModAspects.FLUX, 2).add(ModAspects.DESIRE, 1).add(ModAspects.AURA, 1));
         item(ModItems.KNOWLEDGE_FRAGMENT, a(ModAspects.MIND, 8));
 
-        // our trees are livelier than ordinary ones, and the silverwood hums with aura
         item(ModBlocks.GREATWOOD.log(), a(ModAspects.PLANT, 3).add(ModAspects.LIFE, 1));
         item(ModBlocks.GREATWOOD.sapling(), a(ModAspects.PLANT, 2).add(ModAspects.LIFE, 2));
         item(ModBlocks.SILVERWOOD.log(), a(ModAspects.PLANT, 3).add(ModAspects.AURA, 1));
@@ -259,8 +229,6 @@ public class ModDataMapProvider extends DataMapProvider {
                 ModBlocks.ANCIENT_ROCK, ModBlocks.ANCIENT_TILE)) {
             item(old, a(ModAspects.EARTH, 1).add(ModAspects.ELDRITCH, 1));
         }
-        // a candle is a light and a little of what it was rendered from
-        // an arrow, and the primal in it
         ModItems.PRIMAL_ARROWS.forEach((type, arrow) -> item(arrow, a(ModAspects.AVERSION, 1).add(type.aspect(), 1)));
         ModBlocks.TALLOW_CANDLES.values().forEach(candle ->
                 item(candle, a(ModAspects.LIGHT, 1).add(ModAspects.LIFE, 1)));
@@ -270,7 +238,6 @@ public class ModDataMapProvider extends DataMapProvider {
         item(ModBlocks.ANCIENT_DOORWAY, a(ModAspects.METAL, 1).add(ModAspects.ELDRITCH, 1).add(ModAspects.TRAP, 1));
         item(ModBlocks.GLYPHED_STONE, a(ModAspects.METAL, 1).add(ModAspects.ELDRITCH, 1).add(ModAspects.MIND, 1));
         item(ModBlocks.POROUS_STONE, a(ModAspects.EARTH, 1).add(ModAspects.VOID, 1));
-        // the baubles found rather than made
         for (var ring : me.moonscenty.alchemia.registry.ModItems.APPRENTICE_RINGS.values()) {
             item(ring, a(ModAspects.AURA, 2).add(ModAspects.METAL, 1).add(ring.get().primal(), 5));
         }
@@ -310,7 +277,7 @@ public class ModDataMapProvider extends DataMapProvider {
         }
         mob(me.moonscenty.alchemia.registry.ModEntities.ELDRITCH_GUARDIAN.get(),
                 a(ModAspects.ELDRITCH, 4).add(ModAspects.DEATH, 2).add(ModAspects.UNDEAD, 4));
-        // the original's, which it copied by mistake from the tainted creeper's
+        // original's value, copied there by mistake from the tainted creeper
         mob(me.moonscenty.alchemia.registry.ModEntities.MIND_SPIDER.get(), a(ModAspects.FLUX, 2).add(ModAspects.FIRE, 2));
         mob(me.moonscenty.alchemia.registry.ModEntities.ELDRITCH_CRAB.get(),
                 a(ModAspects.ELDRITCH, 1).add(ModAspects.BEAST, 1).add(ModAspects.TRAP, 1));
@@ -330,19 +297,15 @@ public class ModDataMapProvider extends DataMapProvider {
                 a(ModAspects.METAL, 4).add(ModAspects.ELDRITCH, 1).add(ModAspects.DEATH, 1));
         item(me.moonscenty.alchemia.registry.ModItems.CRIMSON_RITES.get(),
                 a(ModAspects.MIND, 5).add(ModAspects.ELDRITCH, 3).add(ModAspects.SOUL, 3));
-        // any wisp is a little auram and air, and two of its own aspect besides
         mob(me.moonscenty.alchemia.registry.ModEntities.WISP.get(), a(ModAspects.AURA, 1).add(ModAspects.AIR, 1));
-        // a golem, as the original had it
         mob(me.moonscenty.alchemia.registry.ModEntities.GOLEM.get(),
                 a(ModAspects.AIR, 2).add(ModAspects.EARTH, 2).add(ModAspects.MOTION, 2));
-        // the creatures of the taint, as the original had them; it gave the crawler nothing
         mob(me.moonscenty.alchemia.registry.ModEntities.TAINT_SWARM.get(),
                 a(ModAspects.FLUX, 3).add(ModAspects.AIR, 3));
         mob(me.moonscenty.alchemia.registry.ModEntities.TAINTACLE.get(),
                 a(ModAspects.FLUX, 3).add(ModAspects.WATER, 2));
         mob(me.moonscenty.alchemia.registry.ModEntities.TAINTACLE_TINY.get(),
                 a(ModAspects.FLUX, 1).add(ModAspects.WATER, 1));
-        // the animals it makes over, and its slime, as the original had them
         mob(me.moonscenty.alchemia.registry.ModEntities.TAINTED_COW.get(),
                 a(ModAspects.FLUX, 3).add(ModAspects.EARTH, 3));
         mob(me.moonscenty.alchemia.registry.ModEntities.TAINTED_PIG.get(),
@@ -359,7 +322,6 @@ public class ModDataMapProvider extends DataMapProvider {
                 a(ModAspects.FLUX, 2).add(ModAspects.FIRE, 2));
         mob(me.moonscenty.alchemia.registry.ModEntities.ALCHEMIC_SLIME.get(),
                 a(ModAspects.LIFE, 2).add(ModAspects.WATER, 2).add(ModAspects.FLUX, 1));
-        // what every pech is; each kind adds its own
         mob(me.moonscenty.alchemia.registry.ModEntities.PECH.get(),
                 a(ModAspects.MAN, 2).add(ModAspects.AURA, 2).add(ModAspects.EXCHANGE, 2));
         mob(me.moonscenty.alchemia.registry.ModEntities.ANGRY_ZOMBIE.get(),

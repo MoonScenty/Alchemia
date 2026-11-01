@@ -21,13 +21,6 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 
-/**
- * Standing at a thaumatorium: the catalyst slot, and the crucible recipes it could be told to make.
- * <p>
- * The recipes on offer are the ones the player has worked out whose catalyst is the thing in the slot, and with
- * them every one the thaumatorium is already making, so that those can be taken off again. Both sides work the list
- * out the same way, sorted by name, so that a button pressed on one means the same recipe on the other.
- */
 public class ThaumatoriumMenu extends AlchemiaMenu {
     private static final int CATALYST_X = 48;
     private static final int CATALYST_Y = 16;
@@ -58,7 +51,7 @@ public class ThaumatoriumMenu extends AlchemiaMenu {
         return thaumatorium;
     }
 
-    /** What could be chosen now: worked-out recipes the catalyst finishes, and whatever is already chosen. */
+    // both sides build this list the same way, sorted by name, so button ids match
     public List<RecipeHolder<CrucibleRecipe>> offered() {
         if (thaumatorium == null) {
             return List.of();
@@ -79,7 +72,6 @@ public class ThaumatoriumMenu extends AlchemiaMenu {
         return offered;
     }
 
-    /** A button is a recipe on offer, by its place in the list: choosing it, or unchoosing it. */
     @Override
     public boolean clickMenuButton(Player clicker, int id) {
         List<RecipeHolder<CrucibleRecipe>> offered = offered();

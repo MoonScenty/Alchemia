@@ -16,16 +16,12 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/**
- * The wisp and the pech of step eleven.
- */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class WispAndPechTests {
     private static final String TEMPLATE = "empty_32x40x32";
     private static final BlockPos MIDDLE = new BlockPos(8, 6, 8);
 
-    /** A wisp that has drifted a tick is a wisp of something. */
     @GameTest(template = TEMPLATE)
     public static void aWispTakesAnAspect(GameTestHelper helper) {
         Wisp wisp = helper.spawn(ModEntities.WISP.get(), MIDDLE);
@@ -35,7 +31,6 @@ public class WispAndPechTests {
         });
     }
 
-    /** A wisp leaves two points of its aspect as wispy essence, and is its aspect twice over to a scan. */
     @GameTest(template = TEMPLATE)
     public static void aWispLeavesItsEssence(GameTestHelper helper) {
         Wisp wisp = helper.spawn(ModEntities.WISP.get(), MIDDLE);
@@ -55,7 +50,6 @@ public class WispAndPechTests {
         helper.succeed();
     }
 
-    /** Taken against something standing still, a wisp zaps it before long. */
     @GameTest(template = TEMPLATE, timeoutTicks = 300)
     public static void aWispZapsWhatItTakesAgainst(GameTestHelper helper) {
         Wisp wisp = helper.spawn(ModEntities.WISP.get(), MIDDLE);
@@ -68,7 +62,6 @@ public class WispAndPechTests {
         });
     }
 
-    /** A chunk thick with flux can let out a wisp, five blocks over the ground. */
     @GameTest(template = TEMPLATE)
     public static void fluxLetsOutAWisp(GameTestHelper helper) {
         BlockPos ground = helper.absolutePos(new BlockPos(4, 1, 4));
@@ -84,7 +77,6 @@ public class WispAndPechTests {
         return helper.spawnWithNoFreeWill(ModEntities.PECH.get(), at);
     }
 
-    /** Offered what it prizes, a wild pech eats it and may take to you; what else it finds goes in its pack. */
     @GameTest(template = TEMPLATE)
     public static void aPechIsWonOverWithEmeralds(GameTestHelper helper) {
         var pech = pech(helper, new BlockPos(4, 2, 4));
@@ -105,7 +97,6 @@ public class WispAndPechTests {
         helper.succeed();
     }
 
-    /** Hit one pech, and the others about it come for you too. */
     @GameTest(template = TEMPLATE)
     public static void hittingAPechAngersTheOthers(GameTestHelper helper) {
         var struck = pech(helper, new BlockPos(4, 2, 4));
@@ -118,7 +109,6 @@ public class WispAndPechTests {
         helper.succeed();
     }
 
-    /** A tamed pech pays out for an emerald from its own list. */
     @GameTest(template = TEMPLATE)
     public static void aPechTradesForAnEmerald(GameTestHelper helper) {
         var pech = pech(helper, new BlockPos(4, 2, 4));
@@ -141,7 +131,6 @@ public class WispAndPechTests {
         helper.succeed();
     }
 
-    /** Every kind of pech has something for every worth, from its own list or the nearest worth on it. */
     @GameTest(template = TEMPLATE)
     public static void everyLotHasSomething(GameTestHelper helper) {
         RandomSource random = RandomSource.create(4L);
@@ -154,7 +143,6 @@ public class WispAndPechTests {
         helper.succeed();
     }
 
-    /** A pech dies leaving coins where its pack was empty, and is its kind to a scan. */
     @GameTest(template = TEMPLATE)
     public static void aPechLeavesCoins(GameTestHelper helper) {
         var pech = pech(helper, new BlockPos(4, 2, 4));

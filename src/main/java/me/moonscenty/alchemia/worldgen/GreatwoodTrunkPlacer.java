@@ -20,9 +20,6 @@ import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacer;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacer;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacerType;
 
-/**
- * A tall 2x2 trunk with long rising branches along its upper part. Every branch tip and the crown carry foliage.
- */
 public class GreatwoodTrunkPlacer extends TrunkPlacer {
     public static final MapCodec<GreatwoodTrunkPlacer> CODEC = RecordCodecBuilder.mapCodec(
             instance -> trunkPlacerParts(instance).apply(instance, GreatwoodTrunkPlacer::new));
@@ -54,7 +51,6 @@ public class GreatwoodTrunkPlacer extends TrunkPlacer {
         int lowestBranch = Mth.ceil(freeTreeHeight * 0.4F);
         for (int i = 0; i < branches; i++) {
             int startY = lowestBranch + random.nextInt(Math.max(1, freeTreeHeight - 2 - lowestBranch));
-            // spread the branches around the trunk, then jitter them
             double angle = (Math.PI * 2 * i / branches) + random.nextDouble() * 0.9;
             // lower branches reach further out
             float heightFraction = (float) (startY - lowestBranch) / Math.max(1, freeTreeHeight - lowestBranch);
@@ -75,7 +71,7 @@ public class GreatwoodTrunkPlacer extends TrunkPlacer {
 
         BlockPos end = start;
         for (int step = 1; step <= length; step++) {
-            // the trunk is two blocks wide, so measure from its center
+            // 2-wide trunk: measure from its centre
             end = BlockPos.containing(start.getX() + 1 + dx * (step + 0.5), start.getY() + rise * step, start.getZ() + 1 + dz * (step + 0.5));
             placeLog(level, blockSetter, random, end, config, state -> state.trySetValue(RotatedPillarBlock.AXIS, axis));
         }

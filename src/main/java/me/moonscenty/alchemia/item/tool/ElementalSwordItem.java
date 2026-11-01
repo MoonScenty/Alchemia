@@ -13,26 +13,18 @@ import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
-/**
- * The sword of the zephyr: an alchemium sword with air bound into it.
- *
- * <p>A blow carries on to whatever is standing beside what it struck, which is a working it comes with. Held up,
- * it raises a whirlwind round whoever is holding it: the air lifts them, slows their fall, and throws back
- * anything that comes too close. The wind wears the blade, a point a second.
- */
 public class ElementalSwordItem extends SwordItem {
-    /** How far the wind reaches, how hard it throws, and how hard it lifts. All the original's numbers. */
+    // original's values
     private static final double REACHES = 2.5;
     private static final double THROWS = 2.5;
     private static final double LIFTS = 0.08;
     private static final double RISES_AT_MOST = 0.5;
     private static final double SETTLES_TO = 0.2;
-    /** How much a fall is slowed each tick, as a share of itself. */
+    // falling speed and fall distance are divided by this each tick
     private static final double CUSHIONS = 1.2;
-    /** How often the wind is heard, and how often it costs the blade a point, in ticks. */
+    // sound and durability interval, in ticks
     private static final int EVERY = 20;
 
     public ElementalSwordItem(Tier tier, Properties properties) {
@@ -55,13 +47,7 @@ public class ElementalSwordItem extends SwordItem {
         return ElementalTools.HELD_FOREVER;
     }
 
-    /**
-     * One tick of the whirlwind.
-     * <p>
-     * The holder is lifted: a fall is cushioned a fifth at a time and every tick adds a little rise, which settles
-     * back if it gets going too fast. Anything alive within reach is pushed straight away from them, harder the
-     * closer it is. Other players are left out of it, as the original left them.
-     */
+    // other players are not pushed, as in the original
     @Override
     public void onUseTick(Level level, LivingEntity holder, ItemStack stack, int left) {
         int held = getUseDuration(stack, holder) - left;

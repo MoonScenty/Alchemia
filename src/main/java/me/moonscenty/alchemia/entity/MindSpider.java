@@ -19,19 +19,12 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 
-/**
- * A mind spider: a little ghost of a spider, nearly all eyes. Real ones bite, if only for a point.
- * <p>
- * Most are not real. Warp shows one player a swarm of them that nobody else can see, that bite for nothing, are
- * worth nothing, and are gone in a minute; the original forgot the minute when the world was saved, and they stayed.
- * Here they go when their minute is up whatever happens in between.
- */
 public class MindSpider extends Spider implements EldritchMob {
     private static final EntityDataAccessor<Boolean> HARMLESS = SynchedEntityData.defineId(MindSpider.class,
             EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<String> VIEWER = SynchedEntityData.defineId(MindSpider.class,
             EntityDataSerializers.STRING);
-    /** How long a harmless one lasts. */
+    // illusions expire on time even across a save; the original's forgot the timer and stayed
     private static final int ILLUSION_LASTS = 1200;
 
     private int lifeSpan = Integer.MAX_VALUE;
@@ -62,7 +55,6 @@ public class MindSpider extends Spider implements EldritchMob {
         return entityData.get(HARMLESS);
     }
 
-    /** Makes it one of warp's illusions: harmless, worthless, and gone in a minute. */
     public void setHarmless(boolean harmless) {
         if (harmless) {
             lifeSpan = ILLUSION_LASTS;
@@ -70,7 +62,6 @@ public class MindSpider extends Spider implements EldritchMob {
         entityData.set(HARMLESS, harmless);
     }
 
-    /** Who alone can see it, or nobody in particular. */
     public String viewer() {
         return entityData.get(VIEWER);
     }
@@ -111,7 +102,6 @@ public class MindSpider extends Spider implements EldritchMob {
         return true;
     }
 
-    /** None of a spider's riders or gifts. */
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason,
             SpawnGroupData data) {

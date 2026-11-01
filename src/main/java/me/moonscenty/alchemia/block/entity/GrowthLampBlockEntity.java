@@ -24,17 +24,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
-/**
- * A lamp of growth at work: hurrying along whatever is growing within six blocks of it.
- *
- * <p>It burns herba, one point at a time, drawn through the face it hangs from. A point is a hundred nudges, and a
- * nudge is one more turn of growing for one plant that has not finished. It works through the ground under it a
- * column at a time, top to bottom, so it does not keep on at one plant while its neighbours wait.
- *
- * <p>It keeps one point in hand besides the one it is burning, so it does not go dark between deliveries.
- */
 public class GrowthLampBlockEntity extends BlockEntity implements EssentiaHolder {
-    /** How many nudges a point of herba is worth, and how far round it reaches. The original's numbers. */
+    // original's values
     private static final int NUDGES = 100;
     private static final int REACHES = 6;
 
@@ -62,12 +53,6 @@ public class GrowthLampBlockEntity extends BlockEntity implements EssentiaHolder
         }
     }
 
-    /**
-     * One more turn of growing for the next unfinished plant, looked for one column at a time.
-     * <p>
-     * A turn of growing is the game's own: the plant is asked to grow the way it is asked a few times a minute
-     * anyway, and takes it or not as it would then. The lamp only asks far more often.
-     */
     private void nudge(ServerLevel level) {
         if (columns.isEmpty()) {
             for (int x = -REACHES; x <= REACHES; x++) {
@@ -92,12 +77,7 @@ public class GrowthLampBlockEntity extends BlockEntity implements EssentiaHolder
         }
     }
 
-    /**
-     * Whether this is something still growing.
-     * <p>
-     * Anything bone meal would work on that has not finished, and the two that grow without it -- cane and cactus
-     * -- while there is room above them. Grass is passed over: it is always willing, and always finished.
-     */
+    // grass is skipped: always bonemealable, never finished
     private static boolean growing(ServerLevel level, BlockPos at, BlockState there) {
         if (there.is(Blocks.GRASS_BLOCK)) {
             return false;
@@ -108,14 +88,11 @@ public class GrowthLampBlockEntity extends BlockEntity implements EssentiaHolder
         return (there.is(Blocks.SUGAR_CANE) || there.is(Blocks.CACTUS)) && level.isEmptyBlock(at.above());
     }
 
-    // --- being fed ----------------------------------------------------------------------------------------------
-
     @Override
     public AspectList held() {
         return reserve ? AspectList.of(ModAspects.PLANT, 1) : AspectList.EMPTY;
     }
 
-    /** One point in hand at a time, and only herba. */
     @Override
     public boolean wants(Holder<Aspect> aspect) {
         return !reserve && aspect.value() == ModAspects.PLANT.value();
@@ -131,13 +108,11 @@ public class GrowthLampBlockEntity extends BlockEntity implements EssentiaHolder
         return true;
     }
 
-    /** Fed only through the face it hangs from. */
     @Override
     public boolean reachableFrom(Direction side) {
         return side == getBlockState().getValue(LampBlock.FACING);
     }
 
-    /** How many nudges it has left in the point it is burning. */
     public int charges() {
         return charges;
     }

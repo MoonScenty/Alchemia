@@ -19,7 +19,6 @@ import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/** The arcane bore: it digs the way it faces while it has a signal, and what it digs comes out of its base. */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class BoreTests {
@@ -27,7 +26,6 @@ public class BoreTests {
     private static final BlockPos BASE = new BlockPos(5, 2, 12);
     private static final BlockPos BORE = BASE.above();
 
-    /** A bore on its base, facing north, with a focus and a pickaxe in it and entropy in the air about it. */
     private static ArcaneBoreBlockEntity bore(GameTestHelper helper) {
         helper.setBlock(BASE, ModBlocks.ARCANE_BORE_BASE.get().defaultBlockState()
                 .setValue(ArcaneBoreBaseBlock.FACING, Direction.EAST));
@@ -39,7 +37,6 @@ public class BoreTests {
         ArcaneBoreBlockEntity bore = (ArcaneBoreBlockEntity) helper.getLevel().getBlockEntity(at);
         bore.setItem(ArcaneBoreBlockEntity.SLOT_FOCUS, new ItemStack(ModItems.FOCI.get("excavation").get()));
         bore.setItem(ArcaneBoreBlockEntity.SLOT_PICK, new ItemStack(Items.IRON_PICKAXE));
-        // the first line it looks along starts three blocks out
         helper.setBlock(BORE.north(3), Blocks.STONE);
         return bore;
     }
@@ -51,7 +48,6 @@ public class BoreTests {
         }
     }
 
-    /** Given a signal, it digs the stone in front of it, and the cobblestone ends up in the chest by its base. */
     @GameTest(template = TEMPLATE, timeoutTicks = 200)
     public static void aBoreDigsWhatIsInFrontAndPutsItInTheChest(GameTestHelper helper) {
         ArcaneBoreBlockEntity bore = bore(helper);
@@ -66,7 +62,6 @@ public class BoreTests {
         helper.succeed();
     }
 
-    /** Without a signal it does nothing at all. */
     @GameTest(template = TEMPLATE, timeoutTicks = 200)
     public static void aBoreWithoutASignalStandsIdle(GameTestHelper helper) {
         ArcaneBoreBlockEntity bore = bore(helper);

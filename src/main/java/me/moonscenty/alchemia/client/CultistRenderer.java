@@ -25,14 +25,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.Vec3;
 
-/**
- * A cultist as the original drew one: a plain body in the cult's one skin, which is the old sixty-four by thirty-two
- * sheet, and everything that tells the knight from the cleric is what they have on -- the robe and the plate are
- * drawn on the original's own models.
- * <p>
- * A cleric in its rite floats a little off the ground, bobbing, with a dark wisp of thread running from its head to
- * the altar it attends.
- */
 public class CultistRenderer extends HumanoidMobRenderer<Cultist, HumanoidModel<Cultist>> {
     private static final ResourceLocation SKIN = Alchemia.id("textures/entity/cultist.png");
     private static final ResourceLocation THREAD = Alchemia.id("textures/misc/wispy.png");
@@ -63,7 +55,6 @@ public class CultistRenderer extends HumanoidMobRenderer<Cultist, HumanoidModel<
         thread(cleric, cleric.altar().get(), bob, partial, pose, buffers);
     }
 
-    /** The dark thread from the cleric's head to the altar, wavering most in the middle. */
     private static void thread(CultistCleric cleric, BlockPos altar, float bob, float partial, PoseStack pose,
             MultiBufferSource buffers) {
         Vec3 here = cleric.getPosition(partial);

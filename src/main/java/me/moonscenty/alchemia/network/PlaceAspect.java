@@ -10,9 +10,6 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 
-/**
- * Where the reader touched the board, and what they meant to write there. An empty aspect rubs the space out again.
- */
 public record PlaceAspect(HexGrid.Hex at, Optional<ResourceLocation> aspect) implements CustomPacketPayload {
     public static final Type<PlaceAspect> TYPE = new Type<>(Alchemia.id("place_aspect"));
 

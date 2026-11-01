@@ -14,19 +14,12 @@ import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/**
- * What an altar puts on a tool, and what the tool then does.
- * <p>
- * These are the only enchantments in the mod that a table cannot sell, so the rules about what they go on and how
- * far they go are the whole of what keeps them from being a better enchanting table.
- */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class InfusionEnchantmentTests {
     private static final String TEMPLATE = "empty_32x40x32";
     private static final BlockPos HERE = new BlockPos(8, 2, 8);
 
-    /** A working goes on the tools it was meant for, and on nothing else. */
     @GameTest(template = TEMPLATE)
     public static void aWorkingGoesOnlyOnWhatItWasMeantFor(GameTestHelper helper) {
         helper.assertTrue(InfusionEnchantment.DESTRUCTIVE.fits(new ItemStack(Items.IRON_PICKAXE)),
@@ -40,7 +33,6 @@ public class InfusionEnchantmentTests {
         helper.succeed();
     }
 
-    /** The same working twice is the same tool, not a deeper one, once it has been taken as far as it goes. */
     @GameTest(template = TEMPLATE)
     public static void anAltarWillNotSellTheSameStepTwice(GameTestHelper helper) {
         ItemStack plain = new ItemStack(Items.IRON_PICKAXE);
@@ -62,12 +54,6 @@ public class InfusionEnchantmentTests {
         helper.succeed();
     }
 
-    /**
-     * A destructive pickaxe takes the eight stones round the one struck, and leaves what it is no good for.
-     * <p>
-     * The second half is what keeps it from being a bomb: the log standing in the middle of the stone is still
-     * standing afterwards, because a pickaxe was never going to fell it.
-     */
     @GameTest(template = TEMPLATE)
     public static void aDestructivePickaxeTakesTheEightRoundIt(GameTestHelper helper) {
         for (int east = -1; east <= 1; east++) {
@@ -91,7 +77,6 @@ public class InfusionEnchantmentTests {
         helper.succeed();
     }
 
-    /** Crouching turns both of them off, which is the only say a player has over either. */
     @GameTest(template = TEMPLATE)
     public static void crouchingTurnsThemOff(GameTestHelper helper) {
         for (int east = -1; east <= 1; east++) {
@@ -113,13 +98,6 @@ public class InfusionEnchantmentTests {
         helper.succeed();
     }
 
-    /**
-     * A burrowing pickaxe brings a seam apart from its far end.
-     * <p>
-     * The block struck is left standing and the furthest one joined to it goes instead, which is what makes a
-     * trunk fall on its own rather than be climbed. The stone round the seam is not touched: this follows what
-     * is joined, not what is near.
-     */
     @GameTest(template = TEMPLATE)
     public static void aBurrowingPickaxeTakesTheFarEndOfASeam(GameTestHelper helper) {
         helper.setBlock(HERE, Blocks.IRON_ORE);
@@ -131,8 +109,7 @@ public class InfusionEnchantmentTests {
                 InfusionEnchantments.raised(new ItemStack(Items.NETHERITE_PICKAXE), InfusionEnchantment.BURROWING));
         player.setPos(helper.absoluteVec(HERE.above(2).getCenter()));
 
-        // the break has to be announced rather than simply done: what a burrowing tool does is to call the
-        // swing off and spend it elsewhere, and only the announcement can be called off
+        // fire the BreakEvent instead of breaking: burrowing cancels the event and spends the swing elsewhere
         BlockPos at = helper.absolutePos(HERE);
         var swing = new net.neoforged.neoforge.event.level.BlockEvent.BreakEvent(
                 helper.getLevel(), at, helper.getLevel().getBlockState(at), player);
@@ -145,10 +122,6 @@ public class InfusionEnchantmentTests {
         helper.succeed();
     }
 
-    /**
-     * A zombie that has already had its champion roll and come up ordinary, so that a test about blows is not upset
-     * by one coming up armoured or twice as hale.
-     */
     private static net.minecraft.world.entity.monster.Zombie plainZombie(GameTestHelper helper, BlockPos at) {
         var zombie = net.minecraft.world.entity.EntityType.ZOMBIE.create(helper.getLevel());
         zombie.setData(me.moonscenty.alchemia.player.ModAttachments.CHAMPION,
@@ -159,7 +132,6 @@ public class InfusionEnchantmentTests {
         return zombie;
     }
 
-    /** An arcing sword carries the blow to as many others as it has been taken steps, and no further. */
     @GameTest(template = TEMPLATE)
     public static void anArcingSwordReachesPastWhatItStruck(GameTestHelper helper) {
         var struck = plainZombie(helper, HERE);
@@ -178,12 +150,6 @@ public class InfusionEnchantmentTests {
         helper.succeed();
     }
 
-    /**
-     * An essence weapon takes a little of what it killed, and only what that thing was made of.
-     * <p>
-     * Taken to its fifth step it takes something every time, which is what makes this testable at all; at one
-     * step it is one time in five and a test that asserted a drop would be wrong four times in five.
-     */
     @GameTest(template = TEMPLATE)
     public static void anEssenceWeaponTakesWhatItKilled(GameTestHelper helper) {
         ItemStack sword = new ItemStack(Items.NETHERITE_SWORD);

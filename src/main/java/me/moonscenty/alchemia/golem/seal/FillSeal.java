@@ -15,13 +15,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.items.IItemHandler;
 
-/**
- * Store: keeps a task open at the block it is on for any golem carrying something the filter lets by, which puts it
- * in. On a container it fills the container through the face it is on; on anything else the golem drops the thing in
- * front of it. A whitelisted entry's count is how many of it are wanted there, and no more are brought. With its
- * last option set, only things already in the container are brought. Clumsy golems cannot. The advanced seal has
- * nine filter entries and lets its options be set, and wants a smart golem.
- */
+// The Store seal; a whitelisted entry's count caps how many of it are wanted there.
 public class FillSeal extends Seal {
     private static final int EXIST = 4;
 
@@ -37,7 +31,6 @@ public class FillSeal extends Seal {
         this.delay = java.util.concurrent.ThreadLocalRandom.current().nextInt(50);
     }
 
-    /** Once a second, a fresh task if the last one has been taken or has gone. */
     @Override
     public void tick(ServerLevel level, SealEntity seal) {
         if (delay++ % 20 != 0) {
@@ -56,7 +49,7 @@ public class FillSeal extends Seal {
         watched = task.id();
     }
 
-    /** As soon as one golem takes it on another is offered, so that several can fill at once. */
+    // offer another task at once so several golems can fill together
     @Override
     public void onTaskStarted(ServerLevel level, Golem golem, Task task) {
         SealEntity seal = Seals.get(level, task.seal());
@@ -65,7 +58,6 @@ public class FillSeal extends Seal {
         }
     }
 
-    /** How many of what it matched may still be brought: as many as it has, or up to the entry's count. */
     private int limit(Matching.Match match, int there) {
         int limit = match.stack().getCount();
         if (hasStacksizeLimiters() && match.entry() >= 0 && limit(match.entry()) > 0) {
@@ -149,7 +141,6 @@ public class FillSeal extends Seal {
         return List.of(GolemTrait.CLUMSY);
     }
 
-    /** A whitelist says how many; a blacklist only what. */
     @Override
     public boolean hasStacksizeLimiters() {
         return !blacklist();

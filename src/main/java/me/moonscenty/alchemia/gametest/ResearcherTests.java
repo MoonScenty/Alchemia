@@ -24,10 +24,6 @@ import net.minecraft.world.level.GameType;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/**
- * The original's research expertise and mastery: points given back on rubbing out, free points on laying down, and
- * a knowledge fragment spent for a point of each primal.
- */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class ResearcherTests {
@@ -36,7 +32,6 @@ public class ResearcherTests {
     private static final int PLENTY = 1000;
     private static final HexGrid.Hex WRITTEN = HexGrid.CENTRE;
 
-    /** Two earths pinned apart, with air written between them, which joins nothing. */
     private static ResearchNote note(boolean written) {
         return new ResearchNote(ResourceLocation.parse("alchemia:test"), AspectList.of(ModAspects.AIR, PLENTY),
                 List.of(ResearchNote.Cell.pinned(new HexGrid.Hex(-1, 0), ModAspects.EARTH),
@@ -65,7 +60,6 @@ public class ResearcherTests {
         return player;
     }
 
-    /** How many of so many rubbings out gave the point back. */
     private static int givenBack(Player player) {
         int back = 0;
         for (int tried = 0; tried < TRIES; tried++) {
@@ -76,7 +70,6 @@ public class ResearcherTests {
         return back;
     }
 
-    /** How many of so many layings down cost nothing. */
     private static int free(Player player) {
         int free = 0;
         for (int tried = 0; tried < TRIES; tried++) {

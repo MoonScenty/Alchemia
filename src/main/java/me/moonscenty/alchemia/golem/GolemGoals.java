@@ -22,15 +22,11 @@ import net.minecraft.world.entity.ai.util.DefaultRandomPos;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.Vec3;
 
-/** What a golem gets up to on its own, as the original's golems did. */
 public final class GolemGoals {
     private GolemGoals() {
     }
 
-    /**
-     * Keeps after its owner once it is ten blocks off, until it is two away; and if it is a dozen off and cannot
-     * find a way, it simply turns up beside them, on any free ground in the ring round their feet.
-     */
+    // teleports beside the owner when 12+ blocks off with no path
     public static class FollowOwner extends Goal {
         private final Golem golem;
         private final double speed;
@@ -110,10 +106,7 @@ public final class GolemGoals {
         }
     }
 
-    /**
-     * Wanders back when it has strayed more than three blocks from home, looking every couple of seconds. From a
-     * long way off it heads for somewhere on the way rather than straight there.
-     */
+    // from far off it heads for a point on the way rather than straight home
     public static class GoHome extends Goal {
         private final Golem golem;
         private Vec3 to;
@@ -161,10 +154,8 @@ public final class GolemGoals {
         }
     }
 
-    /** Turns on whatever has just hurt its owner, or joins in on whatever its owner has just struck. */
     public static class OwnersFight extends TargetGoal {
         private final Golem golem;
-        /** Whether it goes for what hurt its owner, rather than what its owner hurt. */
         private final boolean defends;
         private LivingEntity other;
         private int seen;
@@ -205,12 +196,7 @@ public final class GolemGoals {
         }
     }
 
-    /**
-     * Going to do a task for a seal. Every quarter second, when it has nothing in hand, it looks for the nearest task
-     * it may do that it can get to, takes it, and heads for it. Near enough, it does it; if the seal says it is not
-     * done yet it waits half a second and tries again. Stuck on the way for two seconds it wanders a little towards
-     * the task and tries again, and after fifty seconds of not getting there it gives up.
-     */
+    // a task the seal says is not done yet is retried after a short pause
     abstract static class Goto extends Goal {
         protected final Golem golem;
         protected int counter = -1;
@@ -313,19 +299,17 @@ public final class GolemGoals {
             task.setReserved(false);
         }
 
-        /** How far it still has to go, squared. */
+        // squared
         protected abstract double distance(Task task);
 
         protected abstract void moveTo();
 
         protected abstract boolean find();
 
-        /** Whether it may do a task at all, before asking whether it can get there. */
         protected boolean mayDo(Task task) {
             return golem.mayWork(Seals.get(golem.level(), task.seal())) && task.canBeDoneBy(golem);
         }
 
-        /** Takes a task on. */
         protected void take(Task task) {
             golem.setTask(task);
             task.setReserved(true);
@@ -333,7 +317,6 @@ public final class GolemGoals {
         }
     }
 
-    /** Going to a block for a seal: to whichever open side of it is nearest. */
     public static class GotoBlock extends Goto {
         public GotoBlock(Golem golem) {
             super(golem);
@@ -377,7 +360,6 @@ public final class GolemGoals {
             return false;
         }
 
-        /** The open side of a block nearest the golem, if any side is open. */
         @Nullable
         private BlockPos beside(BlockPos pos) {
             double best = Double.MAX_VALUE;
@@ -395,7 +377,6 @@ public final class GolemGoals {
             return nearest;
         }
 
-        /** Whether it is close already, or can find a way to within a block and a half of it. */
         private boolean reachable(BlockPos pos) {
             if (golem.distanceToSqr(Vec3.atLowerCornerOf(pos)) < reach) {
                 return true;
@@ -409,7 +390,6 @@ public final class GolemGoals {
         }
     }
 
-    /** Going to something that moves for a seal, near enough to reach out and touch it. */
     public static class GotoEntity extends Goto {
         public GotoEntity(Golem golem) {
             super(golem);
@@ -457,13 +437,12 @@ public final class GolemGoals {
             return false;
         }
 
-        /** How near, squared, it must be to work on it: further for a wider thing. */
+        // squared
         private static double near(Entity there) {
             float half = there.getBbWidth() / 2.0F;
             return 3.5 + half * half;
         }
 
-        /** Whether it is close already, or can find a way to near enough it. */
         private boolean reachable(Entity there) {
             double near = near(there);
             if (golem.distanceToSqr(there) < near) {

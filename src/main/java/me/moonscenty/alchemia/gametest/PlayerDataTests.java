@@ -41,7 +41,6 @@ public class PlayerDataTests {
         helper.assertTrue(knowledge.knows(ModAspects.SOUL), "spiritus should be known once discovered");
         helper.assertTrue(knowledge.withAspect(ModAspects.SOUL) == knowledge, "discovering it twice should change nothing");
 
-        // scanning an item takes in everything it is made of at once
         AspectList scanned = AspectList.EMPTY.add(ModAspects.METAL, 4).add(ModAspects.TOOL, 2);
         PlayerKnowledge after = knowledge.withAspects(scanned);
         helper.assertTrue(after.knows(ModAspects.METAL) && after.knows(ModAspects.TOOL), "a scan should teach every aspect it found");
@@ -68,7 +67,6 @@ public class PlayerDataTests {
         helper.assertTrue(warp.lasting() == 3, "only the permanent warp lasts, was " + warp.lasting());
         helper.assertTrue(warp.counter() == 8, "gaining warp should wind the counter to 8, was " + warp.counter());
 
-        // spending warp must not wind the counter, and must not dig below zero
         WarpData spent = warp.add(WarpData.Kind.TEMPORARY, -99);
         helper.assertTrue(spent.temporary() == 0, "temporary warp should have bottomed out at 0, was " + spent.temporary());
         helper.assertTrue(spent.counter() == 8, "spending warp should leave the counter alone, was " + spent.counter());
@@ -78,10 +76,6 @@ public class PlayerDataTests {
         helper.succeed();
     }
 
-    /**
-     * A player carrying warp should eventually have something come of it, and the counter should unwind as it does.
-     * The roll is kept separate from the player so it can be exercised without a real one.
-     */
     @GameTest(template = TEMPLATE)
     public static void warpEventuallyCatchesUp(GameTestHelper helper) {
         RandomSource random = RandomSource.create(1234);
@@ -100,7 +94,6 @@ public class PlayerDataTests {
         helper.succeed();
     }
 
-    /** No warp means no trouble, however many times the dice are rolled. */
     @GameTest(template = TEMPLATE)
     public static void aClearConscienceIsNeverTroubled(GameTestHelper helper) {
         RandomSource random = RandomSource.create(99);
@@ -108,7 +101,6 @@ public class PlayerDataTests {
             helper.assertTrue(!WarpHandler.triggers(WarpData.NONE, random), "a player with no warp should never be troubled");
         }
 
-        // warp that has already been paid off leaves a counter but no warp, which also must not fire
         WarpData paidOff = WarpData.NONE.add(WarpData.Kind.TEMPORARY, 10).add(WarpData.Kind.TEMPORARY, -10);
         helper.assertTrue(paidOff.total() == 0, "the warp should be gone");
         for (int roll = 0; roll < 500; roll++) {
@@ -117,7 +109,6 @@ public class PlayerDataTests {
         helper.succeed();
     }
 
-    /** Severity climbs with warp, so the nastier outcomes only come to the deeply warped. */
     @GameTest(template = TEMPLATE)
     public static void severityClimbsWithWarp(GameTestHelper helper) {
         int mild = WarpHandler.severityOf(WarpData.NONE.add(WarpData.Kind.TEMPORARY, 5));
@@ -140,10 +131,6 @@ public class PlayerDataTests {
         helper.succeed();
     }
 
-    /**
-     * Every rung of the warp ladder has to land somewhere sensible. This walks the whole range, which is what would
-     * have caught the two rungs that were originally mis-numbered.
-     */
     @GameTest(template = TEMPLATE)
     public static void everyWarpRollLandsSomewhere(GameTestHelper helper) {
         Set<Holder<MobEffect>> seen = new HashSet<>();
@@ -157,7 +144,6 @@ public class PlayerDataTests {
             });
         }
 
-        // the mild end must stay harmless and the deep end must not
         helper.assertTrue(WarpHandler.outcomeFor(60, 0).effect().isEmpty(), "the mildest roll should only whisper");
         helper.assertTrue(WarpHandler.outcomeFor(60, 16).effect().isPresent(), "roll 16 should bring the flux flu on");
         Alchemia.LOGGER.info("the warp ladder can inflict {} different effects", seen.size());
@@ -165,7 +151,6 @@ public class PlayerDataTests {
         helper.succeed();
     }
 
-    /** How hard an ailment bites should follow the warp, not the roll that picked it. */
     @GameTest(template = TEMPLATE)
     public static void deeperWarpBitesHarder(GameTestHelper helper) {
         WarpHandler.Outcome mild = WarpHandler.outcomeFor(10, 16);

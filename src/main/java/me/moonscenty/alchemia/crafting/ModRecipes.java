@@ -8,11 +8,6 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
-/**
- * The one recipe type an arcane workbench looks up, and the two ways of writing one down.
- * <p>
- * Shaped and shapeless share a type so the bench asks the manager once and gets both back.
- */
 public class ModRecipes {
     public static final DeferredRegister<RecipeType<?>> TYPES =
             DeferredRegister.create(Registries.RECIPE_TYPE, Alchemia.MODID);
@@ -33,10 +28,8 @@ public class ModRecipes {
     public static final DeferredHolder<RecipeSerializer<?>, UnitSerializer<ArcaneSceptreRecipe>> ARCANE_SCEPTRE =
             SERIALIZERS.register("arcane_sceptre", () -> new UnitSerializer<>(ArcaneSceptreRecipe.INSTANCE));
 
-    /** Writing a jar label, and rubbing one out. A plain bench recipe, not an arcane one. */
     public static final DeferredHolder<RecipeSerializer<?>, SimpleCraftingRecipeSerializer<LabelRecipe>> JAR_LABEL =
             SERIALIZERS.register("jar_label", () -> new SimpleCraftingRecipeSerializer<>(LabelRecipe::new));
-    /** The triple meat treat: a sugar and three different meat chunks. */
     public static final DeferredHolder<RecipeSerializer<?>, SimpleCraftingRecipeSerializer<TripleMeatTreatRecipe>>
             TRIPLE_MEAT_TREAT = SERIALIZERS.register("triple_meat_treat",
                     () -> new SimpleCraftingRecipeSerializer<>(TripleMeatTreatRecipe::new));
@@ -47,7 +40,6 @@ public class ModRecipes {
     public static final DeferredHolder<RecipeSerializer<?>, CrucibleRecipe.Serializer> CRUCIBLE_SERIALIZER =
             SERIALIZERS.register("crucible", CrucibleRecipe.Serializer::new);
 
-    /** What is worked at an infusion matrix: one thing held under it and a ring of things around it. */
     public static final DeferredHolder<RecipeType<?>, RecipeType<InfusionRecipe>> INFUSION =
             TYPES.register("infusion", () -> RecipeType.<InfusionRecipe>simple(Alchemia.id("infusion")));
 

@@ -20,10 +20,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/**
- * A crystal is the one thing that turns aura into something a player can pick up, so the land has to be able to feed
- * it, starve it and spoil it, and none of those may happen for free.
- */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class CrystalGrowthTests {
@@ -32,7 +28,6 @@ public class CrystalGrowthTests {
     private static final BlockPos CRYSTAL = ROCK.above();
     private static final int BASE = AuraGeneration.BASE;
 
-    /** Sets the land to hold exactly this much of everything, so a test can put it wherever it likes. */
     private static void land(GameTestHelper helper, int base, int air, int flux) {
         AspectList aspects = AspectList.EMPTY.add(ModAspects.AIR, air).add(ModAspects.FLUX, flux);
         helper.getLevel().getChunkAt(helper.absolutePos(CRYSTAL)).setData(ModAuraAttachment.AURA, new AuraChunk(base, aspects));
@@ -54,7 +49,7 @@ public class CrystalGrowthTests {
         helper.setBlock(CRYSTAL, crystal);
     }
 
-    /** Runs the growth enough times that the per-generation dice cannot keep it from happening. */
+    // repeated enough that per-generation randomness cannot block growth
     private static void tickHard(GameTestHelper helper, long seed) {
         RandomSource random = RandomSource.create(seed);
         for (int i = 0; i < 64; i++) {
@@ -66,7 +61,6 @@ public class CrystalGrowthTests {
     @GameTest(template = TEMPLATE)
     public static void aGluttedLandGrowsItsCrystalsAndPaysForIt(GameTestHelper helper) {
         plant(helper, crystal(0, 1));
-        // more than enough to grow all the way, but not so much that growth reads as free
         land(helper, BASE, BASE * 2, 0);
         int before = airInLand(helper);
 
@@ -85,7 +79,6 @@ public class CrystalGrowthTests {
 
         tickHard(helper, 2L);
 
-        // each size given back feeds the land a little, so it stops being starved before the crystal is all gone
         int age = helper.getBlockState(CRYSTAL).getValue(CrystalBlock.AGE);
         helper.assertTrue(age < CrystalBlock.MAX_AGE, "with nothing to live on the crystal should have shrunk, is " + age);
         helper.assertTrue(airInLand(helper) > 0, "what the crystal gave up should have gone back into the land");
@@ -94,7 +87,6 @@ public class CrystalGrowthTests {
         helper.succeed();
     }
 
-    /** The last of a patch stays; it is only one with company that goes altogether. */
     @GameTest(template = TEMPLATE)
     public static void aStarvedCrystalWithCompanyIsTheOneThatGoes(GameTestHelper helper) {
         plant(helper, crystal(0, 1));
@@ -111,7 +103,6 @@ public class CrystalGrowthTests {
     @GameTest(template = TEMPLATE)
     public static void aLandThickWithFluxSoursItsCrystals(GameTestHelper helper) {
         plant(helper, crystal(2, 1));
-        // neither starved nor glutted, so nothing else fires, and flux ahead of what the crystal is made of
         land(helper, BASE, BASE / 2, BASE);
 
         tickHard(helper, 4L);
@@ -122,7 +113,6 @@ public class CrystalGrowthTests {
         helper.succeed();
     }
 
-    /** The world's own crystals can stand tall; each seeding stops shorter than the last. */
     @GameTest(template = TEMPLATE)
     public static void laterGenerationsStopShorter(GameTestHelper helper) {
         BlockPos anywhere = new BlockPos(7, 9, 11);
@@ -133,7 +123,6 @@ public class CrystalGrowthTests {
         helper.succeed();
     }
 
-    /** A wand plucks a shard off a crystal, a size at a time, but only for a crystal farmer. */
     @GameTest(template = TEMPLATE)
     public static void aWandPlucksAShard(GameTestHelper helper) {
         helper.setBlock(ROCK, Blocks.STONE);

@@ -9,10 +9,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingDropsEvent;
 
-/**
- * A villager leaves a coin behind when it dies, the original's {@code EntityEvents.livingDrops}: one time in ten,
- * and one more in ten for each level of looting on whatever killed it. It does not have to be a player that did.
- */
+// any killer counts, not only a player (original's behaviour)
 @EventBusSubscriber(modid = Alchemia.MODID)
 public final class VillagerCoins {
     private VillagerCoins() {

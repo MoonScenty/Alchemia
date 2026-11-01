@@ -6,7 +6,6 @@ import me.moonscenty.alchemia.registry.ModDataComponents;
 import me.moonscenty.alchemia.registry.ModSounds;
 import me.moonscenty.alchemia.research.ResearchEntry;
 import me.moonscenty.alchemia.research.ResearchNote;
-import me.moonscenty.alchemia.player.ModAttachments;
 import me.moonscenty.alchemia.player.PlayerKnowledge;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -20,12 +19,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
-/**
- * A sheet with a research puzzle part-drawn on it.
- * <p>
- * A blank one is only paper; what makes it a note is the puzzle it carries, so the name and the description are read
- * off that rather than from the item itself.
- */
 public class ResearchNoteItem extends Item {
     public ResearchNoteItem(Properties properties) {
         super(properties);
@@ -35,7 +28,6 @@ public class ResearchNoteItem extends Item {
         return stack.get(ModDataComponents.RESEARCH_NOTE.get());
     }
 
-    /** Reading back a solved note is what actually teaches it; the sheet is used up in the doing. */
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack held = player.getItemInHand(hand);

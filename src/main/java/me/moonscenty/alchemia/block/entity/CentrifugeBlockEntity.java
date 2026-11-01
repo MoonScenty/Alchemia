@@ -20,24 +20,13 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
-/**
- * An essentia centrifuge: takes one point of a compound essentia in from below, spins it, and gives one of the two
- * things it was made of back out of the top.
- * <p>
- * One of the two, chosen at random, not both: half of what goes in is lost in the spinning, as in the original. It
- * holds one point coming in and one going out, takes nothing while either is full, and refuses the six primals,
- * which have nothing to come apart into. It never pushes what it has made; something above has to draw it off.
- * A redstone signal stops it.
- */
+// never pushes its output; something above has to draw it off
 public class CentrifugeBlockEntity extends SyncedBlockEntity implements EssentiaHolder, Spills {
-    /** How long a point spins before it comes apart, and how often an empty one looks below for another. */
     private static final int SPINS_FOR = 39;
     private static final int LOOKS_EVERY = 5;
-    /** How fast the rotor gets up to speed and runs down again, and its top speed, in degrees a tick. */
     private static final float SPINS_UP = 2.0F;
     private static final float RUNS_DOWN = 0.5F;
     private static final float TOP_SPEED = 20.0F;
-    /** How far the rotor goes round between one heave of the pump and the next, in degrees. */
     private static final float HALF_TURN = 180.0F;
 
     @Nullable
@@ -47,7 +36,6 @@ public class CentrifugeBlockEntity extends SyncedBlockEntity implements Essentia
     private int spinning;
     private int counter;
 
-    /** The rotor, client side only. */
     private float rotation;
     private float speed;
 
@@ -67,6 +55,7 @@ public class CentrifugeBlockEntity extends SyncedBlockEntity implements Essentia
         }
         if (centrifuge.out == null && centrifuge.in != null && centrifuge.spinning == 0) {
             List<Holder<Aspect>> parts = centrifuge.in.value().components().orElse(List.of());
+            // only one component comes out; the other is lost (original)
             centrifuge.out = parts.isEmpty() ? null : parts.get(level.random.nextInt(parts.size()));
             centrifuge.in = null;
             centrifuge.changed();
@@ -83,17 +72,12 @@ public class CentrifugeBlockEntity extends SyncedBlockEntity implements Essentia
         }
         float before = centrifuge.rotation;
         centrifuge.rotation += centrifuge.speed;
-        // the original's pump, heaving once every half turn for as long as the rotor goes round
         if (centrifuge.speed > 0.0F && (int) (before / HALF_TURN) != (int) (centrifuge.rotation / HALF_TURN)) {
             level.playLocalSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, ModSounds.PUMP.get(),
                     SoundSource.BLOCKS, 1.0F, 1.0F, false);
         }
     }
 
-    /**
-     * Takes one point straight out of whatever vessel it stands on, as the original drew on whatever was below it.
-     * A pipe below fills it on its own; this is for a jar set directly underneath.
-     */
     private void drawFromBelow(Level level, BlockPos pos) {
         Holder<Aspect> drawn = EssentiaHolder.drawFrom(level, pos, Direction.DOWN, this::wants);
         if (drawn != null) {
@@ -101,12 +85,9 @@ public class CentrifugeBlockEntity extends SyncedBlockEntity implements Essentia
         }
     }
 
-    /** How far round the rotor is, for drawing. */
     public float rotation(float partial) {
         return rotation + speed * partial;
     }
-
-    // --- essentia ----------------------------------------------------------
 
     @Override
     public AspectList held() {
@@ -140,7 +121,6 @@ public class CentrifugeBlockEntity extends SyncedBlockEntity implements Essentia
         return true;
     }
 
-    /** Pipes meet it only above and below. */
     @Override
     public boolean reachableFrom(Direction side) {
         return side.getAxis() == Direction.Axis.Y;
@@ -156,7 +136,7 @@ public class CentrifugeBlockEntity extends SyncedBlockEntity implements Essentia
         return side == Direction.UP;
     }
 
-    /** What a broken one lets go: what it had split goes into the air as flux. What was still spinning is lost. */
+    // the point still spinning is lost, not spilled
     @Override
     public void spill() {
         if (level != null && !level.isClientSide && out != null) {
@@ -165,8 +145,6 @@ public class CentrifugeBlockEntity extends SyncedBlockEntity implements Essentia
         out = null;
         in = null;
     }
-
-    // --- saving ------------------------------------------------------------
 
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {

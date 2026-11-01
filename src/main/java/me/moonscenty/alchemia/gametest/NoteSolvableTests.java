@@ -1,19 +1,11 @@
 package me.moonscenty.alchemia.gametest;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.aspect.Aspect;
-import me.moonscenty.alchemia.aspect.AspectList;
-import me.moonscenty.alchemia.research.HexGrid;
 import me.moonscenty.alchemia.research.ModResearch;
 import me.moonscenty.alchemia.research.NoteGeneration;
 import me.moonscenty.alchemia.research.NoteSolving;
@@ -29,16 +21,10 @@ import net.minecraft.util.RandomSource;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/**
- * A note that cannot be worked out is worse than no note at all, and nothing in the drawing of one checks that it
- * can be. These play generated notes the way a reader would — spending from the sheet, mixing for what is not on
- * it, writing aspects into cells — and insist that every one comes out solved.
- */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class NoteSolvableTests {
     private static final String TEMPLATE = "empty_32x40x32";
-    /** How many notes of each piece of research are drawn and played. */
     private static final int ROUNDS = 40;
 
     @GameTest(template = TEMPLATE)
@@ -70,10 +56,6 @@ public class NoteSolvableTests {
         helper.succeed();
     }
 
-    /**
-     * Plays the answer the mod's own solver found, move by move, the way a reader would: mixing for what the sheet
-     * does not hold, writing each aspect into its cell, and refusing anything the rules refuse.
-     */
     private static Optional<ResearchNote> solve(Registry<Aspect> aspects, ResearchNote note) {
         List<NoteSolving.Placement> answer = NoteSolving.solve(aspects, note).orElse(null);
         if (answer == null) {
@@ -90,13 +72,8 @@ public class NoteSolvableTests {
         return NoteSolving.isSolved(playing) ? Optional.of(playing) : Optional.empty();
     }
 
-    // --- paying for an aspect ------------------------------------------------
+    // --- paying for an aspect ---
 
-    /**
-     * The note with enough of an aspect on the sheet to write it down, mixing up whatever is short.
-     *
-     * @return the note, or null if the sheet cannot be made to yield it
-     */
     private static ResearchNote afford(Registry<Aspect> aspects, ResearchNote note, Holder<Aspect> want) {
         if (note.budget().get(want) > 0) {
             return note;
@@ -114,7 +91,6 @@ public class NoteSolvableTests {
             }
         }
         if (twice && playing.budget().get(parts.get(0)) < 2) {
-            // mixing a thing with itself takes two of it, and the first call only made sure of one
             int had = playing.budget().get(parts.get(0));
             playing = new ResearchNote(playing.research(), playing.budget().withAmount(parts.get(0), had), playing.cells(), playing.complete());
             playing = afford(aspects, spend(playing, parts.get(0)), parts.get(0));
@@ -129,7 +105,6 @@ public class NoteSolvableTests {
         return NoteSolving.mix(playing, parts.get(0), parts.get(1), made.get());
     }
 
-    /** The note with one of an aspect taken off the sheet, so making another can be asked for. */
     private static ResearchNote spend(ResearchNote note, Holder<Aspect> aspect) {
         return new ResearchNote(note.research(), note.budget().reduce(aspect, 1), note.cells(), note.complete());
     }

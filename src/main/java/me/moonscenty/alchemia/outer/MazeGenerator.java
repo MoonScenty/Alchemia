@@ -6,24 +6,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-/**
- * Lays out one maze of the Outer Lands, a grid of chunks, as the original did and with the original's dice in the
- * original's order.
- * <p>
- * The great hall, two chunks by two, goes in a corner, and the portal in the middle. Holes of one to three cells are
- * scattered where the maze must go round. From the portal a growing tree is carved -- nine times in twenty it goes
- * on from the newest cell, as often from any, once in ten from the oldest -- and the portal is opened on a few
- * more sides. The hall is let in by one door; where no cell next to it was reached, a tunnel is dug out from it until
- * it meets the maze. Of the dead ends, one holds the key and most of the rest a nest, a library, a turret or a
- * room; half of the other passages get something of their own.
- * <p>
- * It can fail -- nothing carved, the hall shut out, no dead end -- and is then tried again with the next seed.
- */
+// One maze layout, with the original's dice in the original's order; a failed layout retries with the next seed.
 public final class MazeGenerator {
     final int width;
     final int height;
     private final Random random;
-    /** The grid, row by row: {@code grid[y][x]}. */
+    // grid[y][x]
     final int[][] grid;
 
     MazeGenerator(int width, int height, long seed) {
@@ -36,7 +24,6 @@ public final class MazeGenerator {
     private record Loc(int x, int y) {
     }
 
-    /** The first maze of this size that comes out of this seed or one after it. */
     static MazeGenerator make(int width, int height, long seed) {
         while (true) {
             MazeGenerator maze = new MazeGenerator(width, height, seed++);
@@ -286,7 +273,6 @@ public final class MazeGenerator {
         grid[at[0]][at[1]] = cell.pack();
     }
 
-    /** Digs out from the hall into what was not reached until it meets the maze; false when it never does. */
     private boolean tunnel(int bx, int by, List<Loc> frontier, List<Integer> dirs) {
         List<Integer> starts = Arrays.asList(Cell.NORTH, Cell.SOUTH, Cell.EAST, Cell.WEST);
         Collections.shuffle(starts, random);

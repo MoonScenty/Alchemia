@@ -10,12 +10,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
-/**
- * A bottle of taint, the original's {@code ItemBottleTaint}: thrown, gently and a little upward, to break and taint
- * the ground where it lands.
- */
 public class TaintBottleItem extends Item {
-    /** How hard it is thrown, and how far above the line of sight. The original's. */
+    // original's values
     private static final float SPEED = 0.5F;
     private static final float LOFT = -20.0F;
 

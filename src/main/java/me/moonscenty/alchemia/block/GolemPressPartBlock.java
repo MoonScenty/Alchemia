@@ -21,11 +21,6 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
 
-/**
- * One of the four blocks of a golem press round its heart, standing in for what it was made from: the bars over the
- * piston, the table, the anvil or the cauldron. It draws nothing, since the heart draws the whole press; it opens
- * the press like the heart does, and breaking it takes the press apart and drops what it stood in for.
- */
 public class GolemPressPartBlock extends Block {
     public static final MapCodec<GolemPressPartBlock> CODEC = simpleCodec(GolemPressPartBlock::new);
     public static final EnumProperty<Part> PART = EnumProperty.create("part", Part.class);
@@ -41,7 +36,6 @@ public class GolemPressPartBlock extends Block {
             return name().toLowerCase(Locale.ROOT);
         }
 
-        /** What it was before the press was made, and is again when the press is taken apart. */
         public BlockState original() {
             return switch (this) {
                 case BARS -> Blocks.IRON_BARS.defaultBlockState();
@@ -72,7 +66,6 @@ public class GolemPressPartBlock extends Block {
         return RenderShape.INVISIBLE;
     }
 
-    /** Picked in creative, it gives what it stands in for. */
     @Override
     public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) {
         return new ItemStack(state.getValue(PART).original().getBlock());
@@ -96,7 +89,6 @@ public class GolemPressPartBlock extends Block {
         super.onRemove(state, level, pos, replacement, moving);
     }
 
-    /** The heart of the press this is part of: within a block of it, and at or below it. */
     private static BlockPos heart(BlockGetter level, BlockPos pos) {
         for (BlockPos at : BlockPos.betweenClosed(pos.offset(-1, -1, -1), pos.offset(1, 0, 1))) {
             if (level.getBlockState(at).is(ModBlocks.GOLEM_PRESS.get())) {

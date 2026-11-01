@@ -7,12 +7,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.util.RandomSource;
 
-/** What a firebat leaves in the air that the game has no particle for: the sparks off a bomb's fuse. */
 public final class FireBatEffects {
     private FireBatEffects() {
     }
 
-    /** One spark a tick off a bomb, the original's nine-cell run, white and short-lived. */
     public static void fuse(FireBat bat) {
         if (!(bat.level() instanceof ClientLevel level)) {
             return;

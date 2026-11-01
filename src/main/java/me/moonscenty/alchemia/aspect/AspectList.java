@@ -18,13 +18,10 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.ExtraCodecs;
 
-/**
- * How much of each aspect something holds. Immutable; every operation hands back a new list.
- */
 public final class AspectList {
     public static final AspectList EMPTY = new AspectList(Map.of());
 
-    /** At most this many aspects survive {@link #cull()}, matching the original. */
+    // original's value
     public static final int MAX_ASPECTS = 6;
 
     public static final Codec<AspectList> CODEC = Codec
@@ -39,9 +36,7 @@ public final class AspectList {
     private final Map<Holder<Aspect>, Integer> amounts;
 
     private AspectList(Map<Holder<Aspect>, Integer> amounts) {
-        // a linked copy rather than Map.copyOf: a copied map hands its entries back in an order the running
-        // machine picks for itself, and every operation below is at pains to keep the order it was given.
-        // Thrown away here, the same list would read out differently from one run of the game to the next
+        // LinkedHashMap, not Map.copyOf: iteration order must stay stable between runs
         this.amounts = Collections.unmodifiableMap(new LinkedHashMap<>(amounts));
     }
 
@@ -49,10 +44,6 @@ public final class AspectList {
         return amount > 0 ? new AspectList(Map.of(aspect, amount)) : EMPTY;
     }
 
-    /**
-     * So much of each of the six primals. Named one by one rather than read from the registry, so it works while
-     * registries are still being filled.
-     */
     public static AspectList eachPrimal(int amount) {
         return of(ModAspects.AIR, amount)
                 .add(ModAspects.EARTH, amount)
@@ -62,7 +53,6 @@ public final class AspectList {
                 .add(ModAspects.ENTROPY, amount);
     }
 
-    /** The list saved under this key, or nothing if there is none. */
     public static AspectList read(CompoundTag tag, String key, HolderLookup.Provider registries) {
         return CODEC.parse(registries.createSerializationContext(NbtOps.INSTANCE), tag.get(key))
                 .result().orElse(EMPTY);
@@ -77,12 +67,10 @@ public final class AspectList {
         return amounts.isEmpty();
     }
 
-    /** How many different aspects are present. */
     public int size() {
         return amounts.size();
     }
 
-    /** Everything added together, which is what a container or a wand charge is measured in. */
     public int total() {
         return amounts.values().stream().mapToInt(Integer::intValue).sum();
     }
@@ -103,7 +91,6 @@ public final class AspectList {
         return amounts.keySet().stream().sorted(Comparator.comparing(holder -> holder.value().tag())).toList();
     }
 
-    /** Largest first, ties broken by name so the order never wobbles between frames. */
     public List<Holder<Aspect>> sortedByAmount() {
         return amounts.keySet().stream()
                 .sorted(Comparator.<Holder<Aspect>>comparingInt(this::get).reversed()
@@ -129,7 +116,6 @@ public final class AspectList {
         return new AspectList(merged);
     }
 
-    /** Keeps whichever amount is larger rather than adding them, as the original's merge did. */
     public AspectList mergeMax(Holder<Aspect> aspect, int amount) {
         if (amount <= 0) {
             return this;
@@ -148,7 +134,6 @@ public final class AspectList {
         return new AspectList(reduced);
     }
 
-    /** Takes some away, dropping the aspect once nothing is left. */
     public AspectList reduce(Holder<Aspect> aspect, int amount) {
         int left = get(aspect) - amount;
         return left > 0 ? withAmount(aspect, left) : remove(aspect);
@@ -163,7 +148,6 @@ public final class AspectList {
         return new AspectList(changed);
     }
 
-    /** Scales every amount, dropping anything that rounds away to nothing. */
     public AspectList scale(float factor) {
         Map<Holder<Aspect>, Integer> scaled = new LinkedHashMap<>();
         amounts.forEach((aspect, amount) -> {
@@ -181,14 +165,7 @@ public final class AspectList {
         return new AspectList(capped);
     }
 
-    /**
-     * The same list written out in the six primals alone.
-     * <p>
-     * A compound is two aspects mixed, and asking for one is asking for as much of each of the two as was asked
-     * of it: an order of energy is an order of order and an order of fire. Worked all the way down, so what comes
-     * back is only ever primals. Nothing is lost on the way -- the amounts add up rather than being split -- so
-     * what comes out is dearer than what went in, which is the point of quoting a price in compounds.
-     */
+    // each compound expands to both parents at full amount, so the primal total exceeds the input
     public AspectList toPrimals() {
         AspectList out = EMPTY;
         for (Holder<Aspect> aspect : sortedByName()) {
@@ -207,18 +184,11 @@ public final class AspectList {
         return out;
     }
 
-    /**
-     * Trims the list down to {@link #MAX_ASPECTS}, dropping the least interesting aspect each time.
-     * <p>
-     * A plain amount would always favour the primals, since compounds break down into them and so are rarer. Each
-     * aspect is therefore weighed up by how deeply compounded it is, so a little of something intricate outranks a lot
-     * of something plain.
-     */
+    // weighted by compounding depth, so a little of a rare compound outranks a lot of a primal
     public AspectList cull() {
         AspectList result = this;
         while (result.size() > MAX_ASPECTS) {
-            // ties broken by name, so which aspect goes is settled by the list itself rather than by the
-            // order it happened to be built in
+            // ties broken by name, so the result doesn't depend on build order
             Holder<Aspect> weakest = result.amounts.keySet().stream()
                     .min(Comparator.<Holder<Aspect>>comparingDouble(result::weight)
                             .thenComparing(holder -> holder.value().tag()))
@@ -230,7 +200,6 @@ public final class AspectList {
 
     private double weight(Holder<Aspect> aspect) {
         int complexity = aspect.value().complexity();
-        // primals count for a little less, and every further step of compounding for a little more
         return get(aspect) * (complexity == 0 ? 0.9 : Math.pow(1.1, complexity));
     }
 

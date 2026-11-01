@@ -27,11 +27,6 @@ import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.AABB;
 
-/**
- * A banner as the original drew it, on its own model: the pole (unless it hangs from a wall), the beam, the two tabs
- * and the cloth, the cloth stirring in a slow hundred-tick sway; the cloth and tabs in the banner's colour, and the
- * aspect painted on it swinging twice as far.
- */
 public class BannerRenderer implements BlockEntityRenderer<BannerBlockEntity> {
     private static final ResourceLocation CULT = Alchemia.id("textures/entity/banner_cultist.png");
     private static final ResourceLocation BLANK = Alchemia.id("textures/entity/banner_blank.png");

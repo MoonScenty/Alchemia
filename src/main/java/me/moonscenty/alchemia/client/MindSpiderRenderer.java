@@ -15,11 +15,6 @@ import net.minecraft.client.renderer.entity.layers.SpiderEyesLayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FastColor;
 
-/**
- * A mind spider as the original drew it: a spider at six tenths the size, its body only a tenth there, so that what
- * one sees is mostly a pair of red eyes. One warp shows to a single player is drawn for that player alone -- shadow
- * and all, which the original let the others see.
- */
 public class MindSpiderRenderer extends MobRenderer<MindSpider, SpiderModel<MindSpider>> {
     private static final ResourceLocation SKIN = ResourceLocation.withDefaultNamespace(
             "textures/entity/spider/spider.png");
@@ -27,7 +22,6 @@ public class MindSpiderRenderer extends MobRenderer<MindSpider, SpiderModel<Mind
 
     public MindSpiderRenderer(EntityRendererProvider.Context context) {
         super(context, new Ghostly(context), 0.5F);
-        // the eyes are drawn whole whatever the body is
         addLayer(new SpiderEyesLayer<>(this) {
             @Override
             public void render(PoseStack pose, net.minecraft.client.renderer.MultiBufferSource buffers, int light,
@@ -77,7 +71,6 @@ public class MindSpiderRenderer extends MobRenderer<MindSpider, SpiderModel<Mind
         return SKIN;
     }
 
-    /** A spider's body drawn only so far there. */
     private static final class Ghostly extends SpiderModel<MindSpider> {
         float alpha = 0.1F;
 

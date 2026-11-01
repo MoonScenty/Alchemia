@@ -20,7 +20,6 @@ import net.minecraft.world.level.GameType;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/** Hidden research: out of the book until its research and clues are there, and clues found by scanning. */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class HiddenResearchTests {
@@ -47,7 +46,6 @@ public class HiddenResearchTests {
         helper.assertTrue(bow.isShownTo(knowledge, id), "in the book with both");
         helper.assertTrue(NoteRequests.isReady(knowledge, id, bow), "and ready to be taken up");
 
-        // an aspect is a clue known once the aspect is
         ResourceLocation lamp = Alchemia.id("arcane_lamp");
         ResearchEntry lampEntry = helper.getLevel().registryAccess().registryOrThrow(ModResearch.ENTRY_KEY).get(lamp);
         PlayerKnowledge fresh = PlayerKnowledge.fresh();

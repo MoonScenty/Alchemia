@@ -21,11 +21,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
-/**
- * A mirror in the hand. Held against a mirror of the same kind that has no partner, one of these becomes a mirror
- * that remembers it; put that one down, and the two are a pair. A mirror taken down from a pair remembers its
- * partner the same way.
- */
 public class MirrorBlockItem extends BlockItem {
     public MirrorBlockItem(Block block, Properties properties) {
         super(block, properties);
@@ -63,7 +58,6 @@ public class MirrorBlockItem extends BlockItem {
         return InteractionResult.CONSUME;
     }
 
-    /** Put down, a mirror that remembers a partner pairs with it, if the partner is free. */
     @Override
     protected boolean updateCustomBlockEntityTag(BlockPos pos, Level level, Player player, ItemStack stack,
             BlockState state) {

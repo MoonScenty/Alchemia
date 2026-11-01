@@ -29,38 +29,26 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
-/**
- * A magnet on a tripod that drags aura nodes about, the original's {@code EntityNodeMagnet}. It picks the nearest
- * node within thirty-two blocks that nothing is holding still, turns to face it, and draws it in, slower the bigger the
- * node, until it is a block off. It runs on vis it takes from the air a little at a time, and now and then the
- * pulling shakes loose a wisp or a point of flux.
- * <p>
- * It hums, and monsters for thirty-two blocks round take against it. It is fragile: a fall or a hard knock breaks it.
- */
 public class NodeMagnet extends Construct {
-    /** How much charge it holds, which a pull spends a point at a time. */
     private static final EntityDataAccessor<Byte> CHARGE =
             SynchedEntityData.defineId(NodeMagnet.class, EntityDataSerializers.BYTE);
-    /** Whether it has hold of a node and the charge to pull it, which is all the client needs to spin it up. */
     private static final EntityDataAccessor<Boolean> PULLING =
             SynchedEntityData.defineId(NodeMagnet.class, EntityDataSerializers.BOOLEAN);
 
     private static final double LIVES = 15.0;
     private static final double REACH = 32.0;
     private static final int MENDS_EVERY = 50;
-    /** Charge it tops up to, and what each primal it can draw from the air is worth. */
     private static final int TOPS_UP_TO = 10;
     private static final int PER_DROP = 3;
-    /** How hard the magnet pulls, against how big the node is: the original's. */
+    // original's values
     private static final double PULL = 200.0;
     private static final double PULL_PER_SIZE = 3.0;
-    /** How fast the magnet's arms may spin, and how fast they come up to it and run down. */
     private static final float SPINS_AT_MOST = 36.0F;
     private static final float SPINS_UP = 0.36F;
     private static final float SPINS_DOWN = 0.5F;
 
     private AuraNode node;
-    /** How fast the arms are spinning, and where they have got to. The client's alone. */
+    // client-side only
     private float spin;
     public float turned;
 
@@ -103,7 +91,6 @@ public class NodeMagnet extends Construct {
         return entityData.get(PULLING);
     }
 
-    /** The node it has hold of, if any. */
     public AuraNode node() {
         return node;
     }
@@ -133,7 +120,6 @@ public class NodeMagnet extends Construct {
         entityData.set(PULLING, node != null && charge() > 0);
     }
 
-    /** The hum sets the monsters round about against it, and its owner learns why. */
     private void stirUp() {
         for (Monster monster : level().getEntitiesOfClass(Monster.class, getBoundingBox().inflate(REACH),
                 monster -> monster.distanceTo(this) <= REACH)) {
@@ -146,7 +132,6 @@ public class NodeMagnet extends Construct {
         }
     }
 
-    /** A point of each primal the air here can spare is worth three of charge. */
     private void recharge() {
         int charge = charge();
         for (Holder<Aspect> primal : ModAspects.primals()) {
@@ -163,11 +148,6 @@ public class NodeMagnet extends Construct {
         return near.stream().min(Comparator.comparingDouble(this::distanceToSqr)).orElse(null);
     }
 
-    /**
-     * One tick's pull on the node, for a point of charge: towards the magnet, weaker the bigger the node. Close
-     * enough, or too far, and it lets go. One pull in a hundred shakes something loose: a wisp of the node's own
-     * kind one time in five, otherwise a point of flux.
-     */
     private void pull() {
         getLookControl().setLookAt(node.getX(), node.getY() + node.getEyeHeight(), node.getZ(), 10.0F,
                 getMaxHeadXRot());
@@ -194,7 +174,6 @@ public class NodeMagnet extends Construct {
         }
     }
 
-    /** The arms spin up while it pulls and run down when it stops, with a pump's thump at every turn. */
     private void spin() {
         spin = Math.max(0.0F, Math.min(SPINS_AT_MOST, spin + (pulling() ? SPINS_UP : -SPINS_DOWN)));
         turned += spin;
@@ -205,14 +184,11 @@ public class NodeMagnet extends Construct {
         }
     }
 
-    // --- how fragile it is -------------------------------------------------
-
     @Override
     protected boolean hops() {
         return false;
     }
 
-    /** Moving at all is a risk to it, and moving fast breaks it outright. */
     @Override
     public void move(MoverType type, Vec3 by) {
         super.move(type, by);

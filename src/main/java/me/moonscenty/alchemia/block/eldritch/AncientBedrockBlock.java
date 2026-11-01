@@ -9,10 +9,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.common.util.TriState;
 
-/**
- * What the Outer Lands are made of where there is no maze: rock that nothing breaks, with the stars behind it. Laid
- * bare to the air, it gives way to the void -- a deadly void that pours out into whatever was opened.
- */
 public class AncientBedrockBlock extends Block {
     public AncientBedrockBlock(Properties properties) {
         super(properties);
@@ -26,7 +22,6 @@ public class AncientBedrockBlock extends Block {
         }
     }
 
-    /** Whether air touches it on any side. */
     public static boolean exposed(LevelAccessor level, BlockPos pos) {
         for (Direction side : Direction.values()) {
             if (level.isEmptyBlock(pos.relative(side))) {
@@ -36,7 +31,6 @@ public class AncientBedrockBlock extends Block {
         return false;
     }
 
-    /** Turns it into the source of a void, that starts spreading next tick. */
     public static void open(LevelAccessor level, BlockPos pos) {
         level.setBlock(pos, ModBlocks.VACUUM.get().defaultBlockState(), Block.UPDATE_CLIENTS);
         level.scheduleTick(pos, ModBlocks.VACUUM.get(), 1);

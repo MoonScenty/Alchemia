@@ -73,27 +73,20 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
                 ModBlocks.ESSENTIA_INPUT.get(), ModBlocks.ESSENTIA_OUTPUT.get());
         tag(BlockTags.MINEABLE_WITH_HOE).add(ModBlocks.FLESH_BLOCK.get());
         tag(BlockTags.MINEABLE_WITH_SHOVEL).add(ModBlocks.TAINT_DUST.get());
-        // nothing that breaks blocks breaks the Outer Lands' bedrock, its void, or a great hall's door
         tag(BlockTags.WITHER_IMMUNE).add(ModBlocks.ANCIENT_BEDROCK.get(), ModBlocks.VACUUM.get(),
                 ModBlocks.ELDRITCH_LOCK.get(), ModBlocks.ELDRITCH_DOOR.get());
         tag(BlockTags.DRAGON_IMMUNE).add(ModBlocks.ANCIENT_BEDROCK.get(), ModBlocks.VACUUM.get(),
                 ModBlocks.ELDRITCH_LOCK.get(), ModBlocks.ELDRITCH_DOOR.get());
 
-        // the glimmering grass is grass in every way that matters to what grows and grazes on it
         tag(BlockTags.MINEABLE_WITH_SHOVEL).add(ModBlocks.AMBIENT_GRASS.get());
         tag(BlockTags.DIRT).add(ModBlocks.AMBIENT_GRASS.get());
         tag(BlockTags.ANIMALS_SPAWNABLE_ON).add(ModBlocks.AMBIENT_GRASS.get());
         tag(BlockTags.VALID_SPAWN).add(ModBlocks.AMBIENT_GRASS.get());
 
-        // what counts as a fire under a crucible. Anything with a lit state is only counted while it is lit,
-        // which the block asks about itself, since a tag cannot say it.
-        // skulls and candles: what the original counted, and what anybody decorating an altar reaches for anyway
-        // the crusher is a pickaxe and a shovel at once, and goes through the taint as the original's did
         tag(ModTags.Blocks.MINEABLE_PRIMAL_CRUSHER)
                 .addTag(net.minecraft.tags.BlockTags.MINEABLE_WITH_PICKAXE)
                 .addTag(net.minecraft.tags.BlockTags.MINEABLE_WITH_SHOVEL)
                 .addTag(ModTags.Blocks.TAINT);
-        // tallow candles steady an infusion, as the original's did
         ModBlocks.TALLOW_CANDLES.values().forEach(candle -> tag(ModTags.Blocks.STABILISES_INFUSION).add(candle.get()));
         tag(ModTags.Blocks.STABILISES_INFUSION)
                 .addTag(BlockTags.CANDLES)
@@ -129,7 +122,6 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         tag(ModTags.Blocks.STORAGE_BLOCKS_AMBER).add(ModBlocks.AMBER_BLOCK.get());
         tag(Tags.Blocks.STORAGE_BLOCKS).addTag(ModTags.Blocks.STORAGE_BLOCKS_AMBER);
         tag(BlockTags.BEACON_BASE_BLOCKS).add(ModBlocks.AMBER_BLOCK.get(), ModBlocks.AMBER_BRICKS.get());
-        // Amber gives way to bare hands, but a pickaxe is still the quicker route
         tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.AMBER_BLOCK.get(), ModBlocks.AMBER_BRICKS.get());
 
         tag(ModTags.Blocks.ELDRITCH_STONEWORK).add(ModBlocks.ELDRITCH_ALTAR.get(), ModBlocks.ELDRITCH_CAP.get(),
@@ -172,7 +164,6 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         tag(ModTags.Blocks.TAINT).add(ModBlocks.TAINT_FIBRE.get(), ModBlocks.TAINT_SOIL.get(),
                 ModBlocks.TAINT_CRUST.get(), ModBlocks.TAINT_ROCK.get(), ModBlocks.TAINT_LOG.get(),
                 ModBlocks.TAINT_GEYSER.get());
-        // what the taint eats, once it has a block surrounded, and what it turns it into
         tag(ModTags.Blocks.TAINT_ROTS_TO_SOIL)
                 .addTag(BlockTags.DIRT).addTag(BlockTags.SAND)
                 .add(Blocks.CLAY, Blocks.GRAVEL, Blocks.SOUL_SAND, Blocks.SOUL_SOIL, Blocks.FARMLAND, Blocks.DIRT_PATH);

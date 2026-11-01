@@ -14,13 +14,11 @@ import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/** Bags of loot. */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class LootTests {
     private static final String TEMPLATE = "empty_32x40x32";
 
-    /** A bag opened spills eight to twelve things, and is gone. */
     @GameTest(template = TEMPLATE)
     public static void aBagSpillsItsLoot(GameTestHelper helper) {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);

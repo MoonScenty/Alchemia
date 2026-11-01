@@ -19,13 +19,7 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
-/**
- * A ball of crackling light that follows what it was thrown at: pulled harder the nearer it gets, never faster than a
- * quarter of a block a tick on any axis, and gone after twelve seconds (eight for the blue kind, which golems were
- * to throw). It hits as hard as its thrower does, or a little more than half that for the blue, as magic.
- * <p>
- * Struck, it is batted the way the striker is looking -- and then turns back for its target, as the original's did.
- */
+// Once batted away it turns back for its target, as the original's did.
 public class GolemOrb extends ThrowableProjectile {
     private static final EntityDataAccessor<Integer> TARGET = SynchedEntityData.defineId(GolemOrb.class,
             EntityDataSerializers.INT);
@@ -42,7 +36,7 @@ public class GolemOrb extends ThrowableProjectile {
         entityData.set(RED, red);
     }
 
-    /** A red one lobbed high at a target, set off half its first step along the way so it clears the thrower. */
+    // starts half a step along so it clears the thrower
     public static void lob(LivingEntity thrower, LivingEntity target) {
         GolemOrb orb = new GolemOrb(thrower.level(), thrower, target, true);
         double dx = target.getX() - thrower.getX();
@@ -107,7 +101,6 @@ public class GolemOrb extends ThrowableProjectile {
         }
     }
 
-    /** Batted the way the one striking it is looking. */
     @Override
     public boolean hurt(DamageSource source, float amount) {
         if (isInvulnerableTo(source)) {

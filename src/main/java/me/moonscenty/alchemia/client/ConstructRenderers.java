@@ -20,12 +20,10 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
-/** How the constructs that stand on tripods are drawn: the two automated crossbows and the node magnet. */
 public final class ConstructRenderers {
     private ConstructRenderers() {
     }
 
-    /** The basic crossbow, on the original's model built in code. */
     public static class Basic extends MobRenderer<AutomatedCrossbow, AutomatedCrossbowModel> {
         private static final ResourceLocation SHEET = Alchemia.id("textures/entity/automated_crossbow.png");
 
@@ -39,10 +37,6 @@ public final class ConstructRenderers {
         }
     }
 
-    /**
-     * The advanced crossbow, on the original's mesh: legs that stay put, and a body that aims, with its loader sliding
-     * as it reloads and its two bows snapping forward as it shoots. It flushes red and shakes when it is hit.
-     */
     public static class Advanced extends EntityRenderer<AdvancedAutomatedCrossbow> {
         private static final ResourceLocation SHEET = Alchemia.id("textures/entity/advanced_automated_crossbow.png");
         private static final float STANDS = 0.75F;
@@ -97,11 +91,6 @@ public final class ConstructRenderers {
         }
     }
 
-    /**
-     * The node magnet, on the original's model built in code and drawn see-through where its sheet is, and while it
-     * pulls, the ripples it sends out ahead of it: the original's {@code FXSonic}, a hemisphere of rippling sound
-     * thrown forward along its aim, fifteen frames to a wave.
-     */
     public static class Magnet extends MobRenderer<NodeMagnet, NodeMagnetModel> {
         private static final ResourceLocation SHEET = Alchemia.id("textures/entity/node_magnet.png");
         private static final int FRAMES = 15;

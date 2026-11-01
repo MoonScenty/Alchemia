@@ -13,33 +13,19 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.util.Mth;
 
-/**
- * A taintacle, which is the original's {@code ModelTaintacle} read out of its code: a chain of segments, each eight
- * cubed and set eight above the last, the eye-orb and a wider tip on the end.
- * <p>
- * The original drew each segment a little smaller than the one it stood on -- eighty-eight in a hundred -- which
- * gives the tentacle its taper, and lit the orb and the tip as though they glowed. Both are done here as it did
- * them: the taper by giving every segment that size against its parent, and the glow by drawing the two ends a
- * second time at full light.
- */
 public class TaintacleModel<T extends Taintacle> extends EntityModel<T> {
-    /** How much smaller each segment is than the one it stands on. The original's. */
+    // original's value
     private static final float TAPER = 0.88F;
 
     private final String key;
     private final int length;
     private int bakedFrom = -1;
     private ModelPart root;
-    /** The segments that sway, base first, and the two ends that glow. */
     private List<ModelPart> segments = List.of();
     private List<ModelPart> ends = List.of();
     private float rising;
     private float height;
 
-    /**
-     * @param key    which of the original's builds to read: the long one, or the tendril's short one
-     * @param length how many segments that build has
-     */
     public TaintacleModel(String key, int length) {
         this.key = key;
         this.length = length;
@@ -88,10 +74,6 @@ public class TaintacleModel<T extends Taintacle> extends EntityModel<T> {
         pose.popPose();
     }
 
-    /**
-     * Bakes the original's parts again whenever the import has changed what there is, and sets each segment smaller
-     * than its parent, its place against the parent shrunk to match.
-     */
     private boolean refresh() {
         int generation = LegacyModels.generation();
         if (generation != bakedFrom) {
@@ -109,7 +91,6 @@ public class TaintacleModel<T extends Taintacle> extends EntityModel<T> {
                         part.z *= TAPER;
                     }
                 }
-                // depth first: the base, then the swaying segments up the chain, then the two ends on the last
                 segments = all.subList(1, Math.min(all.size(), length));
                 ends = all.subList(Math.min(all.size(), length), all.size());
             }

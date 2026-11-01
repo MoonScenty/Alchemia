@@ -17,32 +17,20 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
-/**
- * A bolt straight down the line of sight to whatever living thing is standing in it.
- *
- * <p>It does not travel: there is nothing to dodge and nothing to shoot down. Whatever the wand was pointed at
- * when the button went down is what gets hit, which is what makes this the plainest of the twelve and the one to
- * build the rest on.
- *
- * <p>Four damage, counted as a working rather than a blow, so armour answers it the way armour answers magic.
- * The original's number. What is worked into the focus can make the bolt harder, make it jump on to whatever is
- * standing beside what it struck, or turn it into a ball lobbed at the floor instead.
- */
 public final class Shock {
-    /** What a bolt does to whatever it lands on, and what it does once it has learned to jump. */
+    // plain and chained damage; original's values
     private static final float HURTS = 4.0F;
     private static final float HURTS_CHAINED = 6.0F;
-    /** How far a jump carries, and how many jumps a rank of chaining or of widening is worth. */
+    // jump range, and jumps per rank of chain lightning or enlarge
     private static final double JUMPS = 8.0;
     private static final int JUMPS_A_RANK = 2;
 
-    /** What a ball lobbed at the floor reaches and does, and what a rank is worth to each. */
+    // earth shock: radius and damage, and what each rank adds
     private static final int BALL_REACHES = 4;
     private static final int WIDER = 2;
     private static final float BALL_HURTS = 5.0F;
     private static final float BALL_HARDER = 1.33F;
 
-    /** How many sparks are thrown off where it lands, and how far they scatter. */
     private static final int SPARKS = 5;
     private static final double SCATTERS = 0.6;
 
@@ -63,7 +51,6 @@ public final class Shock {
         hit.hurt(level.damageSources().indirectMagic(caster, caster),
                 (chained > 0 ? HURTS_CHAINED : HURTS) + potency);
         sparks(level, hit);
-        // heard at the wand that let it go, as the original's was
         level.playSound(null, caster.getX(), caster.getY(), caster.getZ(),
                 ModSounds.SHOCK.get(), SoundSource.PLAYERS, 0.25F, 1.0F);
         if (chained > 0) {
@@ -72,12 +59,7 @@ public final class Shock {
         return true;
     }
 
-    /**
-     * The bolt carrying on from what it struck to whatever is standing nearest it.
-     * <p>
-     * Each jump starts from where the last one landed, so a line of things is walked along rather than a circle
-     * round the first one being filled in. Nothing is hit twice, and whoever cast it is never hit at all.
-     */
+    // each jump starts from the last target and never hits the same thing twice, or the caster
     private static void jumpOn(ServerLevel level, LivingEntity caster, LivingEntity from, int jumps, float hurts) {
         List<Entity> already = new ArrayList<>(List.of(from, caster));
         LivingEntity here = from;
@@ -94,7 +76,6 @@ public final class Shock {
         }
     }
 
-    /** The nearest living thing to this one that has not been hit yet. */
     private static LivingEntity nearest(ServerLevel level, LivingEntity from, List<Entity> already) {
         LivingEntity found = null;
         double closest = Double.MAX_VALUE;
@@ -112,7 +93,6 @@ public final class Shock {
         return found;
     }
 
-    /** The jump itself, as a line of sparks from the one to the other. */
     private static void arc(ServerLevel level, Entity from, Entity to) {
         Vec3 start = from.position().add(0.0, from.getBbHeight() / 2.0, 0.0);
         Vec3 along = to.position().add(0.0, to.getBbHeight() / 2.0, 0.0).subtract(start);
@@ -123,7 +103,6 @@ public final class Shock {
         }
     }
 
-    /** A ball of the same thing, thrown at the floor rather than sent at a face. */
     private static boolean lob(ServerLevel level, LivingEntity caster, int reaches, float hurts) {
         ShockOrb orb = new ShockOrb(level, caster).striking(reaches, hurts);
         orb.shootFromRotation(caster, caster.getXRot(), caster.getYRot(), 0.0F, 1.2F, 0.0F);
@@ -134,13 +113,7 @@ public final class Shock {
         return true;
     }
 
-    /**
-     * The flash where it lands.
-     * <p>
-     * The original drew an arc all the way from the wand to the target and a shower where it struck. The arc was
-     * a particle of its own, which this mod has none of yet; the shower is the half that says a bolt landed, so
-     * it is the half that is here.
-     */
+    // the original's wand-to-target arc needs a custom particle; only the impact shower is ported
     private static void sparks(ServerLevel level, Entity hit) {
         Vec3 middle = hit.position().add(0.0, hit.getBbHeight() / 2.0, 0.0);
         level.sendParticles(ParticleTypes.ELECTRIC_SPARK, middle.x, middle.y, middle.z,

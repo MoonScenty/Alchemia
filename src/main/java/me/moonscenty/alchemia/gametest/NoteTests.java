@@ -25,10 +25,6 @@ import net.minecraft.util.RandomSource;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/**
- * A note has to be solvable the moment it is drawn, and there is no way to check that by hand for every seed. These
- * walk a spread of them instead.
- */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class NoteTests {
@@ -60,7 +56,6 @@ public class NoteTests {
         helper.succeed();
     }
 
-    /** Endpoints spaced around the edge must never land on top of one another, or the puzzle starts solved. */
     @GameTest(template = TEMPLATE)
     public static void endpointsNeverShareACell(GameTestHelper helper) {
         RandomSource random = RandomSource.create(1234L);
@@ -75,7 +70,6 @@ public class NoteTests {
         helper.succeed();
     }
 
-    /** However the sheet is torn, every pinned aspect has to keep somewhere to go. */
     @GameTest(template = TEMPLATE)
     public static void noDrawnNoteStrandsItsEndpoints(GameTestHelper helper) {
         Registry<ResearchEntry> entries = helper.getLevel().registryAccess().registryOrThrow(ModResearch.ENTRY_KEY);
@@ -99,7 +93,6 @@ public class NoteTests {
         helper.succeed();
     }
 
-    /** A note is no use if the reader cannot afford to cross it, so every primal is stocked. */
     @GameTest(template = TEMPLATE)
     public static void everyNoteComesWithSomethingToSpend(GameTestHelper helper) {
         Registry<ResearchEntry> entries = helper.getLevel().registryAccess().registryOrThrow(ModResearch.ENTRY_KEY);
@@ -118,7 +111,6 @@ public class NoteTests {
         helper.succeed();
     }
 
-    /** An aspect only holds to one it is made of, or one made of it. */
     @GameTest(template = TEMPLATE)
     public static void aspectsHoldOnlyToWhatTheyAreMadeOf(GameTestHelper helper) {
         helper.assertTrue(NoteSolving.linked(ModAspects.METAL, ModAspects.EARTH),
@@ -130,7 +122,6 @@ public class NoteTests {
         helper.succeed();
     }
 
-    /** A board one aspect short of a chain is not solved; finishing the chain solves it. */
     @GameTest(template = TEMPLATE)
     public static void aChainHasToReachEveryPinnedAspect(GameTestHelper helper) {
         HexGrid.Hex left = new HexGrid.Hex(-1, 0);
@@ -149,7 +140,6 @@ public class NoteTests {
         helper.succeed();
     }
 
-    /** Laying an aspect that holds to nothing leaves the ends as far apart as they were. */
     @GameTest(template = TEMPLATE)
     public static void anUnrelatedAspectJoinsNothing(GameTestHelper helper) {
         List<ResearchNote.Cell> cells = List.of(
@@ -164,7 +154,6 @@ public class NoteTests {
         helper.succeed();
     }
 
-    /** What the reader may write on the sheet, and what they may not. */
     @GameTest(template = TEMPLATE)
     public static void theBoardRefusesWhatItShould(GameTestHelper helper) {
         HexGrid.Hex pinned = new HexGrid.Hex(-1, 0);
@@ -184,7 +173,6 @@ public class NoteTests {
         helper.succeed();
     }
 
-    /** Settling a solved note keeps the answer and rubs off the working. */
     @GameTest(template = TEMPLATE)
     public static void settlingKeepsTheChainAndRubsOffTheRest(GameTestHelper helper) {
         HexGrid.Hex stray = new HexGrid.Hex(0, -1);
@@ -206,7 +194,6 @@ public class NoteTests {
         helper.succeed();
     }
 
-    /** Every compound has to be reachable by mixing upwards from the primals, or a note could stock nothing useful. */
     @GameTest(template = TEMPLATE)
     public static void everyAspectCanBeMixedUpFromThePrimals(GameTestHelper helper) {
         Registry<Aspect> aspects = ModAspects.REGISTRY;
@@ -240,10 +227,6 @@ public class NoteTests {
         helper.succeed();
     }
 
-    /**
-     * A pinned aspect the reader can never lay anything beside would make a note impossible, so every one of them
-     * has to have at least one aspect that holds to it.
-     */
     @GameTest(template = TEMPLATE)
     public static void everyPinnedAspectHasSomethingThatHoldsToIt(GameTestHelper helper) {
         Registry<ResearchEntry> entries = helper.getLevel().registryAccess().registryOrThrow(ModResearch.ENTRY_KEY);

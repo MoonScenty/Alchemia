@@ -25,26 +25,8 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 
-/**
- * Something worked at an infusion matrix: one thing held under it, a ring of things around it, and a long drink
- * of essentia drawn out of whatever jars are standing nearby.
- * <p>
- * The ring is a bag, not a shape. Where each thing stands makes no difference to what comes out -- only that the
- * ring holds exactly these things and nothing else, which is what lets a works be laid out to fit the room rather
- * than to fit the recipe.
- *
- * @param central what is worked on, and what the result takes the place of when it is done
- * @param ring what is worked into it, one thing to a pedestal
- * @param essentia what has to be drunk, a point at a time, out of the jars within reach
- * @param instability how badly the work wants to go wrong, before the surroundings have their say
- * @param enchants what this puts on the thing worked, if it makes nothing new at all. A recipe with this set
- *                 hands back the same tool with one more thing on it, so its result is whatever went in
- * @param fits what this works into a helm, on the same terms: the helm that went in comes back wearing it.
- *             A helm takes one and the altar will not sell a second
- * @param augments whether this is runic augmentation: one more hardening on whatever runic gear is worked, its
- *                 ring a diamond and a salis mundus and one salis mundus more for each point of shield it already
- *                 holds, and its essentia doubling with each
- */
+// The ring matches as a bag, never by position. With enchants or fits set, the result is the central item itself
+// with one more enchantment or helm fitting; augments adds one runic hardening, costs scaling with what it holds.
 public record InfusionRecipe(Ingredient central, List<Ingredient> ring, ItemStack result, AspectList essentia,
                              int instability, Optional<ResourceLocation> research,
                              Optional<InfusionEnchantment> enchants,
@@ -56,27 +38,24 @@ public record InfusionRecipe(Ingredient central, List<Ingredient> ring, ItemStac
         this(central, ring, result, essentia, instability, research, enchants, fits, false);
     }
 
-    /** The old shape, for the recipes that make a thing rather than work on one. */
     public InfusionRecipe(Ingredient central, List<Ingredient> ring, ItemStack result, AspectList essentia,
             int instability, Optional<ResourceLocation> research) {
         this(central, ring, result, essentia, instability, research, Optional.empty(), Optional.empty(), false);
     }
 
-    /** For the recipes that put a working on a tool. */
     public InfusionRecipe(Ingredient central, List<Ingredient> ring, ItemStack result, AspectList essentia,
             int instability, Optional<ResourceLocation> research, Optional<InfusionEnchantment> enchants) {
         this(central, ring, result, essentia, instability, research, enchants, Optional.empty(), false);
     }
 
-    /** The shield a piece of runic gear holds now, which is what augmenting it once more costs by. */
     private static int held(ItemStack central) {
         return me.moonscenty.alchemia.item.bauble.RunicGear.charge(central);
     }
 
-    /** The essentia this asks to work this thing: augmentation's doubles with every point already there. */
+    // augmentation's essentia doubles with every shield point already held
     public AspectList essentiaFor(ItemStack central) {
         if (enchants.isPresent()) {
-            // the original's: the level being worked, and a third again for every other enchantment already on it
+            // original's: the level being worked, plus a third for every other enchantment already on it
             var on = me.moonscenty.alchemia.enchantment.InfusionEnchantments.on(central);
             int others = on.size() - (on.containsKey(enchants.get()) ? 1 : 0);
             float times = me.moonscenty.alchemia.enchantment.InfusionEnchantments.level(central, enchants.get()) + 1
@@ -99,7 +78,7 @@ public record InfusionRecipe(Ingredient central, List<Ingredient> ring, ItemStac
                 .add(me.moonscenty.alchemia.registry.ModAspects.ENERGY, vis);
     }
 
-    /** How unsteady working this thing is: augmentation's grows by one with every second point. */
+    // augmentation's grows by one with every second point
     public int instabilityFor(ItemStack central) {
         return augments ? 5 + held(central) / 2 : instability;
     }
@@ -120,15 +99,15 @@ public record InfusionRecipe(Ingredient central, List<Ingredient> ring, ItemStac
         if (!central.test(input.central()) || input.ring().size() != ring.size()) {
             return false;
         }
-        // an altar will not sell the same step twice: a tool already worked this far is not a match
+        // the same step can't be sold twice
         if (enchants.isPresent() && !InfusionEnchantments.roomFor(input.central(), enchants.get())) {
             return false;
         }
-        // nor will it work a second thing into a helm that is already wearing one
+        // one fitting per helm
         if (fits.isPresent() && FortressArmorItem.fitting(input.central()).isPresent()) {
             return false;
         }
-        // every thing on the ring has to answer for exactly one of the ingredients, and none may be left over
+        // each ring item must match exactly one ingredient, with none left over
         List<Ingredient> wanted = new ArrayList<>(ring);
         for (ItemStack standing : input.ring()) {
             int found = -1;
@@ -161,7 +140,6 @@ public record InfusionRecipe(Ingredient central, List<Ingredient> ring, ItemStac
                 .orElseGet(result::copy);
     }
 
-    /** What the book draws: the thing worked on first, then the ring around it. */
     @Override
     public NonNullList<Ingredient> getIngredients() {
         NonNullList<Ingredient> all = NonNullList.create();
@@ -199,7 +177,7 @@ public record InfusionRecipe(Ingredient central, List<Ingredient> ring, ItemStac
         private static final MapCodec<InfusionRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
                         Ingredient.CODEC_NONEMPTY.fieldOf("central").forGetter(InfusionRecipe::central),
                         Ingredient.CODEC_NONEMPTY.listOf().fieldOf("ring").forGetter(InfusionRecipe::ring),
-                        // a working that enchants makes nothing new, so it writes down no result at all
+                        // enchanting recipes make nothing new, so no result is written
                         ItemStack.OPTIONAL_CODEC.optionalFieldOf("result", ItemStack.EMPTY)
                                 .forGetter(InfusionRecipe::result),
                         AspectList.CODEC.fieldOf("essentia").forGetter(InfusionRecipe::essentia),
@@ -212,12 +190,7 @@ public record InfusionRecipe(Ingredient central, List<Ingredient> ring, ItemStac
                                 .forGetter(InfusionRecipe::augments))
                 .apply(instance, InfusionRecipe::new));
 
-        /**
-         * Written out by hand rather than composed.
-         * <p>
-         * The helper that stitches stream codecs together stops at six pieces and this has nine. Writing the
-         * nine out is duller than one more line of composition would have been and no less plain.
-         */
+        // written by hand: StreamCodec.composite stops at six fields and this has nine
         private static final StreamCodec<RegistryFriendlyByteBuf, InfusionRecipe> STREAM_CODEC =
                 new StreamCodec<>() {
                     @Override

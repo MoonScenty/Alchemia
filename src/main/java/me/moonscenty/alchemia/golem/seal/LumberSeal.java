@@ -10,11 +10,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.level.Level;
 
-/**
- * Lumberjack: walks its area a block a tick, and sends smart golems with grinders to every log in it. A golem at a
- * tree takes it down a log at a time from the far end, and keeps at it until there is nothing left joined to the
- * log it was sent to.
- */
+// fells from the far end, a log at a time, until nothing joined to the first log is left
 public class LumberSeal extends AreaBlockSeal {
     public LumberSeal() {
         super("lumber", 0, 33);
@@ -25,7 +21,6 @@ public class LumberSeal extends AreaBlockSeal {
         return Fieldwork.log(level, at);
     }
 
-    /** One log off the far end each time; not done while there is any left. */
     @Override
     public boolean onTaskCompletion(ServerLevel level, Golem golem, Task task) {
         if (stillWanted(level, task)) {

@@ -6,47 +6,23 @@ import net.minecraft.core.Holder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
-/**
- * Something that carries vis about and can be made to pay it out: a wand, and later a staff or a sceptre.
- * <p>
- * The arcane workbench is written against this rather than against the wand, so the bench could be built and tried
- * before there was any wand to lay on it, and so anything else that stores vis can be used at one later.
- */
 public interface VisHolder {
-    /**
-     * What a wand is being made to pay for.
-     * <p>
-     * It matters because thrift worked into a focus pays for that focus's own working and nothing else. A wand
-     * laid on a bench is a tool being used to build something, and what is screwed into the end of it has no
-     * say in what the building costs. The original drew the same line.
-     */
+    // frugal focus upgrades only discount WORKING, never crafting
     enum Spending {
-        /** Letting the focus off. */
         WORKING,
-        /** Making something at a bench, where the wand is only the thing holding the vis. */
         CRAFTING
     }
 
-    /** How much of one aspect this is carrying. */
     int held(ItemStack stack, Holder<Aspect> aspect);
 
-    /** Pays out a price. Only called once {@link #holds} has said it can be paid. */
     void take(ItemStack stack, AspectList cost, Player player, Spending why);
 
-    /**
-     * Whether the whole price could be paid out of this.
-     * <p>
-     * Who is holding it matters: what they are wearing comes off the bill, so the same wand with the same vis in
-     * it can afford a working in a robe and not out of one.
-     */
     boolean holds(ItemStack stack, AspectList cost, Player player, Spending why);
 
-    /** The holder in a stack, if it is one. */
     static VisHolder of(ItemStack stack) {
         return stack.getItem() instanceof VisHolder holder ? holder : null;
     }
 
-    /** Whether a price can be paid out of a stack. A free price needs nothing, not even a wand. */
     static boolean canPay(ItemStack stack, AspectList cost, Player player, Spending why) {
         if (cost.isEmpty()) {
             return true;
@@ -55,10 +31,6 @@ public interface VisHolder {
         return holder != null && holder.holds(stack, cost, player, why);
     }
 
-    /**
-     * Pays a price out of a stack if the whole of it can be paid. Only the server takes the vis; the client just
-     * learns whether it would go through.
-     */
     static boolean pay(ItemStack stack, AspectList cost, Player player, Spending why) {
         VisHolder holder = of(stack);
         if (holder == null || !holder.holds(stack, cost, player, why)) {

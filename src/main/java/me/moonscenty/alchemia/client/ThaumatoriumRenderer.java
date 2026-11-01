@@ -22,19 +22,10 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
 
-/**
- * Draws the thaumatorium as the original did: one mesh two blocks tall, from the lower half, turned to face its
- * front; and just out from the front of the upper half, what it has been told to make, a different one every two
- * seconds.
- */
 public class ThaumatoriumRenderer implements BlockEntityRenderer<ThaumatoriumBlockEntity> {
     private static final ResourceLocation TEXTURE = Alchemia.id("textures/entity/thaumatorium.png");
     private static final int SHOWS_EACH_FOR = 40;
 
-    /**
-     * The original's mesh, once per import. Its renderer read it with the older loader, which turned the texture
-     * corners over, so it is turned over here too.
-     */
     private static final LegacyCached<LegacyMesh> MESH = LegacyCached.flippedMesh(LegacyAssets.THAUMATORIUM_MESH);
 
     public ThaumatoriumRenderer(BlockEntityRendererProvider.Context context) {
@@ -50,7 +41,7 @@ public class ThaumatoriumRenderer implements BlockEntityRenderer<ThaumatoriumBlo
         Direction front = it.getBlockState().getValue(ThaumatoriumBlock.FACING);
         pose.pushPose();
         pose.translate(0.5F, 0.0F, 0.5F);
-        // the mesh stands on its end, and is turned from facing west to face the way the block does
+        // mesh stands on its end, modelled facing west
         pose.mulPose(Axis.XN.rotationDegrees(90.0F));
         pose.mulPose(Axis.ZP.rotationDegrees(switch (front) {
             case NORTH -> 270.0F;

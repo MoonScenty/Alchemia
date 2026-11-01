@@ -16,19 +16,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.items.IItemHandler;
 
-/**
- * Provide: stuck on a container, once a second looks for a seal within sixty-four blocks that has asked for
- * something this one's filter lets by and that it has in store, and offers a short task to fetch it out for that
- * seal's golems, at that seal's priority. It can be set to hand out one at a time and to leave one behind. It wants
- * a smart golem; clumsy golems cannot.
- */
 public class ProvideSeal extends Seal {
     private static final int SINGLE = 4;
     private static final int LEAVE = 5;
     private static final double REACH_SQUARED = 4096.0;
 
     private int delay;
-    /** Which request each of its tasks is fetching for. */
     private final Map<Integer, Provisioning.Request> fetching = new HashMap<>();
 
     public ProvideSeal() {
@@ -91,7 +84,6 @@ public class ProvideSeal extends Seal {
         return true;
     }
 
-    /** Only a golem that may work the asking seal, has room, and is not carrying some already. */
     @Override
     public boolean canGolemPerform(Golem golem, Task task) {
         Provisioning.Request request = fetching.get(task.id());

@@ -11,10 +11,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 
-/** A seal that walks its area a block a tick and offers a task at every block there it wants worked. */
 public abstract class AreaBlockSeal extends Seal {
     private int delay;
-    /** Which block each of its tasks is for. */
     private final Map<Integer, Long> blocks = new HashMap<>();
 
     protected AreaBlockSeal(String key, int filterSize, int startsWithin, Toggle... toggles) {
@@ -22,10 +20,8 @@ public abstract class AreaBlockSeal extends Seal {
         this.delay = java.util.concurrent.ThreadLocalRandom.current().nextInt(startsWithin);
     }
 
-    /** Whether the block there is one to send a golem to. */
     protected abstract boolean wanted(Level level, BlockPos at);
 
-    /** Anything more a fresh task needs before it is offered. */
     protected void prepare(ServerLevel level, BlockPos at, Task task) {
     }
 
@@ -45,12 +41,10 @@ public abstract class AreaBlockSeal extends Seal {
         }
     }
 
-    /** Whether the task is still one of its own, at a block it still wants worked. */
     protected boolean stillWanted(Level level, Task task) {
         return blocks.containsKey(task.id()) && wanted(level, task.pos());
     }
 
-    /** Lets go of the task's block, so it can be offered again. */
     protected void forget(Task task) {
         blocks.remove(task.id());
     }

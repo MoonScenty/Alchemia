@@ -34,20 +34,12 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-/**
- * A pot of water kept over a fire, for dissolving things into what they are made of.
- * <p>
- * Nothing happens in a cold one, and nothing happens in a dry one. Both are on purpose: an alchemist's first
- * problem is keeping a fire lit under a pot, and everything after that depends on it.
- */
 public class CrucibleBlock extends BaseEntityBlock {
-    /** How full it is. Zero is dry; three is up to the brim. */
     public static final IntegerProperty LEVEL = IntegerProperty.create("level", 0, 3);
     public static final int FULL = 3;
 
     public static final MapCodec<CrucibleBlock> CODEC = simpleCodec(CrucibleBlock::new);
 
-    // the pot, with the inside taken back out of it
     private static final VoxelShape SHAPE = Shapes.join(
             Shapes.block(),
             Shapes.or(Block.box(2, 4, 2, 14, 16, 14), Block.box(0, 0, 0, 16, 3, 16)),
@@ -83,31 +75,20 @@ public class CrucibleBlock extends BaseEntityBlock {
         return new CrucibleBlockEntity(pos, state);
     }
 
-    /**
-     * Whether there is a fire under the pot.
-     * <p>
-     * A campfire counts only while it is lit, which no tag can say on its own, so the state is asked directly for
-     * anything that has a light to it.
-     */
     public static boolean heated(BlockGetter level, BlockPos pos) {
         BlockState below = level.getBlockState(pos.below());
         if (!below.is(ModTags.Blocks.HEATS_CRUCIBLE)) {
             return false;
         }
+        // a campfire only counts while lit, which the tag cannot express
         return !below.hasProperty(BlockStateProperties.LIT) || below.getValue(BlockStateProperties.LIT);
     }
 
-    /** Whether the pot is doing anything: wet, and hot enough for long enough. */
     public static boolean boiling(BlockGetter level, BlockPos pos) {
         return level.getBlockEntity(pos) instanceof CrucibleBlockEntity crucible && crucible.working();
     }
 
-    /**
-     * Filling and emptying. A bucket of water fills it to the brim in one go; an empty bucket takes a full one back.
-     * <p>
-     * Filling a pot that already holds something washes what is in it away, since there is no way to pour water in
-     * without doing that.
-     */
+    // a bucket of water refills and washes out whatever is dissolved
     @Override
     protected ItemInteractionResult useItemOn(ItemStack held, BlockState state, Level level, BlockPos pos,
             Player player, InteractionHand hand, BlockHitResult hit) {
@@ -129,7 +110,6 @@ public class CrucibleBlock extends BaseEntityBlock {
             return ItemInteractionResult.sidedSuccess(level.isClientSide);
         }
 
-        // anything else held out over the top of a working pot goes in, one at a time, as the original's did
         if (!held.isEmpty() && !player.isSecondaryUseActive() && hit.getDirection() == net.minecraft.core.Direction.UP
                 && !(held.getItem() instanceof me.moonscenty.alchemia.item.WandItem) && !held.is(Items.BUCKET)
                 && crucible.working()) {
@@ -154,7 +134,6 @@ public class CrucibleBlock extends BaseEntityBlock {
         return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
     }
 
-    /** Whatever is alive and standing in a hot pot is scalded now and then. */
     @Override
     protected void entityInside(BlockState state, Level level, BlockPos pos, net.minecraft.world.entity.Entity entity) {
         if (!level.isClientSide && entity instanceof net.minecraft.world.entity.LivingEntity living
@@ -163,7 +142,6 @@ public class CrucibleBlock extends BaseEntityBlock {
         }
     }
 
-    /** Rain fills a pot left out in it, a level at a time, the way a cauldron does. */
     @Override
     protected boolean isRandomlyTicking(BlockState state) {
         return state.getValue(LEVEL) < FULL;
@@ -177,7 +155,6 @@ public class CrucibleBlock extends BaseEntityBlock {
         }
     }
 
-    /** A pot broken with something in it lets it all go into the air at once. */
     @Override
     protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState replacement, boolean moving) {
         if (!state.is(replacement.getBlock()) && level.getBlockEntity(pos) instanceof CrucibleBlockEntity crucible) {
@@ -189,7 +166,6 @@ public class CrucibleBlock extends BaseEntityBlock {
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state,
             BlockEntityType<T> type) {
-        // the client draws the froth and the bubbles every tick, as the original did
         return level.isClientSide
                 ? createTickerHelper(type, ModBlockEntities.CRUCIBLE.get(), CrucibleEffects::tick)
                 : createTickerHelper(type, ModBlockEntities.CRUCIBLE.get(), CrucibleBlockEntity::tick);
@@ -197,7 +173,6 @@ public class CrucibleBlock extends BaseEntityBlock {
 
     @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
-        // the bubbles are drawn every tick by CrucibleEffects; here, as in the original, only the odd pop is heard
         if (random.nextInt(10) == 0 && boiling(level, pos)) {
             level.playLocalSound(pos.getX(), pos.getY(), pos.getZ(), SoundEvents.LAVA_POP, SoundSource.BLOCKS,
                     0.1F + random.nextFloat() * 0.1F, 1.2F + random.nextFloat() * 0.2F, false);

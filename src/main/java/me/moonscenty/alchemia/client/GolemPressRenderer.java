@@ -23,16 +23,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.AABB;
 
-/**
- * Draws a golem press as the original did: the whole two-by-two of it out of one mesh, turned to face its table,
- * with the press itself coming down as it works and a pool of lava glowing in the cauldron.
- */
 public class GolemPressRenderer implements BlockEntityRenderer<GolemPressBlockEntity> {
     private static final ResourceLocation SHEET = Alchemia.id("textures/entity/golem/golem_press.png");
     private static final String PRESS = "press";
-    /** How far the press travels at the bottom of its swing. */
     private static final double TRAVEL = 0.625;
-    /** The cauldron's lava, which glows. */
     private static final int LAVA_LIGHT = 200;
     private static final float LAVA_SIZE = 0.625F;
 
@@ -73,7 +67,6 @@ public class GolemPressRenderer implements BlockEntityRenderer<GolemPressBlockEn
         pose.popPose();
     }
 
-    /** A square of still lava over the cauldron, drawn the way the original laid it. */
     private static void lava(PoseStack pose, MultiBufferSource buffers) {
         TextureAtlasSprite lava = Minecraft.getInstance().getBlockRenderer().getBlockModelShaper()
                 .getParticleIcon(Blocks.LAVA.defaultBlockState());
@@ -97,7 +90,6 @@ public class GolemPressRenderer implements BlockEntityRenderer<GolemPressBlockEn
                 .setLight(LAVA_LIGHT).setNormal(at, 0.0F, 0.0F, 1.0F);
     }
 
-    /** It reaches over all four blocks of the press, and the bars above. */
     @Override
     public AABB getRenderBoundingBox(GolemPressBlockEntity press) {
         return new AABB(press.getBlockPos()).inflate(1.0, 0.0, 1.0).expandTowards(0.0, 1.0, 0.0);

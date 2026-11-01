@@ -27,27 +27,14 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-/**
- * A lamp of brass and glass, hung from whatever face it was put against.
- *
- * <p>There are three, and they share everything but what the light is for. The arcane lamp lights the dark round
- * it. The lamp of growth hurries what is planted round it, and the lamp of fertility brings the animals round it
- * together; those two burn essentia for it, drawn through the face they hang from, and go dark when they run
- * out. A redstone signal puts any of them out.
- *
- * <p>Take away what a lamp is hanging from and it falls.
- */
 public class LampBlock extends BaseEntityBlock {
     public static final MapCodec<LampBlock> CODEC = com.mojang.serialization.codecs.RecordCodecBuilder.mapCodec(
             lamp -> lamp.group(Kind.CODEC.fieldOf("kind").forGetter(LampBlock::kind), propertiesCodec())
                     .apply(lamp, LampBlock::new));
-    /** The face the lamp hangs from. */
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
-    /** Lit, which is to say working: unpowered, and, for the two that burn essentia, fed. */
     public static final BooleanProperty ENABLED = BlockStateProperties.ENABLED;
     private static final VoxelShape SHAPE = Block.box(4.0, 2.0, 4.0, 12.0, 14.0, 12.0);
 
-    /** What the light is for. */
     public enum Kind implements net.minecraft.util.StringRepresentable {
         ARCANE, GROWTH, FERTILITY;
 
@@ -82,14 +69,12 @@ public class LampBlock extends BaseEntityBlock {
         builder.add(FACING, ENABLED);
     }
 
-    /** Hanging from the face it was put against. The arcane lamp lights at once; the other two wait to be fed. */
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         boolean lit = kind == Kind.ARCANE && !context.getLevel().hasNeighborSignal(context.getClickedPos());
         return defaultBlockState().setValue(FACING, context.getClickedFace().getOpposite()).setValue(ENABLED, lit);
     }
 
-    /** Only where there is something to hang it from. */
     @Override
     protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
         BlockPos from = pos.relative(state.getValue(FACING));
@@ -104,10 +89,6 @@ public class LampBlock extends BaseEntityBlock {
                 : super.updateShape(state, side, other, level, pos, otherPos);
     }
 
-    /**
-     * A signal puts the arcane lamp out at once, and takes back every light it has scattered. The other two
-     * notice on their own next tick, since whether they are lit also depends on whether they are fed.
-     */
     @Override
     protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block from, BlockPos fromPos,
             boolean moving) {
@@ -123,7 +104,6 @@ public class LampBlock extends BaseEntityBlock {
         super.neighborChanged(state, level, pos, from, fromPos, moving);
     }
 
-    /** Whatever light the arcane lamp scattered goes out with it. */
     @Override
     protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState replacement, boolean moving) {
         if (!state.is(replacement.getBlock()) && level.getBlockEntity(pos) instanceof ArcaneLampBlockEntity lamp) {

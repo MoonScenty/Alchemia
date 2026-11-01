@@ -21,19 +21,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.AABB;
 
-/**
- * The dioptra as the original drew it: the crystal in its top, coloured by its shard, and over it, while it works, the
- * map of the aura -- a sheet of light lifted at each chunk as high as the aura there is strong, coloured by what
- * aspect it is, inside a glowing box.
- */
 public class DioptraRenderer implements BlockEntityRenderer<DioptraBlockEntity> {
     private static final ResourceLocation CRYSTAL = Alchemia.id("textures/entity/vis_relay.png");
     private static final ResourceLocation GRID = Alchemia.id("textures/entity/dioptra_grid.png");
     private static final ResourceLocation SIDE = Alchemia.id("textures/entity/dioptra_side.png");
-    /** How see-through the map and its box are. The original's. */
     private static final float MAP_ALPHA = 0.9F;
     private static final float BOX_ALPHA = 0.8F;
-    /** The map sits a whisker inside the block's edges and a whisker over its top. */
     private static final float INSET = 0.005F;
     private static final float WIDTH = 0.99F;
     private static final int CELLS = DioptraBlockEntity.ACROSS - 1;
@@ -69,7 +62,6 @@ public class DioptraRenderer implements BlockEntityRenderer<DioptraBlockEntity> 
         }
     }
 
-    /** The original's vis relay crystal, turned on its point and a little stretched, in the shard's colour. */
     private static void crystal(PoseStack pose, MultiBufferSource buffers, int overlay, float red, float green,
             float blue) {
         LegacyMesh relay = ChargerRenderer.RELAY.get();
@@ -88,7 +80,6 @@ public class DioptraRenderer implements BlockEntityRenderer<DioptraBlockEntity> 
         pose.popPose();
     }
 
-    /** The sheet over the top: one square between every four chunks, in the colour of the four of them together. */
     private static void map(DioptraBlockEntity dioptra, PoseStack pose, VertexConsumer into, int overlay) {
         PoseStack.Pose at = pose.last();
         for (int a = 0; a < CELLS; a++) {
@@ -107,7 +98,6 @@ public class DioptraRenderer implements BlockEntityRenderer<DioptraBlockEntity> 
                 float h11 = high(dioptra, a + 1, b + 1);
                 float h01 = high(dioptra, a, b + 1);
                 quad(into, at, overlay, colour, MAP_ALPHA, x0, h00, z0, x1, h10, z0, x1, h11, z1, x0, h01, z1);
-                // skirts down to the block along the edges of the map
                 if (a == 0) {
                     quad(into, at, overlay, colour, MAP_ALPHA, x0, 1, z0, x0, h00, z0, x0, h01, z1, x0, 1, z1);
                 }
@@ -132,7 +122,6 @@ public class DioptraRenderer implements BlockEntityRenderer<DioptraBlockEntity> 
         return 1.001F + dioptra.amount(x, z) / DioptraBlockEntity.FULL;
     }
 
-    /** The four colours mixed evenly; nothing where any of the four was not read. */
     private static int blend(Holder<Aspect> first, Holder<Aspect> second, Holder<Aspect> third,
             Holder<Aspect> fourth) {
         if (first == null || second == null || third == null || fourth == null) {
@@ -150,7 +139,6 @@ public class DioptraRenderer implements BlockEntityRenderer<DioptraBlockEntity> 
         return (red / 4) << 16 | (green / 4) << 8 | blue / 4;
     }
 
-    /** The box of light the map stands in, a block high over the dioptra, in the shard's colour. */
     private static void box(PoseStack pose, VertexConsumer into, int overlay, float red, float green, float blue) {
         PoseStack.Pose at = pose.last();
         int colour = (int) (red * 255) << 16 | (int) (green * 255) << 8 | (int) (blue * 255);
@@ -166,7 +154,6 @@ public class DioptraRenderer implements BlockEntityRenderer<DioptraBlockEntity> 
         quad(into, at, overlay, colour, BOX_ALPHA, x1, y0, z0, x1, y0, z1, x1, y1, z1, x1, y1, z0);
     }
 
-    /** Four corners in order, the whole picture across them. */
     private static void quad(VertexConsumer into, PoseStack.Pose at, int overlay, int rgb, float alpha,
             float ax, float ay, float az, float bx, float by, float bz, float cx, float cy, float cz,
             float dx, float dy, float dz) {

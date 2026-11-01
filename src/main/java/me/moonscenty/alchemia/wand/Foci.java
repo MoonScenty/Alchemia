@@ -16,48 +16,21 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
-/**
- * Fitting a focus to a wand and taking it off again.
- *
- * <p>Both are one action from the player's side and a swap from the bag's side: whatever was on the wand goes back
- * where the new one came from, so nothing is ever created, destroyed, or left without a home.
- *
- * <p>Foci in a pouch count as carried, exactly as loose ones do. That is what a pouch is for — a player with one
- * has every focus on a single key without eighteen squares gone out of their bag.
- *
- * <p>The cycle runs in alphabetical order of what the foci are called rather than in the order they happen to be
- * lying in. Tidying a bag should not change which focus comes next.
- *
- * <p>What a focus is called, for that purpose, is its kind <em>and</em> what is worked into it. Two shock foci,
- * one plain and one upgraded, are two different foci to anybody carrying both, and a cycle that could not tell
- * them apart would never reach the second.
- */
+// the cycle is sorted by name (kind plus upgrades) so inventory order doesn't change it
 public final class Foci {
     private Foci() {
     }
 
-    /**
-     * Where a focus is: a square of the bag, and if that square holds a pouch, a square inside it.
-     *
-     * @param slot    the square of the player's bag
-     * @param inPouch the square inside the pouch there, or -1 when the focus is the bag's square itself
-     */
     private record Spot(int slot, int inPouch) {
         boolean inBag() {
             return inPouch < 0;
         }
     }
 
-    /** What is on the wand, or nothing. */
     public static ItemStack on(ItemStack wand) {
         return WandItem.focus(wand);
     }
 
-    /**
-     * Puts the next focus on the wand, and whatever was on it back where that one came from.
-     *
-     * @return what is now fitted, or nothing if the player had no focus to fit
-     */
     public static ItemStack next(Player player, ItemStack wand) {
         Inventory bag = player.getInventory();
         List<Spot> spots = carried(bag);
@@ -67,21 +40,15 @@ public final class Foci {
         return swap(player, bag, after(bag, spots, on(wand)), wand);
     }
 
-    /** Fits the focus at this spot, and puts what was on the wand where it came from. */
     private static ItemStack swap(Player player, Inventory bag, Spot spot, ItemStack wand) {
         ItemStack taken = read(bag, spot).copy();
-        // the old focus goes where the new one just left, which is the one square certain to be free
+        // the old focus goes into the slot just vacated
         write(bag, spot, WandItem.focus(wand).copy());
         WandItem.setFocus(wand, taken);
         say(player, taken, true);
         return taken;
     }
 
-    /**
-     * Takes the focus off the wand and hands it back, into a pouch if there is room in one.
-     *
-     * @return what came off, or nothing if there was nothing on it
-     */
     public static ItemStack remove(Player player, ItemStack wand) {
         ItemStack fitted = WandItem.focus(wand).copy();
         if (fitted.isEmpty()) {
@@ -95,7 +62,6 @@ public final class Foci {
         return fitted;
     }
 
-    /** Every focus the player is carrying, loose or pouched, soonest-named first. */
     private static List<Spot> carried(Inventory bag) {
         List<Spot> spots = new ArrayList<>();
         for (int slot = 0; slot < bag.getContainerSize(); slot++) {
@@ -122,12 +88,6 @@ public final class Foci {
         return spots;
     }
 
-    /**
-     * The spot holding the focus that comes after the one fitted.
-     * <p>
-     * With nothing fitted, or with the last of them fitted, that is the first. A player holding one focus and
-     * pressing the key therefore swaps it on and off, which is what one focus ought to do.
-     */
     private static Spot after(Inventory bag, List<Spot> spots, ItemStack fitted) {
         if (fitted.isEmpty()) {
             return spots.get(0);
@@ -141,13 +101,12 @@ public final class Foci {
         return spots.get(0);
     }
 
-    /** The pouches worn on the belt, which count as squares past the end of the bag. */
+    // worn pouches are addressed as slots past the end of the inventory
     private static List<ItemStack> worn(Inventory bag) {
         return Worn.baubles(bag.player).stream().filter(bauble -> bauble.getItem() instanceof FocusPouchItem)
                 .toList();
     }
 
-    /** A square of the bag, or past its end, a worn pouch. */
     private static ItemStack at(Inventory bag, int slot) {
         if (slot < bag.getContainerSize()) {
             return bag.getItem(slot);
@@ -174,7 +133,6 @@ public final class Foci {
         FocusPouchItem.setContents(pouch, items);
     }
 
-    /** Puts a focus in the first pouch with room, and says whether one had room. */
     private static boolean intoPouch(Inventory bag, ItemStack focus) {
         int squares = bag.getContainerSize() + worn(bag).size();
         for (int slot = 0; slot < squares; slot++) {
@@ -192,13 +150,7 @@ public final class Foci {
         return false;
     }
 
-    /**
-     * What one focus is called: its kind, and then every rank worked into it in the order they went in.
-     * <p>
-     * This is both how the cycle is sorted and how the wheel says which one was picked. Naming a focus rather
-     * than numbering it means the client and the server need not agree about the order of anybody's bag -- the
-     * client says which focus, and the server finds a focus of that name among the ones actually carried.
-     */
+    // foci are picked by name so client and server needn't agree on inventory order
     public static String name(ItemStack stack) {
         if (stack.isEmpty()) {
             return "";
@@ -210,12 +162,6 @@ public final class Foci {
         return written.toString();
     }
 
-    /**
-     * Says what happened, above the hotbar.
-     * <p>
-     * The original drew the fitted focus beside the crosshair and left it there. That is a heads-up display and
-     * wants writing as one; until it exists, being told once is better than having to read the tooltip.
-     */
     private static void say(Player player, ItemStack focus, boolean fitted) {
         player.displayClientMessage(Component.translatable(
                 fitted ? "item.alchemia.wand.focus_fitted" : "item.alchemia.wand.focus_removed",
@@ -224,12 +170,6 @@ public final class Foci {
                 SoundSource.PLAYERS, 0.3F, fitted ? 1.0F : 0.9F);
     }
 
-    /**
-     * Every focus the player is carrying, in the order the cycle runs in.
-     * <p>
-     * Copies, and only for looking at: the wheel draws these, and whichever is picked is named rather than
-     * handed back. Both sides can work this out for themselves, which is why the wheel can be drawn at all.
-     */
     public static List<ItemStack> carried(Player player) {
         Inventory bag = player.getInventory();
         List<ItemStack> found = new ArrayList<>();
@@ -239,13 +179,6 @@ public final class Foci {
         return found;
     }
 
-    /**
-     * Fits the focus of this name, if one of that name is being carried.
-     * <p>
-     * The swap is the same as the cycle's: what was on the wand goes into the square the new one came out of.
-     *
-     * @return what is now fitted, or nothing when the player is carrying no such focus
-     */
     public static ItemStack fit(Player player, ItemStack wand, String name) {
         Inventory bag = player.getInventory();
         if (name.isEmpty() || name.equals(name(on(wand)))) {

@@ -33,13 +33,11 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/** Step 14C: vis exhaustion, the soap, candles, the pattern crafter, the lodestone, the foci and the rest. */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class LeftoverTests {
     private static final String TEMPLATE = "empty_32x40x32";
 
-    /** Each level of vis exhaustion, of either kind, takes ten parts back off a discount; the worse kind counts. */
     @GameTest(template = TEMPLATE)
     public static void visExhaustionRaisesWandPrices(GameTestHelper helper) {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -52,7 +50,6 @@ public class LeftoverTests {
         helper.succeed();
     }
 
-    /** The phage passes on a level weaker, and at its last level only as the plain flu. */
     @GameTest(template = TEMPLATE, timeoutTicks = 120)
     public static void fluxPhageSpreadsWeaker(GameTestHelper helper) {
         Pig carrier = helper.spawnWithNoFreeWill(EntityType.PIG, new BlockPos(4, 2, 4));
@@ -69,7 +66,6 @@ public class LeftoverTests {
         });
     }
 
-    /** Wading in flux goo drains: vis exhaustion, worse the deeper. */
     @GameTest(template = TEMPLATE, timeoutTicks = 60)
     public static void fluxGooExhausts(GameTestHelper helper) {
         BlockPos at = new BlockPos(4, 2, 4);
@@ -82,7 +78,6 @@ public class LeftoverTests {
         });
     }
 
-    /** A finished wash takes all temporary warp, and a point of sticky warp if the roll is under the odds. */
     @GameTest(template = TEMPLATE)
     public static void soapWashesWarp(GameTestHelper helper) {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -101,7 +96,6 @@ public class LeftoverTests {
         helper.succeed();
     }
 
-    /** A candle burns bright, steadies an infusion, and falls when what it stands on goes. */
     @GameTest(template = TEMPLATE)
     public static void tallowCandleStandsAndBurns(GameTestHelper helper) {
         BlockPos at = new BlockPos(4, 2, 4);
@@ -115,7 +109,6 @@ public class LeftoverTests {
         helper.succeed();
     }
 
-    /** Nine nuggets the whole grid; two planks stood one on the other make sticks; nothing else is touched. */
     @GameTest(template = TEMPLATE)
     public static void patternCrafterCraftsInItsPattern(GameTestHelper helper) {
         BlockPos at = new BlockPos(4, 3, 4);
@@ -142,7 +135,6 @@ public class LeftoverTests {
         helper.succeed();
     }
 
-    /** The lodestone feels what is ahead, within its cone and its reach, and nothing behind. */
     @GameTest(template = TEMPLATE)
     public static void sinisterStoneFeelsWhatIsAhead(GameTestHelper helper) {
         Vec3 eye = Vec3.ZERO;
@@ -154,7 +146,6 @@ public class LeftoverTests {
         helper.succeed();
     }
 
-    /** Every focus but the pech's and the shard's is made, and the vampire bats wait on their research. */
     @GameTest(template = TEMPLATE)
     public static void fociAreMadeAndVampiresWait(GameTestHelper helper) {
         var recipes = helper.getLevel().getRecipeManager();
@@ -170,7 +161,6 @@ public class LeftoverTests {
         helper.succeed();
     }
 
-    /** A note block and an arcane ear each tell goggles their note. */
     @GameTest(template = TEMPLATE)
     public static void notesAreReadable(GameTestHelper helper) {
         BlockPos block = new BlockPos(4, 2, 4);

@@ -34,7 +34,6 @@ import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotContext;
 
-/** Baubles: worn in Curios' slots, the runic shield they hold up, and what the others do. */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class BaubleTests {
@@ -45,7 +44,6 @@ public class BaubleTests {
                 .setStackInSlot(0, bauble);
     }
 
-    /** A player has an amulet's slot, two rings' and a belt's. */
     @GameTest(template = TEMPLATE)
     public static void aPlayerHasBaubleSlots(GameTestHelper helper) {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -57,7 +55,6 @@ public class BaubleTests {
         helper.succeed();
     }
 
-    /** What is worn holds up a shield, and the shield fills a point at a time out of air and earth. */
     @GameTest(template = TEMPLATE, timeoutTicks = 200)
     public static void runicGearHoldsUpAShield(GameTestHelper helper) {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -79,7 +76,6 @@ public class BaubleTests {
         });
     }
 
-    /** An apprentice's ring is five off its own primal and nothing off the rest. */
     @GameTest(template = TEMPLATE)
     public static void anApprenticesRingKnowsItsPrimal(GameTestHelper helper) {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -90,7 +86,6 @@ public class BaubleTests {
         helper.succeed();
     }
 
-    /** Augmentation wants one salis more for every point there already is, and hardens by one. */
     @GameTest(template = TEMPLATE)
     public static void augmentationHardensRunicGear(GameTestHelper helper) {
         InfusionRecipe recipe = helper.getLevel().getRecipeManager().byKey(Alchemia.id("runic_augmentation"))
@@ -112,7 +107,6 @@ public class BaubleTests {
         helper.succeed();
     }
 
-    /** The verdant heart lifts poison, and spends ten for it. */
     @GameTest(template = TEMPLATE)
     public static void theVerdantHeartLiftsPoison(GameTestHelper helper) {
         Pig pig = helper.spawn(EntityType.PIG, new BlockPos(4, 2, 4));
@@ -124,7 +118,6 @@ public class BaubleTests {
         helper.succeed();
     }
 
-    /** The amulet of vis charges the wand in the hotbar out of the aura. */
     @GameTest(template = TEMPLATE)
     public static void theAmuletChargesAWand(GameTestHelper helper) {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);

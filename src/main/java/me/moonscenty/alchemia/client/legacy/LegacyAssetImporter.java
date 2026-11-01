@@ -31,28 +31,10 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.loading.FMLPaths;
 import net.neoforged.neoforge.event.AddPackFindersEvent;
 
-/**
- * Reads the original's jars from the game's {@code mods} folder and offers what {@link LegacyAssets} asks for
- * as a resource pack sitting above our own files.
- *
- * <p>The jars go in {@code mods} beside this mod because that is where a player puts mods. The loader sees that they
- * are for an old Forge, says so in the log and passes over them; nothing of them is loaded but what is read here.
- *
- * <p>The original is All Rights Reserved, so its pictures never go into this repository. The player brings the jar;
- * we only know where in it to look. Both releases are required: while {@link #missingJars()} finds one missing, the
- * game shows where to download it instead of its title. Our own pictures stay underneath, for anything the jars do
- * not have.
- *
- * <p>The import runs every time the pack list is rebuilt, so dropping a jar in and pressing F3+T is enough.
- */
 @EventBusSubscriber(modid = Alchemia.MODID, value = Dist.CLIENT)
 public final class LegacyAssetImporter {
     private static final String PACK_ID = Alchemia.MODID + "/legacy";
-    /**
-     * Stands in for a missing {@code .mcmeta}. The game looks for a picture's metadata in the pack that served it and
-     * then in every pack below, so without this an imported still picture would pick up our own animation strip's
-     * frame list.
-     */
+    // empty mcmeta, or a still image inherits our animation's frames from a lower pack
     private static final byte[] NO_META = "{}".getBytes(StandardCharsets.UTF_8);
 
     private LegacyAssetImporter() {
@@ -81,7 +63,7 @@ public final class LegacyAssetImporter {
                     return new LegacyAssetPack(info, files);
                 }
             };
-            // required, so it is on without anyone ticking it; not fixed, so a player's own pack can still go above
+            // required: always on; not fixed: player packs can still go above
             Pack pack = Pack.readMetaAndCreate(location, resources, PackType.CLIENT_RESOURCES,
                     new PackSelectionConfig(true, Pack.Position.TOP, false));
             if (pack != null) {
@@ -90,14 +72,11 @@ public final class LegacyAssetImporter {
         });
     }
 
-    /** Our files by their path under {@code assets/alchemia/}; empty when there is nothing to import. */
     static Map<String, byte[]> importAll(Path folder) {
         Map<String, byte[]> files = new HashMap<>();
-        // whatever happens below, last time's models are not this time's
         LegacyModels.replace(Map.of(), Map.of());
         if (!Files.isDirectory(folder)) {
             try {
-                // made so a player can see where the jars go
                 Files.createDirectories(folder);
             } catch (IOException e) {
                 Alchemia.LOGGER.debug("Could not make {}", folder, e);
@@ -144,7 +123,6 @@ public final class LegacyAssetImporter {
         return files;
     }
 
-    /** Reads the meshes that came over as OBJ files, so what draws them need not go looking for them again. */
     private static Map<String, LegacyMesh> readMeshes(Map<String, byte[]> files) {
         Map<String, LegacyMesh> meshes = new HashMap<>();
         files.forEach((path, bytes) -> {
@@ -160,7 +138,6 @@ public final class LegacyAssetImporter {
         return meshes;
     }
 
-    /** Reads every model the original wrote as code; the first release whose jar has the class wins. */
     private static Map<String, LegacyModel> importModels(Map<LegacyEdition, LegacyJar> jars) {
         Map<String, LegacyModel> models = new HashMap<>();
         LegacyAssets.MODELS.forEach((key, sources) -> {
@@ -186,7 +163,6 @@ public final class LegacyAssetImporter {
         return models;
     }
 
-    /** Whether a file is one of the original's jars, either release, told by what it says it is inside. */
     public static boolean isOriginal(Path path) {
         try {
             Optional<LegacyJar> opened = LegacyJar.open(path);
@@ -200,18 +176,10 @@ public final class LegacyAssetImporter {
         return false;
     }
 
-    /** Where the jars go: the mods folder, with every other mod. */
     public static Path folder() {
         return FMLPaths.MODSDIR.get();
     }
 
-    /**
-     * Which releases of the original are not in the folder. The mod draws with their pictures and models and is not
-     * meant to be played without them; the game shows where to get them instead of its title while any is missing.
-     * The folder is made if it is not there, so a player can see where the jars go.
-     *
-     * <p>A jar is told apart by what it says it is inside, not by its name, as for the import itself.
-     */
     public static Set<LegacyEdition> missingJars() {
         Path folder = folder();
         Set<LegacyEdition> found = EnumSet.noneOf(LegacyEdition.class);
@@ -228,7 +196,6 @@ public final class LegacyAssetImporter {
             }
         } else {
             try {
-                // made so a player can see where the jars go
                 Files.createDirectories(folder);
             } catch (IOException e) {
                 Alchemia.LOGGER.debug("Could not make {}", folder, e);
@@ -255,7 +222,6 @@ public final class LegacyAssetImporter {
             try {
                 Optional<LegacyJar> opened = LegacyJar.open(path);
                 if (opened.isEmpty()) {
-                    // every other mod in the folder, which is no business of ours
                     Alchemia.LOGGER.debug("{} is not a jar of the original; skipped", path.getFileName());
                     continue;
                 }
@@ -273,7 +239,6 @@ public final class LegacyAssetImporter {
         }
     }
 
-    /** Takes the first source a jar has; empty when none of them does or the file could not be read. */
     private static Optional<LegacyEdition> importOne(LegacyAsset asset, Map<LegacyEdition, LegacyJar> jars,
             Map<String, byte[]> files) {
         for (LegacyAsset.Source source : asset.sources()) {
@@ -292,7 +257,6 @@ public final class LegacyAssetImporter {
                 }
                 return Optional.of(source.edition());
             } catch (IOException | RuntimeException | OutOfMemoryError e) {
-                // a picture too big to take in is left to ours, rather than taking the game down with it
                 Alchemia.LOGGER.warn("Could not import {} from {} for {}", source.path(), source.edition(),
                         asset.target(), e);
             }

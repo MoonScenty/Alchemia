@@ -28,14 +28,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
-/**
- * Draws the arcane bore as the original did: a stand that turns about the upright, a nozzle that tips on it, an
- * emitter spinning at its tip with the focus's knob on it when there is a focus, and a glass shell round the middle;
- * and while it works, two beams, green and orange, from it to the block it is eating.
- * <p>
- * The parts are the original's models ({@code ModelBore}, {@code ModelBoreEmit} and the jar's core), read out of
- * its code. The original's spinning vortex inside the shell is not drawn.
- */
 public class ArcaneBoreRenderer implements BlockEntityRenderer<ArcaneBoreBlockEntity> {
     static final ResourceLocation TEXTURE = Alchemia.id("textures/entity/bore.png");
     private static final ResourceLocation GLASS = Alchemia.id("textures/entity/jar.png");
@@ -45,7 +37,6 @@ public class ArcaneBoreRenderer implements BlockEntityRenderer<ArcaneBoreBlockEn
     private static final String[] NOZZLE = {"NozFront", "NozMid"};
     private static final String[] EMITTER = {"Cross1", "Cross3", "Cross2", "Rod"};
 
-    /** The original's parts, baked again whenever the import changes. */
     private static final LegacyCached<ModelPart[]> BASE_PARTS = LegacyCached.fields(LegacyAssets.BORE, BASE);
     private static final LegacyCached<ModelPart[]> NOZZLE_PARTS = LegacyCached.fields(LegacyAssets.BORE, NOZZLE);
     private static final LegacyCached<ModelPart[]> EMITTER_PARTS =
@@ -77,7 +68,6 @@ public class ArcaneBoreRenderer implements BlockEntityRenderer<ArcaneBoreBlockEn
         }
     }
 
-    /** The two turns the original gave the head for each way it can face: about the upright, then tipped. */
     private static float[] turns(Direction facing) {
         return switch (facing) {
             case DOWN -> new float[] {0.0F, 180.0F};
@@ -89,7 +79,6 @@ public class ArcaneBoreRenderer implements BlockEntityRenderer<ArcaneBoreBlockEn
         };
     }
 
-    /** How far the head turns off its rest to point at the block it is eating, as the original worked it out. */
     private static float[] aim(BlockPos bore, BlockPos target, Direction facing) {
         float[] turns = turns(facing);
         double dx = bore.getX() - target.getX();
@@ -109,7 +98,6 @@ public class ArcaneBoreRenderer implements BlockEntityRenderer<ArcaneBoreBlockEn
         return new float[] {Mth.wrapDegrees(x), Mth.wrapDegrees(z)};
     }
 
-    /** The bore at rest or aiming. Shared with the item, which stands pointing up with no focus. */
     static void draw(PoseStack pose, MultiBufferSource buffers, Direction facing, boolean hanging, boolean focus,
             float spin, float aimX, float aimZ, int light, int overlay) {
         ModelPart[] base = BASE_PARTS.get();
@@ -161,7 +149,6 @@ public class ArcaneBoreRenderer implements BlockEntityRenderer<ArcaneBoreBlockEn
         pose.popPose();
     }
 
-    /** The two beams from the bore to the block: green, and orange, each a pair of crossed ribbons, turning. */
     private static void beams(PoseStack pose, MultiBufferSource buffers, BlockPos from, BlockPos to, float age) {
         Vec3 along = Vec3.atCenterOf(to).subtract(Vec3.atCenterOf(from));
         ribbon(pose, buffers.getBuffer(LegacyRenderTypes.glowBothSides(BEAM_GREEN)), along, 0.15F, age * 4.0F,

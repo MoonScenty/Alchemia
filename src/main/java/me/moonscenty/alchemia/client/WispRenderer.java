@@ -15,19 +15,12 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 
-/**
- * A wisp as the original drew it: no body, only light. A node's halo in the colour of its aspect, turning through
- * its sixteen frames, and over it a white sparkle off the old particle sheet, both always facing whoever looks and
- * both adding light to what is behind them.
- */
 public class WispRenderer extends EntityRenderer<Wisp> {
     private static final ResourceLocation HALO = Alchemia.id("textures/entity/node_halo.png");
     private static final ResourceLocation SHEET = Alchemia.id("textures/misc/legacy_particles.png");
-    /** The halo's frames across; the sparkle's row and frames on the sixteen-by-sixteen sheet. The original's. */
     private static final int FRAMES = 16;
     private static final int SPARKLE_ROW = 5;
     private static final int SHEET_CELLS = 16;
-    /** Half the width of either, in blocks. The original's. */
     private static final float SIZE = 0.75F;
 
     public WispRenderer(EntityRendererProvider.Context context) {

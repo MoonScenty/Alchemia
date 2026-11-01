@@ -23,24 +23,14 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
-/**
- * A lesser crimson portal: a rip in the air that wakes when a player comes within thirty-two blocks and from then on
- * lets the cult through, one at a time.
- * <p>
- * Once awake it sends a cultist -- two knights to each cleric -- every two and a half to five seconds while it can see
- * a player and there are fewer than six cultists about it (four on normal, two on easy). Each one it lets through
- * costs it five to nine of its hundred health, so left alone it burns out after a dozen or so. It does not move,
- * cannot be set alight, and hurts whoever touches it. It leaves nothing but a small blast that breaks nothing.
- */
 public class CultistPortal extends Monster {
     private static final EntityDataAccessor<Boolean> ACTIVE = SynchedEntityData.defineId(CultistPortal.class,
             EntityDataSerializers.BOOLEAN);
     private static final double WAKES_WITHIN = 32.0;
 
     private int nextIn = 100;
-    /** How long it has been awake, for the drawing. */
+    // client-side, for rendering
     public int awake;
-    /** How long since it last let one through, counting down, for the drawing. */
     public int pulse;
 
     public CultistPortal(EntityType<? extends CultistPortal> type, Level level) {
@@ -84,7 +74,6 @@ public class CultistPortal extends Monster {
         }
     }
 
-    /** Wakes when someone comes near, and lets the cult through while they stay. */
     protected void think(ServerLevel served) {
         if (!isActive()) {
             if (tickCount % 10 == 0 && level().getNearestPlayer(this, WAKES_WITHIN) != null) {
@@ -109,28 +98,24 @@ public class CultistPortal extends Monster {
         }
     }
 
-    /** Awake from the first, for a portal that never sleeps. */
     protected void activate() {
         entityData.set(ACTIVE, true);
     }
 
-    /** Dies without the lesser portal's own blast, for one that has a bigger. */
     protected void dieQuietly(DamageSource source) {
         super.die(source);
     }
 
-    /** One more of the cult, and the toll it takes. */
     public void letThrough(ServerLevel level) {
         bringThrough(level, newCultist(level));
         hurt(damageSources().fellOutOfWorld(), 5 + random.nextInt(5));
     }
 
-    /** Two knights to each cleric. */
+    // two knights to each cleric
     protected Cultist newCultist(ServerLevel level) {
         return random.nextFloat() > 0.33F ? new CultistKnight(level) : new CultistCleric(level);
     }
 
-    /** Sets one down beside the portal, ready for a fight, with a puff and a crack. */
     protected void bringThrough(ServerLevel level, Mob arrival) {
         arrival.moveTo(getX() + random.nextFloat() - random.nextFloat(), getY() + 0.25,
                 getZ() + random.nextFloat() - random.nextFloat(), random.nextFloat() * 360.0F, 0.0F);
@@ -142,7 +127,6 @@ public class CultistPortal extends Monster {
         arrival.playSound(ModSounds.WAND_FAIL.get(), 1.0F, 1.0F);
     }
 
-    /** Anything more done to one just through, before it is let loose. */
     protected void settle(Mob arrival) {
     }
 
@@ -169,8 +153,6 @@ public class CultistPortal extends Monster {
         }
         super.die(source);
     }
-
-    // --- it stays where it is ------------------------------------------------
 
     @Override
     public void move(MoverType type, Vec3 by) {
@@ -209,8 +191,6 @@ public class CultistPortal extends Monster {
         return 1.0F;
     }
 
-    // --- its voice -----------------------------------------------------------
-
     @Override
     protected SoundEvent getAmbientSound() {
         return ModSounds.MONOLITH.get();
@@ -235,8 +215,6 @@ public class CultistPortal extends Monster {
     protected SoundEvent getDeathSound() {
         return ModSounds.SHOCK.get();
     }
-
-    // --- saving --------------------------------------------------------------
 
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {

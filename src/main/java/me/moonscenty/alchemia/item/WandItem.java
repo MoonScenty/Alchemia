@@ -43,40 +43,27 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.AbstractCauldronBlock;
 import net.minecraft.world.level.block.Blocks;
 
-/**
- * A wand: a rod with a metal cap at each end, holding vis drawn out of the air around its bearer.
- * <p>
- * Vis is kept in hundredths rather than whole points. Caps change what a thing costs by a fraction — an alchemium
- * cap pays nine tenths of the asking price — and a price rounded to whole vis every time would either round that
- * discount away or hand it out twice over.
- */
 public class WandItem extends Item implements VisHolder, Rechargeable {
-    /** How many hundredths make one point of vis. */
+    // vis is stored in hundredths so fractional cap discounts are not rounded away
     public static final int FINE = 100;
-    /** How often a wand pulls at the aura, in ticks. */
     private static final int DRAWS_EVERY = 5;
-    /** What one rank of thrift takes off a working, as a share of the bill. The original's tenth. */
+    // per rank of frugal, and for sceptre/staff; original's value
     private static final float THRIFT = 0.1F;
-    /** What a staff adds to a blow. */
+    // original's value
     private static final double STAFF_HITS = 6.0;
 
-    /** A trickling rod fills itself only this far, as a share of what the rod holds. */
     private static final float TRICKLES_TO = 0.5F;
-    /** How long a wand can be held down for. Long enough that nobody reaches the end of it. */
     private static final int HELD_FOREVER = 72000;
 
     public WandItem(Properties properties) {
         super(properties.stacksTo(1));
     }
 
-    // --- what it is made of -------------------------------------------------
-
     public static WandRod rod(ItemStack stack) {
         Holder<WandRod> rod = stack.get(ModDataComponents.WAND_ROD.get());
         return rod == null ? ModWandParts.WOOD.get() : rod.value();
     }
 
-    /** Whether this wand is built on a staff core: a staff, which a workbench will not take. */
     public static boolean isStaff(ItemStack stack) {
         return stack.getItem() instanceof WandItem && rod(stack).staff();
     }
@@ -86,13 +73,12 @@ public class WandItem extends Item implements VisHolder, Rechargeable {
         return cap == null ? ModWandParts.IRON.get() : cap.value();
     }
 
-    /** The focus fitted to this wand, or nothing. Always a copy: the component behind it may not be written to. */
+    // returns a copy; the component's stack must not be mutated
     public static ItemStack focus(ItemStack stack) {
         ItemContainerContents fitted = stack.get(ModDataComponents.WAND_FOCUS.get());
         return fitted == null ? ItemStack.EMPTY : fitted.copyOne();
     }
 
-    /** Fits a focus, or takes one off when handed nothing. */
     public static void setFocus(ItemStack stack, ItemStack focus) {
         if (focus.isEmpty()) {
             stack.remove(ModDataComponents.WAND_FOCUS.get());
@@ -102,7 +88,6 @@ public class WandItem extends Item implements VisHolder, Rechargeable {
         }
     }
 
-    /** Whether this wand has a crossbar: a sceptre, which holds half as much again and makes all its work cheaper. */
     public static boolean isSceptre(ItemStack stack) {
         return stack.getItem() instanceof WandItem && stack.has(ModDataComponents.SCEPTRE.get());
     }
@@ -120,31 +105,21 @@ public class WandItem extends Item implements VisHolder, Rechargeable {
         return wand;
     }
 
-    /** How much of one primal the wand holds at most, in whole vis. */
     public static int capacity(ItemStack stack) {
-        // a sceptre's crossbar holds half as much again, the original's
         return isSceptre(stack) ? rod(stack).capacity() * 3 / 2 : rod(stack).capacity();
     }
 
-    /** What is in the wand, in hundredths. */
     private static AspectList fine(ItemStack stack) {
         AspectList stored = stack.get(ModDataComponents.VIS.get());
         return stored == null ? AspectList.EMPTY : stored;
     }
-
-    // --- VisHolder ----------------------------------------------------------
 
     @Override
     public int held(ItemStack stack, Holder<Aspect> aspect) {
         return fine(stack).get(aspect) / FINE;
     }
 
-    /**
-     * Pays a price out of the wand.
-     * <p>
-     * The cap is applied here rather than where the price was quoted, so that what the workbench shows is the price
-     * of the work and what the wand loses is what this particular wand charges for doing it.
-     */
+    // discounts are applied at payment, so quoted prices stay the base cost
     @Override
     public void take(ItemStack stack, AspectList cost, Player player, Spending why) {
         AspectList left = fine(stack);
@@ -155,11 +130,6 @@ public class WandItem extends Item implements VisHolder, Rechargeable {
         stack.set(ModDataComponents.VIS.get(), left);
     }
 
-    /**
-     * Whether the whole price could be paid. The cap and whatever the bearer has on are both counted in, so an
-     * iron cap can leave a wand a point short of work a brass one would manage with the same vis in it, and a
-     * robe can close that gap again.
-     */
     @Override
     public boolean holds(ItemStack stack, AspectList cost, Player player, Spending why) {
         AspectList have = fine(stack);
@@ -171,22 +141,13 @@ public class WandItem extends Item implements VisHolder, Rechargeable {
         return true;
     }
 
-    /**
-     * What share of an asking price this wand actually pays.
-     * <p>
-     * The cap's own rate and whatever the bearer has on, as ever, and on top of that a tenth off per rank of
-     * thrift worked into the focus. A focus pays for its own working only: a wand lying on a bench is holding
-     * vis for somebody else's recipe, and what is screwed into its end has nothing to do with that.
-     */
     private static float rate(ItemStack stack, Player player, Spending why, Holder<Aspect> aspect) {
         float rate = VisDiscount.rate(cap(stack).discount(), player, aspect);
-        // a sceptre makes everything a tenth cheaper, at the bench as much as through a focus
         if (isSceptre(stack)) {
             rate -= THRIFT;
         }
         if (why == Spending.WORKING) {
             rate -= FocusUpgrades.level(focus(stack), FocusUpgrade.FRUGAL) * THRIFT;
-            // and a staff works its focus a tenth cheaper again
             if (rod(stack).staff()) {
                 rate -= THRIFT;
             }
@@ -194,12 +155,6 @@ public class WandItem extends Item implements VisHolder, Rechargeable {
         return Math.max(VisDiscount.LEAST, rate);
     }
 
-    /**
-     * The same wand with every primal filled to the brim.
-     * <p>
-     * Only the creative menu has any use for this. Everything else fills a wand slowly and on purpose, which is
-     * most of what having a wand feels like.
-     */
     public static ItemStack brimming(ItemStack stack) {
         AspectList full = AspectList.EMPTY;
         for (Holder<Aspect> aspect : ModAspects.primals()) {
@@ -209,12 +164,10 @@ public class WandItem extends Item implements VisHolder, Rechargeable {
         return stack;
     }
 
-    /** Puts whole points of a primal's vis in, as far as there is room. */
     public static void addVis(ItemStack stack, Holder<Aspect> aspect, int points) {
         put(stack, aspect, points * FINE);
     }
 
-    /** Puts vis in, in hundredths, and says how much would not fit. */
     private static int put(ItemStack stack, Holder<Aspect> aspect, int amount) {
         if (!aspect.value().isPrimal()) {
             return amount;
@@ -225,8 +178,6 @@ public class WandItem extends Item implements VisHolder, Rechargeable {
         stack.set(ModDataComponents.VIS.get(), stored.withAmount(aspect, after));
         return Math.max(0, stored.get(aspect) + amount - room);
     }
-
-    // --- filling up ---------------------------------------------------------
 
     @Override
     public void inventoryTick(ItemStack stack, Level level, Entity holder, int slot, boolean selected) {
@@ -240,12 +191,7 @@ public class WandItem extends Item implements VisHolder, Rechargeable {
         }
     }
 
-    /**
-     * How hard a wand pulls at the aura around it.
-     * <p>
-     * Only the wand actually in hand draws anything for now. The original let a researcher tap the aura from the
-     * belt once they had worked out how; that research does not exist yet, so the belt is left at nothing.
-     */
+    // only the held wand draws; drawing from the belt needs research not ported yet
     private static int drawRate(boolean selected, int slot) {
         return selected ? 1 : 0;
     }
@@ -255,21 +201,10 @@ public class WandItem extends Item implements VisHolder, Rechargeable {
         return chargeFrom(stack, level, at, amount) != null;
     }
 
-    /**
-     * What a charge did: the last vis it drew, and whether it drew all it was allowed to.
-     *
-     * @param last the aspect drawn last
-     * @param full whether the whole of the amount asked for, and the cap's bonus, came in
-     */
     public record Charged(Holder<Aspect> last, boolean full) {
     }
 
-    /**
-     * Draws vis out of the chunk into the wand, saying what was drawn; null when nothing was.
-     * <p>
-     * The cap's own bonus is added here rather than by whoever asked, so a wand held in a hand and one sitting
-     * under a charger are both worth as much more as the cap on them is.
-     */
+    // the cap bonus is added here so hand-held and charger charging both get it
     @Nullable
     public static Charged chargeFrom(ItemStack stack, ServerLevel level, BlockPos at, int amount) {
         amount += cap(stack).chargeBonus();
@@ -294,9 +229,7 @@ public class WandItem extends Item implements VisHolder, Rechargeable {
         return last == null ? null : new Charged(last, amount <= 0);
     }
 
-    /** A rod that makes its own vis tops itself up, to halfway and no further. */
     private static void trickle(ItemStack stack, Player player) {
-        // one point at a time, of one of the primals the rod makes that is still under half
         java.util.List<Holder<Aspect>> low = rod(stack).trickles().stream()
                 .filter(aspect -> fine(stack).get(aspect) < capacity(stack) * FINE * TRICKLES_TO).toList();
         if (!low.isEmpty()) {
@@ -304,14 +237,6 @@ public class WandItem extends Item implements VisHolder, Rechargeable {
         }
     }
 
-    // --- letting it off -----------------------------------------------------
-
-    /**
-     * Pointing the wand at nothing in particular and using it.
-     * <p>
-     * A focus that is charged by the tick is held down: the wand goes into use and {@link #onUseTick} does the
-     * work for as long as it is held and the wand can pay. One charged by the use goes off once, here and now.
-     */
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack wand = player.getItemInHand(hand);
@@ -328,16 +253,10 @@ public class WandItem extends Item implements VisHolder, Rechargeable {
         if (went) {
             player.swing(hand, true);
         }
-        // consumed either way, so that a wand with nothing in it does not also try to place a block
+        // consume even when nothing fired, so the use doesn't fall through to block placement
         return InteractionResultHolder.sidedSuccess(wand, level.isClientSide);
     }
 
-    /**
-     * A tick of holding one of the two foci that are charged by the tick.
-     * <p>
-     * The price is asked every tick and the hand comes off the button the moment it cannot be met, rather than
-     * the wand going quietly dry while somebody holds a beam on a wall.
-     */
     @Override
     public void onUseTick(Level level, LivingEntity using, ItemStack wand, int remaining) {
         if (!(using instanceof Player caster)) {
@@ -355,7 +274,6 @@ public class WandItem extends Item implements VisHolder, Rechargeable {
         Casting.cast(served, caster, wand, getUseDuration(wand, using) - remaining);
     }
 
-    /** Held as long as somebody holds the button. Nothing stops a beam but letting go or running dry. */
     @Override
     public int getUseDuration(ItemStack stack, LivingEntity using) {
         Focus focus = Casting.fitted(stack);
@@ -367,14 +285,6 @@ public class WandItem extends Item implements VisHolder, Rechargeable {
         return UseAnim.NONE;
     }
 
-    // --- what it can be pointed at ------------------------------------------
-
-    /**
-     * The two things a wand does to a block it is pointed at.
-     * <p>
-     * A shelf of books becomes an Alchemonomicon, and a cauldron becomes a crucible. Both use up what they are
-     * worked on, which is the whole cost of either: the knowledge and the pot are cheap, and everything after is not.
-     */
     @Override
     public InteractionResult useOn(UseOnContext context) {
         Level level = context.getLevel();
@@ -391,7 +301,6 @@ public class WandItem extends Item implements VisHolder, Rechargeable {
             return InteractionResult.sidedSuccess(level.isClientSide);
         }
 
-        // a bore turns to dig toward the face clicked; a base turns its nozzle to it
         if (level.getBlockEntity(pos) instanceof me.moonscenty.alchemia.block.entity.ArcaneBoreBlockEntity bore) {
             if (!level.isClientSide) {
                 bore.aim(context.getClickedFace());
@@ -411,9 +320,7 @@ public class WandItem extends Item implements VisHolder, Rechargeable {
             return InteractionResult.sidedSuccess(level.isClientSide);
         }
 
-        // nether brick, obsidian, lava and a set of bars, made into an infernal furnace if laid out right
         BlockState clicked = level.getBlockState(pos);
-        // an eldritch altar with its four eyes in it: the way above it opens
         if (context.getPlayer() != null && clicked.is(ModBlocks.ELDRITCH_ALTAR.get())
                 && me.moonscenty.alchemia.block.eldritch.Oculus.open(level, pos, context.getPlayer(),
                         context.getItemInHand())) {
@@ -426,7 +333,6 @@ public class WandItem extends Item implements VisHolder, Rechargeable {
             return InteractionResult.sidedSuccess(level.isClientSide);
         }
 
-        // a piston with bars on it, a stone table, an anvil and a cauldron, made into a golem press
         if (context.getPlayer() != null
                 && (clicked.is(Blocks.PISTON) || clicked.is(Blocks.IRON_BARS) || clicked.is(Blocks.ANVIL)
                         || clicked.is(Blocks.CAULDRON) || clicked.is(me.moonscenty.alchemia.registry.ModBlocks
@@ -436,13 +342,12 @@ public class WandItem extends Item implements VisHolder, Rechargeable {
             return InteractionResult.sidedSuccess(level.isClientSide);
         }
 
-        // a crucible with two alchemical constructs on it, made into a thaumatorium if its maker knows how
         if (context.getPlayer() != null && me.moonscenty.alchemia.block.ThaumatoriumBlock.form(level, pos,
                 context.getClickedFace(), context.getPlayer(), context.getItemInHand())) {
             return InteractionResult.sidedSuccess(level.isClientSide);
         }
 
-        // any cauldron, full or empty. What was in it is tipped out, as it would be
+        // any cauldron, full or empty; its contents are discarded
         if (level.getBlockState(pos).getBlock() instanceof AbstractCauldronBlock) {
             if (!level.isClientSide) {
                 level.setBlockAndUpdate(pos, ModBlocks.CRUCIBLE.get().defaultBlockState());
@@ -462,8 +367,6 @@ public class WandItem extends Item implements VisHolder, Rechargeable {
         level.addFreshEntity(item);
     }
 
-    // --- what it says about itself ------------------------------------------
-
     @Override
     public Component getName(ItemStack stack) {
         String kind = isStaff(stack) ? "item.alchemia.staff.named"
@@ -472,7 +375,6 @@ public class WandItem extends Item implements VisHolder, Rechargeable {
                 cap(stack).displayName(), rod(stack).displayName());
     }
 
-    /** A staff is long and heavy enough to club something with, the original's six points over a fist. */
     @Override
     public net.minecraft.world.item.component.ItemAttributeModifiers getDefaultAttributeModifiers(ItemStack stack) {
         if (!isStaff(stack)) {
@@ -514,7 +416,6 @@ public class WandItem extends Item implements VisHolder, Rechargeable {
         }
     }
 
-    /** The bar under the icon shows the primal the wand is fullest of, so an empty wand reads at a glance. */
     @Override
     public boolean isBarVisible(ItemStack stack) {
         return !fine(stack).isEmpty();

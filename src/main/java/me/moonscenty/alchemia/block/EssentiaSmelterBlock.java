@@ -13,7 +13,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
@@ -31,28 +30,13 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
 
-/**
- * A furnace that makes no ingots.
- * <p>
- * What it burns comes apart into what it is made of, and that goes up through the hole in its top into whatever is
- * stacked there. A smelter with nothing above it fills up and stops, which is the whole reason for stacking.
- * <p>
- * There are three, as in the original. They boil things down at the same pace and hold the same fifty; what a
- * better one buys is less lost on the way, and for the alchemium one a quicker pour.
- */
 public class EssentiaSmelterBlock extends BaseEntityBlock {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
     public static final MapCodec<EssentiaSmelterBlock> CODEC =
             simpleCodec(properties -> new EssentiaSmelterBlock(properties, Tier.BASIC));
 
-    /**
-     * The original's three, with its numbers: how much of every point boiled out of something is kept rather than
-     * lost as flux, and how many ticks between pours.
-     * <p>
-     * The void one pours no faster than the plain one. Its description says it does; the original's code does not,
-     * and it is the code that people played.
-     */
+    // original's values; the void tier pours no faster than basic, as in the original's code despite its description
     public enum Tier {
         BASIC(0.80F, 40),
         ALCHEMIUM(0.85F, 25),
@@ -89,10 +73,6 @@ public class EssentiaSmelterBlock extends BaseEntityBlock {
         return tier;
     }
 
-    /**
-     * A vent catching a point of flux, on the client: a fizz and four grey puffs blown out of the vent, away from
-     * the smelter. The side it is on comes as the event's number.
-     */
     @Override
     protected boolean triggerEvent(BlockState state, Level level, BlockPos pos, int id, int param) {
         if (id != EssentiaSmelterBlockEntity.VENTED) {
@@ -153,7 +133,6 @@ public class EssentiaSmelterBlock extends BaseEntityBlock {
         return state.rotate(mirror.getRotation(state.getValue(FACING)));
     }
 
-    /** Opens the screen, whatever is in hand. A furnace does the same, and this is a furnace. */
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player,
             BlockHitResult hit) {
@@ -179,7 +158,6 @@ public class EssentiaSmelterBlock extends BaseEntityBlock {
         if (facing.getAxis().isVertical()) {
             return;
         }
-        // smoke and fire at the mouth, as the original's furnace-like front gave them out every time
         double across = random.nextDouble() * 0.5 - 0.25;
         double x = pos.getX() + 0.5 + facing.getStepX() * 0.52 + facing.getStepZ() * across;
         double y = pos.getY() + 0.2 + random.nextDouble() * 5.0 / 16.0;

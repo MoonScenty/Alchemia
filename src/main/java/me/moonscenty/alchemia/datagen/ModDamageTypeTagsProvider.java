@@ -12,7 +12,6 @@ import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageType;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
-/** What the primal arrows' kinds of harm are: projectiles all, two of them past armour and magic, one fire. */
 public class ModDamageTypeTagsProvider extends TagsProvider<DamageType> {
     public ModDamageTypeTagsProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider,
             ExistingFileHelper existingFileHelper) {

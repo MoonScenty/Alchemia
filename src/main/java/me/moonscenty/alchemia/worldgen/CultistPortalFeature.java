@@ -13,10 +13,6 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
-/**
- * Now and then a lesser crimson portal hangs over bare ground -- stone, earth, sand or snow, never grass -- waiting
- * for somebody to come near enough to wake it.
- */
 public class CultistPortalFeature extends Feature<NoneFeatureConfiguration> {
     public CultistPortalFeature(Codec<NoneFeatureConfiguration> codec) {
         super(codec);

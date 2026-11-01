@@ -8,13 +8,6 @@ import net.minecraft.resources.ResourceKey;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
-/**
- * The pieces a wand is put together from, kept in registries of their own so an add-on can add a rod or a cap the
- * same way the mod does — the same arrangement the aspects use.
- * <p>
- * The numbers are the original's. A plain stick holds a hundred of each primal and a silverwood rod five times
- * that; iron caps spend a tenth more than the price asked, and the better metals pull the aura in faster instead.
- */
 public class ModWandParts {
     public static final ResourceKey<Registry<WandRod>> RODS_KEY = ResourceKey.createRegistryKey(Alchemia.id("wand_rod"));
     public static final ResourceKey<Registry<WandCap>> CAPS_KEY = ResourceKey.createRegistryKey(Alchemia.id("wand_cap"));
@@ -25,9 +18,8 @@ public class ModWandParts {
     public static final Registry<WandRod> RODS = ROD_ENTRIES.makeRegistry(builder -> builder.sync(true));
     public static final Registry<WandCap> CAPS = CAP_ENTRIES.makeRegistry(builder -> builder.sync(true));
 
-    // --- rods ---------------------------------------------------------------------------------------------
+    // --- rods ---
 
-    /** A plain stick. Everyone starts here. */
     public static final DeferredHolder<WandRod, WandRod> WOOD =
             ROD_ENTRIES.register("wood", () -> WandRod.plain(100, 1));
     public static final DeferredHolder<WandRod, WandRod> GREATWOOD =
@@ -35,7 +27,6 @@ public class ModWandParts {
     public static final DeferredHolder<WandRod, WandRod> SILVERWOOD =
             ROD_ENTRIES.register("silverwood", () -> WandRod.plain(500, 9));
 
-    // the six that make one primal of their own, one rod to each
     public static final DeferredHolder<WandRod, WandRod> REED =
             ROD_ENTRIES.register("reed", () -> WandRod.trickling(375, 6, ModAspects.AIR));
     public static final DeferredHolder<WandRod, WandRod> OBSIDIAN =
@@ -49,7 +40,6 @@ public class ModWandParts {
     public static final DeferredHolder<WandRod, WandRod> BONE =
             ROD_ENTRIES.register("bone", () -> WandRod.trickling(375, 6, ModAspects.ENTROPY));
 
-    // the staff cores: longer rods that hold half as much again, the original's numbers
     public static final DeferredHolder<WandRod, WandRod> GREATWOOD_STAFF =
             ROD_ENTRIES.register("greatwood_staff", () -> WandRod.staff("greatwood", 375, 8));
     public static final DeferredHolder<WandRod, WandRod> SILVERWOOD_STAFF =
@@ -69,9 +59,8 @@ public class ModWandParts {
     public static final DeferredHolder<WandRod, WandRod> PRIMAL_STAFF =
             ROD_ENTRIES.register("primal_staff", () -> WandRod.primalStaff(750, 28));
 
-    // --- caps ---------------------------------------------------------------------------------------------
+    // --- caps ---
 
-    /** Cheap, and it shows: everything costs a tenth more. */
     public static final DeferredHolder<WandCap, WandCap> IRON =
             CAP_ENTRIES.register("iron", () -> new WandCap(1.1F, 0, 1));
     public static final DeferredHolder<WandCap, WandCap> GOLD =

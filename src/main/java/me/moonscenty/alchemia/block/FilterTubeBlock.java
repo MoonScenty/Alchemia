@@ -28,13 +28,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.neoforge.registries.DeferredItem;
 
-/**
- * A length of pipe that lets one essentia by and turns the rest back.
- * <p>
- * What it lets by is told to it by holding a phial of that essentia against it, or a vis crystal, which is the
- * same thing in solid form and comes to hand earlier. Crouch and click to make it forget again. Two filters set to different things in one run
- * pass nothing at all, which is the honest answer rather than a special case.
- */
 public class FilterTubeBlock extends TubeBlock {
     public static final MapCodec<FilterTubeBlock> CODEC = simpleCodec(FilterTubeBlock::new);
 
@@ -57,7 +50,6 @@ public class FilterTubeBlock extends TubeBlock {
         return level.getBlockEntity(pos) instanceof FilterTubeBlockEntity filter ? filter.only() : Optional.empty();
     }
 
-    /** Set with a phial of what it is to let by, or with a crystal of it. */
     @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
             Player player, InteractionHand hand, BlockHitResult hit) {
@@ -73,7 +65,6 @@ public class FilterTubeBlock extends TubeBlock {
         return ItemInteractionResult.sidedSuccess(level.isClientSide);
     }
 
-    /** Says what it is set to, and forgets it if you crouch. */
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player,
             BlockHitResult hit) {
@@ -99,7 +90,6 @@ public class FilterTubeBlock extends TubeBlock {
                 .copy().withStyle(ChatFormatting.GRAY), true);
     }
 
-    /** The aspect a primal shard is made of, if the held thing is one. Not the vis crystal, which is another thing. */
     private static Optional<Holder<Aspect>> crystallised(ItemStack stack) {
         for (Map.Entry<CrystalType, DeferredItem<Item>> entry : ModItems.SHARDS.entrySet()) {
             if (stack.is(entry.getValue().get())) {

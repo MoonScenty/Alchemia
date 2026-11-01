@@ -15,16 +15,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
 
-/**
- * One of the twelve things a wand can be made to do.
- *
- * <p>Every focus is this same item with a different {@link Focus} behind it. The original had a class apiece
- * because each one also carried what it did when it went off, and that is still to come; what is here is the part
- * that is the same for all twelve — one to a stack, rare, and a price written on the front.
- *
- * <p>A focus alone does nothing. It has to be fitted to a wand, and the wand has to be the one pointed at
- * something.
- */
 public class FocusItem extends Item {
     private final Focus focus;
 
@@ -33,13 +23,7 @@ public class FocusItem extends Item {
         this.focus = focus;
     }
 
-    /**
-     * What this focus does and costs, once what is worked into it is taken into account.
-     * <p>
-     * This is the one to ask nearly everywhere. A fire focus with a fireball in it is thrown rather than held
-     * down and costs eight times as much, and anything reading the plain values would charge the wrong price
-     * for the wrong working.
-     */
+    // use this rather than base(): upgrades change cost and behaviour
     public Focus focus(ItemStack stack) {
         Focus tuned = FocusUpgrades.tuned(stack);
         Focus found = tuned == null ? focus : tuned;
@@ -49,12 +33,7 @@ public class FocusItem extends Item {
         return found;
     }
 
-    /**
-     * What the primal focus asks this moment: ten and an even number up to eight more of each primal, drawn afresh
-     * every fifth of a second, so the price shimmers on the tooltip and every cast is billed what it is then. The
-     * original's draw, in its order, from the same kind of generator, so a client and a server agree within the
-     * fifth of a second.
-     */
+    // rerolled every 200 ms from a time-seeded generator so client and server agree; original's draw
     public static AspectList primalCost(long millis) {
         java.util.Random draw = new java.util.Random(millis / 200L);
         return AspectList.of(me.moonscenty.alchemia.registry.ModAspects.WATER, 10 + draw.nextInt(5) * 2)
@@ -65,15 +44,10 @@ public class FocusItem extends Item {
                 .add(me.moonscenty.alchemia.registry.ModAspects.ENTROPY, 10 + draw.nextInt(5) * 2);
     }
 
-    /** What it is before anybody has worked on it, which is what the upgrades are applied to. */
     public Focus base() {
         return focus;
     }
 
-    /**
-     * The price, written the way the original wrote it: a heading that says whether it is charged once or every
-     * tick, then a line for each aspect in its own colour.
-     */
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> lines, TooltipFlag flag) {
         Focus fitted = focus(stack);
@@ -93,12 +67,6 @@ public class FocusItem extends Item {
         worked(stack, lines);
     }
 
-    /**
-     * What has been worked into it, one line apiece.
-     * <p>
-     * The same thing twice is written once with a number after it, the way an enchantment is: a focus with two
-     * ranks of frugal in it is frugal II and not frugal, frugal.
-     */
     private static void worked(ItemStack stack, List<Component> lines) {
         java.util.Map<FocusUpgrade, Integer> counted = new java.util.LinkedHashMap<>();
         for (FocusUpgrade upgrade : FocusUpgrades.on(stack)) {

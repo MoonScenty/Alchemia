@@ -21,16 +21,12 @@ import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.fluids.FluidStack;
 
-/**
- * The spa as the original drew it: a pocket for salts, a gauge for the tank, and a small switch between them.
- */
 public class SpaScreen extends AbstractContainerScreen<SpaMenu> {
     private static final ResourceLocation PANEL = Alchemia.id("textures/gui/spa.png");
     private static final int SHEET = 256;
     private static final int PANEL_W = 176;
     private static final int PANEL_H = 166;
 
-    // Laid out as the original laid it out.
     private static final int SWITCH_X = 89;
     private static final int SWITCH_Y = 35;
     private static final int SWITCH_SIZE = 8;
@@ -38,7 +34,6 @@ public class SpaScreen extends AbstractContainerScreen<SpaMenu> {
     private static final int MIXING_FROM_Y = 16;
     private static final int POURING_FROM_Y = 32;
 
-    /** The liquid is drawn at half size, in six squares one above the other, and covered down to how full it is. */
     private static final int LIQUID_X = 107;
     private static final int LIQUID_Y = 15;
     private static final int LIQUID_SQUARE = 8;
@@ -60,7 +55,6 @@ public class SpaScreen extends AbstractContainerScreen<SpaMenu> {
 
     @Override
     protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
-        // the original's panels have soft, half-clear edges, which come out solid without blending
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         graphics.blit(PANEL, leftPos, topPos, 0, 0, PANEL_W, PANEL_H, SHEET, SHEET);
@@ -76,7 +70,6 @@ public class SpaScreen extends AbstractContainerScreen<SpaMenu> {
         RenderSystem.disableBlend();
     }
 
-    /** The tank's liquid in its own picture and colour, with the empty part covered over by the panel. */
     private void liquid(GuiGraphics graphics, Fluid fluid, float full) {
         IClientFluidTypeExtensions look = IClientFluidTypeExtensions.of(fluid);
         TextureAtlasSprite sprite = minecraft.getTextureAtlas(InventoryMenu.BLOCK_ATLAS)
@@ -96,7 +89,6 @@ public class SpaScreen extends AbstractContainerScreen<SpaMenu> {
         }
     }
 
-    /** The switch flips between mixing and pouring the tank as it is. */
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (over(mouseX, mouseY, SWITCH_X, SWITCH_Y, SWITCH_SIZE, SWITCH_SIZE) && minecraft != null
@@ -108,7 +100,6 @@ public class SpaScreen extends AbstractContainerScreen<SpaMenu> {
         return super.mouseClicked(mouseX, mouseY, button);
     }
 
-    /** The panel is a picture of the spa, as the original's was; it carries no words. */
     @Override
     protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
     }
@@ -119,7 +110,6 @@ public class SpaScreen extends AbstractContainerScreen<SpaMenu> {
         renderTooltip(graphics, mouseX, mouseY);
     }
 
-    /** What is in the tank and how much, over the gauge; what the switch is set to, over the switch. */
     @Override
     protected void renderTooltip(GuiGraphics graphics, int mouseX, int mouseY) {
         if (over(mouseX, mouseY, GLASS_X - 2, GLASS_Y - 1, GLASS_W, GLASS_H) && menu.amount() > 0) {

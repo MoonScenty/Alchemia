@@ -42,15 +42,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-/**
- * A pipe that carries essentia between the things that hold it.
- * <p>
- * Each of its six sides is in one of three states, and the model is put together from them: nothing there, another
- * tube, or something worth reaching into. The last gets a collar on the end of the arm, so a run of pipe reads at a
- * glance as a run of pipe with its ends plugged into things.
- */
 public class TubeBlock extends BaseEntityBlock {
-    /** What a side is up against. */
     public enum Link implements StringRepresentable {
         NONE("none"),
         TUBE("tube"),
@@ -72,9 +64,7 @@ public class TubeBlock extends BaseEntityBlock {
 
     public static final MapCodec<TubeBlock> CODEC = simpleCodec(TubeBlock::new);
 
-    /** The bare middle, and one arm out of it per side. */
     private static final VoxelShape CORE = Block.box(6, 6, 6, 10, 10, 10);
-    /** How far the middle reaches out from the centre; a click further out than that is on an arm. */
     private static final double MIDDLE_REACH = 2.0 / 16.0;
     private static final Map<Direction, VoxelShape> ARMS = arms();
 
@@ -153,13 +143,7 @@ public class TubeBlock extends BaseEntityBlock {
         return state.setValue(SIDES.get(towards), linkTo(level, pos, towards, state));
     }
 
-    /**
-     * Works out every side for a tube that arrived without being placed by hand.
-     * <p>
-     * Only a player's placement goes through {@link #getStateForPlacement}; a structure, a command or another mod
-     * sets the block as it stands, and a tube that turned up that way would sit there as a bare middle with no arms
-     * however much was plugged into it.
-     */
+    // structures and commands skip getStateForPlacement
     @Override
     protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState before, boolean moving) {
         BlockState joined = state;
@@ -171,11 +155,6 @@ public class TubeBlock extends BaseEntityBlock {
         }
     }
 
-    /**
-     * A wand on one of its arms shuts that side or opens it again, the original's {@code TileTube.onWandRightClick},
-     * and the tube on the far side of the joint goes with it. Crouching, a buffer's arm is choked a turn further
-     * instead. A wand on the middle is left to whatever else the tube does when clicked.
-     */
     @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
             Player player, InteractionHand hand, BlockHitResult hit) {
@@ -202,7 +181,6 @@ public class TubeBlock extends BaseEntityBlock {
         return ItemInteractionResult.sidedSuccess(level.isClientSide);
     }
 
-    /** Which arm a click landed on, or null for the middle or for a side with no arm. */
     @Nullable
     public static Direction armAt(BlockState state, BlockPos pos, Vec3 hit) {
         double x = hit.x - pos.getX() - 0.5;
@@ -218,44 +196,23 @@ public class TubeBlock extends BaseEntityBlock {
         return state.getValue(SIDES.get(arm)) == Link.NONE ? null : arm;
     }
 
-    /**
-     * Whether essentia may pass through this tube, coming in by one side and leaving by another.
-     * <p>
-     * Plain pipe minds neither side. A valve minds whether it is shut, and a one-way minds which way it is pointed.
-     *
-     * @param out the side it would leave by, or null when this is the tube the essentia stops in
-     */
     public boolean passes(BlockState state, Direction in, Direction out) {
         return true;
     }
 
-    /** The one aspect this tube will let by, if it insists on one. */
     public Optional<Holder<Aspect>> insistsOn(BlockGetter level, BlockPos pos) {
         return Optional.empty();
     }
 
-    /** How many turns a run waits for having come through this tube. */
     public int holdsUp() {
         return 0;
     }
 
-    /**
-     * Whether this tube has a side to spare there at all.
-     * <p>
-     * Plain pipe is open on all six. A valve has a handle on one of them, and a handle is not a socket: nothing
-     * joins to the side it stands on, tube or vessel.
-     */
     public boolean spare(BlockState state, Direction side) {
         return true;
     }
 
-    /**
-     * What lies on one side of a tube: another tube, something that holds essentia, or nothing to speak of.
-     * <p>
-     * Both ends have a say. A tube with a handle in the way refuses, and so does a neighbour with a handle in the
-     * way, which is why the state being built is handed in rather than read back out of the world -- during
-     * placement it is not in the world yet.
-     */
+    // self is passed in because during placement it is not in the world yet
     public static Link linkTo(BlockGetter level, BlockPos pos, Direction side, BlockState self) {
         if (self.getBlock() instanceof TubeBlock tube && !tube.spare(self, side)) {
             return Link.NONE;
@@ -264,17 +221,11 @@ public class TubeBlock extends BaseEntityBlock {
         if (beside.getBlock() instanceof TubeBlock other) {
             return other.spare(beside, side.getOpposite()) ? Link.TUBE : Link.NONE;
         }
-        // the side the neighbour is touched on is the opposite of the one the tube reaches out along
         return level.getBlockEntity(pos.relative(side)) instanceof EssentiaHolder holder
                 && holder.reachableFrom(side.getOpposite()) ? Link.BLOCK : Link.NONE;
     }
 
-    /**
-     * Every kind of tube is pumped the same way.
-     * <p>
-     * The ticker is written out rather than got from {@code createTickerHelper}, which matches one type of block
-     * entity and one only: the odd kinds of pipe keep their own, and all of them want this same pull.
-     */
+    // not createTickerHelper: it matches a single block entity type, and every tube subtype needs this ticker
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state,
             BlockEntityType<T> type) {

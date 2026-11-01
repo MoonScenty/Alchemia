@@ -27,7 +27,6 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/** What comes out of the Outer Lands: the crab, the husk it lives in, the guardian, the mind spider. */
 @GameTestHolder(Alchemia.MODID)
 @PrefixGameTestTemplate(false)
 public class EldritchMobTests {
@@ -41,7 +40,6 @@ public class EldritchMobTests {
         return mob;
     }
 
-    /** A shelled crab has five armour until it is half dead, and then its shell breaks. */
     @GameTest(template = TEMPLATE)
     public static void aCrabsShellBreaksAtHalfHealth(GameTestHelper helper) {
         EldritchCrab crab = ordinary(helper, new EldritchCrab(helper.getLevel()), new BlockPos(4, 2, 4));
@@ -53,7 +51,6 @@ public class EldritchMobTests {
         helper.succeed();
     }
 
-    /** A husk wears the cult's helm, and dying lets a shelled crab out of it, and nothing else. */
     @GameTest(template = TEMPLATE, timeoutTicks = 40)
     public static void aHuskBurstsIntoACrab(GameTestHelper helper) {
         var level = helper.getLevel();
@@ -72,7 +69,6 @@ public class EldritchMobTests {
         });
     }
 
-    /** The guardian's orb hurts and weakens what is alive about it, and not the undead. */
     @GameTest(template = TEMPLATE, timeoutTicks = 60)
     public static void aGuardiansOrbSparesTheUndead(GameTestHelper helper) {
         var level = helper.getLevel();
@@ -92,7 +88,6 @@ public class EldritchMobTests {
         });
     }
 
-    /** A guardian and a crab are of one side; neither is the other's enemy. */
     @GameTest(template = TEMPLATE)
     public static void eldritchThingsAreOfOneSide(GameTestHelper helper) {
         var level = helper.getLevel();
@@ -102,7 +97,6 @@ public class EldritchMobTests {
         helper.succeed();
     }
 
-    /** A spider warp shows one player bites for nothing and is worth nothing. */
     @GameTest(template = TEMPLATE)
     public static void anIllusorySpiderIsHarmless(GameTestHelper helper) {
         var level = helper.getLevel();
@@ -116,7 +110,6 @@ public class EldritchMobTests {
         helper.succeed();
     }
 
-    /** The deep rungs of warp call up guardians in a fog, and spiders. */
     @GameTest(template = TEMPLATE)
     public static void warpCallsUpTheOuterLands(GameTestHelper helper) {
         helper.assertTrue(WarpHandler.outcomeFor(60, 30).summons() == WarpHandler.Summons.GUARDIAN,

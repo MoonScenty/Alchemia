@@ -15,18 +15,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
-/**
- * The thirty-five aspects, defined in code so add-ons can register their own the same way.
- * <p>
- * Ids and colours follow the original. The six primals come first; every compound names the two aspects it is mixed
- * from, so the whole tree is spelled out here.
- */
 public class ModAspects {
     public static final ResourceKey<Registry<Aspect>> KEY = ResourceKey.createRegistryKey(Alchemia.id("aspect"));
     public static final DeferredRegister<Aspect> ASPECTS = DeferredRegister.create(KEY, Alchemia.MODID);
     public static final Registry<Aspect> REGISTRY = ASPECTS.makeRegistry(builder -> builder.sync(true));
 
-    // The six primals
     public static final DeferredHolder<Aspect, Aspect> AIR = primal("aer", 0xFFFF7E, Blending.ADDITIVE);
     public static final DeferredHolder<Aspect, Aspect> EARTH = primal("terra", 0x56C000, Blending.ADDITIVE);
     public static final DeferredHolder<Aspect, Aspect> FIRE = primal("ignis", 0xFF5A01, Blending.ADDITIVE);
@@ -34,7 +27,6 @@ public class ModAspects {
     public static final DeferredHolder<Aspect, Aspect> ORDER = primal("ordo", 0xD5D4EC, Blending.ADDITIVE);
     public static final DeferredHolder<Aspect, Aspect> ENTROPY = primal("perditio", 0x404040, Blending.FLAT);
 
-    // Compounds, each mixed from two aspects above it
     public static final DeferredHolder<Aspect, Aspect> VOID = compound("vacuos", 0x888888, Blending.FLAT, AIR, ENTROPY);
     public static final DeferredHolder<Aspect, Aspect> LIGHT = compound("lux", 0xFFD585, AIR, FIRE);
     public static final DeferredHolder<Aspect, Aspect> MOTION = compound("motus", 0xCDCCF4, AIR, ORDER);
@@ -65,7 +57,6 @@ public class ModAspects {
     public static final DeferredHolder<Aspect, Aspect> BEAST = compound("bestia", 0x9F6409, MOTION, LIFE);
     public static final DeferredHolder<Aspect, Aspect> MAN = compound("humanus", 0xFFD7C0, SOUL, LIFE);
 
-    /** Which aspect two others mix into, keyed by the pair in either order. Built once the registry is frozen. */
     private static Map<Long, Holder<Aspect>> combinations;
 
     private static DeferredHolder<Aspect, Aspect> primal(String tag, int color, Blending blending) {
@@ -80,7 +71,6 @@ public class ModAspects {
         return ASPECTS.register(tag, () -> Aspect.compound(color, blending, first, second));
     }
 
-    /** The aspect the two mix into, if any. Order does not matter. */
     public static Optional<Holder<Aspect>> combine(Holder<Aspect> first, Holder<Aspect> second) {
         if (combinations == null) {
             combinations = buildCombinations();
@@ -88,7 +78,6 @@ public class ModAspects {
         return Optional.ofNullable(combinations.get(pairKey(first, second)));
     }
 
-    /** The aspect saved under this id, or null if there is none. */
     public static Holder<Aspect> byId(String id) {
         ResourceLocation key = ResourceLocation.tryParse(id);
         return key == null ? null : REGISTRY.getHolder(key).map(holder -> (Holder<Aspect>) holder).orElse(null);
@@ -98,7 +87,6 @@ public class ModAspects {
         return REGISTRY.holders().filter(holder -> holder.value().isPrimal()).map(holder -> (Holder<Aspect>) holder).toList();
     }
 
-    /** One of the six, at random. */
     public static Holder<Aspect> randomPrimal(net.minecraft.util.RandomSource random) {
         List<Holder<Aspect>> all = primals();
         return all.get(random.nextInt(all.size()));
@@ -115,7 +103,6 @@ public class ModAspects {
         return built;
     }
 
-    /** Packs two aspect ids into one key that is the same whichever way round they are given. */
     private static long pairKey(Holder<Aspect> first, Holder<Aspect> second) {
         int a = REGISTRY.getId(first.value());
         int b = REGISTRY.getId(second.value());

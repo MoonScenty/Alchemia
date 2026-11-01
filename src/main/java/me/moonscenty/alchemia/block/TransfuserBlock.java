@@ -21,13 +21,8 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-/**
- * An essentia transfuser, filling or emptying, the original's {@code BlockEssentiaTransport}: a half-block fitting set
- * against the face it is put on, looking out from it, with a pipe at its back.
- */
 public class TransfuserBlock extends BaseEntityBlock {
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
-    /** Half a block, against what it is fixed to. The original's measures. */
     private static final Map<Direction, VoxelShape> SHAPES = new EnumMap<>(Map.of(
             Direction.DOWN, Block.box(4, 8, 4, 12, 16, 12),
             Direction.UP, Block.box(4, 0, 4, 12, 8, 12),
@@ -44,7 +39,6 @@ public class TransfuserBlock extends BaseEntityBlock {
         registerDefaultState(stateDefinition.any().setValue(FACING, Direction.UP));
     }
 
-    /** Whether this one fills jars from a pipe, rather than empties them into one. */
     public boolean filling() {
         return filling;
     }
