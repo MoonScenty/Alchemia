@@ -5,7 +5,9 @@ import java.util.Map;
 import java.util.UUID;
 
 import me.moonscenty.alchemia.Alchemia;
+import me.moonscenty.alchemia.aspect.AspectList;
 import me.moonscenty.alchemia.aura.AuraHandler;
+import me.moonscenty.alchemia.item.Worn;
 import me.moonscenty.alchemia.network.ShieldRunes;
 import me.moonscenty.alchemia.registry.ModAspects;
 import me.moonscenty.alchemia.registry.ModSounds;
@@ -29,7 +31,6 @@ import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
-import top.theillusivec4.curios.api.CuriosApi;
 
 /**
  * The runic shield, as the original kept it: golden hearts that are not food's but the gear's.
@@ -121,13 +122,8 @@ public final class RunicShield {
             state.next = now + BROKEN_WAIT;
             state.last = 0;
         }
-        if (current < state.most && state.next < now
-                && !AuraHandler.shouldSpare(level, player.blockPosition(), ModAspects.AIR)
-                && !AuraHandler.shouldSpare(level, player.blockPosition(), ModAspects.EARTH)
-                && AuraHandler.get(level, player.blockPosition(), ModAspects.AIR) >= 1
-                && AuraHandler.get(level, player.blockPosition(), ModAspects.EARTH) >= 1) {
-            AuraHandler.drainAvailable(level, player.blockPosition(), ModAspects.AIR, 1);
-            AuraHandler.drainAvailable(level, player.blockPosition(), ModAspects.EARTH, 1);
+        if (current < state.most && state.next < now && AuraHandler.drainUnlessSpared(level, player.blockPosition(),
+                AspectList.of(ModAspects.AIR, 1).add(ModAspects.EARTH, 1))) {
             state.next = now + Math.max(0, RECHARGE - state.charged * CHARGED_RING_QUICKER);
             player.setAbsorptionAmount(current + 1);
             state.last = current + 1;
@@ -141,24 +137,18 @@ public final class RunicShield {
         int kinetic = 0;
         int healing = 0;
         int emergency = 0;
-        for (EquipmentSlot slot : new EquipmentSlot[] {EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS,
-                EquipmentSlot.FEET}) {
+        for (EquipmentSlot slot : Worn.ARMOUR) {
             most += RunicGear.charge(player.getItemBySlot(slot));
         }
-        var curios = CuriosApi.getCuriosInventory(player);
-        if (curios.isPresent()) {
-            var worn = curios.get().getEquippedCurios();
-            for (int i = 0; i < worn.getSlots(); i++) {
-                ItemStack bauble = worn.getStackInSlot(i);
-                most += RunicGear.charge(bauble);
-                if (bauble.getItem() instanceof RunicGear gear) {
-                    switch (gear.upgrade(bauble)) {
-                        case CHARGED -> charged++;
-                        case KINETIC -> kinetic++;
-                        case HEALING -> healing++;
-                        case EMERGENCY -> emergency++;
-                        default -> {
-                        }
+        for (ItemStack bauble : Worn.baubles(player)) {
+            most += RunicGear.charge(bauble);
+            if (bauble.getItem() instanceof RunicGear gear) {
+                switch (gear.upgrade(bauble)) {
+                    case CHARGED -> charged++;
+                    case KINETIC -> kinetic++;
+                    case HEALING -> healing++;
+                    case EMERGENCY -> emergency++;
+                    default -> {
                     }
                 }
             }

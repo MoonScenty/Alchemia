@@ -3,6 +3,7 @@ package me.moonscenty.alchemia.item.bauble;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.moonscenty.alchemia.item.Worn;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -10,7 +11,6 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotContext;
 
 /**
@@ -38,12 +38,7 @@ public class VisAmuletItem extends BaubleItem {
         for (int i = 0; i < 9; i++) {
             carried.add(player.getInventory().getItem(i));
         }
-        CuriosApi.getCuriosInventory(player).ifPresent(curios -> {
-            var worn = curios.getEquippedCurios();
-            for (int i = 0; i < worn.getSlots(); i++) {
-                carried.add(worn.getStackInSlot(i));
-            }
-        });
+        carried.addAll(Worn.baubles(player));
         for (EquipmentSlot armour : new EquipmentSlot[] {EquipmentSlot.FEET, EquipmentSlot.LEGS,
                 EquipmentSlot.CHEST, EquipmentSlot.HEAD}) {
             carried.add(player.getItemBySlot(armour));

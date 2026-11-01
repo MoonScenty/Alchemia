@@ -2,7 +2,6 @@ package me.moonscenty.alchemia.item;
 
 import java.util.List;
 
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
@@ -49,8 +48,7 @@ public class RobeItem extends ArmorItem implements VisDiscount {
 
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> lines, TooltipFlag flag) {
-        lines.add(Component.translatable("item.alchemia.vis_discount", discount)
-                .withStyle(ChatFormatting.AQUA));
+        lines.add(discountLine(stack));
     }
 
     /** Whether this piece is a void robe. */

@@ -1,6 +1,7 @@
 package me.moonscenty.alchemia.item;
 
-import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
@@ -15,9 +16,6 @@ import net.minecraft.world.item.ItemStack;
  * of a void robe are fifteen parts off every bill, which is a great deal and meant to be.
  */
 public interface VisDiscount {
-    /** The four places armour can give a discount; baubles give theirs from wherever they are worn. */
-    EquipmentSlot[] WORN = {EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET};
-
     /**
      * The least of an asking price a wand can be brought down to.
      * <p>
@@ -38,6 +36,12 @@ public interface VisDiscount {
         return 0;
     }
 
+    /** The tooltip line saying how much this takes off. */
+    default Component discountLine(ItemStack stack) {
+        return Component.translatable("item.alchemia.vis_discount", visDiscount(stack, null))
+                .withStyle(ChatFormatting.AQUA);
+    }
+
     /** Everything the player has on, armour and baubles, added up. */
     static int worn(Player wearer) {
         return worn(wearer, null);
@@ -48,18 +52,8 @@ public interface VisDiscount {
         if (wearer == null) {
             return 0;
         }
-        java.util.List<ItemStack> pieces = new java.util.ArrayList<>();
-        for (EquipmentSlot slot : WORN) {
-            pieces.add(wearer.getItemBySlot(slot));
-        }
-        top.theillusivec4.curios.api.CuriosApi.getCuriosInventory(wearer).ifPresent(curios -> {
-            var baubles = curios.getEquippedCurios();
-            for (int i = 0; i < baubles.getSlots(); i++) {
-                pieces.add(baubles.getStackInSlot(i));
-            }
-        });
         int total = 0;
-        for (ItemStack piece : pieces) {
+        for (ItemStack piece : Worn.stacks(wearer, Worn.ARMOUR)) {
             if (piece.getItem() instanceof VisDiscount gear) {
                 total += gear.visDiscount(piece, wearer);
                 if (aspect != null) {

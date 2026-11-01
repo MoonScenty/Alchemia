@@ -145,4 +145,36 @@ public final class AuraHandler {
         AuraChunk aura = at(level, pos);
         return aura.exists() && (float) aura.get(aspect) / aura.base() < 0.1F;
     }
+
+    /** Whether any of these should be left alone here. */
+    @SafeVarargs
+    public static boolean shouldSpareAny(LevelAccessor level, BlockPos pos, Holder<Aspect>... aspects) {
+        for (Holder<Aspect> aspect : aspects) {
+            if (shouldSpare(level, pos, aspect)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** {@link #drain}, unless the aura here should be spared. */
+    public static boolean drainUnlessSpared(LevelAccessor level, BlockPos pos, Holder<Aspect> aspect, int amount) {
+        return !shouldSpare(level, pos, aspect) && drain(level, pos, aspect, amount);
+    }
+
+    /** {@link #drain} of several, unless any of them should be spared here. */
+    public static boolean drainUnlessSpared(LevelAccessor level, BlockPos pos, AspectList wanted) {
+        for (Holder<Aspect> aspect : wanted.sortedByName()) {
+            if (shouldSpare(level, pos, aspect)) {
+                return false;
+            }
+        }
+        return drain(level, pos, wanted);
+    }
+
+    /** {@link #drainAvailable}, or nothing if the aura here should be spared. */
+    public static int drainAvailableUnlessSpared(LevelAccessor level, BlockPos pos, Holder<Aspect> aspect,
+            int amount) {
+        return shouldSpare(level, pos, aspect) ? 0 : drainAvailable(level, pos, aspect, amount);
+    }
 }

@@ -1,5 +1,7 @@
 package me.moonscenty.alchemia.network;
 
+import java.util.function.BiConsumer;
+
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.aspect.Aspect;
 import me.moonscenty.alchemia.menu.ResearchTableMenu;
@@ -78,18 +80,11 @@ public class ModNetwork {
      * which item is selected cannot put a focus on the wrong thing.
      */
     private static void onChangeFocus(ChangeFocus payload, IPayloadContext context) {
-        context.enqueueWork(() -> {
-            if (!(context.player() instanceof ServerPlayer player)) {
-                return;
-            }
-            ItemStack held = player.getMainHandItem();
-            if (!(held.getItem() instanceof WandItem)) {
-                return;
-            }
+        withWand(context, (player, wand) -> {
             if (payload.remove()) {
-                Foci.remove(player, held);
+                Foci.remove(player, wand);
             } else {
-                Foci.next(player, held);
+                Foci.next(player, wand);
             }
         });
     }
@@ -100,10 +95,15 @@ public class ModNetwork {
      * The wand comes from the hand rather than the packet, for the same reason the cycle takes it from there.
      */
     private static void onChooseFocus(ChooseFocus payload, IPayloadContext context) {
+        withWand(context, (player, wand) -> Foci.fit(player, wand, payload.focus()));
+    }
+
+    /** Does the work on the server with the wand in the player's main hand, if there is one. */
+    private static void withWand(IPayloadContext context, BiConsumer<ServerPlayer, ItemStack> work) {
         context.enqueueWork(() -> {
             if (context.player() instanceof ServerPlayer player
                     && player.getMainHandItem().getItem() instanceof WandItem) {
-                Foci.fit(player, player.getMainHandItem(), payload.focus());
+                work.accept(player, player.getMainHandItem());
             }
         });
     }
@@ -129,30 +129,26 @@ public class ModNetwork {
     }
 
     private static void onPlaceAspect(PlaceAspect payload, IPayloadContext context) {
+        atTable(context, (player, table) ->
+                table.place(player, payload.at(), payload.aspect().flatMap(ModNetwork::aspect)));
+    }
+
+    private static void onMixAspects(MixAspects payload, IPayloadContext context) {
+        atTable(context, (player, table) -> aspect(payload.one()).ifPresent(one ->
+                aspect(payload.other()).ifPresent(other -> table.mix(player, one, other))));
+    }
+
+    private static void onSpendFragment(SpendFragment payload, IPayloadContext context) {
+        atTable(context, (player, table) -> table.spendFragment(player));
+    }
+
+    /** Does the work on the server at the research table the player has open, if they have one open. */
+    private static void atTable(IPayloadContext context, BiConsumer<ServerPlayer, ResearchTableMenu> work) {
         context.enqueueWork(() -> {
             // the menu is the reader's claim on a particular desk, so nothing else needs saying about where they are
             if (context.player() instanceof ServerPlayer player
                     && player.containerMenu instanceof ResearchTableMenu table) {
-                table.place(player, payload.at(), payload.aspect().flatMap(ModNetwork::aspect));
-            }
-        });
-    }
-
-    private static void onMixAspects(MixAspects payload, IPayloadContext context) {
-        context.enqueueWork(() -> {
-            if (context.player() instanceof ServerPlayer player
-                    && player.containerMenu instanceof ResearchTableMenu table) {
-                aspect(payload.one()).ifPresent(one ->
-                        aspect(payload.other()).ifPresent(other -> table.mix(player, one, other)));
-            }
-        });
-    }
-
-    private static void onSpendFragment(SpendFragment payload, IPayloadContext context) {
-        context.enqueueWork(() -> {
-            if (context.player() instanceof ServerPlayer player
-                    && player.containerMenu instanceof ResearchTableMenu table) {
-                table.spendFragment(player);
+                work.accept(player, table);
             }
         });
     }

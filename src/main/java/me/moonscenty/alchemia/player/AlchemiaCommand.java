@@ -89,7 +89,7 @@ public class AlchemiaCommand {
             source.sendFailure(Component.literal("No such research: " + id));
             return 0;
         }
-        player.setData(ModAttachments.KNOWLEDGE, PlayerKnowledge.of(player).withResearch(id));
+        PlayerKnowledge.update(player, knowledge -> knowledge.withResearch(id));
         source.sendSuccess(() -> Component.literal("Completed " + id), false);
         return 1;
     }
@@ -97,11 +97,12 @@ public class AlchemiaCommand {
     private static int grantAll(CommandSourceStack source) throws CommandSyntaxException {
         ServerPlayer player = source.getPlayerOrException();
         Registry<ResearchEntry> entries = entries(source);
-        PlayerKnowledge knowledge = PlayerKnowledge.of(player);
-        for (ResourceLocation id : entries.keySet()) {
-            knowledge = knowledge.withResearch(id);
-        }
-        player.setData(ModAttachments.KNOWLEDGE, knowledge);
+        PlayerKnowledge.update(player, knowledge -> {
+            for (ResourceLocation id : entries.keySet()) {
+                knowledge = knowledge.withResearch(id);
+            }
+            return knowledge;
+        });
         source.sendSuccess(() -> Component.literal("Completed every piece of research"), false);
         return entries.size();
     }
@@ -109,7 +110,7 @@ public class AlchemiaCommand {
     /** Clearing the research hands back whatever starts unlocked, or the book would have nothing to open. */
     private static int forgetResearch(CommandSourceStack source) throws CommandSyntaxException {
         ServerPlayer player = source.getPlayerOrException();
-        player.setData(ModAttachments.KNOWLEDGE, PlayerKnowledge.of(player).withoutResearch());
+        PlayerKnowledge.update(player, PlayerKnowledge::withoutResearch);
         StartingResearch.grant(player);
         source.sendSuccess(() -> Component.literal("Back to only what a reader starts with"), false);
         return 1;
@@ -268,25 +269,27 @@ public class AlchemiaCommand {
             source.sendFailure(Component.literal("No such aspect: " + id));
             return 0;
         }
-        player.setData(ModAttachments.KNOWLEDGE, PlayerKnowledge.of(player).withAspect(aspect));
+        PlayerKnowledge.update(player, knowledge -> knowledge.withAspect(aspect));
         source.sendSuccess(() -> Component.literal("Discovered " + aspect.value().tag()), false);
         return 1;
     }
 
     private static int discoverAll(CommandSourceStack source) throws CommandSyntaxException {
         ServerPlayer player = source.getPlayerOrException();
-        PlayerKnowledge knowledge = PlayerKnowledge.of(player);
-        for (Holder<Aspect> aspect : ModAspects.REGISTRY.holders().map(holder -> (Holder<Aspect>) holder).toList()) {
-            knowledge = knowledge.withAspect(aspect);
-        }
-        player.setData(ModAttachments.KNOWLEDGE, knowledge);
+        PlayerKnowledge.update(player, knowledge -> {
+            for (Holder<Aspect> aspect : ModAspects.REGISTRY.holders().map(holder -> (Holder<Aspect>) holder)
+                    .toList()) {
+                knowledge = knowledge.withAspect(aspect);
+            }
+            return knowledge;
+        });
         source.sendSuccess(() -> Component.literal("Discovered every aspect"), false);
         return ModAspects.REGISTRY.size();
     }
 
     private static int forget(CommandSourceStack source) throws CommandSyntaxException {
         ServerPlayer player = source.getPlayerOrException();
-        player.setData(ModAttachments.KNOWLEDGE, PlayerKnowledge.of(player).withoutAspects());
+        PlayerKnowledge.update(player, PlayerKnowledge::withoutAspects);
         source.sendSuccess(() -> Component.literal("Back to knowing only the primals"), false);
         return 1;
     }

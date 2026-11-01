@@ -61,7 +61,7 @@ public final class Repair {
         }
         var choices = made.toPrimals().add(ModAspects.EARTH, 1).sortedByName();
         Holder<Aspect> paid = choices.get(random.nextInt(choices.size()));
-        if (AuraHandler.shouldSpare(level, pos, paid) || !AuraHandler.drain(level, pos, paid, points)) {
+        if (!AuraHandler.drainUnlessSpared(level, pos, paid, points)) {
             return false;
         }
         stack.setDamageValue(Math.max(0, stack.getDamageValue() - points));

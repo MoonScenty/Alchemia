@@ -6,7 +6,6 @@ import java.util.function.Predicate;
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.block.CrystalType;
 import me.moonscenty.alchemia.entity.AngryZombie;
-import me.moonscenty.alchemia.player.ModAttachments;
 import me.moonscenty.alchemia.player.PlayerKnowledge;
 import me.moonscenty.alchemia.registry.ModAspects;
 import me.moonscenty.alchemia.registry.ModBlocks;
@@ -108,7 +107,7 @@ public final class Clues {
         if (knowledge.hasResearch(clue)) {
             return false;
         }
-        player.setData(ModAttachments.KNOWLEDGE, knowledge.withResearch(clue));
+        PlayerKnowledge.update(player, known -> known.withResearch(clue));
         player.displayClientMessage(Component.translatable("research.alchemia.clue").withStyle(ChatFormatting.GREEN),
                 false);
         player.level().playSound(null, player.getX(), player.getY(), player.getZ(), ModSounds.LEARN.get(),

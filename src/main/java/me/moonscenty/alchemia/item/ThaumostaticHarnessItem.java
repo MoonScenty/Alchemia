@@ -26,7 +26,7 @@ import net.minecraft.world.item.TooltipFlag;
  * worth. Sprinting while flying costs three times as much. While it is worn, a wand pays three parts in a hundred
  * less of air and one less of everything else.
  */
-public class ThaumostaticHarnessItem extends ArmorItem implements VisDiscount {
+public class ThaumostaticHarnessItem extends ArmorItem implements VisDiscount, Rechargeable {
     /** Fuel, in ticks of flight: five minutes. */
     public static final int FUEL_MAX = 6000;
     /** What a point each of air and fire buys, in ticks. */
@@ -74,6 +74,11 @@ public class ThaumostaticHarnessItem extends ArmorItem implements VisDiscount {
     }
 
     @Override
+    public boolean charge(ItemStack stack, ServerLevel level, BlockPos at, int amount) {
+        return recharge(stack, level, at, amount);
+    }
+
+    @Override
     public int visDiscount(ItemStack stack, Player wearer) {
         return 1;
     }
@@ -104,6 +109,6 @@ public class ThaumostaticHarnessItem extends ArmorItem implements VisDiscount {
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> lines, TooltipFlag flag) {
         lines.add(Component.translatable("item.alchemia.thaumostatic_harness.fuel",
                 fuel(stack) / PER_CHARGE).withStyle(ChatFormatting.YELLOW));
-        lines.add(Component.translatable("item.alchemia.vis_discount", 1).withStyle(ChatFormatting.AQUA));
+        lines.add(discountLine(stack));
     }
 }

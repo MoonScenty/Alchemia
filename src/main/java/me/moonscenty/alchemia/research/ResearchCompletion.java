@@ -1,6 +1,5 @@
 package me.moonscenty.alchemia.research;
 
-import me.moonscenty.alchemia.player.ModAttachments;
 import me.moonscenty.alchemia.player.PlayerKnowledge;
 import me.moonscenty.alchemia.player.WarpData;
 import me.moonscenty.alchemia.player.WarpHandler;
@@ -33,7 +32,7 @@ public final class ResearchCompletion {
         if (knowledge.hasResearch(id)) {
             return false;
         }
-        player.setData(ModAttachments.KNOWLEDGE, knowledge.withResearch(id));
+        PlayerKnowledge.update(player, known -> known.withResearch(id));
         player.displayClientMessage(Component.translatable("note.alchemia.learned", ResearchEntry.displayName(id)),
                 false);
         player.giveExperiencePoints(EXPERIENCE);
@@ -62,7 +61,7 @@ public final class ResearchCompletion {
     private static boolean ready(Player player, ResourceLocation id) {
         PlayerKnowledge knowledge = PlayerKnowledge.of(player);
         return player.level().registryAccess().registryOrThrow(ModResearch.ENTRY_KEY).getOptional(id)
-                .map(entry -> entry.parents().stream().allMatch(knowledge::hasResearch))
+                .map(entry -> entry.parentsKnown(knowledge))
                 .orElse(false);
     }
 }

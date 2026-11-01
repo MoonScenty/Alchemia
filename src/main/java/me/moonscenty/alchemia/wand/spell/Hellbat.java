@@ -10,12 +10,8 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.block.LevelEvent;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
@@ -77,15 +73,9 @@ public final class Hellbat {
                 && !(living instanceof FireBat)) {
             return living;
         }
-        Vec3 eye = caster.getEyePosition();
-        Vec3 along = caster.getViewVector(1.0F).scale(SEES);
-        BlockHitResult blocks = level.clip(new ClipContext(eye, eye.add(along), ClipContext.Block.COLLIDER,
-                ClipContext.Fluid.NONE, caster));
-        Vec3 stop = blocks.getType() == HitResult.Type.MISS ? eye.add(along) : blocks.getLocation();
-        AABB swept = caster.getBoundingBox().expandTowards(along).inflate(1.1);
-        EntityHitResult found = ProjectileUtil.getEntityHitResult(level, caster, eye, stop, swept,
-                Hellbat::settable);
-        return found != null && found.getEntity() instanceof LivingEntity living ? living : null;
+        HitResult seen = Casting.aim(caster, SEES, 1.1, Hellbat::settable);
+        return seen instanceof EntityHitResult found && found.getEntity() instanceof LivingEntity living
+                ? living : null;
     }
 
     private static boolean settable(Entity entity) {

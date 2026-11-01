@@ -4,6 +4,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.Set;
+import java.util.function.UnaryOperator;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -97,5 +98,10 @@ public record PlayerKnowledge(Set<Aspect> discoveredAspects, Set<ResourceLocatio
     /** Reads a player's knowledge, falling back to a fresh one on the client before the first sync arrives. */
     public static PlayerKnowledge of(Player player) {
         return player.getData(ModAttachments.KNOWLEDGE);
+    }
+
+    /** Replaces a player's knowledge with what the change makes of it. */
+    public static void update(Player player, UnaryOperator<PlayerKnowledge> change) {
+        player.setData(ModAttachments.KNOWLEDGE, change.apply(of(player)));
     }
 }

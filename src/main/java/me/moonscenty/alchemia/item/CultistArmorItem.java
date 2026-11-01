@@ -2,7 +2,6 @@ package me.moonscenty.alchemia.item;
 
 import java.util.List;
 
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
@@ -68,7 +67,7 @@ public class CultistArmorItem extends ArmorItem implements WarpingGear, VisDisco
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> lines, TooltipFlag flag) {
         if (kind.mark > 0) {
-            lines.add(Component.translatable("item.alchemia.vis_discount", kind.mark).withStyle(ChatFormatting.AQUA));
+            lines.add(discountLine(stack));
         }
     }
 }

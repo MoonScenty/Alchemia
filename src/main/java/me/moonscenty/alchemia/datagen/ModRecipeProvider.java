@@ -25,7 +25,6 @@ import me.moonscenty.alchemia.registry.WoodSet;
 import net.minecraft.advancements.Criterion;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
@@ -35,6 +34,7 @@ import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.data.recipes.SpecialRecipeBuilder;
 import net.minecraft.data.recipes.SingleItemRecipeBuilder;
 import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -212,8 +212,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 .pattern("##").pattern("##")
                 .define('#', input)
                 .unlockedBy("has_input", has(input))
-                .save(output, Alchemia.id(BuiltInRegistries.ITEM.getKey(result.asItem()).getPath()
-                        + "_from_" + BuiltInRegistries.ITEM.getKey(input.asItem()).getPath()));
+                .save(output, conversion(result, input));
     }
 
     /** One plant yields one of whatever it is steeped with. */
@@ -221,8 +220,7 @@ public class ModRecipeProvider extends RecipeProvider {
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, result)
                 .requires(plant)
                 .unlockedBy("has_input", has(plant))
-                .save(output, Alchemia.id(BuiltInRegistries.ITEM.getKey(result.asItem()).getPath()
-                        + "_from_" + BuiltInRegistries.ITEM.getKey(plant.asItem()).getPath()));
+                .save(output, conversion(result, plant));
     }
 
     /**
@@ -241,7 +239,6 @@ public class ModRecipeProvider extends RecipeProvider {
                 .save(output, Alchemia.id("node_stabilizer"));
     }
 
-    /** Nine small items pack into one big item and back. */
     /** Two rods laid corner to corner with a primal charm at the top: a staff core of the same stuff. */
     private void staffCore(RecipeOutput output, String stuff, String research, AspectList cost) {
         arcane(output, "wand_rod_" + stuff + "_staff", research,
@@ -250,18 +247,22 @@ public class ModRecipeProvider extends RecipeProvider {
                 "  S", " G ", "G  ");
     }
 
+    /** Nine small items pack into one big item and back. */
     private static void compress(RecipeOutput output, ItemLike small, TagKey<Item> smallTag, ItemLike big, TagKey<Item> bigTag) {
-        String smallName = BuiltInRegistries.ITEM.getKey(small.asItem()).getPath();
-        String bigName = BuiltInRegistries.ITEM.getKey(big.asItem()).getPath();
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, big)
                 .pattern("###").pattern("###").pattern("###")
                 .define('#', smallTag)
                 .unlockedBy("has_input", has(smallTag))
-                .save(output, Alchemia.id(bigName + "_from_" + smallName));
+                .save(output, conversion(big, small));
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, small, 9)
                 .requires(bigTag)
                 .unlockedBy("has_input", has(bigTag))
-                .save(output, Alchemia.id(smallName + "_from_" + bigName));
+                .save(output, conversion(small, big));
+    }
+
+    /** The {@code <result>_from_<input>} id, under this mod. */
+    private static ResourceLocation conversion(ItemLike result, ItemLike input) {
+        return Alchemia.id(getConversionRecipeName(result, input));
     }
 
     private static void plate(RecipeOutput output, ItemLike plate, TagKey<Item> ingot) {
@@ -1057,13 +1058,10 @@ public class ModRecipeProvider extends RecipeProvider {
 
         // goggles set into a fortress helm. The helm that goes under the matrix is the helm that comes back,
         // so whatever was enchanted onto it or worn off it stays as it was
-        output.accept(Alchemia.id("helm_goggles"), new InfusionRecipe(
-                Ingredient.of(ModItems.FORTRESS.get("fortress_helm")),
+        helmFitting(output, "helm_goggles", HelmFitting.GOGGLES,
                 List.of(Ingredient.of(Items.SLIME_BALL), Ingredient.of(ModItems.GOGGLES)),
-                ItemStack.EMPTY,
                 AspectList.of(ModAspects.SENSES, 32).add(ModAspects.AURA, 16).add(ModAspects.PROTECT, 16),
-                HELM_GOGGLES_UNSTABLE, Optional.of(Alchemia.id("fortress_armour")),
-                Optional.empty(), Optional.of(HelmFitting.GOGGLES)), null);
+                HELM_GOGGLES_UNSTABLE);
 
         // the three masks. Each is a dye, two irons and a hide round the one thing that gives it its face.
         // The original's numbers.
@@ -1359,7 +1357,13 @@ public class ModRecipeProvider extends RecipeProvider {
     private void infusion(RecipeOutput output, String name, Ingredient central, List<Ingredient> ring,
             ItemStack result, AspectList essentia, int instability, String research) {
         output.accept(Alchemia.id(name), new InfusionRecipe(central, ring, result, essentia, instability,
-                Optional.of(Alchemia.id(research))), null);
+                Optional.ofNullable(research).map(Alchemia::id)), null);
+    }
+
+    /** The same, for a working nothing has been written up yet. An altar will do it for anybody. */
+    private void infusion(RecipeOutput output, String name, Ingredient central, List<Ingredient> ring,
+            ItemStack result, AspectList essentia, int instability) {
+        infusion(output, name, central, ring, result, essentia, instability, null);
     }
 
     /**
@@ -1374,9 +1378,15 @@ public class ModRecipeProvider extends RecipeProvider {
         ring.add(Ingredient.of(Items.IRON_INGOT));
         ring.add(Ingredient.of(Items.IRON_INGOT));
         ring.add(Ingredient.of(Items.LEATHER));
+        helmFitting(output, name, face, ring, essentia, MASK_UNSTABLE);
+    }
+
+    /** Something set into a fortress helm, which comes back as it went in with the fitting added. */
+    private void helmFitting(RecipeOutput output, String name, HelmFitting face, List<Ingredient> ring,
+            AspectList essentia, int instability) {
         output.accept(Alchemia.id(name), new InfusionRecipe(
                 Ingredient.of(ModItems.FORTRESS.get("fortress_helm")), ring, ItemStack.EMPTY, essentia,
-                MASK_UNSTABLE, Optional.of(Alchemia.id("fortress_armour")),
+                instability, Optional.of(Alchemia.id("fortress_armour")),
                 Optional.empty(), Optional.of(face)), null);
     }
 
@@ -1404,20 +1414,6 @@ public class ModRecipeProvider extends RecipeProvider {
                 new ItemStack(ModItems.ROBES.get(name).get()), essentia, VOID_ROBE_UNSTABLE, "void_robes");
     }
 
-    /** The same, for a working nothing has been written up yet. An altar will do it for anybody. */
-    private void infusion(RecipeOutput output, String name, Ingredient central, List<Ingredient> ring,
-            ItemStack result, AspectList essentia, int instability) {
-        output.accept(Alchemia.id(name), new InfusionRecipe(central, ring, result, essentia, instability,
-                Optional.empty()), null);
-    }
-
-    /**
-     * What is boiled out of a crucible.
-     * <p>
-     * A crucible recipe is not a shape but a state: what has to be dissolved in the water already, and the one
-     * thing thrown in afterwards to finish it. The thing thrown in is used up either way, so an iron ingot dropped
-     * into a pot that is not ready simply comes apart into what iron is made of.
-     */
     /**
      * The tools and armour of our two metals, in the shapes everyone already knows.
      * <p>
@@ -1459,6 +1455,13 @@ public class ModRecipeProvider extends RecipeProvider {
         builder.save(output, Alchemia.id(name));
     }
 
+    /**
+     * What is boiled out of a crucible.
+     * <p>
+     * A crucible recipe is not a shape but a state: what has to be dissolved in the water already, and the one
+     * thing thrown in afterwards to finish it. The thing thrown in is used up either way, so an iron ingot dropped
+     * into a pot that is not ready simply comes apart into what iron is made of.
+     */
     private void crucible(RecipeOutput output) {
         // the original's alchemical duplication, manufacture and entropic processing, metal purification and
         // transmutation, and the taint shard

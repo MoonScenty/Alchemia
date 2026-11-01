@@ -50,7 +50,7 @@ import net.minecraft.world.level.block.Blocks;
  * cap pays nine tenths of the asking price — and a price rounded to whole vis every time would either round that
  * discount away or hand it out twice over.
  */
-public class WandItem extends Item implements VisHolder {
+public class WandItem extends Item implements VisHolder, Rechargeable {
     /** How many hundredths make one point of vis. */
     public static final int FINE = 100;
     /** How often a wand pulls at the aura, in ticks. */
@@ -250,13 +250,8 @@ public class WandItem extends Item implements VisHolder {
         return selected ? 1 : 0;
     }
 
-    /**
-     * Draws vis out of the chunk into the wand, and says whether any came.
-     * <p>
-     * The cap's own bonus is added here rather than by whoever asked, so a wand held in a hand and one sitting
-     * under a charger are both worth as much more as the cap on them is.
-     */
-    public static boolean charge(ItemStack stack, ServerLevel level, BlockPos at, int amount) {
+    @Override
+    public boolean charge(ItemStack stack, ServerLevel level, BlockPos at, int amount) {
         return chargeFrom(stack, level, at, amount) != null;
     }
 
@@ -269,7 +264,12 @@ public class WandItem extends Item implements VisHolder {
     public record Charged(Holder<Aspect> last, boolean full) {
     }
 
-    /** As {@link #charge}, saying what was drawn; null when nothing was. */
+    /**
+     * Draws vis out of the chunk into the wand, saying what was drawn; null when nothing was.
+     * <p>
+     * The cap's own bonus is added here rather than by whoever asked, so a wand held in a hand and one sitting
+     * under a charger are both worth as much more as the cap on them is.
+     */
     @Nullable
     public static Charged chargeFrom(ItemStack stack, ServerLevel level, BlockPos at, int amount) {
         amount += cap(stack).chargeBonus();
@@ -281,10 +281,10 @@ public class WandItem extends Item implements VisHolder {
                 break;
             }
             int space = room - fine(stack).get(aspect) / FINE;
-            if (space <= 0 || AuraHandler.shouldSpare(level, at, aspect)) {
+            if (space <= 0) {
                 continue;
             }
-            int drawn = AuraHandler.drainAvailable(level, at, aspect, Math.min(amount, space));
+            int drawn = AuraHandler.drainAvailableUnlessSpared(level, at, aspect, Math.min(amount, space));
             if (drawn > 0) {
                 put(stack, aspect, drawn * FINE);
                 amount -= drawn;
@@ -315,7 +315,7 @@ public class WandItem extends Item implements VisHolder {
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack wand = player.getItemInHand(hand);
-        Focus focus = fitted(wand);
+        Focus focus = Casting.fitted(wand);
         if (focus == null || player.getCooldowns().isOnCooldown(this)) {
             return InteractionResultHolder.pass(wand);
         }
@@ -347,7 +347,7 @@ public class WandItem extends Item implements VisHolder {
         if (served == null) {
             return;
         }
-        Focus focus = fitted(wand);
+        Focus focus = Casting.fitted(wand);
         if (focus == null || !VisHolder.canPay(wand, focus.cost(), caster, Spending.WORKING)) {
             caster.stopUsingItem();
             return;
@@ -358,18 +358,13 @@ public class WandItem extends Item implements VisHolder {
     /** Held as long as somebody holds the button. Nothing stops a beam but letting go or running dry. */
     @Override
     public int getUseDuration(ItemStack stack, LivingEntity using) {
-        Focus focus = fitted(stack);
+        Focus focus = Casting.fitted(stack);
         return focus != null && focus.perTick() ? HELD_FOREVER : 0;
     }
 
     @Override
     public UseAnim getUseAnimation(ItemStack stack) {
         return UseAnim.NONE;
-    }
-
-    /** What is on the wand, if it is a focus, and as it is with what is worked into it. */
-    private static Focus fitted(ItemStack wand) {
-        return Casting.fitted(wand);
     }
 
     // --- what it can be pointed at ------------------------------------------

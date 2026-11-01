@@ -3,15 +3,14 @@ package me.moonscenty.alchemia.wand;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 
 import me.moonscenty.alchemia.item.FocusPouchItem;
 import me.moonscenty.alchemia.item.WandItem;
+import me.moonscenty.alchemia.item.Worn;
 import me.moonscenty.alchemia.registry.ModSounds;
 import me.moonscenty.alchemia.registry.ModTags;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -65,8 +64,11 @@ public final class Foci {
         if (spots.isEmpty()) {
             return ItemStack.EMPTY;
         }
-        Spot spot = after(bag, spots, on(wand));
+        return swap(player, bag, after(bag, spots, on(wand)), wand);
+    }
 
+    /** Fits the focus at this spot, and puts what was on the wand where it came from. */
+    private static ItemStack swap(Player player, Inventory bag, Spot spot, ItemStack wand) {
         ItemStack taken = read(bag, spot).copy();
         // the old focus goes where the new one just left, which is the one square certain to be free
         write(bag, spot, WandItem.focus(wand).copy());
@@ -116,7 +118,7 @@ public final class Foci {
                 }
             }
         }
-        spots.sort(Comparator.comparing(spot -> named(read(bag, spot))));
+        spots.sort(Comparator.comparing(spot -> name(read(bag, spot))));
         return spots;
     }
 
@@ -130,9 +132,9 @@ public final class Foci {
         if (fitted.isEmpty()) {
             return spots.get(0);
         }
-        String here = named(fitted);
+        String here = name(fitted);
         for (Spot spot : spots) {
-            if (named(read(bag, spot)).compareTo(here) > 0) {
+            if (name(read(bag, spot)).compareTo(here) > 0) {
                 return spot;
             }
         }
@@ -141,16 +143,8 @@ public final class Foci {
 
     /** The pouches worn on the belt, which count as squares past the end of the bag. */
     private static List<ItemStack> worn(Inventory bag) {
-        List<ItemStack> pouches = new ArrayList<>();
-        top.theillusivec4.curios.api.CuriosApi.getCuriosInventory(bag.player).ifPresent(curios -> {
-            var baubles = curios.getEquippedCurios();
-            for (int i = 0; i < baubles.getSlots(); i++) {
-                if (baubles.getStackInSlot(i).getItem() instanceof FocusPouchItem) {
-                    pouches.add(baubles.getStackInSlot(i));
-                }
-            }
-        });
-        return pouches;
+        return Worn.baubles(bag.player).stream().filter(bauble -> bauble.getItem() instanceof FocusPouchItem)
+                .toList();
     }
 
     /** A square of the bag, or past its end, a worn pouch. */
@@ -216,10 +210,6 @@ public final class Foci {
         return written.toString();
     }
 
-    private static String named(ItemStack stack) {
-        return name(stack);
-    }
-
     /**
      * Says what happened, above the hotbar.
      * <p>
@@ -262,20 +252,10 @@ public final class Foci {
             return ItemStack.EMPTY;
         }
         for (Spot spot : carried(bag)) {
-            if (!name(read(bag, spot)).equals(name)) {
-                continue;
+            if (name(read(bag, spot)).equals(name)) {
+                return swap(player, bag, spot, wand);
             }
-            ItemStack taken = read(bag, spot).copy();
-            write(bag, spot, WandItem.focus(wand).copy());
-            WandItem.setFocus(wand, taken);
-            say(player, taken, true);
-            return taken;
         }
         return ItemStack.EMPTY;
-    }
-
-    /** The name of a focus, for anything that wants to say which one without holding the stack. */
-    public static Optional<ResourceLocation> kind(ItemStack focus) {
-        return focus.isEmpty() ? Optional.empty() : Optional.of(BuiltInRegistries.ITEM.getKey(focus.getItem()));
     }
 }

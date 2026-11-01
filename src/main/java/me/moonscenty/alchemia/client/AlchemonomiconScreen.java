@@ -467,7 +467,7 @@ public class AlchemonomiconScreen extends Screen {
         if (knowledge.hasResearch(id)) {
             lines.add(Component.translatable("research.alchemia.known").withStyle(ChatFormatting.GREEN));
             lines.add(Component.translatable("research.alchemia.open").withStyle(ChatFormatting.DARK_GRAY));
-        } else if (!research.parents().stream().allMatch(knowledge::hasResearch)) {
+        } else if (!research.parentsKnown(knowledge)) {
             lines.add(Component.translatable("research.alchemia.locked").withStyle(ChatFormatting.DARK_GRAY));
         } else if (!research.cluesMet(knowledge)) {
             // what is still to be found out in the world: the aspects by name, anything else only as a hint

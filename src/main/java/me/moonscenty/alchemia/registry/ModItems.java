@@ -509,13 +509,12 @@ public class ModItems {
      */
     private static Map<String, DeferredItem<Item>> registerWandRods() {
         Map<String, DeferredItem<Item>> rods = new java.util.LinkedHashMap<>();
-        for (String stuff : new String[] {"greatwood", "silverwood", "reed", "obsidian",
-                "blaze", "ice", "quartz", "bone"}) {
+        String[] stuffs = {"greatwood", "silverwood", "reed", "obsidian", "blaze", "ice", "quartz", "bone"};
+        for (String stuff : stuffs) {
             rods.put(stuff, ITEMS.registerSimpleItem("wand_rod_" + stuff));
         }
         // and the staff cores, the primal one rare as the original had it
-        for (String stuff : new String[] {"greatwood", "silverwood", "reed", "obsidian", "blaze", "ice", "quartz",
-                "bone"}) {
+        for (String stuff : stuffs) {
             rods.put(stuff + "_staff", ITEMS.registerSimpleItem("wand_rod_" + stuff + "_staff"));
         }
         rods.put("primal_staff", ITEMS.registerSimpleItem("wand_rod_primal_staff",
@@ -523,7 +522,6 @@ public class ModItems {
         return rods;
     }
 
-    /** One item to a cap. */
     /**
      * The twelve foci, each with the numbers the original gave it.
      * <p>
@@ -581,11 +579,6 @@ public class ModItems {
         return AspectList.eachPrimal(10);
     }
 
-    /**
-     * The six robe pieces, in the shape the original gave each robe.
-     * <p>
-     * The key is the item's own name, so that what is registered and what is asked for cannot drift apart.
-     */
     private static Map<String, DeferredItem<me.moonscenty.alchemia.item.MeatChunkItem>> registerMeatChunks() {
         Map<String, DeferredItem<me.moonscenty.alchemia.item.MeatChunkItem>> made = new java.util.LinkedHashMap<>();
         for (String meat : new String[] {"beef", "chicken", "pork", "fish", "rabbit", "mutton"}) {
@@ -594,6 +587,11 @@ public class ModItems {
         return made;
     }
 
+    /**
+     * The six robe pieces, in the shape the original gave each robe.
+     * <p>
+     * The key is the item's own name, so that what is registered and what is asked for cannot drift apart.
+     */
     private static Map<String, DeferredItem<RobeItem>> registerRobes() {
         Map<String, DeferredItem<RobeItem>> made = new java.util.LinkedHashMap<>();
         robe(made, "cloth_chest", ArmorItem.Type.CHESTPLATE, ModArmorMaterials.CLOTH,
@@ -658,6 +656,7 @@ public class ModItems {
         return Collections.unmodifiableMap(made);
     }
 
+    /** One item to a cap. */
     private static Map<String, DeferredItem<Item>> registerWandCaps() {
         Map<String, DeferredItem<Item>> caps = new java.util.LinkedHashMap<>();
         for (String metal : new String[] {"iron", "gold", "brass", "alchemium", "void"}) {

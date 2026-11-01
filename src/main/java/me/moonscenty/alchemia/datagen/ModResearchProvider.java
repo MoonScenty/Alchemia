@@ -9,6 +9,7 @@ import me.moonscenty.alchemia.block.CrystalType;
 import me.moonscenty.alchemia.registry.ModAspects;
 import me.moonscenty.alchemia.registry.ModBlocks;
 import me.moonscenty.alchemia.registry.ModItems;
+import me.moonscenty.alchemia.research.Clues;
 import me.moonscenty.alchemia.research.ModResearch;
 import me.moonscenty.alchemia.research.NodeShape;
 import me.moonscenty.alchemia.research.ResearchPage;
@@ -769,22 +770,22 @@ public class ModResearchProvider {
      * by name, or a clue under {@code clue/}. Some of these gate research that is in the book from the start.
      */
     private static final java.util.Map<String, List<String>> CLUES = java.util.Map.ofEntries(
-            java.util.Map.entry("focus_hellbat", List.of("clue/bat")),
+            java.util.Map.entry("focus_hellbat", List.of(Clues.BAT.getPath())),
             java.util.Map.entry("thaumostatic_harness", List.of("volatus")),
-            java.util.Map.entry("mirror", List.of("clue/teleport")),
+            java.util.Map.entry("mirror", List.of(Clues.TELEPORT.getPath())),
             java.util.Map.entry("growth_lamp", List.of("herba")),
             java.util.Map.entry("fertility_lamp", List.of("victus", "desiderium")),
-            java.util.Map.entry("bone_bow", List.of("clue/bone", "clue/bow")),
-            java.util.Map.entry("primal_arrows", List.of("clue/arrow")),
-            java.util.Map.entry("brain_jar", List.of("clue/brain")),
+            java.util.Map.entry("bone_bow", List.of(Clues.BONE.getPath(), Clues.BOW.getPath())),
+            java.util.Map.entry("primal_arrows", List.of(Clues.ARROW.getPath())),
+            java.util.Map.entry("brain_jar", List.of(Clues.BRAIN.getPath())),
             java.util.Map.entry("liquid_death", List.of("mortuus")),
             java.util.Map.entry("bottle_taint", List.of("vitium")),
-            java.util.Map.entry("taint_shard", List.of("vitium", "clue/taint_shard")),
+            java.util.Map.entry("taint_shard", List.of("vitium", Clues.TAINT_SHARD.getPath())),
             java.util.Map.entry("ethereal_bloom", List.of("vitium")),
-            java.util.Map.entry("bath_salts", List.of("clue/bath_salts")),
-            java.util.Map.entry("bioalchemic_mind", List.of("clue/brain")),
-            java.util.Map.entry("autocaster", List.of("clue/dispenser")),
-            java.util.Map.entry("basic_turret", List.of("clue/dispenser")),
+            java.util.Map.entry("bath_salts", List.of(Clues.BATH_SALTS.getPath())),
+            java.util.Map.entry("bioalchemic_mind", List.of(Clues.BRAIN.getPath())),
+            java.util.Map.entry("autocaster", List.of(Clues.DISPENSER.getPath())),
+            java.util.Map.entry("basic_turret", List.of(Clues.DISPENSER.getPath())),
             java.util.Map.entry("staff_primal", List.of("staff_silverwood", "staves_primal")),
             java.util.Map.entry("crystal_farmer", List.of("vitreus")),
             java.util.Map.entry("levitator", List.of("volatus")),
@@ -795,7 +796,7 @@ public class ModResearchProvider {
     /** Pages that turn up in an entry only once something has been found out: the node magnet's warning. */
     private static final java.util.Map<String, List<ResearchPage>> LATER_PAGES = java.util.Map.of(
             "node_magnet", List.of(new ResearchPage.Text("research.alchemia.node_magnet.danger",
-                    java.util.Optional.of(Alchemia.id("clue/node_magnet_danger")))));
+                    java.util.Optional.of(Clues.NODE_MAGNET_DANGER))));
 
     /** Research learnt along with another: the Crimson Rites teach the minor eldritch lore too. */
     private static final java.util.Map<String, List<String>> SIBLINGS = java.util.Map.of(

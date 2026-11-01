@@ -3,6 +3,7 @@ package me.moonscenty.alchemia.item.bauble;
 import java.util.List;
 
 import me.moonscenty.alchemia.aura.AuraHandler;
+import me.moonscenty.alchemia.item.Rechargeable;
 import me.moonscenty.alchemia.player.effect.ModEffects;
 import me.moonscenty.alchemia.registry.ModAspects;
 import me.moonscenty.alchemia.registry.ModDataComponents;
@@ -23,7 +24,7 @@ import top.theillusivec4.curios.api.SlotContext;
  * to mend a point of health; a sustainer's one to give back breath, or else to feed. It is charged as a wand is, and
  * draws earth and water for it, not while either is to be spared.
  */
-public class VerdantHeartItem extends BaubleItem {
+public class VerdantHeartItem extends BaubleItem implements Rechargeable {
     public static final int HOLDS = 200;
     public static final int PLAIN = 0;
     public static final int LIFEGIVER = 1;
@@ -91,8 +92,9 @@ public class VerdantHeartItem extends BaubleItem {
     }
 
     /** Draws earth and water out of the aura here for it, the mean of what came. */
-    public static boolean recharge(ItemStack stack, ServerLevel level, BlockPos at, int amount) {
-        if (AuraHandler.shouldSpare(level, at, ModAspects.EARTH) || AuraHandler.shouldSpare(level, at, ModAspects.WATER)) {
+    @Override
+    public boolean charge(ItemStack stack, ServerLevel level, BlockPos at, int amount) {
+        if (AuraHandler.shouldSpareAny(level, at, ModAspects.EARTH, ModAspects.WATER)) {
             return false;
         }
         amount = Math.min(amount, stack.getDamageValue());

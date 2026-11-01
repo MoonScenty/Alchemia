@@ -22,18 +22,8 @@ public interface WarpingGear {
 
     /** Everything the player is holding or wearing, baubles too, added up. */
     static int carried(Player holder) {
-        java.util.List<ItemStack> counted = new java.util.ArrayList<>();
-        for (EquipmentSlot slot : COUNTED) {
-            counted.add(holder.getItemBySlot(slot));
-        }
-        top.theillusivec4.curios.api.CuriosApi.getCuriosInventory(holder).ifPresent(curios -> {
-            var baubles = curios.getEquippedCurios();
-            for (int i = 0; i < baubles.getSlots(); i++) {
-                counted.add(baubles.getStackInSlot(i));
-            }
-        });
         int total = 0;
-        for (ItemStack stack : counted) {
+        for (ItemStack stack : Worn.stacks(holder, COUNTED)) {
             total += of(stack, holder);
         }
         return total;

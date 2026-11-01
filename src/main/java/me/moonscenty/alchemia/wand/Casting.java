@@ -1,5 +1,7 @@
 package me.moonscenty.alchemia.wand;
 
+import java.util.function.Predicate;
+
 import me.moonscenty.alchemia.item.FocusItem;
 import me.moonscenty.alchemia.item.VisHolder;
 import me.moonscenty.alchemia.item.WandItem;
@@ -124,17 +126,25 @@ public final class Casting {
      * a wall means by it.
      */
     public static HitResult aim(LivingEntity caster) {
+        return aim(caster, REACH, 1.0, Casting::catchable);
+    }
+
+    /**
+     * The same, this far out, for entities that pass the filter.
+     *
+     * @param slack how far either side of the line of sight an entity is still caught
+     */
+    public static HitResult aim(LivingEntity caster, double reach, double slack, Predicate<Entity> filter) {
         Vec3 eye = caster.getEyePosition();
-        Vec3 along = caster.getViewVector(1.0F).scale(REACH);
+        Vec3 along = caster.getViewVector(1.0F).scale(reach);
         Vec3 far = eye.add(along);
 
         BlockHitResult blocks = caster.level().clip(new ClipContext(eye, far,
                 ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, caster));
         Vec3 stop = blocks.getType() == HitResult.Type.MISS ? far : blocks.getLocation();
 
-        AABB swept = caster.getBoundingBox().expandTowards(along).inflate(1.0);
-        EntityHitResult struck = ProjectileUtil.getEntityHitResult(caster.level(), caster, eye, stop, swept,
-                Casting::catchable);
+        AABB swept = caster.getBoundingBox().expandTowards(along).inflate(slack);
+        EntityHitResult struck = ProjectileUtil.getEntityHitResult(caster.level(), caster, eye, stop, swept, filter);
         return struck != null ? struck : blocks;
     }
 

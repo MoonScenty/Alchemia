@@ -54,17 +54,13 @@ public final class FortressArmourEvents {
      */
     public static final float A_MASK = 0.125F;
 
-    /** All four, though only three of them can hold any of this today. A fourth piece would need no change here. */
-    private static final EquipmentSlot[] WORN = {EquipmentSlot.HEAD, EquipmentSlot.CHEST,
-            EquipmentSlot.LEGS, EquipmentSlot.FEET};
-
     private FortressArmourEvents() {
     }
 
     /** How many pieces of it are on. */
     public static int worn(LivingEntity wearer) {
         int pieces = 0;
-        for (EquipmentSlot slot : WORN) {
+        for (EquipmentSlot slot : Worn.ARMOUR) {
             if (wearer.getItemBySlot(slot).getItem() instanceof FortressArmorItem) {
                 pieces++;
             }
@@ -78,7 +74,7 @@ public final class FortressArmourEvents {
      */
     public static float turnedAside(LivingEntity wearer, DamageSource source) {
         float pieces = worn(wearer);
-        for (EquipmentSlot slot : WORN) {
+        for (EquipmentSlot slot : Worn.ARMOUR) {
             if (FortressArmorItem.fitting(wearer.getItemBySlot(slot)).map(HelmFitting::isMask).orElse(false)) {
                 pieces += A_MASK;
             }

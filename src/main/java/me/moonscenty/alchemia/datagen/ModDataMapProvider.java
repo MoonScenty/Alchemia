@@ -213,7 +213,7 @@ public class ModDataMapProvider extends DataMapProvider {
 
         // a shard and the crystal it broke off carry the aspect they grew from
         for (CrystalType type : CrystalType.values()) {
-            Holder<Aspect> aspect = aspectOf(type);
+            Holder<Aspect> aspect = type.aspect();
             item(ModItems.SHARDS.get(type), a(aspect, 2).add(ModAspects.CRYSTAL, 1));
             item(ModBlocks.CRYSTALS.get(type), a(aspect, 4).add(ModAspects.CRYSTAL, 2));
         }
@@ -366,18 +366,6 @@ public class ModDataMapProvider extends DataMapProvider {
                 a(ModAspects.UNDEAD, 3).add(ModAspects.MAN, 1).add(ModAspects.MIND, 1).add(ModAspects.EARTH, 1));
         mob(me.moonscenty.alchemia.registry.ModEntities.FURIOUS_ZOMBIE.get(),
                 a(ModAspects.UNDEAD, 4).add(ModAspects.MAN, 2).add(ModAspects.MIND, 1).add(ModAspects.EARTH, 2));
-    }
-
-    private static Holder<Aspect> aspectOf(CrystalType type) {
-        return switch (type) {
-            case AIR -> ModAspects.AIR;
-            case FIRE -> ModAspects.FIRE;
-            case WATER -> ModAspects.WATER;
-            case EARTH -> ModAspects.EARTH;
-            case ORDER -> ModAspects.ORDER;
-            case ENTROPY -> ModAspects.ENTROPY;
-            case FLUX -> ModAspects.FLUX;
-        };
     }
 
     private static AspectList a(Holder<Aspect> aspect, int amount) {

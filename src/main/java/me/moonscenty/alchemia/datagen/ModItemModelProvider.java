@@ -17,10 +17,6 @@ public class ModItemModelProvider extends ItemModelProvider {
         super(output, Alchemia.MODID, existingFileHelper);
     }
 
-    /** The rods and caps, for their loose items. */
-    static final String[] RODS = {"wood", "greatwood", "silverwood", "reed", "obsidian", "blaze", "ice", "quartz", "bone"};
-    static final String[] CAPS = {"iron", "gold", "brass", "alchemium", "void"};
-
     @Override
     protected void registerModels() {
         wands();
@@ -282,7 +278,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         held(staff, ItemDisplayContext.FIRST_PERSON_LEFT_HAND, 0, 90, 20, 1.13F, 3.2F, 1.13F, 0.68F);
         held(staff, ItemDisplayContext.HEAD, 0, 0, 0, 0, 13, 7, 1.0F);
 
-        for (String cap : CAPS) {
+        for (String cap : ModItems.WAND_CAPS.keySet()) {
             withExistingParent("wand_cap_" + cap, mcLoc("item/generated"))
                     .texture("layer0", modLoc("item/wand/cap_" + cap + "_mat"));
             // the same ferrule with the life taken out of it, for the two that are cast before they are finished
@@ -370,14 +366,11 @@ public class ModItemModelProvider extends ItemModelProvider {
 
         // a loose rod has a picture of its own, drawn as one rather than as the strip laid under a wand's caps;
         // only the wooden one has no item, being a plain stick
-        for (int rod = 1; rod < RODS.length; rod++) {
-            withExistingParent("wand_rod_" + RODS[rod], mcLoc("item/handheld"))
-                    .texture("layer0", modLoc("item/wand/rod_" + RODS[rod] + "_mat"));
-        }
-        for (String stuff : new String[] {"greatwood", "silverwood", "reed", "obsidian", "blaze", "ice", "quartz",
-                "bone", "primal"}) {
-            withExistingParent("wand_rod_" + stuff + "_staff", mcLoc("item/handheld"))
-                    .texture("layer0", modLoc("item/wand/staff_rod_" + stuff));
+        for (String rod : ModItems.WAND_RODS.keySet()) {
+            String picture = rod.endsWith("_staff")
+                    ? "item/wand/staff_rod_" + rod.substring(0, rod.length() - "_staff".length())
+                    : "item/wand/rod_" + rod + "_mat";
+            withExistingParent("wand_rod_" + rod, mcLoc("item/handheld")).texture("layer0", modLoc(picture));
         }
     }
 

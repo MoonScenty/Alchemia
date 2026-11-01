@@ -101,7 +101,12 @@ public record ResearchEntry(
 
     /** Whether the player has everything this entry needs before it can be attempted: its research and its clues. */
     public boolean isAvailableTo(me.moonscenty.alchemia.player.PlayerKnowledge knowledge) {
-        return parents.stream().allMatch(knowledge::hasResearch) && cluesMet(knowledge);
+        return parentsKnown(knowledge) && cluesMet(knowledge);
+    }
+
+    /** Whether every piece of research it waits on is known. */
+    public boolean parentsKnown(me.moonscenty.alchemia.player.PlayerKnowledge knowledge) {
+        return parents.stream().allMatch(knowledge::hasResearch);
     }
 
     /** Whether every clue it waits on has been found. */

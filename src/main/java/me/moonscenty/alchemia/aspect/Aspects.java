@@ -67,14 +67,7 @@ public final class Aspects {
 
     /** What a plain, unenchanted one of these is made of. */
     public static AspectList of(Item item) {
-        AspectList known = CACHE.get(item);
-        if (known != null) {
-            return known;
-        }
-
-        AspectList resolved = lookup(item, new HashSet<>());
-        CACHE.put(item, resolved);
-        return resolved;
+        return lookup(item, new HashSet<>());
     }
 
     /** Resolves an item and everything it earns for being the kind of thing it is. */
@@ -89,13 +82,13 @@ public final class Aspects {
         return resolved;
     }
 
-    /** Mobs are always written down; there is no recipe to trace one back through. */
     /** What this particular creature is made of: its kind, and anything it carries of its own. */
     public static AspectList of(net.minecraft.world.entity.Entity entity) {
         AspectList kind = of(entity.getType());
         return entity instanceof OwnAspects own ? kind.add(own.ownAspects()) : kind;
     }
 
+    /** Mobs are always written down; there is no recipe to trace one back through. */
     public static AspectList of(EntityType<?> type) {
         AspectList listed = type.builtInRegistryHolder().getData(ModDataMaps.ENTITY_ASPECTS);
         return listed == null ? AspectList.EMPTY : listed;
