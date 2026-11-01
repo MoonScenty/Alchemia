@@ -6,8 +6,7 @@ import com.mojang.math.Axis;
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.block.entity.BrainJarBlockEntity;
 import me.moonscenty.alchemia.client.legacy.LegacyAssets;
-import me.moonscenty.alchemia.client.legacy.LegacyModels;
-import me.moonscenty.alchemia.client.legacy.model.LegacyModelBaker;
+import me.moonscenty.alchemia.client.legacy.LegacyCached;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -28,10 +27,10 @@ public class BrainJarRenderer implements BlockEntityRenderer<BrainJarBlockEntity
     private static final ResourceLocation BRAIN = Alchemia.id("textures/entity/brain.png");
     private static final ResourceLocation BRINE = Alchemia.id("textures/entity/jar_brine.png");
 
-    /** The original's parts, as of the import {@link #bakedFrom} names. */
-    private static int bakedFrom = -1;
-    private static ModelPart[] brain;
-    private static ModelPart brine;
+    /** The original's parts, baked again whenever the import changes. */
+    private static final LegacyCached<ModelPart[]> BRAIN_PARTS =
+            LegacyCached.fields(LegacyAssets.BRAIN, "Shape1", "Shape2", "Shape3");
+    private static final LegacyCached<ModelPart> BRINE_PART = LegacyCached.field(LegacyAssets.JAR, "Brine");
 
     public BrainJarRenderer(BlockEntityRendererProvider.Context context) {
     }
@@ -39,7 +38,9 @@ public class BrainJarRenderer implements BlockEntityRenderer<BrainJarBlockEntity
     @Override
     public void render(BrainJarBlockEntity jar, float partial, PoseStack pose, MultiBufferSource buffers, int light,
             int overlay) {
-        if (!refresh()) {
+        ModelPart[] brain = BRAIN_PARTS.get();
+        ModelPart brine = BRINE_PART.get();
+        if (brain == null || brine == null) {
             return;
         }
         var player = Minecraft.getInstance().player;
@@ -62,19 +63,5 @@ public class BrainJarRenderer implements BlockEntityRenderer<BrainJarBlockEntity
 
         brine.render(pose, buffers.getBuffer(RenderType.entityTranslucent(BRINE)), light, overlay);
         pose.popPose();
-    }
-
-    /** Bakes the original's parts again whenever the import has changed what there is. */
-    private static boolean refresh() {
-        int generation = LegacyModels.generation();
-        if (generation != bakedFrom) {
-            bakedFrom = generation;
-            brain = LegacyModels.get(LegacyAssets.BRAIN).map(read -> new ModelPart[] {
-                    LegacyModelBaker.field(read, "Shape1"), LegacyModelBaker.field(read, "Shape2"),
-                    LegacyModelBaker.field(read, "Shape3")}).orElse(null);
-            brine = LegacyModels.get(LegacyAssets.JAR).map(read -> LegacyModelBaker.field(read, "Brine"))
-                    .orElse(null);
-        }
-        return brain != null && brine != null;
     }
 }

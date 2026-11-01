@@ -6,7 +6,7 @@ import com.mojang.math.Axis;
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.block.eldritch.CrabSpawnerBlockEntity;
 import me.moonscenty.alchemia.client.legacy.LegacyAssets;
-import me.moonscenty.alchemia.client.legacy.LegacyModels;
+import me.moonscenty.alchemia.client.legacy.LegacyCached;
 import me.moonscenty.alchemia.client.legacy.model.LegacyMesh;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -18,24 +18,16 @@ import net.minecraft.resources.ResourceLocation;
 public class CrabSpawnerRenderer implements BlockEntityRenderer<CrabSpawnerBlockEntity> {
     private static final ResourceLocation VENT = Alchemia.id("textures/entity/crabvent.png");
 
-    private static int bakedFrom = -1;
-    private static LegacyMesh mesh;
+    private static final LegacyCached<LegacyMesh> MESH = LegacyCached.flippedMesh(LegacyAssets.CRAB_VENT_MESH);
 
     public CrabSpawnerRenderer(BlockEntityRendererProvider.Context context) {
-    }
-
-    private static boolean refresh() {
-        if (bakedFrom != LegacyModels.generation()) {
-            bakedFrom = LegacyModels.generation();
-            mesh = LegacyModels.mesh(LegacyAssets.CRAB_VENT_MESH).map(LegacyMesh::flippedV).orElse(null);
-        }
-        return mesh != null;
     }
 
     @Override
     public void render(CrabSpawnerBlockEntity vent, float partial, PoseStack pose, MultiBufferSource buffers,
             int light, int overlay) {
-        if (!refresh()) {
+        LegacyMesh mesh = MESH.get();
+        if (mesh == null) {
             return;
         }
         pose.pushPose();

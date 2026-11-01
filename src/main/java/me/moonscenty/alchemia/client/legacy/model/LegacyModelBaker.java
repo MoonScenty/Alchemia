@@ -78,6 +78,15 @@ public final class LegacyModelBaker {
         return baked;
     }
 
+    /** Several fields, each baked on its own as {@link #field} does, in the order named. */
+    public static ModelPart[] fields(LegacyModel model, String... names) {
+        ModelPart[] parts = new ModelPart[names.length];
+        for (int i = 0; i < names.length; i++) {
+            parts[i] = field(model, names[i]);
+        }
+        return parts;
+    }
+
     private static void add(PartDefinition parent, LegacyPart part, String name, LegacyModel model) {
         // a part that kept its own sheet size gets its corners scaled to the model's, which is the only size a layer
         // has here

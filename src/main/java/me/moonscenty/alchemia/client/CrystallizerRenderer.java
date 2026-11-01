@@ -7,7 +7,7 @@ import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.block.CrystallizerBlock;
 import me.moonscenty.alchemia.block.entity.CrystallizerBlockEntity;
 import me.moonscenty.alchemia.client.legacy.LegacyAssets;
-import me.moonscenty.alchemia.client.legacy.LegacyModels;
+import me.moonscenty.alchemia.client.legacy.LegacyCached;
 import me.moonscenty.alchemia.client.legacy.model.LegacyMesh;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LightTexture;
@@ -30,10 +30,11 @@ public class CrystallizerRenderer implements BlockEntityRenderer<CrystallizerBlo
     private static final int GLOW_DIM = 50;
     private static final int GLOW_RANGE = 150;
 
-    /** The original's meshes as of the import {@link #meshFrom} names, turned over for the loader that drew them. */
-    private static int meshFrom = -1;
-    private static LegacyMesh body;
-    private static LegacyMesh relay;
+    /**
+     * The original's body mesh, once per import. Its renderer read it with the older loader, which turned the texture
+     * corners over, so it is turned over here too.
+     */
+    private static final LegacyCached<LegacyMesh> BODY_MESH = LegacyCached.flippedMesh(LegacyAssets.CRYSTALLIZER_MESH);
 
     public CrystallizerRenderer(BlockEntityRendererProvider.Context context) {
     }
@@ -49,7 +50,9 @@ public class CrystallizerRenderer implements BlockEntityRenderer<CrystallizerBlo
     /** The crystallizer facing a given way, its crystals at a given turn and colour. Shared with the item. */
     static void draw(PoseStack pose, MultiBufferSource buffers, Direction facing, float spin, int tint, float age,
             int light, int overlay) {
-        if (!refresh()) {
+        LegacyMesh body = BODY_MESH.get();
+        LegacyMesh relay = ChargerRenderer.RELAY.get();
+        if (body == null || relay == null) {
             return;
         }
         pose.pushPose();
@@ -92,19 +95,5 @@ public class CrystallizerRenderer implements BlockEntityRenderer<CrystallizerBlo
     static float clientAge(float partial) {
         var player = Minecraft.getInstance().player;
         return player == null ? 0.0F : player.tickCount + partial;
-    }
-
-    /**
-     * The original's meshes, once per import. Its renderer read them with the older loader, which turned the
-     * texture corners over, so they are turned over here too.
-     */
-    private static boolean refresh() {
-        int generation = LegacyModels.generation();
-        if (generation != meshFrom) {
-            meshFrom = generation;
-            body = LegacyModels.mesh(LegacyAssets.CRYSTALLIZER_MESH).map(LegacyMesh::flippedV).orElse(null);
-            relay = LegacyModels.mesh(LegacyAssets.RELAY_MESH).map(LegacyMesh::flippedV).orElse(null);
-        }
-        return body != null && relay != null;
     }
 }

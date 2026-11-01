@@ -9,7 +9,7 @@ import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.aura.node.AuraNode;
 import me.moonscenty.alchemia.block.entity.NodeStabilizerBlockEntity;
 import me.moonscenty.alchemia.client.legacy.LegacyAssets;
-import me.moonscenty.alchemia.client.legacy.LegacyModels;
+import me.moonscenty.alchemia.client.legacy.LegacyCached;
 import me.moonscenty.alchemia.client.legacy.model.LegacyMesh;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LightTexture;
@@ -48,7 +48,7 @@ public class NodeStabilizerRenderer implements BlockEntityRenderer<NodeStabilize
     public void render(NodeStabilizerBlockEntity stabilizer, float partialTick, PoseStack pose,
             MultiBufferSource buffers, int light, int overlay) {
         float age = stabilizer.getLevel() == null ? 0 : stabilizer.getLevel().getGameTime() + partialTick;
-        LegacyMesh legacy = legacyMesh();
+        LegacyMesh legacy = MESH.get();
         if (legacy != null) {
             renderLegacy(legacy, stabilizer.reachOut(), age, pose, buffers, light, overlay);
         }
@@ -57,22 +57,11 @@ public class NodeStabilizerRenderer implements BlockEntityRenderer<NodeStabilize
         }
     }
 
-    /** The original's mesh as of the import {@link #meshFrom} names, turned over for the loader that drew it. */
-    private static int meshFrom = -1;
-    private static LegacyMesh mesh;
-
     /**
      * The original's mesh, once per import. Its renderer read it with the older loader, which turned the texture
      * corners over, so it is turned over here too.
      */
-    private static LegacyMesh legacyMesh() {
-        int generation = LegacyModels.generation();
-        if (generation != meshFrom) {
-            meshFrom = generation;
-            mesh = LegacyModels.mesh(LegacyAssets.STABILIZER_MESH).map(LegacyMesh::flippedV).orElse(null);
-        }
-        return mesh;
-    }
+    private static final LegacyCached<LegacyMesh> MESH = LegacyCached.flippedMesh(LegacyAssets.STABILIZER_MESH);
 
     /**
      * The stabiliser as the original's renderer drew it, all of it: the mesh is modelled lying down, so it is stood

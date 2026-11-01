@@ -11,10 +11,8 @@ import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.block.ArcaneBoreBlock;
 import me.moonscenty.alchemia.block.entity.ArcaneBoreBlockEntity;
 import me.moonscenty.alchemia.client.legacy.LegacyAssets;
-import me.moonscenty.alchemia.client.legacy.LegacyModels;
+import me.moonscenty.alchemia.client.legacy.LegacyCached;
 import me.moonscenty.alchemia.client.legacy.LegacyRenderTypes;
-import me.moonscenty.alchemia.client.legacy.model.LegacyModel;
-import me.moonscenty.alchemia.client.legacy.model.LegacyModelBaker;
 import me.moonscenty.alchemia.registry.ModBlocks;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.LightTexture;
@@ -47,13 +45,13 @@ public class ArcaneBoreRenderer implements BlockEntityRenderer<ArcaneBoreBlockEn
     private static final String[] NOZZLE = {"NozFront", "NozMid"};
     private static final String[] EMITTER = {"Cross1", "Cross3", "Cross2", "Rod"};
 
-    /** The original's parts, as of the import {@link #bakedFrom} names. */
-    private static int bakedFrom = -1;
-    private static ModelPart[] base;
-    private static ModelPart[] nozzle;
-    private static ModelPart[] emitter;
-    private static ModelPart knob;
-    private static ModelPart core;
+    /** The original's parts, baked again whenever the import changes. */
+    private static final LegacyCached<ModelPart[]> BASE_PARTS = LegacyCached.fields(LegacyAssets.BORE, BASE);
+    private static final LegacyCached<ModelPart[]> NOZZLE_PARTS = LegacyCached.fields(LegacyAssets.BORE, NOZZLE);
+    private static final LegacyCached<ModelPart[]> EMITTER_PARTS =
+            LegacyCached.fields(LegacyAssets.BORE_EMITTER, EMITTER);
+    private static final LegacyCached<ModelPart> KNOB = LegacyCached.field(LegacyAssets.BORE_EMITTER, "Knob");
+    private static final LegacyCached<ModelPart> CORE = LegacyCached.field(LegacyAssets.JAR, "Core");
 
     public ArcaneBoreRenderer(BlockEntityRendererProvider.Context context) {
     }
@@ -114,7 +112,12 @@ public class ArcaneBoreRenderer implements BlockEntityRenderer<ArcaneBoreBlockEn
     /** The bore at rest or aiming. Shared with the item, which stands pointing up with no focus. */
     static void draw(PoseStack pose, MultiBufferSource buffers, Direction facing, boolean hanging, boolean focus,
             float spin, float aimX, float aimZ, int light, int overlay) {
-        if (!refresh()) {
+        ModelPart[] base = BASE_PARTS.get();
+        ModelPart[] nozzle = NOZZLE_PARTS.get();
+        ModelPart[] emitter = EMITTER_PARTS.get();
+        ModelPart knob = KNOB.get();
+        ModelPart core = CORE.get();
+        if (base == null || nozzle == null || emitter == null || knob == null || core == null) {
             return;
         }
         float[] turns = turns(facing);
@@ -202,29 +205,5 @@ public class ArcaneBoreRenderer implements BlockEntityRenderer<ArcaneBoreBlockEn
     @Override
     public AABB getRenderBoundingBox(ArcaneBoreBlockEntity bore) {
         return new AABB(bore.getBlockPos()).inflate(66.0);
-    }
-
-    /** Bakes the original's parts again whenever the import has changed what there is. */
-    private static boolean refresh() {
-        int generation = LegacyModels.generation();
-        if (generation != bakedFrom) {
-            bakedFrom = generation;
-            base = LegacyModels.get(LegacyAssets.BORE).map(read -> parts(read, BASE)).orElse(null);
-            nozzle = LegacyModels.get(LegacyAssets.BORE).map(read -> parts(read, NOZZLE)).orElse(null);
-            emitter = LegacyModels.get(LegacyAssets.BORE_EMITTER).map(read -> parts(read, EMITTER)).orElse(null);
-            knob = LegacyModels.get(LegacyAssets.BORE_EMITTER).map(read -> LegacyModelBaker.field(read, "Knob"))
-                    .orElse(null);
-            core = LegacyModels.get(LegacyAssets.JAR).map(read -> LegacyModelBaker.field(read, "Core"))
-                    .orElse(null);
-        }
-        return base != null && nozzle != null && emitter != null && knob != null && core != null;
-    }
-
-    static ModelPart[] parts(LegacyModel read, String[] names) {
-        ModelPart[] parts = new ModelPart[names.length];
-        for (int i = 0; i < names.length; i++) {
-            parts[i] = LegacyModelBaker.field(read, names[i]);
-        }
-        return parts;
     }
 }

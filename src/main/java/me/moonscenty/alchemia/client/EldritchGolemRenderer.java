@@ -9,6 +9,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.client.legacy.LegacyAssets;
+import me.moonscenty.alchemia.client.legacy.LegacyCached;
 import me.moonscenty.alchemia.client.legacy.LegacyModels;
 import me.moonscenty.alchemia.client.legacy.model.LegacyModelBaker;
 import me.moonscenty.alchemia.entity.boss.EldritchGolem;
@@ -47,13 +48,21 @@ public class EldritchGolemRenderer extends MobRenderer<EldritchGolem, EldritchGo
                 "CloakCL", "CloakCR", "Cloak3", "Cloak2", "Head", "Head2", "Frontcloth0", "CollarB", "Torso",
                 "CollarR", "CollarF", "ArmL", "ArmR", "BackpanelR1", "WaistR1", "WaistR2", "WaistR3", "LegR",
                 "WaistL1", "WaistL2", "WaistL3", "Frontcloth2", "BackpanelL1", "LegL");
-        private static int bakedFrom = -1;
-        private static Map<String, ModelPart> parts = Map.of();
+        private static final LegacyCached<Map<String, ModelPart>> PARTS = new LegacyCached<>(() -> {
+            Map<String, ModelPart> baked = new LinkedHashMap<>();
+            LegacyModels.get(LegacyAssets.ELDRITCH_GOLEM).ifPresent(model -> {
+                for (String name : ROOTS) {
+                    baked.put(name, LegacyModelBaker.field(model, name));
+                }
+            });
+            return baked;
+        });
         private boolean headless;
 
         @Override
         public void prepareMobModel(EldritchGolem golem, float limbSwing, float limbSwingAmount, float partial) {
-            if (!refresh()) {
+            Map<String, ModelPart> parts = PARTS.get();
+            if (parts.isEmpty()) {
                 return;
             }
             int timer = golem.attackTimer();
@@ -75,7 +84,8 @@ public class EldritchGolemRenderer extends MobRenderer<EldritchGolem, EldritchGo
         @Override
         public void setupAnim(EldritchGolem golem, float limbSwing, float limbSwingAmount, float age, float headYaw,
                 float headPitch) {
-            if (!refresh()) {
+            Map<String, ModelPart> parts = PARTS.get();
+            if (parts.isEmpty()) {
                 return;
             }
             headless = golem.isHeadless();
@@ -103,7 +113,8 @@ public class EldritchGolemRenderer extends MobRenderer<EldritchGolem, EldritchGo
 
         @Override
         public void renderToBuffer(PoseStack pose, VertexConsumer buffer, int light, int overlay, int colour) {
-            if (!refresh()) {
+            Map<String, ModelPart> parts = PARTS.get();
+            if (parts.isEmpty()) {
                 return;
             }
             parts.forEach((name, part) -> {
@@ -112,21 +123,6 @@ public class EldritchGolemRenderer extends MobRenderer<EldritchGolem, EldritchGo
                 }
                 part.render(pose, buffer, light, overlay, colour);
             });
-        }
-
-        private static boolean refresh() {
-            int generation = LegacyModels.generation();
-            if (generation != bakedFrom) {
-                bakedFrom = generation;
-                Map<String, ModelPart> baked = new LinkedHashMap<>();
-                LegacyModels.get(LegacyAssets.ELDRITCH_GOLEM).ifPresent(model -> {
-                    for (String name : ROOTS) {
-                        baked.put(name, LegacyModelBaker.field(model, name));
-                    }
-                });
-                parts = baked;
-            }
-            return !parts.isEmpty();
         }
     }
 }

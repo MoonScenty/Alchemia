@@ -7,6 +7,7 @@ import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.block.ResearchTableBlock;
 import me.moonscenty.alchemia.block.entity.ResearchTableBlockEntity;
 import me.moonscenty.alchemia.client.legacy.LegacyAssets;
+import me.moonscenty.alchemia.client.legacy.LegacyCached;
 import me.moonscenty.alchemia.client.legacy.LegacyModels;
 import me.moonscenty.alchemia.client.legacy.model.LegacyModelBaker;
 import me.moonscenty.alchemia.registry.ModItems;
@@ -45,11 +46,10 @@ public class ResearchTableRenderer implements BlockEntityRenderer<ResearchTableB
     private final Minecraft client = Minecraft.getInstance();
     private ItemStack carrier = ItemStack.EMPTY;
 
-    /** The original's three parts, as of the import {@link #bakedFrom} names. */
-    private static int bakedFrom = -1;
-    private static ModelPart inkwell;
-    private static ModelPart scrollTube;
-    private static ModelPart scrollRibbon;
+    /** The original's three parts, baked again whenever the import changes. */
+    private static final LegacyCached<Parts> PARTS = new LegacyCached<>(() -> LegacyModels.get(
+            LegacyAssets.RESEARCH_TABLE).map(read -> new Parts(LegacyModelBaker.field(read, "Inkwell"),
+            LegacyModelBaker.field(read, "ScrollTube"), LegacyModelBaker.field(read, "ScrollRibbon"))).orElse(null));
 
     /**
      * The item renderer draws nothing for an empty stack, so it is handed the scribing tools to carry the quill
@@ -75,14 +75,14 @@ public class ResearchTableRenderer implements BlockEntityRenderer<ResearchTableB
             return;
         }
         Direction facing = state.getValue(ResearchTableBlock.FACING);
-        refresh();
-        if (inkwell != null) {
-            renderLegacy(facing, tools, notes, pose, buffers, light);
+        Parts parts = PARTS.get();
+        if (parts != null) {
+            renderLegacy(parts, facing, tools, notes, pose, buffers, light);
         }
     }
 
     /** As the original's renderer drew them: from the middle of the desk's top, turned upside down and round. */
-    private void renderLegacy(Direction facing, boolean tools, boolean notes, PoseStack pose,
+    private void renderLegacy(Parts parts, Direction facing, boolean tools, boolean notes, PoseStack pose,
             MultiBufferSource buffers, int light) {
         pose.pushPose();
         pose.translate(0.5F, 1.0F, 0.5F);
@@ -95,11 +95,11 @@ public class ResearchTableRenderer implements BlockEntityRenderer<ResearchTableB
         }));
         var buffer = buffers.getBuffer(RenderType.entityCutoutNoCull(LEGACY_TEXTURE));
         if (notes) {
-            scrollTube.render(pose, buffer, light, OverlayTexture.NO_OVERLAY);
-            scrollRibbon.render(pose, buffer, light, OverlayTexture.NO_OVERLAY, RIBBON);
+            parts.scrollTube().render(pose, buffer, light, OverlayTexture.NO_OVERLAY);
+            parts.scrollRibbon().render(pose, buffer, light, OverlayTexture.NO_OVERLAY, RIBBON);
         }
         if (tools) {
-            inkwell.render(pose, buffer, light, OverlayTexture.NO_OVERLAY);
+            parts.inkwell().render(pose, buffer, light, OverlayTexture.NO_OVERLAY);
 
             // the quill: turned back upright, set in the inkwell and turned a little, then drawn as a flat picture
             // from its corner, mirrored, as the original's own flat drawing laid its picture out
@@ -117,16 +117,6 @@ public class ResearchTableRenderer implements BlockEntityRenderer<ResearchTableB
         pose.popPose();
     }
 
-    /** Bakes the original's parts again whenever the import has changed what there is. */
-    private static void refresh() {
-        int generation = LegacyModels.generation();
-        if (generation == bakedFrom) {
-            return;
-        }
-        bakedFrom = generation;
-        var model = LegacyModels.get(LegacyAssets.RESEARCH_TABLE);
-        inkwell = model.map(read -> LegacyModelBaker.field(read, "Inkwell")).orElse(null);
-        scrollTube = model.map(read -> LegacyModelBaker.field(read, "ScrollTube")).orElse(null);
-        scrollRibbon = model.map(read -> LegacyModelBaker.field(read, "ScrollRibbon")).orElse(null);
+    private record Parts(ModelPart inkwell, ModelPart scrollTube, ModelPart scrollRibbon) {
     }
 }

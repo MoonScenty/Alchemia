@@ -8,8 +8,7 @@ import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.block.BellowsBlock;
 import me.moonscenty.alchemia.block.entity.BellowsBlockEntity;
 import me.moonscenty.alchemia.client.legacy.LegacyAssets;
-import me.moonscenty.alchemia.client.legacy.LegacyModels;
-import me.moonscenty.alchemia.client.legacy.model.LegacyModelBaker;
+import me.moonscenty.alchemia.client.legacy.LegacyCached;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -31,13 +30,12 @@ public class BellowsRenderer implements BlockEntityRenderer<BellowsBlockEntity> 
     private static final float CLOSEST = 0.125F;
     private static final float SPREADS = 0.875F;
 
-    /** The original's parts, as of the import {@link #bakedFrom} names. */
-    private static int bakedFrom = -1;
-    private static ModelPart bag;
-    private static ModelPart top;
-    private static ModelPart middle;
-    private static ModelPart bottom;
-    private static ModelPart nozzle;
+    /** The original's parts, baked again whenever the import changes. */
+    private static final LegacyCached<ModelPart> BAG = LegacyCached.field(LegacyAssets.BELLOWS, "Bag");
+    private static final LegacyCached<ModelPart> TOP = LegacyCached.field(LegacyAssets.BELLOWS, "TopPlank");
+    private static final LegacyCached<ModelPart> MIDDLE = LegacyCached.field(LegacyAssets.BELLOWS, "MiddlePlank");
+    private static final LegacyCached<ModelPart> BOTTOM = LegacyCached.field(LegacyAssets.BELLOWS, "BottomPlank");
+    private static final LegacyCached<ModelPart> NOZZLE = LegacyCached.field(LegacyAssets.BELLOWS, "Nozzle");
 
     public BellowsRenderer(BlockEntityRendererProvider.Context context) {
     }
@@ -66,7 +64,12 @@ public class BellowsRenderer implements BlockEntityRenderer<BellowsBlockEntity> 
      */
     static void draw(PoseStack pose, VertexConsumer buffer, Direction facing, float inflation, int light,
             int overlay) {
-        if (!refresh()) {
+        ModelPart bag = BAG.get();
+        ModelPart top = TOP.get();
+        ModelPart middle = MIDDLE.get();
+        ModelPart bottom = BOTTOM.get();
+        ModelPart nozzle = NOZZLE.get();
+        if (bag == null || top == null || middle == null || bottom == null || nozzle == null) {
             return;
         }
         float apart = CLOSEST + inflation * SPREADS;
@@ -116,20 +119,5 @@ public class BellowsRenderer implements BlockEntityRenderer<BellowsBlockEntity> 
                 // south is the way the model was built
             }
         }
-    }
-
-    /** Bakes the original's parts again whenever the import has changed what there is. */
-    private static boolean refresh() {
-        int generation = LegacyModels.generation();
-        if (generation != bakedFrom) {
-            bakedFrom = generation;
-            var model = LegacyModels.get(LegacyAssets.BELLOWS);
-            bag = model.map(read -> LegacyModelBaker.field(read, "Bag")).orElse(null);
-            top = model.map(read -> LegacyModelBaker.field(read, "TopPlank")).orElse(null);
-            middle = model.map(read -> LegacyModelBaker.field(read, "MiddlePlank")).orElse(null);
-            bottom = model.map(read -> LegacyModelBaker.field(read, "BottomPlank")).orElse(null);
-            nozzle = model.map(read -> LegacyModelBaker.field(read, "Nozzle")).orElse(null);
-        }
-        return bag != null && top != null && middle != null && bottom != null && nozzle != null;
     }
 }

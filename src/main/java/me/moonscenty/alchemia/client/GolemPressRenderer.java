@@ -1,7 +1,5 @@
 package me.moonscenty.alchemia.client;
 
-import javax.annotation.Nullable;
-
 import org.joml.Matrix4f;
 
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -11,7 +9,7 @@ import com.mojang.math.Axis;
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.block.GolemPressBlock;
 import me.moonscenty.alchemia.block.entity.GolemPressBlockEntity;
-import me.moonscenty.alchemia.client.legacy.LegacyModels;
+import me.moonscenty.alchemia.client.legacy.LegacyCached;
 import me.moonscenty.alchemia.client.legacy.model.LegacyMesh;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -44,7 +42,7 @@ public class GolemPressRenderer implements BlockEntityRenderer<GolemPressBlockEn
     @Override
     public void render(GolemPressBlockEntity press, float partialTick, PoseStack pose, MultiBufferSource buffers,
             int light, int overlay) {
-        LegacyMesh mesh = mesh();
+        LegacyMesh mesh = MESH.get();
         if (mesh == null) {
             return;
         }
@@ -105,17 +103,6 @@ public class GolemPressRenderer implements BlockEntityRenderer<GolemPressBlockEn
         return new AABB(press.getBlockPos()).inflate(1.0, 0.0, 1.0).expandTowards(0.0, 1.0, 0.0);
     }
 
-    private static int meshFrom = -1;
-    @Nullable
-    private static LegacyMesh mesh;
-
-    @Nullable
-    private static LegacyMesh mesh() {
-        int generation = LegacyModels.generation();
-        if (generation != meshFrom) {
-            meshFrom = generation;
-            mesh = LegacyModels.mesh("models/legacy/golem/golem_press.obj").map(LegacyMesh::flippedV).orElse(null);
-        }
-        return mesh;
-    }
+    private static final LegacyCached<LegacyMesh> MESH =
+            LegacyCached.flippedMesh("models/legacy/golem/golem_press.obj");
 }

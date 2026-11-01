@@ -9,7 +9,7 @@ import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.block.ThaumatoriumBlock;
 import me.moonscenty.alchemia.block.entity.ThaumatoriumBlockEntity;
 import me.moonscenty.alchemia.client.legacy.LegacyAssets;
-import me.moonscenty.alchemia.client.legacy.LegacyModels;
+import me.moonscenty.alchemia.client.legacy.LegacyCached;
 import me.moonscenty.alchemia.client.legacy.model.LegacyMesh;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -31,9 +31,11 @@ public class ThaumatoriumRenderer implements BlockEntityRenderer<ThaumatoriumBlo
     private static final ResourceLocation TEXTURE = Alchemia.id("textures/entity/thaumatorium.png");
     private static final int SHOWS_EACH_FOR = 40;
 
-    /** The original's mesh as of the import {@link #meshFrom} names, turned over for the loader that drew it. */
-    private static int meshFrom = -1;
-    private static LegacyMesh mesh;
+    /**
+     * The original's mesh, once per import. Its renderer read it with the older loader, which turned the texture
+     * corners over, so it is turned over here too.
+     */
+    private static final LegacyCached<LegacyMesh> MESH = LegacyCached.flippedMesh(LegacyAssets.THAUMATORIUM_MESH);
 
     public ThaumatoriumRenderer(BlockEntityRendererProvider.Context context) {
     }
@@ -41,7 +43,8 @@ public class ThaumatoriumRenderer implements BlockEntityRenderer<ThaumatoriumBlo
     @Override
     public void render(ThaumatoriumBlockEntity it, float partial, PoseStack pose, MultiBufferSource buffers,
             int light, int overlay) {
-        if (it.getBlockState().getValue(ThaumatoriumBlock.TOP) || !refresh()) {
+        LegacyMesh mesh = it.getBlockState().getValue(ThaumatoriumBlock.TOP) ? null : MESH.get();
+        if (mesh == null) {
             return;
         }
         Direction front = it.getBlockState().getValue(ThaumatoriumBlock.FACING);
@@ -85,18 +88,5 @@ public class ThaumatoriumRenderer implements BlockEntityRenderer<ThaumatoriumBlo
     @Override
     public AABB getRenderBoundingBox(ThaumatoriumBlockEntity it) {
         return new AABB(it.getBlockPos()).inflate(0.1).expandTowards(0.0, 1.0, 0.0);
-    }
-
-    /**
-     * The original's mesh, once per import. Its renderer read it with the older loader, which turned the texture
-     * corners over, so it is turned over here too.
-     */
-    private static boolean refresh() {
-        int generation = LegacyModels.generation();
-        if (generation != meshFrom) {
-            meshFrom = generation;
-            mesh = LegacyModels.mesh(LegacyAssets.THAUMATORIUM_MESH).map(LegacyMesh::flippedV).orElse(null);
-        }
-        return mesh != null;
     }
 }

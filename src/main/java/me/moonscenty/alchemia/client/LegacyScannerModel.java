@@ -11,8 +11,10 @@ import com.mojang.blaze3d.vertex.PoseStack;
 
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.client.legacy.LegacyAssets;
+import me.moonscenty.alchemia.client.legacy.LegacyCached;
 import me.moonscenty.alchemia.client.legacy.LegacyModels;
 import me.moonscenty.alchemia.client.legacy.model.LegacyMesh;
+import me.moonscenty.alchemia.client.legacy.model.LegacyQuads;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemTransform;
@@ -26,7 +28,6 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.model.BakedModelWrapper;
-import net.neoforged.neoforge.client.model.pipeline.QuadBakingVertexConsumer;
 
 /**
  * The alchemometer as Thaumcraft 4's thaumometer, when its jar is there: a six-sided brass frame with a glass screen
@@ -63,8 +64,8 @@ public class LegacyScannerModel extends BakedModelWrapper<BakedModel> {
             transform(0, 0, 0, 0, 2, 0, 0.5F),
             transform(90, 0, 0, 0, 0, 0, 1.0F));
 
-    private static List<BakedQuad> quads = List.of();
-    private static int bakedFrom = -1;
+    private static final LegacyCached<List<BakedQuad>> QUADS = new LegacyCached<>(() -> LegacyModels.mesh(
+            LegacyAssets.SCANNER_MESH).map(LegacyScannerModel::bake).orElse(List.of()));
 
     public LegacyScannerModel(BakedModel ours) {
         super(ours);
@@ -84,7 +85,7 @@ public class LegacyScannerModel extends BakedModelWrapper<BakedModel> {
         if (!legacy()) {
             return super.getQuads(state, side, random);
         }
-        return side == null ? baked() : List.of();
+        return side == null ? QUADS.get() : List.of();
     }
 
     @Override
@@ -113,15 +114,6 @@ public class LegacyScannerModel extends BakedModelWrapper<BakedModel> {
     @Override
     public List<BakedModel> getRenderPasses(ItemStack stack, boolean fabulous) {
         return List.of(this);
-    }
-
-    private static List<BakedQuad> baked() {
-        int generation = LegacyModels.generation();
-        if (generation != bakedFrom) {
-            bakedFrom = generation;
-            quads = LegacyModels.mesh(LegacyAssets.SCANNER_MESH).map(LegacyScannerModel::bake).orElse(List.of());
-        }
-        return quads;
     }
 
     private static List<BakedQuad> bake(LegacyMesh mesh) {
@@ -153,17 +145,12 @@ public class LegacyScannerModel extends BakedModelWrapper<BakedModel> {
     }
 
     private static BakedQuad quad(TextureAtlasSprite sprite, float[][] corners, Vector3f normal) {
-        QuadBakingVertexConsumer quad = new QuadBakingVertexConsumer();
-        quad.setSprite(sprite);
-        quad.setShade(true);
-        quad.setDirection(Direction.getNearest(normal.x, normal.y, normal.z));
-        for (float[] corner : corners) {
-            quad.addVertex(MIDDLE + corner[0] * SCALE, MIDDLE + (corner[1] - THICK_MIDDLE) * SCALE,
-                            MIDDLE + corner[2] * SCALE)
-                    .setColor(-1)
-                    .setUv(sprite.getU(corner[3]), sprite.getV(corner[4]))
-                    .setNormal(normal.x, normal.y, normal.z);
+        float[][] placed = new float[corners.length][];
+        for (int i = 0; i < corners.length; i++) {
+            float[] corner = corners[i];
+            placed[i] = new float[] {MIDDLE + corner[0] * SCALE, MIDDLE + (corner[1] - THICK_MIDDLE) * SCALE,
+                    MIDDLE + corner[2] * SCALE, corner[3], corner[4]};
         }
-        return quad.bakeQuad();
+        return LegacyQuads.bake(placed, sprite, -1, normal);
     }
 }

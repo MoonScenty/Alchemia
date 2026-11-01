@@ -9,8 +9,7 @@ import com.mojang.math.Axis;
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.block.eldritch.EldritchLockBlockEntity;
 import me.moonscenty.alchemia.client.legacy.LegacyAssets;
-import me.moonscenty.alchemia.client.legacy.LegacyModels;
-import me.moonscenty.alchemia.client.legacy.model.LegacyModelBaker;
+import me.moonscenty.alchemia.client.legacy.LegacyCached;
 import me.moonscenty.alchemia.registry.ModItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.ModelPart;
@@ -36,20 +35,10 @@ public class EldritchLockRenderer implements BlockEntityRenderer<EldritchLockBlo
     /** Close enough for the door's stars to be drawn. */
     private static final double STARS_IN_RANGE = 512.0;
 
-    private static int bakedFrom = -1;
-    private static ModelPart cube;
+    private static final LegacyCached<ModelPart> CUBE = LegacyCached.field(LegacyAssets.CUBE, "cube");
     private ItemStack tablet;
 
     public EldritchLockRenderer(BlockEntityRendererProvider.Context context) {
-    }
-
-    private static boolean refresh() {
-        if (bakedFrom != LegacyModels.generation()) {
-            bakedFrom = LegacyModels.generation();
-            cube = LegacyModels.get(LegacyAssets.CUBE).map(model -> LegacyModelBaker.field(model, "cube"))
-                    .orElse(null);
-        }
-        return cube != null;
     }
 
     @Override
@@ -58,7 +47,8 @@ public class EldritchLockRenderer implements BlockEntityRenderer<EldritchLockBlo
         Direction facing = lock.facing();
         Minecraft minecraft = Minecraft.getInstance();
         float time = (minecraft.player == null ? 0 : minecraft.player.tickCount) + partial;
-        if (refresh()) {
+        ModelPart cube = CUBE.get();
+        if (cube != null) {
             pose.pushPose();
             pose.translate(0.5F, 0.5F, 0.5F);
             pose.pushPose();

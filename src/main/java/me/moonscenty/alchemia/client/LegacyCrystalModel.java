@@ -17,6 +17,7 @@ import me.moonscenty.alchemia.block.CrystalBlock;
 import me.moonscenty.alchemia.client.legacy.LegacyAssets;
 import me.moonscenty.alchemia.client.legacy.LegacyModels;
 import me.moonscenty.alchemia.client.legacy.model.LegacyMesh;
+import me.moonscenty.alchemia.client.legacy.model.LegacyQuads;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -32,7 +33,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.model.BakedModelWrapper;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import net.neoforged.neoforge.client.model.data.ModelProperty;
-import net.neoforged.neoforge.client.model.pipeline.QuadBakingVertexConsumer;
 
 /**
  * A crystal as the original drew it, when its jar is there: a few shards out of the eight in its mesh, standing out
@@ -133,19 +133,7 @@ public class LegacyCrystalModel extends BakedModelWrapper<BakedModel> {
                 }
                 float[][] corners = Arrays.copyOf(turned, face.length);
                 LegacyMesh.normal(corners, normal);
-                QuadBakingVertexConsumer quad = new QuadBakingVertexConsumer();
-                quad.setSprite(sprite);
-                quad.setTintIndex(TINT);
-                quad.setShade(true);
-                quad.setDirection(Direction.getNearest(normal.x, normal.y, normal.z));
-                for (int i = 0; i < 4; i++) {
-                    float[] corner = corners[Math.min(i, corners.length - 1)];
-                    quad.addVertex(corner[0], corner[1], corner[2])
-                            .setColor(-1)
-                            .setUv(sprite.getU(corner[3]), sprite.getV(corner[4]))
-                            .setNormal(normal.x, normal.y, normal.z);
-                }
-                quads.add(quad.bakeQuad());
+                quads.add(LegacyQuads.bake(corners, sprite, TINT, normal));
             }
         }
         return List.copyOf(quads);

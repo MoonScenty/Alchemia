@@ -2,10 +2,10 @@ package me.moonscenty.alchemia.client;
 
 import me.moonscenty.alchemia.client.particle.GenericParticle;
 import me.moonscenty.alchemia.client.particle.LegacySheet;
+import me.moonscenty.alchemia.client.particle.ParticleBudget;
 import me.moonscenty.alchemia.entity.EldritchGuardian;
 import me.moonscenty.alchemia.entity.EldritchOrb;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.ParticleStatus;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -24,8 +24,7 @@ public final class EldritchEffects {
         if (!(guardian.level() instanceof ClientLevel level)) {
             return;
         }
-        ParticleStatus status = Minecraft.getInstance().options.particles().get();
-        int count = status == ParticleStatus.ALL ? 2 : status == ParticleStatus.DECREASED ? 1 : 0;
+        int count = ParticleBudget.scale(1);
         RandomSource random = guardian.getRandom();
         for (int i = 0; i < count; i++) {
             float shade = random.nextFloat() * 0.05F;
@@ -167,7 +166,7 @@ public final class EldritchEffects {
         Minecraft.getInstance().particleEngine.add(new GenericParticle(level, x, y, z, 0.0, 0.0, 0.0,
                 LegacySheet.GLOW, 16)
                 .lasts(2)
-                .colour(((colour >> 16) & 0xFF) / 255.0F, ((colour >> 8) & 0xFF) / 255.0F, (colour & 0xFF) / 255.0F)
+                .colour(ClientColours.red(colour), ClientColours.green(colour), ClientColours.blue(colour))
                 .opacity(0.9F, 0.6F)
                 .cells(WISP_CELLS, WISP_FRAMES, 1)
                 .size(0.25F, 0.25F));

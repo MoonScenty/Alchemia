@@ -17,6 +17,7 @@ import me.moonscenty.alchemia.block.TubeBlock;
 import me.moonscenty.alchemia.client.legacy.LegacyAssets;
 import me.moonscenty.alchemia.client.legacy.LegacyModels;
 import me.moonscenty.alchemia.client.legacy.model.LegacyMesh;
+import me.moonscenty.alchemia.client.legacy.model.LegacyQuads;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -29,7 +30,6 @@ import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.model.BakedModelWrapper;
 import net.neoforged.neoforge.client.model.data.ModelData;
-import net.neoforged.neoforge.client.model.pipeline.QuadBakingVertexConsumer;
 
 /**
  * A tube on the original's mesh: a small box in the middle, or a large one for a buffer, and
@@ -115,22 +115,16 @@ public class LegacyTubeModel extends BakedModelWrapper<BakedModel> {
         Vector3f normal = new Vector3f();
         for (float[][] face : mesh.faces(group)) {
             LegacyMesh.normal(face, normal);
-            QuadBakingVertexConsumer quad = new QuadBakingVertexConsumer();
-            quad.setSprite(sprite);
-            quad.setTintIndex(tint);
-            quad.setShade(true);
-            quad.setDirection(Direction.getNearest(normal.x, normal.y, normal.z));
-            for (int i = 0; i < 4; i++) {
-                float[] corner = face[Math.min(i, face.length - 1)];
+            // the kind's picture is found by moving the corners the original marked as movable
+            float[][] moved = new float[face.length][];
+            for (int i = 0; i < face.length; i++) {
+                float[] corner = face[i];
                 int index = (int) corner[5];
                 float u = corner[3] + (index >= 0 && index < ACROSS_BELOW ? kind.across : 0.0F);
                 float v = corner[4] + (index >= ACROSS_BELOW && index < DOWN_BELOW ? kind.down : 0.0F);
-                quad.addVertex(corner[0], corner[1], corner[2])
-                        .setColor(-1)
-                        .setUv(sprite.getU(u), sprite.getV(v))
-                        .setNormal(normal.x, normal.y, normal.z);
+                moved[i] = new float[] {corner[0], corner[1], corner[2], u, v};
             }
-            quads.add(quad.bakeQuad());
+            quads.add(LegacyQuads.bake(moved, sprite, tint, normal));
         }
     }
 

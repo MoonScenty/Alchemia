@@ -6,6 +6,7 @@ import com.mojang.math.Axis;
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.block.eldritch.EldritchAltarBlockEntity;
 import me.moonscenty.alchemia.client.legacy.LegacyAssets;
+import me.moonscenty.alchemia.client.legacy.LegacyCached;
 import me.moonscenty.alchemia.client.legacy.LegacyModels;
 import me.moonscenty.alchemia.client.legacy.model.LegacyMesh;
 import me.moonscenty.alchemia.registry.ModItems;
@@ -27,9 +28,10 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 public class EldritchCapRenderer<T extends BlockEntity> implements BlockEntityRenderer<T> {
     static final ResourceLocation CAP = Alchemia.id("textures/entity/obelisk_cap.png");
 
-    private static int bakedFrom = -1;
-    private static LegacyMesh mesh;
-    private static int capGroup = -1;
+    /** The original's cap mesh and which of its groups is the cap, read again whenever the import changes. */
+    private static final LegacyCached<Cap> MESH = new LegacyCached<>(() -> LegacyModels.mesh(
+            LegacyAssets.OBELISK_CAP_MESH).map(LegacyMesh::flippedV).map(mesh -> new Cap(mesh,
+            Math.max(0, mesh.group("Cap")))).orElse(null));
     private ItemStack eye;
 
     public EldritchCapRenderer(BlockEntityRendererProvider.Context context) {
@@ -37,11 +39,12 @@ public class EldritchCapRenderer<T extends BlockEntity> implements BlockEntityRe
 
     @Override
     public void render(T stone, float partial, PoseStack pose, MultiBufferSource buffers, int light, int overlay) {
-        if (refresh()) {
+        Cap cap = MESH.get();
+        if (cap != null) {
             pose.pushPose();
             pose.translate(0.5F, 0.0F, 0.5F);
             pose.mulPose(Axis.XN.rotationDegrees(90.0F));
-            mesh.render(capGroup, pose.last(), buffers.getBuffer(RenderType.entityCutoutNoCull(CAP)), -1, light,
+            cap.mesh.render(cap.group, pose.last(), buffers.getBuffer(RenderType.entityCutoutNoCull(CAP)), -1, light,
                     overlay);
             pose.popPose();
         }
@@ -64,21 +67,15 @@ public class EldritchCapRenderer<T extends BlockEntity> implements BlockEntityRe
         }
     }
 
-    /** The original's cap mesh, read again whenever the import has changed what there is. */
-    static boolean refresh() {
-        if (bakedFrom != LegacyModels.generation()) {
-            bakedFrom = LegacyModels.generation();
-            mesh = LegacyModels.mesh(LegacyAssets.OBELISK_CAP_MESH).map(LegacyMesh::flippedV).orElse(null);
-            capGroup = mesh == null ? -1 : Math.max(0, mesh.group("Cap"));
-        }
-        return mesh != null;
-    }
-
     /** The cap, for the obelisk to draw at its two ends. */
     static void drawCap(PoseStack pose, MultiBufferSource buffers, ResourceLocation texture, int light, int overlay) {
-        if (refresh()) {
-            mesh.render(capGroup, pose.last(), buffers.getBuffer(RenderType.entityCutoutNoCull(texture)), -1, light,
-                    overlay);
+        Cap cap = MESH.get();
+        if (cap != null) {
+            cap.mesh.render(cap.group, pose.last(), buffers.getBuffer(RenderType.entityCutoutNoCull(texture)), -1,
+                    light, overlay);
         }
+    }
+
+    private record Cap(LegacyMesh mesh, int group) {
     }
 }

@@ -5,6 +5,7 @@ import me.moonscenty.alchemia.client.particle.CrumbParticle;
 import me.moonscenty.alchemia.client.particle.GenericParticle;
 import me.moonscenty.alchemia.client.particle.GlowWispParticle;
 import me.moonscenty.alchemia.client.particle.LegacySheet;
+import me.moonscenty.alchemia.client.particle.ParticleBudget;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
@@ -70,7 +71,7 @@ public final class AuraEffects {
         RandomSource random = level.random;
         rain(level, cloud, random);
         BlockPos at = cloud.blockPosition();
-        for (int i = 0; i < CrucibleEffects.count(1); i++) {
+        for (int i = 0; i < ParticleBudget.scale(1); i++) {
             BlockPos puff = at.offset(random.nextInt(PUFFS_WITHIN) - random.nextInt(PUFFS_WITHIN), 1,
                     random.nextInt(PUFFS_WITHIN) - random.nextInt(PUFFS_WITHIN));
             float size = 25.0F + 15.0F * random.nextFloat();

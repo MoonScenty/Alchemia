@@ -7,8 +7,7 @@ import com.mojang.math.Axis;
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.block.entity.CentrifugeBlockEntity;
 import me.moonscenty.alchemia.client.legacy.LegacyAssets;
-import me.moonscenty.alchemia.client.legacy.LegacyModels;
-import me.moonscenty.alchemia.client.legacy.model.LegacyModelBaker;
+import me.moonscenty.alchemia.client.legacy.LegacyCached;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -28,10 +27,10 @@ public class CentrifugeRenderer implements BlockEntityRenderer<CentrifugeBlockEn
     private static final String[] STILL = {"Top", "Bottom"};
     private static final String[] SPINNING = {"Crossbar", "Dingus1", "Dingus2", "Core"};
 
-    /** The original's parts, as of the import {@link #bakedFrom} names. */
-    private static int bakedFrom = -1;
-    private static ModelPart[] still;
-    private static ModelPart[] spinning;
+    /** The original's parts, baked again whenever the import changes. */
+    private static final LegacyCached<ModelPart[]> STILL_PARTS = LegacyCached.fields(LegacyAssets.CENTRIFUGE, STILL);
+    private static final LegacyCached<ModelPart[]> SPINNING_PARTS =
+            LegacyCached.fields(LegacyAssets.CENTRIFUGE, SPINNING);
 
     public CentrifugeRenderer(BlockEntityRendererProvider.Context context) {
     }
@@ -45,7 +44,9 @@ public class CentrifugeRenderer implements BlockEntityRenderer<CentrifugeBlockEn
 
     /** The centrifuge with its rotor at a given turn. Shared with the item, which stands still. */
     static void draw(PoseStack pose, VertexConsumer buffer, float rotation, int light, int overlay) {
-        if (!refresh()) {
+        ModelPart[] still = STILL_PARTS.get();
+        ModelPart[] spinning = SPINNING_PARTS.get();
+        if (still == null || spinning == null) {
             return;
         }
         pose.pushPose();
@@ -58,25 +59,5 @@ public class CentrifugeRenderer implements BlockEntityRenderer<CentrifugeBlockEn
             part.render(pose, buffer, light, overlay);
         }
         pose.popPose();
-    }
-
-    /** Bakes the original's parts again whenever the import has changed what there is. */
-    private static boolean refresh() {
-        int generation = LegacyModels.generation();
-        if (generation != bakedFrom) {
-            bakedFrom = generation;
-            var model = LegacyModels.get(LegacyAssets.CENTRIFUGE);
-            still = model.map(read -> bake(read, STILL)).orElse(null);
-            spinning = model.map(read -> bake(read, SPINNING)).orElse(null);
-        }
-        return still != null && spinning != null;
-    }
-
-    private static ModelPart[] bake(me.moonscenty.alchemia.client.legacy.model.LegacyModel read, String[] names) {
-        ModelPart[] parts = new ModelPart[names.length];
-        for (int i = 0; i < names.length; i++) {
-            parts[i] = LegacyModelBaker.field(read, names[i]);
-        }
-        return parts;
     }
 }

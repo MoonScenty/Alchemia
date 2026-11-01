@@ -59,7 +59,7 @@ public final class NodeSight {
         if (wearsLenses(player)) {
             return LENS_RANGE;
         }
-        return holdingInstrument(player) && lookingAt(player, node) ? INSTRUMENT_RANGE : 0.0;
+        return holdingAlchemometer(player) && lookingAt(player, node) ? INSTRUMENT_RANGE : 0.0;
     }
 
     /** Anything in the tag shows nodes just by being worn or carried, and so does a helm with goggles in it. */
@@ -81,7 +81,8 @@ public final class NodeSight {
                 || FortressArmorItem.fitting(stack).map(HelmFitting::reveals).orElse(false);
     }
 
-    private static boolean holdingInstrument(Player player) {
+    /** The alchemometer in either hand. */
+    static boolean holdingAlchemometer(Player player) {
         return player.getMainHandItem().is(ModItems.ALCHEMOMETER.get())
                 || player.getOffhandItem().is(ModItems.ALCHEMOMETER.get());
     }

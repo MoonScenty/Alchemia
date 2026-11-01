@@ -167,6 +167,15 @@ public final class LegacyMesh {
         }
     }
 
+    /** Draws the group with this name, or nothing when there is none. */
+    public void render(String group, PoseStack.Pose pose, VertexConsumer consumer, int colour, int light,
+            int overlay) {
+        int found = group(group);
+        if (found >= 0) {
+            render(found, pose, consumer, colour, light, overlay);
+        }
+    }
+
     /** The way a face looks out, from its first three corners. */
     public static Vector3f normal(float[][] face, Vector3f into) {
         float[] a = face[0];

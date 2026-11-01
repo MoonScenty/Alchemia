@@ -7,6 +7,7 @@ import me.moonscenty.alchemia.block.entity.CrucibleBlockEntity;
 import me.moonscenty.alchemia.client.particle.BubbleParticle;
 import me.moonscenty.alchemia.client.particle.GenericParticle;
 import me.moonscenty.alchemia.client.particle.LegacySheet;
+import me.moonscenty.alchemia.client.particle.ParticleBudget;
 import me.moonscenty.alchemia.client.particle.WispParticle;
 import me.moonscenty.alchemia.registry.ModSounds;
 import net.minecraft.client.Minecraft;
@@ -84,7 +85,7 @@ public final class CrucibleEffects {
         List<Holder<Aspect>> held = crucible.dissolved().sortedByAmount();
         double top = pos.getY() + 0.1 + crucible.surface();
         for (int call = 0; call < 10; call++) {
-            for (int i = 0; i < count(1); i++) {
+            for (int i = 0; i < ParticleBudget.scale(1); i++) {
                 int colour = held.isEmpty() ? WHITE : held.get(random.nextInt(held.size())).value().color();
                 add(new BubbleParticle(client, pos.getX() + 0.2 + random.nextFloat() * 0.6, top,
                         pos.getZ() + 0.2 + random.nextFloat() * 0.6, colour, 3, 0.003 * strength,
@@ -114,7 +115,7 @@ public final class CrucibleEffects {
     public static void bamf(ClientLevel level, double x, double y, double z, float r, float g, float b,
             boolean flair, boolean up) {
         RandomSource random = level.random;
-        for (int i = 0; i < count(3) + random.nextInt(3) + 1; i++) {
+        for (int i = 0; i < ParticleBudget.scale(3) + random.nextInt(3) + 1; i++) {
             double xd = flung(random, 0.05F, 0.05F);
             double yd = flung(random, 0.05F, 0.05F);
             double zd = flung(random, 0.05F, 0.05F);
@@ -135,7 +136,7 @@ public final class CrucibleEffects {
                     .collides());
         }
         if (flair) {
-            for (int i = 0; i < count(3) + random.nextInt(3); i++) {
+            for (int i = 0; i < ParticleBudget.scale(3) + random.nextInt(3); i++) {
                 double xd = flung(random, 0.1F, 0.05F);
                 double yd = flung(random, 0.1F, 0.05F);
                 double zd = flung(random, 0.1F, 0.05F);
@@ -150,7 +151,7 @@ public final class CrucibleEffects {
                     .size(10.0F + random.nextFloat() * 2.0F, 0.0F)
                     .spins(random.nextFloat() * 360.0F, (float) random.nextGaussian()));
         }
-        for (int i = 0; i < count(flair ? 1 : 0) + random.nextInt(3); i++) {
+        for (int i = 0; i < ParticleBudget.scale(flair ? 1 : 0) + random.nextInt(3); i++) {
             double xd = flung(random, 0.0025F, 0.005F);
             double yd = flung(random, 0.0025F, 0.005F);
             double zd = flung(random, 0.0025F, 0.005F);
@@ -180,15 +181,6 @@ public final class CrucibleEffects {
     /** A colour band a little off, one way or the other. */
     private static float tinge(RandomSource random, float band) {
         return Math.clamp(band * (1.0F + (float) random.nextGaussian() * 0.1F), 0.0F, 1.0F);
-    }
-
-    /** How many of something the original drew, by the player's particle setting. */
-    static int count(int n) {
-        return switch (Minecraft.getInstance().options.particles().get()) {
-            case MINIMAL -> n / 2;
-            case DECREASED -> n;
-            case ALL -> n * 2;
-        };
     }
 
     private static void add(Particle particle) {

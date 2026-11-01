@@ -6,7 +6,7 @@ import com.mojang.math.Axis;
 
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.client.legacy.LegacyAssets;
-import me.moonscenty.alchemia.client.legacy.LegacyModels;
+import me.moonscenty.alchemia.client.legacy.LegacyCached;
 import me.moonscenty.alchemia.client.legacy.model.LegacyMesh;
 import me.moonscenty.alchemia.item.Hover;
 import me.moonscenty.alchemia.item.ThaumostaticHarnessItem;
@@ -32,26 +32,18 @@ public class HarnessLayer extends RenderLayer<AbstractClientPlayer, PlayerModel<
     /** How far the original tipped everything forward for a crouch: half a radian. */
     private static final float CROUCH = 28.64789F;
 
-    private static int bakedFrom = -1;
-    private static LegacyMesh mesh;
+    private static final LegacyCached<LegacyMesh> MESH = LegacyCached.flippedMesh(LegacyAssets.HARNESS_MESH);
 
     public HarnessLayer(RenderLayerParent<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> parent) {
         super(parent);
-    }
-
-    private static boolean refresh() {
-        if (bakedFrom != LegacyModels.generation()) {
-            bakedFrom = LegacyModels.generation();
-            mesh = LegacyModels.mesh(LegacyAssets.HARNESS_MESH).map(LegacyMesh::flippedV).orElse(null);
-        }
-        return mesh != null;
     }
 
     @Override
     public void render(PoseStack pose, MultiBufferSource buffers, int light, AbstractClientPlayer player,
             float limbSwing, float limbSwingAmount, float partial, float age, float headYaw, float headPitch) {
         ItemStack harness = Hover.worn(player);
-        if (harness.isEmpty() || !refresh()) {
+        LegacyMesh mesh = harness.isEmpty() ? null : MESH.get();
+        if (mesh == null) {
             return;
         }
         boolean crouched = player.isCrouching();

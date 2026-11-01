@@ -9,8 +9,7 @@ import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.block.ValveTubeBlock;
 import me.moonscenty.alchemia.block.entity.ValveTubeBlockEntity;
 import me.moonscenty.alchemia.client.legacy.LegacyAssets;
-import me.moonscenty.alchemia.client.legacy.LegacyModels;
-import me.moonscenty.alchemia.client.legacy.model.LegacyModelBaker;
+import me.moonscenty.alchemia.client.legacy.LegacyCached;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -34,10 +33,9 @@ public class ValveHandleRenderer implements BlockEntityRenderer<ValveTubeBlockEn
     private static final float SHUT = 360.0F;
     private static final float PER_TICK = 20.0F;
 
-    /** The original's wheel and stem, as of the import {@link #bakedFrom} names. */
-    private static int bakedFrom = -1;
-    private static ModelPart ring;
-    private static ModelPart rod;
+    /** The original's wheel and stem, baked again whenever the import changes. */
+    private static final LegacyCached<ModelPart> RING = LegacyCached.field(LegacyAssets.VALVE, "ValveRing");
+    private static final LegacyCached<ModelPart> ROD = LegacyCached.field(LegacyAssets.VALVE, "ValveRod");
 
     public ValveHandleRenderer(BlockEntityRendererProvider.Context context) {
     }
@@ -46,7 +44,12 @@ public class ValveHandleRenderer implements BlockEntityRenderer<ValveTubeBlockEn
     public void render(ValveTubeBlockEntity valve, float partial, PoseStack pose, MultiBufferSource buffers,
             int light, int overlay) {
         BlockState state = valve.getBlockState();
-        if (!(state.getBlock() instanceof ValveTubeBlock) || !refresh()) {
+        if (!(state.getBlock() instanceof ValveTubeBlock)) {
+            return;
+        }
+        ModelPart ring = RING.get();
+        ModelPart rod = ROD.get();
+        if (ring == null || rod == null) {
             return;
         }
         boolean open = state.getValue(ValveTubeBlock.OPEN);
@@ -86,18 +89,8 @@ public class ValveHandleRenderer implements BlockEntityRenderer<ValveTubeBlockEn
 
     /** The original's stem on its own, for the one-way tube's mark; null until it has been read. */
     static ModelPart rod() {
-        return refresh() ? rod : null;
-    }
-
-    /** Bakes the original's parts again whenever the import has changed what there is. */
-    private static boolean refresh() {
-        int generation = LegacyModels.generation();
-        if (generation != bakedFrom) {
-            bakedFrom = generation;
-            var model = LegacyModels.get(LegacyAssets.VALVE);
-            ring = model.map(read -> LegacyModelBaker.field(read, "ValveRing")).orElse(null);
-            rod = model.map(read -> LegacyModelBaker.field(read, "ValveRod")).orElse(null);
-        }
-        return ring != null && rod != null;
+        ModelPart ring = RING.get();
+        ModelPart rod = ROD.get();
+        return ring != null && rod != null ? rod : null;
     }
 }

@@ -11,8 +11,10 @@ import org.joml.Vector4f;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 
+import me.moonscenty.alchemia.client.legacy.LegacyCached;
 import me.moonscenty.alchemia.client.legacy.LegacyModels;
 import me.moonscenty.alchemia.client.legacy.model.LegacyMesh;
+import me.moonscenty.alchemia.client.legacy.model.LegacyQuads;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -25,7 +27,6 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.model.BakedModelWrapper;
-import net.neoforged.neoforge.client.model.pipeline.QuadBakingVertexConsumer;
 
 /**
  * An item drawn on parts of one of the original's meshes, each placed where the original's renderer placed it, when
@@ -44,8 +45,7 @@ public class LegacyMeshItemModel extends BakedModelWrapper<BakedModel> {
     private final ResourceLocation texture;
     private final List<Placed> parts;
 
-    private List<BakedQuad> quads = List.of();
-    private int bakedFrom = -1;
+    private final LegacyCached<List<BakedQuad>> quads;
 
     /**
      * @param mesh    the mesh's key in {@link LegacyModels}
@@ -59,6 +59,8 @@ public class LegacyMeshItemModel extends BakedModelWrapper<BakedModel> {
         this.flipped = flipped;
         this.texture = texture;
         this.parts = List.copyOf(parts);
+        this.quads = new LegacyCached<>(() -> LegacyModels.mesh(mesh)
+                .map(found -> bake(flipped ? found.flippedV() : found)).orElse(List.of()));
     }
 
     private boolean legacy() {
@@ -70,7 +72,7 @@ public class LegacyMeshItemModel extends BakedModelWrapper<BakedModel> {
         if (!legacy()) {
             return super.getQuads(state, side, random);
         }
-        return side == null ? baked() : List.of();
+        return side == null ? quads.get() : List.of();
     }
 
     @Override
@@ -91,15 +93,6 @@ public class LegacyMeshItemModel extends BakedModelWrapper<BakedModel> {
         return List.of(this);
     }
 
-    private List<BakedQuad> baked() {
-        int generation = LegacyModels.generation();
-        if (generation != bakedFrom) {
-            bakedFrom = generation;
-            quads = LegacyModels.mesh(mesh).map(found -> bake(flipped ? found.flippedV() : found)).orElse(List.of());
-        }
-        return quads;
-    }
-
     private List<BakedQuad> bake(LegacyMesh found) {
         TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(texture);
         List<BakedQuad> out = new ArrayList<>();
@@ -117,18 +110,7 @@ public class LegacyMeshItemModel extends BakedModelWrapper<BakedModel> {
                     moved[i] = new float[] {corner.x, corner.y, corner.z, face[i][3], face[i][4]};
                 }
                 LegacyMesh.normal(moved, normal);
-                QuadBakingVertexConsumer quad = new QuadBakingVertexConsumer();
-                quad.setSprite(sprite);
-                quad.setShade(true);
-                quad.setDirection(Direction.getNearest(normal.x, normal.y, normal.z));
-                for (int i = 0; i < 4; i++) {
-                    float[] at = moved[Math.min(i, moved.length - 1)];
-                    quad.addVertex(at[0], at[1], at[2])
-                            .setColor(-1)
-                            .setUv(sprite.getU(at[3]), sprite.getV(at[4]))
-                            .setNormal(normal.x, normal.y, normal.z);
-                }
-                out.add(quad.bakeQuad());
+                out.add(LegacyQuads.bake(moved, sprite, -1, normal));
             }
         }
         return List.copyOf(out);

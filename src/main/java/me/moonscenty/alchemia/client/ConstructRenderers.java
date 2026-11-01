@@ -5,7 +5,7 @@ import com.mojang.math.Axis;
 
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.client.legacy.LegacyAssets;
-import me.moonscenty.alchemia.client.legacy.LegacyModels;
+import me.moonscenty.alchemia.client.legacy.LegacyCached;
 import me.moonscenty.alchemia.client.legacy.model.LegacyMesh;
 import me.moonscenty.alchemia.entity.AdvancedAutomatedCrossbow;
 import me.moonscenty.alchemia.entity.AutomatedCrossbow;
@@ -46,11 +46,10 @@ public final class ConstructRenderers {
     public static class Advanced extends EntityRenderer<AdvancedAutomatedCrossbow> {
         private static final ResourceLocation SHEET = Alchemia.id("textures/entity/advanced_automated_crossbow.png");
         private static final float STANDS = 0.75F;
-        private static final float RATTLES = 500.0F;
         private static final int HURT = 0xFFFF8080;
 
-        private static int meshFrom = -1;
-        private static LegacyMesh mesh;
+        private static final LegacyCached<LegacyMesh> MESH =
+                LegacyCached.flippedMesh(LegacyAssets.CROSSBOW_ADVANCED_MESH);
 
         public Advanced(EntityRendererProvider.Context context) {
             super(context);
@@ -60,59 +59,36 @@ public final class ConstructRenderers {
         @Override
         public void render(AdvancedAutomatedCrossbow turret, float yaw, float partial, PoseStack pose,
                 MultiBufferSource buffers, int light) {
-            LegacyMesh mesh = mesh();
+            LegacyMesh mesh = MESH.get();
             if (mesh != null) {
                 var buffer = buffers.getBuffer(RenderType.entityCutoutNoCull(SHEET));
                 int colour = turret.hurtTime > 0 ? HURT : -1;
                 pose.pushPose();
                 pose.translate(0.0F, STANDS, 0.0F);
-                part(mesh, "legs", pose, buffer, colour, light);
-                if (turret.hurtTime > 0) {
-                    float shake = turret.hurtTime / RATTLES;
-                    pose.translate((float) (turret.getRandom().nextGaussian() * shake),
-                            (float) (turret.getRandom().nextGaussian() * shake),
-                            (float) (turret.getRandom().nextGaussian() * shake));
-                }
-                pose.mulPose(Axis.YN.rotationDegrees(Mth.rotLerp(partial, turret.yHeadRotO, turret.yHeadRot)));
-                pose.mulPose(Axis.XP.rotationDegrees(Mth.lerp(partial, turret.xRotO, turret.getXRot())));
+                mesh.render("legs", pose.last(), buffer, colour, light, OverlayTexture.NO_OVERLAY);
+                AimPose.shake(pose, turret);
+                AimPose.aim(pose, turret, partial);
                 for (String still : new String[] {"mech", "box", "shield", "brain"}) {
-                    part(mesh, still, pose, buffer, colour, light);
+                    mesh.render(still, pose.last(), buffer, colour, light, OverlayTexture.NO_OVERLAY);
                 }
                 pose.pushPose();
                 pose.translate(0.0F, 0.0F, Mth.sin(Mth.sqrt(turret.winding(partial)) * Mth.TWO_PI) / 12.0F);
-                part(mesh, "loader", pose, buffer, colour, light);
+                mesh.render("loader", pose.last(), buffer, colour, light, OverlayTexture.NO_OVERLAY);
                 pose.popPose();
 
                 float snap = Mth.sin(Mth.sqrt(turret.getAttackAnim(partial)) * Mth.TWO_PI) * 20.0F;
                 pose.translate(0.0F, 0.0F, 0.375F);
                 pose.pushPose();
                 pose.mulPose(Axis.YP.rotationDegrees(snap));
-                part(mesh, "bow1", pose, buffer, colour, light);
+                mesh.render("bow1", pose.last(), buffer, colour, light, OverlayTexture.NO_OVERLAY);
                 pose.popPose();
                 pose.pushPose();
                 pose.mulPose(Axis.YN.rotationDegrees(snap));
-                part(mesh, "bow2", pose, buffer, colour, light);
+                mesh.render("bow2", pose.last(), buffer, colour, light, OverlayTexture.NO_OVERLAY);
                 pose.popPose();
                 pose.popPose();
             }
             super.render(turret, yaw, partial, pose, buffers, light);
-        }
-
-        private static void part(LegacyMesh mesh, String name, PoseStack pose,
-                com.mojang.blaze3d.vertex.VertexConsumer buffer, int colour, int light) {
-            int group = mesh.group(name);
-            if (group >= 0) {
-                mesh.render(group, pose.last(), buffer, colour, light, OverlayTexture.NO_OVERLAY);
-            }
-        }
-
-        private static LegacyMesh mesh() {
-            int generation = LegacyModels.generation();
-            if (generation != meshFrom) {
-                meshFrom = generation;
-                mesh = LegacyModels.mesh(LegacyAssets.CROSSBOW_ADVANCED_MESH).map(LegacyMesh::flippedV).orElse(null);
-            }
-            return mesh;
         }
 
         @Override
@@ -131,8 +107,8 @@ public final class ConstructRenderers {
         private static final int FRAMES = 15;
         private static final float WAVE = 10.0F;
 
-        private static int meshFrom = -1;
-        private static LegacyMesh hemisphere;
+        private static final LegacyCached<LegacyMesh> HEMISPHERE =
+                LegacyCached.flippedMesh(LegacyAssets.HEMISPHERE_MESH);
 
         public Magnet(EntityRendererProvider.Context context) {
             super(context, new NodeMagnetModel(), 0.5F);
@@ -153,7 +129,7 @@ public final class ConstructRenderers {
         }
 
         private static void ripple(NodeMagnet magnet, float partial, PoseStack pose, MultiBufferSource buffers) {
-            LegacyMesh mesh = hemisphere();
+            LegacyMesh mesh = HEMISPHERE.get();
             if (mesh == null) {
                 return;
             }
@@ -163,22 +139,12 @@ public final class ConstructRenderers {
             float tall = magnet.getBbHeight();
             pose.pushPose();
             pose.translate(0.0F, magnet.getEyeHeight(), 0.0F);
-            pose.mulPose(Axis.YN.rotationDegrees(Mth.rotLerp(partial, magnet.yHeadRotO, magnet.yHeadRot)));
-            pose.mulPose(Axis.XP.rotationDegrees(Mth.lerp(partial, magnet.xRotO, magnet.getXRot())));
+            AimPose.aim(pose, magnet, partial);
             pose.translate(0.0F, 0.0F, 2.0F * tall + magnet.getBbWidth() / 2.0F);
             pose.scale(0.25F * tall, 0.25F * tall, -tall);
             mesh.render(pose.last(), buffers.getBuffer(RenderType.entityTranslucent(sheet)), 0xFF808080,
                     LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY);
             pose.popPose();
-        }
-
-        private static LegacyMesh hemisphere() {
-            int generation = LegacyModels.generation();
-            if (generation != meshFrom) {
-                meshFrom = generation;
-                hemisphere = LegacyModels.mesh(LegacyAssets.HEMISPHERE_MESH).map(LegacyMesh::flippedV).orElse(null);
-            }
-            return hemisphere;
         }
 
         @Override

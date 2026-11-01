@@ -1,12 +1,13 @@
 package me.moonscenty.alchemia.client.armour;
 
+import static me.moonscenty.alchemia.client.armour.LegacyArmourModel.turn;
+
 import java.util.List;
 import java.util.Optional;
 
 import me.moonscenty.alchemia.client.legacy.LegacyAssets;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.Model;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -26,9 +27,6 @@ public class CultistArmourExtensions implements IClientItemExtensions {
     public static final CultistArmourExtensions PRAETOR = new CultistArmourExtensions(LegacyAssets.LEADER_ARMOUR,
             LegacyAssets.LEADER_ARMOUR_LOWER, true);
 
-    private static final float STRIDE = 0.6662F;
-    private static final float SWING = 1.4F;
-
     private final LegacyArmourModel chest;
     private final LegacyArmourModel rest;
     private final boolean plate;
@@ -47,9 +45,6 @@ public class CultistArmourExtensions implements IClientItemExtensions {
             return flat;
         }
         LegacyArmourModel.Worn drawn = LegacyArmourModel.dress(flat, found.get());
-        drawn.head.xScale *= FortressExtensions.HELM_SCALE;
-        drawn.head.yScale *= FortressExtensions.HELM_SCALE;
-        drawn.head.zScale *= FortressExtensions.HELM_SCALE;
         return drawn;
     }
 
@@ -66,9 +61,7 @@ public class CultistArmourExtensions implements IClientItemExtensions {
         if (!(model instanceof LegacyArmourModel.Worn drawn)) {
             return;
         }
-        // whichever leg is further back holds the cloth out behind it
-        float swing = Math.min(Mth.cos(limbSwing * STRIDE) * SWING * limbSwingAmount,
-                Mth.cos(limbSwing * STRIDE + Mth.PI) * SWING * limbSwingAmount);
+        float swing = LegacyArmourModel.swing(limbSwing, limbSwingAmount);
         if (plate) {
             turn(drawn, List.of("Frontcloth1", "LegClothR", "LegClothL"), swing - 0.1047198F);
             turn(drawn, List.of("Frontcloth2"), swing - 0.3316126F);
@@ -81,9 +74,5 @@ public class CultistArmourExtensions implements IClientItemExtensions {
             turn(drawn, List.of("ClothBackR1", "ClothBackL1"), -swing + 0.1047198F);
             turn(drawn, List.of("ClothBackR2", "ClothBackL2", "ClothBackR3", "ClothBackL3"), -swing + 0.2268928F);
         }
-    }
-
-    private static void turn(LegacyArmourModel.Worn drawn, List<String> names, float xRot) {
-        names.forEach(name -> drawn.part(name).ifPresent(part -> part.xRot = xRot));
     }
 }

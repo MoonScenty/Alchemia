@@ -28,7 +28,7 @@ public class ScanHintOverlay {
     public static void onRenderGui(RenderGuiEvent.Post event) {
         Minecraft client = Minecraft.getInstance();
         Player player = client.player;
-        if (player == null || client.options.hideGui || !holdingScanner(player)) {
+        if (player == null || client.options.hideGui || !NodeSight.holdingAlchemometer(player)) {
             return;
         }
 
@@ -62,10 +62,5 @@ public class ScanHintOverlay {
         int top = centreY + 14;
         graphics.fill(left, top, left + BAR_WIDTH, top + BAR_HEIGHT, 0x80000000);
         graphics.fill(left, top, left + (int) (BAR_WIDTH * progress), top + BAR_HEIGHT, 0xFF54C8E8);
-    }
-
-    private static boolean holdingScanner(Player player) {
-        return player.getMainHandItem().is(ModItems.ALCHEMOMETER.get())
-                || player.getOffhandItem().is(ModItems.ALCHEMOMETER.get());
     }
 }

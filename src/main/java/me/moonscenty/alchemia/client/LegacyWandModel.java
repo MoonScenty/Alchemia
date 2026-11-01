@@ -15,6 +15,7 @@ import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.client.legacy.LegacyAssets;
 import me.moonscenty.alchemia.client.legacy.LegacyModels;
 import me.moonscenty.alchemia.client.legacy.model.LegacyMesh;
+import me.moonscenty.alchemia.client.legacy.model.LegacyQuads;
 import me.moonscenty.alchemia.item.WandItem;
 import me.moonscenty.alchemia.registry.ModWandParts;
 import net.minecraft.client.Minecraft;
@@ -35,7 +36,6 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.model.BakedModelWrapper;
-import net.neoforged.neoforge.client.model.pipeline.QuadBakingVertexConsumer;
 
 /**
  * The wand on the original's own mesh: a rod with a cap at either end, each part wearing the picture of what it is
@@ -127,18 +127,13 @@ public class LegacyWandModel extends BakedModelWrapper<BakedModel> {
         Vector3f normal = new Vector3f();
         for (float[][] face : mesh.faces(group)) {
             LegacyMesh.normal(face, normal);
-            QuadBakingVertexConsumer quad = new QuadBakingVertexConsumer();
-            quad.setSprite(sprite);
-            quad.setShade(true);
-            quad.setDirection(Direction.getNearest(normal.x, normal.y, normal.z));
-            for (int i = 0; i < 4; i++) {
-                float[] corner = face[Math.min(i, face.length - 1)];
-                quad.addVertex(shrink(corner[0]), shrink(corner[1]), shrink(corner[2]))
-                        .setColor(-1)
-                        .setUv(sprite.getU(corner[3]), sprite.getV(corner[4]))
-                        .setNormal(normal.x, normal.y, normal.z);
+            float[][] shrunk = new float[face.length][];
+            for (int i = 0; i < face.length; i++) {
+                float[] corner = face[i];
+                shrunk[i] = new float[] {shrink(corner[0]), shrink(corner[1]), shrink(corner[2]), corner[3],
+                        corner[4]};
             }
-            quads.add(quad.bakeQuad());
+            quads.add(LegacyQuads.bake(shrunk, sprite, -1, normal));
         }
     }
 

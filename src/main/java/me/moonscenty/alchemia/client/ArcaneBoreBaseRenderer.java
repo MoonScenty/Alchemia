@@ -7,7 +7,7 @@ import com.mojang.math.Axis;
 import me.moonscenty.alchemia.block.ArcaneBoreBaseBlock;
 import me.moonscenty.alchemia.block.entity.ArcaneBoreBaseBlockEntity;
 import me.moonscenty.alchemia.client.legacy.LegacyAssets;
-import me.moonscenty.alchemia.client.legacy.LegacyModels;
+import me.moonscenty.alchemia.client.legacy.LegacyCached;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -24,9 +24,8 @@ public class ArcaneBoreBaseRenderer implements BlockEntityRenderer<ArcaneBoreBas
             "Pillar4"};
     private static final String[] NOZZLE = {"Nozzle1", "Nozzle2"};
 
-    private static int bakedFrom = -1;
-    private static ModelPart[] stand;
-    private static ModelPart[] nozzle;
+    private static final LegacyCached<ModelPart[]> STAND_PARTS = LegacyCached.fields(LegacyAssets.BORE_BASE, STAND);
+    private static final LegacyCached<ModelPart[]> NOZZLE_PARTS = LegacyCached.fields(LegacyAssets.BORE_BASE, NOZZLE);
 
     public ArcaneBoreBaseRenderer(BlockEntityRendererProvider.Context context) {
     }
@@ -40,7 +39,9 @@ public class ArcaneBoreBaseRenderer implements BlockEntityRenderer<ArcaneBoreBas
 
     /** The base with its nozzle to a given side. Shared with the item, which points it north. */
     static void draw(PoseStack pose, VertexConsumer buffer, Direction nozzleTo, int light, int overlay) {
-        if (!refresh()) {
+        ModelPart[] stand = STAND_PARTS.get();
+        ModelPart[] nozzle = NOZZLE_PARTS.get();
+        if (stand == null || nozzle == null) {
             return;
         }
         pose.pushPose();
@@ -66,7 +67,9 @@ public class ArcaneBoreBaseRenderer implements BlockEntityRenderer<ArcaneBoreBas
      * turned as the original's bellows renderer turned it.
      */
     static void drawNozzle(PoseStack pose, VertexConsumer buffer, Direction pointing, int light, int overlay) {
-        if (!refresh()) {
+        ModelPart[] stand = STAND_PARTS.get();
+        ModelPart[] nozzle = NOZZLE_PARTS.get();
+        if (stand == null || nozzle == null) {
             return;
         }
         pose.pushPose();
@@ -90,17 +93,5 @@ public class ArcaneBoreBaseRenderer implements BlockEntityRenderer<ArcaneBoreBas
             part.render(pose, buffer, light, overlay);
         }
         pose.popPose();
-    }
-
-    private static boolean refresh() {
-        int generation = LegacyModels.generation();
-        if (generation != bakedFrom) {
-            bakedFrom = generation;
-            stand = LegacyModels.get(LegacyAssets.BORE_BASE).map(read -> ArcaneBoreRenderer.parts(read, STAND))
-                    .orElse(null);
-            nozzle = LegacyModels.get(LegacyAssets.BORE_BASE).map(read -> ArcaneBoreRenderer.parts(read, NOZZLE))
-                    .orElse(null);
-        }
-        return stand != null && nozzle != null;
     }
 }

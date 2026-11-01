@@ -9,7 +9,7 @@ import com.mojang.math.Axis;
 
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.client.legacy.LegacyAssets;
-import me.moonscenty.alchemia.client.legacy.LegacyModels;
+import me.moonscenty.alchemia.client.legacy.LegacyCached;
 import me.moonscenty.alchemia.client.legacy.model.LegacyMesh;
 import me.moonscenty.alchemia.entity.cult.Cultist;
 import net.minecraft.client.Minecraft;
@@ -36,8 +36,7 @@ import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 @EventBusSubscriber(modid = Alchemia.MODID, value = Dist.CLIENT)
 public final class ShieldRunesRenderer {
     private static final List<Flare> FLARES = new ArrayList<>();
-    private static int bakedFrom = -1;
-    private static LegacyMesh mesh;
+    private static final LegacyCached<LegacyMesh> MESH = LegacyCached.flippedMesh(LegacyAssets.HEMIS_MESH);
 
     private record Flare(Entity shielded, float yaw, float pitch, boolean ripple, long born, int lasts) {
     }
@@ -81,14 +80,6 @@ public final class ShieldRunesRenderer {
         FLARES.add(new Flare(shielded, yaw, pitch, ripple, level.getGameTime(), 8 + level.random.nextInt(4)));
     }
 
-    private static boolean refresh() {
-        if (bakedFrom != LegacyModels.generation()) {
-            bakedFrom = LegacyModels.generation();
-            mesh = LegacyModels.mesh(LegacyAssets.HEMIS_MESH).map(LegacyMesh::flippedV).orElse(null);
-        }
-        return mesh != null;
-    }
-
     @SubscribeEvent
     public static void render(RenderLevelStageEvent event) {
         if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_PARTICLES || FLARES.isEmpty()) {
@@ -96,7 +87,8 @@ public final class ShieldRunesRenderer {
         }
         Minecraft minecraft = Minecraft.getInstance();
         ClientLevel level = minecraft.level;
-        if (level == null || !refresh()) {
+        LegacyMesh mesh = level == null ? null : MESH.get();
+        if (mesh == null) {
             FLARES.clear();
             return;
         }

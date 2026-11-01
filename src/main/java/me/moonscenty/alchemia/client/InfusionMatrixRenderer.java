@@ -6,10 +6,9 @@ import com.mojang.math.Axis;
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.block.entity.InfusionMatrixBlockEntity;
 import me.moonscenty.alchemia.client.legacy.LegacyAssets;
-import me.moonscenty.alchemia.client.legacy.LegacyModels;
+import me.moonscenty.alchemia.client.legacy.LegacyCached;
 import me.moonscenty.alchemia.client.legacy.LegacyRenderTypes;
 import me.moonscenty.alchemia.client.legacy.model.LegacyMesh;
-import me.moonscenty.alchemia.client.legacy.model.LegacyModelBaker;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -71,11 +70,10 @@ public class InfusionMatrixRenderer implements BlockEntityRenderer<InfusionMatri
     /** The colour the original gave the glow. */
     private static final float GLOW_R = 0.8F, GLOW_G = 0.1F, GLOW_B = 1.0F;
 
-    /** The original's cube, its glow and its pillar, as of the import {@link #bakedFrom} names. */
-    private static int bakedFrom = -1;
-    private static ModelPart legacyStone;
-    private static ModelPart legacyGlow;
-    private static LegacyMesh pillarMesh;
+    /** The original's cube, its glow and its pillar, read again whenever the import changes. */
+    private static final LegacyCached<ModelPart> STONE = LegacyCached.field(LegacyAssets.INFUSER, "cube");
+    private static final LegacyCached<ModelPart> GLOW = LegacyCached.field(LegacyAssets.INFUSER_GLOW, "cube");
+    private static final LegacyCached<LegacyMesh> PILLAR = LegacyCached.mesh(LegacyAssets.PILLAR_MESH);
 
     public InfusionMatrixRenderer(BlockEntityRendererProvider.Context context) {
     }
@@ -83,7 +81,9 @@ public class InfusionMatrixRenderer implements BlockEntityRenderer<InfusionMatri
     @Override
     public void render(InfusionMatrixBlockEntity matrix, float partial, PoseStack pose, MultiBufferSource buffers,
             int light, int overlay) {
-        refresh();
+        ModelPart legacyStone = STONE.get();
+        ModelPart legacyGlow = GLOW.get();
+        LegacyMesh pillarMesh = PILLAR.get();
         if (matrix.getLevel() == null || legacyStone == null || pillarMesh == null) {
             return;
         }
@@ -160,20 +160,6 @@ public class InfusionMatrixRenderer implements BlockEntityRenderer<InfusionMatri
             }
         }
         pose.popPose();
-    }
-
-    /** Bakes the original's cube again, and picks up its pillar, whenever the import has changed what there is. */
-    private static void refresh() {
-        int generation = LegacyModels.generation();
-        if (generation == bakedFrom) {
-            return;
-        }
-        bakedFrom = generation;
-        legacyStone = LegacyModels.get(LegacyAssets.INFUSER).map(model -> LegacyModelBaker.field(model, "cube"))
-                .orElse(null);
-        legacyGlow = LegacyModels.get(LegacyAssets.INFUSER_GLOW).map(model -> LegacyModelBaker.field(model, "cube"))
-                .orElse(null);
-        pillarMesh = LegacyModels.mesh(LegacyAssets.PILLAR_MESH).orElse(null);
     }
 
     /**

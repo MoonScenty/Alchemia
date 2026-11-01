@@ -34,8 +34,6 @@ public class FortressExtensions implements IClientItemExtensions {
             "ShoulderplateR3", "SidepanelR3", "SidepanelL3");
     /** Worked into a helm on the altar. None of them is worn until one has been. */
     private static final List<String> HELM_WORK = List.of("Goggles", "Mask_0", "Mask_1", "Mask_2");
-    /** The original drew the head a hair larger, so the helm sits over a hat rather than in it. */
-    static final float HELM_SCALE = 1.01F;
 
     public static final FortressExtensions INSTANCE = new FortressExtensions();
 
@@ -52,9 +50,6 @@ public class FortressExtensions implements IClientItemExtensions {
             return flat;
         }
         LegacyArmourModel.Worn drawn = LegacyArmourModel.dress(flat, fortress.get());
-        drawn.head.xScale *= HELM_SCALE;
-        drawn.head.yScale *= HELM_SCALE;
-        drawn.head.zScale *= HELM_SCALE;
         int pieces = worn(wearer);
         FROM_TWO.forEach(name -> drawn.show(name, pieces >= 2));
         FROM_THREE.forEach(name -> drawn.show(name, pieces >= 3));

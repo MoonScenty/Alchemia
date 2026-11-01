@@ -6,7 +6,7 @@ import com.mojang.math.Axis;
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.block.entity.ArcaneWorkbenchChargerBlockEntity;
 import me.moonscenty.alchemia.client.legacy.LegacyAssets;
-import me.moonscenty.alchemia.client.legacy.LegacyModels;
+import me.moonscenty.alchemia.client.legacy.LegacyCached;
 import me.moonscenty.alchemia.client.legacy.model.LegacyMesh;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -29,9 +29,11 @@ public class ChargerRenderer implements BlockEntityRenderer<ArcaneWorkbenchCharg
     private static final int GLOW_DIM = 50;
     private static final int GLOW_RANGE = 150;
 
-    /** The original's mesh as of the import {@link #meshFrom} names, turned over for the loader that drew it. */
-    private static int meshFrom = -1;
-    private static LegacyMesh mesh;
+    /**
+     * The original's vis relay mesh, once per import. Its renderer read it with the older loader, which turned the
+     * texture corners over, so it is turned over here too. Shared with the crystallizer and the dioptra.
+     */
+    static final LegacyCached<LegacyMesh> RELAY = LegacyCached.flippedMesh(LegacyAssets.RELAY_MESH);
 
     public ChargerRenderer(BlockEntityRendererProvider.Context context) {
     }
@@ -39,7 +41,7 @@ public class ChargerRenderer implements BlockEntityRenderer<ArcaneWorkbenchCharg
     @Override
     public void render(ArcaneWorkbenchChargerBlockEntity charger, float partialTick, PoseStack pose,
             MultiBufferSource buffers, int light, int overlay) {
-        LegacyMesh relay = legacyMesh();
+        LegacyMesh relay = RELAY.get();
         if (relay == null) {
             return;
         }
@@ -73,18 +75,5 @@ public class ChargerRenderer implements BlockEntityRenderer<ArcaneWorkbenchCharg
         relay.render(crystal, pose.last(), buffers.getBuffer(RenderType.entityTranslucent(TEXTURE)), -1, glow,
                 overlay);
         pose.popPose();
-    }
-
-    /**
-     * The original's mesh, once per import. Its renderer read it with the older loader, which turned the texture
-     * corners over, so it is turned over here too.
-     */
-    private static LegacyMesh legacyMesh() {
-        int generation = LegacyModels.generation();
-        if (generation != meshFrom) {
-            meshFrom = generation;
-            mesh = LegacyModels.mesh(LegacyAssets.RELAY_MESH).map(LegacyMesh::flippedV).orElse(null);
-        }
-        return mesh;
     }
 }

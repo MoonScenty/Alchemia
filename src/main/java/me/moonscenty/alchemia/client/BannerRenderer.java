@@ -12,6 +12,7 @@ import com.mojang.math.Axis;
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.block.BannerBlockEntity;
 import me.moonscenty.alchemia.client.legacy.LegacyAssets;
+import me.moonscenty.alchemia.client.legacy.LegacyCached;
 import me.moonscenty.alchemia.client.legacy.LegacyModels;
 import me.moonscenty.alchemia.client.legacy.model.LegacyModelBaker;
 import net.minecraft.client.model.geom.ModelPart;
@@ -35,8 +36,15 @@ public class BannerRenderer implements BlockEntityRenderer<BannerBlockEntity> {
     private static final ResourceLocation CULT = Alchemia.id("textures/entity/banner_cultist.png");
     private static final ResourceLocation BLANK = Alchemia.id("textures/entity/banner_blank.png");
 
-    private static int bakedFrom = -1;
-    private static Map<String, ModelPart> parts = Map.of();
+    private static final LegacyCached<Map<String, ModelPart>> PARTS = new LegacyCached<>(() -> {
+        Map<String, ModelPart> baked = new HashMap<>();
+        LegacyModels.get(LegacyAssets.BANNER).ifPresent(model -> {
+            for (String name : new String[] {"B1", "B2", "Beam", "Banner", "Pole"}) {
+                baked.put(name, LegacyModelBaker.field(model, name));
+            }
+        });
+        return baked;
+    });
 
     public BannerRenderer(BlockEntityRendererProvider.Context context) {
     }
@@ -44,7 +52,8 @@ public class BannerRenderer implements BlockEntityRenderer<BannerBlockEntity> {
     @Override
     public void render(BannerBlockEntity banner, float partial, PoseStack pose, MultiBufferSource buffers, int light,
             int overlay) {
-        if (!refresh()) {
+        Map<String, ModelPart> parts = PARTS.get();
+        if (parts.size() != 5) {
             return;
         }
         long time = banner.getLevel() == null ? 0 : banner.getLevel().getGameTime();
@@ -94,20 +103,6 @@ public class BannerRenderer implements BlockEntityRenderer<BannerBlockEntity> {
         buffer.addVertex(matrix, x, y, 0.0F).setColor(tint >> 16 & 0xFF, tint >> 8 & 0xFF, tint & 0xFF, 191)
                 .setUv(u, v).setOverlay(OverlayTexture.NO_OVERLAY).setLight(LightTexture.FULL_BRIGHT)
                 .setNormal(0.0F, 0.0F, 1.0F);
-    }
-
-    private static boolean refresh() {
-        if (bakedFrom != LegacyModels.generation()) {
-            bakedFrom = LegacyModels.generation();
-            Map<String, ModelPart> baked = new HashMap<>();
-            LegacyModels.get(LegacyAssets.BANNER).ifPresent(model -> {
-                for (String name : new String[] {"B1", "B2", "Beam", "Banner", "Pole"}) {
-                    baked.put(name, LegacyModelBaker.field(model, name));
-                }
-            });
-            parts = baked;
-        }
-        return parts.size() == 5;
     }
 
     @Override

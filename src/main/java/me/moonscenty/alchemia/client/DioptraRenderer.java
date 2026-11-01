@@ -9,8 +9,6 @@ import me.moonscenty.alchemia.aspect.Aspect;
 import me.moonscenty.alchemia.aura.ShardTuning;
 import me.moonscenty.alchemia.block.DioptraBlock;
 import me.moonscenty.alchemia.block.entity.DioptraBlockEntity;
-import me.moonscenty.alchemia.client.legacy.LegacyAssets;
-import me.moonscenty.alchemia.client.legacy.LegacyModels;
 import me.moonscenty.alchemia.client.legacy.LegacyRenderTypes;
 import me.moonscenty.alchemia.client.legacy.model.LegacyMesh;
 import net.minecraft.client.renderer.LightTexture;
@@ -40,9 +38,6 @@ public class DioptraRenderer implements BlockEntityRenderer<DioptraBlockEntity> 
     private static final float WIDTH = 0.99F;
     private static final int CELLS = DioptraBlockEntity.ACROSS - 1;
 
-    private static int meshFrom = -1;
-    private static LegacyMesh mesh;
-
     public DioptraRenderer(BlockEntityRendererProvider.Context context) {
     }
 
@@ -59,9 +54,9 @@ public class DioptraRenderer implements BlockEntityRenderer<DioptraBlockEntity> 
         float blue;
         if (shown != null) {
             int colour = shown.value().color();
-            red = (colour >> 16 & 0xFF) / 255.0F;
-            green = (colour >> 8 & 0xFF) / 255.0F;
-            blue = (colour & 0xFF) / 255.0F;
+            red = ClientColours.red(colour);
+            green = ClientColours.green(colour);
+            blue = ClientColours.blue(colour);
         } else {
             red = Mth.sin(age / 12.0F) * 0.3F + 0.7F;
             green = Mth.sin(age / 11.0F) * 0.3F + 0.7F;
@@ -77,7 +72,7 @@ public class DioptraRenderer implements BlockEntityRenderer<DioptraBlockEntity> 
     /** The original's vis relay crystal, turned on its point and a little stretched, in the shard's colour. */
     private static void crystal(PoseStack pose, MultiBufferSource buffers, int overlay, float red, float green,
             float blue) {
-        LegacyMesh relay = legacyMesh();
+        LegacyMesh relay = ChargerRenderer.RELAY.get();
         int crystal = relay == null ? -1 : relay.group("Crystal");
         if (crystal < 0) {
             return;
@@ -191,15 +186,5 @@ public class DioptraRenderer implements BlockEntityRenderer<DioptraBlockEntity> 
     @Override
     public AABB getRenderBoundingBox(DioptraBlockEntity dioptra) {
         return new AABB(dioptra.getBlockPos()).inflate(0.3).expandTowards(0, 1.0, 0);
-    }
-
-    /** The original's vis relay mesh, once per import, turned over as the older loader read it. */
-    private static LegacyMesh legacyMesh() {
-        int generation = LegacyModels.generation();
-        if (generation != meshFrom) {
-            meshFrom = generation;
-            mesh = LegacyModels.mesh(LegacyAssets.RELAY_MESH).map(LegacyMesh::flippedV).orElse(null);
-        }
-        return mesh;
     }
 }
