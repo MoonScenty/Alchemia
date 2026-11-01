@@ -96,7 +96,7 @@ public record CrucibleRecipe(Ingredient catalyst, AspectList aspects, ItemStack 
                         Ingredient.CODEC_NONEMPTY.fieldOf("catalyst").forGetter(CrucibleRecipe::catalyst),
                         AspectList.CODEC.fieldOf("aspects").forGetter(CrucibleRecipe::aspects),
                         ItemStack.STRICT_CODEC.fieldOf("result").forGetter(CrucibleRecipe::result),
-                        ResourceLocation.CODEC.optionalFieldOf("research").forGetter(CrucibleRecipe::research))
+                        Codecs.RESEARCH.forGetter(CrucibleRecipe::research))
                 .apply(instance, CrucibleRecipe::new));
 
         private static final StreamCodec<RegistryFriendlyByteBuf, CrucibleRecipe> STREAM_CODEC =

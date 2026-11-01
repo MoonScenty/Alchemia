@@ -7,9 +7,6 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.Containers;
@@ -21,7 +18,6 @@ import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
 /**
@@ -30,7 +26,7 @@ import net.minecraft.world.level.block.state.BlockState;
  * Unlike a vanilla bench this keeps hold of what is on it when the screen is closed, because the wand is meant to
  * be left there — the charger sitting above the bench tops it up while nobody is using it.
  */
-public class ArcaneWorkbenchBlockEntity extends BlockEntity implements Container, MenuProvider {
+public class ArcaneWorkbenchBlockEntity extends SyncedBlockEntity implements Container, MenuProvider {
     public static final int GRID = 9;
     /** Where the wand lies. The last slot, so the nine before it are the grid in reading order. */
     public static final int SLOT_WAND = GRID;
@@ -84,9 +80,7 @@ public class ArcaneWorkbenchBlockEntity extends BlockEntity implements Container
 
     @Override
     public boolean stillValid(Player player) {
-        return level != null
-                && level.getBlockEntity(worldPosition) == this
-                && player.distanceToSqr(worldPosition.getCenter()) <= 64.0D;
+        return Container.stillValidBlockEntity(this, player);
     }
 
     @Override
@@ -125,16 +119,6 @@ public class ArcaneWorkbenchBlockEntity extends BlockEntity implements Container
         if (level != null && !level.isClientSide) {
             level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
         }
-    }
-
-    @Override
-    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
-        return saveWithoutMetadata(registries);
-    }
-
-    @Override
-    public Packet<ClientGamePacketListener> getUpdatePacket() {
-        return ClientboundBlockEntityDataPacket.create(this);
     }
 
     public static void drop(Level level, BlockPos pos, ArcaneWorkbenchBlockEntity bench) {

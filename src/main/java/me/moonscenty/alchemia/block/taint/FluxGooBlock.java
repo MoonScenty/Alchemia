@@ -1,23 +1,16 @@
 package me.moonscenty.alchemia.block.taint;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import me.moonscenty.alchemia.aura.AuraHandler;
 import me.moonscenty.alchemia.registry.ModAspects;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -34,15 +27,13 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * Now and then a deep enough puddle congeals into an alchemic slime instead, and an alchemic slime that wades through
  * goo deeper than it is big may soak some of it up and grow.
  */
-public class FluxGooBlock extends Block {
+public class FluxGooBlock extends SettlingLayerBlock {
     /** How deep the puddle is: nothing but a film, up to a full block. */
     public static final IntegerProperty LEVEL = IntegerProperty.create("level", 0, 7);
     public static final int FULL = 7;
 
     /** How often it thinks about running somewhere, in ticks. */
     private static final int FLOW_EVERY = 5;
-    /** A drop of one depth is not worth running for; the puddle only evens out where it is two or more down. */
-    private static final int STEP = 2;
     /** How often, on a random tick, it dries a little instead of lying there. */
     private static final int DRY_CHANCE = 4;
 
@@ -55,96 +46,21 @@ public class FluxGooBlock extends Block {
     }
 
     public FluxGooBlock(Properties properties) {
-        super(properties);
-        registerDefaultState(stateDefinition.any().setValue(LEVEL, FULL));
+        super(properties, FLOW_EVERY);
+    }
+
+    @Override
+    protected IntegerProperty depthProperty() {
+        return LEVEL;
+    }
+
+    @Override
+    protected int full() {
+        return FULL;
     }
 
     public static BlockState of(Block goo, int level) {
         return goo.defaultBlockState().setValue(LEVEL, Math.clamp(level, 0, FULL));
-    }
-
-    // --- running downhill ----------------------------------------------------
-
-    @Override
-    protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston) {
-        level.scheduleTick(pos, this, FLOW_EVERY);
-    }
-
-    @Override
-    protected BlockState updateShape(BlockState state, Direction direction, BlockState neighborState,
-            LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
-        level.scheduleTick(pos, this, FLOW_EVERY);
-        return state;
-    }
-
-    @Override
-    protected void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-        int depth = state.getValue(LEVEL);
-
-        // straight down first: a puddle over nothing falls as one
-        BlockPos below = pos.below();
-        if (roomAt(level, below)) {
-            level.removeBlock(pos, false);
-            level.setBlock(below, state, Block.UPDATE_ALL);
-            return;
-        }
-        if (level.getBlockState(below).is(this)) {
-            int theirs = level.getBlockState(below).getValue(LEVEL);
-            int give = Math.min(depth + 1, FULL - theirs);
-            if (give > 0) {
-                level.setBlock(below, of(this, theirs + give), Block.UPDATE_ALL);
-                shrink(level, pos, state, give);
-                return;
-            }
-        }
-
-        // otherwise it evens out sideways, a depth at a time, to wherever is lowest
-        if (depth == 0) {
-            return;
-        }
-        List<BlockPos> lower = new ArrayList<>();
-        int lowest = depth - STEP;
-        for (Direction side : Direction.Plane.HORIZONTAL) {
-            BlockPos next = pos.relative(side);
-            int theirs = depthAt(level, next);
-            if (theirs != Integer.MAX_VALUE && theirs <= lowest) {
-                if (theirs < lowest) {
-                    lower.clear();
-                    lowest = theirs;
-                }
-                lower.add(next);
-            }
-        }
-        if (lower.isEmpty()) {
-            return;
-        }
-        BlockPos into = lower.get(random.nextInt(lower.size()));
-        level.setBlock(into, of(this, lowest + 1), Block.UPDATE_ALL);
-        shrink(level, pos, state, 1);
-    }
-
-    /** A depth counted so that open ground reads as one lower than the thinnest film. */
-    private int depthAt(LevelReader level, BlockPos pos) {
-        BlockState there = level.getBlockState(pos);
-        if (there.is(this)) {
-            return there.getValue(LEVEL);
-        }
-        return roomAt(level, pos) ? -1 : Integer.MAX_VALUE;
-    }
-
-    private static boolean roomAt(LevelReader level, BlockPos pos) {
-        BlockState there = level.getBlockState(pos);
-        return (there.isAir() || there.canBeReplaced()) && there.getFluidState().isEmpty();
-    }
-
-    /** Takes some depth off a puddle, and takes the puddle away when there is none left to take. */
-    private void shrink(ServerLevel level, BlockPos pos, BlockState state, int by) {
-        int left = state.getValue(LEVEL) - by;
-        if (left < 0) {
-            level.removeBlock(pos, false);
-        } else {
-            level.setBlock(pos, of(this, left), Block.UPDATE_ALL);
-        }
     }
 
     // --- drying up -----------------------------------------------------------
@@ -227,10 +143,5 @@ public class FluxGooBlock extends Block {
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         return defaultBlockState();
-    }
-
-    @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(LEVEL);
     }
 }

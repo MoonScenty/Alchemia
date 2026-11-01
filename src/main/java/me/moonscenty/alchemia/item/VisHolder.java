@@ -54,4 +54,19 @@ public interface VisHolder {
         VisHolder holder = of(stack);
         return holder != null && holder.holds(stack, cost, player, why);
     }
+
+    /**
+     * Pays a price out of a stack if the whole of it can be paid. Only the server takes the vis; the client just
+     * learns whether it would go through.
+     */
+    static boolean pay(ItemStack stack, AspectList cost, Player player, Spending why) {
+        VisHolder holder = of(stack);
+        if (holder == null || !holder.holds(stack, cost, player, why)) {
+            return false;
+        }
+        if (!player.level().isClientSide) {
+            holder.take(stack, cost, player, why);
+        }
+        return true;
+    }
 }

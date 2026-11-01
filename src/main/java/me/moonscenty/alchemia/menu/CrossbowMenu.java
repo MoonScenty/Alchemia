@@ -7,7 +7,6 @@ import me.moonscenty.alchemia.registry.ModMenus;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 
@@ -15,14 +14,12 @@ import net.minecraft.world.item.ItemStack;
  * The inside of an automated crossbow: one square for its arrows, and on the advanced one the four things it may be
  * told to mind, as the menu's own buttons. Laid out as the original's two containers were.
  */
-public class CrossbowMenu extends AbstractContainerMenu {
+public class CrossbowMenu extends AlchemiaMenu {
     private static final int AMMO_X = 80;
     private static final int AMMO_X_ADVANCED = 42;
     private static final int AMMO_Y = 29;
     private static final int PACK_X = 8;
     private static final int PACK_Y = 84;
-    private static final int BELT_Y = 142;
-    private static final int PITCH = 18;
 
     private final AutomatedCrossbow turret;
 
@@ -44,14 +41,7 @@ public class CrossbowMenu extends AbstractContainerMenu {
                 }
             });
         }
-        for (int row = 0; row < 3; row++) {
-            for (int column = 0; column < 9; column++) {
-                addSlot(new Slot(inventory, column + row * 9 + 9, PACK_X + column * PITCH, PACK_Y + row * PITCH));
-            }
-        }
-        for (int column = 0; column < 9; column++) {
-            addSlot(new Slot(inventory, column, PACK_X + column * PITCH, BELT_Y));
-        }
+        addPlayerInventory(inventory, PACK_X, PACK_Y);
     }
 
     public AutomatedCrossbow turret() {
@@ -76,24 +66,6 @@ public class CrossbowMenu extends AbstractContainerMenu {
 
     @Override
     public ItemStack quickMoveStack(Player player, int index) {
-        Slot slot = slots.get(index);
-        if (turret == null || !slot.hasItem()) {
-            return ItemStack.EMPTY;
-        }
-        ItemStack held = slot.getItem();
-        ItemStack copy = held.copy();
-        if (index == 0) {
-            if (!moveItemStackTo(held, 1, slots.size(), true)) {
-                return ItemStack.EMPTY;
-            }
-        } else if (!moveItemStackTo(held, 0, 1, false)) {
-            return ItemStack.EMPTY;
-        }
-        if (held.isEmpty()) {
-            slot.set(ItemStack.EMPTY);
-        } else {
-            slot.setChanged();
-        }
-        return copy;
+        return turret == null ? ItemStack.EMPTY : quickMoveBetween(index, 1);
     }
 }

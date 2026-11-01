@@ -174,13 +174,10 @@ public class GolemPressBlock extends BaseEntityBlock {
             if (facing == null) {
                 continue;
             }
-            VisHolder holder = VisHolder.of(wand);
-            AspectList cost = COSTS.get();
-            if (holder == null || !holder.holds(wand, cost, player, VisHolder.Spending.CRAFTING)) {
+            if (!VisHolder.pay(wand, COSTS.get(), player, VisHolder.Spending.CRAFTING)) {
                 return false;
             }
             if (!level.isClientSide) {
-                holder.take(wand, cost, player, VisHolder.Spending.CRAFTING);
                 build(level, at.immutable(), facing);
                 level.playSound(null, clicked, ModSounds.WAND.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
             }

@@ -88,10 +88,7 @@ public class RechargePedestalBlock extends BaseEntityBlock {
 
     @Override
     protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState replacement, boolean moving) {
-        if (!state.is(replacement.getBlock())
-                && level.getBlockEntity(pos) instanceof RechargePedestalBlockEntity pedestal) {
-            net.minecraft.world.Containers.dropContents(level, pos, pedestal);
-        }
+        net.minecraft.world.Containers.dropContentsOnDestroy(state, replacement, level, pos);
         super.onRemove(state, level, pos, replacement, moving);
     }
 

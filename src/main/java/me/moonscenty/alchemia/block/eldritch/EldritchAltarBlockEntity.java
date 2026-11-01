@@ -1,5 +1,6 @@
 package me.moonscenty.alchemia.block.eldritch;
 
+import me.moonscenty.alchemia.block.entity.SyncedBlockEntity;
 import me.moonscenty.alchemia.entity.EldritchGuardian;
 import me.moonscenty.alchemia.entity.cult.Cultist;
 import me.moonscenty.alchemia.entity.cult.CultistCleric;
@@ -9,16 +10,11 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 
@@ -35,7 +31,7 @@ import net.minecraft.world.phys.AABB;
  * It takes up to four eldritch eyes. The third makes it a guardian altar whatever it was. With four, and the rite
  * known, a wand opens the way above it.
  */
-public class EldritchAltarBlockEntity extends BlockEntity {
+public class EldritchAltarBlockEntity extends SyncedBlockEntity {
     public static final int MOST_EYES = 4;
     private static final int[][] CLERICS = {{-2, -2}, {-2, 2}, {2, -2}, {2, 2}};
 
@@ -76,12 +72,12 @@ public class EldritchAltarBlockEntity extends BlockEntity {
             setSpawner(true, 1);
         }
         eyes++;
-        sync();
+        changed();
     }
 
     public void setOpen(boolean open) {
         this.open = open;
-        sync();
+        changed();
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state, EldritchAltarBlockEntity altar) {
@@ -176,13 +172,6 @@ public class EldritchAltarBlockEntity extends BlockEntity {
 
     // --- saving and telling -------------------------------------------------
 
-    private void sync() {
-        setChanged();
-        if (level != null) {
-            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
-        }
-    }
-
     @Override
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.saveAdditional(tag, registries);
@@ -205,14 +194,9 @@ public class EldritchAltarBlockEntity extends BlockEntity {
 
     @Override
     public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
-        CompoundTag tag = super.getUpdateTag(registries);
+        CompoundTag tag = new CompoundTag();
         tag.putByte("eyes", eyes);
         tag.putBoolean("open", open);
         return tag;
-    }
-
-    @Override
-    public Packet<ClientGamePacketListener> getUpdatePacket() {
-        return ClientboundBlockEntityDataPacket.create(this);
     }
 }

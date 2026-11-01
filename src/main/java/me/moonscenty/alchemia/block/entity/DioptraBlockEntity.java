@@ -18,14 +18,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 
@@ -36,7 +31,7 @@ import net.minecraft.world.phys.AABB;
  * <p>Each chunk is written down as how much there is, against half again the usual aura and never past a hundred and
  * ten in a hundred, and which aspect it was. A chunk with a node in it is marked as well, and sparkles on the map.
  */
-public class DioptraBlockEntity extends BlockEntity {
+public class DioptraBlockEntity extends SyncedBlockEntity {
     /** How many chunks across the map is, and how often it is read. The original's. */
     public static final int ACROSS = 13;
     public static final int MIDDLE = ACROSS / 2;
@@ -102,8 +97,7 @@ public class DioptraBlockEntity extends BlockEntity {
                 amounts[cell] = (byte) Math.min(TALLEST, aura.get(shown) / FULL * 100.0F);
             }
         }
-        setChanged();
-        level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
+        changed();
         level.updateNeighbourForOutputSignal(worldPosition, getBlockState().getBlock());
     }
 
@@ -159,10 +153,7 @@ public class DioptraBlockEntity extends BlockEntity {
         this.tuning = tuning;
         amounts = new byte[ACROSS * ACROSS];
         kinds = blank();
-        setChanged();
-        if (level != null && !level.isClientSide) {
-            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
-        }
+        changed();
     }
 
     public int tuning() {
@@ -208,15 +199,5 @@ public class DioptraBlockEntity extends BlockEntity {
         tag.putByte("tuning", (byte) tuning);
         tag.putByteArray("amounts", amounts);
         tag.putByteArray("kinds", kinds);
-    }
-
-    @Override
-    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
-        return saveWithoutMetadata(registries);
-    }
-
-    @Override
-    public Packet<ClientGamePacketListener> getUpdatePacket() {
-        return ClientboundBlockEntityDataPacket.create(this);
     }
 }

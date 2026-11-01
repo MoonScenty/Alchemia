@@ -36,7 +36,7 @@ import net.neoforged.neoforge.event.tick.ServerTickEvent;
  * thrown away at the end of the tick.
  */
 @EventBusSubscriber(modid = Alchemia.MODID)
-public class ArcaneEarBlockEntity extends BlockEntity {
+public class ArcaneEarBlockEntity extends SyncedBlockEntity {
     /** How far an ear hears, squared, and how long it signals for a note. The original's. */
     private static final double HEARS_SQUARED = 64 * 64;
     private static final int SIGNALS_FOR = 10;
@@ -108,11 +108,8 @@ public class ArcaneEarBlockEntity extends BlockEntity {
     /** A semitone up, round again to the lowest after the highest. */
     public void raisePitch() {
         note = (note + 1) % NOTES;
-        setChanged();
         // goggles show the note it is tuned to, so whoever is watching has to know
-        if (level != null) {
-            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
-        }
+        changed();
     }
 
     /** Its note shown over it, and sounded, in its voice, if it is being tuned rather than answering. */
@@ -151,15 +148,5 @@ public class ArcaneEarBlockEntity extends BlockEntity {
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.saveAdditional(tag, registries);
         tag.putByte("note", (byte) note);
-    }
-
-    @Override
-    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
-        return saveWithoutMetadata(registries);
-    }
-
-    @Override
-    public net.minecraft.network.protocol.Packet<net.minecraft.network.protocol.game.ClientGamePacketListener> getUpdatePacket() {
-        return net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket.create(this);
     }
 }

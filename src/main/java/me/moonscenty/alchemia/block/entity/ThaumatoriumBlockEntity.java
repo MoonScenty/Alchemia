@@ -10,13 +10,11 @@ import me.moonscenty.alchemia.aspect.Aspect;
 import me.moonscenty.alchemia.aspect.AspectList;
 import me.moonscenty.alchemia.block.MnemonicMatrixBlock;
 import me.moonscenty.alchemia.block.ThaumatoriumBlock;
-import me.moonscenty.alchemia.block.TubeBlock;
 import me.moonscenty.alchemia.crafting.CrucibleRecipe;
 import me.moonscenty.alchemia.crafting.ModRecipes;
 import me.moonscenty.alchemia.essentia.EssentiaHolder;
 import me.moonscenty.alchemia.menu.ThaumatoriumMenu;
 import me.moonscenty.alchemia.registry.ModBlockEntities;
-import me.moonscenty.alchemia.registry.ModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
@@ -24,17 +22,14 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.WorldlyContainer;
@@ -46,8 +41,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseFireBlock;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.items.IItemHandler;
@@ -67,7 +60,7 @@ import net.neoforged.neoforge.items.ItemHandlerHelper;
  * <p>
  * Both halves have one of these, and the upper one hands everything to the lower, which is the one that works.
  */
-public class ThaumatoriumBlockEntity extends BlockEntity implements EssentiaHolder, WorldlyContainer, MenuProvider {
+public class ThaumatoriumBlockEntity extends SyncedBlockEntity implements EssentiaHolder, WorldlyContainer, MenuProvider {
     private static final int LOOKS_ROUND_EVERY = 40;
     private static final int WORKS_EVERY = 5;
     /** The block event that sets the client's steam going, and for how long. */
@@ -239,14 +232,7 @@ public class ThaumatoriumBlockEntity extends BlockEntity implements EssentiaHold
                 if (side == front() || side == Direction.DOWN || (layer == 0 && side == Direction.UP)) {
                     continue;
                 }
-                BlockPos beside = pos.above(layer).relative(side);
-                if (level.getBlockState(beside).getBlock() instanceof TubeBlock
-                        || !(level.getBlockEntity(beside) instanceof EssentiaHolder source)
-                        || source instanceof ThaumatoriumBlockEntity
-                        || !source.reachableFrom(side.getOpposite()) || !source.givesTo(side.getOpposite())) {
-                    continue;
-                }
-                if (source.held().get(drawing) > 0 && source.release(drawing)) {
+                if (EssentiaHolder.drawFrom(level, pos.above(layer), side, drawing)) {
                     accept(drawing);
                     return;
                 }
@@ -352,13 +338,6 @@ public class ThaumatoriumBlockEntity extends BlockEntity implements EssentiaHold
         return false;
     }
 
-    private void changed() {
-        setChanged();
-        if (level != null) {
-            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
-        }
-    }
-
     // --- the catalyst slot -------------------------------------------------
 
     public NonNullList<ItemStack> contents() {
@@ -408,8 +387,7 @@ public class ThaumatoriumBlockEntity extends BlockEntity implements EssentiaHold
 
     @Override
     public boolean stillValid(Player player) {
-        return level != null && level.getBlockEntity(worldPosition) == this
-                && player.distanceToSqr(worldPosition.getCenter()) <= 64.0;
+        return Container.stillValidBlockEntity(this, player);
     }
 
     @Override
@@ -451,8 +429,7 @@ public class ThaumatoriumBlockEntity extends BlockEntity implements EssentiaHold
         catalyst.clear();
         ContainerHelper.loadAllItems(tag, catalyst, registries);
         remembers = Math.max(REMEMBERS, tag.getInt("maxrec"));
-        essentia = AspectList.CODEC.parse(registries.createSerializationContext(NbtOps.INSTANCE), tag.get("Aspects"))
-                .result().orElse(AspectList.EMPTY);
+        essentia = AspectList.read(tag, "Aspects", registries);
         recipes.clear();
         for (Tag entry : tag.getList("recipes", Tag.TAG_STRING)) {
             recipes.add(ResourceLocation.parse(entry.getAsString()));
@@ -464,30 +441,9 @@ public class ThaumatoriumBlockEntity extends BlockEntity implements EssentiaHold
         super.saveAdditional(tag, registries);
         ContainerHelper.saveAllItems(tag, catalyst, registries);
         tag.putInt("maxrec", remembers);
-        AspectList.CODEC.encodeStart(registries.createSerializationContext(NbtOps.INSTANCE), essentia).result()
-                .ifPresent(written -> tag.put("Aspects", written));
+        AspectList.write(tag, "Aspects", essentia, registries);
         ListTag listed = new ListTag();
         recipes.forEach(id -> listed.add(StringTag.valueOf(id.toString())));
         tag.put("recipes", listed);
-    }
-
-    @Override
-    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
-        return saveWithoutMetadata(registries);
-    }
-
-    @Override
-    public Packet<ClientGamePacketListener> getUpdatePacket() {
-        return ClientboundBlockEntityDataPacket.create(this);
-    }
-
-    /** For the blocks around it: is this the half that holds the catalyst. */
-    public boolean holdsCatalyst() {
-        return !isTop();
-    }
-
-    /** Whether this is a working thaumatorium's lower half, for the blocks that check on it. */
-    public static boolean isThaumatorium(BlockState state) {
-        return state.is(ModBlocks.THAUMATORIUM.get());
     }
 }

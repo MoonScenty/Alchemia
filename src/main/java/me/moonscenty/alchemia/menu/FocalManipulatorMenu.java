@@ -7,7 +7,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -20,14 +19,12 @@ import net.minecraft.world.level.block.entity.BlockEntity;
  * worked on. The buttons are the menu's own: which upgrade was picked is the button's number, and the bench
  * answers for whether it will take it.
  */
-public class FocalManipulatorMenu extends AbstractContainerMenu {
+public class FocalManipulatorMenu extends AlchemiaMenu {
     /** Where the original's container put the focus and the player's own bag. */
     private static final int FOCUS_X = 88;
     private static final int FOCUS_Y = 60;
     private static final int PACK_X = 16;
     private static final int PACK_Y = 151;
-    private static final int BELT_Y = 209;
-    private static final int PITCH = 18;
 
     private final FocalManipulatorBlockEntity bench;
 
@@ -50,14 +47,7 @@ public class FocalManipulatorMenu extends AbstractContainerMenu {
                 return 1;
             }
         });
-        for (int row = 0; row < 3; row++) {
-            for (int column = 0; column < 9; column++) {
-                addSlot(new Slot(inventory, column + row * 9 + 9, PACK_X + column * PITCH, PACK_Y + row * PITCH));
-            }
-        }
-        for (int column = 0; column < 9; column++) {
-            addSlot(new Slot(inventory, column, PACK_X + column * PITCH, BELT_Y));
-        }
+        addPlayerInventory(inventory, PACK_X, PACK_Y);
     }
 
     public FocalManipulatorBlockEntity bench() {
@@ -95,26 +85,6 @@ public class FocalManipulatorMenu extends AbstractContainerMenu {
 
     @Override
     public ItemStack quickMoveStack(Player player, int index) {
-        Slot slot = slots.get(index);
-        if (!slot.hasItem()) {
-            return ItemStack.EMPTY;
-        }
-        ItemStack held = slot.getItem();
-        ItemStack copy = held.copy();
-
-        if (index == 0) {
-            if (!moveItemStackTo(held, 1, slots.size(), true)) {
-                return ItemStack.EMPTY;
-            }
-        } else if (!moveItemStackTo(held, 0, 1, false)) {
-            return ItemStack.EMPTY;
-        }
-
-        if (held.isEmpty()) {
-            slot.set(ItemStack.EMPTY);
-        } else {
-            slot.setChanged();
-        }
-        return copy;
+        return quickMoveBetween(index, 1);
     }
 }

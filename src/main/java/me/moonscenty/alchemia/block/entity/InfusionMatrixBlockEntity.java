@@ -2,7 +2,6 @@ package me.moonscenty.alchemia.block.entity;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import me.moonscenty.alchemia.aspect.Aspect;
@@ -17,15 +16,11 @@ import me.moonscenty.alchemia.registry.ModBlocks;
 import me.moonscenty.alchemia.registry.ModSounds;
 import me.moonscenty.alchemia.registry.ModTags;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -36,7 +31,6 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
 /**
@@ -51,7 +45,7 @@ import net.minecraft.world.level.block.state.BlockState;
  * It is slow on purpose. An infusion is meant to be something you stand and watch, partly because watching is the
  * only warning you get that it is about to go wrong.
  */
-public class InfusionMatrixBlockEntity extends BlockEntity {
+public class InfusionMatrixBlockEntity extends SyncedBlockEntity {
     /** How long a turn of the work takes when nothing has been built to change it. */
     public static final int CYCLE = 20;
     /** What a working costs when nothing has been built to change it, in hundredths. */
@@ -782,13 +776,6 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
         return found;
     }
 
-    private void changed() {
-        setChanged();
-        if (level != null && !level.isClientSide) {
-            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
-        }
-    }
-
     // --- writing it down ---------------------------------------------------
 
     @Override
@@ -796,9 +783,7 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
         super.loadAdditional(tag, registries);
         awake = tag.getBoolean("awake");
         working = tag.contains("working") ? ResourceLocation.parse(tag.getString("working")) : null;
-        owed = AspectList.CODEC
-                .parse(registries.createSerializationContext(NbtOps.INSTANCE), tag.get("owed"))
-                .result().orElse(AspectList.EMPTY);
+        owed = AspectList.read(tag, "owed", registries);
         instability = tag.getInt("instability");
         recipeShake = tag.getInt("recipe_shake");
         eating = tag.getInt("eating");
@@ -833,9 +818,7 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
         if (working != null) {
             tag.putString("working", working.toString());
         }
-        AspectList.CODEC
-                .encodeStart(registries.createSerializationContext(NbtOps.INSTANCE), owed)
-                .result().ifPresent(written -> tag.put("owed", written));
+        AspectList.write(tag, "owed", owed, registries);
         tag.putInt("instability", instability);
         tag.putInt("recipe_shake", recipeShake);
         tag.putInt("eating", eating);
@@ -854,15 +837,5 @@ public class InfusionMatrixBlockEntity extends BlockEntity {
         tag.putInt("cost", cost);
         tag.putLong("woken", woken);
         tag.putLongArray("ring", ring.stream().mapToLong(BlockPos::asLong).toArray());
-    }
-
-    @Override
-    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
-        return saveWithoutMetadata(registries);
-    }
-
-    @Override
-    public Packet<ClientGamePacketListener> getUpdatePacket() {
-        return ClientboundBlockEntityDataPacket.create(this);
     }
 }

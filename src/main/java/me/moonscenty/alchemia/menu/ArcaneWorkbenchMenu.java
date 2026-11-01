@@ -18,7 +18,6 @@ import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.ResultContainer;
 import net.minecraft.world.inventory.Slot;
@@ -34,7 +33,7 @@ import net.minecraft.world.level.Level;
  * is in the slots, the recipes, and what the player has researched — is already on the client, so the screen can
  * show the price without a packet of its own.
  */
-public class ArcaneWorkbenchMenu extends AbstractContainerMenu {
+public class ArcaneWorkbenchMenu extends AlchemiaMenu {
     public static final int SLOT_RESULT = 0;
     public static final int FIRST_GRID = 1;
     public static final int SLOT_WAND = FIRST_GRID + ArcaneWorkbenchBlockEntity.GRID;
@@ -51,8 +50,6 @@ public class ArcaneWorkbenchMenu extends AbstractContainerMenu {
     public static final int RESULT_Y = 64;
     private static final int PACK_X = 16;
     private static final int PACK_Y = 151;
-    private static final int BELT_Y = 209;
-    private static final int PITCH = 18;
 
     private final Container bench;
     private final ResultContainer result = new ResultContainer();
@@ -90,14 +87,7 @@ public class ArcaneWorkbenchMenu extends AbstractContainerMenu {
             }
         });
 
-        for (int row = 0; row < 3; row++) {
-            for (int column = 0; column < 9; column++) {
-                addSlot(new Slot(inventory, column + row * 9 + 9, PACK_X + column * PITCH, PACK_Y + row * PITCH));
-            }
-        }
-        for (int column = 0; column < 9; column++) {
-            addSlot(new Slot(inventory, column, PACK_X + column * PITCH, BELT_Y));
-        }
+        addPlayerInventory(inventory, PACK_X, PACK_Y);
         lookUp();
     }
 

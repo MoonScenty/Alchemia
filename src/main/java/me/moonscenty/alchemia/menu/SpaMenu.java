@@ -9,7 +9,6 @@ import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.SimpleContainerData;
@@ -20,7 +19,7 @@ import net.minecraft.world.level.material.Fluid;
 /**
  * Standing at a spa: the pocket for bath salts, the tank, and the switch between mixing and pouring as it is.
  */
-public class SpaMenu extends AbstractContainerMenu {
+public class SpaMenu extends AlchemiaMenu {
     /** The one button on the panel: mix, or pour what is in the tank as it is. */
     public static final int TOGGLE_MIXING = 0;
 
@@ -29,8 +28,6 @@ public class SpaMenu extends AbstractContainerMenu {
     private static final int SALTS_Y = 31;
     private static final int PACK_X = 8;
     private static final int PACK_Y = 84;
-    private static final int BELT_Y = 142;
-    private static final int PITCH = 18;
 
     private final Container spa;
     private final ContainerData readings;
@@ -64,14 +61,7 @@ public class SpaMenu extends AbstractContainerMenu {
                 return stack.is(ModItems.BATH_SALTS.get());
             }
         });
-        for (int row = 0; row < 3; row++) {
-            for (int column = 0; column < 9; column++) {
-                addSlot(new Slot(inventory, column + row * 9 + 9, PACK_X + column * PITCH, PACK_Y + row * PITCH));
-            }
-        }
-        for (int column = 0; column < 9; column++) {
-            addSlot(new Slot(inventory, column, PACK_X + column * PITCH, BELT_Y));
-        }
+        addPlayerInventory(inventory, PACK_X, PACK_Y);
     }
 
     @Override
@@ -97,25 +87,7 @@ public class SpaMenu extends AbstractContainerMenu {
 
     @Override
     public ItemStack quickMoveStack(Player player, int index) {
-        Slot slot = slots.get(index);
-        if (!slot.hasItem()) {
-            return ItemStack.EMPTY;
-        }
-        ItemStack held = slot.getItem();
-        ItemStack copy = held.copy();
-        if (index == 0) {
-            if (!moveItemStackTo(held, 1, slots.size(), true)) {
-                return ItemStack.EMPTY;
-            }
-        } else if (!held.is(ModItems.BATH_SALTS.get()) || !moveItemStackTo(held, 0, 1, false)) {
-            return ItemStack.EMPTY;
-        }
-        if (held.isEmpty()) {
-            slot.set(ItemStack.EMPTY);
-        } else {
-            slot.setChanged();
-        }
-        return copy;
+        return quickMoveBetween(index, 1);
     }
 
     @Override

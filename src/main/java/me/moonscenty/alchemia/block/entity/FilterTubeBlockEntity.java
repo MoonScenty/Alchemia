@@ -9,11 +9,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
 /**
@@ -35,19 +30,13 @@ public class FilterTubeBlockEntity extends TubeBlockEntity {
 
     public void only(Holder<Aspect> aspect) {
         only = aspect;
-        setChanged();
-        if (level != null && !level.isClientSide) {
-            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
-        }
+        changed();
     }
 
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
-        only = tag.contains("only")
-                ? ModAspects.REGISTRY.getHolder(ResourceLocation.parse(tag.getString("only")))
-                        .map(found -> (Holder<Aspect>) found).orElse(null)
-                : null;
+        only = tag.contains("only") ? ModAspects.byId(tag.getString("only")) : null;
     }
 
     @Override
@@ -56,15 +45,5 @@ public class FilterTubeBlockEntity extends TubeBlockEntity {
         if (only != null) {
             tag.putString("only", only.value().id().toString());
         }
-    }
-
-    @Override
-    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
-        return saveWithoutMetadata(registries);
-    }
-
-    @Override
-    public Packet<ClientGamePacketListener> getUpdatePacket() {
-        return ClientboundBlockEntityDataPacket.create(this);
     }
 }

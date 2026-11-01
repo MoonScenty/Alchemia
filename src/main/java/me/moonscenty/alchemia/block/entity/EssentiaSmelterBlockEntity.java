@@ -18,11 +18,8 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.network.chat.Component;
-import net.minecraft.nbt.NbtOps;
+import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.WorldlyContainer;
@@ -35,7 +32,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
 /**
@@ -45,7 +41,7 @@ import net.minecraft.world.level.block.state.BlockState;
  * difference is where the work goes — nothing comes out of the front, and a smelter with nothing over it simply
  * fills up and stops.
  */
-public class EssentiaSmelterBlockEntity extends BlockEntity implements WorldlyContainer, MenuProvider, EssentiaHolder {
+public class EssentiaSmelterBlockEntity extends SyncedBlockEntity implements WorldlyContainer, MenuProvider, EssentiaHolder {
     public static final int SLOT_INPUT = 0;
     public static final int SLOT_FUEL = 1;
 
@@ -136,10 +132,7 @@ public class EssentiaSmelterBlockEntity extends BlockEntity implements WorldlyCo
             return false;
         }
         held = held.reduce(aspect, 1);
-        if (level != null) {
-            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
-        }
-        setChanged();
+        changed();
         return true;
     }
 
@@ -383,8 +376,7 @@ public class EssentiaSmelterBlockEntity extends BlockEntity implements WorldlyCo
 
     @Override
     public boolean stillValid(Player player) {
-        return level != null && level.getBlockEntity(worldPosition) == this
-                && player.distanceToSqr(worldPosition.getCenter()) <= 64.0D;
+        return Container.stillValidBlockEntity(this, player);
     }
 
     @Override
@@ -414,17 +406,6 @@ public class EssentiaSmelterBlockEntity extends BlockEntity implements WorldlyCo
 
     // --- saving ------------------------------------------------------------
 
-    /** The gauges and the tooltip are drawn from this, so it has to reach the client without anyone asking. */
-    @Override
-    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
-        return saveWithoutMetadata(registries);
-    }
-
-    @Override
-    public Packet<ClientGamePacketListener> getUpdatePacket() {
-        return ClientboundBlockEntityDataPacket.create(this);
-    }
-
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
@@ -434,9 +415,7 @@ public class EssentiaSmelterBlockEntity extends BlockEntity implements WorldlyCo
         burnsFor = tag.getInt("burnsFor");
         cooked = tag.getInt("cooked");
         hurried = tag.getBoolean("hurried");
-        held = AspectList.CODEC
-                .parse(registries.createSerializationContext(NbtOps.INSTANCE), tag.get("held"))
-                .result().orElse(AspectList.EMPTY);
+        held = AspectList.read(tag, "held", registries);
     }
 
     @Override
@@ -447,8 +426,6 @@ public class EssentiaSmelterBlockEntity extends BlockEntity implements WorldlyCo
         tag.putInt("burnsFor", burnsFor);
         tag.putInt("cooked", cooked);
         tag.putBoolean("hurried", hurried);
-        AspectList.CODEC
-                .encodeStart(registries.createSerializationContext(NbtOps.INSTANCE), held)
-                .result().ifPresent(written -> tag.put("held", written));
+        AspectList.write(tag, "held", held, registries);
     }
 }

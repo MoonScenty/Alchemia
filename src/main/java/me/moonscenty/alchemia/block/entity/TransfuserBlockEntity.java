@@ -1,7 +1,6 @@
 package me.moonscenty.alchemia.block.entity;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 import me.moonscenty.alchemia.aspect.Aspect;
@@ -124,17 +123,21 @@ public class TransfuserBlockEntity extends BlockEntity implements EssentiaHolder
         Direction facing = facing();
         for (BlockEntity near : EssentiaReach.holders(level, worldPosition, REACH * 2)) {
             if (near == this || near instanceof TubeBlockEntity || near instanceof TransfuserBlockEntity
-                    || !inFront(worldPosition, facing, near.getBlockPos())) {
+                    || !inFront(worldPosition, facing, near.getBlockPos(), REACH)) {
                 continue;
             }
             found.add((EssentiaHolder) near);
         }
-        found.sort(Comparator.comparingDouble(jar -> ((BlockEntity) jar).getBlockPos().distSqr(worldPosition)));
         return found;
     }
 
     /** Within sixteen across and sixteen out from the face, as the original searched. */
     public static boolean inFront(BlockPos from, Direction facing, BlockPos at) {
+        return inFront(from, facing, at, REACH);
+    }
+
+    /** Within so far across and so far out from the face, the block itself left out. */
+    public static boolean inFront(BlockPos from, Direction facing, BlockPos at, int reach) {
         int dx = at.getX() - from.getX();
         int dy = at.getY() - from.getY();
         int dz = at.getZ() - from.getZ();
@@ -155,6 +158,6 @@ public class TransfuserBlockEntity extends BlockEntity implements EssentiaHolder
                 b = dz;
             }
         }
-        return out >= 0 && out < REACH && Math.abs(a) <= REACH && Math.abs(b) <= REACH && (out | a | b) != 0;
+        return out >= 0 && out < reach && Math.abs(a) <= reach && Math.abs(b) <= reach && (out | a | b) != 0;
     }
 }

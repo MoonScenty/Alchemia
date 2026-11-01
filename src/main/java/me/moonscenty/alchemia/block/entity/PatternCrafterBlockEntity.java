@@ -12,9 +12,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
@@ -25,8 +22,6 @@ import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.items.IItemHandler;
@@ -40,7 +35,7 @@ import net.neoforged.neoforge.items.ItemHandlerHelper;
  * Two things count as the same for gathering enough if they are the same item, or if they share a named common tag
  * such as {@code c:ingots/iron}, as the original let anything share an ore dictionary name.
  */
-public class PatternCrafterBlockEntity extends BlockEntity {
+public class PatternCrafterBlockEntity extends SyncedBlockEntity {
     /** The grid squares each pattern fills, in the order the dial goes round them. */
     public static final int[][] PATTERNS = {
             {0, 1, 2, 3, 4, 5, 6, 7, 8},
@@ -81,10 +76,7 @@ public class PatternCrafterBlockEntity extends BlockEntity {
     /** The dial's next pattern, round to the first after the last. */
     public void cycle() {
         mode = (mode + 1) % PATTERNS.length;
-        setChanged();
-        if (level != null) {
-            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
-        }
+        changed();
     }
 
     /** How far round the gears have turned, between the last tick and this one. */
@@ -232,15 +224,5 @@ public class PatternCrafterBlockEntity extends BlockEntity {
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
         mode = Math.floorMod(tag.getByte("type"), PATTERNS.length);
-    }
-
-    @Override
-    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
-        return saveWithoutMetadata(registries);
-    }
-
-    @Override
-    public Packet<ClientGamePacketListener> getUpdatePacket() {
-        return ClientboundBlockEntityDataPacket.create(this);
     }
 }

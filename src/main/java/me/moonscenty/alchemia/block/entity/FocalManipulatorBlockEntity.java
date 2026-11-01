@@ -16,9 +16,6 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
@@ -29,7 +26,6 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
 /**
@@ -43,7 +39,7 @@ import net.minecraft.world.level.block.state.BlockState;
  * did the same, and it is the only answer that does not leave half an upgrade written on a focus somebody has
  * walked off with.
  */
-public class FocalManipulatorBlockEntity extends BlockEntity implements Container, MenuProvider {
+public class FocalManipulatorBlockEntity extends SyncedBlockEntity implements Container, MenuProvider {
     /** How often it draws, and how much of any one aspect it can pull at a time. */
     private static final int DRAWS_EVERY = 5;
     private static final int DRAWS = 5;
@@ -162,11 +158,9 @@ public class FocalManipulatorBlockEntity extends BlockEntity implements Containe
         return rank;
     }
 
-    private void changed() {
-        setChanged();
-        if (level != null && !level.isClientSide) {
-            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
-        }
+    @Override
+    protected void changed() {
+        changed(Block.UPDATE_ALL);
     }
 
     // --- the one square it has --------------------------------------------------------------------------
@@ -234,8 +228,7 @@ public class FocalManipulatorBlockEntity extends BlockEntity implements Containe
 
     @Override
     public boolean stillValid(Player player) {
-        return level != null && level.getBlockEntity(worldPosition) == this
-                && player.distanceToSqr(worldPosition.getCenter()) < 64.0;
+        return Container.stillValidBlockEntity(this, player);
     }
 
     @Override
@@ -260,9 +253,7 @@ public class FocalManipulatorBlockEntity extends BlockEntity implements Containe
         super.loadAdditional(tag, registries);
         laid.clear();
         ContainerHelper.loadAllItems(tag, laid, registries);
-        owed = AspectList.CODEC
-                .parse(registries.createSerializationContext(NbtOps.INSTANCE), tag.get("owed"))
-                .result().orElse(AspectList.EMPTY);
+        owed = AspectList.read(tag, "owed", registries);
         bill = tag.getInt("bill");
         rank = tag.getInt("rank");
         working = tag.contains("working")
@@ -274,25 +265,12 @@ public class FocalManipulatorBlockEntity extends BlockEntity implements Containe
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.saveAdditional(tag, registries);
         ContainerHelper.saveAllItems(tag, laid, registries);
-        AspectList.CODEC
-                .encodeStart(registries.createSerializationContext(NbtOps.INSTANCE), owed)
-                .result().ifPresent(written -> tag.put("owed", written));
+        AspectList.write(tag, "owed", owed, registries);
         tag.putInt("bill", bill);
         tag.putInt("rank", rank);
         if (working != null) {
             FocusUpgrade.CODEC.encodeStart(NbtOps.INSTANCE, working)
                     .result().ifPresent(written -> tag.put("working", written));
         }
-    }
-
-    /** The screen draws the bill and what is left of it, so all of that has to reach the client on its own. */
-    @Override
-    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
-        return saveWithoutMetadata(registries);
-    }
-
-    @Override
-    public Packet<ClientGamePacketListener> getUpdatePacket() {
-        return ClientboundBlockEntityDataPacket.create(this);
     }
 }

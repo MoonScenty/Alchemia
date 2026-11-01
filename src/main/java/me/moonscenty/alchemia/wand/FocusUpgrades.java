@@ -257,9 +257,7 @@ public final class FocusUpgrades {
             case "excavation" -> excavation(base, focus);
             case "hellbat" -> hellbat(base, focus);
             case "pech" -> has(focus, NIGHTSHADE)
-                    ? base.costing(AspectList.of(ModAspects.AIR, 1).add(ModAspects.FIRE, 1)
-                            .add(ModAspects.EARTH, 1).add(ModAspects.ORDER, 1)
-                            .add(ModAspects.ENTROPY, 1).add(ModAspects.WATER, 1))
+                    ? base.costing(AspectList.eachPrimal(1))
                     : base;
             case "shard" -> has(focus, PERSISTENT)
                     ? base.costing(AspectList.of(ModAspects.FIRE, 1).add(ModAspects.ENTROPY, 1)
@@ -337,8 +335,7 @@ public final class FocusUpgrades {
 
     /** One of each of the other five, which is what the original charged for taking a block up whole. */
     private static AspectList allButEarth() {
-        return AspectList.of(ModAspects.AIR, 1).add(ModAspects.FIRE, 1).add(ModAspects.WATER, 1)
-                .add(ModAspects.ORDER, 1).add(ModAspects.ENTROPY, 1);
+        return AspectList.eachPrimal(1).remove(ModAspects.EARTH);
     }
 
     /** What a focus is called, which is its registry name without the word focus in front of it. */

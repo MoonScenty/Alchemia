@@ -29,9 +29,6 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
@@ -51,7 +48,6 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
@@ -79,7 +75,7 @@ import net.neoforged.neoforge.items.ItemHandlerHelper;
  * fortune make it luckier, either silk touch takes blocks whole, and dowsing or refining turns some ores into
  * clusters. The pickaxe wears a point a block, and the bore stops while it has one left.
  */
-public class ArcaneBoreBlockEntity extends BlockEntity implements Container, MenuProvider {
+public class ArcaneBoreBlockEntity extends SyncedBlockEntity implements Container, MenuProvider {
     public static final int SLOT_FOCUS = 0;
     public static final int SLOT_PICK = 1;
     /** The radius it sweeps with nothing worked into the focus. */
@@ -565,8 +561,7 @@ public class ArcaneBoreBlockEntity extends BlockEntity implements Container, Men
 
     @Override
     public boolean stillValid(Player player) {
-        return level != null && level.getBlockEntity(worldPosition) == this
-                && player.distanceToSqr(worldPosition.getCenter()) <= 64.0;
+        return Container.stillValidBlockEntity(this, player);
     }
 
     @Override
@@ -575,12 +570,10 @@ public class ArcaneBoreBlockEntity extends BlockEntity implements Container, Men
     }
 
     /** What it holds changes what it mines with, and what the client draws; both are told. */
-    private void changed() {
+    @Override
+    protected void changed() {
         reckon();
-        setChanged();
-        if (level != null) {
-            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
-        }
+        super.changed();
     }
 
     @Override
@@ -623,15 +616,5 @@ public class ArcaneBoreBlockEntity extends BlockEntity implements Container, Men
     public void onLoad() {
         super.onLoad();
         reckon();
-    }
-
-    @Override
-    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
-        return saveWithoutMetadata(registries);
-    }
-
-    @Override
-    public Packet<ClientGamePacketListener> getUpdatePacket() {
-        return ClientboundBlockEntityDataPacket.create(this);
     }
 }

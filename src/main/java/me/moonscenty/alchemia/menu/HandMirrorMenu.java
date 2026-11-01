@@ -10,7 +10,6 @@ import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
@@ -19,13 +18,11 @@ import net.minecraft.world.item.ItemStack;
  * Looking into a hand mirror: one square, and whatever is put in it goes straight through to the mirror it is
  * linked to. The hand mirror itself cannot be moved while it is open.
  */
-public class HandMirrorMenu extends AbstractContainerMenu {
+public class HandMirrorMenu extends AlchemiaMenu {
     private static final int SLOT_X = 80;
     private static final int SLOT_Y = 24;
     private static final int PACK_X = 8;
     private static final int PACK_Y = 84;
-    private static final int BELT_Y = 142;
-    private static final int PITCH = 18;
 
     private final Player player;
     private final int heldIn;
@@ -51,19 +48,20 @@ public class HandMirrorMenu extends AbstractContainerMenu {
                 return !(stack.getItem() instanceof HandMirrorItem);
             }
         });
-        for (int row = 0; row < 3; row++) {
-            for (int column = 0; column < 9; column++) {
-                addSlot(new Slot(inventory, column + row * 9 + 9, PACK_X + column * PITCH, PACK_Y + row * PITCH));
+        addPlayerInventory(inventory, PACK_X, PACK_Y, this::pocket);
+    }
+
+    /** The hand mirror's own square of the belt cannot be picked up while it is open. */
+    private Slot pocket(Inventory inventory, int index, int x, int y) {
+        if (index >= Inventory.getSelectionSize()) {
+            return new Slot(inventory, index, x, y);
+        }
+        return new Slot(inventory, index, x, y) {
+            @Override
+            public boolean mayPickup(Player taker) {
+                return getContainerSlot() != heldIn;
             }
-        }
-        for (int column = 0; column < 9; column++) {
-            addSlot(new Slot(inventory, column, PACK_X + column * PITCH, BELT_Y) {
-                @Override
-                public boolean mayPickup(Player taker) {
-                    return getContainerSlot() != heldIn;
-                }
-            });
-        }
+        };
     }
 
     /** Which square of the belt the hand mirror is in, for the panel to mark. */
@@ -99,25 +97,10 @@ public class HandMirrorMenu extends AbstractContainerMenu {
 
     @Override
     public ItemStack quickMoveStack(Player taker, int index) {
-        Slot from = slots.get(index);
-        if (!from.hasItem() || from.getItem().getItem() instanceof HandMirrorItem) {
+        if (slots.get(index).getItem().getItem() instanceof HandMirrorItem) {
             return ItemStack.EMPTY;
         }
-        ItemStack held = from.getItem();
-        ItemStack copy = held.copy();
-        if (index == 0) {
-            if (!moveItemStackTo(held, 1, slots.size(), true)) {
-                return ItemStack.EMPTY;
-            }
-        } else if (!moveItemStackTo(held, 0, 1, false)) {
-            return ItemStack.EMPTY;
-        }
-        if (held.isEmpty()) {
-            from.set(ItemStack.EMPTY);
-        } else {
-            from.setChanged();
-        }
-        return copy;
+        return quickMoveBetween(index, 1);
     }
 
     @Override

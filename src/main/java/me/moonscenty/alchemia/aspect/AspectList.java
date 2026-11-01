@@ -10,6 +10,9 @@ import com.mojang.serialization.Codec;
 
 import me.moonscenty.alchemia.registry.ModAspects;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -44,6 +47,30 @@ public final class AspectList {
 
     public static AspectList of(Holder<Aspect> aspect, int amount) {
         return amount > 0 ? new AspectList(Map.of(aspect, amount)) : EMPTY;
+    }
+
+    /**
+     * So much of each of the six primals. Named one by one rather than read from the registry, so it works while
+     * registries are still being filled.
+     */
+    public static AspectList eachPrimal(int amount) {
+        return of(ModAspects.AIR, amount)
+                .add(ModAspects.EARTH, amount)
+                .add(ModAspects.FIRE, amount)
+                .add(ModAspects.WATER, amount)
+                .add(ModAspects.ORDER, amount)
+                .add(ModAspects.ENTROPY, amount);
+    }
+
+    /** The list saved under this key, or nothing if there is none. */
+    public static AspectList read(CompoundTag tag, String key, HolderLookup.Provider registries) {
+        return CODEC.parse(registries.createSerializationContext(NbtOps.INSTANCE), tag.get(key))
+                .result().orElse(EMPTY);
+    }
+
+    public static void write(CompoundTag tag, String key, AspectList list, HolderLookup.Provider registries) {
+        CODEC.encodeStart(registries.createSerializationContext(NbtOps.INSTANCE), list)
+                .result().ifPresent(written -> tag.put(key, written));
     }
 
     public boolean isEmpty() {

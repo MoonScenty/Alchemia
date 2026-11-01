@@ -20,10 +20,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtOps;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -32,7 +28,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 
@@ -45,7 +40,7 @@ import net.minecraft.world.phys.AABB;
  * The pot holds only so much. Past that it spills, and what spills does not simply vanish: it goes into the air as
  * flux, which is the price of working carelessly and the reason a crucible is worth watching.
  */
-public class CrucibleBlockEntity extends BlockEntity {
+public class CrucibleBlockEntity extends SyncedBlockEntity {
     /** Plain water, for a pot that has had nothing thrown in it yet. */
     private static final int WATER = 0x3F76E4;
 
@@ -368,7 +363,8 @@ public class CrucibleBlockEntity extends BlockEntity {
      * <p>
      * The state carries only how full it looks, since that is all the model needs; everything else lives here.
      */
-    private void changed() {
+    @Override
+    protected void changed() {
         setChanged();
         if (level == null || level.isClientSide) {
             return;
@@ -389,9 +385,7 @@ public class CrucibleBlockEntity extends BlockEntity {
         super.loadAdditional(tag, registries);
         water = tag.getInt("water");
         heat = tag.getInt("heat");
-        dissolved = AspectList.CODEC
-                .parse(registries.createSerializationContext(NbtOps.INSTANCE), tag.get("dissolved"))
-                .result().orElse(AspectList.EMPTY);
+        dissolved = AspectList.read(tag, "dissolved", registries);
     }
 
     @Override
@@ -399,19 +393,6 @@ public class CrucibleBlockEntity extends BlockEntity {
         super.saveAdditional(tag, registries);
         tag.putInt("water", water);
         tag.putInt("heat", heat);
-        AspectList.CODEC
-                .encodeStart(registries.createSerializationContext(NbtOps.INSTANCE), dissolved)
-                .result().ifPresent(written -> tag.put("dissolved", written));
-    }
-
-    /** The colour of the water and the froth are drawn from this, so it has to reach the client on its own. */
-    @Override
-    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
-        return saveWithoutMetadata(registries);
-    }
-
-    @Override
-    public Packet<ClientGamePacketListener> getUpdatePacket() {
-        return ClientboundBlockEntityDataPacket.create(this);
+        AspectList.write(tag, "dissolved", dissolved, registries);
     }
 }

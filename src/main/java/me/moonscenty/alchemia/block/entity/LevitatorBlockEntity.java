@@ -13,15 +13,10 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -40,7 +35,7 @@ import net.minecraft.world.phys.Vec3;
  * <p>Both sides run it: the server pushes what the server moves, and each player's own game pushes that player,
  * since a player's game is the one that says where the player goes.
  */
-public class LevitatorBlockEntity extends BlockEntity {
+public class LevitatorBlockEntity extends SyncedBlockEntity {
     /** The ranges the toggle steps through, and how many hundredths a point of aer buys. The original's. */
     private static final int[] RANGES = {4, 8, 16, 32};
     private static final int PER_POINT = 1200;
@@ -201,14 +196,6 @@ public class LevitatorBlockEntity extends BlockEntity {
         }
     }
 
-    /** Saved, and told to anyone watching, since whether it has anything to push with is theirs to know too. */
-    private void changed() {
-        setChanged();
-        if (level != null && !level.isClientSide) {
-            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
-        }
-    }
-
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
@@ -221,15 +208,5 @@ public class LevitatorBlockEntity extends BlockEntity {
         super.saveAdditional(tag, registries);
         tag.putByte("range", (byte) range);
         tag.putInt("vis", vis);
-    }
-
-    @Override
-    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
-        return saveWithoutMetadata(registries);
-    }
-
-    @Override
-    public Packet<ClientGamePacketListener> getUpdatePacket() {
-        return ClientboundBlockEntityDataPacket.create(this);
     }
 }

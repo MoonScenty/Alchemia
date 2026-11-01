@@ -159,15 +159,12 @@ public class ThaumatoriumBlock extends BaseEntityBlock {
         } else {
             return false;
         }
-        VisHolder holder = VisHolder.of(wand);
-        AspectList cost = COSTS.get();
-        if (holder == null || !holder.holds(wand, cost, player, VisHolder.Spending.CRAFTING)) {
+        if (!VisHolder.pay(wand, COSTS.get(), player, VisHolder.Spending.CRAFTING)) {
             return false;
         }
         if (level.isClientSide) {
             return true;
         }
-        holder.take(wand, cost, player, VisHolder.Spending.CRAFTING);
         BlockState made = ModBlocks.THAUMATORIUM.get().defaultBlockState().setValue(FACING, side);
         level.setBlock(base, made, Block.UPDATE_CLIENTS);
         level.setBlock(base.above(), made.setValue(TOP, true), Block.UPDATE_ALL);

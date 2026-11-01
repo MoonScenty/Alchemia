@@ -11,10 +11,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtOps;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -30,7 +26,7 @@ import net.minecraft.world.level.block.state.BlockState;
  * turn. A choked side still fills it but bellows do not hurry it through there; a shut one does not fill it at all,
  * though what is in it can still be drawn back out that way.
  */
-public class BufferTubeBlockEntity extends TubeBlockEntity implements EssentiaHolder {
+public class BufferTubeBlockEntity extends TubeBlockEntity implements EssentiaHolder, Spills {
     /** How much it keeps, counted across everything in it. */
     public static final int CAPACITY = 8;
 
@@ -93,6 +89,7 @@ public class BufferTubeBlockEntity extends TubeBlockEntity implements EssentiaHo
     }
 
     /** What a broken buffer lets go: the little it was keeping, into the air. */
+    @Override
     public void spill() {
         if (level instanceof ServerLevel served && !held.isEmpty()) {
             AuraHandler.add(served, worldPosition, ModAspects.FLUX, held.total());
@@ -103,9 +100,7 @@ public class BufferTubeBlockEntity extends TubeBlockEntity implements EssentiaHo
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
-        held = AspectList.CODEC
-                .parse(registries.createSerializationContext(NbtOps.INSTANCE), tag.get("held"))
-                .result().orElse(AspectList.EMPTY);
+        held = AspectList.read(tag, "held", registries);
         byte[] read = tag.getByteArray("choke");
         for (int side = 0; side < choked.length; side++) {
             choked[side] = side < read.length ? read[side] : 0;
@@ -115,19 +110,7 @@ public class BufferTubeBlockEntity extends TubeBlockEntity implements EssentiaHo
     @Override
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.saveAdditional(tag, registries);
-        AspectList.CODEC
-                .encodeStart(registries.createSerializationContext(NbtOps.INSTANCE), held)
-                .result().ifPresent(written -> tag.put("held", written));
+        AspectList.write(tag, "held", held, registries);
         tag.putByteArray("choke", choked.clone());
-    }
-
-    @Override
-    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
-        return saveWithoutMetadata(registries);
-    }
-
-    @Override
-    public Packet<ClientGamePacketListener> getUpdatePacket() {
-        return ClientboundBlockEntityDataPacket.create(this);
     }
 }

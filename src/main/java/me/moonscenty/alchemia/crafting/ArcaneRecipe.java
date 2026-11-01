@@ -38,6 +38,23 @@ public interface ArcaneRecipe extends Recipe<CraftingInput> {
         return true;
     }
 
+    /** Whether the grid is three by three with exactly these squares filled, counted across the rows from 0. */
+    static boolean onlyFilled(CraftingInput input, int... squares) {
+        if (input.width() != 3 || input.height() != 3) {
+            return false;
+        }
+        for (int square = 0; square < 9; square++) {
+            boolean used = false;
+            for (int wanted : squares) {
+                used |= wanted == square;
+            }
+            if (used == input.getItem(square).isEmpty()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     /** The two kinds share a type, so the workbench only ever looks one recipe type up. */
     @Override
     RecipeSerializer<?> getSerializer();

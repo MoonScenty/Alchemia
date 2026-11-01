@@ -62,9 +62,7 @@ public class SpaBlock extends BaseEntityBlock {
 
     @Override
     protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState replacement, boolean moving) {
-        if (!state.is(replacement.getBlock()) && level.getBlockEntity(pos) instanceof SpaBlockEntity spa) {
-            Containers.dropContents(level, pos, spa);
-        }
+        Containers.dropContentsOnDestroy(state, replacement, level, pos);
         super.onRemove(state, level, pos, replacement, moving);
     }
 

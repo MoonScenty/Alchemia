@@ -7,14 +7,11 @@ import me.moonscenty.alchemia.registry.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
@@ -24,7 +21,7 @@ import net.minecraft.world.phys.Vec3;
  * line comes down on the ground it puts the land back as it was made and kills whatever taint is there. After fifteen
  * seconds of finding nothing it goes to sleep for a minute, and starts again.
  */
-public class EtherealBloomBlockEntity extends BlockEntity {
+public class EtherealBloomBlockEntity extends SyncedBlockEntity {
     /** How long it searches in vain before it sleeps, in passes, and how long it sleeps, in ticks. */
     public static final int RESTLESS = 300;
     public static final int SLEEPS = RESTLESS * 4;
@@ -48,10 +45,7 @@ public class EtherealBloomBlockEntity extends BlockEntity {
     /** Planted just now: it grows in from nothing. */
     public void planted() {
         growthCounter = 0;
-        setChanged();
-        if (level != null) {
-            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
-        }
+        changed(Block.UPDATE_ALL);
     }
 
     private void wake() {
@@ -145,15 +139,5 @@ public class EtherealBloomBlockEntity extends BlockEntity {
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.saveAdditional(tag, registries);
         tag.putInt("growth", Math.min(growthCounter, GROWS));
-    }
-
-    @Override
-    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
-        return saveWithoutMetadata(registries);
-    }
-
-    @Override
-    public Packet<ClientGamePacketListener> getUpdatePacket() {
-        return ClientboundBlockEntityDataPacket.create(this);
     }
 }

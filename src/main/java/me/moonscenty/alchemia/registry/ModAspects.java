@@ -11,6 +11,7 @@ import me.moonscenty.alchemia.aspect.Aspect.Blending;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -85,6 +86,12 @@ public class ModAspects {
             combinations = buildCombinations();
         }
         return Optional.ofNullable(combinations.get(pairKey(first, second)));
+    }
+
+    /** The aspect saved under this id, or null if there is none. */
+    public static Holder<Aspect> byId(String id) {
+        ResourceLocation key = ResourceLocation.tryParse(id);
+        return key == null ? null : REGISTRY.getHolder(key).map(holder -> (Holder<Aspect>) holder).orElse(null);
     }
 
     public static List<Holder<Aspect>> primals() {

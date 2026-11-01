@@ -1,5 +1,6 @@
 package me.moonscenty.alchemia.block;
 
+import me.moonscenty.alchemia.block.entity.Spills;
 import com.mojang.serialization.MapCodec;
 
 import me.moonscenty.alchemia.block.entity.CrystallizerBlockEntity;
@@ -80,9 +81,7 @@ public class CrystallizerBlock extends BaseEntityBlock {
 
     @Override
     protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState replacement, boolean moving) {
-        if (!state.is(replacement.getBlock()) && level.getBlockEntity(pos) instanceof CrystallizerBlockEntity held) {
-            held.spill();
-        }
+        Spills.onRemove(state, replacement, level, pos);
         super.onRemove(state, level, pos, replacement, moving);
     }
 }

@@ -6,7 +6,6 @@ import me.moonscenty.alchemia.aspect.Aspect;
 import me.moonscenty.alchemia.aspect.AspectList;
 import me.moonscenty.alchemia.aura.AuraHandler;
 import me.moonscenty.alchemia.block.CrystallizerBlock;
-import me.moonscenty.alchemia.block.TubeBlock;
 import me.moonscenty.alchemia.essentia.EssentiaHolder;
 import me.moonscenty.alchemia.item.CrystallizedEssenceItem;
 import me.moonscenty.alchemia.registry.ModAspects;
@@ -16,17 +15,11 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.items.IItemHandler;
@@ -40,7 +33,7 @@ import net.neoforged.neoforge.items.ItemHandlerHelper;
  * time, a hundred steps of work for each four; a crystal takes forty. With no earth in the air it simply waits,
  * holding its point. A redstone signal stops it.
  */
-public class CrystallizerBlockEntity extends BlockEntity implements EssentiaHolder {
+public class CrystallizerBlockEntity extends SyncedBlockEntity implements EssentiaHolder, Spills {
     private static final int WORKS_EVERY = 5;
     /** How much work a crystal is, and how much a step of it does at most. */
     private static final int WORK = 200;
@@ -149,18 +142,9 @@ public class CrystallizerBlockEntity extends BlockEntity implements EssentiaHold
 
     /** Takes one point straight out of a vessel set against its back. A pipe there fills it on its own. */
     private void drawFromBehind(Level level, BlockPos pos) {
-        Direction back = facing();
-        BlockPos behind = pos.relative(back);
-        if (level.getBlockState(behind).getBlock() instanceof TubeBlock
-                || !(level.getBlockEntity(behind) instanceof EssentiaHolder source)
-                || !source.reachableFrom(back.getOpposite()) || !source.givesTo(back.getOpposite())) {
-            return;
-        }
-        for (Holder<Aspect> held : source.held().sortedByAmount()) {
-            if (source.release(held)) {
-                accept(held);
-                return;
-            }
+        Holder<Aspect> drawn = EssentiaHolder.drawFrom(level, pos, facing(), held -> true);
+        if (drawn != null) {
+            accept(drawn);
         }
     }
 
@@ -240,6 +224,7 @@ public class CrystallizerBlockEntity extends BlockEntity implements EssentiaHold
     }
 
     /** What a broken one lets go: the point it held goes into the air as flux. */
+    @Override
     public void spill() {
         if (level != null && !level.isClientSide && aspect != null) {
             AuraHandler.add(level, worldPosition, ModAspects.FLUX, 1);
@@ -247,22 +232,12 @@ public class CrystallizerBlockEntity extends BlockEntity implements EssentiaHold
         aspect = null;
     }
 
-    private void changed() {
-        setChanged();
-        if (level != null) {
-            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
-        }
-    }
-
     // --- saving ------------------------------------------------------------
 
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
-        aspect = tag.contains("Aspect")
-                ? ModAspects.REGISTRY.getHolder(ResourceLocation.parse(tag.getString("Aspect")))
-                        .map(found -> (Holder<Aspect>) found).orElse(null)
-                : null;
+        aspect = tag.contains("Aspect") ? ModAspects.byId(tag.getString("Aspect")) : null;
         fuel = tag.getInt("fuel");
     }
 
@@ -273,15 +248,5 @@ public class CrystallizerBlockEntity extends BlockEntity implements EssentiaHold
             tag.putString("Aspect", aspect.value().id().toString());
         }
         tag.putInt("fuel", fuel);
-    }
-
-    @Override
-    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
-        return saveWithoutMetadata(registries);
-    }
-
-    @Override
-    public Packet<ClientGamePacketListener> getUpdatePacket() {
-        return ClientboundBlockEntityDataPacket.create(this);
     }
 }

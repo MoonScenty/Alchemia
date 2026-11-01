@@ -1,17 +1,12 @@
 package me.moonscenty.alchemia.block.eldritch;
 
+import me.moonscenty.alchemia.block.entity.SyncedBlockEntity;
 import me.moonscenty.alchemia.registry.ModBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 
@@ -19,7 +14,7 @@ import net.minecraft.world.phys.AABB;
  * Whether the way is open, and how far it has opened, for the drawing. In the Outer Lands it is always open. Every
  * quarter second it takes whoever stands in it through, to the Outer Lands or back out of them.
  */
-public class EldritchPortalBlockEntity extends BlockEntity {
+public class EldritchPortalBlockEntity extends SyncedBlockEntity {
     private boolean open;
     /** How long it has stood open, counted on the client up to thirty for the drawing. */
     public int opened = -1;
@@ -54,10 +49,7 @@ public class EldritchPortalBlockEntity extends BlockEntity {
 
     public void open() {
         open = true;
-        setChanged();
-        if (level != null) {
-            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
-        }
+        changed();
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state, EldritchPortalBlockEntity portal) {
@@ -100,14 +92,9 @@ public class EldritchPortalBlockEntity extends BlockEntity {
 
     @Override
     public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
-        CompoundTag tag = super.getUpdateTag(registries);
+        CompoundTag tag = new CompoundTag();
         tag.putBoolean("open", open);
         return tag;
-    }
-
-    @Override
-    public Packet<ClientGamePacketListener> getUpdatePacket() {
-        return ClientboundBlockEntityDataPacket.create(this);
     }
 
     public AABB getRenderBoundingBox() {

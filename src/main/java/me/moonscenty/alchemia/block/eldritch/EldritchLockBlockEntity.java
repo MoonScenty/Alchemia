@@ -1,5 +1,6 @@
 package me.moonscenty.alchemia.block.eldritch;
 
+import me.moonscenty.alchemia.block.entity.SyncedBlockEntity;
 import me.moonscenty.alchemia.outer.BossRooms;
 import me.moonscenty.alchemia.registry.ModBlockEntities;
 import me.moonscenty.alchemia.registry.ModSounds;
@@ -7,14 +8,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 
@@ -23,7 +19,7 @@ import net.minecraft.world.phys.AABB;
  * been turning. It pumps every quarter second for five seconds, then whatever is in the hall wakes, the door melts
  * away and the lock with it.
  */
-public class EldritchLockBlockEntity extends BlockEntity {
+public class EldritchLockBlockEntity extends SyncedBlockEntity {
     /** How long the lock turns before the hall opens. */
     public static final int TURNING = 100;
 
@@ -56,13 +52,6 @@ public class EldritchLockBlockEntity extends BlockEntity {
     public void turn() {
         count = 0;
         changed();
-    }
-
-    private void changed() {
-        setChanged();
-        if (level != null) {
-            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
-        }
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state, EldritchLockBlockEntity lock) {
@@ -98,14 +87,9 @@ public class EldritchLockBlockEntity extends BlockEntity {
 
     @Override
     public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
-        CompoundTag tag = super.getUpdateTag(registries);
+        CompoundTag tag = new CompoundTag();
         saveAdditional(tag, registries);
         return tag;
-    }
-
-    @Override
-    public Packet<ClientGamePacketListener> getUpdatePacket() {
-        return ClientboundBlockEntityDataPacket.create(this);
     }
 
     public AABB getRenderBoundingBox() {

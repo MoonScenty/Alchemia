@@ -1,14 +1,12 @@
 package me.moonscenty.alchemia.block.entity;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.annotation.Nullable;
 
 import me.moonscenty.alchemia.aspect.Aspect;
 import me.moonscenty.alchemia.aspect.AspectList;
 import me.moonscenty.alchemia.aura.AuraHandler;
-import me.moonscenty.alchemia.block.TubeBlock;
 import me.moonscenty.alchemia.essentia.EssentiaHolder;
 import me.moonscenty.alchemia.registry.ModAspects;
 import me.moonscenty.alchemia.registry.ModBlockEntities;
@@ -18,14 +16,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
 /**
@@ -37,7 +29,7 @@ import net.minecraft.world.level.block.state.BlockState;
  * which have nothing to come apart into. It never pushes what it has made; something above has to draw it off.
  * A redstone signal stops it.
  */
-public class CentrifugeBlockEntity extends BlockEntity implements EssentiaHolder {
+public class CentrifugeBlockEntity extends SyncedBlockEntity implements EssentiaHolder, Spills {
     /** How long a point spins before it comes apart, and how often an empty one looks below for another. */
     private static final int SPINS_FOR = 39;
     private static final int LOOKS_EVERY = 5;
@@ -103,16 +95,9 @@ public class CentrifugeBlockEntity extends BlockEntity implements EssentiaHolder
      * A pipe below fills it on its own; this is for a jar set directly underneath.
      */
     private void drawFromBelow(Level level, BlockPos pos) {
-        if (level.getBlockState(pos.below()).getBlock() instanceof TubeBlock
-                || !(level.getBlockEntity(pos.below()) instanceof EssentiaHolder below)
-                || !below.reachableFrom(Direction.UP) || !below.givesTo(Direction.UP)) {
-            return;
-        }
-        for (Holder<Aspect> aspect : below.held().sortedByAmount()) {
-            if (wants(aspect) && below.release(aspect)) {
-                accept(aspect);
-                return;
-            }
+        Holder<Aspect> drawn = EssentiaHolder.drawFrom(level, pos, Direction.DOWN, this::wants);
+        if (drawn != null) {
+            accept(drawn);
         }
     }
 
@@ -126,10 +111,6 @@ public class CentrifugeBlockEntity extends BlockEntity implements EssentiaHolder
     @Override
     public AspectList held() {
         return out == null ? AspectList.EMPTY : AspectList.of(out, 1);
-    }
-
-    public Optional<Holder<Aspect>> spinningNow() {
-        return Optional.ofNullable(in);
     }
 
     @Override
@@ -176,6 +157,7 @@ public class CentrifugeBlockEntity extends BlockEntity implements EssentiaHolder
     }
 
     /** What a broken one lets go: what it had split goes into the air as flux. What was still spinning is lost. */
+    @Override
     public void spill() {
         if (level != null && !level.isClientSide && out != null) {
             AuraHandler.add(level, worldPosition, ModAspects.FLUX, 1);
@@ -184,20 +166,13 @@ public class CentrifugeBlockEntity extends BlockEntity implements EssentiaHolder
         in = null;
     }
 
-    private void changed() {
-        setChanged();
-        if (level != null) {
-            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
-        }
-    }
-
     // --- saving ------------------------------------------------------------
 
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
-        in = aspect(tag, "aspectIn");
-        out = aspect(tag, "aspectOut");
+        in = tag.contains("aspectIn") ? ModAspects.byId(tag.getString("aspectIn")) : null;
+        out = tag.contains("aspectOut") ? ModAspects.byId(tag.getString("aspectOut")) : null;
     }
 
     @Override
@@ -209,24 +184,5 @@ public class CentrifugeBlockEntity extends BlockEntity implements EssentiaHolder
         if (out != null) {
             tag.putString("aspectOut", out.value().id().toString());
         }
-    }
-
-    @Nullable
-    private static Holder<Aspect> aspect(CompoundTag tag, String key) {
-        if (!tag.contains(key)) {
-            return null;
-        }
-        return ModAspects.REGISTRY.getHolder(ResourceLocation.parse(tag.getString(key)))
-                .map(found -> (Holder<Aspect>) found).orElse(null);
-    }
-
-    @Override
-    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
-        return saveWithoutMetadata(registries);
-    }
-
-    @Override
-    public Packet<ClientGamePacketListener> getUpdatePacket() {
-        return ClientboundBlockEntityDataPacket.create(this);
     }
 }

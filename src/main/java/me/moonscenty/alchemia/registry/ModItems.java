@@ -576,18 +576,9 @@ public class ModItems {
      * The original asked ten plus a random even number up to eight, redrawn every fifth of a second, so the price
      * shimmered on the tooltip and the wand paid a different bill each time. That is put on when the focus is asked
      * for its price ({@code FocusItem.primalCost}); this is what it stands at for anything that reads it unasked.
-     * <p>
-     * The six are named one by one rather than asked for with {@code ModAspects.primals()}: that reads the aspect
-     * registry, and this runs while the item registry is being filled, when the aspect registry is still empty.
-     * A holder can be pointed at before it holds anything; a list of them cannot be counted.
      */
     private static AspectList primalCost() {
-        return AspectList.of(ModAspects.AIR, 10)
-                .add(ModAspects.EARTH, 10)
-                .add(ModAspects.FIRE, 10)
-                .add(ModAspects.WATER, 10)
-                .add(ModAspects.ORDER, 10)
-                .add(ModAspects.ENTROPY, 10);
+        return AspectList.eachPrimal(10);
     }
 
     /**

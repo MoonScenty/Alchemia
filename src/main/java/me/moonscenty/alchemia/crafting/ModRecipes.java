@@ -2,7 +2,6 @@ package me.moonscenty.alchemia.crafting;
 
 import me.moonscenty.alchemia.Alchemia;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -29,10 +28,10 @@ public class ModRecipes {
     public static final DeferredHolder<RecipeSerializer<?>, ArcaneShapelessRecipe.Serializer> ARCANE_SHAPELESS =
             SERIALIZERS.register("arcane_shapeless", ArcaneShapelessRecipe.Serializer::new);
 
-    public static final DeferredHolder<RecipeSerializer<?>, ArcaneWandRecipe.Serializer> ARCANE_WAND =
-            SERIALIZERS.register("arcane_wand", ArcaneWandRecipe.Serializer::new);
-    public static final DeferredHolder<RecipeSerializer<?>, ArcaneSceptreRecipe.Serializer> ARCANE_SCEPTRE =
-            SERIALIZERS.register("arcane_sceptre", ArcaneSceptreRecipe.Serializer::new);
+    public static final DeferredHolder<RecipeSerializer<?>, UnitSerializer<ArcaneWandRecipe>> ARCANE_WAND =
+            SERIALIZERS.register("arcane_wand", () -> new UnitSerializer<>(ArcaneWandRecipe.INSTANCE));
+    public static final DeferredHolder<RecipeSerializer<?>, UnitSerializer<ArcaneSceptreRecipe>> ARCANE_SCEPTRE =
+            SERIALIZERS.register("arcane_sceptre", () -> new UnitSerializer<>(ArcaneSceptreRecipe.INSTANCE));
 
     /** Writing a jar label, and rubbing one out. A plain bench recipe, not an arcane one. */
     public static final DeferredHolder<RecipeSerializer<?>, SimpleCraftingRecipeSerializer<LabelRecipe>> JAR_LABEL =

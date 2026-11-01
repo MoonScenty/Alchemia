@@ -16,13 +16,8 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
 /**
@@ -31,7 +26,7 @@ import net.minecraft.world.level.block.state.BlockState;
  * It fills and empties through the lid and nowhere else. A jar is a vessel, not a junction: a pipe run has to come
  * down onto it, which is what makes a wall of jars something you lay out rather than something you scatter.
  */
-public class JarBlockEntity extends BlockEntity implements EssentiaHolder {
+public class JarBlockEntity extends SyncedBlockEntity implements EssentiaHolder {
     /** How much one holds. */
     public static final int CAPACITY = 64;
     /** How many heights the liquid is drawn at. */
@@ -188,7 +183,8 @@ public class JarBlockEntity extends BlockEntity implements EssentiaHolder {
      * The state carries the height of the liquid and nothing else, since that is all the model needs; what the
      * essentia actually is lives here, and the colour is asked for separately.
      */
-    private void changed() {
+    @Override
+    protected void changed() {
         setChanged();
         if (level == null || level.isClientSide) {
             return;
@@ -208,8 +204,8 @@ public class JarBlockEntity extends BlockEntity implements EssentiaHolder {
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
         amount = tag.getInt("amount");
-        holding = named(tag, "aspect");
-        label = named(tag, "label");
+        holding = tag.contains("aspect") ? ModAspects.byId(tag.getString("aspect")) : null;
+        label = tag.contains("label") ? ModAspects.byId(tag.getString("label")) : null;
         braced = tag.getBoolean("braced");
     }
 
@@ -226,25 +222,5 @@ public class JarBlockEntity extends BlockEntity implements EssentiaHolder {
         if (braced) {
             tag.putBoolean("braced", true);
         }
-    }
-
-    /** The colour of what is standing in it is drawn from this, so it has to reach the client on its own. */
-    /** An aspect written down under some name in the tag, if it is there and still exists. */
-    @SuppressWarnings("unchecked")
-    private static Holder<Aspect> named(CompoundTag tag, String key) {
-        return tag.contains(key)
-                ? ModAspects.REGISTRY.getHolder(ResourceLocation.parse(tag.getString(key)))
-                        .map(found -> (Holder<Aspect>) found).orElse(null)
-                : null;
-    }
-
-    @Override
-    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
-        return saveWithoutMetadata(registries);
-    }
-
-    @Override
-    public Packet<ClientGamePacketListener> getUpdatePacket() {
-        return ClientboundBlockEntityDataPacket.create(this);
     }
 }

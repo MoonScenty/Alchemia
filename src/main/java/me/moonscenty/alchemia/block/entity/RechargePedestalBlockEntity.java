@@ -9,9 +9,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Container;
@@ -19,8 +16,6 @@ import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
 /**
@@ -30,7 +25,7 @@ import net.minecraft.world.level.block.state.BlockState;
  * points and the cap's bonus -- and a full draw shows as a mote of the last vis drawn, drifting in to the wand from
  * somewhere round about. A hopper can set a wand on it from any side, and take one off.
  */
-public class RechargePedestalBlockEntity extends BlockEntity implements WorldlyContainer {
+public class RechargePedestalBlockEntity extends SyncedBlockEntity implements WorldlyContainer {
     /** How often it draws, in ticks, and how much it asks for each time. The original's. */
     private static final int EVERY = 10;
     private static final int AMOUNT = 5;
@@ -67,14 +62,6 @@ public class RechargePedestalBlockEntity extends BlockEntity implements WorldlyC
             served.sendParticles(new SparkleOptions(charged.last().value().color(), target),
                     from.getX() + random.nextDouble(), from.getY() + random.nextDouble(),
                     from.getZ() + random.nextDouble(), 1, 0.0, 0.0, 0.0, 0.0);
-        }
-    }
-
-    /** Saved, and shown to anyone watching, since what is on it and how full it is are there to be seen. */
-    private void changed() {
-        setChanged();
-        if (level != null && !level.isClientSide) {
-            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
         }
     }
 
@@ -165,15 +152,5 @@ public class RechargePedestalBlockEntity extends BlockEntity implements WorldlyC
         if (!held.isEmpty()) {
             tag.put("held", held.save(registries));
         }
-    }
-
-    @Override
-    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
-        return saveWithoutMetadata(registries);
-    }
-
-    @Override
-    public Packet<ClientGamePacketListener> getUpdatePacket() {
-        return ClientboundBlockEntityDataPacket.create(this);
     }
 }

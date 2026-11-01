@@ -6,12 +6,9 @@ import com.mojang.serialization.MapCodec;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
@@ -23,7 +20,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * One vent takes a third of the flux; two, a little over half; three, seven in ten. It sits only on the side or back
  * of a smelter, facing into it, and takes up the half of its block nearest it.
  */
-public class SmelterVentBlock extends HorizontalDirectionalBlock {
+public class SmelterVentBlock extends SmelterSideBlock {
     public static final MapCodec<SmelterVentBlock> CODEC = simpleCodec(SmelterVentBlock::new);
     /** The half nearest the smelter, a little in from the edges, for each way it can face. */
     private static final Map<Direction, VoxelShape> SHAPES = Map.of(
@@ -34,7 +31,6 @@ public class SmelterVentBlock extends HorizontalDirectionalBlock {
 
     public SmelterVentBlock(Properties properties) {
         super(properties);
-        registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH));
     }
 
     @Override
@@ -43,19 +39,7 @@ public class SmelterVentBlock extends HorizontalDirectionalBlock {
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING);
-    }
-
-    @Override
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return SHAPES.get(state.getValue(FACING));
-    }
-
-    /** Only on the side or back of a smelter, facing into it. */
-    @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context) {
-        Direction facing = SmelterAuxBlock.againstSmelter(context);
-        return facing == null ? null : defaultBlockState().setValue(FACING, facing);
     }
 }

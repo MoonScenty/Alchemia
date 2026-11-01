@@ -12,7 +12,6 @@ import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
@@ -26,7 +25,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
  * <p>Nothing is kept between trades. What is left in the places when the trade is shut is handed back, and the pech
  * will not go after it.
  */
-public class PechMenu extends AbstractContainerMenu {
+public class PechMenu extends AlchemiaMenu {
     /** The one button: roll the bones over what is offered. */
     public static final int ROLL = 0;
     public static final int OFFER = 0;
@@ -41,7 +40,6 @@ public class PechMenu extends AbstractContainerMenu {
     private static final int GIVEN_Y = 20;
     private static final int PACK_X = 8;
     private static final int PACK_Y = 84;
-    private static final int BELT_Y = 142;
     private static final int PITCH = 18;
 
     @Nullable
@@ -75,14 +73,7 @@ public class PechMenu extends AbstractContainerMenu {
                 });
             }
         }
-        for (int row = 0; row < 3; row++) {
-            for (int column = 0; column < 9; column++) {
-                addSlot(new Slot(inventory, column + row * 9 + 9, PACK_X + column * PITCH, PACK_Y + row * PITCH));
-            }
-        }
-        for (int column = 0; column < 9; column++) {
-            addSlot(new Slot(inventory, column, PACK_X + column * PITCH, BELT_Y));
-        }
+        addPlayerInventory(inventory, PACK_X, PACK_Y);
     }
 
     @Nullable

@@ -25,7 +25,6 @@ import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
@@ -33,7 +32,7 @@ import net.minecraft.world.item.ItemStack;
 /**
  * Working at a research table: the tools and the note laid out on it, with the reader's own pockets below.
  */
-public class ResearchTableMenu extends AbstractContainerMenu {
+public class ResearchTableMenu extends AlchemiaMenu {
     public static final int SLOT_TOOLS = ResearchTableBlockEntity.SLOT_TOOLS;
     public static final int SLOT_NOTES = ResearchTableBlockEntity.SLOT_NOTES;
     private static final int TABLE_SLOTS = 2;
@@ -44,8 +43,6 @@ public class ResearchTableMenu extends AbstractContainerMenu {
     private static final int TABLE_Y = 10;
     private static final int PACK_X = 48;
     private static final int PACK_Y = 175;
-    private static final int BELT_Y = 233;
-    private static final int PITCH = 18;
 
     private final Container table;
     private final ContainerLevelAccess access;
@@ -74,14 +71,7 @@ public class ResearchTableMenu extends AbstractContainerMenu {
             }
         });
 
-        for (int row = 0; row < 3; row++) {
-            for (int column = 0; column < 9; column++) {
-                addSlot(new Slot(inventory, column + row * 9 + 9, PACK_X + column * PITCH, PACK_Y + row * PITCH));
-            }
-        }
-        for (int column = 0; column < 9; column++) {
-            addSlot(new Slot(inventory, column, PACK_X + column * PITCH, BELT_Y));
-        }
+        addPlayerInventory(inventory, PACK_X, PACK_Y);
     }
 
     public ItemStack noteStack() {
@@ -202,27 +192,7 @@ public class ResearchTableMenu extends AbstractContainerMenu {
 
     @Override
     public ItemStack quickMoveStack(Player player, int index) {
-        Slot slot = slots.get(index);
-        if (!slot.hasItem()) {
-            return ItemStack.EMPTY;
-        }
-
-        ItemStack held = slot.getItem();
-        ItemStack copy = held.copy();
-        if (index < TABLE_SLOTS) {
-            if (!moveItemStackTo(held, TABLE_SLOTS, slots.size(), true)) {
-                return ItemStack.EMPTY;
-            }
-        } else if (!moveItemStackTo(held, 0, TABLE_SLOTS, false)) {
-            return ItemStack.EMPTY;
-        }
-
-        if (held.isEmpty()) {
-            slot.set(ItemStack.EMPTY);
-        } else {
-            slot.setChanged();
-        }
-        return copy;
+        return quickMoveBetween(index, TABLE_SLOTS);
     }
 
     @Override

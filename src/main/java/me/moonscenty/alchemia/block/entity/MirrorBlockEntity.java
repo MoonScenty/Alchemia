@@ -1,7 +1,6 @@
 package me.moonscenty.alchemia.block.entity;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -11,6 +10,7 @@ import me.moonscenty.alchemia.aspect.AspectList;
 import me.moonscenty.alchemia.aura.AuraHandler;
 import me.moonscenty.alchemia.block.MirrorBlock;
 import me.moonscenty.alchemia.essentia.EssentiaHolder;
+import me.moonscenty.alchemia.essentia.EssentiaReach;
 import me.moonscenty.alchemia.registry.ModAspects;
 import me.moonscenty.alchemia.registry.ModBlockEntities;
 import me.moonscenty.alchemia.registry.ModDataComponents;
@@ -25,14 +25,10 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -48,7 +44,7 @@ import net.minecraft.world.level.block.state.BlockState;
  * the longer it fails. Moving things strains the aura: every hundred and twenty-eight items through a magic mirror,
  * or sixty-four points of essentia through an essentia one, lets out a point of flux.
  */
-public class MirrorBlockEntity extends BlockEntity implements EssentiaHolder {
+public class MirrorBlockEntity extends SyncedBlockEntity implements EssentiaHolder {
     private static final int RETRIES_FIRST = 40;
     private static final int RETRIES_AT_MOST = 600;
     private static final int RETRIES_LATER_BY = 20;
@@ -271,33 +267,16 @@ public class MirrorBlockEntity extends BlockEntity implements EssentiaHolder {
         if (partner == null) {
             return List.of();
         }
-        Level there = partner.getLevel();
         BlockPos origin = partner.getBlockPos();
         Direction out = partner.facing();
-        List<BlockEntity> found = new ArrayList<>();
-        for (int a = -REACHES; a <= REACHES; a++) {
-            for (int b = -REACHES; b <= REACHES; b++) {
-                for (int c = 0; c < REACHES; c++) {
-                    if (a == 0 && b == 0 && c == 0) {
-                        continue;
-                    }
-                    BlockPos at;
-                    if (out.getAxis() == Direction.Axis.Y) {
-                        at = origin.offset(a, c * out.getStepY(), b);
-                    } else if (out.getAxis() == Direction.Axis.Z) {
-                        at = origin.offset(a, b, c * out.getStepZ());
-                    } else {
-                        at = origin.offset(c * out.getStepX(), a, b);
-                    }
-                    if (there.isLoaded(at) && there.getBlockEntity(at) instanceof EssentiaHolder holder
-                            && !(holder instanceof MirrorBlockEntity)) {
-                        found.add((BlockEntity) holder);
-                    }
-                }
+        List<EssentiaHolder> found = new ArrayList<>();
+        for (BlockEntity near : EssentiaReach.holders(partner.getLevel(), origin, REACHES * 2)) {
+            if (!(near instanceof MirrorBlockEntity)
+                    && TransfuserBlockEntity.inFront(origin, out, near.getBlockPos(), REACHES)) {
+                found.add((EssentiaHolder) near);
             }
         }
-        found.sort(Comparator.comparingDouble(entity -> entity.getBlockPos().distSqr(origin)));
-        return found.stream().map(entity -> (EssentiaHolder) entity).toList();
+        return found;
     }
 
     @Override
@@ -371,13 +350,6 @@ public class MirrorBlockEntity extends BlockEntity implements EssentiaHolder {
         tag.remove("link");
     }
 
-    private void changed() {
-        setChanged();
-        if (level != null) {
-            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
-        }
-    }
-
     // --- saving ------------------------------------------------------------
 
     @Override
@@ -415,10 +387,5 @@ public class MirrorBlockEntity extends BlockEntity implements EssentiaHolder {
         CompoundTag tag = new CompoundTag();
         tag.putBoolean("linked", linked);
         return tag;
-    }
-
-    @Override
-    public Packet<ClientGamePacketListener> getUpdatePacket() {
-        return ClientboundBlockEntityDataPacket.create(this);
     }
 }

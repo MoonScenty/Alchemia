@@ -5,7 +5,6 @@ import javax.annotation.Nullable;
 import me.moonscenty.alchemia.aspect.Aspect;
 import me.moonscenty.alchemia.aspect.AspectList;
 import me.moonscenty.alchemia.block.ArcaneBoreBaseBlock;
-import me.moonscenty.alchemia.block.TubeBlock;
 import me.moonscenty.alchemia.essentia.EssentiaHolder;
 import me.moonscenty.alchemia.registry.ModAspects;
 import me.moonscenty.alchemia.registry.ModBlockEntities;
@@ -79,16 +78,7 @@ public class ArcaneBoreBaseBlockEntity extends BlockEntity implements EssentiaHo
             return;
         }
         for (Direction side : Direction.Plane.HORIZONTAL) {
-            if (!reachableFrom(side)) {
-                continue;
-            }
-            BlockPos beside = worldPosition.relative(side);
-            if (level.getBlockState(beside).getBlock() instanceof TubeBlock
-                    || !(level.getBlockEntity(beside) instanceof EssentiaHolder source)
-                    || !source.reachableFrom(side.getOpposite()) || !source.givesTo(side.getOpposite())) {
-                continue;
-            }
-            if (source.held().get(ModAspects.ENTROPY) > 0 && source.release(ModAspects.ENTROPY)) {
+            if (reachableFrom(side) && EssentiaHolder.drawFrom(level, worldPosition, side, ModAspects.ENTROPY)) {
                 bore.fuel();
                 return;
             }

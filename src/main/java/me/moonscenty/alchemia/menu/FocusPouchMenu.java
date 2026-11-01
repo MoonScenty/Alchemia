@@ -12,7 +12,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 
@@ -27,13 +26,12 @@ import net.minecraft.world.item.ItemStack;
  * <p>The pouch being edited cannot be moved while it is open. Its own slot in the bag is nailed down, so there is
  * no way to shift-click the pouch into itself or to drop it and leave the window looking at nothing.
  */
-public class FocusPouchMenu extends AbstractContainerMenu {
+public class FocusPouchMenu extends AlchemiaMenu {
     // where the slots sit on the original's panel, as its container placed them
     private static final int FOCI_X = 37;
     private static final int FOCI_Y = 51;
     private static final int PACK_X = 8;
     private static final int PACK_Y = 151;
-    private static final int BELT_Y = 209;
     private static final int PITCH = 18;
 
     private final Player player;
@@ -59,14 +57,7 @@ public class FocusPouchMenu extends AbstractContainerMenu {
                         FOCI_X + column * PITCH, FOCI_Y + row * PITCH));
             }
         }
-        for (int row = 0; row < 3; row++) {
-            for (int column = 0; column < 9; column++) {
-                addSlot(held(inventory, column + row * 9 + 9, PACK_X + column * PITCH, PACK_Y + row * PITCH));
-            }
-        }
-        for (int column = 0; column < 9; column++) {
-            addSlot(held(inventory, column, PACK_X + column * PITCH, BELT_Y));
-        }
+        addPlayerInventory(inventory, PACK_X, PACK_Y, this::held);
     }
 
     /** Which square of the bag the pouch is in, or -1 when it is in the off hand. */
@@ -142,27 +133,7 @@ public class FocusPouchMenu extends AbstractContainerMenu {
 
     @Override
     public ItemStack quickMoveStack(Player taker, int index) {
-        Slot slot = slots.get(index);
-        if (!slot.hasItem()) {
-            return ItemStack.EMPTY;
-        }
-        ItemStack held = slot.getItem();
-        ItemStack copy = held.copy();
-
-        if (index < FocusPouchItem.SIZE) {
-            if (!moveItemStackTo(held, FocusPouchItem.SIZE, slots.size(), true)) {
-                return ItemStack.EMPTY;
-            }
-        } else if (!moveItemStackTo(held, 0, FocusPouchItem.SIZE, false)) {
-            return ItemStack.EMPTY;
-        }
-
-        if (held.isEmpty()) {
-            slot.set(ItemStack.EMPTY);
-        } else {
-            slot.setChanged();
-        }
-        return copy;
+        return quickMoveBetween(index, FocusPouchItem.SIZE);
     }
 
     /** A square that takes a focus and nothing else, one to a square. */

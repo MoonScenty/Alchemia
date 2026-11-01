@@ -20,13 +20,9 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.model.data.ModelData;
@@ -47,7 +43,7 @@ import net.neoforged.neoforge.client.model.data.ModelProperty;
  * Any side can be shut with a wand, the original's {@code openSides}: nothing passes a shut side, and the arm is not
  * drawn, though it can still be clicked to open it again.
  */
-public class TubeBlockEntity extends BlockEntity {
+public class TubeBlockEntity extends SyncedBlockEntity {
     /** How often a point moves, in ticks. */
     private static final int PULLS_EVERY = 10;
     /** How far along the pipe a pull will look. A run longer than this simply needs a second pump of its own. */
@@ -253,13 +249,6 @@ public class TubeBlockEntity extends BlockEntity {
         return found;
     }
 
-    protected void changed() {
-        setChanged();
-        if (level != null && !level.isClientSide) {
-            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
-        }
-    }
-
     @Override
     public ModelData getModelData() {
         return ModelData.builder().with(SHUT, shut).build();
@@ -282,15 +271,5 @@ public class TubeBlockEntity extends BlockEntity {
         if (shut != 0) {
             tag.putInt("shut", shut);
         }
-    }
-
-    @Override
-    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
-        return saveWithoutMetadata(registries);
-    }
-
-    @Override
-    public Packet<ClientGamePacketListener> getUpdatePacket() {
-        return ClientboundBlockEntityDataPacket.create(this);
     }
 }

@@ -3,7 +3,6 @@ package me.moonscenty.alchemia.block.eldritch;
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.aspect.AspectList;
 import me.moonscenty.alchemia.player.PlayerKnowledge;
-import me.moonscenty.alchemia.registry.ModAspects;
 import me.moonscenty.alchemia.registry.ModSounds;
 import me.moonscenty.alchemia.item.VisHolder;
 import net.minecraft.core.BlockPos;
@@ -32,10 +31,7 @@ public final class Oculus {
                 || !PlayerKnowledge.of(player).hasResearch(RESEARCH)) {
             return false;
         }
-        AspectList cost = AspectList.of(ModAspects.AIR, EACH).add(ModAspects.FIRE, EACH).add(ModAspects.EARTH, EACH)
-                .add(ModAspects.WATER, EACH).add(ModAspects.ORDER, EACH).add(ModAspects.ENTROPY, EACH);
-        VisHolder holder = VisHolder.of(wand);
-        if (holder == null || !holder.holds(wand, cost, player, VisHolder.Spending.CRAFTING)) {
+        if (!VisHolder.pay(wand, AspectList.eachPrimal(EACH), player, VisHolder.Spending.CRAFTING)) {
             return false;
         }
         if (level instanceof net.minecraft.server.level.ServerLevel served) {
@@ -43,7 +39,6 @@ public final class Oculus {
             me.moonscenty.alchemia.outer.Labyrinth.of(served.getServer()).ensureMaze(pos, level.random);
         }
         if (!level.isClientSide) {
-            holder.take(wand, cost, player, VisHolder.Spending.CRAFTING);
             altar.setOpen(true);
             portal.open();
             level.playSound(null, pos, ModSounds.WAND.get(), SoundSource.BLOCKS, 1.0F, 1.0F);

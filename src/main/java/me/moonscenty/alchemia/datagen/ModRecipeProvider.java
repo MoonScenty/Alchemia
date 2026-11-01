@@ -372,8 +372,7 @@ public class ModRecipeProvider extends RecipeProvider {
 
         // the cloth everything soft is cut from: string round wool, and all six primals to work it
         arcane(output, "enchanted_fabric", "enchanted_fabric", new ItemStack(ModItems.ENCHANTED_FABRIC.get()),
-                AspectList.of(ModAspects.AIR, 5).add(ModAspects.FIRE, 5).add(ModAspects.WATER, 5)
-                        .add(ModAspects.EARTH, 5).add(ModAspects.ORDER, 5).add(ModAspects.ENTROPY, 5),
+                AspectList.eachPrimal(5),
                 Map.of('S', Ingredient.of(Items.STRING), 'C', Ingredient.of(ItemTags.WOOL)),
                 " S ", "SCS", " S ");
 
@@ -400,8 +399,7 @@ public class ModRecipeProvider extends RecipeProvider {
         // goggles: two alchemometers looking through brass, held on with leather
         arcane(output, "goggles_of_revealing", "goggles",
                 new ItemStack(ModItems.GOGGLES.get()),
-                AspectList.of(ModAspects.AIR, 25).add(ModAspects.FIRE, 25).add(ModAspects.WATER, 25)
-                        .add(ModAspects.EARTH, 25).add(ModAspects.ENTROPY, 25).add(ModAspects.ORDER, 25),
+                AspectList.eachPrimal(25),
                 Map.of('T', Ingredient.of(ModItems.ALCHEMOMETER),
                         'G', Ingredient.of(ModTags.Items.INGOTS_BRASS),
                         'L', Ingredient.of(Items.LEATHER)),

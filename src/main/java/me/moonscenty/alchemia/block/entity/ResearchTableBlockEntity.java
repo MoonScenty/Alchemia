@@ -8,9 +8,6 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.MenuProvider;
@@ -21,7 +18,6 @@ import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
 /**
@@ -30,7 +26,7 @@ import net.minecraft.world.level.block.state.BlockState;
  * Both are visible on the desk, so whenever they change the block state is updated to match and the model picks up
  * the difference.
  */
-public class ResearchTableBlockEntity extends BlockEntity implements Container, MenuProvider {
+public class ResearchTableBlockEntity extends SyncedBlockEntity implements Container, MenuProvider {
     public static final int SLOT_TOOLS = 0;
     public static final int SLOT_NOTES = 1;
 
@@ -134,9 +130,7 @@ public class ResearchTableBlockEntity extends BlockEntity implements Container, 
     /** Only someone still stood at the desk may keep working at it. */
     @Override
     public boolean stillValid(Player player) {
-        return level != null
-                && level.getBlockEntity(worldPosition) == this
-                && player.distanceToSqr(worldPosition.getCenter()) <= 64.0D;
+        return Container.stillValidBlockEntity(this, player);
     }
 
     @Override
@@ -173,16 +167,6 @@ public class ResearchTableBlockEntity extends BlockEntity implements Container, 
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.saveAdditional(tag, registries);
         ContainerHelper.saveAllItems(tag, contents, registries);
-    }
-
-    @Override
-    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
-        return saveWithoutMetadata(registries);
-    }
-
-    @Override
-    public Packet<ClientGamePacketListener> getUpdatePacket() {
-        return ClientboundBlockEntityDataPacket.create(this);
     }
 
     public static void drop(Level level, BlockPos pos, ResearchTableBlockEntity table) {

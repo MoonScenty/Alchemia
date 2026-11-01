@@ -1,5 +1,6 @@
 package me.moonscenty.alchemia.block;
 
+import me.moonscenty.alchemia.block.entity.Spills;
 import com.mojang.serialization.MapCodec;
 
 import me.moonscenty.alchemia.block.entity.CentrifugeBlockEntity;
@@ -48,9 +49,7 @@ public class CentrifugeBlock extends BaseEntityBlock {
 
     @Override
     protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState replacement, boolean moving) {
-        if (!state.is(replacement.getBlock()) && level.getBlockEntity(pos) instanceof CentrifugeBlockEntity spun) {
-            spun.spill();
-        }
+        Spills.onRemove(state, replacement, level, pos);
         super.onRemove(state, level, pos, replacement, moving);
     }
 }

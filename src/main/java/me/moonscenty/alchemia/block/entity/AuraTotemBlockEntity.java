@@ -17,8 +17,6 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -32,7 +30,6 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
 /**
@@ -44,7 +41,7 @@ import net.minecraft.world.level.block.state.BlockState;
  * take, puts it in a chunk of the other -- or, now and then, spoils it into flux in its own chunk instead. The more
  * poles, the likelier that is; stabilising poles make it less so.
  */
-public class AuraTotemBlockEntity extends BlockEntity implements WorldlyContainer, MenuProvider {
+public class AuraTotemBlockEntity extends SyncedBlockEntity implements WorldlyContainer, MenuProvider {
     /** How many steps a shard lasts, and how long a step is at the slowest. The original's. */
     public static final int LASTS = 500;
     private static final int SLOWEST = 10;
@@ -235,14 +232,6 @@ public class AuraTotemBlockEntity extends BlockEntity implements WorldlyContaine
         return aspect != null ? aspect.value().color() : tuning == ShardTuning.BALANCED ? 0xF0F0F0 : 0x101010;
     }
 
-    /** Saved, and told to anyone watching, whose game has to colour it again. */
-    private void changed() {
-        setChanged();
-        if (level != null && !level.isClientSide) {
-            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
-        }
-    }
-
     // --- the shard pocket ------------------------------------------------------------------------------------
 
     @Override
@@ -356,11 +345,6 @@ public class AuraTotemBlockEntity extends BlockEntity implements WorldlyContaine
     public void handleUpdateTag(CompoundTag tag, HolderLookup.Provider registries) {
         tuning = tag.contains("tuning") ? tag.getByte("tuning") : ShardTuning.NONE;
         recolour();
-    }
-
-    @Override
-    public Packet<ClientGamePacketListener> getUpdatePacket() {
-        return ClientboundBlockEntityDataPacket.create(this);
     }
 
     @Override

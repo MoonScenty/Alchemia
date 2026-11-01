@@ -17,7 +17,6 @@ import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
@@ -29,13 +28,11 @@ import net.minecraft.world.item.crafting.RecipeHolder;
  * them every one the thaumatorium is already making, so that those can be taken off again. Both sides work the list
  * out the same way, sorted by name, so that a button pressed on one means the same recipe on the other.
  */
-public class ThaumatoriumMenu extends AbstractContainerMenu {
+public class ThaumatoriumMenu extends AlchemiaMenu {
     private static final int CATALYST_X = 48;
     private static final int CATALYST_Y = 16;
     private static final int PACK_X = 8;
     private static final int PACK_Y = 84;
-    private static final int BELT_Y = 142;
-    private static final int PITCH = 18;
 
     private final Player player;
     @Nullable
@@ -53,14 +50,7 @@ public class ThaumatoriumMenu extends AbstractContainerMenu {
         this.thaumatorium = thaumatorium;
         this.slot = thaumatorium == null ? new SimpleContainer(1) : thaumatorium;
         addSlot(new Slot(slot, 0, CATALYST_X, CATALYST_Y));
-        for (int row = 0; row < 3; row++) {
-            for (int column = 0; column < 9; column++) {
-                addSlot(new Slot(inventory, column + row * 9 + 9, PACK_X + column * PITCH, PACK_Y + row * PITCH));
-            }
-        }
-        for (int column = 0; column < 9; column++) {
-            addSlot(new Slot(inventory, column, PACK_X + column * PITCH, BELT_Y));
-        }
+        addPlayerInventory(inventory, PACK_X, PACK_Y);
     }
 
     @Nullable
@@ -102,25 +92,7 @@ public class ThaumatoriumMenu extends AbstractContainerMenu {
 
     @Override
     public ItemStack quickMoveStack(Player taker, int index) {
-        Slot from = slots.get(index);
-        if (!from.hasItem()) {
-            return ItemStack.EMPTY;
-        }
-        ItemStack held = from.getItem();
-        ItemStack copy = held.copy();
-        if (index == 0) {
-            if (!moveItemStackTo(held, 1, slots.size(), true)) {
-                return ItemStack.EMPTY;
-            }
-        } else if (!moveItemStackTo(held, 0, 1, false)) {
-            return ItemStack.EMPTY;
-        }
-        if (held.isEmpty()) {
-            from.set(ItemStack.EMPTY);
-        } else {
-            from.setChanged();
-        }
-        return copy;
+        return quickMoveBetween(index, 1);
     }
 
     @Override

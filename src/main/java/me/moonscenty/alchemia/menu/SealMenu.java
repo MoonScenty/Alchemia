@@ -18,7 +18,6 @@ import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
@@ -30,7 +29,7 @@ import net.minecraft.world.item.ItemStack;
  * ghosts: what is put in them stays in the player's hand. Where a seal counts what it wants, a left click with the
  * same thing in hand adds that many, with nothing in hand adds one, and a right click takes them off again.
  */
-public class SealMenu extends AbstractContainerMenu {
+public class SealMenu extends AlchemiaMenu {
     // the buttons, numbered as the original numbered them
     public static final int BLACKLIST = 20;
     public static final int WHITELIST = 21;
@@ -107,14 +106,7 @@ public class SealMenu extends AbstractContainerMenu {
                 }
             });
         }
-        for (int row = 0; row < 3; row++) {
-            for (int column = 0; column < 9; column++) {
-                addSlot(new Slot(inventory, column + row * 9 + 9, 8 + column * 18, 150 + row * 18));
-            }
-        }
-        for (int column = 0; column < 9; column++) {
-            addSlot(new Slot(inventory, column, 8 + column * 18, 208));
-        }
+        addPlayerInventory(inventory, 8, 150);
     }
 
     public SealPos pos() {

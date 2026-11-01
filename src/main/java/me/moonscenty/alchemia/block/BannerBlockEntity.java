@@ -1,5 +1,6 @@
 package me.moonscenty.alchemia.block;
 
+import me.moonscenty.alchemia.block.entity.SyncedBlockEntity;
 import javax.annotation.Nullable;
 
 import me.moonscenty.alchemia.aspect.Aspect;
@@ -12,13 +13,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 
@@ -26,7 +21,7 @@ import net.minecraft.world.phys.AABB;
  * What a banner is: which way it hangs, whether from a wall or on its own pole, its colour -- none for the Crimson
  * Cult's -- and the aspect painted on it, if any.
  */
-public class BannerBlockEntity extends BlockEntity {
+public class BannerBlockEntity extends SyncedBlockEntity {
     /** One of sixteen turns standing, or one of four hanging. */
     private byte facing;
     private boolean wall;
@@ -66,24 +61,17 @@ public class BannerBlockEntity extends BlockEntity {
     public void hang(int facing, boolean wall) {
         this.facing = (byte) facing;
         this.wall = wall;
-        sync();
+        changed();
     }
 
     public void paint(@Nullable Holder<Aspect> aspect) {
         this.aspect = aspect;
-        sync();
+        changed();
     }
 
     public void setColour(@Nullable DyeColor colour) {
         this.colour = colour;
-        sync();
-    }
-
-    private void sync() {
-        setChanged();
-        if (level != null) {
-            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
-        }
+        changed();
     }
 
     @Override
@@ -120,18 +108,7 @@ public class BannerBlockEntity extends BlockEntity {
         wall = tag.getBoolean("wall");
         int id = tag.getByte("color");
         colour = id < 0 ? null : DyeColor.byId(id);
-        ResourceLocation named = tag.contains("aspect") ? ResourceLocation.tryParse(tag.getString("aspect")) : null;
-        aspect = named == null ? null : ModAspects.REGISTRY.getHolder(named).orElse(null);
-    }
-
-    @Override
-    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
-        return saveWithoutMetadata(registries);
-    }
-
-    @Override
-    public Packet<ClientGamePacketListener> getUpdatePacket() {
-        return ClientboundBlockEntityDataPacket.create(this);
+        aspect = tag.contains("aspect") ? ModAspects.byId(tag.getString("aspect")) : null;
     }
 
     public AABB getRenderBoundingBox() {

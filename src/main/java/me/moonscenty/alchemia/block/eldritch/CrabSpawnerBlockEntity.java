@@ -1,5 +1,6 @@
 package me.moonscenty.alchemia.block.eldritch;
 
+import me.moonscenty.alchemia.block.entity.SyncedBlockEntity;
 import me.moonscenty.alchemia.client.EldritchEffects;
 import me.moonscenty.alchemia.entity.EldritchCrab;
 import me.moonscenty.alchemia.registry.ModBlockEntities;
@@ -9,16 +10,11 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 
@@ -27,7 +23,7 @@ import net.minecraft.world.phys.AABB;
  * crabs within thirty-two, it hisses and, a little after, pushes out a crab -- without a helmet -- every seven to
  * twelve seconds.
  */
-public class CrabSpawnerBlockEntity extends BlockEntity {
+public class CrabSpawnerBlockEntity extends SyncedBlockEntity {
     private int count = 150;
     /** For the drawing: an animation counter with a random start, and how much longer it is venting hard. */
     public int ticks;
@@ -44,10 +40,7 @@ public class CrabSpawnerBlockEntity extends BlockEntity {
 
     public void setFacing(Direction facing) {
         this.facing = facing;
-        setChanged();
-        if (level != null) {
-            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
-        }
+        changed();
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state, CrabSpawnerBlockEntity vent) {
@@ -125,13 +118,8 @@ public class CrabSpawnerBlockEntity extends BlockEntity {
 
     @Override
     public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
-        CompoundTag tag = super.getUpdateTag(registries);
+        CompoundTag tag = new CompoundTag();
         saveAdditional(tag, registries);
         return tag;
-    }
-
-    @Override
-    public Packet<ClientGamePacketListener> getUpdatePacket() {
-        return ClientboundBlockEntityDataPacket.create(this);
     }
 }

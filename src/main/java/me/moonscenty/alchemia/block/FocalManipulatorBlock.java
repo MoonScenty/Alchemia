@@ -68,10 +68,7 @@ public class FocalManipulatorBlock extends BaseEntityBlock {
     /** Whatever was laid on it falls out, as it does from any bench that is broken with work on it. */
     @Override
     protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState replacement, boolean moving) {
-        if (!state.is(replacement.getBlock())
-                && level.getBlockEntity(pos) instanceof FocalManipulatorBlockEntity bench) {
-            net.minecraft.world.Containers.dropContents(level, pos, bench);
-        }
+        net.minecraft.world.Containers.dropContentsOnDestroy(state, replacement, level, pos);
         super.onRemove(state, level, pos, replacement, moving);
     }
 }

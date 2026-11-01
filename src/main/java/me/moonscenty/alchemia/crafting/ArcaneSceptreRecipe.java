@@ -2,12 +2,9 @@ package me.moonscenty.alchemia.crafting;
 
 import java.util.Optional;
 
-import com.mojang.serialization.MapCodec;
-
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.aspect.AspectList;
 import me.moonscenty.alchemia.item.WandItem;
-import me.moonscenty.alchemia.registry.ModAspects;
 import me.moonscenty.alchemia.registry.ModItems;
 import me.moonscenty.alchemia.registry.ModWandParts;
 import me.moonscenty.alchemia.wand.WandCap;
@@ -16,8 +13,6 @@ import me.moonscenty.alchemia.wand.WandRod;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
-import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingInput;
@@ -33,7 +28,7 @@ import net.minecraft.world.level.Level;
  * Unlike a wand it has a price, and the price is set by what went into it: the cap's working cost times the rod's,
  * times ten, of every primal. That is why the price is asked of the grid rather than of the recipe.
  */
-public class ArcaneSceptreRecipe implements ArcaneRecipe {
+public class ArcaneSceptreRecipe extends UnitArcaneRecipe {
     public static final ArcaneSceptreRecipe INSTANCE = new ArcaneSceptreRecipe();
 
     /** Where each piece lies, numbered across the rows of the grid. */
@@ -64,12 +59,7 @@ public class ArcaneSceptreRecipe implements ArcaneRecipe {
 
     /** What a sceptre of these makes the bench charge, of every primal. */
     public static AspectList price(WandCap cap, WandRod rod) {
-        int each = cap.craftCost() * rod.craftCost() * PRICE;
-        AspectList price = AspectList.EMPTY;
-        for (Holder<me.moonscenty.alchemia.aspect.Aspect> primal : ModAspects.primals()) {
-            price = price.add(primal, each);
-        }
-        return price;
+        return AspectList.eachPrimal(cap.craftCost() * rod.craftCost() * PRICE);
     }
 
     private record Parts(Holder<WandRod> rod, Holder<WandCap> cap) {
@@ -77,15 +67,8 @@ public class ArcaneSceptreRecipe implements ArcaneRecipe {
 
     /** The rod and cap these nine squares spell a sceptre of, or nothing. */
     private static Parts parts(CraftingInput input) {
-        if (input.width() != 3 || input.height() != 3) {
+        if (!ArcaneRecipe.onlyFilled(input, TOP_CAP, CHARM, ROD, SIDE_CAP, LOW_CAP)) {
             return null;
-        }
-        for (int square = 0; square < 9; square++) {
-            boolean used = square == TOP_CAP || square == CHARM || square == ROD || square == SIDE_CAP
-                    || square == LOW_CAP;
-            if (used == input.getItem(square).isEmpty()) {
-                return null;
-            }
         }
         if (!input.getItem(CHARM).is(ModItems.PRIMAL_CHARM.get())) {
             return null;
@@ -126,39 +109,7 @@ public class ArcaneSceptreRecipe implements ArcaneRecipe {
     }
 
     @Override
-    public boolean canCraftInDimensions(int width, int height) {
-        return width >= 3 && height >= 3;
-    }
-
-    @Override
     public RecipeSerializer<?> getSerializer() {
         return ModRecipes.ARCANE_SCEPTRE.get();
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        return other instanceof ArcaneSceptreRecipe;
-    }
-
-    @Override
-    public int hashCode() {
-        return ArcaneSceptreRecipe.class.hashCode();
-    }
-
-    /** Nothing to write down: the recipe is the same every time and reads what it needs off the bench. */
-    public static class Serializer implements RecipeSerializer<ArcaneSceptreRecipe> {
-        private static final MapCodec<ArcaneSceptreRecipe> CODEC = MapCodec.unit(INSTANCE);
-        private static final StreamCodec<RegistryFriendlyByteBuf, ArcaneSceptreRecipe> STREAM_CODEC =
-                StreamCodec.unit(INSTANCE);
-
-        @Override
-        public MapCodec<ArcaneSceptreRecipe> codec() {
-            return CODEC;
-        }
-
-        @Override
-        public StreamCodec<RegistryFriendlyByteBuf, ArcaneSceptreRecipe> streamCodec() {
-            return STREAM_CODEC;
-        }
     }
 }

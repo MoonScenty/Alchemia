@@ -4,12 +4,7 @@ import me.moonscenty.alchemia.registry.ModBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
 /**
@@ -18,7 +13,7 @@ import net.minecraft.world.level.block.state.BlockState;
  * It is synced as it changes rather than only on load, because the whole point of a pedestal is that what is on it
  * is visible from where you are standing.
  */
-public class ArcanePedestalBlockEntity extends BlockEntity {
+public class ArcanePedestalBlockEntity extends SyncedBlockEntity {
     private ItemStack held = ItemStack.EMPTY;
 
     public ArcanePedestalBlockEntity(BlockPos pos, BlockState state) {
@@ -31,10 +26,7 @@ public class ArcanePedestalBlockEntity extends BlockEntity {
 
     public void hold(ItemStack stack) {
         held = stack;
-        setChanged();
-        if (level != null && !level.isClientSide) {
-            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
-        }
+        changed();
     }
 
     @Override
@@ -51,15 +43,5 @@ public class ArcanePedestalBlockEntity extends BlockEntity {
         if (!held.isEmpty()) {
             tag.put("held", held.save(registries));
         }
-    }
-
-    @Override
-    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
-        return saveWithoutMetadata(registries);
-    }
-
-    @Override
-    public Packet<ClientGamePacketListener> getUpdatePacket() {
-        return ClientboundBlockEntityDataPacket.create(this);
     }
 }

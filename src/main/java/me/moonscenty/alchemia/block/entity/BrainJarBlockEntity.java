@@ -10,17 +10,12 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -33,7 +28,7 @@ import net.minecraft.world.phys.Vec3;
  * seconds before it eats again, so that what it gave is not eaten straight back. It keeps what it holds when it is
  * broken and put down again.
  */
-public class BrainJarBlockEntity extends BlockEntity {
+public class BrainJarBlockEntity extends SyncedBlockEntity {
     public static final int HOLDS = 2000;
     private static final double REACHES = 6.0;
     private static final int GIVES_UP_TO = 64;
@@ -135,13 +130,6 @@ public class BrainJarBlockEntity extends BlockEntity {
         return turnedBefore + Mth.wrapDegrees((turned - turnedBefore) * Mth.RAD_TO_DEG) * Mth.DEG_TO_RAD * partial;
     }
 
-    private void changed() {
-        setChanged();
-        if (level != null) {
-            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
-        }
-    }
-
     // --- what it keeps when broken -------------------------------------------
 
     @Override
@@ -175,15 +163,5 @@ public class BrainJarBlockEntity extends BlockEntity {
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.saveAdditional(tag, registries);
         tag.putInt("XP", xp);
-    }
-
-    @Override
-    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
-        return saveWithoutMetadata(registries);
-    }
-
-    @Override
-    public Packet<ClientGamePacketListener> getUpdatePacket() {
-        return ClientboundBlockEntityDataPacket.create(this);
     }
 }

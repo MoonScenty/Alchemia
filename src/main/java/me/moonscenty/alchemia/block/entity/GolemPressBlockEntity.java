@@ -6,7 +6,6 @@ import javax.annotation.Nullable;
 
 import me.moonscenty.alchemia.aspect.Aspect;
 import me.moonscenty.alchemia.aspect.AspectList;
-import me.moonscenty.alchemia.block.TubeBlock;
 import me.moonscenty.alchemia.client.GolemEffects;
 import me.moonscenty.alchemia.essentia.EssentiaHolder;
 import me.moonscenty.alchemia.golem.GolemDesign;
@@ -21,9 +20,6 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
@@ -36,8 +32,6 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.core.NonNullList;
 
@@ -50,7 +44,7 @@ import net.minecraft.core.NonNullList;
  * meet it on any side but the top, or straight out of a jar set against it. A press with its slot full of something
  * else waits.
  */
-public class GolemPressBlockEntity extends BlockEntity implements EssentiaHolder, Container, MenuProvider {
+public class GolemPressBlockEntity extends SyncedBlockEntity implements EssentiaHolder, Container, MenuProvider {
     /** What the menu reads: how many measures are left, and how many there were. */
     public static final int READINGS = 2;
     public static final int READING_COST = 0;
@@ -207,18 +201,8 @@ public class GolemPressBlockEntity extends BlockEntity implements EssentiaHolder
 
     /** One measure of machina straight out of a vessel against a side; a tube there brings it on its own. */
     private boolean draw(Level level, BlockPos pos) {
-        Holder<Aspect> machina = ModAspects.MECHANISM;
         for (Direction side : Direction.values()) {
-            if (side == Direction.UP) {
-                continue;
-            }
-            BlockPos beside = pos.relative(side);
-            if (level.getBlockState(beside).getBlock() instanceof TubeBlock
-                    || !(level.getBlockEntity(beside) instanceof EssentiaHolder source)
-                    || !source.reachableFrom(side.getOpposite()) || !source.givesTo(side.getOpposite())) {
-                continue;
-            }
-            if (source.held().get(machina) > 0 && source.release(machina)) {
+            if (side != Direction.UP && EssentiaHolder.drawFrom(level, pos, side, ModAspects.MECHANISM)) {
                 return true;
             }
         }
@@ -229,13 +213,6 @@ public class GolemPressBlockEntity extends BlockEntity implements EssentiaHolder
     public void spill() {
         if (level != null) {
             Containers.dropContents(level, worldPosition, this);
-        }
-    }
-
-    private void changed() {
-        setChanged();
-        if (level != null) {
-            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
         }
     }
 
@@ -361,15 +338,5 @@ public class GolemPressBlockEntity extends BlockEntity implements EssentiaHolder
         tag.putInt("cost", cost);
         tag.putInt("max_cost", maxCost);
         tag.putBoolean("buffered", buffered);
-    }
-
-    @Override
-    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
-        return saveWithoutMetadata(registries);
-    }
-
-    @Override
-    public Packet<ClientGamePacketListener> getUpdatePacket() {
-        return ClientboundBlockEntityDataPacket.create(this);
     }
 }

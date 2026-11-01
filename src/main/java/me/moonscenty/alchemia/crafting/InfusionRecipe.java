@@ -205,7 +205,7 @@ public record InfusionRecipe(Ingredient central, List<Ingredient> ring, ItemStac
                         AspectList.CODEC.fieldOf("essentia").forGetter(InfusionRecipe::essentia),
                         com.mojang.serialization.Codec.INT.optionalFieldOf("instability", 0)
                                 .forGetter(InfusionRecipe::instability),
-                        ResourceLocation.CODEC.optionalFieldOf("research").forGetter(InfusionRecipe::research),
+                        Codecs.RESEARCH.forGetter(InfusionRecipe::research),
                         InfusionEnchantment.CODEC.optionalFieldOf("enchants").forGetter(InfusionRecipe::enchants),
                         HelmFitting.CODEC.optionalFieldOf("fits").forGetter(InfusionRecipe::fits),
                         com.mojang.serialization.Codec.BOOL.optionalFieldOf("augments", false)

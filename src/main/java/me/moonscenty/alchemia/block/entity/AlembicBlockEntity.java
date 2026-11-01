@@ -12,14 +12,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
 /**
@@ -29,7 +24,7 @@ import net.minecraft.world.level.block.state.BlockState;
  * each takes the first thing it is offered, so what comes out separated is separated by how many pots are there
  * rather than by any setting.
  */
-public class AlembicBlockEntity extends BlockEntity implements EssentiaHolder {
+public class AlembicBlockEntity extends SyncedBlockEntity implements EssentiaHolder, Spills {
     /** How much one holds. */
     public static final int CAPACITY = 32;
 
@@ -96,6 +91,7 @@ public class AlembicBlockEntity extends BlockEntity implements EssentiaHolder {
     }
 
     /** What a broken vessel lets go: all of it, into the air. */
+    @Override
     public void spill() {
         if (level instanceof ServerLevel served && amount > 0) {
             AuraHandler.add(served, worldPosition, ModAspects.FLUX, amount);
@@ -109,11 +105,9 @@ public class AlembicBlockEntity extends BlockEntity implements EssentiaHolder {
         return holding == null ? 0xFFFFFF : holding.value().color();
     }
 
-    private void changed() {
-        setChanged();
-        if (level != null && !level.isClientSide) {
-            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
-        }
+    @Override
+    protected void changed() {
+        changed(Block.UPDATE_ALL);
     }
 
     /**
@@ -142,10 +136,7 @@ public class AlembicBlockEntity extends BlockEntity implements EssentiaHolder {
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
         amount = tag.getInt("amount");
-        holding = tag.contains("aspect")
-                ? ModAspects.REGISTRY.getHolder(ResourceLocation.parse(tag.getString("aspect")))
-                        .map(found -> (Holder<Aspect>) found).orElse(null)
-                : null;
+        holding = tag.contains("aspect") ? ModAspects.byId(tag.getString("aspect")) : null;
     }
 
     @Override
@@ -155,15 +146,5 @@ public class AlembicBlockEntity extends BlockEntity implements EssentiaHolder {
         if (holding != null) {
             tag.putString("aspect", holding.value().id().toString());
         }
-    }
-
-    @Override
-    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
-        return saveWithoutMetadata(registries);
-    }
-
-    @Override
-    public Packet<ClientGamePacketListener> getUpdatePacket() {
-        return ClientboundBlockEntityDataPacket.create(this);
     }
 }

@@ -9,19 +9,16 @@ import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 
 /** Standing at an arcane bore: its focus on the left, its pickaxe on the right, laid out as the original's. */
-public class ArcaneBoreMenu extends AbstractContainerMenu {
+public class ArcaneBoreMenu extends AlchemiaMenu {
     private static final int FOCUS_X = 26;
     private static final int PICK_X = 74;
     private static final int SLOTS_Y = 18;
     private static final int PACK_X = 8;
     private static final int PACK_Y = 59;
-    private static final int BELT_Y = 117;
-    private static final int PITCH = 18;
 
     @Nullable
     private final ArcaneBoreBlockEntity bore;
@@ -48,14 +45,7 @@ public class ArcaneBoreMenu extends AbstractContainerMenu {
                 return ArcaneBoreBlockEntity.isPick(stack);
             }
         });
-        for (int row = 0; row < 3; row++) {
-            for (int column = 0; column < 9; column++) {
-                addSlot(new Slot(inventory, column + row * 9 + 9, PACK_X + column * PITCH, PACK_Y + row * PITCH));
-            }
-        }
-        for (int column = 0; column < 9; column++) {
-            addSlot(new Slot(inventory, column, PACK_X + column * PITCH, BELT_Y));
-        }
+        addPlayerInventory(inventory, PACK_X, PACK_Y);
     }
 
     @Nullable

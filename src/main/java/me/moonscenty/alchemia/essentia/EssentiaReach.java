@@ -30,21 +30,6 @@ public final class EssentiaReach {
     }
 
     /**
-     * Takes one point of the given aspect out of the nearest thing within reach that will part with it.
-     *
-     * @return where it came from, or null if nothing nearby had any
-     */
-    public static BlockPos drain(Level level, BlockPos from, Holder<Aspect> aspect, int range) {
-        for (BlockEntity holding : nearby(level, from, range)) {
-            if (holding instanceof EssentiaHolder holder && holder.held().get(aspect) > 0
-                    && holder.release(aspect)) {
-                return holding.getBlockPos();
-            }
-        }
-        return null;
-    }
-
-    /**
      * Takes a point of an aspect for an infusion, the original's way: out of a jar or an essentia mirror within a box
      * reaching so far each way, nearest first. Nothing else an altar stands among -- alembics, smelters, pipes -- is
      * drunk from.
@@ -68,23 +53,6 @@ public final class EssentiaReach {
         return null;
     }
 
-    /** How much of an aspect is standing within reach, for telling somebody why the work has stopped. */
-    public static int within(Level level, BlockPos from, Holder<Aspect> aspect, int range) {
-        int found = 0;
-        for (BlockEntity holding : nearby(level, from, range)) {
-            if (holding instanceof EssentiaHolder holder) {
-                found += holder.held().get(aspect);
-            }
-        }
-        return found;
-    }
-
-    /**
-     * Everything that holds essentia within reach, nearest first.
-     * <p>
-     * Walked over the loaded chunks rather than block by block: a reach of twelve is twenty-five thousand blocks
-     * and a handful of block entities, and asking the chunk which ones it has is the difference between the two.
-     */
     /** Everything that holds essentia within reach, nearest first, for anything else that reaches. */
     public static List<BlockEntity> holders(Level level, BlockPos from, int range) {
         return nearby(level, from, range);
