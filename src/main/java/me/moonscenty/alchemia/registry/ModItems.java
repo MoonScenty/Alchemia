@@ -58,7 +58,7 @@ public class ModItems {
             () -> new AlchemometerItem(new Item.Properties().stacksTo(1)));
 
     public static final DeferredItem<Item> SCRIBING_TOOLS = ITEMS.register("scribing_tools",
-            () -> new Item(new Item.Properties().stacksTo(1).durability(64)));
+            () -> new Item(new Item.Properties().stacksTo(1).durability(100)));
     public static final DeferredItem<Item> RESEARCH_NOTES = ITEMS.register("research_notes",
             () -> new ResearchNoteItem(new Item.Properties().stacksTo(1)));
 

@@ -52,14 +52,11 @@ public class ResearchTableBlockEntity extends SyncedBlockEntity implements Conta
 
     public boolean useInk() {
         ItemStack tools = contents.get(SLOT_TOOLS);
-        if (tools.isEmpty()) {
+        // used to the last point, and a dry set stays in its slot to be refilled [ResearchManager.consumeInkFromTable]
+        if (tools.isEmpty() || tools.getDamageValue() >= tools.getMaxDamage()) {
             return false;
         }
-        if (tools.getDamageValue() + 1 >= tools.getMaxDamage()) {
-            contents.set(SLOT_TOOLS, ItemStack.EMPTY);
-        } else {
-            tools.setDamageValue(tools.getDamageValue() + 1);
-        }
+        tools.setDamageValue(tools.getDamageValue() + 1);
         setChanged();
         showWhatIsOnTheDesk();
         return true;

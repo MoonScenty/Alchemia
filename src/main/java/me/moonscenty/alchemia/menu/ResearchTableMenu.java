@@ -83,7 +83,7 @@ public class ResearchTableMenu extends AlchemiaMenu {
 
     public boolean hasInk() {
         ItemStack tools = toolStack();
-        return !tools.isEmpty() && tools.getDamageValue() < tools.getMaxDamage() - 1;
+        return !tools.isEmpty() && tools.getDamageValue() < tools.getMaxDamage();
     }
 
     public static final ResourceLocation RESEARCHER_1 = Alchemia.id("researcher1");

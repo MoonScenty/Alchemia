@@ -23,6 +23,8 @@ import net.minecraft.world.inventory.ResultContainer;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingInput;
+import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 
@@ -93,7 +95,16 @@ public class ArcaneWorkbenchMenu extends AlchemiaMenu {
         return bench.getItem(ArcaneWorkbenchBlockEntity.SLOT_WAND);
     }
 
+    // plain crafting is looked for first and costs no vis [ContainerArcaneWorkbench.onCraftMatrixChanged]
+    public Optional<RecipeHolder<CraftingRecipe>> plain() {
+        Level level = player.level();
+        return level.getRecipeManager().getRecipeFor(RecipeType.CRAFTING, grid(), level);
+    }
+
     public Optional<RecipeHolder<ArcaneRecipe>> matching() {
+        if (plain().isPresent()) {
+            return Optional.empty();
+        }
         Level level = player.level();
         return level.getRecipeManager().getRecipeFor(ModRecipes.ARCANE.get(), grid(), level);
     }
@@ -117,12 +128,14 @@ public class ArcaneWorkbenchMenu extends AlchemiaMenu {
         if (player.level().isClientSide) {
             return;
         }
-        ItemStack made = matching()
-                .filter(found -> known(found.value()))
-                .filter(found -> VisHolder.canPay(wand(), found.value().cost(grid()), player,
-                        VisHolder.Spending.CRAFTING))
+        ItemStack made = plain()
                 .map(found -> found.value().assemble(grid(), player.level().registryAccess()))
-                .orElse(ItemStack.EMPTY);
+                .orElseGet(() -> matching()
+                        .filter(found -> known(found.value()))
+                        .filter(found -> VisHolder.canPay(wand(), found.value().cost(grid()), player,
+                                VisHolder.Spending.CRAFTING))
+                        .map(found -> found.value().assemble(grid(), player.level().registryAccess()))
+                        .orElse(ItemStack.EMPTY));
         result.setItem(0, made);
         if (player instanceof ServerPlayer server) {
             server.connection.send(new ClientboundContainerSetSlotPacket(

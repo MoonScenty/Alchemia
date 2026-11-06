@@ -69,7 +69,7 @@ public final class NoteRequests {
 
         player.getInventory().removeItem(paper, 1);
         ItemStack scribing = player.getInventory().getItem(tools);
-        scribing.hurtAndBreak(1, player, net.minecraft.world.entity.EquipmentSlot.MAINHAND);
+        scribing.setDamageValue(scribing.getDamageValue() + 1);
 
         ItemStack note = new ItemStack(ModItems.RESEARCH_NOTES.get());
         note.set(ModDataComponents.RESEARCH_NOTE.get(), NoteGeneration.draw(id, entry, player.getRandom()));
@@ -111,7 +111,7 @@ public final class NoteRequests {
         Inventory inventory = player.getInventory();
         for (int slot = 0; slot < inventory.getContainerSize(); slot++) {
             ItemStack stack = inventory.getItem(slot);
-            if (stack.is(ModItems.SCRIBING_TOOLS.get()) && stack.getDamageValue() < stack.getMaxDamage() - 1) {
+            if (stack.is(ModItems.SCRIBING_TOOLS.get()) && stack.getDamageValue() < stack.getMaxDamage()) {
                 return slot;
             }
         }

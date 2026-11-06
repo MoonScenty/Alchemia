@@ -184,9 +184,11 @@ public class ResearchTests {
         for (int used = 1; used <= capacity; used++) {
             helper.assertTrue(table.useInk(), "the ink gave out early, after " + used);
         }
-        helper.assertTrue(table.get(ResearchTableBlockEntity.SLOT_TOOLS).isEmpty(),
-                "the dry tools should have been cleared away");
-        helper.assertTrue(!helper.getBlockState(pos).getValue(ResearchTableBlock.HAS_TOOLS), "and the inkwell with them");
+        helper.assertValueEqual(capacity, 100, "a hundred points of ink");
+        helper.assertTrue(!table.useInk(), "and not one more");
+        helper.assertTrue(table.get(ResearchTableBlockEntity.SLOT_TOOLS).is(ModItems.SCRIBING_TOOLS.get()),
+                "the dry tools stay where they are, to be refilled");
+        helper.assertTrue(helper.getBlockState(pos).getValue(ResearchTableBlock.HAS_TOOLS), "and so does the inkwell");
         helper.succeed();
     }
 }
