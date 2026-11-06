@@ -29,7 +29,7 @@ public class CultistArmorItem extends ArmorItem implements WarpingGear, VisDisco
     private final Kind kind;
 
     public CultistArmorItem(Holder<ArmorMaterial> material, Type type, Kind kind, Properties properties) {
-        super(material, type, properties.rarity(Rarity.UNCOMMON));
+        super(material, type, properties.rarity(kind == Kind.PRAETOR ? Rarity.RARE : Rarity.UNCOMMON));
         this.kind = kind;
     }
 

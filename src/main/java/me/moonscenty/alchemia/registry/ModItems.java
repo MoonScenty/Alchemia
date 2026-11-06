@@ -60,7 +60,7 @@ public class ModItems {
     public static final DeferredItem<Item> SCRIBING_TOOLS = ITEMS.register("scribing_tools",
             () -> new Item(new Item.Properties().stacksTo(1).durability(100)));
     public static final DeferredItem<Item> RESEARCH_NOTES = ITEMS.register("research_notes",
-            () -> new ResearchNoteItem(new Item.Properties().stacksTo(1)));
+            () -> new ResearchNoteItem(new Item.Properties()));
 
     public static final DeferredItem<Item> NODE_PLACER = ITEMS.register("node_placer",
             () -> new NodePlacerItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
@@ -69,7 +69,7 @@ public class ModItems {
             () -> new AlchemonomiconItem(new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON)));
 
     public static final DeferredItem<Item> WAND = ITEMS.register("wand",
-            () -> new WandItem(new Item.Properties()));
+            () -> new WandItem(new Item.Properties().rarity(Rarity.UNCOMMON)));
 
     public static final Map<String, DeferredItem<Item>> WAND_CAPS = registerWandCaps();
 
@@ -137,7 +137,7 @@ public class ModItems {
     public static final DeferredItem<Item> CINNABAR_CLUSTER = ITEMS.registerSimpleItem("cinnabar_cluster");
 
     public static final DeferredItem<Item> PRIMAL_CHARM = ITEMS.register("primal_charm",
-            () -> new Item(new Item.Properties().rarity(net.minecraft.world.item.Rarity.UNCOMMON)));
+            () -> new Item(new Item.Properties().stacksTo(1).rarity(net.minecraft.world.item.Rarity.UNCOMMON)));
     public static final DeferredItem<me.moonscenty.alchemia.item.ZombieBrainItem> ZOMBIE_BRAIN =
             ITEMS.register("zombie_brain", () -> new me.moonscenty.alchemia.item.ZombieBrainItem(new Item.Properties()));
     public static final Map<String, DeferredItem<me.moonscenty.alchemia.item.MeatChunkItem>> MEAT_CHUNKS =
@@ -203,7 +203,7 @@ public class ModItems {
     public static final DeferredItem<me.moonscenty.alchemia.item.CrimsonBladeItem> CRIMSON_BLADE =
             ITEMS.register("crimson_blade", () -> new me.moonscenty.alchemia.item.CrimsonBladeItem(ModTiers.CRIMSON,
                     new Item.Properties().rarity(net.minecraft.world.item.Rarity.EPIC).attributes(
-                            SwordItem.createAttributes(ModTiers.CRIMSON, 3, -2.4F))));
+                            SwordItem.createAttributes(ModTiers.CRIMSON, 4, -2.4F))));
     public static final DeferredItem<me.moonscenty.alchemia.item.CrimsonRitesItem> CRIMSON_RITES =
             ITEMS.register("crimson_rites", () -> new me.moonscenty.alchemia.item.CrimsonRitesItem(
                     new Item.Properties().stacksTo(1).rarity(net.minecraft.world.item.Rarity.RARE)));
@@ -230,13 +230,13 @@ public class ModItems {
     public static final DeferredItem<Item> PRIMORDIAL_PEARL = ITEMS.register("primordial_pearl",
             () -> new Item(new Item.Properties().fireResistant()));
     public static final DeferredItem<me.moonscenty.alchemia.item.LootBagItem> LOOT_BAG_COMMON = ITEMS.register(
-            "loot_bag_common", () -> new me.moonscenty.alchemia.item.LootBagItem(new Item.Properties(), 0));
+            "loot_bag_common", () -> new me.moonscenty.alchemia.item.LootBagItem(new Item.Properties().stacksTo(16), 0));
     public static final DeferredItem<me.moonscenty.alchemia.item.LootBagItem> LOOT_BAG_UNCOMMON = ITEMS.register(
             "loot_bag_uncommon", () -> new me.moonscenty.alchemia.item.LootBagItem(
-                    new Item.Properties().rarity(net.minecraft.world.item.Rarity.UNCOMMON), 1));
+                    new Item.Properties().stacksTo(16).rarity(net.minecraft.world.item.Rarity.UNCOMMON), 1));
     public static final DeferredItem<me.moonscenty.alchemia.item.LootBagItem> LOOT_BAG_RARE = ITEMS.register(
             "loot_bag_rare", () -> new me.moonscenty.alchemia.item.LootBagItem(
-                    new Item.Properties().rarity(net.minecraft.world.item.Rarity.RARE), 2));
+                    new Item.Properties().stacksTo(16).rarity(net.minecraft.world.item.Rarity.RARE), 2));
     public static final DeferredItem<me.moonscenty.alchemia.item.RunedTabletItem> RUNED_TABLET = ITEMS.register(
             "runed_tablet", () -> new me.moonscenty.alchemia.item.RunedTabletItem(new Item.Properties().stacksTo(1)
                     .rarity(net.minecraft.world.item.Rarity.RARE)));
@@ -496,8 +496,10 @@ public class ModItems {
     private static void crimson(Map<String, DeferredItem<me.moonscenty.alchemia.item.CultistArmorItem>> into,
             String name, ArmorItem.Type type, me.moonscenty.alchemia.item.CultistArmorItem.Kind kind,
             DeferredHolder<ArmorMaterial, ArmorMaterial> material) {
+        int lasts = kind == me.moonscenty.alchemia.item.CultistArmorItem.Kind.PRAETOR
+                ? ModArmorMaterials.PRAETOR_LASTS : ModArmorMaterials.CRIMSON_LASTS;
         into.put(name, ITEMS.register(name, () -> new me.moonscenty.alchemia.item.CultistArmorItem(material, type,
-                kind, new Item.Properties().durability(type.getDurability(ModArmorMaterials.CRIMSON_LASTS)))));
+                kind, new Item.Properties().durability(type.getDurability(lasts)))));
     }
 
     private static Map<String, DeferredItem<FortressArmorItem>> registerFortress() {
@@ -538,7 +540,7 @@ public class ModItems {
                             ShovelItem.createAttributes(tier, 1.5F, -3.0F)))));
             made.put(metal + "_sword", ITEMS.register(metal + "_sword",
                     () -> new SwordItem(tier, new Item.Properties().attributes(
-                            SwordItem.createAttributes(tier, 3, -2.4F)))));
+                            SwordItem.createAttributes(tier, 4, -2.4F)))));
             made.put(metal + "_hoe", ITEMS.register(metal + "_hoe",
                     () -> new HoeItem(tier, new Item.Properties().attributes(
                             HoeItem.createAttributes(tier, -2.0F, -1.0F)))));
@@ -564,7 +566,7 @@ public class ModItems {
         made.put("elemental_sword", ITEMS.register("elemental_sword",
                 () -> new me.moonscenty.alchemia.item.tool.ElementalSwordItem(tier,
                         me.moonscenty.alchemia.item.tool.ElementalTools.carrying(new Item.Properties()
-                                        .attributes(SwordItem.createAttributes(tier, 3, -2.4F)),
+                                        .attributes(SwordItem.createAttributes(tier, 4, -2.4F)),
                                 me.moonscenty.alchemia.enchantment.InfusionEnchantment.ARCING, 2))));
         made.put("elemental_shovel", ITEMS.register("elemental_shovel",
                 () -> new me.moonscenty.alchemia.item.tool.ElementalShovelItem(tier,
@@ -589,7 +591,8 @@ public class ModItems {
                     ArmorItem.Type.LEGGINGS, ArmorItem.Type.BOOTS}) {
                 made.put(metal + "_" + type.getName(), ITEMS.register(metal + "_" + type.getName(),
                         () -> new ArmorItem(metals.get(metal), type,
-                                new Item.Properties().durability(type.getDurability(lasts.get(metal))))));
+                                new Item.Properties().durability(type.getDurability(lasts.get(metal)))
+                                        .rarity(Rarity.UNCOMMON))));
             }
         }
         return Collections.unmodifiableMap(made);

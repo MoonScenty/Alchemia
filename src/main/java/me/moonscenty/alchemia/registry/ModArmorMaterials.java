@@ -30,13 +30,13 @@ public final class ModArmorMaterials {
                     () -> Ingredient.of(ModItems.VOID_INGOT)));
 
     public static final DeferredHolder<ArmorMaterial, ArmorMaterial> TRAVELLER =
-            MATERIALS.register("traveller", () -> new ArmorMaterial(stops(1, 3, 2, 1), 15,
+            MATERIALS.register("traveller", () -> new ArmorMaterial(stops(1, 3, 2, 1), 25,
                     SoundEvents.ARMOR_EQUIP_LEATHER, () -> Ingredient.of(net.minecraft.world.item.Items.LEATHER),
                     List.of(new ArmorMaterial.Layer(Alchemia.id("traveller_boots"))), 0.0F, 0.0F));
 
     // own material: the armour texture is named by the material, so sharing one shares the texture
     public static final DeferredHolder<ArmorMaterial, ArmorMaterial> GOGGLES =
-            MATERIALS.register("goggles", () -> new ArmorMaterial(stops(1, 3, 2, 1), 15,
+            MATERIALS.register("goggles", () -> new ArmorMaterial(stops(1, 3, 2, 1), 25,
                     SoundEvents.ARMOR_EQUIP_IRON, () -> Ingredient.of(ModItems.BRASS_INGOT),
                     List.of(new ArmorMaterial.Layer(Alchemia.id("goggles"))), 0.0F, 0.0F));
 
@@ -47,7 +47,7 @@ public final class ModArmorMaterials {
 
     public static final DeferredHolder<ArmorMaterial, ArmorMaterial> CLOTH =
             MATERIALS.register("cloth", () -> new ArmorMaterial(stops(1, 3, 2, 1), 25,
-                    SoundEvents.ARMOR_EQUIP_LEATHER, () -> Ingredient.of(net.minecraft.world.item.Items.LEATHER),
+                    SoundEvents.ARMOR_EQUIP_LEATHER, () -> Ingredient.of(ModItems.ENCHANTED_FABRIC),
                     robeLayers("cloth"), 0.0F, 0.0F));
 
     public static final DeferredHolder<ArmorMaterial, ArmorMaterial> VOID_ROBE =
@@ -56,11 +56,11 @@ public final class ModArmorMaterials {
                     robeLayers("void_robe"), 0.0F, 0.0F));
 
     public static final DeferredHolder<ArmorMaterial, ArmorMaterial> FORTRESS =
-            MATERIALS.register("fortress", () -> new ArmorMaterial(stops(3, 7, 6, 3), 40,
+            MATERIALS.register("fortress", () -> new ArmorMaterial(stops(3, 7, 6, 3), 25,
                     SoundEvents.ARMOR_EQUIP_IRON, () -> Ingredient.of(ModItems.ALCHEMIUM_INGOT),
                     List.of(new ArmorMaterial.Layer(Alchemia.id("fortress"))), 0.0F, 0.0F));
 
-    public static final int FORTRESS_LASTS = 25;
+    public static final int FORTRESS_LASTS = 40;
 
     public static final DeferredHolder<ArmorMaterial, ArmorMaterial> CRIMSON_ROBE =
             MATERIALS.register("crimson_robe", () -> material("crimson_robe", stops(2, 6, 5, 2), 9,
@@ -76,6 +76,7 @@ public final class ModArmorMaterials {
                     () -> Ingredient.of(net.minecraft.world.item.Items.IRON_INGOT)));
 
     public static final int CRIMSON_LASTS = 15;
+    public static final int PRAETOR_LASTS = 45;
 
     public static final int CLOTH_LASTS = 25;
     public static final int VOID_ROBE_LASTS = 10;

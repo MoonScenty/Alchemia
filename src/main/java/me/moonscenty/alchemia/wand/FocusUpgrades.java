@@ -213,7 +213,7 @@ public final class FocusUpgrades {
                             .add(ModAspects.WATER, 1).add(ModAspects.AIR, 1))
                     : base;
             case "trade" -> has(focus, SILK_TOUCH)
-                    ? base.costing(base.cost().add(allButEarth()))
+                    ? base.costing(base.cost().add(allButEntropy()))
                     : base;
             default -> base;
         };
@@ -277,6 +277,10 @@ public final class FocusUpgrades {
                     .add(ModAspects.AIR, 5).add(ModAspects.EARTH, 5));
         }
         return base;
+    }
+
+    private static AspectList allButEntropy() {
+        return AspectList.eachPrimal(1).remove(ModAspects.ENTROPY);
     }
 
     private static AspectList allButEarth() {
