@@ -2,6 +2,7 @@ package me.moonscenty.alchemia.wand.spell;
 
 import java.util.List;
 
+import me.moonscenty.alchemia.entity.Pech;
 import me.moonscenty.alchemia.registry.ModEntities;
 import me.moonscenty.alchemia.registry.ModSounds;
 import net.minecraft.core.particles.ParticleTypes;
@@ -82,28 +83,25 @@ public class PechBlast extends ThrowableProjectile {
 
         Entity thrower = getOwner();
         List<LivingEntity> caught = served.getEntitiesOfClass(LivingEntity.class,
-                new AABB(position(), position()).inflate(REACHES), alive -> alive != thrower);
+                new AABB(position(), position()).inflate(REACHES),
+                alive -> alive != thrower && !(alive instanceof Pech));
         int lasts = LASTS + longer * LONGER;
         for (LivingEntity hit : caught) {
-            hit.hurt(damageSources().indirectMagic(this, thrower), HURTS + strength);
+            hit.hurt(damageSources().thrown(this, thrower), HURTS + strength);
+            // slowness gets one amplifier rank more than the other two, as in the original
             if (nightshade) {
-                // slowness gets one amplifier rank more than the other two, as in the original
                 hit.addEffect(new MobEffectInstance(MobEffects.POISON, lasts, strength));
                 hit.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, lasts, strength + 1));
                 hit.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, lasts, strength));
             } else {
-                hit.addEffect(new MobEffectInstance(oneOf(), lasts, strength));
+                switch (random.nextInt(3)) {
+                    case 0 -> hit.addEffect(new MobEffectInstance(MobEffects.POISON, lasts, strength));
+                    case 1 -> hit.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, lasts, strength + 1));
+                    default -> hit.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, lasts, strength));
+                }
             }
         }
         discard();
-    }
-
-    private net.minecraft.core.Holder<net.minecraft.world.effect.MobEffect> oneOf() {
-        return switch (random.nextInt(3)) {
-            case 0 -> MobEffects.POISON;
-            case 1 -> MobEffects.MOVEMENT_SLOWDOWN;
-            default -> MobEffects.WEAKNESS;
-        };
     }
 
     @Override

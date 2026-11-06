@@ -10,16 +10,21 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 
 public class PrimalOrb extends Bolt {
     private static final float BLAST = 2.0F;
-    // one in this many plain orbs bursts into taint instead
-    private static final int WRONG_IN = 100;
+    private static final float PORTAL_BLAST = 4.0F;
+    // a plain orb bursts into taint when a roll of 0-99 comes up at most this
+    private static final int GOES_WRONG = 1;
+    private static final int GOES_WRONG_IN_PORTAL = 10;
     // taint placement attempts and search radius
     private static final int TRIES = 15;
     private static final int SPREADS = 6;
-    private static final int BURNS_OUT = 100;
+    private static final int BURNS_OUT = 5000;
     private static final double LOOKS = 16.0;
     private static final double STEERS = 0.2;
 
@@ -58,6 +63,10 @@ public class PrimalOrb extends Bolt {
     // the original's plain orb wandered randomly; ours flies straight, so only the seeker steers
     @Override
     public void tick() {
+        if (!level().isClientSide && inPortal()) {
+            lands(new EntityHitResult(this));
+            return;
+        }
         if (seeker && !level().isClientSide) {
             LivingEntity mark = level().getNearestEntity(LivingEntity.class,
                     net.minecraft.world.entity.ai.targeting.TargetingConditions.forNonCombat().range(LOOKS),
@@ -84,10 +93,17 @@ public class PrimalOrb extends Bolt {
 
     @Override
     protected void land(ServerLevel level, HitResult where) {
-        level.explode(getOwner(), getX(), getY(), getZ(), BLAST, Level.ExplosionInteraction.TNT);
-        if (!seeker && random.nextInt(WRONG_IN) == 0) {
+        boolean portal = where.getType() == HitResult.Type.BLOCK && inPortal();
+        level.explode(getOwner(), getX(), getY(), getZ(), portal ? PORTAL_BLAST : BLAST,
+                Level.ExplosionInteraction.TNT);
+        if (!seeker && random.nextInt(100) <= (portal ? GOES_WRONG_IN_PORTAL : GOES_WRONG)) {
             goesWrong(level);
         }
+    }
+
+    private boolean inPortal() {
+        BlockState at = level().getBlockState(BlockPos.containing(getEyePosition()));
+        return at.is(Blocks.NETHER_PORTAL) || at.is(Blocks.END_PORTAL) || at.is(Blocks.END_GATEWAY);
     }
 
     private void goesWrong(ServerLevel level) {

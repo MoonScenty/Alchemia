@@ -65,6 +65,7 @@ public class BossTests {
         golem.invulnerableTime = 0;
         golem.hurt(helper.getLevel().damageSources().generic(), 30.0F);
         helper.assertTrue(golem.isAlive() && golem.isHeadless(), "it lost its head, not its life");
+        helper.assertValueEqual(golem.getEyeHeight(), 3.33F, "and now sees from its shoulders");
         golem.discard();
         helper.succeed();
     }

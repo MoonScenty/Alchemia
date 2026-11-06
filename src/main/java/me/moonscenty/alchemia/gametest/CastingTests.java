@@ -263,4 +263,18 @@ public class CastingTests {
                 "there was nothing there to bore");
         helper.succeed();
     }
+
+    @GameTest(template = TEMPLATE, timeoutTicks = 200)
+    public static void aPechsCurseSparesOtherPechs(GameTestHelper helper) {
+        Player caster = helper.makeMockPlayer(GameType.SURVIVAL);
+        LivingEntity pech = helper.spawn(me.moonscenty.alchemia.registry.ModEntities.PECH.get(), new BlockPos(2, 2, 2));
+        PechBlast blast = new PechBlast(helper.getLevel(), caster);
+        blast.setPos(pech.getX(), pech.getY() + 0.5, pech.getZ());
+        helper.getLevel().addFreshEntity(blast);
+        blast.burst(new net.minecraft.world.phys.BlockHitResult(blast.position(),
+                net.minecraft.core.Direction.UP, helper.absolutePos(new BlockPos(2, 1, 2)), false));
+        helper.assertTrue(pech.getActiveEffects().isEmpty() && pech.getHealth() == pech.getMaxHealth(),
+                "a pech is left alone");
+        helper.succeed();
+    }
 }

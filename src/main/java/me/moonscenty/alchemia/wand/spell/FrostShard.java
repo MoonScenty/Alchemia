@@ -22,7 +22,7 @@ import net.minecraft.world.phys.Vec3;
 public class FrostShard extends Bolt {
     private static final float HURTS = 3.0F;
     // gravity for spikes, then for splinters
-    private static final double FALLS = 0.03;
+    private static final double FALLS = 0.05;
     private static final double DRIFTS = 0.015;
     private static final int MELTS_AFTER = 100;
     // chill duration in ticks, and the share of speed a boulder keeps off a wall
@@ -79,7 +79,7 @@ public class FrostShard extends Bolt {
             return;
         }
         if (where instanceof EntityHitResult struck) {
-            struck.getEntity().hurt(damageSources().indirectMagic(this, getOwner()), hurts);
+            struck.getEntity().hurt(damageSources().thrown(this, getOwner()), hurts);
             if (chills > 0 && struck.getEntity() instanceof LivingEntity chilled) {
                 chilled.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, CHILLS_FOR, chills - 1));
             }

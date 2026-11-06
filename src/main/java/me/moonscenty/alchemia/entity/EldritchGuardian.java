@@ -98,7 +98,7 @@ public class EldritchGuardian extends Monster implements RangedAttackMob, Eldrit
     protected void registerGoals() {
         goalSelector.addGoal(0, new FloatGoal(this));
         // casts from further off than eight blocks; nearer, it strikes
-        goalSelector.addGoal(2, LongRangeAttackGoal.toStart(this, 8.0, 1.0, 20, 40, 24.0F));
+        goalSelector.addGoal(2, new LongRangeAttackGoal(this, 8.0, 1.0, 20, 40, 24.0F));
         goalSelector.addGoal(3, new QuickMeleeGoal(this, 1.0, false));
         goalSelector.addGoal(5, new MoveTowardsRestrictionGoal(this, 0.8));
         goalSelector.addGoal(7, new RandomStrollGoal(this, 1.0));

@@ -18,7 +18,6 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.RangedAttackGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Enemy;
@@ -73,7 +72,7 @@ public class AutomatedCrossbow extends ConstructWithSlot implements RangedAttack
 
     @Override
     protected void registerGoals() {
-        goalSelector.addGoal(1, new RangedAttackGoal(this, 0.0, 20, reloadsWithin(), (float) SEES));
+        goalSelector.addGoal(1, new ArrowAttackGoal(this, 0.0, 20, reloadsWithin(), (float) SEES));
         targetSelector.addGoal(1, new HurtByTargetGoal(this));
         targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Mob.class, 5, true, false,
                 other -> other instanceof Enemy));

@@ -122,4 +122,33 @@ public class EldritchMobTests {
                 "and the deepest brings many guardians");
         helper.succeed();
     }
+
+    @GameTest(template = TEMPLATE)
+    public static void aHuskTurnsNoVillager(GameTestHelper helper) {
+        var level = helper.getLevel();
+        InhabitedZombie husk = ordinary(helper, new InhabitedZombie(level), new BlockPos(8, 2, 8));
+        for (int victim = 0; victim < 8; victim++) {
+            husk.killedEntity(level, helper.spawn(EntityType.VILLAGER, new BlockPos(10, 2, 8)));
+        }
+        helper.assertTrue(level.getEntitiesOfClass(net.minecraft.world.entity.monster.ZombieVillager.class,
+                new AABB(helper.absolutePos(new BlockPos(10, 2, 8))).inflate(4.0)).isEmpty(),
+                "the villager stays dead");
+        helper.succeed();
+    }
+
+    @GameTest(template = TEMPLATE, timeoutTicks = 60)
+    public static void aHuskLeavesNothingEvenToAPlayer(GameTestHelper helper) {
+        var level = helper.getLevel();
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        for (int husk = 0; husk < 20; husk++) {
+            InhabitedZombie killed = ordinary(helper, new InhabitedZombie(level), new BlockPos(4 + husk, 2, 20));
+            killed.hurt(level.damageSources().playerAttack(player), 1000.0F);
+        }
+        AABB around = new AABB(helper.absolutePos(new BlockPos(14, 2, 20))).inflate(14.0, 4.0, 4.0);
+        helper.runAfterDelay(30, () -> {
+            helper.assertTrue(level.getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class, around)
+                    .isEmpty(), "no brain, no gear");
+            helper.succeed();
+        });
+    }
 }

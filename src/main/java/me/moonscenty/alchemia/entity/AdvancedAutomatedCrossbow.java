@@ -6,7 +6,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.RangedAttackGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.player.Player;
@@ -27,7 +26,7 @@ public class AdvancedAutomatedCrossbow extends AutomatedCrossbow {
 
     @Override
     protected void registerGoals() {
-        goalSelector.addGoal(1, new RangedAttackGoal(this, 0.0, 20, reloadsWithin(), 24.0F));
+        goalSelector.addGoal(1, new ArrowAttackGoal(this, 0.0, 20, reloadsWithin(), 24.0F));
         targetSelector.addGoal(1, new HurtByTargetGoal(this));
         targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, LivingEntity.class, 5, true, false,
                 this::worthShooting));

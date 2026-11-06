@@ -200,8 +200,8 @@ public class Golem extends PathfinderMob implements OwnableEntity, net.minecraft
                 goalSelector.addGoal(0, new FloatGoal(this));
             }
             if (has(GolemTrait.RANGED) && design.arms() == GolemParts.Arms.DARTS) {
-                goalSelector.addGoal(1, new net.minecraft.world.entity.ai.goal.RangedAttackGoal(this, 1.0, 20, 25,
-                        16.0F));
+                goalSelector.addGoal(1, new me.moonscenty.alchemia.entity.ArrowAttackGoal(this, 1.0, 20, 25,
+                        16.0F).turning(10.0F));
             }
             goalSelector.addGoal(2, new me.moonscenty.alchemia.entity.QuickMeleeGoal(this, 1.15, false));
             if (following()) {
@@ -401,8 +401,10 @@ public class Golem extends PathfinderMob implements OwnableEntity, net.minecraft
     public boolean doHurtTarget(Entity target) {
         boolean hit = super.doHurtTarget(target);
         if (hit) {
-            if (target instanceof LivingEntity living && has(GolemTrait.DEFT) && getOwner() instanceof Player owner) {
-                living.setLastHurtByPlayer(owner);
+            // counts as a player's kill even with the owner away; loot tables want a player to credit
+            if (target instanceof LivingEntity living && has(GolemTrait.DEFT) && level() instanceof ServerLevel served) {
+                living.setLastHurtByPlayer(getOwner() instanceof Player owner ? owner
+                        : me.moonscenty.alchemia.golem.seal.Fieldwork.hands(served, this));
             }
             if (target instanceof Mob mob && !mob.isAlive()) {
                 addRankXp(KILL_XP);

@@ -48,7 +48,7 @@ public class GuardSeal extends Seal {
         }
     }
 
-    // to the original, animals were anything tame-natured, golems included
+    // to the original, animals were anything tame-natured, golems and monsters included
     private boolean wanted(LivingEntity target) {
         if (!target.isAlive()) {
             return false;
@@ -57,7 +57,7 @@ public class GuardSeal extends Seal {
             return true;
         }
         if (toggle(ANIMALS) && (target instanceof Animal || target instanceof AmbientCreature
-                || target instanceof WaterAnimal || target instanceof AbstractGolem)) {
+                || target instanceof WaterAnimal || target instanceof AbstractGolem || target instanceof Enemy)) {
             return true;
         }
         return toggle(PLAYERS) && target instanceof Player && target.level().getServer() != null

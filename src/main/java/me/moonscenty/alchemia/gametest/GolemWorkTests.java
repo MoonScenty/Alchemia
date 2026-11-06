@@ -180,4 +180,29 @@ public class GolemWorkTests {
             helper.assertTrue(golem.distanceTo(zombie) > 2.0, "from a distance");
         });
     }
+
+    @GameTest(template = TEMPLATE, timeoutTicks = 200)
+    public static void aGuardForAnimalsAlsoTakesMonsters(GameTestHelper helper) {
+        floor(helper);
+        Player owner = helper.makeMockPlayer(GameType.SURVIVAL);
+        Golem golem = golem(helper, owner, FIGHTER, new BlockPos(2, 2, 2));
+        SealEntity seal = stick(helper, "guard", new BlockPos(6, 1, 6), owner);
+        seal.seal().toggles().get(0).set(false);
+        seal.seal().toggles().get(1).set(true);
+        var zombie = still(helper, EntityType.ZOMBIE, new BlockPos(6, 2, 6));
+        helper.succeedWhen(() -> helper.assertTrue(golem.getTarget() == zombie, "the golem is after the zombie"));
+    }
+
+    @GameTest(template = TEMPLATE)
+    public static void aDeftGolemsKillIsAPlayersEvenWithTheOwnerAway(GameTestHelper helper) {
+        Golem golem = ModEntities.GOLEM.get().create(helper.getLevel());
+        BlockPos where = helper.absolutePos(new BlockPos(2, 2, 2));
+        golem.moveTo(where.getX() + 0.5, where.getY(), where.getZ() + 0.5, 0.0F, 0.0F);
+        golem.placed(java.util.UUID.randomUUID(), GolemDesign.BASIC.withArms(GolemParts.Arms.FINE), 0, where);
+        helper.getLevel().addFreshEntity(golem);
+        var cow = still(helper, EntityType.COW, new BlockPos(3, 2, 2));
+        golem.doHurtTarget(cow);
+        helper.assertTrue(cow.getKillCredit() instanceof Player, "the kill counts as a player's");
+        helper.succeed();
+    }
 }

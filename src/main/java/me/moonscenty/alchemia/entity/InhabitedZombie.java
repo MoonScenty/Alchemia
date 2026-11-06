@@ -16,6 +16,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -78,7 +79,14 @@ public class InhabitedZombie extends Zombie implements EldritchMob {
     }
 
     @Override
-    protected void dropCustomDeathLoot(ServerLevel level, DamageSource source, boolean recentlyHit) {
+    public boolean killedEntity(ServerLevel level, LivingEntity entity) {
+        return true;
+    }
+
+    // only experience: no loot, no gear, and no drops event
+    @Override
+    protected void dropAllDeathLoot(ServerLevel level, DamageSource source) {
+        dropExperience(source.getEntity());
     }
 
     @Override

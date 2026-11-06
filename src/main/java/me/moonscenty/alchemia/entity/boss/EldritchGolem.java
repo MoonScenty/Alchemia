@@ -19,9 +19,11 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -87,6 +89,21 @@ public class EldritchGolem extends ThaumcraftBoss implements EldritchMob, Ranged
 
     public boolean isHeadless() {
         return entityData.get(HEADLESS);
+    }
+
+    @Override
+    public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
+        super.onSyncedDataUpdated(key);
+        if (HEADLESS.equals(key)) {
+            refreshDimensions();
+        }
+    }
+
+    // original's value
+    @Override
+    protected EntityDimensions getDefaultDimensions(Pose pose) {
+        EntityDimensions body = super.getDefaultDimensions(pose);
+        return isHeadless() ? body.withEyeHeight(3.33F) : body;
     }
 
     public int attackTimer() {
@@ -174,10 +191,10 @@ public class EldritchGolem extends ThaumcraftBoss implements EldritchMob, Ranged
     public boolean hurt(DamageSource source, float amount) {
         if (!level().isClientSide && amount > getHealth() && !isHeadless() && !isInvulnerableTo(source)) {
             setSpawnTimer(DORMANT);
+            loseHead();
             double xx = Mth.cos(getYRot() % 360.0F / 180.0F * Mth.PI) * 0.75;
             double zz = Mth.sin(getYRot() % 360.0F / 180.0F * Mth.PI) * 0.75;
             level().explode(this, getX() + xx, getEyeY(), getZ() + zz, 2.0F, Level.ExplosionInteraction.NONE);
-            loseHead();
             return false;
         }
         return super.hurt(source, amount);

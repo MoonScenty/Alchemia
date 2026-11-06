@@ -148,7 +148,7 @@ public class CultistCleric extends Cultist implements RangedAttackMob {
         goalSelector.addGoal(0, new FloatGoal(this));
         goalSelector.addGoal(1, new AltarFocus(this));
         // casts from further off than two blocks; nearer, the hands are quicker
-        goalSelector.addGoal(2, LongRangeAttackGoal.toStart(this, 2.0, 1.0, 20, 40, 24.0F));
+        goalSelector.addGoal(2, new LongRangeAttackGoal(this, 2.0, 1.0, 20, 40, 24.0F));
         goalSelector.addGoal(3, new me.moonscenty.alchemia.entity.QuickMeleeGoal(this, 1.0, false));
         goalSelector.addGoal(5, new OpenDoorGoal(this, true));
         goalSelector.addGoal(6, new MoveTowardsRestrictionGoal(this, 0.8));

@@ -225,11 +225,11 @@ public final class Champions {
                         ModSounds.RUNIC_SHIELD_EFFECT.get(), SoundSource.HOSTILE, 0.66F,
                         1.1F + hurt.getRandom().nextFloat() * 0.1F);
             } else if (defending.when() == ChampionModifier.When.HURT
-                    && source.getEntity() instanceof LivingEntity attacker) {
+                    && source.getDirectEntity() instanceof LivingEntity attacker) {
                 event.setAmount(defend(defending, hurt, attacker, source, event.getAmount()));
             }
         }
-        if (event.getAmount() > 0.0F && source.getEntity() instanceof Monster champion) {
+        if (event.getAmount() > 0.0F && source.getDirectEntity() instanceof Monster champion) {
             ChampionModifier attacking = modifier(champion);
             if (attacking != null && attacking.when() == ChampionModifier.When.HITS) {
                 event.setAmount(attack(attacking, champion, hurt, event.getAmount()));

@@ -101,4 +101,22 @@ public class MobTests {
                 "the armored one lost less");
         helper.succeed();
     }
+
+    @GameTest(template = TEMPLATE)
+    public static void aChampionShrugsOffNothingFromAfar(GameTestHelper helper) {
+        Zombie armored = ordinary(helper, EntityType.ZOMBIE, new BlockPos(8, 2, 4));
+        Zombie plain = ordinary(helper, EntityType.ZOMBIE, new BlockPos(12, 2, 4));
+        Champions.make(armored, ChampionModifier.ARMORED);
+        Champions.make(plain, ChampionModifier.UNDYING);
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        var arrow = EntityType.ARROW.create(helper.getLevel());
+        DamageSource shot = helper.getLevel().damageSources().arrow(arrow, player);
+        float armoredBefore = armored.getHealth();
+        float plainBefore = plain.getHealth();
+        armored.hurt(shot, 10.0F);
+        plain.hurt(shot, 10.0F);
+        helper.assertValueEqual(armoredBefore - armored.getHealth(), plainBefore - plain.getHealth(),
+                "an arrow is not held off");
+        helper.succeed();
+    }
 }
