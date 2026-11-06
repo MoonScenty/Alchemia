@@ -135,4 +135,53 @@ public class BiomeTests {
         helper.getLevel().getChunkAt(helper.absolutePos(HERE)).setData(ModAuraAttachment.AURA,
                 new AuraChunk(AuraGeneration.BASE, AspectList.EMPTY.add(ModAspects.FLUX, amount)));
     }
+
+    private static Holder<Biome> any(GameTestHelper helper, ResourceKey<Biome> key) {
+        return helper.getLevel().registryAccess().registryOrThrow(Registries.BIOME).getHolderOrThrow(key);
+    }
+
+    @GameTest(template = TEMPLATE)
+    public static void theWildGrowsWhereTheOriginalPutsIt(GameTestHelper helper) {
+        Holder<Biome> forest = any(helper, ModBiomes.MAGICAL_FOREST);
+        helper.assertTrue(forest.is(ModTags.Biomes.HAS_GREATWOOD), "greatwood grows in the magical forest too");
+        helper.assertTrue(forest.is(ModTags.Biomes.HAS_ANGRY_ZOMBIES), "and angry zombies walk there");
+        helper.assertFalse(forest.is(ModTags.Biomes.HAS_SILVERWOOD), "the forest grows its own silverwood");
+        helper.assertTrue(any(helper, net.minecraft.world.level.biome.Biomes.FOREST).is(ModTags.Biomes.HAS_SILVERWOOD),
+                "silverwood stands in plain forest");
+        helper.assertTrue(any(helper, net.minecraft.world.level.biome.Biomes.TAIGA).is(ModTags.Biomes.HAS_LITTLE_GREATWOOD),
+                "a little greatwood in the taiga");
+        helper.assertFalse(any(helper, ModBiomes.TAINTED_LAND).is(ModTags.Biomes.HAS_PECHS), "no pechs in tainted land");
+        helper.assertTrue(any(helper, ModBiomes.EERIE).is(ModTags.Biomes.HAS_PECHS), "but in the eerie land");
+        Holder<Biome> nether = any(helper, net.minecraft.world.level.biome.Biomes.NETHER_WASTES);
+        helper.assertTrue(nether.is(ModTags.Biomes.HAS_NODES), "nodes form in the nether");
+        helper.assertFalse(nether.is(ModTags.Biomes.HAS_ORES), "ores and crystals do not");
+        helper.assertTrue(any(helper, net.minecraft.world.level.biome.Biomes.THE_END).is(ModTags.Biomes.HAS_ORES),
+                "but they do in the end");
+        helper.succeed();
+    }
+
+    @GameTest(template = TEMPLATE)
+    public static void theLandsSpawnWhatTheOriginalsDid(GameTestHelper helper) {
+        var forest = any(helper, ModBiomes.MAGICAL_FOREST).value().getMobSettings()
+                .getMobs(net.minecraft.world.entity.MobCategory.MONSTER).unwrap();
+        int pechWeight = 0;
+        for (var data : forest) {
+            if (data.type == me.moonscenty.alchemia.registry.ModEntities.PECH.get()) {
+                pechWeight += data.getWeight().asInt();
+                helper.assertValueEqual(data.maxCount, 1, "pechs come one at a time");
+            }
+        }
+        helper.assertValueEqual(pechWeight, 20, "pech weight in the magical forest");
+
+        var eerie = any(helper, ModBiomes.EERIE).value().getMobSettings()
+                .getMobs(net.minecraft.world.entity.MobCategory.CREATURE).unwrap();
+        helper.assertTrue(!eerie.isEmpty() && eerie.stream().allMatch(data -> data.type == net.minecraft.world.entity.EntityType.BAT),
+                "the eerie land keeps only bats, had " + eerie);
+
+        Biome tainted = any(helper, ModBiomes.TAINTED_LAND).value();
+        helper.assertTrue(tainted.getMobSettings().getMobs(net.minecraft.world.entity.MobCategory.AMBIENT).unwrap().stream()
+                .anyMatch(data -> data.type == net.minecraft.world.entity.EntityType.BAT), "bats still haunt tainted caves");
+        helper.assertValueEqual(tainted.getBaseTemperature(), 0.5F, "tainted land temperature");
+        helper.succeed();
+    }
 }

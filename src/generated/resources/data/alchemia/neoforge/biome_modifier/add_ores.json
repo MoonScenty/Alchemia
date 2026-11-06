@@ -1,6 +1,6 @@
 {
   "type": "neoforge:add_features",
-  "biomes": "#minecraft:is_overworld",
+  "biomes": "#alchemia:has_ores",
   "features": [
     "alchemia:ore_amber",
     "alchemia:ore_cinnabar"

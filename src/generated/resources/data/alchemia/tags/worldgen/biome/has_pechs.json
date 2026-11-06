@@ -1,0 +1,8 @@
+{
+  "remove": [
+    "alchemia:tainted_land"
+  ],
+  "values": [
+    "#c:is_magical"
+  ]
+}

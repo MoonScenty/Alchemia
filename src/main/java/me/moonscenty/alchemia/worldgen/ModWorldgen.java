@@ -1,13 +1,9 @@
 package me.moonscenty.alchemia.worldgen;
 
-import java.util.ArrayList;
-import java.util.EnumMap;
 import java.util.List;
-import java.util.Map;
 
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.aura.node.NodeType;
-import me.moonscenty.alchemia.block.CrystalType;
 import me.moonscenty.alchemia.registry.ModBlocks;
 import me.moonscenty.alchemia.registry.ModFeatures;
 import me.moonscenty.alchemia.registry.ModTags;
@@ -19,7 +15,6 @@ import net.minecraft.data.worldgen.features.MiscOverworldFeatures;
 import net.minecraft.data.worldgen.placement.VegetationPlacements;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
@@ -37,7 +32,7 @@ import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.configurations.BlockStateConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.ReplaceBlockConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
@@ -51,7 +46,9 @@ import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraft.world.level.levelgen.placement.RarityFilter;
 import net.minecraft.world.level.levelgen.placement.SurfaceWaterDepthFilter;
-import net.minecraft.world.level.levelgen.structure.templatesystem.TagMatchTest;
+import net.minecraft.world.level.levelgen.structure.templatesystem.BlockMatchTest;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.placement.HeightmapPlacement;
 import net.neoforged.neoforge.common.world.BiomeModifier;
 import net.neoforged.neoforge.common.world.BiomeModifiers;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
@@ -59,7 +56,7 @@ import net.neoforged.neoforge.registries.NeoForgeRegistries;
 public class ModWorldgen {
     public static final ResourceKey<ConfiguredFeature<?, ?>> ORE_AMBER = configured("ore_amber");
     public static final ResourceKey<ConfiguredFeature<?, ?>> ORE_CINNABAR = configured("ore_cinnabar");
-    public static final Map<CrystalType, ResourceKey<ConfiguredFeature<?, ?>>> CRYSTAL_PATCHES = new EnumMap<>(CrystalType.class);
+    public static final ResourceKey<ConfiguredFeature<?, ?>> CRYSTALS = configured("crystals");
 
     public static final ResourceKey<ConfiguredFeature<?, ?>> CINDERPEARL_PATCH = configured("cinderpearl_patch");
     public static final ResourceKey<PlacedFeature> CINDERPEARL_PATCH_PLACED = placed("cinderpearl_patch");
@@ -67,9 +64,12 @@ public class ModWorldgen {
 
     public static final ResourceKey<ConfiguredFeature<?, ?>> GREATWOOD_TREE = configured("greatwood_tree");
     public static final ResourceKey<ConfiguredFeature<?, ?>> SILVERWOOD_TREE = configured("silverwood_tree");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> TALL_SILVERWOOD_TREE = configured("tall_silverwood_tree");
     public static final ResourceKey<ConfiguredFeature<?, ?>> BIG_MAGIC_TREE = configured("big_magic_tree");
 
     public static final ResourceKey<PlacedFeature> GREATWOOD_TREE_PLACED = placed("greatwood_tree");
+    public static final ResourceKey<PlacedFeature> SOME_GREATWOOD_TREE_PLACED = placed("some_greatwood_tree");
+    public static final ResourceKey<PlacedFeature> LITTLE_GREATWOOD_TREE_PLACED = placed("little_greatwood_tree");
     public static final ResourceKey<PlacedFeature> SILVERWOOD_TREE_PLACED = placed("silverwood_tree");
     public static final ResourceKey<ConfiguredFeature<?, ?>> AURA_NODE = configured("aura_node");
     public static final ResourceKey<ConfiguredFeature<?, ?>> ELDRITCH_RING = configured("eldritch_ring");
@@ -83,7 +83,7 @@ public class ModWorldgen {
     public static final ResourceKey<PlacedFeature> AURA_NODE_PLACED = placed("aura_node");
     public static final ResourceKey<PlacedFeature> ORE_AMBER_PLACED = placed("ore_amber");
     public static final ResourceKey<PlacedFeature> ORE_CINNABAR_PLACED = placed("ore_cinnabar");
-    public static final Map<CrystalType, ResourceKey<PlacedFeature>> CRYSTAL_PATCHES_PLACED = new EnumMap<>(CrystalType.class);
+    public static final ResourceKey<PlacedFeature> CRYSTALS_PLACED = placed("crystals");
 
     public static final ResourceKey<ConfiguredFeature<?, ?>> MAGICAL_FOREST_TREES = configured("magical_forest_trees");
     public static final ResourceKey<PlacedFeature> MAGICAL_FOREST_TREES_PLACED = placed("magical_forest_trees");
@@ -100,32 +100,24 @@ public class ModWorldgen {
     public static final ResourceKey<BiomeModifier> ADD_CRYSTALS = biomeModifier("add_crystals");
     public static final ResourceKey<BiomeModifier> ADD_NODES = biomeModifier("add_nodes");
     public static final ResourceKey<BiomeModifier> ADD_GREATWOOD = biomeModifier("add_greatwood");
+    public static final ResourceKey<BiomeModifier> ADD_SOME_GREATWOOD = biomeModifier("add_some_greatwood");
+    public static final ResourceKey<BiomeModifier> ADD_LITTLE_GREATWOOD = biomeModifier("add_little_greatwood");
     public static final ResourceKey<BiomeModifier> ADD_SILVERWOOD = biomeModifier("add_silverwood");
     public static final ResourceKey<BiomeModifier> SPAWN_ANGRY_ZOMBIES = biomeModifier("spawn_angry_zombies");
     public static final ResourceKey<BiomeModifier> SPAWN_FIREBATS = biomeModifier("spawn_firebats");
     public static final ResourceKey<BiomeModifier> SPAWN_WISPS = biomeModifier("spawn_wisps");
     public static final ResourceKey<BiomeModifier> SPAWN_PECHS = biomeModifier("spawn_pechs");
 
-    static {
-        for (CrystalType type : CrystalType.values()) {
-            if (type.generatesNaturally()) {
-                CRYSTAL_PATCHES.put(type, configured(type.getName() + "_crystal_patch"));
-                CRYSTAL_PATCHES_PLACED.put(type, placed(type.getName() + "_crystal_patch"));
-            }
-        }
-    }
-
     public static void bootstrapConfigured(BootstrapContext<ConfiguredFeature<?, ?>> context) {
-        TagMatchTest stone = new TagMatchTest(BlockTags.STONE_ORE_REPLACEABLES);
-        TagMatchTest deepslate = new TagMatchTest(BlockTags.DEEPSLATE_ORE_REPLACEABLES);
-
-        // the original scattered single blocks, so veins stay tiny
-        context.register(ORE_AMBER, new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(List.of(
+        // original's ores are single blocks, and only in plain stone
+        BlockMatchTest stone = new BlockMatchTest(Blocks.STONE);
+        BlockMatchTest deepslate = new BlockMatchTest(Blocks.DEEPSLATE);
+        context.register(ORE_AMBER, new ConfiguredFeature<>(Feature.REPLACE_SINGLE_BLOCK, new ReplaceBlockConfiguration(List.of(
                 OreConfiguration.target(stone, ModBlocks.AMBER_ORE.get().defaultBlockState()),
-                OreConfiguration.target(deepslate, ModBlocks.DEEPSLATE_AMBER_ORE.get().defaultBlockState())), 3)));
-        context.register(ORE_CINNABAR, new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(List.of(
+                OreConfiguration.target(deepslate, ModBlocks.DEEPSLATE_AMBER_ORE.get().defaultBlockState())))));
+        context.register(ORE_CINNABAR, new ConfiguredFeature<>(Feature.REPLACE_SINGLE_BLOCK, new ReplaceBlockConfiguration(List.of(
                 OreConfiguration.target(stone, ModBlocks.CINNABAR_ORE.get().defaultBlockState()),
-                OreConfiguration.target(deepslate, ModBlocks.DEEPSLATE_CINNABAR_ORE.get().defaultBlockState())), 3)));
+                OreConfiguration.target(deepslate, ModBlocks.DEEPSLATE_CINNABAR_ORE.get().defaultBlockState())))));
 
         // greatwood 12-22 tall with several leaf balls; silverwood 7-10 tall with one tall canopy
         context.register(GREATWOOD_TREE, new ConfiguredFeature<>(Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
@@ -134,18 +126,9 @@ public class ModWorldgen {
                 BlockStateProvider.simple(ModBlocks.GREATWOOD.leaves().get()),
                 new SphereFoliagePlacer(ConstantInt.of(2), ConstantInt.of(0), 1),
                 new TwoLayersFeatureSize(1, 1, 2)).ignoreVines().build()));
-        context.register(SILVERWOOD_TREE, new ConfiguredFeature<>(Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
-                BlockStateProvider.simple(ModBlocks.SILVERWOOD.log().get()),
-                new SilverwoodTrunkPlacer(7, 3, 0),
-                BlockStateProvider.simple(ModBlocks.SILVERWOOD.leaves().get()),
-                new SphereFoliagePlacer(ConstantInt.of(3), ConstantInt.of(0), 3),
-                new TwoLayersFeatureSize(1, 1, 2))
-                // about one silverwood in three gets a small pure node in its trunk
-                .decorators(List.of(
-                        new UndergrowthDecorator(BlockStateProvider.simple(ModBlocks.SHIMMERLEAF.get()), BlockTags.DIRT, 18, 8),
-                        new UndergrowthDecorator(BlockStateProvider.simple(ModBlocks.VISHROOM.get()), BlockTags.DIRT, 10, 6),
-                        new NodeInTreeDecorator(0.3F, NodeType.PURE, 0.33F)))
-                .ignoreVines().build()));
+        // original's silverwood is 7-10 tall, 8-12 inside the magical forest
+        context.register(SILVERWOOD_TREE, silverwood(new SilverwoodTrunkPlacer(7, 3, 0)));
+        context.register(TALL_SILVERWOOD_TREE, silverwood(new SilverwoodTrunkPlacer(8, 4, 0)));
 
         // original's big magic tree: fancy-oak growth, 11-22 to the crown, leaf balls three layers deep
         context.register(BIG_MAGIC_TREE, new ConfiguredFeature<>(Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
@@ -172,13 +155,13 @@ public class ModWorldgen {
         context.register(MAGICAL_FOREST_TREES, new ConfiguredFeature<>(Feature.RANDOM_SELECTOR,
                 new RandomFeatureConfiguration(List.of(
                         new WeightedPlacedFeature(PlacementUtils.inlinePlaced(
-                                features.getOrThrow(SILVERWOOD_TREE),
+                                features.getOrThrow(TALL_SILVERWOOD_TREE),
                                 PlacementUtils.filteredByBlockSurvival(ModBlocks.SILVERWOOD.sapling().get())),
                                 1.0F / 14.0F),
                         new WeightedPlacedFeature(PlacementUtils.inlinePlaced(
                                 features.getOrThrow(GREATWOOD_TREE),
                                 PlacementUtils.filteredByBlockSurvival(ModBlocks.GREATWOOD.sapling().get())),
-                                13.0F / 140.0F)),
+                                0.1F)),
                         PlacementUtils.inlinePlaced(
                                 features.getOrThrow(BIG_MAGIC_TREE),
                                 PlacementUtils.filteredByBlockSurvival(Blocks.OAK_SAPLING)))));
@@ -193,25 +176,48 @@ public class ModWorldgen {
         context.register(AMBIENT_GRASS, new ConfiguredFeature<>(ModFeatures.AMBIENT_GRASS.get(),
                 NoneFeatureConfiguration.INSTANCE));
 
-        CRYSTAL_PATCHES.forEach((type, key) -> context.register(key, new ConfiguredFeature<>(ModFeatures.CRYSTAL_PATCH.get(),
-                new BlockStateConfiguration(ModBlocks.CRYSTALS.get(type).get().defaultBlockState()))));
+        context.register(CRYSTALS, new ConfiguredFeature<>(ModFeatures.CRYSTAL_CLUSTERS.get(),
+                NoneFeatureConfiguration.INSTANCE));
+    }
+
+    private static ConfiguredFeature<?, ?> silverwood(SilverwoodTrunkPlacer trunk) {
+        return new ConfiguredFeature<>(Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
+                BlockStateProvider.simple(ModBlocks.SILVERWOOD.log().get()),
+                trunk,
+                BlockStateProvider.simple(ModBlocks.SILVERWOOD.leaves().get()),
+                new SphereFoliagePlacer(ConstantInt.of(3), ConstantInt.of(0), 3),
+                new TwoLayersFeatureSize(1, 1, 2))
+                // about one silverwood in three gets a small pure node in its trunk
+                .decorators(List.of(
+                        new UndergrowthDecorator(BlockStateProvider.simple(ModBlocks.SHIMMERLEAF.get()), BlockTags.DIRT, 18, 8),
+                        new UndergrowthDecorator(BlockStateProvider.simple(ModBlocks.VISHROOM.get()), BlockTags.DIRT, 10, 6),
+                        new NodeInTreeDecorator(0.3F, NodeType.PURE, 0.33F)))
+                .ignoreVines().build());
     }
 
     public static void bootstrapPlaced(BootstrapContext<PlacedFeature> context) {
         HolderGetter<ConfiguredFeature<?, ?>> configured = context.lookup(Registries.CONFIGURED_FEATURE);
 
+        // original's ores: 20 amber up to 24 under the surface, 18 cinnabar at Y 0-50
         context.register(ORE_AMBER_PLACED, new PlacedFeature(configured.getOrThrow(ORE_AMBER),
-                ore(12, HeightRangePlacement.triangle(VerticalAnchor.absolute(32), VerticalAnchor.absolute(128)))));
+                List.of(CountPlacement.of(20), InSquarePlacement.spread(),
+                        new BelowSurfacePlacement(24))));
         context.register(ORE_CINNABAR_PLACED, new PlacedFeature(configured.getOrThrow(ORE_CINNABAR),
-                ore(10, HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(40)))));
+                List.of(CountPlacement.of(18), InSquarePlacement.spread(),
+                        HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(50)))));
 
         context.register(CINDERPEARL_PATCH_PLACED, new PlacedFeature(configured.getOrThrow(CINDERPEARL_PATCH),
                 List.of(RarityFilter.onAverageOnceEvery(30), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome())));
 
+        // original's 1 in 25 chunks times the biome's greatwood chance (1, 0.5 or 0.2), silverwood 1 in 60
         context.register(GREATWOOD_TREE_PLACED, new PlacedFeature(configured.getOrThrow(GREATWOOD_TREE),
-                tree(14, ModBlocks.GREATWOOD.sapling().get())));
+                tree(25, ModBlocks.GREATWOOD.sapling().get())));
+        context.register(SOME_GREATWOOD_TREE_PLACED, new PlacedFeature(configured.getOrThrow(GREATWOOD_TREE),
+                tree(50, ModBlocks.GREATWOOD.sapling().get())));
+        context.register(LITTLE_GREATWOOD_TREE_PLACED, new PlacedFeature(configured.getOrThrow(GREATWOOD_TREE),
+                tree(125, ModBlocks.GREATWOOD.sapling().get())));
         context.register(SILVERWOOD_TREE_PLACED, new PlacedFeature(configured.getOrThrow(SILVERWOOD_TREE),
-                tree(40, ModBlocks.SILVERWOOD.sapling().get())));
+                tree(60, ModBlocks.SILVERWOOD.sapling().get())));
 
         // original's odds: ring ~1 in 66 chunks, portal 1 in 500, mound 1 in 150
         context.register(MOUND_PLACED, new PlacedFeature(configured.getOrThrow(MOUND),
@@ -230,9 +236,7 @@ public class ModWorldgen {
                                 net.minecraft.world.level.levelgen.Heightmap.Types.WORLD_SURFACE_WG),
                         BiomeFilter.biome())));
 
-        // ~1 in 30 chunks, about the original's rate
-        context.register(AURA_NODE_PLACED, new PlacedFeature(configured.getOrThrow(AURA_NODE),
-                List.of(RarityFilter.onAverageOnceEvery(30), InSquarePlacement.spread(), BiomeFilter.biome())));
+        context.register(AURA_NODE_PLACED, new PlacedFeature(configured.getOrThrow(AURA_NODE), List.of()));
 
         // original's density
         context.register(MAGICAL_FOREST_TREES_PLACED, new PlacedFeature(configured.getOrThrow(MAGICAL_FOREST_TREES),
@@ -242,29 +246,36 @@ public class ModWorldgen {
                 MiscOverworldFeatures.FOREST_ROCK),
                 List.of(CountPlacement.of(UniformInt.of(0, 2)),
                         InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome())));
+        // original's 16 tries a chunk at 1 in 40
         context.register(MAGICAL_FOREST_MUSHROOMS_PLACED, new PlacedFeature(configured.getOrThrow(
-                MAGICAL_FOREST_MUSHROOMS), List.of(RarityFilter.onAverageOnceEvery(3), InSquarePlacement.spread(),
-                        PlacementUtils.HEIGHTMAP, BiomeFilter.biome())));
+                MAGICAL_FOREST_MUSHROOMS), List.of(CountPlacement.of(16), RarityFilter.onAverageOnceEvery(40),
+                        InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome())));
         context.register(VISHROOMS_BY_TREES_PLACED, new PlacedFeature(configured.getOrThrow(VISHROOMS_BY_TREES),
                 List.of(BiomeFilter.biome())));
         context.register(AMBIENT_GRASS_PLACED, new PlacedFeature(configured.getOrThrow(AMBIENT_GRASS),
                 List.of(BiomeFilter.biome())));
 
-        CRYSTAL_PATCHES_PLACED.forEach((type, key) -> context.register(key, new PlacedFeature(configured.getOrThrow(CRYSTAL_PATCHES.get(type)),
-                ore(2, HeightRangePlacement.uniform(VerticalAnchor.aboveBottom(8), VerticalAnchor.absolute(64))))));
+        context.register(CRYSTALS_PLACED, new PlacedFeature(configured.getOrThrow(CRYSTALS), List.of()));
     }
 
     public static void bootstrapBiomeModifiers(BootstrapContext<BiomeModifier> context) {
         HolderGetter<PlacedFeature> placed = context.lookup(Registries.PLACED_FEATURE);
-        HolderSet<Biome> overworld = context.lookup(Registries.BIOME).getOrThrow(BiomeTags.IS_OVERWORLD);
+        HolderGetter<Biome> biomes = context.lookup(Registries.BIOME);
+        HolderSet<Biome> overworld = biomes.getOrThrow(BiomeTags.IS_OVERWORLD);
+        HolderSet<Biome> withOres = biomes.getOrThrow(ModTags.Biomes.HAS_ORES);
 
-        context.register(ADD_ORES, new BiomeModifiers.AddFeaturesBiomeModifier(overworld,
+        context.register(ADD_ORES, new BiomeModifiers.AddFeaturesBiomeModifier(withOres,
                 HolderSet.direct(placed.getOrThrow(ORE_AMBER_PLACED), placed.getOrThrow(ORE_CINNABAR_PLACED)),
                 GenerationStep.Decoration.UNDERGROUND_ORES));
 
-        HolderGetter<Biome> biomes = context.lookup(Registries.BIOME);
         context.register(ADD_GREATWOOD, new BiomeModifiers.AddFeaturesBiomeModifier(biomes.getOrThrow(ModTags.Biomes.HAS_GREATWOOD),
                 HolderSet.direct(placed.getOrThrow(GREATWOOD_TREE_PLACED)), GenerationStep.Decoration.VEGETAL_DECORATION));
+        context.register(ADD_SOME_GREATWOOD, new BiomeModifiers.AddFeaturesBiomeModifier(
+                biomes.getOrThrow(ModTags.Biomes.HAS_SOME_GREATWOOD),
+                HolderSet.direct(placed.getOrThrow(SOME_GREATWOOD_TREE_PLACED)), GenerationStep.Decoration.VEGETAL_DECORATION));
+        context.register(ADD_LITTLE_GREATWOOD, new BiomeModifiers.AddFeaturesBiomeModifier(
+                biomes.getOrThrow(ModTags.Biomes.HAS_LITTLE_GREATWOOD),
+                HolderSet.direct(placed.getOrThrow(LITTLE_GREATWOOD_TREE_PLACED)), GenerationStep.Decoration.VEGETAL_DECORATION));
         context.register(ADD_SILVERWOOD, new BiomeModifiers.AddFeaturesBiomeModifier(biomes.getOrThrow(ModTags.Biomes.HAS_SILVERWOOD),
                 HolderSet.direct(placed.getOrThrow(SILVERWOOD_TREE_PLACED)), GenerationStep.Decoration.VEGETAL_DECORATION));
 
@@ -278,13 +289,11 @@ public class ModWorldgen {
         context.register(ADD_MOUND, new BiomeModifiers.AddFeaturesBiomeModifier(overworld,
                 HolderSet.direct(placed.getOrThrow(MOUND_PLACED)), GenerationStep.Decoration.SURFACE_STRUCTURES));
 
-        context.register(ADD_NODES, new BiomeModifiers.AddFeaturesBiomeModifier(overworld,
+        context.register(ADD_NODES, new BiomeModifiers.AddFeaturesBiomeModifier(biomes.getOrThrow(ModTags.Biomes.HAS_NODES),
                 HolderSet.direct(placed.getOrThrow(AURA_NODE_PLACED)), GenerationStep.Decoration.TOP_LAYER_MODIFICATION));
 
-        List<Holder<PlacedFeature>> crystals = new ArrayList<>();
-        CRYSTAL_PATCHES_PLACED.values().forEach(key -> crystals.add(placed.getOrThrow(key)));
-        context.register(ADD_CRYSTALS, new BiomeModifiers.AddFeaturesBiomeModifier(overworld,
-                HolderSet.direct(crystals), GenerationStep.Decoration.UNDERGROUND_DECORATION));
+        context.register(ADD_CRYSTALS, new BiomeModifiers.AddFeaturesBiomeModifier(withOres,
+                HolderSet.direct(placed.getOrThrow(CRYSTALS_PLACED)), GenerationStep.Decoration.UNDERGROUND_DECORATION));
 
         // original's spawns
         context.register(SPAWN_ANGRY_ZOMBIES, BiomeModifiers.AddSpawnsBiomeModifier.singleSpawn(
@@ -300,13 +309,9 @@ public class ModWorldgen {
                 new net.minecraft.world.level.biome.MobSpawnSettings.SpawnerData(
                         me.moonscenty.alchemia.registry.ModEntities.WISP.get(), 5, 1, 1)));
         context.register(SPAWN_PECHS, BiomeModifiers.AddSpawnsBiomeModifier.singleSpawn(
-                biomes.getOrThrow(net.neoforged.neoforge.common.Tags.Biomes.IS_MAGICAL),
+                biomes.getOrThrow(ModTags.Biomes.HAS_PECHS),
                 new net.minecraft.world.level.biome.MobSpawnSettings.SpawnerData(
-                        me.moonscenty.alchemia.registry.ModEntities.PECH.get(), 10, 1, 2)));
-    }
-
-    private static List<PlacementModifier> ore(int count, PlacementModifier height) {
-        return List.of(CountPlacement.of(count), InSquarePlacement.spread(), height, BiomeFilter.biome());
+                        me.moonscenty.alchemia.registry.ModEntities.PECH.get(), 10, 1, 1)));
     }
 
     private static List<PlacementModifier> tree(int rarity, Block sapling) {

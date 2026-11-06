@@ -273,7 +273,14 @@ public class Pech extends Monster implements RangedAttackMob, OwnAspects {
 
     public static boolean checkSpawnRules(EntityType<Pech> type, ServerLevelAccessor level, MobSpawnType reason,
             net.minecraft.core.BlockPos pos, RandomSource random) {
-        return level.getEntitiesOfClass(Pech.class, new AABB(pos).inflate(16.0)).size() < 4
+        var biome = level.getBiome(pos);
+        // original's pechs keep to magical land, never tainted, and only the forest or eerie land off the overworld
+        boolean magical = biome.is(net.neoforged.neoforge.common.Tags.Biomes.IS_MAGICAL)
+                && !biome.is(me.moonscenty.alchemia.worldgen.ModBiomes.TAINTED_LAND)
+                && (level.getLevel().dimension() == net.minecraft.world.level.Level.OVERWORLD
+                        || biome.is(me.moonscenty.alchemia.worldgen.ModBiomes.MAGICAL_FOREST)
+                        || biome.is(me.moonscenty.alchemia.worldgen.ModBiomes.EERIE));
+        return magical && level.getEntitiesOfClass(Pech.class, new AABB(pos).inflate(16.0)).size() < 4
                 && checkMonsterSpawnRules(type, level, reason, pos, random);
     }
 

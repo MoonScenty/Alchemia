@@ -22,7 +22,7 @@
       {
         "chance": 0.071428575,
         "feature": {
-          "feature": "alchemia:silverwood_tree",
+          "feature": "alchemia:tall_silverwood_tree",
           "placement": [
             {
               "type": "minecraft:block_predicate_filter",
@@ -40,7 +40,7 @@
         }
       },
       {
-        "chance": 0.092857145,
+        "chance": 0.1,
         "feature": {
           "feature": "alchemia:greatwood_tree",
           "placement": [

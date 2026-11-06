@@ -1,16 +1,14 @@
 {
-  "type": "minecraft:ore",
+  "type": "minecraft:replace_single_block",
   "config": {
-    "discard_chance_on_air_exposure": 0.0,
-    "size": 3,
     "targets": [
       {
         "state": {
           "Name": "alchemia:amber_ore"
         },
         "target": {
-          "predicate_type": "minecraft:tag_match",
-          "tag": "minecraft:stone_ore_replaceables"
+          "block": "minecraft:stone",
+          "predicate_type": "minecraft:block_match"
         }
       },
       {
@@ -18,8 +16,8 @@
           "Name": "alchemia:deepslate_amber_ore"
         },
         "target": {
-          "predicate_type": "minecraft:tag_match",
-          "tag": "minecraft:deepslate_ore_replaceables"
+          "block": "minecraft:deepslate",
+          "predicate_type": "minecraft:block_match"
         }
       }
     ]

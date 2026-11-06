@@ -153,4 +153,46 @@ public class WorldgenTests {
         });
         return found[0];
     }
+
+    @GameTest(template = TEMPLATE)
+    public static void tallSilverwoodGrowsInTheForest(GameTestHelper helper) {
+        growAndCheck(helper, ModWorldgen.TALL_SILVERWOOD_TREE, ModBlocks.SILVERWOOD, 5 * 8 + 8, 100);
+    }
+
+    @GameTest(template = TEMPLATE)
+    public static void oresComeOneBlockAtATime(GameTestHelper helper) {
+        for (BlockPos pos : BlockPos.betweenClosed(TREE_BASE.offset(-2, 0, -2), TREE_BASE.offset(2, 4, 2))) {
+            helper.setBlock(pos, Blocks.STONE);
+        }
+        ServerLevel level = helper.getLevel();
+        level.registryAccess().registryOrThrow(Registries.CONFIGURED_FEATURE).getOrThrow(ModWorldgen.ORE_CINNABAR)
+                .place(level, level.getChunkSource().getGenerator(), level.getRandom(), helper.absolutePos(TREE_BASE.above(2)));
+        helper.assertValueEqual(count(helper, ModBlocks.CINNABAR_ORE.get()), 1, "cinnabar blocks");
+        helper.succeed();
+    }
+
+    @GameTest(template = TEMPLATE)
+    public static void crystalsKeepOutOfWater(GameTestHelper helper) {
+        BlockPos centre = TREE_BASE.above(3);
+        for (BlockPos pos : BlockPos.betweenClosed(centre.offset(-2, -2, -2), centre.offset(2, 2, 2))) {
+            helper.setBlock(pos, Blocks.STONE);
+        }
+        for (BlockPos pos : BlockPos.betweenClosed(centre.offset(-1, -1, -1), centre.offset(1, 1, 1))) {
+            helper.setBlock(pos, Blocks.WATER);
+        }
+        ServerLevel level = helper.getLevel();
+        net.minecraft.util.RandomSource random = net.minecraft.util.RandomSource.create(7L);
+        for (int i = 0; i < 10; i++) {
+            helper.assertValueEqual(me.moonscenty.alchemia.worldgen.CrystalClustersFeature.cluster(level,
+                    helper.absolutePos(centre), me.moonscenty.alchemia.block.CrystalType.WATER, random), 0,
+                    "crystals grown in water");
+        }
+        for (BlockPos pos : BlockPos.betweenClosed(centre.offset(-1, -1, -1), centre.offset(1, 1, 1))) {
+            helper.setBlock(pos, Blocks.AIR);
+        }
+        int grown = me.moonscenty.alchemia.worldgen.CrystalClustersFeature.cluster(level, helper.absolutePos(centre),
+                me.moonscenty.alchemia.block.CrystalType.WATER, random);
+        helper.assertTrue(grown > 0, "but they should grow in a dry pocket");
+        helper.succeed();
+    }
 }

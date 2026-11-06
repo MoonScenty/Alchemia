@@ -89,6 +89,8 @@ public final class ModBiomes {
         spawns.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.WITCH, 3, 1, 1));
         spawns.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.ENDERMAN, 3, 1, 1));
         spawns.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(ModEntities.WISP.get(), 10, 1, 2));
+        // with the pechs given to every magical land, the original's forest ends up holding two such lines
+        spawns.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(ModEntities.PECH.get(), 10, 1, 1));
 
         return land(0.7F, 0.6F, 0x55FF81, 0x66FFC5, sky(0.7F), 0x0077EE, spawns, generation,
                 net.minecraft.sounds.Musics.createGameMusic(SoundEvents.MUSIC_BIOME_FOREST));
@@ -98,9 +100,10 @@ public final class ModBiomes {
         BiomeGenerationSettings.Builder generation = new BiomeGenerationSettings.Builder(placed, carvers);
         everywhere(generation);
         MobSpawnSettings.Builder spawns = new MobSpawnSettings.Builder();
-        BiomeDefaultFeatures.farmAnimals(spawns);
         BiomeDefaultFeatures.monsters(spawns, 95, 5, 100, false);
-        spawns.addSpawn(MobCategory.AMBIENT, new MobSpawnSettings.SpawnerData(EntityType.BAT, 3, 1, 1));
+        // original's eerie creatures are bats alone
+        spawns.addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(EntityType.BAT, 3, 1, 1));
+        spawns.addSpawn(MobCategory.AMBIENT, new MobSpawnSettings.SpawnerData(EntityType.BAT, 10, 8, 8));
         spawns.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.WITCH, 8, 1, 1));
         spawns.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.ENDERMAN, 4, 1, 1));
         spawns.addSpawn(MobCategory.MONSTER,
@@ -119,7 +122,8 @@ public final class ModBiomes {
         everywhere(generation);
         MobSpawnSettings.Builder spawns = new MobSpawnSettings.Builder();
         spawns.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(ModEntities.TAINTACLE.get(), 1, 1, 1));
-        return land(0.8F, 0.4F, 0x6D4189, 0x7C6D87, 0x7C44FF, 0xCC1188, spawns, generation, null);
+        spawns.addSpawn(MobCategory.AMBIENT, new MobSpawnSettings.SpawnerData(EntityType.BAT, 10, 8, 8));
+        return land(0.5F, 0.5F, 0x6D4189, 0x7C6D87, 0x7C44FF, 0xCC1188, spawns, generation, null);
     }
 
     private static Biome eldritch(HolderGetter<PlacedFeature> placed, HolderGetter<ConfiguredWorldCarver<?>> carvers) {

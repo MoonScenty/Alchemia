@@ -1,9 +1,9 @@
 {
   "type": "neoforge:add_spawns",
-  "biomes": "#c:is_magical",
+  "biomes": "#alchemia:has_pechs",
   "spawners": {
     "type": "alchemia:pech",
-    "maxCount": 2,
+    "maxCount": 1,
     "minCount": 1,
     "weight": 10
   }

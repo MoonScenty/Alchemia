@@ -52,6 +52,11 @@ public class ModTags {
     public static class Biomes {
         public static final TagKey<Biome> HAS_ANGRY_ZOMBIES = TagKey.create(Registries.BIOME, Alchemia.id("has_angry_zombies"));
         public static final TagKey<Biome> HAS_GREATWOOD = TagKey.create(Registries.BIOME, Alchemia.id("has_greatwood"));
+        public static final TagKey<Biome> HAS_SOME_GREATWOOD = TagKey.create(Registries.BIOME, Alchemia.id("has_some_greatwood"));
+        public static final TagKey<Biome> HAS_LITTLE_GREATWOOD = TagKey.create(Registries.BIOME, Alchemia.id("has_little_greatwood"));
+        public static final TagKey<Biome> HAS_ORES = TagKey.create(Registries.BIOME, Alchemia.id("has_ores"));
+        public static final TagKey<Biome> HAS_NODES = TagKey.create(Registries.BIOME, Alchemia.id("has_nodes"));
+        public static final TagKey<Biome> HAS_PECHS = TagKey.create(Registries.BIOME, Alchemia.id("has_pechs"));
         public static final TagKey<Biome> HAS_SILVERWOOD = TagKey.create(Registries.BIOME, Alchemia.id("has_silverwood"));
         public static final TagKey<Biome> HAS_CINDERPEARL = TagKey.create(Registries.BIOME, Alchemia.id("has_cinderpearl"));
 

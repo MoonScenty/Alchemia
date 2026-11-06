@@ -1,7 +1,7 @@
 package me.moonscenty.alchemia.registry;
 
 import me.moonscenty.alchemia.Alchemia;
-import me.moonscenty.alchemia.worldgen.CrystalPatchFeature;
+import me.moonscenty.alchemia.worldgen.CrystalClustersFeature;
 import me.moonscenty.alchemia.worldgen.NodeFeature;
 import me.moonscenty.alchemia.worldgen.GreatwoodTrunkPlacer;
 import me.moonscenty.alchemia.worldgen.SilverwoodTrunkPlacer;
@@ -10,7 +10,6 @@ import me.moonscenty.alchemia.worldgen.NodeInTreeDecorator;
 import me.moonscenty.alchemia.worldgen.UndergrowthDecorator;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.configurations.BlockStateConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacerType;
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecoratorType;
@@ -31,14 +30,20 @@ public class ModFeatures {
     public static final DeferredHolder<FoliagePlacerType<?>, FoliagePlacerType<SphereFoliagePlacer>> SPHERE_FOLIAGE = FOLIAGE_PLACERS.register("sphere",
             () -> new FoliagePlacerType<>(SphereFoliagePlacer.CODEC));
 
+    public static final DeferredRegister<net.minecraft.world.level.levelgen.placement.PlacementModifierType<?>> PLACEMENTS =
+            DeferredRegister.create(Registries.PLACEMENT_MODIFIER_TYPE, Alchemia.MODID);
+    public static final DeferredHolder<net.minecraft.world.level.levelgen.placement.PlacementModifierType<?>,
+            net.minecraft.world.level.levelgen.placement.PlacementModifierType<me.moonscenty.alchemia.worldgen.BelowSurfacePlacement>> BELOW_SURFACE =
+            PLACEMENTS.register("below_surface", () -> () -> me.moonscenty.alchemia.worldgen.BelowSurfacePlacement.CODEC);
+
     public static final DeferredRegister<TreeDecoratorType<?>> TREE_DECORATORS = DeferredRegister.create(Registries.TREE_DECORATOR_TYPE, Alchemia.MODID);
     public static final DeferredHolder<TreeDecoratorType<?>, TreeDecoratorType<UndergrowthDecorator>> UNDERGROWTH = TREE_DECORATORS.register("undergrowth",
             () -> new TreeDecoratorType<>(UndergrowthDecorator.CODEC));
     public static final DeferredHolder<TreeDecoratorType<?>, TreeDecoratorType<NodeInTreeDecorator>> NODE_IN_TREE = TREE_DECORATORS.register("node_in_tree",
             () -> new TreeDecoratorType<>(NodeInTreeDecorator.CODEC));
 
-    public static final DeferredHolder<Feature<?>, CrystalPatchFeature> CRYSTAL_PATCH = FEATURES.register("crystal_patch",
-            () -> new CrystalPatchFeature(BlockStateConfiguration.CODEC));
+    public static final DeferredHolder<Feature<?>, CrystalClustersFeature> CRYSTAL_CLUSTERS = FEATURES.register("crystal_clusters",
+            () -> new CrystalClustersFeature(NoneFeatureConfiguration.CODEC));
 
     public static final DeferredHolder<Feature<?>, me.moonscenty.alchemia.worldgen.EldritchRingFeature> ELDRITCH_RING =
             FEATURES.register("eldritch_ring",
