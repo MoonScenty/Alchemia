@@ -54,7 +54,8 @@ public abstract class Cultist extends Monster {
 
     @Override
     public boolean isAlliedTo(Entity other) {
-        return other instanceof Cultist || super.isAlliedTo(other);
+        return other instanceof Cultist || other instanceof me.moonscenty.alchemia.entity.boss.CultistLeader
+                || super.isAlliedTo(other);
     }
 
     @Override

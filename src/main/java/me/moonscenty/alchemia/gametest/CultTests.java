@@ -12,6 +12,7 @@ import me.moonscenty.alchemia.player.ModAttachments;
 import me.moonscenty.alchemia.player.PlayerKnowledge;
 import me.moonscenty.alchemia.player.WarpData;
 import me.moonscenty.alchemia.player.WarpHandler;
+import me.moonscenty.alchemia.registry.ModEntities;
 import me.moonscenty.alchemia.registry.ModItems;
 import me.moonscenty.alchemia.research.ModResearch;
 import me.moonscenty.alchemia.research.NoteRequests;
@@ -59,6 +60,17 @@ public class CultTests {
                 "the cleric wears the robe");
         helper.assertTrue(cleric.getMainHandItem().isEmpty(), "and carries nothing");
         helper.assertTrue(knight.isAlliedTo(cleric) && cleric.isAlliedTo(knight), "and they are of one side");
+        helper.succeed();
+    }
+
+    @GameTest(template = TEMPLATE)
+    public static void thePraetorSidesOnlyWithTheCult(GameTestHelper helper) {
+        var level = helper.getLevel();
+        var praetor = ordinary(helper, ModEntities.CULTIST_LEADER.get().create(level), new BlockPos(4, 2, 4));
+        CultistKnight knight = ordinary(helper, new CultistKnight(level), new BlockPos(8, 2, 4));
+        var crab = ordinary(helper, ModEntities.ELDRITCH_CRAB.get().create(level), new BlockPos(12, 2, 4));
+        helper.assertTrue(praetor.isAlliedTo(knight) && knight.isAlliedTo(praetor), "the praetor and the cult");
+        helper.assertFalse(praetor.isAlliedTo(crab), "but not the eldritch crab");
         helper.succeed();
     }
 

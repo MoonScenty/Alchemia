@@ -95,9 +95,10 @@ public class CultistLeader extends ThaumcraftBoss implements RangedAttackMob {
         return super.finalizeSpawn(level, difficulty, reason, data);
     }
 
+    // only the cult: unlike the other bosses the original's praetor has no eldritch allies
     @Override
     public boolean isAlliedTo(Entity other) {
-        return other instanceof Cultist || other instanceof CultistLeader || super.isAlliedTo(other);
+        return other instanceof Cultist || other instanceof CultistLeader || isAlliedTo(other.getTeam());
     }
 
     @Override
