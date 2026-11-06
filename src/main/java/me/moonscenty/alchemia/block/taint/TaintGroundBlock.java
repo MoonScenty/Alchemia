@@ -120,9 +120,20 @@ public class TaintGroundBlock extends Block implements Tainted {
 
     @Override
     protected void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-        if (kind == Kind.CRUST && FallingBlock.isFree(level.getBlockState(pos.below())) && pos.getY() >= level.getMinBuildHeight()) {
+        if (kind == Kind.CRUST && FallingBlock.isFree(level.getBlockState(pos.below())) && !besideWood(level, pos.below())
+                && pos.getY() >= level.getMinBuildHeight()) {
             FallingBlockEntity.fall(level, pos, state);
         }
+    }
+
+    // the original's crust hangs on anywhere within a block of a log
+    private static boolean besideWood(LevelAccessor level, BlockPos pos) {
+        for (BlockPos near : BlockPos.betweenClosed(pos.offset(-1, -1, -1), pos.offset(1, 1, 1))) {
+            if (level.getBlockState(near).is(net.minecraft.tags.BlockTags.LOGS)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void slump(ServerLevel level, BlockPos pos, RandomSource random) {
@@ -136,7 +147,7 @@ public class TaintGroundBlock extends Block implements Tainted {
             }
         }
         BlockPos over = pos.relative(way);
-        if (level.isEmptyBlock(over)) {
+        if (level.isEmptyBlock(over) && !besideWood(level, over.below())) {
             level.removeBlock(pos, false);
             FallingBlockEntity.fall(level, over, defaultBlockState());
         }

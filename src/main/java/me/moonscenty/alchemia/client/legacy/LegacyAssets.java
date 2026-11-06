@@ -282,12 +282,12 @@ public final class LegacyAssets {
         all.add(block("taint_log_top", "log_taintwood_top", null));
         all.add(block("taint_rock", "taint_rock", null));
         for (String part : List.of("taint_fibre", "taint_growth_1", "taint_growth_2", "taint_growth_3",
-                "taint_growth_4")) {
+                "taint_growth_4", "taint_orb_0", "taint_orb_1", "taint_orb_2")) {
             all.add(LegacyAsset.of("models/block/" + part + ".json").five("models/block/" + part + ".json")
                     .asModel("cutout"));
         }
         for (String picture : List.of("taint_fibres", "taint_growth_1", "taint_growth_2", "taint_growth_3",
-                "taint_growth_4")) {
+                "taint_growth_4", "taint_growth_5")) {
             all.add(LegacyAsset.of("textures/block/legacy/" + picture + ".png")
                     .five("textures/blocks/" + picture + ".png"));
         }

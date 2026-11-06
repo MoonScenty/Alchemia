@@ -399,6 +399,17 @@ public class ModBlocks {
                     .randomTicks()
                     .pushReaction(PushReaction.DESTROY)));
 
+    public static final DeferredBlock<me.moonscenty.alchemia.block.taint.TaintFeatureBlock> TAINT_FEATURE =
+            register("taint_feature", () -> new me.moonscenty.alchemia.block.taint.TaintFeatureBlock(
+                    BlockBehaviour.Properties.of()
+                            .mapColor(MapColor.COLOR_PURPLE)
+                            .strength(0.1F)
+                            .sound(SoundType.SLIME_BLOCK)
+                            .lightLevel(state -> 9)
+                            .noOcclusion()
+                            .randomTicks()
+                            .pushReaction(PushReaction.DESTROY)));
+
     public static final DeferredBlock<TaintGroundBlock> TAINT_SOIL = registerTaintGround("taint_soil", TaintGroundBlock.Kind.SOIL);
     public static final DeferredBlock<TaintGroundBlock> TAINT_CRUST = registerTaintGround("taint_crust", TaintGroundBlock.Kind.CRUST);
     public static final DeferredBlock<TaintGroundBlock> TAINT_ROCK = registerTaintGround("taint_rock", TaintGroundBlock.Kind.ROCK);

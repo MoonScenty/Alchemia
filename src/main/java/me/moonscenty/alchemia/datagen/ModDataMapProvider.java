@@ -210,6 +210,7 @@ public class ModDataMapProvider extends DataMapProvider {
         item(ModItems.WISPY_ESSENCE, a(ModAspects.AURA, 1));
         item(ModItems.COIN, a(ModAspects.DESIRE, 1));
         item(ModItems.TAINTED_GOO, a(ModAspects.FLUX, 2).add(ModAspects.WATER, 1).add(ModAspects.AURA, 1));
+        item(ModBlocks.TAINT_FEATURE, a(ModAspects.AURA, 1).add(ModAspects.BEAST, 1).add(ModAspects.FLUX, 2));
         item(ModItems.TAINT_TENDRIL, a(ModAspects.FLUX, 2).add(ModAspects.DESIRE, 1).add(ModAspects.AURA, 1));
         item(ModItems.KNOWLEDGE_FRAGMENT, a(ModAspects.MIND, 8));
 

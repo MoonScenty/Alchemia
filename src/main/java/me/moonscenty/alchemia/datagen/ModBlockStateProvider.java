@@ -90,6 +90,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         simpleBlockItem(ModBlocks.TAINT_GEYSER.get(), geyser);
         taintLog();
         taintFibre();
+        taintFeature();
         fluxGoo();
     }
 
@@ -164,6 +165,27 @@ public class ModBlockStateProvider extends BlockStateProvider {
             return ConfiguredModel.builder().modelFile(model).build();
         });
         simpleBlockItem(ModBlocks.FLUX_GOO.get(), models().getExistingFile(modLoc("block/flux_goo_7")));
+    }
+
+    // the original's blockstate: three pods, each turned a few ways
+    private void taintFeature() {
+        java.util.Map<Direction, int[][]> turns = java.util.Map.of(
+                Direction.UP, new int[][] {{0, 0}, {0, 90}, {0, 180}},
+                Direction.DOWN, new int[][] {{180, 0}, {180, 90}, {180, 180}},
+                Direction.EAST, new int[][] {{90, 90}, {270, 270}},
+                Direction.WEST, new int[][] {{90, 270}, {270, 90}},
+                Direction.NORTH, new int[][] {{90, 0}, {270, 180}},
+                Direction.SOUTH, new int[][] {{90, 180}, {270, 0}});
+        getVariantBuilder(ModBlocks.TAINT_FEATURE.get()).forAllStates(state -> {
+            java.util.List<ConfiguredModel> models = new java.util.ArrayList<>();
+            for (int[] turn : turns.get(state.getValue(me.moonscenty.alchemia.block.taint.TaintFeatureBlock.FACING))) {
+                for (int orb = 0; orb < 3; orb++) {
+                    models.add(new ConfiguredModel(models().getExistingFile(modLoc("block/taint_orb_" + orb)),
+                            turn[0], turn[1], false));
+                }
+            }
+            return models.toArray(ConfiguredModel[]::new);
+        });
     }
 
     private void taintFibre() {

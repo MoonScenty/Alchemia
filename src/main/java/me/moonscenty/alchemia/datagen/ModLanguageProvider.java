@@ -969,6 +969,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("note.alchemia.no_paper", pick("You have no paper to write on.", "쓸 종이가 없다."));
         addBlock(ModBlocks.NODE_STABILIZER, pick("Node Stabilizer", "노드 안정기"));
         addBlock(ModBlocks.TAINT_FIBRE, pick("Fibrous Taint", "오염 섬유"));
+        addBlock(ModBlocks.TAINT_FEATURE, pick("Swollen Taint", "부푼 오염"));
         addBlock(ModBlocks.TAINT_SOIL, pick("Tainted Soil", "오염된 흙"));
         addBlock(ModBlocks.TAINT_CRUST, pick("Crusted Taint", "오염 껍질"));
         addBlock(ModBlocks.TAINT_ROCK, pick("Tainted Rock", "오염된 바위"));

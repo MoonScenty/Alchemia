@@ -6,7 +6,6 @@ import me.moonscenty.alchemia.aura.AuraChunk;
 import me.moonscenty.alchemia.aura.AuraGeneration;
 import me.moonscenty.alchemia.aura.AuraHandler;
 import me.moonscenty.alchemia.aura.ModAuraAttachment;
-import me.moonscenty.alchemia.block.taint.TaintFibreBlock;
 import me.moonscenty.alchemia.entity.TaintCrawler;
 import me.moonscenty.alchemia.entity.TaintSwarm;
 import me.moonscenty.alchemia.entity.Taintacle;
@@ -117,12 +116,11 @@ public class TaintMobTests {
     }
 
     @GameTest(template = TEMPLATE)
-    public static void aGrowthBursts(GameTestHelper helper) {
+    public static void aSwollenTaintBursts(GameTestHelper helper) {
         BlockPos at = new BlockPos(4, 2, 4);
         floor(helper, ModBlocks.TAINT_SOIL.get(), at);
         flux(helper, at, 10);
-        helper.setBlock(at, ModBlocks.TAINT_FIBRE.get().defaultBlockState().setValue(TaintFibreBlock.DOWN, true)
-                .setValue(TaintFibreBlock.GROWTH, 1));
+        helper.setBlock(at, ModBlocks.TAINT_FEATURE.get().defaultBlockState());
         helper.setBlock(at, Blocks.AIR);
         int crawlers = helper.getLevel().getEntitiesOfClass(TaintCrawler.class, helper.getBounds().inflate(2)).size();
         int flux = AuraHandler.get(helper.getLevel(), helper.absolutePos(at), ModAspects.FLUX);

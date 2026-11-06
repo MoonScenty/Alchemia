@@ -161,7 +161,7 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
                 .addTag(BlockTags.BASE_STONE_OVERWORLD)
                 .addTag(BlockTags.BASE_STONE_NETHER);
 
-        tag(ModTags.Blocks.TAINT).add(ModBlocks.TAINT_FIBRE.get(), ModBlocks.TAINT_SOIL.get(),
+        tag(ModTags.Blocks.TAINT).add(ModBlocks.TAINT_FIBRE.get(), ModBlocks.TAINT_FEATURE.get(), ModBlocks.TAINT_SOIL.get(),
                 ModBlocks.TAINT_CRUST.get(), ModBlocks.TAINT_ROCK.get(), ModBlocks.TAINT_LOG.get(),
                 ModBlocks.TAINT_GEYSER.get());
         tag(ModTags.Blocks.TAINT_ROTS_TO_SOIL)
@@ -180,6 +180,6 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.TAINT_SOIL.get(), ModBlocks.TAINT_CRUST.get(), ModBlocks.TAINT_ROCK.get());
         tag(BlockTags.MINEABLE_WITH_AXE).add(ModBlocks.TAINT_GEYSER.get());
         tag(BlockTags.MINEABLE_WITH_AXE).add(ModBlocks.TAINT_LOG.get());
-        tag(BlockTags.MINEABLE_WITH_HOE).add(ModBlocks.TAINT_FIBRE.get());
+        tag(BlockTags.MINEABLE_WITH_HOE).add(ModBlocks.TAINT_FIBRE.get(), ModBlocks.TAINT_FEATURE.get());
     }
 }

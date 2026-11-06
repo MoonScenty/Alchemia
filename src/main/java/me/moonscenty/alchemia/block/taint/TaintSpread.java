@@ -51,8 +51,18 @@ public final class TaintSpread {
 
         boolean leaves = state.is(BlockTags.LEAVES);
         boolean soft = state.isAir() || state.canBeReplaced() || state.getBlock() instanceof BushBlock;
-        if (leaves || (soft && state.getFluidState().isEmpty() && besideSolid(level, at) && !onlyBesideTaint(level, at))) {
+        if (!leaves && soft && state.getFluidState().isEmpty() && besideSolid(level, at) && !onlyBesideTaint(level, at)) {
             settle(level, at, fibres(level, at), random, 1);
+            return;
+        }
+        if (leaves) {
+            // beside a tainted log the leaves usually swell into a pod pointing away from it
+            Direction log = random.nextFloat() < 0.6F ? touching(level, at, ModBlocks.TAINT_LOG.get()) : null;
+            if (log != null) {
+                settle(level, at, TaintFeatureBlock.facing(log.getOpposite()), random, 3);
+            } else {
+                settle(level, at, fibres(level, at), random, 1);
+            }
             return;
         }
 
@@ -72,6 +82,16 @@ public final class TaintSpread {
         } else if (state.is(ModTags.Blocks.TAINT_ROTS_TO_ROCK)) {
             settle(level, at, ModBlocks.TAINT_ROCK.get().defaultBlockState(), random, 4);
         }
+    }
+
+    // the first side, in the original's order, that has the block
+    private static Direction touching(LevelReader level, BlockPos at, Block block) {
+        for (Direction side : Direction.values()) {
+            if (level.getBlockState(at.relative(side)).is(block)) {
+                return side;
+            }
+        }
+        return null;
     }
 
     public static BlockState fibres(LevelReader level, BlockPos at) {

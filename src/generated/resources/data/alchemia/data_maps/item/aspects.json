@@ -482,6 +482,11 @@
       "alchemia:auram": 2,
       "alchemia:herba": 2
     },
+    "alchemia:taint_feature": {
+      "alchemia:auram": 1,
+      "alchemia:bestia": 1,
+      "alchemia:vitium": 2
+    },
     "alchemia:taint_tendril": {
       "alchemia:auram": 1,
       "alchemia:desiderium": 1,

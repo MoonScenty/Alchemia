@@ -1,4 +1,113 @@
 {
   "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "block": "alchemia:taint_fibre",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "growth": "1"
+              }
+            },
+            {
+              "chances": [
+                0.2,
+                0.4,
+                0.6,
+                0.8,
+                1.0
+              ],
+              "condition": "minecraft:table_bonus",
+              "enchantment": "minecraft:fortune"
+            }
+          ],
+          "name": "alchemia:taint_tendril"
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "block": "alchemia:taint_fibre",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "growth": "2"
+              }
+            },
+            {
+              "chances": [
+                0.2,
+                0.4,
+                0.6,
+                0.8,
+                1.0
+              ],
+              "condition": "minecraft:table_bonus",
+              "enchantment": "minecraft:fortune"
+            }
+          ],
+          "name": "alchemia:taint_tendril"
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "block": "alchemia:taint_fibre",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "growth": "4"
+              }
+            },
+            {
+              "chances": [
+                0.2,
+                0.4,
+                0.6,
+                0.8,
+                1.0
+              ],
+              "condition": "minecraft:table_bonus",
+              "enchantment": "minecraft:fortune"
+            }
+          ],
+          "name": "alchemia:taint_tendril"
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "block": "alchemia:taint_fibre",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "growth": "3"
+              }
+            },
+            {
+              "chances": [
+                0.2,
+                0.4,
+                0.6,
+                0.8,
+                1.0
+              ],
+              "condition": "minecraft:table_bonus",
+              "enchantment": "minecraft:fortune"
+            }
+          ],
+          "name": "alchemia:tainted_goo"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
   "random_sequence": "alchemia:blocks/taint_fibre"
 }

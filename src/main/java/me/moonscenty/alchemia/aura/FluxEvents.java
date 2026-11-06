@@ -110,7 +110,7 @@ public final class FluxEvents {
     // no bolt or cloud next to tainted land (sixteen blocks off on any side) or near an existing cloud
     public static boolean nearTaint(ServerLevel level, BlockPos at) {
         for (net.minecraft.core.Direction side : net.minecraft.core.Direction.Plane.HORIZONTAL) {
-            if (level.getBiome(at.relative(side, 16)).is(me.moonscenty.alchemia.worldgen.ModBiomes.TAINTED_LAND)) {
+            if (BiomePaint.at(level, at.relative(side, 16)).is(me.moonscenty.alchemia.worldgen.ModBiomes.TAINTED_LAND)) {
                 return true;
             }
         }

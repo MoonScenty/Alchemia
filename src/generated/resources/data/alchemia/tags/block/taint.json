@@ -1,6 +1,7 @@
 {
   "values": [
     "alchemia:taint_fibre",
+    "alchemia:taint_feature",
     "alchemia:taint_soil",
     "alchemia:taint_crust",
     "alchemia:taint_rock",

@@ -179,7 +179,9 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
         add(ModBlocks.BANNER.get(), noDrop());
         dropSelf(ModBlocks.ELDRITCH_PEDESTAL.get());
 
-        add(ModBlocks.TAINT_FIBRE.get(), noDrop());
+        add(ModBlocks.TAINT_FIBRE.get(), taintFibreDrops(ModBlocks.TAINT_FIBRE.get()));
+        add(ModBlocks.TAINT_FEATURE.get(), block -> createSilkTouchDispatchTable(block,
+                applyExplosionCondition(block, LootItem.lootTableItem(ModItems.TAINTED_GOO.get()))));
         add(ModBlocks.TAINT_SOIL.get(), noDrop());
         add(ModBlocks.TAINT_CRUST.get(), noDrop());
         add(ModBlocks.TAINT_ROCK.get(), noDrop());
@@ -195,6 +197,26 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
         dropSelf(ModBlocks.INFUSION_COST_STONE.get());
 
         ModBlocks.CRYSTALS.forEach((type, crystal) -> add(crystal.get(), createCrystalDrops(crystal.get(), ModItems.SHARDS.get(type).get())));
+    }
+
+    // the original's: sprouts give a tendril and the lump goo, each one time in five (more with fortune)
+    private LootTable.Builder taintFibreDrops(Block block) {
+        Holder<Enchantment> fortune = registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FORTUNE);
+        LootPool.Builder pool = LootPool.lootPool().setRolls(ConstantValue.exactly(1));
+        for (int growth : new int[] {1, 2, me.moonscenty.alchemia.block.taint.TaintFibreBlock.HANGING}) {
+            pool.add(LootItem.lootTableItem(ModItems.TAINT_TENDRIL.get())
+                    .when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block)
+                            .setProperties(StatePropertiesPredicate.Builder.properties()
+                                    .hasProperty(me.moonscenty.alchemia.block.taint.TaintFibreBlock.GROWTH, growth)))
+                    .when(BonusLevelTableCondition.bonusLevelFlatChance(fortune, 0.2F, 0.4F, 0.6F, 0.8F, 1.0F)));
+        }
+        pool.add(LootItem.lootTableItem(ModItems.TAINTED_GOO.get())
+                .when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block)
+                        .setProperties(StatePropertiesPredicate.Builder.properties()
+                                .hasProperty(me.moonscenty.alchemia.block.taint.TaintFibreBlock.GROWTH,
+                                        me.moonscenty.alchemia.block.taint.TaintFibreBlock.LUMP)))
+                .when(BonusLevelTableCondition.bonusLevelFlatChance(fortune, 0.2F, 0.4F, 0.6F, 0.8F, 1.0F)));
+        return LootTable.lootTable().withPool(applyExplosionCondition(block, pool));
     }
 
     private LootTable.Builder createAmberOreDrops(Block block) {

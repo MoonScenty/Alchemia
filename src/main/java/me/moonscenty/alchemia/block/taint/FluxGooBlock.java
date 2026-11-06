@@ -97,7 +97,9 @@ public class FluxGooBlock extends SettlingLayerBlock {
             }
             return;
         }
-        entity.makeStuckInBlock(state, new Vec3(0.5, 0.35, 0.5));
+        // the original's: sideways speed falls with depth, to nothing in a full block
+        double held = 1.0 - (state.getValue(LEVEL) + 1) / (double) (FULL + 1);
+        entity.makeStuckInBlock(state, new Vec3(held, 1.0, held));
         if (!level.isClientSide && entity instanceof net.minecraft.world.entity.LivingEntity living) {
             living.addEffect(new net.minecraft.world.effect.MobEffectInstance(
                     me.moonscenty.alchemia.player.effect.ModEffects.FLUX_FLU, 600, state.getValue(LEVEL) / 3, true,
