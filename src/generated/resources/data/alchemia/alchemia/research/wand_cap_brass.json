@@ -1,7 +1,6 @@
 {
   "category": "alchemia:arcana",
   "column": 5,
-  "complexity": 2,
   "icon": "alchemia:wand_cap_brass",
   "pages": [
     {
@@ -14,7 +13,8 @@
     }
   ],
   "parents": [
-    "alchemia:wand_cap_gold"
+    "alchemia:wand_cap_gold",
+    "alchemia:metallurgy"
   ],
   "requirements": {
     "alchemia:instrumentum": 3,

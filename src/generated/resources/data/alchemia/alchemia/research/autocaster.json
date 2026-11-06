@@ -19,8 +19,7 @@
   ],
   "parents": [
     "alchemia:bioalchemic_mind",
-    "alchemia:infusion",
-    "alchemia:wand"
+    "alchemia:arcane_bore"
   ],
   "requirements": {
     "alchemia:auram": 3,

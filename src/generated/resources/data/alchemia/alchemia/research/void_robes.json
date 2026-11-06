@@ -1,7 +1,7 @@
 {
   "category": "alchemia:artifice",
   "column": 8,
-  "complexity": 3,
+  "complexity": 2,
   "hidden": true,
   "icon": "alchemia:void_robe_chest",
   "pages": [
@@ -23,14 +23,14 @@
     }
   ],
   "parents": [
-    "alchemia:robes",
-    "alchemia:void_gear",
-    "alchemia:infusion"
+    "alchemia:void_metal",
+    "alchemia:enchanted_fabric",
+    "alchemia:eldritch_major"
   ],
   "requirements": {
-    "alchemia:alienis": 3,
-    "alchemia:auram": 4,
-    "alchemia:praemunio": 4,
+    "alchemia:alienis": 9,
+    "alchemia:praemunio": 3,
+    "alchemia:spiritus": 6,
     "alchemia:vacuos": 6
   },
   "row": 3,

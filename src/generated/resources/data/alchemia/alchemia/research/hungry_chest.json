@@ -13,13 +13,11 @@
     }
   ],
   "parents": [
-    "alchemia:primal_charm",
-    "alchemia:greatwood"
+    "alchemia:golem_wood"
   ],
   "requirements": {
     "alchemia:desiderium": 3,
-    "alchemia:vacuos": 3,
-    "alchemia:vinculum": 3
+    "alchemia:vacuos": 3
   },
   "row": -1
 }

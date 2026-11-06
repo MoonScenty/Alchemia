@@ -123,13 +123,13 @@ public class ModDataMapProvider extends DataMapProvider {
 
         tag(Tags.Items.INGOTS_IRON, a(ModAspects.METAL, 4));
         tag(Tags.Items.INGOTS_GOLD, a(ModAspects.METAL, 3).add(ModAspects.DESIRE, 2));
-        tag(Tags.Items.INGOTS_COPPER, a(ModAspects.METAL, 3).add(ModAspects.ENERGY, 1));
+        tag(Tags.Items.INGOTS_COPPER, a(ModAspects.METAL, 3).add(ModAspects.EXCHANGE, 1));
         tag(Tags.Items.GEMS_DIAMOND, a(ModAspects.CRYSTAL, 4).add(ModAspects.DESIRE, 4));
         tag(Tags.Items.GEMS_EMERALD, a(ModAspects.CRYSTAL, 4).add(ModAspects.DESIRE, 5));
         tag(Tags.Items.GEMS_QUARTZ, a(ModAspects.CRYSTAL, 1).add(ModAspects.ENERGY, 1));
-        tag(Tags.Items.GEMS_LAPIS, a(ModAspects.SENSES, 3));
+        tag(Tags.Items.GEMS_LAPIS, a(ModAspects.SENSES, 1));
         tag(Tags.Items.DUSTS_REDSTONE, a(ModAspects.ENERGY, 2));
-        tag(Tags.Items.DUSTS_GLOWSTONE, a(ModAspects.SENSES, 3).add(ModAspects.LIGHT, 10));
+        tag(Tags.Items.DUSTS_GLOWSTONE, a(ModAspects.SENSES, 1).add(ModAspects.LIGHT, 2));
         item(Items.AMETHYST_SHARD, a(ModAspects.CRYSTAL, 3).add(ModAspects.SENSES, 1));
         item(Items.COAL, a(ModAspects.ENERGY, 2).add(ModAspects.FIRE, 2));
         item(Items.CHARCOAL, a(ModAspects.ENERGY, 2).add(ModAspects.FIRE, 2));
@@ -164,12 +164,13 @@ public class ModDataMapProvider extends DataMapProvider {
         item(Items.VINE, a(ModAspects.PLANT, 1));
         item(Items.SHORT_GRASS, a(ModAspects.PLANT, 1).add(ModAspects.AIR, 1));
         item(Items.DEAD_BUSH, a(ModAspects.PLANT, 1).add(ModAspects.ENTROPY, 1));
-        tag(ItemTags.SMALL_FLOWERS, a(ModAspects.PLANT, 1).add(ModAspects.SENSES, 1));
+        tag(ItemTags.SMALL_FLOWERS, a(ModAspects.PLANT, 1).add(ModAspects.LIFE, 1).add(ModAspects.SENSES, 1));
 
         AspectList meat = a(ModAspects.BEAST, 2).add(ModAspects.LIFE, 1).add(ModAspects.EARTH, 1);
-        for (ItemLike cut : new ItemLike[] {Items.BEEF, Items.PORKCHOP, Items.CHICKEN, Items.MUTTON, Items.RABBIT}) {
+        for (ItemLike cut : new ItemLike[] {Items.BEEF, Items.PORKCHOP, Items.MUTTON, Items.RABBIT}) {
             item(cut, meat);
         }
+        item(Items.CHICKEN, a(ModAspects.BEAST, 2).add(ModAspects.LIFE, 1).add(ModAspects.AIR, 1));
         tag(ItemTags.FISHES, a(ModAspects.WATER, 1).add(ModAspects.BEAST, 2).add(ModAspects.LIFE, 1));
 
         item(Items.ICE, a(ModAspects.COLD, 4));
@@ -190,15 +191,12 @@ public class ModDataMapProvider extends DataMapProvider {
             item(ModItems.SHARDS.get(type), a(aspect, 2).add(ModAspects.CRYSTAL, 1));
             item(ModBlocks.CRYSTALS.get(type), a(aspect, 4).add(ModAspects.CRYSTAL, 2));
         }
-        AspectList balanced = a(ModAspects.CRYSTAL, 1);
-        for (Holder<Aspect> primal : ModAspects.primals()) {
-            balanced = balanced.add(primal, 1);
-        }
-        item(ModItems.BALANCED_SHARD, balanced);
+        item(ModItems.BALANCED_SHARD, AspectList.eachPrimal(2).add(ModAspects.CRYSTAL, 1));
 
         item(ModItems.IRON_CLUSTER, a(ModAspects.ORDER, 1).add(ModAspects.METAL, 6).add(ModAspects.EARTH, 1));
         item(ModItems.GOLD_CLUSTER, a(ModAspects.ORDER, 1).add(ModAspects.METAL, 4).add(ModAspects.EARTH, 1).add(ModAspects.DESIRE, 2));
-        item(ModItems.COPPER_CLUSTER, a(ModAspects.ORDER, 1).add(ModAspects.METAL, 5).add(ModAspects.EARTH, 1));
+        item(ModItems.COPPER_CLUSTER, a(ModAspects.ORDER, 1).add(ModAspects.METAL, 5).add(ModAspects.EARTH, 1)
+                .add(ModAspects.EXCHANGE, 2));
         item(ModItems.CINNABAR_CLUSTER, a(ModAspects.ORDER, 1).add(ModAspects.METAL, 4).add(ModAspects.EARTH, 1)
                 .add(ModAspects.EXCHANGE, 4).add(ModAspects.DEATH, 1));
 
@@ -254,24 +252,78 @@ public class ModDataMapProvider extends DataMapProvider {
     }
 
     private void mobAspects() {
-        AspectList beast = a(ModAspects.BEAST, 4).add(ModAspects.LIFE, 2);
-        for (EntityType<?> animal : new EntityType<?>[] {EntityType.COW, EntityType.PIG, EntityType.SHEEP,
-                EntityType.CHICKEN, EntityType.RABBIT, EntityType.HORSE, EntityType.WOLF, EntityType.CAT}) {
-            mob(animal, beast);
+        AspectList zombie = a(ModAspects.UNDEAD, 2).add(ModAspects.MAN, 1).add(ModAspects.EARTH, 1);
+        for (EntityType<?> risen : new EntityType<?>[] {EntityType.ZOMBIE, EntityType.ZOMBIE_VILLAGER, EntityType.HUSK,
+                EntityType.DROWNED}) {
+            mob(risen, zombie);
         }
-
-        AspectList undead = a(ModAspects.UNDEAD, 4).add(ModAspects.DEATH, 2).add(ModAspects.ENTROPY, 1);
-        for (EntityType<?> risen : new EntityType<?>[] {EntityType.ZOMBIE, EntityType.SKELETON, EntityType.HUSK,
-                EntityType.DROWNED, EntityType.STRAY, EntityType.WITHER_SKELETON, EntityType.ZOMBIE_VILLAGER}) {
-            mob(risen, undead);
+        mob(EntityType.GIANT, a(ModAspects.UNDEAD, 4).add(ModAspects.MAN, 3).add(ModAspects.EARTH, 3));
+        AspectList skeleton = a(ModAspects.UNDEAD, 3).add(ModAspects.MAN, 1).add(ModAspects.EARTH, 1);
+        mob(EntityType.SKELETON, skeleton);
+        mob(EntityType.STRAY, skeleton);
+        mob(EntityType.WITHER_SKELETON, a(ModAspects.UNDEAD, 4).add(ModAspects.MAN, 1).add(ModAspects.FIRE, 2));
+        mob(EntityType.CREEPER, a(ModAspects.PLANT, 2).add(ModAspects.FIRE, 2));
+        AspectList horse = a(ModAspects.BEAST, 4).add(ModAspects.EARTH, 1).add(ModAspects.AIR, 1);
+        for (EntityType<?> steed : new EntityType<?>[] {EntityType.HORSE, EntityType.DONKEY, EntityType.MULE,
+                EntityType.SKELETON_HORSE, EntityType.ZOMBIE_HORSE}) {
+            mob(steed, horse);
         }
+        mob(EntityType.PIG, a(ModAspects.BEAST, 2).add(ModAspects.EARTH, 2));
+        mob(EntityType.EXPERIENCE_ORB, a(ModAspects.MIND, 5));
+        mob(EntityType.SHEEP, a(ModAspects.BEAST, 2).add(ModAspects.EARTH, 2));
+        mob(EntityType.COW, a(ModAspects.BEAST, 3).add(ModAspects.EARTH, 3));
+        mob(EntityType.MOOSHROOM, a(ModAspects.BEAST, 3).add(ModAspects.PLANT, 1).add(ModAspects.EARTH, 2));
+        mob(EntityType.SNOW_GOLEM, a(ModAspects.COLD, 3).add(ModAspects.WATER, 1));
+        mob(EntityType.OCELOT, a(ModAspects.BEAST, 3).add(ModAspects.ENTROPY, 3));
+        mob(EntityType.CAT, a(ModAspects.BEAST, 3).add(ModAspects.ENTROPY, 3));
+        mob(EntityType.CHICKEN, a(ModAspects.BEAST, 2).add(ModAspects.FLIGHT, 2).add(ModAspects.AIR, 1));
+        mob(EntityType.SQUID, a(ModAspects.BEAST, 2).add(ModAspects.WATER, 2));
+        mob(EntityType.WOLF, a(ModAspects.BEAST, 3).add(ModAspects.EARTH, 3));
+        mob(EntityType.BAT, a(ModAspects.BEAST, 1).add(ModAspects.FLIGHT, 1).add(ModAspects.AIR, 1));
+        mob(EntityType.BOAT, a(ModAspects.MECHANISM, 2).add(ModAspects.WATER, 2));
+        mob(EntityType.SPIDER, a(ModAspects.BEAST, 3).add(ModAspects.ENTROPY, 2));
+        mob(EntityType.SLIME, a(ModAspects.LIFE, 2).add(ModAspects.WATER, 2));
+        mob(EntityType.GHAST, a(ModAspects.UNDEAD, 3).add(ModAspects.FIRE, 2));
+        mob(EntityType.ZOMBIFIED_PIGLIN, a(ModAspects.UNDEAD, 4).add(ModAspects.FIRE, 2));
+        mob(EntityType.ENDERMAN, a(ModAspects.ELDRITCH, 4).add(ModAspects.MOTION, 2).add(ModAspects.AIR, 2));
+        mob(EntityType.CAVE_SPIDER, a(ModAspects.BEAST, 2).add(ModAspects.DEATH, 2).add(ModAspects.EARTH, 1));
+        mob(EntityType.SILVERFISH, a(ModAspects.BEAST, 1).add(ModAspects.EARTH, 1));
+        mob(EntityType.BLAZE, a(ModAspects.ELDRITCH, 4).add(ModAspects.FIRE, 1));
+        mob(EntityType.MAGMA_CUBE, a(ModAspects.WATER, 3).add(ModAspects.FIRE, 2));
+        mob(EntityType.ENDER_DRAGON, a(ModAspects.ELDRITCH, 20).add(ModAspects.BEAST, 20).add(ModAspects.ENTROPY, 20));
+        mob(EntityType.WITHER, a(ModAspects.UNDEAD, 20).add(ModAspects.ENTROPY, 20).add(ModAspects.FIRE, 15));
+        mob(EntityType.WITCH, a(ModAspects.MAN, 3).add(ModAspects.AURA, 2).add(ModAspects.FIRE, 1));
+        mob(EntityType.VILLAGER, a(ModAspects.MAN, 3).add(ModAspects.AIR, 2));
+        mob(EntityType.IRON_GOLEM, a(ModAspects.METAL, 4).add(ModAspects.EARTH, 3));
+        mob(EntityType.MINECART, a(ModAspects.MECHANISM, 3).add(ModAspects.AIR, 2));
+        mob(EntityType.CHEST_MINECART, a(ModAspects.MECHANISM, 3).add(ModAspects.AIR, 1).add(ModAspects.VOID, 1));
+        mob(EntityType.FURNACE_MINECART, a(ModAspects.MECHANISM, 3).add(ModAspects.AIR, 1).add(ModAspects.FIRE, 1));
+        mob(EntityType.TNT_MINECART, a(ModAspects.MECHANISM, 3).add(ModAspects.AIR, 1).add(ModAspects.FIRE, 1));
+        mob(EntityType.HOPPER_MINECART, a(ModAspects.MECHANISM, 3).add(ModAspects.AIR, 1).add(ModAspects.EXCHANGE, 1));
+        mob(EntityType.SPAWNER_MINECART, a(ModAspects.MECHANISM, 3).add(ModAspects.AIR, 1).add(ModAspects.AURA, 1));
+        mob(EntityType.END_CRYSTAL, a(ModAspects.ELDRITCH, 3).add(ModAspects.AURA, 3).add(ModAspects.LIFE, 3));
+        mob(EntityType.ITEM_FRAME, a(ModAspects.SENSES, 3).add(ModAspects.CRAFT, 1));
+        mob(EntityType.PAINTING, a(ModAspects.SENSES, 5).add(ModAspects.CRAFT, 3));
+        mob(EntityType.GUARDIAN, a(ModAspects.BEAST, 2).add(ModAspects.ELDRITCH, 1).add(ModAspects.WATER, 1));
+        mob(EntityType.ELDER_GUARDIAN, a(ModAspects.BEAST, 2).add(ModAspects.ELDRITCH, 1).add(ModAspects.WATER, 1));
+        mob(EntityType.RABBIT, a(ModAspects.BEAST, 1).add(ModAspects.EARTH, 1).add(ModAspects.MOTION, 1));
+        mob(EntityType.ENDERMITE, a(ModAspects.BEAST, 1).add(ModAspects.ELDRITCH, 1).add(ModAspects.MOTION, 1));
 
-        mob(EntityType.CREEPER, a(ModAspects.FIRE, 4).add(ModAspects.ENTROPY, 4).add(ModAspects.PLANT, 2));
-        mob(EntityType.SPIDER, a(ModAspects.BEAST, 4).add(ModAspects.SENSES, 2).add(ModAspects.TRAP, 2));
-        mob(EntityType.ENDERMAN, a(ModAspects.ELDRITCH, 6).add(ModAspects.MOTION, 4).add(ModAspects.DARKNESS, 2));
-        mob(EntityType.BLAZE, a(ModAspects.FIRE, 8).add(ModAspects.ENERGY, 4));
-        mob(EntityType.VILLAGER, a(ModAspects.MAN, 6).add(ModAspects.EXCHANGE, 2).add(ModAspects.MIND, 2));
-        mob(EntityType.WITCH, a(ModAspects.MAN, 4).add(ModAspects.AURA, 4).add(ModAspects.MIND, 2));
+        mob(me.moonscenty.alchemia.registry.ModEntities.AURA_NODE.get(), a(ModAspects.AURA, 10));
+        mob(me.moonscenty.alchemia.registry.ModEntities.PRIMAL_ORB.get(), a(ModAspects.AIR, 5).add(ModAspects.ENTROPY, 10)
+                .add(ModAspects.AURA, 10).add(ModAspects.ENERGY, 10));
+        mob(me.moonscenty.alchemia.registry.ModEntities.FIRE_BAT.get(),
+                a(ModAspects.BEAST, 2).add(ModAspects.FLIGHT, 1).add(ModAspects.FIRE, 2));
+        mob(me.moonscenty.alchemia.registry.ModEntities.TAINT_CRAWLER.get(), a(ModAspects.FLUX, 1).add(ModAspects.EARTH, 1));
+        mob(me.moonscenty.alchemia.registry.ModEntities.ELDRITCH_ORB.get(), a(ModAspects.ELDRITCH, 2).add(ModAspects.DEATH, 2));
+        mob(me.moonscenty.alchemia.registry.ModEntities.ELDRITCH_WARDEN.get(),
+                a(ModAspects.ELDRITCH, 8).add(ModAspects.DEATH, 4).add(ModAspects.UNDEAD, 4));
+        mob(me.moonscenty.alchemia.registry.ModEntities.ELDRITCH_GOLEM.get(),
+                a(ModAspects.ELDRITCH, 8).add(ModAspects.ENERGY, 4).add(ModAspects.MECHANISM, 4));
+        mob(me.moonscenty.alchemia.registry.ModEntities.CULTIST_LEADER.get(),
+                a(ModAspects.ELDRITCH, 8).add(ModAspects.AVERSION, 4).add(ModAspects.MAN, 4));
+        mob(me.moonscenty.alchemia.registry.ModEntities.TAINTACLE_GIANT.get(),
+                a(ModAspects.ELDRITCH, 8).add(ModAspects.WATER, 4).add(ModAspects.FLUX, 4));
         for (EntityType<?> cultist : new EntityType<?>[] {me.moonscenty.alchemia.registry.ModEntities.CULTIST_KNIGHT.get(),
                 me.moonscenty.alchemia.registry.ModEntities.CULTIST_CLERIC.get()}) {
             mob(cultist, a(ModAspects.ELDRITCH, 1).add(ModAspects.MAN, 2).add(ModAspects.AVERSION, 1));

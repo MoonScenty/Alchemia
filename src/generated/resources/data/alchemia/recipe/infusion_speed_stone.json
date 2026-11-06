@@ -16,6 +16,7 @@
     "NGN",
     "SNS"
   ],
+  "research": "alchemia:infusion_boost",
   "result": {
     "count": 1,
     "id": "alchemia:infusion_speed_stone"

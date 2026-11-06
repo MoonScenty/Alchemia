@@ -1,0 +1,23 @@
+{
+  "category": "alchemia:arcana",
+  "column": 2,
+  "icon": "alchemia:focus_pouch",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.focus_pouch.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:focus_pouch"
+    }
+  ],
+  "parents": [
+    "alchemia:wand"
+  ],
+  "requirements": {
+    "alchemia:instrumentum": 3,
+    "alchemia:vacuos": 6
+  },
+  "row": 0
+}

@@ -6,6 +6,9 @@
   "column": -1,
   "complexity": 2,
   "hidden": true,
+  "hidden_parents": [
+    "alchemia:infusion"
+  ],
   "icon": "alchemia:growth_lamp",
   "pages": [
     {
@@ -18,11 +21,11 @@
     }
   ],
   "parents": [
-    "alchemia:arcane_lamp",
-    "alchemia:infusion"
+    "alchemia:arcane_lamp"
   ],
   "requirements": {
     "alchemia:herba": 6,
+    "alchemia:instrumentum": 3,
     "alchemia:lux": 3,
     "alchemia:victus": 3
   },

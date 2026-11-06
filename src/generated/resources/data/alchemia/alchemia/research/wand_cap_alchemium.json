@@ -1,7 +1,7 @@
 {
   "category": "alchemia:arcana",
   "column": 6,
-  "complexity": 3,
+  "complexity": 2,
   "icon": "alchemia:wand_cap_alchemium",
   "pages": [
     {
@@ -19,6 +19,7 @@
   ],
   "parents": [
     "alchemia:wand_cap_brass",
+    "alchemia:metallurgy",
     "alchemia:infusion"
   ],
   "requirements": {

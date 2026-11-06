@@ -7,6 +7,9 @@
   "column": 1,
   "complexity": 2,
   "hidden": true,
+  "hidden_parents": [
+    "alchemia:infusion"
+  ],
   "icon": "alchemia:fertility_lamp",
   "pages": [
     {
@@ -19,13 +22,13 @@
     }
   ],
   "parents": [
-    "alchemia:arcane_lamp",
-    "alchemia:infusion"
+    "alchemia:arcane_lamp"
   ],
   "requirements": {
     "alchemia:bestia": 6,
+    "alchemia:desiderium": 6,
     "alchemia:lux": 3,
-    "alchemia:victus": 3
+    "alchemia:victus": 6
   },
   "row": -2
 }

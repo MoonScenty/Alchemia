@@ -20,6 +20,7 @@
     }
   ],
   "parents": [
+    "alchemia:node_stabilizer",
     "alchemia:aura_totem_pole_pure",
     "alchemia:bioalchemic_mind",
     "alchemia:crystal_farmer"

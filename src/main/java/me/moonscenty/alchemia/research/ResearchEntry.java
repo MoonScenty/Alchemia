@@ -29,7 +29,8 @@ public record ResearchEntry(
         boolean hidden,
         int warp,
         List<ResourceLocation> siblings,
-        List<ResourceLocation> clues) {
+        List<ResourceLocation> clues,
+        List<ResourceLocation> hiddenParents) {
 
     public static final Codec<ResearchEntry> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             ResourceKey.codec(ModResearch.CATEGORY_KEY).fieldOf("category").forGetter(ResearchEntry::category),
@@ -45,7 +46,9 @@ public record ResearchEntry(
             Codec.BOOL.optionalFieldOf("hidden", false).forGetter(ResearchEntry::hidden),
             Codec.intRange(0, 100).optionalFieldOf("warp", 0).forGetter(ResearchEntry::warp),
             ResourceLocation.CODEC.listOf().optionalFieldOf("siblings", List.of()).forGetter(ResearchEntry::siblings),
-            ResourceLocation.CODEC.listOf().optionalFieldOf("clues", List.of()).forGetter(ResearchEntry::clues))
+            ResourceLocation.CODEC.listOf().optionalFieldOf("clues", List.of()).forGetter(ResearchEntry::clues),
+            ResourceLocation.CODEC.listOf().optionalFieldOf("hidden_parents", List.of())
+                    .forGetter(ResearchEntry::hiddenParents))
             .apply(instance, ResearchEntry::new));
 
     public List<ResearchPage> pagesFor(java.util.function.Predicate<ResourceLocation> hasResearch) {
@@ -70,7 +73,7 @@ public record ResearchEntry(
     }
 
     public boolean onlyGiven() {
-        return hidden && parents.isEmpty() && clues.isEmpty();
+        return hidden && parents.isEmpty() && hiddenParents.isEmpty() && clues.isEmpty();
     }
 
     public boolean isAvailableTo(me.moonscenty.alchemia.player.PlayerKnowledge knowledge) {
@@ -78,7 +81,8 @@ public record ResearchEntry(
     }
 
     public boolean parentsKnown(me.moonscenty.alchemia.player.PlayerKnowledge knowledge) {
-        return parents.stream().allMatch(knowledge::hasResearch);
+        return parents.stream().allMatch(knowledge::hasResearch)
+                && hiddenParents.stream().allMatch(knowledge::hasResearch);
     }
 
     public boolean cluesMet(me.moonscenty.alchemia.player.PlayerKnowledge knowledge) {

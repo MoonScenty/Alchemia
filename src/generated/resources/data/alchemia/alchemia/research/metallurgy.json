@@ -1,7 +1,6 @@
 {
   "category": "alchemia:alchemy",
   "column": -1,
-  "complexity": 3,
   "icon": "alchemia:alchemium_ingot",
   "pages": [
     {
@@ -21,9 +20,8 @@
     "alchemia:crucible"
   ],
   "requirements": {
-    "alchemia:ignis": 2,
-    "alchemia:metallum": 6,
-    "alchemia:permutatio": 4
+    "alchemia:machina": 3,
+    "alchemia:metallum": 3
   },
   "row": 3
 }

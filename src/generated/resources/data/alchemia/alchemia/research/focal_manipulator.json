@@ -2,6 +2,12 @@
   "category": "alchemia:arcana",
   "column": 2,
   "complexity": 2,
+  "hidden_parents": [
+    "alchemia:focus_frost",
+    "alchemia:focus_shock",
+    "alchemia:focus_trade",
+    "alchemia:focus_excavation"
+  ],
   "icon": "alchemia:focal_manipulator",
   "pages": [
     {
@@ -14,13 +20,12 @@
     }
   ],
   "parents": [
-    "alchemia:arcane_workbench",
-    "alchemia:arcane_stone"
+    "alchemia:focus_fire"
   ],
   "requirements": {
     "alchemia:fabrico": 5,
     "alchemia:instrumentum": 8,
-    "alchemia:potentia": 8,
+    "alchemia:potentia": 5,
     "alchemia:vitreus": 5
   },
   "row": 5,

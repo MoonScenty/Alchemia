@@ -191,4 +191,43 @@ public class ResearchTests {
         helper.assertTrue(helper.getBlockState(pos).getValue(ResearchTableBlock.HAS_TOOLS), "and so does the inkwell");
         helper.succeed();
     }
+
+    @GameTest(template = TEMPLATE)
+    public static void someParentsAreKnownWithoutALine(GameTestHelper helper) {
+        Registry<ResearchEntry> entries = helper.getLevel().registryAccess().registryOrThrow(ModResearch.ENTRY_KEY);
+        ResearchEntry manipulator = entries.get(Alchemia.id("focal_manipulator"));
+        PlayerKnowledge fire = PlayerKnowledge.fresh().withResearch(Alchemia.id("focus_fire"));
+        helper.assertFalse(manipulator.isAvailableTo(fire), "the other foci are wanted first");
+        PlayerKnowledge all = fire;
+        for (String focus : new String[] {"focus_frost", "focus_shock", "focus_trade", "focus_excavation"}) {
+            all = all.withResearch(Alchemia.id(focus));
+        }
+        helper.assertTrue(manipulator.isAvailableTo(all), "and then it opens");
+        helper.assertValueEqual(manipulator.parents(), java.util.List.of(Alchemia.id("focus_fire")),
+                "with only the fire focus drawn to it");
+        helper.succeed();
+    }
+
+    @GameTest(template = TEMPLATE)
+    public static void theBoreComesBeforeTheAutocaster(GameTestHelper helper) {
+        Registry<ResearchEntry> entries = helper.getLevel().registryAccess().registryOrThrow(ModResearch.ENTRY_KEY);
+        helper.assertTrue(entries.get(Alchemia.id("autocaster")).parents().contains(Alchemia.id("arcane_bore")),
+                "the autocaster follows the bore");
+        helper.assertFalse(entries.get(Alchemia.id("arcane_bore")).parents().contains(Alchemia.id("autocaster")),
+                "not the other way round");
+        helper.succeed();
+    }
+
+    @GameTest(template = TEMPLATE)
+    public static void everyArcaneRecipeWantsResearch(GameTestHelper helper) {
+        var recipes = helper.getLevel().getRecipeManager().getRecipes();
+        for (var holder : recipes) {
+            if (holder.value() instanceof me.moonscenty.alchemia.crafting.ArcaneShapedRecipe
+                    || holder.value() instanceof me.moonscenty.alchemia.crafting.ArcaneShapelessRecipe) {
+                var research = ((me.moonscenty.alchemia.crafting.ArcaneRecipe) holder.value()).research();
+                helper.assertTrue(research.isPresent(), holder.id() + " can be made without any research");
+            }
+        }
+        helper.succeed();
+    }
 }

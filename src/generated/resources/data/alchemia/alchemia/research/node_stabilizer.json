@@ -1,0 +1,26 @@
+{
+  "category": "alchemia:arcana",
+  "column": 9,
+  "complexity": 3,
+  "icon": "alchemia:node_stabilizer",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.node_stabilizer.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:node_stabilizer"
+    }
+  ],
+  "parents": [
+    "alchemia:aura_totem"
+  ],
+  "requirements": {
+    "alchemia:auram": 6,
+    "alchemia:machina": 3,
+    "alchemia:motus": 6,
+    "alchemia:vinculum": 8
+  },
+  "row": 0
+}

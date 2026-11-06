@@ -1,7 +1,7 @@
 {
   "category": "alchemia:arcana",
   "column": 7,
-  "complexity": 3,
+  "complexity": 2,
   "icon": "alchemia:infusion_matrix",
   "pages": [
     {
@@ -18,14 +18,13 @@
     }
   ],
   "parents": [
-    "alchemia:arcane_workbench",
-    "alchemia:vis_crystals"
+    "alchemia:primal_charm",
+    "alchemia:distillation"
   ],
   "requirements": {
-    "alchemia:auram": 6,
     "alchemia:fabrico": 6,
-    "alchemia:ordo": 4,
-    "alchemia:potentia": 4
+    "alchemia:machina": 3,
+    "alchemia:potentia": 6
   },
   "row": 2,
   "shape": "major"

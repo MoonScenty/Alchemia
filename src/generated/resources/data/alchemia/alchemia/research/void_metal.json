@@ -1,7 +1,7 @@
 {
   "category": "alchemia:alchemy",
   "column": -2,
-  "complexity": 3,
+  "complexity": 2,
   "icon": "alchemia:void_ingot",
   "pages": [
     {
@@ -30,13 +30,14 @@
     }
   ],
   "parents": [
-    "alchemia:metallurgy"
+    "alchemia:metallurgy",
+    "alchemia:eldritch_minor"
   ],
   "requirements": {
-    "alchemia:alienis": 2,
-    "alchemia:metallum": 4,
-    "alchemia:tenebrae": 6,
-    "alchemia:vacuos": 6
+    "alchemia:alienis": 3,
+    "alchemia:metallum": 3,
+    "alchemia:vacuos": 5,
+    "alchemia:vitium": 3
   },
   "row": 4,
   "shape": "special"

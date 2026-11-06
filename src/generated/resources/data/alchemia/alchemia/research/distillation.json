@@ -1,7 +1,6 @@
 {
   "category": "alchemia:alchemy",
   "column": 1,
-  "complexity": 3,
   "icon": "alchemia:essentia_smelter",
   "pages": [
     {
@@ -22,12 +21,13 @@
     }
   ],
   "parents": [
-    "alchemia:crucible"
+    "alchemia:nitor",
+    "alchemia:alumentum"
   ],
   "requirements": {
-    "alchemia:aqua": 4,
-    "alchemia:fabrico": 4,
-    "alchemia:ignis": 4
+    "alchemia:aqua": 3,
+    "alchemia:fabrico": 3,
+    "alchemia:ignis": 3
   },
   "row": 4,
   "shape": "major"

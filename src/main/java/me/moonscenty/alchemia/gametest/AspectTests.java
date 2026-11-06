@@ -154,9 +154,12 @@ public class AspectTests {
 
     @GameTest(template = TEMPLATE)
     public static void mobsCarryTheirOwnAspects(GameTestHelper helper) {
-        helper.assertTrue(Aspects.of(EntityType.ZOMBIE).get(ModAspects.UNDEAD) == 4, "a zombie should be exanimis 4");
-        helper.assertTrue(Aspects.of(EntityType.COW).get(ModAspects.BEAST) == 4, "a cow should be bestia 4");
-        helper.assertTrue(Aspects.of(EntityType.ENDER_DRAGON).isEmpty(), "an unlisted mob should come back empty");
+        helper.assertTrue(Aspects.of(EntityType.ZOMBIE).get(ModAspects.UNDEAD) == 2, "a zombie should be exanimis 2");
+        helper.assertTrue(Aspects.of(EntityType.COW).get(ModAspects.BEAST) == 3, "a cow should be bestia 3");
+        helper.assertTrue(Aspects.of(EntityType.BLAZE).get(ModAspects.ELDRITCH) == 4, "a blaze should be alienis 4");
+        helper.assertTrue(Aspects.of(me.moonscenty.alchemia.registry.ModEntities.ELDRITCH_GOLEM.get())
+                .get(ModAspects.MECHANISM) == 4, "the eldritch golem should be machina 4");
+        helper.assertTrue(Aspects.of(EntityType.PHANTOM).isEmpty(), "an unlisted mob should come back empty");
         helper.succeed();
     }
 
@@ -231,6 +234,22 @@ public class AspectTests {
         helper.assertTrue(keenAspects.get(ModAspects.AVERSION) == 4, "sharpness IV should lift aversio to 4, was " + keenAspects);
         helper.assertTrue(keenAspects.get(ModAspects.ENERGY) == 4, "four levels of enchanting should show as potentia 4");
         helper.assertTrue(plainAspects.get(ModAspects.ENERGY) == 0, "an unenchanted sword should carry no potentia");
+        helper.succeed();
+    }
+
+    @GameTest(template = TEMPLATE)
+    public static void someItemsCarryTheOriginalsAspects(GameTestHelper helper) {
+        AspectList glowstone = Aspects.of(Items.GLOWSTONE_DUST);
+        helper.assertTrue(glowstone.get(ModAspects.LIGHT) == 2 && glowstone.get(ModAspects.SENSES) == 1,
+                "glowstone dust should be lux 2, sensus 1, was " + glowstone);
+        helper.assertTrue(Aspects.of(Items.CHICKEN).get(ModAspects.AIR) == 1, "raw chicken carries some air");
+        helper.assertTrue(Aspects.of(Items.LAPIS_LAZULI).get(ModAspects.SENSES) == 1, "lapis should be sensus 1");
+        helper.assertTrue(Aspects.of(Items.COPPER_INGOT).get(ModAspects.EXCHANGE) == 1, "copper should be permutatio 1");
+        helper.assertTrue(Aspects.of(Items.POPPY).get(ModAspects.LIFE) == 1, "a flower should be victus 1");
+        AspectList balanced = Aspects.of(ModItems.BALANCED_SHARD.get());
+        for (Holder<Aspect> primal : ModAspects.primals()) {
+            helper.assertTrue(balanced.get(primal) == 2, "a balanced shard should hold 2 of every primal, was " + balanced);
+        }
         helper.succeed();
     }
 }

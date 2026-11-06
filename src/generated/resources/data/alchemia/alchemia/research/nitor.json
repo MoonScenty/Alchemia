@@ -1,7 +1,6 @@
 {
   "category": "alchemia:alchemy",
   "column": -3,
-  "complexity": 2,
   "icon": "alchemia:nitor",
   "pages": [
     {
@@ -17,9 +16,8 @@
     "alchemia:crucible"
   ],
   "requirements": {
-    "alchemia:ignis": 4,
-    "alchemia:lux": 6,
-    "alchemia:potentia": 4
+    "alchemia:ignis": 1,
+    "alchemia:lux": 3
   },
   "row": 4
 }

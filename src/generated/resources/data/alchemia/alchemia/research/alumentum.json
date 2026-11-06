@@ -1,7 +1,6 @@
 {
   "category": "alchemia:alchemy",
   "column": -3,
-  "complexity": 2,
   "icon": "alchemia:alumentum",
   "pages": [
     {
@@ -17,9 +16,8 @@
     "alchemia:crucible"
   ],
   "requirements": {
-    "alchemia:ignis": 6,
-    "alchemia:perditio": 2,
-    "alchemia:potentia": 4
+    "alchemia:ignis": 1,
+    "alchemia:potentia": 3
   },
   "row": 2
 }

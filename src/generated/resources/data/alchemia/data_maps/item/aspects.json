@@ -5,8 +5,8 @@
       "alchemia:terra": 1
     },
     "#c:dusts/glowstone": {
-      "alchemia:lux": 10,
-      "alchemia:sensus": 3
+      "alchemia:lux": 2,
+      "alchemia:sensus": 1
     },
     "#c:dusts/redstone": {
       "alchemia:potentia": 2
@@ -24,7 +24,7 @@
       "alchemia:vitreus": 4
     },
     "#c:gems/lapis": {
-      "alchemia:sensus": 3
+      "alchemia:sensus": 1
     },
     "#c:gems/quartz": {
       "alchemia:potentia": 1,
@@ -35,7 +35,7 @@
     },
     "#c:ingots/copper": {
       "alchemia:metallum": 3,
-      "alchemia:potentia": 1
+      "alchemia:permutatio": 1
     },
     "#c:ingots/gold": {
       "alchemia:desiderium": 2,
@@ -93,7 +93,8 @@
     },
     "#minecraft:small_flowers": {
       "alchemia:herba": 1,
-      "alchemia:sensus": 1
+      "alchemia:sensus": 1,
+      "alchemia:victus": 1
     },
     "#minecraft:wool": {
       "alchemia:bestia": 2,
@@ -170,12 +171,12 @@
       "alchemia:terra": 1
     },
     "alchemia:balanced_shard": {
-      "alchemia:aer": 1,
-      "alchemia:aqua": 1,
-      "alchemia:ignis": 1,
-      "alchemia:ordo": 1,
-      "alchemia:perditio": 1,
-      "alchemia:terra": 1,
+      "alchemia:aer": 2,
+      "alchemia:aqua": 2,
+      "alchemia:ignis": 2,
+      "alchemia:ordo": 2,
+      "alchemia:perditio": 2,
+      "alchemia:terra": 2,
       "alchemia:vitreus": 1
     },
     "alchemia:beef_chunk": {
@@ -217,6 +218,7 @@
     "alchemia:copper_cluster": {
       "alchemia:metallum": 5,
       "alchemia:ordo": 1,
+      "alchemia:permutatio": 2,
       "alchemia:terra": 1
     },
     "alchemia:crimson_blade": {
@@ -568,8 +570,8 @@
       "alchemia:potentia": 2
     },
     "minecraft:chicken": {
+      "alchemia:aer": 1,
       "alchemia:bestia": 2,
-      "alchemia:terra": 1,
       "alchemia:victus": 1
     },
     "minecraft:clay_ball": {

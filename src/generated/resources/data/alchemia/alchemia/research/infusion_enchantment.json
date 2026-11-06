@@ -38,13 +38,14 @@
     }
   ],
   "parents": [
-    "alchemia:infusion"
+    "alchemia:elemental_tools"
   ],
   "requirements": {
-    "alchemia:auram": 6,
-    "alchemia:cognitio": 4,
-    "alchemia:fabrico": 4,
-    "alchemia:instrumentum": 6
+    "alchemia:aversio": 3,
+    "alchemia:cognitio": 3,
+    "alchemia:instrumentum": 3,
+    "alchemia:potentia": 6,
+    "alchemia:praemunio": 3
   },
   "row": 2
 }

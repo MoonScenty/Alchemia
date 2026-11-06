@@ -14,13 +14,12 @@
     }
   ],
   "parents": [
-    "alchemia:infusion",
-    "alchemia:charger"
+    "alchemia:infusion"
   ],
   "requirements": {
     "alchemia:auram": 6,
     "alchemia:permutatio": 3,
-    "alchemia:potentia": 6
+    "alchemia:potentia": 3
   },
   "row": 1
 }

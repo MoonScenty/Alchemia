@@ -16,6 +16,7 @@
     "LBL",
     "LLL"
   ],
+  "research": "alchemia:focus_pouch",
   "result": {
     "count": 1,
     "id": "alchemia:focus_pouch"

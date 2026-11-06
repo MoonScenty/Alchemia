@@ -71,24 +71,24 @@ public class ModResearchProvider {
         entry(context, "arcane_workbench", ModResearch.ARCANA, ModBlocks.ARCANE_WORKBENCH, 4, 1,
                 AspectList.of(ModAspects.CRAFT, 4).add(ModAspects.AURA, 2), List.of("wand"), false, NodeShape.MAJOR, 2);
         entry(context, "charger", ModResearch.ARCANA, ModBlocks.ARCANE_WORKBENCH_CHARGER, 5, 2,
-                AspectList.of(ModAspects.AURA, 4).add(ModAspects.ENERGY, 4).add(ModAspects.CRYSTAL, 2),
-                List.of("arcane_workbench"), false, NodeShape.PLAIN, 2, "arcane_workbench_charger");
+                AspectList.of(ModAspects.AURA, 3).add(ModAspects.MECHANISM, 3).add(ModAspects.ENERGY, 6),
+                List.of("recharge_pedestal"), false, NodeShape.PLAIN, 2, "arcane_workbench_charger");
 
         entry(context, "wand_cap_gold", ModResearch.ARCANA, ModItems.WAND_CAPS.get("gold"), 4, 3,
                 AspectList.of(ModAspects.METAL, 3).add(ModAspects.DESIRE, 3).add(ModAspects.TOOL, 3),
-                List.of("arcane_workbench"), false, NodeShape.PLAIN, 2, "wand_cap_gold");
+                List.of("arcane_workbench"), false, NodeShape.PLAIN, 1, "wand_cap_gold");
         entry(context, "wand_cap_brass", ModResearch.ARCANA, ModItems.WAND_CAPS.get("brass"), 5, 4,
                 AspectList.of(ModAspects.METAL, 3).add(ModAspects.ENERGY, 3).add(ModAspects.TOOL, 3),
-                List.of("wand_cap_gold"), false, NodeShape.PLAIN, 2, "wand_cap_brass");
+                List.of("wand_cap_gold", "metallurgy"), false, NodeShape.PLAIN, 1, "wand_cap_brass");
         entry(context, "wand_cap_alchemium", ModResearch.ARCANA, ModItems.WAND_CAPS.get("alchemium"), 6, 5,
                 AspectList.of(ModAspects.METAL, 6).add(ModAspects.ENERGY, 6).add(ModAspects.TOOL, 3)
                         .add(ModAspects.AURA, 3),
-                List.of("wand_cap_brass", "infusion"), false, NodeShape.SPECIAL, 3,
+                List.of("wand_cap_brass", "metallurgy", "infusion"), false, NodeShape.SPECIAL, 2,
                 "wand_cap_alchemium_inert", "wand_cap_alchemium");
 
         entry(context, "wand_rod_greatwood", ModResearch.ARCANA, ModItems.WAND_RODS.get("greatwood"), 2, 3,
                 AspectList.of(ModAspects.TOOL, 3).add(ModAspects.PLANT, 6).add(ModAspects.ENERGY, 3),
-                List.of("arcane_workbench", "greatwood"), false, NodeShape.PLAIN, 2, "wand_rod_greatwood");
+                List.of("arcane_workbench", "greatwood"), false, NodeShape.PLAIN, 1, "wand_rod_greatwood");
 
         entry(context, "crucible", ModResearch.ALCHEMY, ModBlocks.CRUCIBLE, 0, 2,
                 AspectList.of(ModAspects.WATER, 4).add(ModAspects.FIRE, 4).add(ModAspects.EXCHANGE, 2),
@@ -96,20 +96,20 @@ public class ModResearchProvider {
                 "balanced_shard_from_fire", "balanced_shard_from_water", "balanced_shard_from_earth",
                 "balanced_shard_from_order", "balanced_shard_from_entropy");
         entry(context, "metallurgy", ModResearch.ALCHEMY, ModItems.ALCHEMIUM_INGOT, -1, 3,
-                AspectList.of(ModAspects.METAL, 6).add(ModAspects.EXCHANGE, 4).add(ModAspects.FIRE, 2),
-                List.of("crucible"), false, NodeShape.PLAIN, 3,
+                AspectList.of(ModAspects.METAL, 3).add(ModAspects.MECHANISM, 3),
+                List.of("crucible"), false, NodeShape.PLAIN, 1,
                 "alchemium_ingot_from_iron", "brass_ingot_from_iron");
 
         entry(context, "alumentum", ModResearch.ALCHEMY, ModItems.ALUMENTUM, -3, 2,
-                AspectList.of(ModAspects.FIRE, 6).add(ModAspects.ENERGY, 4).add(ModAspects.ENTROPY, 2),
-                List.of("crucible"), false, NodeShape.PLAIN, 2, "alumentum");
+                AspectList.of(ModAspects.ENERGY, 3).add(ModAspects.FIRE, 1),
+                List.of("crucible"), false, NodeShape.PLAIN, 1, "alumentum");
         entry(context, "nitor", ModResearch.ALCHEMY, ModBlocks.NITOR.get(DyeColor.WHITE), -3, 4,
-                AspectList.of(ModAspects.LIGHT, 6).add(ModAspects.FIRE, 4).add(ModAspects.ENERGY, 4),
-                List.of("crucible"), false, NodeShape.PLAIN, 2, "nitor");
+                AspectList.of(ModAspects.LIGHT, 3).add(ModAspects.FIRE, 1),
+                List.of("crucible"), false, NodeShape.PLAIN, 1, "nitor");
 
         entry(context, "distillation", ModResearch.ALCHEMY, ModBlocks.ESSENTIA_SMELTER, 1, 4,
-                AspectList.of(ModAspects.FIRE, 4).add(ModAspects.WATER, 4).add(ModAspects.CRAFT, 4),
-                List.of("crucible"), false, NodeShape.MAJOR, 3, "filter", "essentia_smelter", "alembic");
+                AspectList.of(ModAspects.FIRE, 3).add(ModAspects.WATER, 3).add(ModAspects.CRAFT, 3),
+                List.of("nitor", "alumentum"), false, NodeShape.MAJOR, 1, "filter", "essentia_smelter", "alembic");
         entry(context, "alchemical_duplication", ModResearch.ALCHEMY, net.minecraft.world.item.Items.GUNPOWDER, -3, 1,
                 AspectList.of(ModAspects.WATER, 3).add(ModAspects.DESIRE, 6).add(ModAspects.ENERGY, 3),
                 List.of("tallow"), false, NodeShape.PLAIN, 1, "gunpowder_duplication", "slime_ball_duplication", "glowstone_dust_duplication", "ink_sac_duplication", "prismarine_crystals_duplication", "prismarine_shard_duplication");
@@ -141,10 +141,10 @@ public class ModResearchProvider {
                 "jar", "phial", "jar_label", "jar_brace");
         entry(context, "tubes", ModResearch.ALCHEMY, ModBlocks.TUBE, 2, 5,
                 AspectList.of(ModAspects.WATER, 3).add(ModAspects.EXCHANGE, 6),
-                List.of("distillation"), false, NodeShape.PLAIN, 2, "tube", "tube_valve", "essentia_resonator");
+                List.of("distillation"), false, NodeShape.PLAIN, 1, "tube", "tube_valve", "essentia_resonator");
         entry(context, "tube_filter", ModResearch.ALCHEMY, ModBlocks.TUBE_FILTER, 3, 6,
                 AspectList.of(ModAspects.WATER, 3).add(ModAspects.EXCHANGE, 6).add(ModAspects.ORDER, 3),
-                List.of("tubes"), false, NodeShape.PLAIN, 3,
+                List.of("tubes"), false, NodeShape.PLAIN, 1,
                 "tube_filter", "tube_restrict", "tube_oneway", "tube_buffer", "alchemical_construct");
 
         entry(context, "mirror", ModResearch.ARTIFICE, ModBlocks.MIRROR, -1, 9,
@@ -168,7 +168,8 @@ public class ModResearchProvider {
         entry(context, "arcane_bore", ModResearch.GOLEMANCY, ModBlocks.ARCANE_BORE, 5, 5,
                 AspectList.of(ModAspects.EARTH, 6).add(ModAspects.MOTION, 3).add(ModAspects.MECHANISM, 3)
                         .add(ModAspects.TOOL, 3),
-                List.of("infusion", "autocaster"), false, NodeShape.PLAIN, 2, "arcane_bore", "arcane_bore_base");
+                List.of("infusion", "basic_turret", "focus_excavation"), false, NodeShape.PLAIN, 2, "arcane_bore",
+                "arcane_bore_base");
 
         entry(context, "brain_jar", ModResearch.ARTIFICE, ModBlocks.BRAIN_JAR, -2, 2,
                 AspectList.of(ModAspects.DESIRE, 6).add(ModAspects.MIND, 3).add(ModAspects.UNDEAD, 3),
@@ -201,9 +202,9 @@ public class ModResearchProvider {
                 "void_smelter");
 
         entry(context, "void_metal", ModResearch.ALCHEMY, ModItems.VOID_INGOT, -2, 4,
-                AspectList.of(ModAspects.VOID, 6).add(ModAspects.DARKNESS, 6).add(ModAspects.METAL, 4)
-                        .add(ModAspects.ELDRITCH, 2),
-                List.of("metallurgy"), false, NodeShape.SPECIAL, 3,
+                AspectList.of(ModAspects.METAL, 3).add(ModAspects.ELDRITCH, 3).add(ModAspects.VOID, 5)
+                        .add(ModAspects.FLUX, 3),
+                List.of("metallurgy", "eldritch_minor"), false, NodeShape.SPECIAL, 2,
                 "void_seed", "void_ingot", "void_plate", "wand_cap_void_inert", "wand_cap_void");
 
         entry(context, "alchemium_gear", ModResearch.ARTIFICE, ModItems.METAL_TOOLS.get("alchemium_pickaxe"),
@@ -219,9 +220,8 @@ public class ModResearchProvider {
                 "void_helmet", "void_chestplate", "void_leggings", "void_boots");
 
         entry(context, "infusion", ModResearch.ARCANA, ModBlocks.INFUSION_MATRIX, 7, 2,
-                AspectList.of(ModAspects.AURA, 6).add(ModAspects.CRAFT, 6).add(ModAspects.ORDER, 4)
-                        .add(ModAspects.ENERGY, 4),
-                List.of("arcane_workbench", "vis_crystals"), false, NodeShape.MAJOR, 3,
+                AspectList.of(ModAspects.ENERGY, 6).add(ModAspects.MECHANISM, 3).add(ModAspects.CRAFT, 6),
+                List.of("primal_charm", "distillation"), false, NodeShape.MAJOR, 2,
                 "infusion_matrix", "arcane_pedestal");
         entry(context, "infusion_boost", ModResearch.ARTIFICE, ModBlocks.INFUSION_SPEED_STONE, 5, 4,
                 AspectList.of(ModAspects.ENERGY, 6).add(ModAspects.AIR, 3).add(ModAspects.WATER, 3)
@@ -231,7 +231,7 @@ public class ModResearchProvider {
 
         entry(context, "goggles", ModResearch.ARTIFICE, ModItems.GOGGLES, 5, 2,
                 AspectList.of(ModAspects.SENSES, 3).add(ModAspects.AURA, 3).add(ModAspects.ENERGY, 3),
-                List.of("arcane_workbench"), false, NodeShape.PLAIN, 2, "goggles_of_revealing");
+                List.of("arcane_workbench"), false, NodeShape.PLAIN, 1, "goggles_of_revealing");
 
         entry(context, "enchanted_fabric", ModResearch.ARTIFICE, ModItems.ENCHANTED_FABRIC, 6, 3,
                 AspectList.of(ModAspects.CRAFT, 4).add(ModAspects.AURA, 3).add(ModAspects.BEAST, 2),
@@ -242,15 +242,14 @@ public class ModResearchProvider {
                 List.of("enchanted_fabric"), false, NodeShape.PLAIN, 2,
                 "cloth_chest", "cloth_legs", "cloth_boots");
         entry(context, "void_robes", ModResearch.ARTIFICE, ModItems.ROBES.get("void_robe_chest"), 8, 3,
-                AspectList.of(ModAspects.VOID, 6).add(ModAspects.AURA, 4).add(ModAspects.PROTECT, 4)
-                        .add(ModAspects.ELDRITCH, 3),
-                List.of("robes", "void_gear", "infusion"), false, NodeShape.SPECIAL, 3,
+                AspectList.of(ModAspects.PROTECT, 3).add(ModAspects.VOID, 6).add(ModAspects.ELDRITCH, 9)
+                        .add(ModAspects.SOUL, 6),
+                List.of("void_metal", "enchanted_fabric", "eldritch_major"), false, NodeShape.SPECIAL, 2,
                 "void_robe_helm", "void_robe_chest", "void_robe_legs");
 
         entry(context, "fortress_armour", ModResearch.ARTIFICE, ModItems.FORTRESS.get("fortress_chest"), 6, 5,
-                AspectList.of(ModAspects.METAL, 6).add(ModAspects.PROTECT, 6).add(ModAspects.TOOL, 4)
-                        .add(ModAspects.ENERGY, 4),
-                List.of("alchemium_gear", "infusion"), false, NodeShape.SPECIAL, 3,
+                AspectList.of(ModAspects.METAL, 3).add(ModAspects.PROTECT, 5).add(ModAspects.CRAFT, 5),
+                List.of("metallurgy", "traveller_boots"), false, NodeShape.SPECIAL, 2,
                 "fortress_helm", "fortress_chest", "fortress_legs", "helm_goggles",
                 "mask_grinning_devil", "mask_angry_ghost", "mask_sipping_fiend");
 
@@ -260,9 +259,9 @@ public class ModResearchProvider {
                 List.of("infusion"), false, NodeShape.PLAIN, 2, "traveller_boots");
 
         entry(context, "infusion_enchantment", ModResearch.ARCANA, Items.ENCHANTED_BOOK, 9, 2,
-                AspectList.of(ModAspects.AURA, 6).add(ModAspects.TOOL, 6).add(ModAspects.CRAFT, 4)
-                        .add(ModAspects.MIND, 4),
-                List.of("infusion"), false, NodeShape.PLAIN, 3,
+                AspectList.of(ModAspects.ENERGY, 6).add(ModAspects.MIND, 3).add(ModAspects.AVERSION, 3)
+                        .add(ModAspects.PROTECT, 3).add(ModAspects.TOOL, 3),
+                List.of("elemental_tools"), false, NodeShape.PLAIN, 3,
                 "infusion_enchantment_collector", "infusion_enchantment_destructive",
                 "infusion_enchantment_burrowing", "infusion_enchantment_refining", "infusion_enchantment_sounding",
                 "infusion_enchantment_arcing", "infusion_enchantment_essence");
@@ -287,15 +286,15 @@ public class ModResearchProvider {
                 List.of("wand_rods", "staff_greatwood"), false, NodeShape.PLAIN, 3, "wand_rod_silverwood_staff");
 
         entry(context, "wand_rods", ModResearch.ARCANA, ModItems.WAND_RODS.get("silverwood"), 8, 4,
-                AspectList.of(ModAspects.TOOL, 6).add(ModAspects.AURA, 6).add(ModAspects.ENERGY, 6),
-                List.of("infusion", "silverwood"), false, NodeShape.PLAIN, 3,
+                AspectList.eachPrimal(6).add(ModAspects.TOOL, 3).add(ModAspects.ENERGY, 3),
+                List.of("wand_rod_greatwood", "infusion", "silverwood"), false, NodeShape.PLAIN, 3,
                 "wand_rod_obsidian", "wand_rod_ice", "wand_rod_quartz", "wand_rod_reed",
                 "wand_rod_blaze", "wand_rod_bone", "wand_rod_silverwood");
 
         entry(context, "focal_manipulator", ModResearch.ARCANA, ModBlocks.FOCAL_MANIPULATOR, 2, 5,
-                AspectList.of(ModAspects.ENERGY, 8).add(ModAspects.TOOL, 8).add(ModAspects.CRAFT, 5)
+                AspectList.of(ModAspects.ENERGY, 5).add(ModAspects.TOOL, 8).add(ModAspects.CRAFT, 5)
                         .add(ModAspects.CRYSTAL, 5),
-                List.of("arcane_workbench", "arcane_stone"), false, NodeShape.MAJOR, 2, "focal_manipulator");
+                List.of("focus_fire"), false, NodeShape.MAJOR, 2, "focal_manipulator");
 
         entry(context, "elemental_tools", ModResearch.ARTIFICE, ModItems.ELEMENTAL_TOOLS.get("elemental_axe"), 4, 6,
                 AspectList.of(ModAspects.TOOL, 6).add(ModAspects.AVERSION, 6).add(ModAspects.AIR, 3)
@@ -325,7 +324,7 @@ public class ModResearchProvider {
         entry(context, "autocaster", ModResearch.GOLEMANCY, ModItems.AUTOCASTER, 1, 6,
                 AspectList.of(ModAspects.MECHANISM, 3).add(ModAspects.AVERSION, 3).add(ModAspects.SENSES, 3)
                         .add(ModAspects.MIND, 3).add(ModAspects.AURA, 3),
-                List.of("bioalchemic_mind", "infusion", "wand"), false, NodeShape.MAJOR, 2, "autocaster");
+                List.of("bioalchemic_mind", "arcane_bore"), false, NodeShape.MAJOR, 2, "autocaster");
 
         entry(context, "basic_turret", ModResearch.GOLEMANCY, ModItems.AUTOMATED_CROSSBOW, 3, 3,
                 AspectList.of(ModAspects.MECHANISM, 3).add(ModAspects.AVERSION, 3).add(ModAspects.SENSES, 3)
@@ -456,17 +455,19 @@ public class ModResearchProvider {
                 AspectList.of(ModAspects.AURA, 3).add(ModAspects.ENERGY, 9).add(ModAspects.VOID, 3),
                 List.of("recharge_pedestal", "infusion"), false, NodeShape.PLAIN, 2, "vis_amulet");
         entry(context, "arcane_lamp", ModResearch.ARTIFICE, ModBlocks.ARCANE_LAMP, 0, -1,
-                AspectList.of(ModAspects.LIGHT, 6).add(ModAspects.FIRE, 3).add(ModAspects.AIR, 3),
+                AspectList.of(ModAspects.LIGHT, 3).add(ModAspects.SENSES, 3).add(ModAspects.DARKNESS, 3),
                 List.of("primal_charm", "nitor"), false, NodeShape.PLAIN, 1, "arcane_lamp");
         entry(context, "growth_lamp", ModResearch.ARTIFICE, ModBlocks.GROWTH_LAMP, -1, -2,
-                AspectList.of(ModAspects.PLANT, 6).add(ModAspects.LIGHT, 3).add(ModAspects.LIFE, 3),
-                List.of("arcane_lamp", "infusion"), false, NodeShape.PLAIN, 2, "growth_lamp");
+                AspectList.of(ModAspects.LIGHT, 3).add(ModAspects.PLANT, 6).add(ModAspects.LIFE, 3)
+                        .add(ModAspects.TOOL, 3),
+                List.of("arcane_lamp"), false, NodeShape.PLAIN, 2, "growth_lamp");
         entry(context, "fertility_lamp", ModResearch.ARTIFICE, ModBlocks.FERTILITY_LAMP, 1, -2,
-                AspectList.of(ModAspects.BEAST, 6).add(ModAspects.LIGHT, 3).add(ModAspects.LIFE, 3),
-                List.of("arcane_lamp", "infusion"), false, NodeShape.PLAIN, 2, "fertility_lamp");
+                AspectList.of(ModAspects.BEAST, 6).add(ModAspects.LIFE, 6).add(ModAspects.LIGHT, 3)
+                        .add(ModAspects.DESIRE, 6),
+                List.of("arcane_lamp"), false, NodeShape.PLAIN, 2, "fertility_lamp");
         entry(context, "hungry_chest", ModResearch.ARTIFICE, ModBlocks.HUNGRY_CHEST, 3, -1,
-                AspectList.of(ModAspects.VOID, 3).add(ModAspects.DESIRE, 3).add(ModAspects.TRAP, 3),
-                List.of("primal_charm", "greatwood"), false, NodeShape.PLAIN, 1, "hungry_chest");
+                AspectList.of(ModAspects.DESIRE, 3).add(ModAspects.VOID, 3),
+                List.of("golem_wood"), false, NodeShape.PLAIN, 1, "hungry_chest");
         entry(context, "water_jug", ModResearch.ALCHEMY, ModBlocks.WATER_JUG, 1, 2,
                 AspectList.of(ModAspects.WATER, 6).add(ModAspects.EARTH, 3).add(ModAspects.CRAFT, 3),
                 List.of("crucible", "infusion"), false, NodeShape.PLAIN, 1, "water_jug");
@@ -474,9 +475,17 @@ public class ModResearchProvider {
         entry(context, "node_magnet", ModResearch.ARCANA, ModItems.NODE_MAGNET, 10, 0,
                 AspectList.of(ModAspects.AURA, 6).add(ModAspects.MOTION, 6).add(ModAspects.MECHANISM, 3)
                         .add(ModAspects.DESIRE, 8),
-                List.of("aura_totem_pole_pure", "bioalchemic_mind", "crystal_farmer"), false, NodeShape.SPECIAL, 3,
+                List.of("node_stabilizer", "aura_totem_pole_pure", "bioalchemic_mind", "crystal_farmer"), false,
+                NodeShape.SPECIAL, 3,
                 "node_magnet");
 
+        entry(context, "node_stabilizer", ModResearch.ARCANA, ModBlocks.NODE_STABILIZER, 9, 0,
+                AspectList.of(ModAspects.AURA, 6).add(ModAspects.MOTION, 6).add(ModAspects.MECHANISM, 3)
+                        .add(ModAspects.TRAP, 8),
+                List.of("aura_totem"), false, NodeShape.PLAIN, 3, "node_stabilizer");
+        entry(context, "focus_pouch", ModResearch.ARCANA, ModItems.FOCUS_POUCH, 2, 0,
+                AspectList.of(ModAspects.VOID, 6).add(ModAspects.TOOL, 3),
+                List.of("wand"), false, NodeShape.PLAIN, 1, "focus_pouch");
         entry(context, "aura_totem", ModResearch.ARCANA, ModBlocks.AURA_TOTEM_PUSH, 8, 1,
                 AspectList.of(ModAspects.AURA, 6).add(ModAspects.EXCHANGE, 3).add(ModAspects.WATER, 3)
                         .add(ModAspects.AVERSION, 3),
@@ -491,8 +500,8 @@ public class ModResearchProvider {
                 List.of("aura_totem"), false, NodeShape.PLAIN, 2, "aura_totem_pole_pure");
 
         entry(context, "recharge_pedestal", ModResearch.ARCANA, ModBlocks.RECHARGE_PEDESTAL, 6, 1,
-                AspectList.of(ModAspects.AURA, 6).add(ModAspects.ENERGY, 6).add(ModAspects.EXCHANGE, 3),
-                List.of("infusion", "charger"), false, NodeShape.PLAIN, 2, "recharge_pedestal");
+                AspectList.of(ModAspects.AURA, 6).add(ModAspects.ENERGY, 3).add(ModAspects.EXCHANGE, 3),
+                List.of("infusion"), false, NodeShape.PLAIN, 2, "recharge_pedestal");
         entry(context, "dioptra", ModResearch.ARTIFICE, ModBlocks.DIOPTRA, 6, 1,
                 AspectList.of(ModAspects.SENSES, 3).add(ModAspects.AURA, 3).add(ModAspects.ENERGY, 3)
                         .add(ModAspects.EARTH, 3),
@@ -688,6 +697,12 @@ public class ModResearchProvider {
             java.util.Map.entry("fortress_armour", List.of("praemunio")),
             java.util.Map.entry("pattern_crafter", List.of("fabrico")));
 
+    private static final java.util.Map<String, List<String>> HIDDEN_PARENTS = java.util.Map.of(
+            "focal_manipulator", List.of("focus_frost", "focus_shock", "focus_trade", "focus_excavation"),
+            "charger", List.of("wand_rod_greatwood"),
+            "growth_lamp", List.of("infusion"),
+            "fertility_lamp", List.of("infusion"));
+
     private static final java.util.Map<String, List<ResearchPage>> LATER_PAGES = java.util.Map.of(
             "node_magnet", List.of(new ResearchPage.Text("research.alchemia.node_magnet.danger",
                     java.util.Optional.of(Clues.NODE_MAGNET_DANGER))));
@@ -706,6 +721,7 @@ public class ModResearchProvider {
                         pages(name, recipes),
                         autoUnlock, shape, complexity, hidden || CONCEALED.contains(name), WARP.getOrDefault(name, 0),
                         SIBLINGS.getOrDefault(name, List.of()).stream().map(Alchemia::id).toList(),
-                        CLUES.getOrDefault(name, List.of()).stream().map(Alchemia::id).toList()));
+                        CLUES.getOrDefault(name, List.of()).stream().map(Alchemia::id).toList(),
+                        HIDDEN_PARENTS.getOrDefault(name, List.of()).stream().map(Alchemia::id).toList()));
     }
 }

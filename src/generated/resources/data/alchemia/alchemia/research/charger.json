@@ -2,6 +2,9 @@
   "category": "alchemia:arcana",
   "column": 5,
   "complexity": 2,
+  "hidden_parents": [
+    "alchemia:wand_rod_greatwood"
+  ],
   "icon": "alchemia:arcane_workbench_charger",
   "pages": [
     {
@@ -14,12 +17,12 @@
     }
   ],
   "parents": [
-    "alchemia:arcane_workbench"
+    "alchemia:recharge_pedestal"
   ],
   "requirements": {
-    "alchemia:auram": 4,
-    "alchemia:potentia": 4,
-    "alchemia:vitreus": 2
+    "alchemia:auram": 3,
+    "alchemia:machina": 3,
+    "alchemia:potentia": 6
   },
   "row": 2
 }

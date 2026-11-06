@@ -1,24 +1,35 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "category": "misc",
+  "type": "alchemia:arcane_shaped",
   "key": {
-    "B": {
-      "item": "alchemia:arcane_stone_bricks"
+    "G": {
+      "item": "minecraft:gold_ingot"
+    },
+    "N": {
+      "tag": "alchemia:nitor"
     },
     "P": {
-      "item": "alchemia:alchemium_plate"
+      "item": "minecraft:piston"
+    },
+    "Q": {
+      "item": "minecraft:quartz_block"
     },
     "S": {
-      "item": "alchemia:balanced_shard"
+      "item": "alchemia:arcane_stone_bricks"
     }
   },
   "pattern": [
-    " P ",
-    "PSP",
-    "BBB"
+    " G ",
+    "QPQ",
+    "SNS"
   ],
+  "research": "alchemia:node_stabilizer",
   "result": {
     "count": 1,
     "id": "alchemia:node_stabilizer"
+  },
+  "vis": {
+    "alchemia:aqua": 25,
+    "alchemia:ordo": 50,
+    "alchemia:terra": 25
   }
 }

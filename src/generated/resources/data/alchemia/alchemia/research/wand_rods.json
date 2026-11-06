@@ -38,13 +38,19 @@
     }
   ],
   "parents": [
+    "alchemia:wand_rod_greatwood",
     "alchemia:infusion",
     "alchemia:silverwood"
   ],
   "requirements": {
-    "alchemia:auram": 6,
-    "alchemia:instrumentum": 6,
-    "alchemia:potentia": 6
+    "alchemia:aer": 6,
+    "alchemia:aqua": 6,
+    "alchemia:ignis": 6,
+    "alchemia:instrumentum": 3,
+    "alchemia:ordo": 6,
+    "alchemia:perditio": 6,
+    "alchemia:potentia": 3,
+    "alchemia:terra": 6
   },
   "row": 4
 }

@@ -200,16 +200,15 @@ public class ModRecipeProvider extends RecipeProvider {
                 .save(output, conversion(result, plant));
     }
 
-    private static void nodeStabilizer(RecipeOutput output) {
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.NODE_STABILIZER.get())
-                .pattern(" P ")
-                .pattern("PSP")
-                .pattern("BBB")
-                .define('P', ModItems.ALCHEMIUM_PLATE.get())
-                .define('S', ModItems.BALANCED_SHARD.get())
-                .define('B', ModBlocks.ARCANE_STONE_BRICKS.block().get())
-                .unlockedBy("has_shard", has(ModItems.BALANCED_SHARD.get()))
-                .save(output, Alchemia.id("node_stabilizer"));
+    private void nodeStabilizer(RecipeOutput output) {
+        arcane(output, "node_stabilizer", "node_stabilizer", new ItemStack(ModBlocks.NODE_STABILIZER.get()),
+                AspectList.of(ModAspects.WATER, 25).add(ModAspects.EARTH, 25).add(ModAspects.ORDER, 50),
+                Map.of('G', Ingredient.of(Items.GOLD_INGOT),
+                        'Q', Ingredient.of(Blocks.QUARTZ_BLOCK),
+                        'P', Ingredient.of(Blocks.PISTON),
+                        'S', Ingredient.of(ModBlocks.ARCANE_STONE_BRICKS.block()),
+                        'N', Ingredient.of(ModTags.Items.NITOR)),
+                " G ", "QPQ", "SNS");
     }
 
     private void staffCore(RecipeOutput output, String stuff, String research, AspectList cost) {
@@ -290,19 +289,19 @@ public class ModRecipeProvider extends RecipeProvider {
     }
 
     private void arcane(RecipeOutput output) {
-        arcane(output, "wand_cap_gold", new ItemStack(ModItems.WAND_CAPS.get("gold").get()),
+        arcane(output, "wand_cap_gold", "wand_cap_gold", new ItemStack(ModItems.WAND_CAPS.get("gold").get()),
                 AspectList.of(ModAspects.ORDER, 24).add(ModAspects.FIRE, 24).add(ModAspects.AIR, 24),
                 Map.of('N', Ingredient.of(Tags.Items.NUGGETS_GOLD)), "NNN", "N N");
 
-        arcane(output, "wand_cap_brass", new ItemStack(ModItems.WAND_CAPS.get("brass").get()),
+        arcane(output, "wand_cap_brass", "wand_cap_brass", new ItemStack(ModItems.WAND_CAPS.get("brass").get()),
                 AspectList.of(ModAspects.ORDER, 24).add(ModAspects.FIRE, 24).add(ModAspects.AIR, 24),
                 Map.of('N', Ingredient.of(ModTags.Items.NUGGETS_BRASS)), "NNN", "N N");
 
-        arcane(output, "wand_cap_alchemium_inert", new ItemStack(ModItems.INERT_CAPS.get("alchemium").get()),
+        arcane(output, "wand_cap_alchemium_inert", "wand_cap_alchemium", new ItemStack(ModItems.INERT_CAPS.get("alchemium").get()),
                 AspectList.of(ModAspects.ORDER, 48).add(ModAspects.FIRE, 48).add(ModAspects.AIR, 48),
                 Map.of('N', Ingredient.of(ModTags.Items.NUGGETS_ALCHEMIUM)), "NNN", "N N");
 
-        arcane(output, "wand_rod_greatwood", new ItemStack(ModItems.WAND_RODS.get("greatwood").get()),
+        arcane(output, "wand_rod_greatwood", "wand_rod_greatwood", new ItemStack(ModItems.WAND_RODS.get("greatwood").get()),
                 AspectList.of(ModAspects.ENTROPY, 24),
                 Map.of('G', Ingredient.of(ModBlocks.GREATWOOD.log())), " G", "G ");
 
@@ -315,7 +314,7 @@ public class ModRecipeProvider extends RecipeProvider {
                     AspectList.of(ModAspects.ORDER, 14 * 4).add(element, 14 * 4));
         }
 
-        arcane(output, "arcane_stone", new ItemStack(ModBlocks.ARCANE_STONE.block(), 9),
+        arcane(output, "arcane_stone", "arcane_stone", new ItemStack(ModBlocks.ARCANE_STONE.block(), 9),
                 AspectList.of(ModAspects.EARTH, 5).add(ModAspects.FIRE, 5),
                 Map.of('S', Ingredient.of(Tags.Items.STONES), 'C', Ingredient.of(ModTags.Items.SHARDS)),
                 "SSS", "SCS", "SSS");
@@ -335,7 +334,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 AspectList.of(ModAspects.EARTH, 20),
                 Map.of('I', Ingredient.of(ModItems.ENCHANTED_FABRIC)), "I I", "I I");
 
-        arcane(output, "focus_pouch", new ItemStack(ModItems.FOCUS_POUCH.get()),
+        arcane(output, "focus_pouch", "focus_pouch", new ItemStack(ModItems.FOCUS_POUCH.get()),
                 AspectList.of(ModAspects.EARTH, 25).add(ModAspects.ORDER, 25).add(ModAspects.ENTROPY, 25),
                 Map.of('L', Ingredient.of(Items.LEATHER),
                         'G', Ingredient.of(Items.GOLD_INGOT),
@@ -499,13 +498,13 @@ public class ModRecipeProvider extends RecipeProvider {
                         'I', Ingredient.of(Items.IRON_INGOT)),
                 "WW ", "LCI", "WW ");
 
-        arcane(output, "infusion_speed_stone", new ItemStack(ModBlocks.INFUSION_SPEED_STONE.get()),
+        arcane(output, "infusion_speed_stone", "infusion_boost", new ItemStack(ModBlocks.INFUSION_SPEED_STONE.get()),
                 AspectList.of(ModAspects.AIR, 250).add(ModAspects.ORDER, 250).add(ModAspects.ENTROPY, 250),
                 Map.of('S', Ingredient.of(ModBlocks.ARCANE_STONE.block()),
                         'N', Ingredient.of(ModTags.Items.NITOR),
                         'G', Ingredient.of(Blocks.DIAMOND_BLOCK)),
                 "SNS", "NGN", "SNS");
-        arcane(output, "infusion_cost_stone", new ItemStack(ModBlocks.INFUSION_COST_STONE.get()),
+        arcane(output, "infusion_cost_stone", "infusion_boost", new ItemStack(ModBlocks.INFUSION_COST_STONE.get()),
                 AspectList.of(ModAspects.WATER, 250).add(ModAspects.ORDER, 250).add(ModAspects.ENTROPY, 250),
                 Map.of('S', Ingredient.of(ModBlocks.ARCANE_STONE.block()),
                         'A', Ingredient.of(ModItems.ALUMENTUM),
@@ -629,11 +628,6 @@ public class ModRecipeProvider extends RecipeProvider {
                 List.of(Ingredient.of(Items.DIAMOND), Ingredient.of(ModItems.SALIS_MUNDUS)), ItemStack.EMPTY,
                 AspectList.of(ModAspects.PROTECT, 16).add(ModAspects.CRYSTAL, 16).add(ModAspects.ENERGY, 32), 5,
                 Optional.of(Alchemia.id("runic_augmentation")), Optional.empty(), Optional.empty(), true), null);
-    }
-
-    private void arcane(RecipeOutput output, String name, ItemStack result, AspectList cost,
-            Map<Character, Ingredient> key, String... pattern) {
-        arcane(output, name, null, result, cost, key, pattern);
     }
 
     private void arcane(RecipeOutput output, String name, String research, ItemStack result, AspectList cost,

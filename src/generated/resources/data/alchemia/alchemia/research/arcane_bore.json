@@ -19,7 +19,8 @@
   ],
   "parents": [
     "alchemia:infusion",
-    "alchemia:autocaster"
+    "alchemia:basic_turret",
+    "alchemia:focus_excavation"
   ],
   "requirements": {
     "alchemia:instrumentum": 3,

@@ -20,9 +20,9 @@
     "alchemia:nitor"
   ],
   "requirements": {
-    "alchemia:aer": 3,
-    "alchemia:ignis": 3,
-    "alchemia:lux": 6
+    "alchemia:lux": 3,
+    "alchemia:sensus": 3,
+    "alchemia:tenebrae": 3
   },
   "row": -1
 }
