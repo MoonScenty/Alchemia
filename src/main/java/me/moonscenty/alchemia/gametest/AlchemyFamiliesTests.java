@@ -30,4 +30,19 @@ public class AlchemyFamiliesTests {
         }
         helper.succeed();
     }
+
+    @GameTest(template = TEMPLATE)
+    public static void infusionBlocksHaveTheOriginalCentres(GameTestHelper helper) {
+        var recipes = helper.getLevel().getRecipeManager();
+        var nitor = new net.minecraft.world.item.ItemStack(me.moonscenty.alchemia.registry.ModBlocks.NITOR
+                .get(net.minecraft.world.item.DyeColor.WHITE).get());
+        var diamond = new net.minecraft.world.item.ItemStack(net.minecraft.world.level.block.Blocks.DIAMOND_BLOCK);
+        helper.assertTrue(recipes.byKey(Alchemia.id("infusion_matrix")).orElseThrow().value().getIngredients().get(4)
+                .test(nitor), "the matrix is built round nitor");
+        for (String stone : new String[] {"infusion_speed_stone", "infusion_cost_stone"}) {
+            helper.assertTrue(recipes.byKey(Alchemia.id(stone)).orElseThrow().value().getIngredients().get(4)
+                    .test(diamond), stone + " is built round a diamond block");
+        }
+        helper.succeed();
+    }
 }

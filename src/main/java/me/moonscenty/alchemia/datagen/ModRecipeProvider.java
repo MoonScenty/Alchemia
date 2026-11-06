@@ -503,13 +503,13 @@ public class ModRecipeProvider extends RecipeProvider {
                 AspectList.of(ModAspects.AIR, 250).add(ModAspects.ORDER, 250).add(ModAspects.ENTROPY, 250),
                 Map.of('S', Ingredient.of(ModBlocks.ARCANE_STONE.block()),
                         'N', Ingredient.of(ModTags.Items.NITOR),
-                        'G', Ingredient.of(Blocks.GOLD_BLOCK)),
+                        'G', Ingredient.of(Blocks.DIAMOND_BLOCK)),
                 "SNS", "NGN", "SNS");
         arcane(output, "infusion_cost_stone", new ItemStack(ModBlocks.INFUSION_COST_STONE.get()),
                 AspectList.of(ModAspects.WATER, 250).add(ModAspects.ORDER, 250).add(ModAspects.ENTROPY, 250),
                 Map.of('S', Ingredient.of(ModBlocks.ARCANE_STONE.block()),
                         'A', Ingredient.of(ModItems.ALUMENTUM),
-                        'G', Ingredient.of(Blocks.GOLD_BLOCK)),
+                        'G', Ingredient.of(Blocks.DIAMOND_BLOCK)),
                 "SAS", "AGA", "SAS");
     }
 
@@ -826,7 +826,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 AspectList.of(ModAspects.ORDER, 100),
                 Map.of('S', Ingredient.of(ModBlocks.ARCANE_STONE_BRICKS.block()),
                         'B', Ingredient.of(ModTags.Items.SHARDS),
-                        'N', Ingredient.of(ModItems.BALANCED_SHARD)),
+                        'N', Ingredient.of(ModTags.Items.NITOR)),
                 "SBS", "BNB", "SBS");
 
         arcane(output, "ancient_pedestal", "infusion", new ItemStack(ModBlocks.ANCIENT_PEDESTAL.get()),

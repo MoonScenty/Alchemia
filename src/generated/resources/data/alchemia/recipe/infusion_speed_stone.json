@@ -2,7 +2,7 @@
   "type": "alchemia:arcane_shaped",
   "key": {
     "G": {
-      "item": "minecraft:gold_block"
+      "item": "minecraft:diamond_block"
     },
     "N": {
       "tag": "alchemia:nitor"
