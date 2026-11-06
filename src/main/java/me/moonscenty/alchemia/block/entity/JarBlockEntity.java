@@ -103,7 +103,7 @@ public class JarBlockEntity extends SyncedBlockEntity implements EssentiaHolder 
 
     @Override
     public boolean release(Holder<Aspect> aspect) {
-        if (braced || holding == null || holding.value() != aspect.value() || amount <= 0) {
+        if (holding == null || holding.value() != aspect.value() || amount <= 0) {
             return false;
         }
         amount--;

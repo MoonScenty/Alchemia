@@ -51,7 +51,9 @@ public final class EssentiaReach {
                     continue;
                 }
                 for (BlockEntity holding : level.getChunk(chunkX, chunkZ).getBlockEntities().values()) {
-                    if (holding instanceof EssentiaHolder && holding.getBlockPos().distSqr(from) <= reach) {
+                    // a braced jar is held back from every pipeless draw and fill, and from nothing else [TileJarFillable.isBlocked]
+                    if (holding instanceof EssentiaHolder && holding.getBlockPos().distSqr(from) <= reach
+                            && !(holding instanceof me.moonscenty.alchemia.block.entity.JarBlockEntity jar && jar.braced())) {
                         found.add(holding);
                     }
                 }

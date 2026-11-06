@@ -338,10 +338,11 @@ public class EssentiaSmelterBlockEntity extends SyncedBlockEntity implements Wor
 
     @Override
     public int[] getSlotsForFace(Direction side) {
+        // sides take what is smelted, the bottom takes fuel, the top takes nothing [TileSmelter]
         return switch (side) {
-            case UP -> new int[] {SLOT_INPUT};
-            case DOWN -> new int[0];
-            default -> new int[] {SLOT_FUEL};
+            case UP -> new int[0];
+            case DOWN -> new int[] {SLOT_FUEL};
+            default -> new int[] {SLOT_INPUT};
         };
     }
 

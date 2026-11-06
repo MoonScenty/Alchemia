@@ -133,18 +133,18 @@ public class DistilleryTests {
     }
 
     @GameTest(template = TEMPLATE)
-    public static void aBracedJarGivesNothingUp(GameTestHelper helper) {
+    public static void aBracedJarStillServesTubesAndPhials(GameTestHelper helper) {
         JarBlockEntity jar = jar(helper, START);
         for (int one = 0; one < PhialItem.DRAUGHT; one++) {
             jar.accept(ModAspects.FIRE);
         }
         jar.brace(true);
 
-        helper.assertTrue(!jar.release(ModAspects.FIRE), "a tube gets nothing out of it");
-        helper.assertTrue(jar.accept(ModAspects.FIRE), "but it still takes more");
+        helper.assertTrue(jar.release(ModAspects.FIRE), "a tube still draws from it");
+        helper.assertTrue(jar.accept(ModAspects.FIRE), "and it still takes more");
 
         useOn(helper, START, new ItemStack(ModItems.PHIAL.get()));
-        helper.assertValueEqual(jar.amount(), PhialItem.DRAUGHT + 1, "and a phial gets nothing out of it either");
+        helper.assertValueEqual(jar.amount(), 0, "and a phial still fills from it");
         helper.succeed();
     }
 
