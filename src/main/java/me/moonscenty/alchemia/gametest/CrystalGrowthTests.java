@@ -78,6 +78,9 @@ public class CrystalGrowthTests {
         land(helper, BASE, 0, 0);
 
         tickHard(helper, 2L);
+        // the refund is owed to the chunk and paid when it next settles
+        me.moonscenty.alchemia.aura.AuraTicker.settle(helper.getLevel(),
+                new net.minecraft.world.level.ChunkPos(helper.absolutePos(CRYSTAL)));
 
         int age = helper.getBlockState(CRYSTAL).getValue(CrystalBlock.AGE);
         helper.assertTrue(age < CrystalBlock.MAX_AGE, "with nothing to live on the crystal should have shrunk, is " + age);

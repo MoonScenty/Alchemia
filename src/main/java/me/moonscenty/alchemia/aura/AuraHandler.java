@@ -3,7 +3,6 @@ package me.moonscenty.alchemia.aura;
 import me.moonscenty.alchemia.aspect.Aspect;
 import me.moonscenty.alchemia.aspect.AspectList;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -89,37 +88,10 @@ public final class AuraHandler {
         return taken;
     }
 
-    // the further past its base a chunk is, the likelier new aura spills to a neighbour, so one chunk can't hoard it
+    // owed to the chunk and paid out on its next settling, where an overfull chunk spills it further off
     public static void recharge(ServerLevel level, BlockPos pos, Holder<Aspect> aspect, int amount,
             RandomSource random) {
-        AuraChunk aura = at(level, pos);
-        if (!aura.exists() || amount <= 0) {
-            return;
-        }
-
-        int here = aura.get(aspect);
-        if (here <= aura.base()) {
-            store(level, pos, aura.add(aspect, amount));
-            return;
-        }
-
-        // overflow, in tenths of the base
-        float over = (here - aura.base()) / (aura.base() * 0.1F);
-        if (random.nextFloat() > over) {
-            store(level, pos, aura.add(aspect, amount));
-        } else if (random.nextFloat() > 0.33F) {
-            spill(level, pos, aspect, amount, random);
-        }
-    }
-
-    private static void spill(ServerLevel level, BlockPos pos, Holder<Aspect> aspect, int amount,
-            RandomSource random) {
-        Direction side = Direction.Plane.HORIZONTAL.getRandomDirection(random);
-        BlockPos next = pos.offset(side.getStepX() * 16, 0, side.getStepZ() * 16);
-        AuraChunk theirs = at(level, next);
-        if (theirs.exists()) {
-            store(level, next, theirs.add(aspect, amount));
-        }
+        AuraTicker.owe(level, new net.minecraft.world.level.ChunkPos(pos), aspect, amount);
     }
 
     public static boolean shouldSpare(LevelAccessor level, BlockPos pos, Holder<Aspect> aspect) {

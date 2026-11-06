@@ -50,6 +50,16 @@ public class ModEntities {
                     .noSummon()
                     .build("taint_cloud"));
 
+    public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.aura.FluxBolt>> FLUX_BOLT =
+            ENTITIES.register("flux_bolt", () -> EntityType.Builder
+                    .<me.moonscenty.alchemia.aura.FluxBolt>of(me.moonscenty.alchemia.aura.FluxBolt::new, MobCategory.MISC)
+                    .noSave()
+                    .sized(0.0F, 0.0F)
+                    .clientTrackingRange(16)
+                    .updateInterval(Integer.MAX_VALUE)
+                    .noSummon()
+                    .build("flux_bolt"));
+
     public static final DeferredHolder<EntityType<?>, EntityType<PechBlast>> PECH_BLAST =
             ENTITIES.register("pech_blast", () -> EntityType.Builder
                     .<PechBlast>of(PechBlast::new, MobCategory.MISC)

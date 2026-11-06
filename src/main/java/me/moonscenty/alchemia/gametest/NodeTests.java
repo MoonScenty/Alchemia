@@ -115,15 +115,18 @@ public class NodeTests {
         helper.assertTrue(AuraHandler.get(helper.getLevel(), here, ModAspects.AIR) == 0, "the chunk should be empty");
 
         RandomSource random = RandomSource.create(16L);
+        net.minecraft.world.level.ChunkPos chunkAt = chunk.getPos();
         for (int round = 0; round < 50; round++) {
             AuraHandler.recharge(helper.getLevel(), here, ModAspects.AIR, 1, random);
         }
+        me.moonscenty.alchemia.aura.AuraTicker.settle(helper.getLevel(), chunkAt);
         int after = AuraHandler.get(helper.getLevel(), here, ModAspects.AIR);
         helper.assertTrue(after > 0, "feeding an empty chunk should have put something back");
 
         int base = chunk.getData(ModAuraAttachment.AURA).base();
         for (int round = 0; round < 2000; round++) {
             AuraHandler.recharge(helper.getLevel(), here, ModAspects.AIR, 1, random);
+            me.moonscenty.alchemia.aura.AuraTicker.settle(helper.getLevel(), chunkAt);
         }
         int full = AuraHandler.get(helper.getLevel(), here, ModAspects.AIR);
         helper.assertTrue(full > base, "a chunk should be able to run a little over what it holds");

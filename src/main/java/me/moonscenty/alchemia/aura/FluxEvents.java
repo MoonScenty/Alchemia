@@ -5,25 +5,20 @@ import java.util.List;
 
 import me.moonscenty.alchemia.AlchemiaConfig;
 import me.moonscenty.alchemia.aura.node.AuraNode;
-import me.moonscenty.alchemia.block.taint.FluxGooBlock;
 import me.moonscenty.alchemia.aura.node.NodeType;
 import me.moonscenty.alchemia.player.WarpData;
 import me.moonscenty.alchemia.player.WarpHandler;
 import me.moonscenty.alchemia.player.effect.ModEffects;
 import me.moonscenty.alchemia.registry.ModAspects;
-import me.moonscenty.alchemia.registry.ModBlocks;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -61,9 +56,6 @@ public final class FluxEvents {
             new Trouble("crawler", 2, 10, me.moonscenty.alchemia.entity.TaintCrawler::fromFlux)));
 
     private static final double CLOUD_ELBOW_ROOM = 32.0;
-    private static final double BOLT_REACH = 3.0;
-    private static final float BOLT_HARM = 3.0F;
-    private static final int BOLT_FLU = 1200;
     private static final int CLOUD_HEIGHT = 20;
     private static final int CLOUD_LASTS = 30 * 20;
     private static final int CLOUD_LASTS_MORE = 10 * 20;
@@ -115,14 +107,20 @@ public final class FluxEvents {
         return new AABB(at).inflate(REACH);
     }
 
-    // weather doesn't stack: no bolt or cloud under an existing cloud
-    private static boolean underACloud(ServerLevel level, BlockPos at) {
-        return !level.getEntitiesOfClass(TaintCloud.class, new AABB(at).inflate(CLOUD_ELBOW_ROOM)).isEmpty();
+    // no bolt or cloud next to tainted land (sixteen blocks off on any side) or near an existing cloud
+    public static boolean nearTaint(ServerLevel level, BlockPos at) {
+        for (net.minecraft.core.Direction side : net.minecraft.core.Direction.Plane.HORIZONTAL) {
+            if (level.getBiome(at.relative(side, 16)).is(me.moonscenty.alchemia.worldgen.ModBiomes.TAINTED_LAND)) {
+                return true;
+            }
+        }
+        Vec3 centre = Vec3.atCenterOf(at);
+        return !level.getEntitiesOfClass(TaintCloud.class, new AABB(at).inflate(CLOUD_ELBOW_ROOM),
+                cloud -> cloud.distanceToSqr(centre) <= CLOUD_ELBOW_ROOM * CLOUD_ELBOW_ROOM).isEmpty();
     }
 
-    // the bolt is visual only; damage and flu are applied by hand
     private static boolean strikeLightning(ServerLevel level, BlockPos at, RandomSource random) {
-        if (underACloud(level, at)) {
+        if (nearTaint(level, at)) {
             return false;
         }
         BlockPos struck = at;
@@ -136,26 +134,11 @@ public final class FluxEvents {
             return false;
         }
 
-        LightningBolt bolt = EntityType.LIGHTNING_BOLT.create(level);
-        if (bolt == null) {
-            return false;
-        }
-        bolt.moveTo(Vec3.atBottomCenterOf(struck));
-        bolt.setVisualOnly(true);
-        level.addFreshEntity(bolt);
-
-        for (LivingEntity hit : level.getEntitiesOfClass(LivingEntity.class, new AABB(struck).inflate(BOLT_REACH, BOLT_REACH + 6.0, BOLT_REACH))) {
-            hit.hurt(level.damageSources().lightningBolt(), BOLT_HARM);
-            hit.addEffect(new MobEffectInstance(ModEffects.TAINT_POISON, BOLT_FLU, 0, false, true));
-        }
-        if (level.getBlockState(struck).canBeReplaced() && level.getBlockState(struck).getFluidState().isEmpty()) {
-            level.setBlock(struck, FluxGooBlock.of(ModBlocks.FLUX_GOO.get(), FluxGooBlock.FULL), Block.UPDATE_ALL);
-        }
-        return true;
+        return FluxBolt.strike(level, struck, random);
     }
 
     private static boolean gatherCloud(ServerLevel level, BlockPos at, RandomSource random) {
-        if (underACloud(level, at)) {
+        if (nearTaint(level, at)) {
             return false;
         }
         BlockPos up = at.above(CLOUD_HEIGHT);

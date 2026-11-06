@@ -976,6 +976,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         addBlock(ModBlocks.TAINT_LOG, pick("Taintwood Log", "오염된 원목"));
         addBlock(ModBlocks.FLUX_GOO, pick("Flux Goo", "플럭스 구스"));
         add("entity.alchemia.taint_cloud", pick("Taint Cloud", "오염 구름"));
+        add("entity.alchemia.flux_bolt", pick("Flux Lightning", "플럭스 번개"));
         add("entity.alchemia.aura_node", pick("Aura Node", "오라 노드"));
         add("flux_event.alchemia.warp", pick("The nearby aura suddenly twists and warps, leaving your thoughts in a shambles.",
                 "주변의 오라가 갑자기 비틀리며 생각이 헝클어진다."));

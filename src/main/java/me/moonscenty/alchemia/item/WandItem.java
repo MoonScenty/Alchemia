@@ -198,20 +198,23 @@ public class WandItem extends Item implements VisHolder, Rechargeable {
 
     @Override
     public boolean charge(ItemStack stack, ServerLevel level, BlockPos at, int amount) {
-        return chargeFrom(stack, level, at, amount) != null;
+        return chargeFrom(stack, level, at, amount, true) != null;
     }
 
     public record Charged(Holder<Aspect> last, boolean full) {
     }
 
-    // the cap bonus is added here so hand-held and charger charging both get it
+    // the cap bonus is added here so hand-held and charger charging both get it;
+    // devices draw even from a chunk that is nearly spent, a carried wand spares it
     @Nullable
-    public static Charged chargeFrom(ItemStack stack, ServerLevel level, BlockPos at, int amount) {
+    public static Charged chargeFrom(ItemStack stack, ServerLevel level, BlockPos at, int amount, boolean spare) {
         amount += cap(stack).chargeBonus();
         int room = capacity(stack);
         Holder<Aspect> last = null;
 
-        for (Holder<Aspect> aspect : ModAspects.primals()) {
+        java.util.List<Holder<Aspect>> roomiest = new java.util.ArrayList<>(ModAspects.primals());
+        roomiest.sort(java.util.Comparator.comparingInt((Holder<Aspect> aspect) -> fine(stack).get(aspect)));
+        for (Holder<Aspect> aspect : roomiest) {
             if (amount <= 0) {
                 break;
             }
@@ -219,7 +222,9 @@ public class WandItem extends Item implements VisHolder, Rechargeable {
             if (space <= 0) {
                 continue;
             }
-            int drawn = AuraHandler.drainAvailableUnlessSpared(level, at, aspect, Math.min(amount, space));
+            int wanted = Math.min(amount, space);
+            int drawn = spare ? AuraHandler.drainAvailableUnlessSpared(level, at, aspect, wanted)
+                    : AuraHandler.drainAvailable(level, at, aspect, wanted);
             if (drawn > 0) {
                 put(stack, aspect, drawn * FINE);
                 amount -= drawn;

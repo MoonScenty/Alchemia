@@ -42,7 +42,7 @@ public class RechargePedestalBlockEntity extends SyncedBlockEntity implements Wo
             }
             return;
         }
-        WandItem.Charged charged = WandItem.chargeFrom(pedestal.held, served, pos, AMOUNT);
+        WandItem.Charged charged = WandItem.chargeFrom(pedestal.held, served, pos, AMOUNT, false);
         if (charged == null) {
             return;
         }

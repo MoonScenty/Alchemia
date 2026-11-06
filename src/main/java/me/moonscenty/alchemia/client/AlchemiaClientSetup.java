@@ -365,6 +365,7 @@ public class AlchemiaClientSetup {
         event.registerEntityRenderer(ModEntities.ANGRY_ZOMBIE.get(), AngryZombieRenderer::new);
         event.registerEntityRenderer(ModEntities.FURIOUS_ZOMBIE.get(), AngryZombieRenderer::new);
         event.registerEntityRenderer(ModEntities.TAINT_CLOUD.get(), NoopRenderer::new);
+        event.registerEntityRenderer(ModEntities.FLUX_BOLT.get(), net.minecraft.client.renderer.entity.LightningBoltRenderer::new);
         event.registerEntityRenderer(ModEntities.PECH_BLAST.get(), NoopRenderer::new);
         event.registerEntityRenderer(ModEntities.GRAPPLE.get(), NoopRenderer::new);
         event.registerEntityRenderer(ModEntities.EMBER.get(), NoopRenderer::new);

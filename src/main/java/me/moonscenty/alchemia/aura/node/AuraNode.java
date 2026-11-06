@@ -152,12 +152,14 @@ public class AuraNode extends Entity {
     }
 
     private void feed(ServerLevel level) {
-        if (!type().feeds() || type() == NodeType.TAINTED) {
+        if (!type().feeds()) {
             return;
         }
         Holder<Aspect> giving = feedsWith(random);
+        // a tainted node feeds its own aspect at full strength; the fifth it puts out is the flux
+        NodeType strength = type() == NodeType.TAINTED ? NodeType.PLAIN : type();
         if (giving != null) {
-            AuraHandler.recharge(level, blockPosition(), giving, type().strengthOf(this, level), random);
+            AuraHandler.recharge(level, blockPosition(), giving, strength.strengthOf(this, level), random);
         }
     }
 
@@ -169,7 +171,7 @@ public class AuraNode extends Entity {
         }
 
         for (AuraNode other : neighbours) {
-            if (!other.isAlive() || !isAlive()) {
+            if (!other.isAlive() || !isAlive() || other.isHeld()) {
                 continue;
             }
             Vec3 away = position().subtract(other.position());

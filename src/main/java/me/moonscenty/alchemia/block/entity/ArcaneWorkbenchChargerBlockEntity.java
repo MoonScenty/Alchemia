@@ -34,7 +34,7 @@ public class ArcaneWorkbenchChargerBlockEntity extends BlockEntity {
         if (!(wand.getItem() instanceof WandItem)) {
             return;
         }
-        WandItem.Charged charged = WandItem.chargeFrom(wand, served, pos, AMOUNT);
+        WandItem.Charged charged = WandItem.chargeFrom(wand, served, pos, AMOUNT, false);
         if (charged == null) {
             return;
         }
