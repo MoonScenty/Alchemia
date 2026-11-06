@@ -68,27 +68,35 @@ public class ModBlocks {
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(Alchemia.MODID);
 
     public static final DeferredBlock<Block> AMBER_ORE = register("amber_ore",
-            () -> new DropExperienceBlock(UniformInt.of(1, 4), BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_ORE)));
+            () -> new DropExperienceBlock(UniformInt.of(1, 4), BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_ORE)
+                    .strength(1.25F, 3.0F)));
     public static final DeferredBlock<Block> DEEPSLATE_AMBER_ORE = register("deepslate_amber_ore",
-            () -> new DropExperienceBlock(UniformInt.of(1, 4), BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_IRON_ORE)));
+            () -> new DropExperienceBlock(UniformInt.of(1, 4), BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_IRON_ORE)
+                    .strength(2.75F, 3.0F)));
     public static final DeferredBlock<Block> CINNABAR_ORE = register("cinnabar_ore",
-            () -> new DropExperienceBlock(ConstantInt.of(0), BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_ORE)));
+            () -> new DropExperienceBlock(ConstantInt.of(0), BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_ORE)
+                    .strength(2.0F, 3.0F)));
     public static final DeferredBlock<Block> DEEPSLATE_CINNABAR_ORE = register("deepslate_cinnabar_ore",
-            () -> new DropExperienceBlock(ConstantInt.of(0), BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_IRON_ORE)));
+            () -> new DropExperienceBlock(ConstantInt.of(0), BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_IRON_ORE)
+                    .strength(3.5F, 3.0F)));
 
     public static final DeferredBlock<ResearchTableBlock> RESEARCH_TABLE = register("research_table",
             () -> new ResearchTableBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_PLANKS)
                     .mapColor(MapColor.COLOR_BROWN)
+                    .strength(2.0F, 12.0F)
                     .noOcclusion()));
 
     public static final DeferredBlock<ArcaneWorkbenchBlock> ARCANE_WORKBENCH = register("arcane_workbench",
             () -> new ArcaneWorkbenchBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CRAFTING_TABLE)
                     .mapColor(MapColor.COLOR_BROWN)
+                    .strength(2.0F, 12.0F)
                     .noOcclusion()));
 
     public static final DeferredBlock<CrucibleBlock> CRUCIBLE = register("crucible",
             () -> new CrucibleBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CAULDRON)
                     .mapColor(MapColor.METAL)
+                    .strength(2.0F, 12.0F)
+                    .sound(SoundType.METAL)
                     .noOcclusion()));
 
     public static final DeferredBlock<EssentiaSmelterBlock> ESSENTIA_SMELTER = register("essentia_smelter",
@@ -129,34 +137,42 @@ public class ModBlocks {
                     BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).strength(2.0F, 12.0F).noOcclusion()));
     public static final DeferredBlock<me.moonscenty.alchemia.block.MnemonicMatrixBlock> MNEMONIC_MATRIX =
             register("mnemonic_matrix", () -> new me.moonscenty.alchemia.block.MnemonicMatrixBlock(
-                    BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).strength(1.0F, 10.0F).noOcclusion()));
+                    BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).strength(1.0F, 6.0F).noOcclusion()));
     public static final DeferredBlock<me.moonscenty.alchemia.block.SmelterAuxBlock> SMELTER_AUX =
             register("smelter_aux", () -> new me.moonscenty.alchemia.block.SmelterAuxBlock(
-                    BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).strength(1.0F, 10.0F).noOcclusion()));
+                    BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).strength(1.0F, 6.0F).noOcclusion()));
     public static final DeferredBlock<me.moonscenty.alchemia.block.SmelterVentBlock> SMELTER_VENT =
             register("smelter_vent", () -> new me.moonscenty.alchemia.block.SmelterVentBlock(
-                    BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).strength(1.0F, 10.0F).noOcclusion()));
+                    BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).strength(1.0F, 6.0F).noOcclusion()));
 
     public static final DeferredBlock<AlembicBlock> ALEMBIC = register("alembic",
             () -> new AlembicBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS)
                     .mapColor(MapColor.STONE)
+                    .strength(2.0F, 12.0F)
+                    .sound(SoundType.WOOD)
                     .noOcclusion()));
 
     public static final DeferredBlock<me.moonscenty.alchemia.block.BrainJarBlock> BRAIN_JAR = register("brain_jar",
             () -> new me.moonscenty.alchemia.block.BrainJarBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS)
                     .mapColor(MapColor.NONE)
+                    .strength(0.3F, 12.0F)
+                    .sound(jarSound())
                     .noOcclusion()),
             me.moonscenty.alchemia.item.BrainJarItem::new);
 
     public static final DeferredBlock<JarBlock> JAR = register("jar",
             () -> new JarBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS)
                     .mapColor(MapColor.NONE)
+                    .strength(0.3F, 12.0F)
+                    .sound(jarSound())
                     .noOcclusion()),
             JarBlockItem::new);
 
     public static final DeferredBlock<me.moonscenty.alchemia.block.VoidJarBlock> VOID_JAR = register("void_jar",
             () -> new me.moonscenty.alchemia.block.VoidJarBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS)
                     .mapColor(MapColor.NONE)
+                    .strength(0.3F, 12.0F)
+                    .sound(jarSound())
                     .noOcclusion()),
             JarBlockItem::new);
 
@@ -182,12 +198,13 @@ public class ModBlocks {
     public static final DeferredBlock<ArcanePedestalBlock> ARCANE_PEDESTAL = register("arcane_pedestal",
             () -> new ArcanePedestalBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS)
                     .mapColor(MapColor.STONE)
+                    .strength(2.0F, 12.0F)
                     .noOcclusion()));
 
     public static final DeferredBlock<InfusionMatrixBlock> INFUSION_MATRIX = register("infusion_matrix",
             () -> new InfusionMatrixBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS)
                     .mapColor(MapColor.STONE)
-                    .lightLevel(state -> 7)
+                    .strength(2.0F, 12.0F)
                     .noOcclusion()));
 
     public static final DeferredBlock<ArcanePillarBlock> ARCANE_PILLAR = registerBlockOnly("arcane_pillar",
@@ -200,6 +217,7 @@ public class ModBlocks {
                     () -> new me.moonscenty.alchemia.block.FocalManipulatorBlock(
                             BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS)
                                     .mapColor(MapColor.STONE)
+                                    .strength(2.0F, 12.0F)
                                     .noOcclusion()));
 
     // --- small devices ---
@@ -228,16 +246,17 @@ public class ModBlocks {
     public static final DeferredBlock<me.moonscenty.alchemia.block.WaterJugBlock> WATER_JUG = register("water_jug",
             () -> new me.moonscenty.alchemia.block.WaterJugBlock(
                     BlockBehaviour.Properties.ofFullCopy(Blocks.TERRACOTTA).mapColor(MapColor.TERRACOTTA_ORANGE)
-                            .noOcclusion()));
+                            .strength(2.0F, 12.0F).noOcclusion()));
 
     public static final DeferredBlock<me.moonscenty.alchemia.block.LevitatorBlock> LEVITATOR = register("levitator",
             () -> new me.moonscenty.alchemia.block.LevitatorBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_PLANKS)
                     .mapColor(MapColor.WOOD)
+                    .strength(2.0F, 12.0F)
                     .noOcclusion()));
 
     public static final DeferredBlock<me.moonscenty.alchemia.block.RedstoneRelayBlock> REDSTONE_RELAY =
             register("redstone_relay", () -> new me.moonscenty.alchemia.block.RedstoneRelayBlock(
-                    BlockBehaviour.Properties.ofFullCopy(Blocks.REPEATER)));
+                    BlockBehaviour.Properties.ofFullCopy(Blocks.REPEATER).sound(SoundType.WOOD)));
 
     public static final DeferredBlock<me.moonscenty.alchemia.block.BarrierStoneBlock> BARRIER_STONE = register("barrier_stone",
             () -> new me.moonscenty.alchemia.block.BarrierStoneBlock(BlockBehaviour.Properties.of()
@@ -259,13 +278,13 @@ public class ModBlocks {
             () -> new me.moonscenty.alchemia.block.ArcaneEarBlock(BlockBehaviour.Properties.of()
                     .mapColor(MapColor.WOOD)
                     .sound(net.minecraft.world.level.block.SoundType.WOOD)
-                    .strength(1.0F)
+                    .strength(1.0F, 12.0F)
                     .noOcclusion()
                     .pushReaction(net.minecraft.world.level.material.PushReaction.DESTROY)));
 
     public static final DeferredBlock<me.moonscenty.alchemia.block.SpaBlock> SPA = register("spa",
             () -> new me.moonscenty.alchemia.block.SpaBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS)
-                    .mapColor(MapColor.QUARTZ)));
+                    .mapColor(MapColor.QUARTZ).strength(2.0F, 12.0F)));
 
     public static final DeferredBlock<me.moonscenty.alchemia.block.PurifyingFluidBlock> PURIFYING_FLUID =
             registerBlockOnly("purifying_fluid", () -> new me.moonscenty.alchemia.block.PurifyingFluidBlock(
@@ -279,12 +298,13 @@ public class ModBlocks {
     public static final DeferredBlock<me.moonscenty.alchemia.block.RechargePedestalBlock> RECHARGE_PEDESTAL =
             register("recharge_pedestal", () -> new me.moonscenty.alchemia.block.RechargePedestalBlock(
                     BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS).mapColor(MapColor.STONE)
-                            .noOcclusion()));
+                            .strength(2.0F, 12.0F).noOcclusion()));
 
     public static final DeferredBlock<me.moonscenty.alchemia.block.DioptraBlock> DIOPTRA = register("dioptra",
             () -> new me.moonscenty.alchemia.block.DioptraBlock(
                     BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS)
                     .mapColor(MapColor.COLOR_BLACK)
+                    .strength(2.0F, 12.0F)
                     .noOcclusion()));
 
     public static final DeferredBlock<me.moonscenty.alchemia.block.AuraTotemBlock> AURA_TOTEM_PUSH =
@@ -304,12 +324,20 @@ public class ModBlocks {
     private static BlockBehaviour.Properties smelter(MapColor colour) {
         return BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE)
                 .mapColor(colour)
+                .strength(2.0F, 12.0F)
+                .sound(SoundType.METAL)
                 .lightLevel(state -> state.getValue(EssentiaSmelterBlock.LIT) ? 13 : 0);
     }
 
     private static BlockBehaviour.Properties mirror() {
         return BlockBehaviour.Properties.of().mapColor(MapColor.METAL).strength(0.1F, 12.0F)
-                .sound(net.minecraft.world.level.block.SoundType.GLASS).noOcclusion().noCollission();
+                .sound(jarSound()).noOcclusion().noCollission();
+    }
+
+    // the original's CustomSoundType: one sound for breaking, stepping and placing alike
+    private static SoundType jarSound() {
+        return new net.neoforged.neoforge.common.util.DeferredSoundType(1.0F, 1.0F, ModSounds.JAR, ModSounds.JAR,
+                ModSounds.JAR, ModSounds.JAR, ModSounds.JAR);
     }
 
     private static BlockBehaviour.Properties device() {
@@ -325,7 +353,7 @@ public class ModBlocks {
         return new me.moonscenty.alchemia.block.AuraTotemBlock(kind, BlockBehaviour.Properties.of()
                 .mapColor(MapColor.WOOD)
                 .sound(net.minecraft.world.level.block.SoundType.WOOD)
-                .strength(0.5F, 5.0F)
+                .strength(0.5F, 3.0F)
                 .noOcclusion());
     }
 
@@ -333,7 +361,7 @@ public class ModBlocks {
         return new me.moonscenty.alchemia.block.LampBlock(kind, BlockBehaviour.Properties.of()
                 .mapColor(MapColor.METAL)
                 .sound(net.minecraft.world.level.block.SoundType.METAL)
-                .strength(1.0F)
+                .strength(1.0F, 12.0F)
                 .noOcclusion()
                 .lightLevel(state -> state.getValue(me.moonscenty.alchemia.block.LampBlock.ENABLED) ? 15 : 0));
     }
@@ -341,20 +369,20 @@ public class ModBlocks {
     public static final DeferredBlock<me.moonscenty.alchemia.block.BellowsBlock> BELLOWS = register("bellows",
             () -> new me.moonscenty.alchemia.block.BellowsBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_PLANKS)
                     .mapColor(MapColor.WOOD)
-                    .strength(1.0F)
+                    .strength(1.0F, 12.0F)
                     .noOcclusion()));
 
     public static final DeferredBlock<ArcaneWorkbenchChargerBlock> ARCANE_WORKBENCH_CHARGER =
             register("arcane_workbench_charger",
                     () -> new ArcaneWorkbenchChargerBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_PLANKS)
                             .mapColor(MapColor.COLOR_BROWN)
-                            .lightLevel(state -> 6)
+                            .strength(2.0F, 12.0F)
                             .noOcclusion()));
 
     public static final DeferredBlock<NodeStabilizerBlock> NODE_STABILIZER = register("node_stabilizer",
             () -> new NodeStabilizerBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS)
                     .mapColor(MapColor.STONE)
-                    .lightLevel(state -> 5)
+                    .strength(2.0F, 12.0F)
                     .noOcclusion()));
 
     // --- taint ---
@@ -391,7 +419,7 @@ public class ModBlocks {
     public static final DeferredBlock<TaintLogBlock> TAINT_LOG = register("taint_log",
             () -> new TaintLogBlock(BlockBehaviour.Properties.of()
                     .mapColor(MapColor.COLOR_PURPLE)
-                    .strength(3.0F)
+                    .strength(3.0F, 60.0F)
                     .sound(SoundType.SLIME_BLOCK)
                     .randomTicks()));
 
@@ -442,11 +470,11 @@ public class ModBlocks {
             () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).strength(2.5F, 6.0F).noOcclusion()));
     public static final DeferredBlock<me.moonscenty.alchemia.block.GolemPressBlock> GOLEM_PRESS =
             registerBlockOnly("golem_press", () -> new me.moonscenty.alchemia.block.GolemPressBlock(
-                    BlockBehaviour.Properties.of().mapColor(MapColor.STONE).strength(2.5F)
+                    BlockBehaviour.Properties.of().mapColor(MapColor.STONE).strength(2.0F, 12.0F)
                             .sound(net.minecraft.world.level.block.SoundType.STONE).noOcclusion()));
     public static final DeferredBlock<me.moonscenty.alchemia.block.GolemPressPartBlock> GOLEM_PRESS_PART =
             registerBlockOnly("golem_press_part", () -> new me.moonscenty.alchemia.block.GolemPressPartBlock(
-                    BlockBehaviour.Properties.of().mapColor(MapColor.STONE).strength(2.5F)
+                    BlockBehaviour.Properties.of().mapColor(MapColor.STONE).strength(2.0F, 12.0F)
                             .sound(net.minecraft.world.level.block.SoundType.STONE).noOcclusion()));
 
     public static final WoodSet GREATWOOD = registerWood("greatwood", Blocks.DARK_OAK_LOG, MapColor.COLOR_BROWN, 0, ModWorldgen.GREATWOOD_TREE);
@@ -491,10 +519,10 @@ public class ModBlocks {
 
     public static final DeferredBlock<ArcanePedestalBlock> ANCIENT_PEDESTAL = register("ancient_pedestal",
             () -> new ArcanePedestalBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS)
-                    .mapColor(MapColor.COLOR_GRAY).noOcclusion(), me.moonscenty.alchemia.block.PillarKind.ANCIENT));
+                    .mapColor(MapColor.COLOR_GRAY).strength(2.0F, 12.0F).noOcclusion(), me.moonscenty.alchemia.block.PillarKind.ANCIENT));
     public static final DeferredBlock<ArcanePedestalBlock> ELDRITCH_PEDESTAL = register("eldritch_pedestal",
             () -> new ArcanePedestalBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS)
-                    .mapColor(MapColor.COLOR_BLACK).noOcclusion(), me.moonscenty.alchemia.block.PillarKind.ELDRITCH));
+                    .mapColor(MapColor.COLOR_BLACK).strength(2.0F, 12.0F).noOcclusion(), me.moonscenty.alchemia.block.PillarKind.ELDRITCH));
 
     public static final DeferredBlock<me.moonscenty.alchemia.block.eldritch.EldritchStoneworkBlock> ELDRITCH_ALTAR = registerBlockOnly("eldritch_altar",
             () -> new me.moonscenty.alchemia.block.eldritch.EldritchStoneworkBlock(eldritch(), me.moonscenty.alchemia.block.eldritch.EldritchStoneworkBlock.Part.ALTAR));
@@ -546,7 +574,7 @@ public class ModBlocks {
             register("essentia_output", () -> new me.moonscenty.alchemia.block.TransfuserBlock(false, transfuser()));
 
     private static BlockBehaviour.Properties transfuser() {
-        return BlockBehaviour.Properties.of().mapColor(MapColor.METAL).strength(1.0F, 10.0F).sound(SoundType.METAL)
+        return BlockBehaviour.Properties.of().mapColor(MapColor.METAL).strength(1.0F, 6.0F).sound(SoundType.METAL)
                 .noOcclusion();
     }
 
@@ -556,7 +584,7 @@ public class ModBlocks {
                             .sound(SoundType.SAND).replaceable().randomTicks().noLootTable().noOcclusion()));
 
     public static final DeferredBlock<Block> FLESH_BLOCK = register("flesh_block",
-            () -> new Block(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_RED).strength(0.25F, 2.0F)
+            () -> new Block(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_RED).strength(0.25F, 1.2F)
                     .sound(new net.neoforged.neoforge.common.util.DeferredSoundType(0.5F, 0.8F, ModSounds.GORE,
                             ModSounds.GORE, ModSounds.GORE, ModSounds.GORE, ModSounds.GORE))));
 
@@ -565,7 +593,7 @@ public class ModBlocks {
 
     public static final DeferredBlock<me.moonscenty.alchemia.block.PatternCrafterBlock> PATTERN_CRAFTER =
             register("pattern_crafter", () -> new me.moonscenty.alchemia.block.PatternCrafterBlock(
-                    BlockBehaviour.Properties.of().mapColor(MapColor.METAL).strength(2.0F, 20.0F)
+                    BlockBehaviour.Properties.of().mapColor(MapColor.METAL).strength(2.0F, 12.0F)
                             .sound(SoundType.METAL).noOcclusion()));
 
     private static Map<net.minecraft.world.item.DyeColor, DeferredBlock<me.moonscenty.alchemia.block.TallowCandleBlock>> registerCandles() {
@@ -582,7 +610,7 @@ public class ModBlocks {
     }
 
     private static BlockBehaviour.Properties eldritch() {
-        return BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLACK).strength(50.0F, 1200.0F)
+        return BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLACK).strength(50.0F, 12000.0F)
                 .sound(SoundType.STONE).lightLevel(state -> 8).noOcclusion().noLootTable()
                 .isValidSpawn(ModBlocks::never);
     }
@@ -618,14 +646,14 @@ public class ModBlocks {
                 .mapColor(color)
                 .instrument(NoteBlockInstrument.BASEDRUM)
                 .requiresCorrectToolForDrops()
-                .strength(2.0F, 10.0F)
+                .strength(2.0F, 6.0F)
                 .sound(SoundType.STONE);
     }
 
     private static BlockBehaviour.Properties amber() {
         return BlockBehaviour.Properties.of()
                 .mapColor(MapColor.COLOR_ORANGE)
-                .strength(0.5F)
+                .strength(0.5F, 1.2F)
                 .sound(SoundType.STONE)
                 .noOcclusion()
                 .isValidSpawn(Blocks::never)
@@ -650,7 +678,7 @@ public class ModBlocks {
         DeferredBlock<Block> planks = register(name + "_planks",
                 () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_PLANKS).mapColor(plankColor)));
         return new WoodSet(name,
-                register(name + "_log", () -> new RotatedPillarBlock(BlockBehaviour.Properties.ofFullCopy(logTemplate).lightLevel(state -> logLight))),
+                register(name + "_log", () -> new RotatedPillarBlock(BlockBehaviour.Properties.ofFullCopy(logTemplate).strength(2.0F, 3.0F).lightLevel(state -> logLight))),
                 planks,
                 register(name + "_leaves", () -> new LeavesBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.DARK_OAK_LEAVES))),
                 register(name + "_sapling", () -> new SaplingBlock(grower, BlockBehaviour.Properties.ofFullCopy(Blocks.DARK_OAK_SAPLING))),
@@ -661,6 +689,7 @@ public class ModBlocks {
     private static BlockBehaviour.Properties tubing() {
         return BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BARS)
                 .mapColor(MapColor.GOLD)
+                .strength(0.5F, 3.0F)
                 .noOcclusion();
     }
 
@@ -674,7 +703,6 @@ public class ModBlocks {
                     .lightLevel(state -> 15)
                     .noCollission()
                     .noOcclusion()
-                    .instabreak()
                     .pushReaction(PushReaction.DESTROY), colour)));
         }
         // unmodifiableMap, not Map.copyOf: copyOf's iteration order varies per run and shuffles datagen output
@@ -691,7 +719,8 @@ public class ModBlocks {
             crystals.put(type, register(type.getName() + "_crystal", () -> new CrystalBlock(type, BlockBehaviour.Properties.of()
                     .mapColor(MapColor.QUARTZ)
                     .strength(0.25F)
-                    .sound(SoundType.AMETHYST_CLUSTER)
+                    .sound(new net.neoforged.neoforge.common.util.DeferredSoundType(1.0F, 1.0F, ModSounds.CRYSTAL,
+                            ModSounds.CRYSTAL, ModSounds.CRYSTAL, ModSounds.CRYSTAL, ModSounds.CRYSTAL))
                     .lightLevel(CrystalBlock::getLightLevel)
                     .randomTicks()
                     .forceSolidOn()
@@ -704,7 +733,7 @@ public class ModBlocks {
     private static DeferredBlock<TaintGroundBlock> registerTaintGround(String name, TaintGroundBlock.Kind kind) {
         return register(name, () -> new TaintGroundBlock(kind, BlockBehaviour.Properties.of()
                 .mapColor(MapColor.COLOR_PURPLE)
-                .strength(10.0F, 100.0F)
+                .strength(10.0F, 60.0F)
                 .sound(SoundType.SLIME_BLOCK)
                 .requiresCorrectToolForDrops()
                 .randomTicks()));
