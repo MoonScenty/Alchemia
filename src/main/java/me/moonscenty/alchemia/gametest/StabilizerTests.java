@@ -89,7 +89,7 @@ public class StabilizerTests {
     public static void onlyOneIsHeldAndTheRestAreShovedOff(GameTestHelper helper) {
         NodeStabilizerBlockEntity stabilizer = place(helper);
         AuraNode first = nodeAt(helper, stabilizer, new Vec3(0.1, 0.0, 0.0));
-        AuraNode second = nodeAt(helper, stabilizer, new Vec3(1.2, 0.0, 0.0));
+        AuraNode second = nodeAt(helper, stabilizer, new Vec3(0.6, 0.0, 0.0));
 
         run(stabilizer, helper, 12);
         helper.assertTrue(first.isHeld(), "the nearer one should be the one held");

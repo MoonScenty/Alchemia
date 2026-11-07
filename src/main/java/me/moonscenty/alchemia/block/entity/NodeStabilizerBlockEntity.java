@@ -14,8 +14,7 @@ import net.minecraft.world.phys.Vec3;
 
 public class NodeStabilizerBlockEntity extends BlockEntity {
     private static final double ANCHOR_UP = 1.5;
-    // original used 0.5; wider so a stabilizer set beside a node catches it
-    private static final double REACH = 2.5;
+    private static final double REACH = 0.5;
 
     private static final double DRAW_IN = 1000.0;
     private static final double PUSH_OFF = 750.0;
