@@ -42,7 +42,7 @@
       {
         "chance": 0.1,
         "feature": {
-          "feature": "alchemia:greatwood_tree",
+          "feature": "alchemia:wild_greatwood_tree",
           "placement": [
             {
               "type": "minecraft:block_predicate_filter",

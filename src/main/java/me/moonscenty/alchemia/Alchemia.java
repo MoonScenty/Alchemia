@@ -55,6 +55,7 @@ public class Alchemia {
         ModFeatures.FOLIAGE_PLACERS.register(modEventBus);
         ModFeatures.TREE_DECORATORS.register(modEventBus);
         ModFeatures.PLACEMENTS.register(modEventBus);
+        ModFeatures.BIOME_MODIFIERS.register(modEventBus);
         ModAspects.ASPECTS.register(modEventBus);
         ModArmorMaterials.MATERIALS.register(modEventBus);
         ModParticles.PARTICLES.register(modEventBus);

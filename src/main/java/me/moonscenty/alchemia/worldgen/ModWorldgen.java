@@ -63,6 +63,7 @@ public class ModWorldgen {
     public static final ResourceKey<BiomeModifier> ADD_CINDERPEARL = biomeModifier("add_cinderpearl");
 
     public static final ResourceKey<ConfiguredFeature<?, ?>> GREATWOOD_TREE = configured("greatwood_tree");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> WILD_GREATWOOD_TREE = configured("wild_greatwood_tree");
     public static final ResourceKey<ConfiguredFeature<?, ?>> SILVERWOOD_TREE = configured("silverwood_tree");
     public static final ResourceKey<ConfiguredFeature<?, ?>> TALL_SILVERWOOD_TREE = configured("tall_silverwood_tree");
     public static final ResourceKey<ConfiguredFeature<?, ?>> BIG_MAGIC_TREE = configured("big_magic_tree");
@@ -105,6 +106,7 @@ public class ModWorldgen {
     public static final ResourceKey<BiomeModifier> ADD_SILVERWOOD = biomeModifier("add_silverwood");
     public static final ResourceKey<BiomeModifier> SPAWN_ANGRY_ZOMBIES = biomeModifier("spawn_angry_zombies");
     public static final ResourceKey<BiomeModifier> SPAWN_FIREBATS = biomeModifier("spawn_firebats");
+    public static final ResourceKey<BiomeModifier> SPAWN_HALLOWEEN_FIREBATS = biomeModifier("spawn_halloween_firebats");
     public static final ResourceKey<BiomeModifier> SPAWN_WISPS = biomeModifier("spawn_wisps");
     public static final ResourceKey<BiomeModifier> SPAWN_PECHS = biomeModifier("spawn_pechs");
 
@@ -120,12 +122,10 @@ public class ModWorldgen {
                 OreConfiguration.target(deepslate, ModBlocks.DEEPSLATE_CINNABAR_ORE.get().defaultBlockState())))));
 
         // greatwood 12-22 tall with several leaf balls; silverwood 7-10 tall with one tall canopy
-        context.register(GREATWOOD_TREE, new ConfiguredFeature<>(Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
-                BlockStateProvider.simple(ModBlocks.GREATWOOD.log().get()),
-                new GreatwoodTrunkPlacer(12, 6, 4),
-                BlockStateProvider.simple(ModBlocks.GREATWOOD.leaves().get()),
-                new SphereFoliagePlacer(ConstantInt.of(2), ConstantInt.of(0), 1),
-                new TwoLayersFeatureSize(1, 1, 2)).ignoreVines().build()));
+        context.register(GREATWOOD_TREE, new ConfiguredFeature<>(Feature.TREE, greatwood().build()));
+        // original: one wild greatwood in 8 shelters a spider nest, never one grown from a sapling
+        context.register(WILD_GREATWOOD_TREE, new ConfiguredFeature<>(Feature.TREE, greatwood()
+                .decorators(List.of(new SpiderNestDecorator(1.0F / 8.0F))).build()));
         // original's silverwood is 7-10 tall, 8-12 inside the magical forest
         context.register(SILVERWOOD_TREE, silverwood(new SilverwoodTrunkPlacer(7, 3, 0)));
         context.register(TALL_SILVERWOOD_TREE, silverwood(new SilverwoodTrunkPlacer(8, 4, 0)));
@@ -159,7 +159,7 @@ public class ModWorldgen {
                                 PlacementUtils.filteredByBlockSurvival(ModBlocks.SILVERWOOD.sapling().get())),
                                 1.0F / 14.0F),
                         new WeightedPlacedFeature(PlacementUtils.inlinePlaced(
-                                features.getOrThrow(GREATWOOD_TREE),
+                                features.getOrThrow(WILD_GREATWOOD_TREE),
                                 PlacementUtils.filteredByBlockSurvival(ModBlocks.GREATWOOD.sapling().get())),
                                 0.1F)),
                         PlacementUtils.inlinePlaced(
@@ -178,6 +178,15 @@ public class ModWorldgen {
 
         context.register(CRYSTALS, new ConfiguredFeature<>(ModFeatures.CRYSTAL_CLUSTERS.get(),
                 NoneFeatureConfiguration.INSTANCE));
+    }
+
+    private static TreeConfiguration.TreeConfigurationBuilder greatwood() {
+        return new TreeConfiguration.TreeConfigurationBuilder(
+                BlockStateProvider.simple(ModBlocks.GREATWOOD.log().get()),
+                new GreatwoodTrunkPlacer(12, 6, 4),
+                BlockStateProvider.simple(ModBlocks.GREATWOOD.leaves().get()),
+                new SphereFoliagePlacer(ConstantInt.of(2), ConstantInt.of(0), 1),
+                new TwoLayersFeatureSize(1, 1, 2)).ignoreVines();
     }
 
     private static ConfiguredFeature<?, ?> silverwood(SilverwoodTrunkPlacer trunk) {
@@ -210,11 +219,11 @@ public class ModWorldgen {
                 List.of(RarityFilter.onAverageOnceEvery(30), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome())));
 
         // original's 1 in 25 chunks times the biome's greatwood chance (1, 0.5 or 0.2), silverwood 1 in 60
-        context.register(GREATWOOD_TREE_PLACED, new PlacedFeature(configured.getOrThrow(GREATWOOD_TREE),
+        context.register(GREATWOOD_TREE_PLACED, new PlacedFeature(configured.getOrThrow(WILD_GREATWOOD_TREE),
                 tree(25, ModBlocks.GREATWOOD.sapling().get())));
-        context.register(SOME_GREATWOOD_TREE_PLACED, new PlacedFeature(configured.getOrThrow(GREATWOOD_TREE),
+        context.register(SOME_GREATWOOD_TREE_PLACED, new PlacedFeature(configured.getOrThrow(WILD_GREATWOOD_TREE),
                 tree(50, ModBlocks.GREATWOOD.sapling().get())));
-        context.register(LITTLE_GREATWOOD_TREE_PLACED, new PlacedFeature(configured.getOrThrow(GREATWOOD_TREE),
+        context.register(LITTLE_GREATWOOD_TREE_PLACED, new PlacedFeature(configured.getOrThrow(WILD_GREATWOOD_TREE),
                 tree(125, ModBlocks.GREATWOOD.sapling().get())));
         context.register(SILVERWOOD_TREE_PLACED, new PlacedFeature(configured.getOrThrow(SILVERWOOD_TREE),
                 tree(60, ModBlocks.SILVERWOOD.sapling().get())));
@@ -304,6 +313,11 @@ public class ModWorldgen {
                 biomes.getOrThrow(BiomeTags.IS_NETHER),
                 new net.minecraft.world.level.biome.MobSpawnSettings.SpawnerData(
                         me.moonscenty.alchemia.registry.ModEntities.FIRE_BAT.get(), 10, 1, 2)));
+        // original: on 31 October fire bats join the angry zombies' lands
+        context.register(SPAWN_HALLOWEEN_FIREBATS, new HalloweenSpawnsModifier(
+                biomes.getOrThrow(ModTags.Biomes.HAS_ANGRY_ZOMBIES),
+                new net.minecraft.world.level.biome.MobSpawnSettings.SpawnerData(
+                        me.moonscenty.alchemia.registry.ModEntities.FIRE_BAT.get(), 5, 1, 2)));
         context.register(SPAWN_WISPS, BiomeModifiers.AddSpawnsBiomeModifier.singleSpawn(
                 biomes.getOrThrow(BiomeTags.IS_NETHER),
                 new net.minecraft.world.level.biome.MobSpawnSettings.SpawnerData(

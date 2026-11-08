@@ -184,4 +184,27 @@ public class BiomeTests {
         helper.assertValueEqual(tainted.getBaseTemperature(), 0.5F, "tainted land temperature");
         helper.succeed();
     }
+
+    @GameTest(template = TEMPLATE)
+    public static void fireBatsComeOutOnHalloween(GameTestHelper helper) {
+        helper.assertTrue(me.moonscenty.alchemia.worldgen.HalloweenSpawnsModifier.isHalloween(java.time.LocalDate.of(2026, 10, 31)),
+                "31 October is halloween");
+        helper.assertFalse(me.moonscenty.alchemia.worldgen.HalloweenSpawnsModifier.isHalloween(java.time.LocalDate.of(2026, 10, 30)),
+                "30 October is not");
+        helper.assertFalse(me.moonscenty.alchemia.worldgen.HalloweenSpawnsModifier.isHalloween(java.time.LocalDate.of(2026, 11, 1)),
+                "nor 1 November");
+        helper.succeed();
+    }
+
+    @GameTest(template = TEMPLATE)
+    public static void squidSwimInTheMagicalLands(GameTestHelper helper) {
+        for (ResourceKey<Biome> land : java.util.List.of(ModBiomes.MAGICAL_FOREST, ModBiomes.EERIE)) {
+            helper.assertTrue(any(helper, land).value().getMobSettings()
+                    .getMobs(net.minecraft.world.entity.MobCategory.WATER_CREATURE).unwrap().stream()
+                    .anyMatch(data -> data.type == net.minecraft.world.entity.EntityType.SQUID), "squid in " + land.location());
+        }
+        helper.assertTrue(any(helper, ModBiomes.TAINTED_LAND).value().getMobSettings()
+                .getMobs(net.minecraft.world.entity.MobCategory.WATER_CREATURE).isEmpty(), "but not in tainted land");
+        helper.succeed();
+    }
 }

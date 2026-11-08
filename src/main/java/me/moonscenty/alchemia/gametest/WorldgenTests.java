@@ -195,4 +195,36 @@ public class WorldgenTests {
         helper.assertTrue(grown > 0, "but they should grow in a dry pocket");
         helper.succeed();
     }
+
+    @GameTest(template = TEMPLATE)
+    public static void aWildGreatwoodCanShelterSpiders(GameTestHelper helper) {
+        layGround(helper, 3);
+        ServerLevel level = helper.getLevel();
+        var registry = level.registryAccess().registryOrThrow(Registries.CONFIGURED_FEATURE);
+        var planted = (net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration)
+                registry.getOrThrow(ModWorldgen.GREATWOOD_TREE).config();
+        var wild = (net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration)
+                registry.getOrThrow(ModWorldgen.WILD_GREATWOOD_TREE).config();
+        helper.assertTrue(planted.decorators.isEmpty(), "a planted greatwood never holds a nest");
+        helper.assertTrue(wild.decorators.stream().anyMatch(d -> d instanceof me.moonscenty.alchemia.worldgen.SpiderNestDecorator),
+                "a wild greatwood may");
+
+        var always = new net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration.TreeConfigurationBuilder(
+                planted.trunkProvider, planted.trunkPlacer, planted.foliageProvider, planted.foliagePlacer, planted.minimumSize)
+                .decorators(List.of(new me.moonscenty.alchemia.worldgen.SpiderNestDecorator(1.0F))).ignoreVines().build();
+        net.minecraft.world.level.levelgen.feature.Feature.TREE.place(always, level, level.getChunkSource().getGenerator(),
+                net.minecraft.util.RandomSource.create(3L), helper.absolutePos(TREE_BASE));
+
+        helper.assertBlockPresent(Blocks.SPAWNER, TREE_BASE.below());
+        var spawner = (net.minecraft.world.level.block.entity.SpawnerBlockEntity) level.getBlockEntity(helper.absolutePos(TREE_BASE.below()));
+        var spawned = spawner.getSpawner().getOrCreateDisplayEntity(level, helper.absolutePos(TREE_BASE.below()));
+        helper.assertTrue(spawned != null && spawned.getType() == net.minecraft.world.entity.EntityType.CAVE_SPIDER,
+                "the spawner should breed cave spiders");
+        helper.assertBlockPresent(Blocks.CHEST, TREE_BASE.below(2));
+        var chest = (net.minecraft.world.level.block.entity.ChestBlockEntity) level.getBlockEntity(helper.absolutePos(TREE_BASE.below(2)));
+        helper.assertValueEqual(chest.getLootTable(), net.minecraft.world.level.storage.loot.BuiltInLootTables.SIMPLE_DUNGEON,
+                "the chest holds dungeon loot");
+        helper.assertTrue(count(helper, Blocks.COBWEB) > 0, "webs hang among the wood");
+        helper.succeed();
+    }
 }

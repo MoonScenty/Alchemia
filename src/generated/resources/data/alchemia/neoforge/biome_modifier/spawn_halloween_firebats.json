@@ -1,0 +1,10 @@
+{
+  "type": "alchemia:halloween_spawns",
+  "biomes": "#alchemia:has_angry_zombies",
+  "spawner": {
+    "type": "alchemia:firebat",
+    "maxCount": 2,
+    "minCount": 1,
+    "weight": 5
+  }
+}

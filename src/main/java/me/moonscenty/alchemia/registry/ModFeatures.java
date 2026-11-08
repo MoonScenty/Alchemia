@@ -41,6 +41,15 @@ public class ModFeatures {
             () -> new TreeDecoratorType<>(UndergrowthDecorator.CODEC));
     public static final DeferredHolder<TreeDecoratorType<?>, TreeDecoratorType<NodeInTreeDecorator>> NODE_IN_TREE = TREE_DECORATORS.register("node_in_tree",
             () -> new TreeDecoratorType<>(NodeInTreeDecorator.CODEC));
+    public static final DeferredHolder<TreeDecoratorType<?>, TreeDecoratorType<me.moonscenty.alchemia.worldgen.SpiderNestDecorator>> SPIDER_NEST =
+            TREE_DECORATORS.register("spider_nest",
+                    () -> new TreeDecoratorType<>(me.moonscenty.alchemia.worldgen.SpiderNestDecorator.CODEC));
+
+    public static final DeferredRegister<com.mojang.serialization.MapCodec<? extends net.neoforged.neoforge.common.world.BiomeModifier>> BIOME_MODIFIERS =
+            DeferredRegister.create(net.neoforged.neoforge.registries.NeoForgeRegistries.Keys.BIOME_MODIFIER_SERIALIZERS, Alchemia.MODID);
+    public static final DeferredHolder<com.mojang.serialization.MapCodec<? extends net.neoforged.neoforge.common.world.BiomeModifier>,
+            com.mojang.serialization.MapCodec<me.moonscenty.alchemia.worldgen.HalloweenSpawnsModifier>> HALLOWEEN_SPAWNS =
+            BIOME_MODIFIERS.register("halloween_spawns", () -> me.moonscenty.alchemia.worldgen.HalloweenSpawnsModifier.CODEC);
 
     public static final DeferredHolder<Feature<?>, CrystalClustersFeature> CRYSTAL_CLUSTERS = FEATURES.register("crystal_clusters",
             () -> new CrystalClustersFeature(NoneFeatureConfiguration.CODEC));
