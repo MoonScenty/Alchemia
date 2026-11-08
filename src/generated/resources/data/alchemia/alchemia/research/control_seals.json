@@ -23,5 +23,8 @@
     "alchemia:nitor"
   ],
   "row": 5,
-  "shape": "major"
+  "shape": "major",
+  "siblings": [
+    "alchemia:seal_collect"
+  ]
 }

@@ -1,6 +1,7 @@
 {
+  "auto_unlock": true,
   "category": "alchemia:artifice",
-  "column": 1,
+  "column": 0,
   "icon": "alchemia:primal_charm",
   "pages": [
     {
@@ -39,9 +40,6 @@
       "type": "recipe",
       "recipe": "alchemia:fancy_belt"
     }
-  ],
-  "parents": [
-    "alchemia:vis_crystals"
   ],
   "row": 1,
   "shape": "major"

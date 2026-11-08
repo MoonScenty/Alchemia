@@ -1,9 +1,13 @@
 package me.moonscenty.alchemia.research;
 
+import java.util.Map;
+
 import me.moonscenty.alchemia.player.PlayerKnowledge;
 import me.moonscenty.alchemia.player.WarpData;
 import me.moonscenty.alchemia.player.WarpHandler;
+import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 
@@ -16,23 +20,43 @@ public final class ResearchCompletion {
     }
 
     public static boolean complete(Player player, ResourceLocation id) {
-        PlayerKnowledge knowledge = PlayerKnowledge.of(player);
-        if (knowledge.hasResearch(id)) {
+        if (PlayerKnowledge.of(player).hasResearch(id)) {
             return false;
         }
-        PlayerKnowledge.update(player, known -> known.withResearch(id));
-        player.displayClientMessage(Component.translatable("note.alchemia.learned", ResearchEntry.displayName(id)),
-                false);
+        announce(player, id);
         player.giveExperiencePoints(EXPERIENCE);
-        player.level().registryAccess().registryOrThrow(ModResearch.ENTRY_KEY).getOptional(id).ifPresent(entry -> {
-            settle(player, entry.warp());
+        entries(player).getOptional(id).ifPresent(entry -> {
             for (ResourceLocation sibling : entry.siblings()) {
-                if (ready(player, sibling)) {
-                    complete(player, sibling);
+                if (!PlayerKnowledge.of(player).hasResearch(sibling) && ready(player, sibling)) {
+                    announce(player, sibling);
                 }
             }
         });
         return true;
+    }
+
+    // original: reading the book hands over every sibling still owed, parents or not
+    public static void collectSiblings(Player player) {
+        for (Map.Entry<ResourceKey<ResearchEntry>, ResearchEntry> entry : entries(player).entrySet()) {
+            if (PlayerKnowledge.of(player).hasResearch(entry.getKey().location())) {
+                for (ResourceLocation sibling : entry.getValue().siblings()) {
+                    learn(player, sibling);
+                }
+            }
+        }
+    }
+
+    private static void announce(Player player, ResourceLocation id) {
+        learn(player, id);
+        player.displayClientMessage(Component.translatable("note.alchemia.learned", ResearchEntry.displayName(id)),
+                false);
+    }
+
+    private static void learn(Player player, ResourceLocation id) {
+        if (!PlayerKnowledge.of(player).hasResearch(id)) {
+            PlayerKnowledge.update(player, known -> known.withResearch(id));
+            entries(player).getOptional(id).ifPresent(entry -> settle(player, entry.warp()));
+        }
     }
 
     // one point is permanent; more is split, the larger half permanent and the rest sticky
@@ -47,8 +71,12 @@ public final class ResearchCompletion {
 
     private static boolean ready(Player player, ResourceLocation id) {
         PlayerKnowledge knowledge = PlayerKnowledge.of(player);
-        return player.level().registryAccess().registryOrThrow(ModResearch.ENTRY_KEY).getOptional(id)
+        return entries(player).getOptional(id)
                 .map(entry -> entry.parentsKnown(knowledge))
                 .orElse(false);
+    }
+
+    private static Registry<ResearchEntry> entries(Player player) {
+        return player.level().registryAccess().registryOrThrow(ModResearch.ENTRY_KEY);
     }
 }

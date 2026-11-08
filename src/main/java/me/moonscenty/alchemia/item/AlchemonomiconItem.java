@@ -1,6 +1,7 @@
 package me.moonscenty.alchemia.item;
 
 import me.moonscenty.alchemia.registry.ModSounds;
+import me.moonscenty.alchemia.research.ResearchCompletion;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -24,6 +25,8 @@ public class AlchemonomiconItem extends Item {
             opener.run();
             level.playLocalSound(player.getX(), player.getY(), player.getZ(), ModSounds.PAGE.get(),
                     SoundSource.PLAYERS, 1.0F, 1.0F, false);
+        } else {
+            ResearchCompletion.collectSiblings(player);
         }
         return InteractionResultHolder.sidedSuccess(player.getItemInHand(hand), level.isClientSide);
     }

@@ -339,7 +339,7 @@ public class ModResearchProvider {
         entry(context, "clockwork_mind", ModResearch.GOLEMANCY, ModItems.CLOCKWORK_MIND, 0, 3,
                 AspectList.of(ModAspects.MECHANISM, 3).add(ModAspects.MIND, 3).add(ModAspects.SENSES, 3)
                         .add(ModAspects.ENERGY, 6).add(ModAspects.LIFE, 3),
-                List.of("arcane_workbench", "metallurgy"), false, NodeShape.PLAIN, 1, "clockwork_mind",
+                List.of("golem_wood", "distillation", "tallow", "nitor"), false, NodeShape.PLAIN, 1, "clockwork_mind",
                 "stone_table");
         entry(context, "golem_wood", ModResearch.GOLEMANCY, ModBlocks.GREATWOOD.planks().get(), -2, -2,
                 AspectList.EMPTY, List.of(), true, NodeShape.MAJOR, 1);
@@ -423,8 +423,8 @@ public class ModResearchProvider {
                         .add(ModAspects.UNDEAD, 3),
                 List.of("clockwork_mind", "infusion"), false, NodeShape.PLAIN, 2, "bioalchemic_mind");
 
-        entry(context, "primal_charm", ModResearch.ARTIFICE, ModItems.PRIMAL_CHARM, 1, 1,
-                AspectList.EMPTY, List.of("vis_crystals"), false, NodeShape.MAJOR, 1,
+        entry(context, "primal_charm", ModResearch.ARTIFICE, ModItems.PRIMAL_CHARM, 0, 1,
+                AspectList.EMPTY, List.of(), true, NodeShape.MAJOR, 1,
                 "primal_charm", "mirrored_glass", "mundane_amulet", "mundane_ring", "mundane_belt", "fancy_amulet",
                 "fancy_ring", "fancy_belt");
         entry(context, "runic_shielding", ModResearch.ARTIFICE, ModItems.RUNIC_AMULET, -3, 6,
@@ -708,7 +708,9 @@ public class ModResearchProvider {
                     java.util.Optional.of(Clues.NODE_MAGNET_DANGER))));
 
     private static final java.util.Map<String, List<String>> SIBLINGS = java.util.Map.of(
-            "crimson", List.of("eldritch_minor"));
+            "crimson", List.of("eldritch_minor"),
+            "clockwork_mind", List.of("control_seals"),
+            "control_seals", List.of("seal_collect"));
 
     private static void register(BootstrapContext<ResearchEntry> context, String name,
             ResourceKey<ResearchCategory> category, ItemLike icon, int column, int row, AspectList requirements,

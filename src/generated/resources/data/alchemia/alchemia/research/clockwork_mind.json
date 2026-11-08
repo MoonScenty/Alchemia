@@ -18,8 +18,10 @@
     }
   ],
   "parents": [
-    "alchemia:arcane_workbench",
-    "alchemia:metallurgy"
+    "alchemia:golem_wood",
+    "alchemia:distillation",
+    "alchemia:tallow",
+    "alchemia:nitor"
   ],
   "requirements": {
     "alchemia:cognitio": 3,
@@ -28,5 +30,8 @@
     "alchemia:sensus": 3,
     "alchemia:victus": 3
   },
-  "row": 3
+  "row": 3,
+  "siblings": [
+    "alchemia:control_seals"
+  ]
 }

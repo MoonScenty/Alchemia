@@ -44,6 +44,8 @@ public final class NoteRequests {
     public static boolean isReady(PlayerKnowledge knowledge, ResourceLocation id, ResearchEntry entry) {
         return !knowledge.hasResearch(id)
                 && !entry.onlyGiven()
+                // original: stubs take no note
+                && !entry.requirements().isEmpty()
                 && entry.isAvailableTo(knowledge)
                 && entry.missingFor(knowledge::knows).isEmpty();
     }

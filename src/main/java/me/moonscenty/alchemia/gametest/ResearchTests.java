@@ -1,7 +1,11 @@
 package me.moonscenty.alchemia.gametest;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.aspect.AspectList;
+import me.moonscenty.alchemia.player.ModAttachments;
 import me.moonscenty.alchemia.player.PlayerKnowledge;
 import me.moonscenty.alchemia.registry.ModAspects;
 import me.moonscenty.alchemia.block.ResearchTableBlock;
@@ -9,7 +13,9 @@ import me.moonscenty.alchemia.block.entity.ResearchTableBlockEntity;
 import me.moonscenty.alchemia.registry.ModBlocks;
 import me.moonscenty.alchemia.registry.ModItems;
 import me.moonscenty.alchemia.research.ModResearch;
+import me.moonscenty.alchemia.research.NoteRequests;
 import me.moonscenty.alchemia.research.ResearchCategory;
+import me.moonscenty.alchemia.research.ResearchCompletion;
 import me.moonscenty.alchemia.research.ResearchEntry;
 import me.moonscenty.alchemia.research.ScanTarget;
 import me.moonscenty.alchemia.research.StartingResearch;
@@ -18,8 +24,11 @@ import net.minecraft.core.Registry;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.GameType;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
@@ -205,6 +214,108 @@ public class ResearchTests {
         helper.assertTrue(manipulator.isAvailableTo(all), "and then it opens");
         helper.assertValueEqual(manipulator.parents(), java.util.List.of(Alchemia.id("focus_fire")),
                 "with only the fire focus drawn to it");
+        helper.succeed();
+    }
+
+    @GameTest(template = TEMPLATE)
+    public static void everyEntryCanBeEarned(GameTestHelper helper) {
+        Registry<ResearchEntry> entries = helper.getLevel().registryAccess().registryOrThrow(ModResearch.ENTRY_KEY);
+        Set<ResourceLocation> earned = new HashSet<>();
+        for (ResourceLocation id : entries.keySet()) {
+            ResearchEntry entry = entries.get(id);
+            if (entry.autoUnlock() || entry.onlyGiven()) {
+                earned.add(id);
+            }
+        }
+
+        boolean grew = true;
+        while (grew) {
+            grew = false;
+            for (ResourceLocation id : entries.keySet()) {
+                ResearchEntry entry = entries.get(id);
+                if (!earned.contains(id) && !entry.requirements().isEmpty() && waitsOnly(entry, earned)) {
+                    grew |= earned.add(id);
+                }
+                if (earned.contains(id)) {
+                    grew |= earned.addAll(entry.siblings());
+                }
+            }
+        }
+
+        Set<ResourceLocation> stranded = new HashSet<>(entries.keySet());
+        stranded.removeAll(earned);
+        helper.assertTrue(stranded.isEmpty(), "no way to ever finish " + stranded);
+        helper.succeed();
+    }
+
+    @GameTest(template = TEMPLATE)
+    public static void aSiblingIsReadyTheMomentItsKinIsLearned(GameTestHelper helper) {
+        Registry<ResearchEntry> entries = helper.getLevel().registryAccess().registryOrThrow(ModResearch.ENTRY_KEY);
+        for (ResourceLocation id : entries.keySet()) {
+            ResearchEntry entry = entries.get(id);
+            Set<ResourceLocation> known = new HashSet<>(entry.parents());
+            known.addAll(entry.hiddenParents());
+            known.add(id);
+            for (ResourceLocation sibling : entry.siblings()) {
+                helper.assertTrue(entries.containsKey(sibling), id + " lists a sibling that does not exist: " + sibling);
+                helper.assertTrue(waitsOnly(entries.get(sibling), known), sibling + " waits on more than " + id);
+            }
+        }
+        helper.succeed();
+    }
+
+    private static boolean waitsOnly(ResearchEntry entry, Set<ResourceLocation> known) {
+        return known.containsAll(entry.parents()) && known.containsAll(entry.hiddenParents());
+    }
+
+    @GameTest(template = TEMPLATE)
+    public static void thePrimalCharmIsKnownFromTheStart(GameTestHelper helper) {
+        Registry<ResearchEntry> entries = helper.getLevel().registryAccess().registryOrThrow(ModResearch.ENTRY_KEY);
+        helper.assertTrue(StartingResearch.fold(PlayerKnowledge.fresh(), entries).hasResearch(Alchemia.id("primal_charm")),
+                "the root of artifice comes free");
+        helper.succeed();
+    }
+
+    @GameTest(template = TEMPLATE)
+    public static void theSealsFollowTheClockworkMind(GameTestHelper helper) {
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        for (String parent : new String[] {"golem_wood", "distillation", "tallow", "nitor"}) {
+            player.setData(ModAttachments.KNOWLEDGE, PlayerKnowledge.of(player).withResearch(Alchemia.id(parent)));
+        }
+        int experience = player.totalExperience;
+
+        helper.assertTrue(ResearchCompletion.complete(player, Alchemia.id("clockwork_mind")), "learnt");
+        helper.assertTrue(PlayerKnowledge.of(player).hasResearch(Alchemia.id("control_seals")), "the seals come with it");
+        helper.assertFalse(PlayerKnowledge.of(player).hasResearch(Alchemia.id("seal_collect")), "one step at a time");
+        helper.assertValueEqual(player.totalExperience, experience + ResearchCompletion.EXPERIENCE,
+                "only the entry that was worked for pays");
+
+        ModItems.ALCHEMONOMICON.get().use(helper.getLevel(), player, InteractionHand.MAIN_HAND);
+        helper.assertTrue(PlayerKnowledge.of(player).hasResearch(Alchemia.id("seal_collect")), "reading brings the rest");
+        helper.succeed();
+    }
+
+    @GameTest(template = TEMPLATE)
+    public static void readingTheBookPaysSiblingsStillOwed(GameTestHelper helper) {
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        player.setData(ModAttachments.KNOWLEDGE, PlayerKnowledge.of(player).withResearch(Alchemia.id("clockwork_mind")));
+
+        ModItems.ALCHEMONOMICON.get().use(helper.getLevel(), player, InteractionHand.MAIN_HAND);
+        helper.assertTrue(PlayerKnowledge.of(player).hasResearch(Alchemia.id("control_seals")),
+                "an old reader still gets the seals");
+        helper.succeed();
+    }
+
+    @GameTest(template = TEMPLATE)
+    public static void anEntryWithNothingToStudyTakesNoNote(GameTestHelper helper) {
+        Registry<ResearchEntry> entries = helper.getLevel().registryAccess().registryOrThrow(ModResearch.ENTRY_KEY);
+        ResourceLocation seals = Alchemia.id("control_seals");
+        PlayerKnowledge knowledge = PlayerKnowledge.fresh();
+        for (String parent : new String[] {"distillation", "tallow", "nitor"}) {
+            knowledge = knowledge.withResearch(Alchemia.id(parent));
+        }
+        helper.assertTrue(entries.get(seals).isAvailableTo(knowledge), "its parents are known");
+        helper.assertFalse(NoteRequests.isReady(knowledge, seals, entries.get(seals)), "but no note can be drawn");
         helper.succeed();
     }
 
