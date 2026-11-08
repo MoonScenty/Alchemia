@@ -13,6 +13,7 @@ import me.moonscenty.alchemia.aura.node.AuraNode;
 import me.moonscenty.alchemia.aura.node.NodeType;
 import me.moonscenty.alchemia.registry.ModFeatures;
 import net.minecraft.core.BlockPos;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecorator;
@@ -54,7 +55,7 @@ public class NodeInTreeDecorator extends TreeDecorator {
             return;
         }
 
-        List<BlockPos> heart = heartwood(context.logs());
+        List<BlockPos> heart = heartwood(level, context.logs());
         int up = heart.size() / 2 - 1 + random.nextInt(3);
         BlockPos at = heart.get(Math.clamp(up, 0, heart.size() - 1));
 
@@ -67,9 +68,13 @@ public class NodeInTreeDecorator extends TreeDecorator {
     }
 
     // the trunk is the column running the full height; roots and knots are logs too
-    private static List<BlockPos> heartwood(List<BlockPos> logs) {
+    private static List<BlockPos> heartwood(WorldGenLevel level, List<BlockPos> logs) {
         Map<Long, List<BlockPos>> columns = new HashMap<>();
         for (BlockPos log : logs) {
+            // the dirt put under the trunk is listed among the logs
+            if (!level.getBlockState(log).is(BlockTags.LOGS)) {
+                continue;
+            }
             columns.computeIfAbsent(BlockPos.asLong(log.getX(), 0, log.getZ()), key -> new ArrayList<>()).add(log);
         }
         List<BlockPos> tallest = List.of();
