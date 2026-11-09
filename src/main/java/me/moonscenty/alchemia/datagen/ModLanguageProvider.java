@@ -1003,6 +1003,9 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("warp.alchemia.gained.temporary", pick("You have gained temporary Warp!", "일시적 뒤틀림을 얻었다!"));
         add("warp.alchemia.lost.permanent", pick("You have lost permanent Warp!", "영구 뒤틀림을 잃었다!"));
         add("warp.alchemia.lost.sticky", pick("You have lost Warp!", "뒤틀림을 잃었다!"));
+        add("warp.alchemia.hunger.unsatisfied", pick("Ordinary food does nothing for this hunger.",
+                "평범한 음식으로는 이 허기를 달랠 수 없다."));
+        add("warp.alchemia.hunger.fading", pick("The hunger starts to ebb.", "허기가 가라앉기 시작한다."));
         add("note.alchemia.already_known", pick("You already know that.", "이미 알고 있다."));
         add("note.alchemia.no_ink", pick("Your scribing tools have run dry.", "필기구의 잉크가 말랐다."));
 
@@ -1517,7 +1520,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                 {"What ails you is looking for company.", "당신을 괴롭히는 것이 동행을 찾고 있다."},
                 {"You are no longer entirely alone in here.", "이 안에 당신만 있는 것이 아니다."},
                 {"Whatever you look at, looks back.", "무엇을 보든, 그것도 당신을 본다."},
-                {"It has stopped being patient.", "그것이 더는 참지 않는다."},
+                {"For a moment, your thoughts are your own again.", "잠시나마 생각이 온전히 내 것으로 돌아온다."},
                 {"Somewhere close, voices are chanting.", "가까운 어딘가에서 읊조리는 소리가 들린다."},
         };
         for (int line = 0; line < whispers.length; line++) {

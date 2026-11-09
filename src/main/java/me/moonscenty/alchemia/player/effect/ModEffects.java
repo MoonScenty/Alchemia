@@ -3,6 +3,7 @@ package me.moonscenty.alchemia.player.effect;
 import java.util.List;
 
 import me.moonscenty.alchemia.Alchemia;
+import me.moonscenty.alchemia.registry.ModBlocks;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.effect.MobEffect;
@@ -34,7 +35,7 @@ public class ModEffects {
             }));
 
     public static final DeferredHolder<MobEffect, MobEffect> SUN_SCORNED = EFFECTS.register("sun_scorned",
-            () -> new WarpEffect(MobEffectCategory.HARMFUL, 0xE0A020, 20, ModEffects::scorch));
+            () -> new WarpEffect(MobEffectCategory.HARMFUL, 0xE0A020, 40, ModEffects::scorch));
 
     public static final DeferredHolder<MobEffect, MobEffect> BLURRED_VISION = EFFECTS.register("blurred_vision",
             () -> WarpEffect.inert(MobEffectCategory.HARMFUL, 0x505060));
@@ -43,7 +44,7 @@ public class ModEffects {
             () -> WarpEffect.inert(MobEffectCategory.HARMFUL, 0x901020));
 
     public static final DeferredHolder<MobEffect, MobEffect> ALCHEDIARRHEA = EFFECTS.register("alchediarrhea",
-            () -> WarpEffect.inert(MobEffectCategory.HARMFUL, 0x7030A0));
+            () -> new WarpEffect(MobEffectCategory.HARMFUL, 0x7030A0, 20, ModEffects::seep));
 
     public static final DeferredHolder<MobEffect, MobEffect> WARP_WARD = EFFECTS.register("warp_ward",
             () -> WarpEffect.inert(MobEffectCategory.BENEFICIAL, 0xFFD700));
@@ -81,6 +82,14 @@ public class ModEffects {
                 && entity.getRandom().nextFloat() * 30F < (brightness - 0.4F) * 2F
                 && entity.level().canSeeSky(entity.blockPosition())) {
             entity.igniteForSeconds(4);
+        } else if (brightness < 0.25F && entity.getRandom().nextFloat() > brightness * 2F) {
+            entity.heal(1.0F);
+        }
+    }
+
+    private static void seep(LivingEntity entity, int amplifier) {
+        if (entity.getRandom().nextInt(15) == 0 && entity.level().isEmptyBlock(entity.blockPosition())) {
+            entity.level().setBlockAndUpdate(entity.blockPosition(), ModBlocks.FLUX_GOO.get().defaultBlockState());
         }
     }
 }

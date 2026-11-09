@@ -48,7 +48,7 @@ public record WarpData(int permanent, int sticky, int temporary, int counter) {
         };
     }
 
-    // gaining warp also winds the counter up by the same amount
+    // original: any change sets the counter to the new total
     public WarpData add(Kind kind, int amount) {
         int gained = Math.max(amount, -of(kind));
         WarpData changed = switch (kind) {
@@ -56,7 +56,16 @@ public record WarpData(int permanent, int sticky, int temporary, int counter) {
             case STICKY -> new WarpData(permanent, sticky + gained, temporary, counter);
             case TEMPORARY -> new WarpData(permanent, sticky, temporary + gained, counter);
         };
-        return gained > 0 ? changed.withCounter(counter + gained) : changed;
+        return changed.withCounter(changed.total());
+    }
+
+    // the check's own wear and the clarity event leave the counter alone
+    public WarpData wornOff() {
+        return new WarpData(permanent, sticky, Math.max(0, temporary - 1), counter);
+    }
+
+    public WarpData eased() {
+        return new WarpData(permanent, Math.max(0, sticky - 1), temporary, counter);
     }
 
     public WarpData withCounter(int value) {

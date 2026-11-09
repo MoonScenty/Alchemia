@@ -69,7 +69,7 @@ public class PlayerDataTests {
 
         WarpData spent = warp.add(WarpData.Kind.TEMPORARY, -99);
         helper.assertTrue(spent.temporary() == 0, "temporary warp should have bottomed out at 0, was " + spent.temporary());
-        helper.assertTrue(spent.counter() == 8, "spending warp should leave the counter alone, was " + spent.counter());
+        helper.assertTrue(spent.counter() == 3, "any change should set the counter to the total, was " + spent.counter());
 
         Tag saved = WarpData.CODEC.encodeStart(NbtOps.INSTANCE, warp).getOrThrow();
         helper.assertTrue(WarpData.CODEC.parse(NbtOps.INSTANCE, saved).getOrThrow().equals(warp), "warp changed on the way through nbt");
@@ -136,7 +136,7 @@ public class PlayerDataTests {
         Set<Holder<MobEffect>> seen = new HashSet<>();
         for (int roll = 0; roll <= 100; roll++) {
             WarpHandler.Outcome outcome = WarpHandler.outcomeFor(60, roll);
-            helper.assertTrue(outcome.message() >= 0 && outcome.message() <= 15,
+            helper.assertTrue(outcome.message() >= WarpHandler.NO_MESSAGE && outcome.message() <= 15,
                     "roll " + roll + " pointed at whisper " + outcome.message() + ", which does not exist");
             outcome.effect().ifPresent(effect -> {
                 helper.assertTrue(outcome.duration() > 0, "an ailment with no duration is no ailment");
