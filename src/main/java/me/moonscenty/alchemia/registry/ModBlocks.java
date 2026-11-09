@@ -692,7 +692,14 @@ public class ModBlocks {
                 register(name + "_log", () -> new RotatedPillarBlock(BlockBehaviour.Properties.ofFullCopy(logTemplate).strength(2.0F, 3.0F).lightLevel(state -> logLight))),
                 planks,
                 register(name + "_leaves", () -> new LeavesBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.DARK_OAK_LEAVES))),
-                register(name + "_sapling", () -> new SaplingBlock(grower, BlockBehaviour.Properties.ofFullCopy(Blocks.DARK_OAK_SAPLING))),
+                register(name + "_sapling", () -> new SaplingBlock(grower, BlockBehaviour.Properties.ofFullCopy(Blocks.DARK_OAK_SAPLING)) {
+                    // original's value
+                    @Override
+                    public boolean isBonemealSuccess(net.minecraft.world.level.Level level,
+                            net.minecraft.util.RandomSource random, net.minecraft.core.BlockPos pos, net.minecraft.world.level.block.state.BlockState state) {
+                        return level.random.nextFloat() < 0.25F;
+                    }
+                }),
                 register(name + "_stairs", () -> new StairBlock(planks.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(planks.get()))),
                 register(name + "_slab", () -> new SlabBlock(BlockBehaviour.Properties.ofFullCopy(planks.get()))));
     }

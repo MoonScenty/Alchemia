@@ -78,7 +78,9 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
             if (want <= 0) {
                 continue;
             }
-            boolean paid = holder != null && holder.held(wand, aspect) >= want;
+            float price = holder == null || minecraft == null ? want
+                    : want * holder.priceRate(wand, minecraft.player, VisHolder.Spending.CRAFTING, aspect);
+            boolean paid = holder != null && holder.held(wand, aspect) >= price;
             shortAnywhere |= !paid;
             float alpha = paid ? 1F : 0.5F + Mth.sin((ticks + place * 10) / 2F) * 0.2F - 0.2F;
             int x = leftPos + CIRCLES[place][0] - ICON / 2;
@@ -86,7 +88,7 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
             drawAspect(graphics, aspect, x, y, alpha);
             graphics.pose().pushPose();
             graphics.pose().translate(0, 0, 200);
-            String count = String.valueOf(want);
+            String count = new java.text.DecimalFormat("#.##").format(price);
             graphics.drawString(font, count, x + ICON - font.width(count) + 1, y + ICON - 7,
                     paid ? 0xFFFFFFFF : 0xFFFF7070, true);
             graphics.pose().popPose();

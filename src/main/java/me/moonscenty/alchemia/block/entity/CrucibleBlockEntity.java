@@ -1,7 +1,6 @@
 package me.moonscenty.alchemia.block.entity;
 
 import java.util.List;
-import java.util.Optional;
 
 import me.moonscenty.alchemia.aspect.Aspect;
 import me.moonscenty.alchemia.aspect.AspectList;
@@ -78,7 +77,6 @@ public class CrucibleBlockEntity extends SyncedBlockEntity {
 
     public void fill() {
         water = FULL;
-        dissolved = AspectList.EMPTY;
         changed();
     }
 
@@ -206,11 +204,8 @@ public class CrucibleBlockEntity extends SyncedBlockEntity {
     }
 
     private Taken take(ServerLevel level, BlockPos pos, ItemStack one, Player thrower) {
-        Optional<RecipeHolder<CrucibleRecipe>> found = level.getRecipeManager()
-                .getRecipeFor(ModRecipes.CRUCIBLE.get(), new CrucibleInput(one, dissolved), level);
-
-        if (found.isPresent() && known(found.get().value(), thrower) && water > 0) {
-            CrucibleRecipe recipe = found.get().value();
+        CrucibleRecipe recipe = best(level, new CrucibleInput(one, dissolved), thrower);
+        if (recipe != null && water > 0) {
             dissolved = recipe.taken(dissolved);
             water = Math.max(0, water - PER_CRAFT);
             ItemStack made = recipe.assemble(new CrucibleInput(one, dissolved), level.registryAccess());
@@ -227,6 +222,21 @@ public class CrucibleBlockEntity extends SyncedBlockEntity {
         dissolved = dissolved.add(made);
         counter = AFTER_MELT;
         return Taken.MELTED;
+    }
+
+    // original: of the recipes the thrower knows, the one asking for the most kinds of aspect
+    private CrucibleRecipe best(ServerLevel level, CrucibleInput input, Player thrower) {
+        CrucibleRecipe best = null;
+        int most = 0;
+        for (RecipeHolder<CrucibleRecipe> holder : level.getRecipeManager().getAllRecipesFor(ModRecipes.CRUCIBLE.get())) {
+            CrucibleRecipe recipe = holder.value();
+            int kinds = recipe.aspects().sortedByName().size();
+            if (kinds > most && known(recipe, thrower) && recipe.matches(input, level)) {
+                best = recipe;
+                most = kinds;
+            }
+        }
+        return best;
     }
 
     public void touched(net.minecraft.world.entity.LivingEntity living) {

@@ -20,6 +20,7 @@ import net.minecraft.world.level.block.Block;
 
 public class AlembicRenderer implements BlockEntityRenderer<AlembicBlockEntity> {
     private static final ResourceLocation TEXTURE = Alchemia.id("textures/entity/alembic.png");
+    private static final ResourceLocation LABEL = Alchemia.id("textures/entity/label.png");
 
     // flipped: the original's old OBJ loader turned the texture V over
     private static final LegacyCached<LegacyMesh> MESH = LegacyCached.flippedMesh(LegacyAssets.ALEMBIC_MESH);
@@ -60,5 +61,31 @@ public class AlembicRenderer implements BlockEntityRenderer<AlembicBlockEntity> 
         legacy.render("Pot", pose.last(), buffer, -1, light, overlay);
         legacy.render("Panel", pose.last(), buffer, -1, light, overlay);
         pose.popPose();
+        alembic.filter().ifPresent(aspect -> label(alembic, aspect.value(), pose, buffers, light, overlay));
+    }
+
+    private static void label(AlembicBlockEntity alembic, me.moonscenty.alchemia.aspect.Aspect aspect, PoseStack pose,
+            MultiBufferSource buffers, int light, int overlay) {
+        pose.pushPose();
+        pose.translate(0.5F, 0.5F, 0.5F);
+        pose.mulPose(Axis.YP.rotationDegrees(180.0F - alembic.labelFace().toYRot()));
+        quad(buffers.getBuffer(RenderType.entityCutoutNoCull(LABEL)), pose, -0.376F, 0.22F, 0xFFFFFF, light, overlay);
+        quad(buffers.getBuffer(RenderType.entityTranslucent(aspect.icon())), pose, -0.377F, 0.16F, aspect.color(), light,
+                overlay);
+        pose.popPose();
+    }
+
+    private static void quad(com.mojang.blaze3d.vertex.VertexConsumer buffer, PoseStack pose, float z, float half, int tint,
+            int light, int overlay) {
+        corner(buffer, pose, -half, -half, z, 0.0F, 1.0F, tint, light, overlay);
+        corner(buffer, pose, -half, half, z, 0.0F, 0.0F, tint, light, overlay);
+        corner(buffer, pose, half, half, z, 1.0F, 0.0F, tint, light, overlay);
+        corner(buffer, pose, half, -half, z, 1.0F, 1.0F, tint, light, overlay);
+    }
+
+    private static void corner(com.mojang.blaze3d.vertex.VertexConsumer buffer, PoseStack pose, float x, float y, float z,
+            float u, float v, int tint, int light, int overlay) {
+        buffer.addVertex(pose.last().pose(), x, y, z).setColor(tint >> 16 & 0xFF, tint >> 8 & 0xFF, tint & 0xFF, 255)
+                .setUv(u, v).setOverlay(overlay).setLight(light).setNormal(pose.last(), 0.0F, 0.0F, -1.0F);
     }
 }

@@ -19,6 +19,10 @@ public interface VisHolder {
 
     boolean holds(ItemStack stack, AspectList cost, Player player, Spending why);
 
+    default float priceRate(ItemStack stack, Player player, Spending why, Holder<Aspect> aspect) {
+        return 1.0F;
+    }
+
     static VisHolder of(ItemStack stack) {
         return stack.getItem() instanceof VisHolder holder ? holder : null;
     }

@@ -82,10 +82,18 @@ public class GrowthLampBlockEntity extends BlockEntity implements EssentiaHolder
         if (there.is(Blocks.GRASS_BLOCK)) {
             return false;
         }
+        // original: a grown stem still has fruit to set; canes and cacti are tended at the root
+        if (there.getBlock() instanceof net.minecraft.world.level.block.StemBlock) {
+            return true;
+        }
+        if (there.is(Blocks.NETHER_WART)) {
+            return there.getValue(net.minecraft.world.level.block.NetherWartBlock.AGE)
+                    < net.minecraft.world.level.block.NetherWartBlock.MAX_AGE;
+        }
         if (there.getBlock() instanceof BonemealableBlock plant) {
             return plant.isValidBonemealTarget(level, at, there);
         }
-        return (there.is(Blocks.SUGAR_CANE) || there.is(Blocks.CACTUS)) && level.isEmptyBlock(at.above());
+        return (there.is(Blocks.SUGAR_CANE) || there.is(Blocks.CACTUS)) && !level.getBlockState(at.below()).is(there.getBlock());
     }
 
     @Override

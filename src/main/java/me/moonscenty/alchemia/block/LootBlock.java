@@ -46,6 +46,12 @@ public class LootBlock extends Block {
     @Override
     protected List<ItemStack> getDrops(BlockState state, LootParams.Builder params) {
         ServerLevel level = params.getLevel();
+        if (PorousStoneBlock.silky(params)) {
+            ItemStack whole = new ItemStack(this);
+            whole.set(net.minecraft.core.component.DataComponents.BLOCK_STATE,
+                    net.minecraft.world.item.component.BlockItemStateProperties.EMPTY.with(RARITY, state));
+            return List.of(whole);
+        }
         RandomSource random = level.getRandom();
         int rarity = state.getValue(RARITY);
         int count = 1 + rarity + random.nextInt(3);

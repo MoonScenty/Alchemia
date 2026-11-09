@@ -9,6 +9,7 @@ import me.moonscenty.alchemia.essentia.EssentiaHolder;
 import me.moonscenty.alchemia.registry.ModAspects;
 import me.moonscenty.alchemia.registry.ModBlockEntities;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -22,6 +23,8 @@ public class AlembicBlockEntity extends SyncedBlockEntity implements EssentiaHol
 
     private Holder<Aspect> holding;
     private int amount;
+    private Holder<Aspect> filter;
+    private Direction labelFace = Direction.DOWN;
 
     public AlembicBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.ALEMBIC.get(), pos, state);
@@ -37,6 +40,45 @@ public class AlembicBlockEntity extends SyncedBlockEntity implements EssentiaHol
 
     public boolean isEmpty() {
         return amount <= 0;
+    }
+
+    public Optional<Holder<Aspect>> filter() {
+        return Optional.ofNullable(filter);
+    }
+
+    public Direction labelFace() {
+        return labelFace;
+    }
+
+    public void label(Holder<Aspect> aspect, Direction face) {
+        filter = aspect;
+        labelFace = face;
+        changed();
+    }
+
+    public void unlabel() {
+        filter = null;
+        labelFace = Direction.DOWN;
+        changed();
+    }
+
+    public void draw(int points) {
+        amount = Math.max(0, amount - points);
+        if (amount == 0) {
+            holding = null;
+        }
+        changed();
+    }
+
+    // original: tubes may only draw from it, never through the label or the bottom
+    @Override
+    public boolean reachableFrom(Direction side) {
+        return side != labelFace && side != Direction.DOWN;
+    }
+
+    @Override
+    public boolean takesFrom(Direction side) {
+        return false;
     }
 
     @Override
@@ -59,7 +101,8 @@ public class AlembicBlockEntity extends SyncedBlockEntity implements EssentiaHol
 
     @Override
     public boolean wants(Holder<Aspect> aspect) {
-        return amount < CAPACITY && (holding == null || holding.value() == aspect.value());
+        return amount < CAPACITY && (filter == null || filter.value() == aspect.value())
+                && (holding == null || holding.value() == aspect.value());
     }
 
     @Override
@@ -118,6 +161,8 @@ public class AlembicBlockEntity extends SyncedBlockEntity implements EssentiaHol
         super.loadAdditional(tag, registries);
         amount = tag.getInt("amount");
         holding = tag.contains("aspect") ? ModAspects.byId(tag.getString("aspect")) : null;
+        filter = tag.contains("filter") ? ModAspects.byId(tag.getString("filter")) : null;
+        labelFace = Direction.from3DDataValue(tag.getByte("label_face"));
     }
 
     @Override
@@ -127,5 +172,9 @@ public class AlembicBlockEntity extends SyncedBlockEntity implements EssentiaHol
         if (holding != null) {
             tag.putString("aspect", holding.value().id().toString());
         }
+        if (filter != null) {
+            tag.putString("filter", filter.value().id().toString());
+        }
+        tag.putByte("label_face", (byte) labelFace.get3DDataValue());
     }
 }

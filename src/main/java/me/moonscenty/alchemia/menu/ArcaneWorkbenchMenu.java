@@ -33,6 +33,7 @@ public class ArcaneWorkbenchMenu extends AlchemiaMenu {
     public static final int FIRST_GRID = 1;
     public static final int SLOT_WAND = FIRST_GRID + ArcaneWorkbenchBlockEntity.GRID;
     private static final int BENCH_SLOTS = SLOT_WAND + 1;
+    private static final int PACK_ROWS = 27;
 
     private static final int GRID_X = 40;
     private static final int GRID_Y = 40;
@@ -189,7 +190,14 @@ public class ArcaneWorkbenchMenu extends AlchemiaMenu {
                 return ItemStack.EMPTY;
             }
             slot.onQuickCraft(held, copy);
-        } else if (!moveItemStackTo(held, FIRST_GRID, BENCH_SLOTS, false)) {
+        } else if (held.getItem() instanceof me.moonscenty.alchemia.item.WandItem
+                && !me.moonscenty.alchemia.item.WandItem.isStaff(held)) {
+            if (!moveItemStackTo(held, SLOT_WAND, BENCH_SLOTS, false)) {
+                return ItemStack.EMPTY;
+            }
+        } else if (!(index < BENCH_SLOTS + PACK_ROWS
+                ? moveItemStackTo(held, BENCH_SLOTS + PACK_ROWS, slots.size(), false)
+                : moveItemStackTo(held, BENCH_SLOTS, BENCH_SLOTS + PACK_ROWS, false))) {
             return ItemStack.EMPTY;
         }
 

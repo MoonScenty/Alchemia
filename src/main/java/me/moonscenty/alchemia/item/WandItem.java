@@ -141,6 +141,11 @@ public class WandItem extends Item implements VisHolder, Rechargeable {
         return true;
     }
 
+    @Override
+    public float priceRate(ItemStack stack, Player player, Spending why, Holder<Aspect> aspect) {
+        return rate(stack, player, why, aspect);
+    }
+
     private static float rate(ItemStack stack, Player player, Spending why, Holder<Aspect> aspect) {
         float rate = VisDiscount.rate(cap(stack).discount(), player, aspect);
         if (isSceptre(stack)) {

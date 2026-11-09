@@ -48,6 +48,16 @@ public class ArcaneWorkbenchChargerBlock extends BaseEntityBlock {
         return RenderShape.MODEL;
     }
 
+    // original: the charger is a handle for the bench beneath it
+    @Override
+    protected net.minecraft.world.InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos,
+            net.minecraft.world.entity.player.Player player, net.minecraft.world.phys.BlockHitResult hit) {
+        BlockState bench = level.getBlockState(pos.below());
+        return bench.getBlock() instanceof ArcaneWorkbenchBlock
+                ? bench.useWithoutItem(level, player, hit.withPosition(pos.below()))
+                : net.minecraft.world.InteractionResult.sidedSuccess(level.isClientSide);
+    }
+
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new ArcaneWorkbenchChargerBlockEntity(pos, state);

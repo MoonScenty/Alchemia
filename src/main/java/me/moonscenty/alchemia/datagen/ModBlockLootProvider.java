@@ -54,8 +54,8 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
             dropSelf(wood.sapling().get());
             add(wood.slab().get(), this::createSlabItemTable);
         }
-        add(ModBlocks.GREATWOOD.leaves().get(), block -> createLeavesDrops(block, ModBlocks.GREATWOOD.sapling().get(),
-                1 / 44F, 1 / 36F, 1 / 28F, 1 / 20F));
+        add(ModBlocks.GREATWOOD.leaves().get(), block -> leaves(block, ModBlocks.GREATWOOD.sapling().get(),
+                1 / 44F, 1 / 40F, 1 / 36F, 1 / 28F));
         add(ModBlocks.SILVERWOOD.leaves().get(), block -> createSilverwoodLeavesDrops(block, ModBlocks.SILVERWOOD.sapling().get()));
 
         for (StoneSet set : ModBlocks.STONE_SETS) {
@@ -228,11 +228,18 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
 
     private LootTable.Builder createSilverwoodLeavesDrops(Block leaves, Block sapling) {
         Holder<Enchantment> fortune = registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FORTUNE);
-        return createLeavesDrops(leaves, sapling, 1 / 200F, 1 / 160F, 1 / 120F, 1 / 80F)
+        return leaves(leaves, sapling, 1 / 200F, 1 / 196F, 1 / 192F, 1 / 184F)
                 .withPool(LootPool.lootPool()
                         .when(HAS_SHEARS.or(hasSilkTouch()).invert())
                         .add(applyExplosionCondition(leaves, LootItem.lootTableItem(ModItems.QUICKSILVER_DROP.get()))
-                                .when(BonusLevelTableCondition.bonusLevelFlatChance(fortune, 1 / 100F, 1 / 85F, 1 / 70F, 1 / 50F))));
+                                .when(BonusLevelTableCondition.bonusLevelFlatChance(fortune, 1 / 300F, 1 / 270F, 1 / 240F, 1 / 180F))));
+    }
+
+    // original's leaves give no sticks
+    private LootTable.Builder leaves(Block leaves, Block sapling, float... chances) {
+        Holder<Enchantment> fortune = registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FORTUNE);
+        return createSilkTouchOrShearsDispatchTable(leaves, applyExplosionCondition(leaves, LootItem.lootTableItem(sapling))
+                .when(BonusLevelTableCondition.bonusLevelFlatChance(fortune, chances)));
     }
 
     private LootTable.Builder createCrystalDrops(Block block, Item shard) {

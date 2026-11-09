@@ -14,7 +14,11 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemUtils;
+import net.minecraft.world.item.alchemy.PotionContents;
+import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -35,6 +39,18 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class CrucibleBlock extends BaseEntityBlock {
+    private static final int BOTTLE = 250;
+
+    @Override
+    protected boolean hasAnalogOutputSignal(BlockState state) {
+        return true;
+    }
+
+    @Override
+    protected int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos) {
+        return level.getBlockEntity(pos) instanceof CrucibleBlockEntity crucible
+                ? EssentiaSignal.of(crucible.dissolved().total(), CrucibleBlockEntity.CAPACITY) : 0;
+    }
     public static final IntegerProperty LEVEL = IntegerProperty.create("level", 0, 3);
     public static final int FULL = 3;
 
@@ -98,12 +114,17 @@ public class CrucibleBlock extends BaseEntityBlock {
             return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         }
 
-        if (held.is(Items.WATER_BUCKET) && filled < FULL) {
+        // original: water is never melted, even when the pot is too full to take it
+        boolean bottle = held.is(Items.POTION)
+                && held.getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY).is(Potions.WATER);
+        if (held.is(Items.WATER_BUCKET) || bottle) {
+            if (crucible.water() >= CrucibleBlockEntity.FULL) {
+                return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+            }
             if (!level.isClientSide) {
-                crucible.fill();
-                if (!player.getAbilities().instabuild) {
-                    player.setItemInHand(hand, new ItemStack(Items.BUCKET));
-                }
+                crucible.pour(bottle ? BOTTLE : CrucibleBlockEntity.FULL, true);
+                player.setItemInHand(hand, ItemUtils.createFilledResult(held, player,
+                        new ItemStack(bottle ? Items.GLASS_BOTTLE : Items.BUCKET)));
                 level.playSound(null, pos, SoundEvents.GENERIC_SWIM, SoundSource.BLOCKS, 0.33F,
                         1.0F + (level.random.nextFloat() - level.random.nextFloat()) * 0.3F);
             }

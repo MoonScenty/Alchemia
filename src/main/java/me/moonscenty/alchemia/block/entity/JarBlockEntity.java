@@ -62,6 +62,17 @@ public class JarBlockEntity extends SyncedBlockEntity implements EssentiaHolder 
         changed();
     }
 
+    public void pourOut() {
+        if (level instanceof ServerLevel served && amount > 0) {
+            AuraHandler.add(served, worldPosition, ModAspects.FLUX, amount);
+        }
+        amount = 0;
+        if (label == null) {
+            holding = null;
+        }
+        changed();
+    }
+
     public void brace(boolean fitted) {
         braced = fitted;
         changed();

@@ -21,6 +21,11 @@ public class TubeTests {
     private static final String TEMPLATE = "empty_32x40x32";
     private static final BlockPos START = new BlockPos(2, 1, 2);
 
+    private static JarBlockEntity sink(GameTestHelper helper, BlockPos lastTube) {
+        helper.setBlock(lastTube.below(), ModBlocks.JAR.get());
+        return (JarBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(lastTube.below()));
+    }
+
     private static AlembicBlockEntity alembic(GameTestHelper helper, BlockPos at) {
         helper.setBlock(at, ModBlocks.ALEMBIC.get());
         return (AlembicBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(at));
@@ -64,17 +69,17 @@ public class TubeTests {
     public static void itCarriesAlongTheRun(GameTestHelper helper) {
         AlembicBlockEntity from = alembic(helper, START);
         pipe(helper, START.east(), 4);
-        AlembicBlockEntity to = alembic(helper, START.east(5));
+        JarBlockEntity to = sink(helper, START.east(4));
 
         for (int filled = 0; filled < 6; filled++) {
             from.accept(ModAspects.METAL);
         }
         helper.assertValueEqual(from.amount(), 6, "the first vessel was filled");
-        helper.assertTrue(to.isEmpty(), "and the far one was not");
+        helper.assertTrue(to.amount() == 0, "and the far one was not");
 
         run(helper, START.east(4), 60);
 
-        helper.assertTrue(!to.isEmpty(), "something reached the far end");
+        helper.assertTrue(to.amount() > 0, "something reached the far end");
         helper.assertValueEqual(to.holding().orElseThrow().value(), ModAspects.METAL.value(),
                 "and it is what set off");
         helper.assertValueEqual(from.amount() + to.amount(), 6, "nothing was made or lost on the way");

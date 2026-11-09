@@ -13,7 +13,9 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
+import me.moonscenty.alchemia.aspect.Aspects;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeType;
 
 public class EssentiaSmelterMenu extends AlchemiaMenu {
     private static final int SMELTER_SLOTS = 2;
@@ -24,6 +26,8 @@ public class EssentiaSmelterMenu extends AlchemiaMenu {
     private static final int FUEL_Y = 48;
     private static final int PACK_X = 8;
     private static final int PACK_Y = 84;
+
+    private static final int PACK_ROWS = 27;
 
     private final Container smelter;
     private final ContainerData readings;
@@ -93,7 +97,34 @@ public class EssentiaSmelterMenu extends AlchemiaMenu {
 
     @Override
     public ItemStack quickMoveStack(Player player, int index) {
-        return quickMoveBetween(index, SMELTER_SLOTS);
+        Slot slot = slots.get(index);
+        if (!slot.hasItem()) {
+            return ItemStack.EMPTY;
+        }
+        ItemStack held = slot.getItem();
+        ItemStack copy = held.copy();
+        boolean moved;
+        if (index < SMELTER_SLOTS) {
+            moved = moveItemStackTo(held, SMELTER_SLOTS, slots.size(), false);
+        } else if (held.getBurnTime(RecipeType.SMELTING) > 0) {
+            moved = moveItemStackTo(held, EssentiaSmelterBlockEntity.SLOT_FUEL, EssentiaSmelterBlockEntity.SLOT_FUEL + 1, false)
+                    || moveItemStackTo(held, EssentiaSmelterBlockEntity.SLOT_INPUT, EssentiaSmelterBlockEntity.SLOT_INPUT + 1, false);
+        } else if (!Aspects.of(held).isEmpty()) {
+            moved = moveItemStackTo(held, EssentiaSmelterBlockEntity.SLOT_INPUT, EssentiaSmelterBlockEntity.SLOT_INPUT + 1, false);
+        } else if (index < SMELTER_SLOTS + PACK_ROWS) {
+            moved = moveItemStackTo(held, SMELTER_SLOTS + PACK_ROWS, slots.size(), false);
+        } else {
+            moved = moveItemStackTo(held, SMELTER_SLOTS, SMELTER_SLOTS + PACK_ROWS, false);
+        }
+        if (!moved) {
+            return ItemStack.EMPTY;
+        }
+        if (held.isEmpty()) {
+            slot.set(ItemStack.EMPTY);
+        } else {
+            slot.setChanged();
+        }
+        return copy;
     }
 
     @Override

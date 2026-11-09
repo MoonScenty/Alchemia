@@ -6,6 +6,20 @@
     "alchemia:alchemical_construct",
     "alchemia:advanced_alchemical_construct",
     "alchemia:amber_block",
-    "alchemia:amber_bricks"
+    "alchemia:amber_bricks",
+    "alchemia:arcane_stone",
+    "alchemia:arcane_stone_bricks",
+    "alchemia:ancient_stone",
+    "alchemia:eldritch_stone",
+    "alchemia:ancient_rock",
+    "alchemia:ancient_tile",
+    "alchemia:ancient_doorway",
+    "alchemia:glyphed_stone",
+    "alchemia:crusted_stone",
+    "alchemia:glowing_crusted_stone",
+    "alchemia:porous_stone",
+    "alchemia:infusion_speed_stone",
+    "alchemia:infusion_cost_stone",
+    "alchemia:ancient_bedrock"
   ]
 }

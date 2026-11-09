@@ -28,6 +28,14 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import java.util.Optional;
+import me.moonscenty.alchemia.aspect.Aspect;
+import me.moonscenty.alchemia.item.PhialItem;
+import me.moonscenty.alchemia.registry.ModItems;
+import net.minecraft.core.Holder;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -111,6 +119,36 @@ public class AlembicBlock extends BaseEntityBlock {
     }
 
     @Override
+    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
+            Player player, InteractionHand hand, BlockHitResult hit) {
+        if (!stack.is(ModItems.JAR_LABEL.get()) || !hit.getDirection().getAxis().isHorizontal()
+                || !(level.getBlockEntity(pos) instanceof AlembicBlockEntity alembic) || alembic.filter().isPresent()) {
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        }
+        Optional<Holder<Aspect>> word = alembic.amount() > 0 ? alembic.holding() : PhialItem.inside(stack);
+        if (word.isEmpty()) {
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        }
+        if (!level.isClientSide) {
+            alembic.label(word.get(), hit.getDirection());
+            stack.consume(1, player);
+            level.playSound(null, pos, ModSounds.PAGE.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
+        }
+        return ItemInteractionResult.sidedSuccess(level.isClientSide);
+    }
+
+    @Override
+    protected boolean hasAnalogOutputSignal(BlockState state) {
+        return true;
+    }
+
+    @Override
+    protected int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos) {
+        return level.getBlockEntity(pos) instanceof AlembicBlockEntity alembic
+                ? EssentiaSignal.of(alembic.amount(), AlembicBlockEntity.CAPACITY) : 0;
+    }
+
+    @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player,
             BlockHitResult hit) {
         if (!(level.getBlockEntity(pos) instanceof AlembicBlockEntity alembic)) {
@@ -123,6 +161,12 @@ public class AlembicBlock extends BaseEntityBlock {
         if (player.isShiftKeyDown()) {
             if (level.isClientSide) {
                 return InteractionResult.SUCCESS;
+            }
+            if (alembic.filter().isPresent() && hit.getDirection() == alembic.labelFace()) {
+                popResourceFromFace(level, pos, hit.getDirection(), new ItemStack(ModItems.JAR_LABEL.get()));
+                alembic.unlabel();
+                level.playSound(null, pos, ModSounds.PAGE.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
+                return InteractionResult.CONSUME;
             }
             level.playSound(null, pos, ModSounds.JAR.get(), SoundSource.BLOCKS, 0.4F, 1.0F);
             level.playSound(null, pos, SoundEvents.GENERIC_SWIM, SoundSource.BLOCKS, 0.5F,

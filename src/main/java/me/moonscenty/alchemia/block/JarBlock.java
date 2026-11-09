@@ -15,6 +15,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -104,10 +105,9 @@ public class JarBlock extends BaseEntityBlock {
             return ItemInteractionResult.sidedSuccess(level.isClientSide);
         }
         if (stack.is(ModItems.JAR_LABEL.get()) && jar.label().isEmpty()) {
-            Optional<Holder<Aspect>> word = PhialItem.inside(stack).or(jar::holding);
-            boolean honest = word.isPresent() && (jar.amount() == 0
-                    || jar.holding().orElseThrow().value() == word.get().value());
-            if (!honest) {
+            // original: what is inside decides; the label's own word only counts on an empty jar
+            Optional<Holder<Aspect>> word = jar.amount() > 0 ? jar.holding() : PhialItem.inside(stack);
+            if (word.isEmpty()) {
                 return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
             }
             if (!level.isClientSide) {
@@ -135,10 +135,17 @@ public class JarBlock extends BaseEntityBlock {
         if (level.isClientSide) {
             return InteractionResult.SUCCESS;
         }
-        if (player.isSecondaryUseActive() && jar.label().isPresent()) {
-            popResource(level, pos, labelFor(jar.label().get()));
-            jar.label(null);
-            level.playSound(null, pos, ModSounds.PAGE.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
+        if (player.isSecondaryUseActive()) {
+            if (jar.label().isPresent() && hit.getDirection() == state.getValue(FACING)) {
+                popResourceFromFace(level, pos, hit.getDirection(), new ItemStack(ModItems.JAR_LABEL.get()));
+                jar.label(null);
+                level.playSound(null, pos, ModSounds.PAGE.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
+            } else {
+                level.playSound(null, pos, ModSounds.JAR.get(), SoundSource.BLOCKS, 0.4F, 1.0F);
+                level.playSound(null, pos, SoundEvents.GENERIC_SWIM, SoundSource.BLOCKS, 0.5F,
+                        1.0F + (level.random.nextFloat() - level.random.nextFloat()) * 0.3F);
+                jar.pourOut();
+            }
             return InteractionResult.CONSUME;
         }
         player.displayClientMessage(jar.holding()
@@ -147,6 +154,17 @@ public class JarBlock extends BaseEntityBlock {
                 .orElse(Component.translatable("block.alchemia.jar.empty"))
                 .copy().withStyle(ChatFormatting.GRAY), true);
         return InteractionResult.CONSUME;
+    }
+
+    @Override
+    protected boolean hasAnalogOutputSignal(BlockState state) {
+        return true;
+    }
+
+    @Override
+    protected int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos) {
+        return level.getBlockEntity(pos) instanceof JarBlockEntity jar
+                ? EssentiaSignal.of(jar.amount(), JarBlockEntity.CAPACITY) : 0;
     }
 
     public static ItemStack labelFor(Holder<Aspect> aspect) {

@@ -3,6 +3,7 @@ package me.moonscenty.alchemia.gametest;
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.block.BellowsBlock;
 import me.moonscenty.alchemia.block.entity.AlembicBlockEntity;
+import me.moonscenty.alchemia.block.entity.JarBlockEntity;
 import me.moonscenty.alchemia.block.entity.BufferTubeBlockEntity;
 import me.moonscenty.alchemia.block.entity.TubeBlockEntity;
 import me.moonscenty.alchemia.item.WandItem;
@@ -26,6 +27,11 @@ import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 public class TubeWandTests {
     private static final String TEMPLATE = "empty_32x40x32";
     private static final BlockPos START = new BlockPos(2, 1, 2);
+
+    private static JarBlockEntity sink(GameTestHelper helper, BlockPos lastTube) {
+        helper.setBlock(lastTube.below(), ModBlocks.JAR.get());
+        return (JarBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(lastTube.below()));
+    }
 
     private static AlembicBlockEntity alembic(GameTestHelper helper, BlockPos at, int water) {
         helper.setBlock(at, ModBlocks.ALEMBIC.get());
@@ -63,19 +69,19 @@ public class TubeWandTests {
         AlembicBlockEntity from = alembic(helper, START, 6);
         helper.setBlock(START.east(), ModBlocks.TUBE.get());
         helper.setBlock(START.east(2), ModBlocks.TUBE.get());
-        AlembicBlockEntity to = alembic(helper, START.east(3), 0);
+        JarBlockEntity to = sink(helper, START.east(2));
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
 
         wandOn(helper, player, START.east(), Direction.EAST);
         helper.assertTrue(isShut(helper, START.east(), Direction.EAST), "the side clicked is shut");
         helper.assertTrue(isShut(helper, START.east(2), Direction.WEST), "and so is the far end of the joint");
         run(helper, START.east(2), 60);
-        helper.assertTrue(to.isEmpty(), "nothing gets through a shut joint");
+        helper.assertTrue(to.amount() == 0, "nothing gets through a shut joint");
 
         wandOn(helper, player, START.east(), Direction.EAST);
         helper.assertTrue(!isShut(helper, START.east(2), Direction.WEST), "a second click opens it again");
         run(helper, START.east(2), 60);
-        helper.assertTrue(!to.isEmpty(), "and then it carries");
+        helper.assertTrue(to.amount() > 0, "and then it carries");
         helper.assertValueEqual(from.amount() + to.amount(), 6, "nothing was made or lost");
         helper.succeed();
     }

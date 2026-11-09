@@ -5,6 +5,7 @@ import me.moonscenty.alchemia.block.OnewayTubeBlock;
 import me.moonscenty.alchemia.block.TubeBlock;
 import me.moonscenty.alchemia.block.ValveTubeBlock;
 import me.moonscenty.alchemia.block.entity.AlembicBlockEntity;
+import me.moonscenty.alchemia.block.entity.JarBlockEntity;
 import me.moonscenty.alchemia.block.entity.BufferTubeBlockEntity;
 import me.moonscenty.alchemia.block.entity.FilterTubeBlockEntity;
 import me.moonscenty.alchemia.block.entity.TubeBlockEntity;
@@ -26,6 +27,11 @@ public class TubeKindTests {
     private static final String TEMPLATE = "empty_32x40x32";
     private static final BlockPos START = new BlockPos(2, 1, 2);
     private static final int TURN = 11;
+
+    private static JarBlockEntity sink(GameTestHelper helper, BlockPos lastTube) {
+        helper.setBlock(lastTube.below(), ModBlocks.JAR.get());
+        return (JarBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(lastTube.below()));
+    }
 
     private static AlembicBlockEntity alembic(GameTestHelper helper, BlockPos at) {
         helper.setBlock(at, ModBlocks.ALEMBIC.get());
@@ -56,17 +62,17 @@ public class TubeKindTests {
     public static void aShutValveStopsTheRun(GameTestHelper helper) {
         AlembicBlockEntity from = alembic(helper, START);
         pipe(helper, START.east(), ModBlocks.TUBE.get(), ModBlocks.TUBE_VALVE.get(), ModBlocks.TUBE.get());
-        AlembicBlockEntity to = alembic(helper, START.east(4));
+        JarBlockEntity to = sink(helper, START.east(3));
         fill(from, 4);
 
         BlockPos valve = START.east(2);
         helper.setBlock(valve, helper.getBlockState(valve).setValue(ValveTubeBlock.OPEN, false));
         run(helper, START.east(3), 4 * TURN);
-        helper.assertTrue(to.isEmpty(), "nothing gets past a shut valve");
+        helper.assertTrue(to.amount() == 0, "nothing gets past a shut valve");
 
         helper.setBlock(valve, helper.getBlockState(valve).setValue(ValveTubeBlock.OPEN, true));
         run(helper, START.east(3), 4 * TURN);
-        helper.assertTrue(!to.isEmpty(), "and it flows again once it is opened");
+        helper.assertTrue(to.amount() > 0, "and it flows again once it is opened");
         helper.succeed();
     }
 
@@ -105,18 +111,18 @@ public class TubeKindTests {
     public static void aOneWayCarriesOneWay(GameTestHelper helper) {
         AlembicBlockEntity from = alembic(helper, START);
         pipe(helper, START.east(), ModBlocks.TUBE.get(), ModBlocks.TUBE_ONEWAY.get(), ModBlocks.TUBE.get());
-        AlembicBlockEntity to = alembic(helper, START.east(4));
+        JarBlockEntity to = sink(helper, START.east(3));
         fill(from, 4);
 
         BlockPos oneway = START.east(2);
         BlockState against = helper.getBlockState(oneway).setValue(OnewayTubeBlock.FACING, Direction.WEST);
         helper.setBlock(oneway, against);
         run(helper, START.east(3), 4 * TURN);
-        helper.assertTrue(to.isEmpty(), "nothing goes against a one-way");
+        helper.assertTrue(to.amount() == 0, "nothing goes against a one-way");
 
         helper.setBlock(oneway, against.setValue(OnewayTubeBlock.FACING, Direction.EAST));
         run(helper, START.east(3), 4 * TURN);
-        helper.assertTrue(!to.isEmpty(), "and it flows the way the length points");
+        helper.assertTrue(to.amount() > 0, "and it flows the way the length points");
         helper.succeed();
     }
 
@@ -124,18 +130,18 @@ public class TubeKindTests {
     public static void aFilterLetsOneAspectBy(GameTestHelper helper) {
         AlembicBlockEntity from = alembic(helper, START);
         pipe(helper, START.east(), ModBlocks.TUBE.get(), ModBlocks.TUBE_FILTER.get(), ModBlocks.TUBE.get());
-        AlembicBlockEntity to = alembic(helper, START.east(4));
+        JarBlockEntity to = sink(helper, START.east(3));
         fill(from, 4);
 
         FilterTubeBlockEntity filter = (FilterTubeBlockEntity) helper.getLevel()
                 .getBlockEntity(helper.absolutePos(START.east(2)));
         filter.only(ModAspects.FIRE);
         run(helper, START.east(3), 4 * TURN);
-        helper.assertTrue(to.isEmpty(), "a filter set to one thing turns everything else back");
+        helper.assertTrue(to.amount() == 0, "a filter set to one thing turns everything else back");
 
         filter.only(ModAspects.METAL);
         run(helper, START.east(3), 4 * TURN);
-        helper.assertTrue(!to.isEmpty(), "and passes what it was set to");
+        helper.assertTrue(to.amount() > 0, "and passes what it was set to");
         helper.succeed();
     }
 
@@ -143,7 +149,7 @@ public class TubeKindTests {
     public static void twoFiltersThatDisagreePassNothing(GameTestHelper helper) {
         AlembicBlockEntity from = alembic(helper, START);
         pipe(helper, START.east(), ModBlocks.TUBE_FILTER.get(), ModBlocks.TUBE_FILTER.get(), ModBlocks.TUBE.get());
-        AlembicBlockEntity to = alembic(helper, START.east(4));
+        JarBlockEntity to = sink(helper, START.east(3));
         fill(from, 4);
 
         ((FilterTubeBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(START.east())))
@@ -152,7 +158,7 @@ public class TubeKindTests {
                 .only(ModAspects.FIRE);
 
         run(helper, START.east(3), 4 * TURN);
-        helper.assertTrue(to.isEmpty(), "what one lets by the other turns back");
+        helper.assertTrue(to.amount() == 0, "what one lets by the other turns back");
         helper.succeed();
     }
 
@@ -160,7 +166,7 @@ public class TubeKindTests {
     public static void aRestrictHalvesTheFlow(GameTestHelper helper) {
         AlembicBlockEntity from = alembic(helper, START);
         pipe(helper, START.east(), ModBlocks.TUBE.get(), ModBlocks.TUBE_RESTRICT.get(), ModBlocks.TUBE.get());
-        AlembicBlockEntity to = alembic(helper, START.east(4));
+        JarBlockEntity to = sink(helper, START.east(3));
         fill(from, 10);
 
         run(helper, START.east(3), 10 * TURN);
@@ -185,7 +191,7 @@ public class TubeKindTests {
     @GameTest(template = TEMPLATE)
     public static void aBufferGivesItBack(GameTestHelper helper) {
         pipe(helper, START, ModBlocks.TUBE_BUFFER.get(), ModBlocks.TUBE.get());
-        AlembicBlockEntity to = alembic(helper, START.east(2));
+        JarBlockEntity to = sink(helper, START.east(1));
 
         BufferTubeBlockEntity buffer = (BufferTubeBlockEntity) helper.getLevel()
                 .getBlockEntity(helper.absolutePos(START));

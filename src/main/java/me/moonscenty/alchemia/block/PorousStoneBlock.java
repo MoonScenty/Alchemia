@@ -26,6 +26,9 @@ public class PorousStoneBlock extends Block {
 
     @Override
     protected List<ItemStack> getDrops(BlockState state, LootParams.Builder params) {
+        if (silky(params)) {
+            return List.of(new ItemStack(this));
+        }
         int fortune = 0;
         ItemStack tool = params.getOptionalParameter(LootContextParams.TOOL);
         if (tool != null && !tool.isEmpty()) {
@@ -36,6 +39,12 @@ public class PorousStoneBlock extends Block {
         List<ItemStack> drops = new ArrayList<>();
         drops.add(random.nextInt(15) + fortune > 13 ? caught(random) : new ItemStack(Items.COBBLESTONE));
         return drops;
+    }
+
+    static boolean silky(LootParams.Builder params) {
+        ItemStack tool = params.getOptionalParameter(LootContextParams.TOOL);
+        return tool != null && !tool.isEmpty() && EnchantmentHelper.getItemEnchantmentLevel(params.getLevel().registryAccess()
+                .registryOrThrow(Registries.ENCHANTMENT).getHolderOrThrow(Enchantments.SILK_TOUCH), tool) > 0;
     }
 
     // original's weights

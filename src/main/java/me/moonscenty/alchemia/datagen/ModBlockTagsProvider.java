@@ -122,6 +122,11 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         tag(ModTags.Blocks.STORAGE_BLOCKS_AMBER).add(ModBlocks.AMBER_BLOCK.get());
         tag(Tags.Blocks.STORAGE_BLOCKS).addTag(ModTags.Blocks.STORAGE_BLOCKS_AMBER);
         tag(BlockTags.BEACON_BASE_BLOCKS).add(ModBlocks.AMBER_BLOCK.get(), ModBlocks.AMBER_BRICKS.get());
+        tag(BlockTags.BEACON_BASE_BLOCKS).add(ModBlocks.ARCANE_STONE.block().get(), ModBlocks.ARCANE_STONE_BRICKS.block().get(),
+                ModBlocks.ANCIENT_STONE.block().get(), ModBlocks.ELDRITCH_STONE.block().get(), ModBlocks.ANCIENT_ROCK.get(),
+                ModBlocks.ANCIENT_TILE.get(), ModBlocks.ANCIENT_DOORWAY.get(), ModBlocks.GLYPHED_STONE.get(),
+                ModBlocks.CRUSTED_STONE.get(), ModBlocks.GLOWING_CRUSTED_STONE.get(), ModBlocks.POROUS_STONE.get(),
+                ModBlocks.INFUSION_SPEED_STONE.get(), ModBlocks.INFUSION_COST_STONE.get(), ModBlocks.ANCIENT_BEDROCK.get());
         tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.AMBER_BLOCK.get(), ModBlocks.AMBER_BRICKS.get());
 
         tag(ModTags.Blocks.ELDRITCH_STONEWORK).add(ModBlocks.ELDRITCH_ALTAR.get(), ModBlocks.ELDRITCH_CAP.get(),

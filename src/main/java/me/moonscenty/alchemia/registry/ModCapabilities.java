@@ -21,6 +21,8 @@ public final class ModCapabilities {
                 (crucible, side) -> new CrucibleWater(crucible));
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, ModBlockEntities.RECHARGE_PEDESTAL.get(),
                 (pedestal, side) -> new net.neoforged.neoforge.items.wrapper.InvWrapper(pedestal));
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, ModBlockEntities.ARCANE_PEDESTAL.get(),
+                (pedestal, side) -> new OnPedestal(pedestal));
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, ModBlockEntities.AURA_TOTEM.get(),
                 (totem, side) -> new net.neoforged.neoforge.items.wrapper.InvWrapper(totem));
         event.registerBlock(Capabilities.ItemHandler.BLOCK, (level, pos, state, found, side) -> {
@@ -87,6 +89,53 @@ public final class ModCapabilities {
         @Override
         public FluidStack drain(int maxDrain, FluidAction action) {
             return FluidStack.EMPTY;
+        }
+    }
+
+    private record OnPedestal(me.moonscenty.alchemia.block.entity.ArcanePedestalBlockEntity pedestal)
+            implements net.neoforged.neoforge.items.IItemHandler {
+        @Override
+        public int getSlots() {
+            return 1;
+        }
+
+        @Override
+        public net.minecraft.world.item.ItemStack getStackInSlot(int slot) {
+            return pedestal.held();
+        }
+
+        @Override
+        public net.minecraft.world.item.ItemStack insertItem(int slot, net.minecraft.world.item.ItemStack stack,
+                boolean simulate) {
+            if (stack.isEmpty() || !pedestal.held().isEmpty()) {
+                return stack;
+            }
+            if (!simulate) {
+                pedestal.hold(stack.copyWithCount(1));
+            }
+            return stack.copyWithCount(stack.getCount() - 1);
+        }
+
+        @Override
+        public net.minecraft.world.item.ItemStack extractItem(int slot, int amount, boolean simulate) {
+            net.minecraft.world.item.ItemStack held = pedestal.held();
+            if (amount <= 0 || held.isEmpty()) {
+                return net.minecraft.world.item.ItemStack.EMPTY;
+            }
+            if (!simulate) {
+                pedestal.hold(net.minecraft.world.item.ItemStack.EMPTY);
+            }
+            return held.copy();
+        }
+
+        @Override
+        public int getSlotLimit(int slot) {
+            return 1;
+        }
+
+        @Override
+        public boolean isItemValid(int slot, net.minecraft.world.item.ItemStack stack) {
+            return true;
         }
     }
 

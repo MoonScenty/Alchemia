@@ -18,6 +18,16 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 
 public class BufferTubeBlock extends TubeBlock {
+    @Override
+    protected boolean hasAnalogOutputSignal(BlockState state) {
+        return true;
+    }
+
+    @Override
+    protected int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos) {
+        return level.getBlockEntity(pos) instanceof me.moonscenty.alchemia.block.entity.BufferTubeBlockEntity buffer
+                ? EssentiaSignal.of(buffer.held().total(), me.moonscenty.alchemia.block.entity.BufferTubeBlockEntity.CAPACITY) : 0;
+    }
     public static final MapCodec<BufferTubeBlock> CODEC = simpleCodec(BufferTubeBlock::new);
 
     public BufferTubeBlock(Properties properties) {
