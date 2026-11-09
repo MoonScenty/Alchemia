@@ -114,6 +114,7 @@ public class ConstructTests {
         helper.assertTrue(turret.worthShooting(cow), "until it is told to mind animals");
         turret.mind(Autocaster.PLAYERS, true);
         helper.assertFalse(turret.worthShooting(owner), "never its owner unless told to mind friends");
+        turret.mind(Autocaster.PLAYERS, true);
         turret.mind(Autocaster.FRIENDS, true);
         helper.assertTrue(turret.worthShooting(owner), "and then even them");
         helper.succeed();

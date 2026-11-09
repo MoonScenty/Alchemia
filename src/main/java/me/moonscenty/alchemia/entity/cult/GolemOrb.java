@@ -19,7 +19,6 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
-// Once batted away it turns back for its target, as the original's did.
 public class GolemOrb extends ThrowableProjectile {
     private static final EntityDataAccessor<Integer> TARGET = SynchedEntityData.defineId(GolemOrb.class,
             EntityDataSerializers.INT);
@@ -114,15 +113,5 @@ public class GolemOrb extends ThrowableProjectile {
         setDeltaMovement(striker.getLookAngle().scale(0.9));
         playSound(ModSounds.ZAP.get(), 1.0F, 1.0F + (random.nextFloat() - random.nextFloat()) * 0.2F);
         return true;
-    }
-
-    @Override
-    public boolean isPickable() {
-        return true;
-    }
-
-    @Override
-    public float getPickRadius() {
-        return 1.0F;
     }
 }

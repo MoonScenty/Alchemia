@@ -1,7 +1,5 @@
 package me.moonscenty.alchemia.entity;
 
-import java.util.Objects;
-
 import me.moonscenty.alchemia.aspect.Aspect;
 import me.moonscenty.alchemia.aspect.AspectList;
 import me.moonscenty.alchemia.aura.AuraHandler;
@@ -24,16 +22,15 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.player.Inventory;
@@ -65,6 +62,10 @@ public class Autocaster extends ConstructWithSlot {
     private static final double SLOWER_BY_HAND = 1.33;
     // focus cooldowns are in milliseconds
     private static final int A_TICK = 50;
+    // original's values: radians across, and degrees a tick
+    private static final double AIM_CONE = 0.3;
+    private static final float TURNS = 10.0F;
+    private static final float TILTS = 20.0F;
     private AspectList vis = AspectList.EMPTY;
     private int waits = 10;
     // counts shots in a burst, which per-tick foci scale by
@@ -90,6 +91,8 @@ public class Autocaster extends ConstructWithSlot {
 
     @Override
     protected void registerGoals() {
+        goalSelector.addGoal(3, new LookAtPlayerGoal(this, Player.class, 12.0F));
+        goalSelector.addGoal(4, new RandomLookAroundGoal(this));
         targetSelector.addGoal(1, new HurtByTargetGoal(this));
         targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, LivingEntity.class, LOOKS_ROUND,
                 true, false, this::worthShooting));
@@ -118,7 +121,7 @@ public class Autocaster extends ConstructWithSlot {
         super.customServerAiStep();
         LivingEntity mark = getTarget();
         if (mark != null) {
-            getLookControl().setLookAt(mark, getHeadRotSpeed(), getMaxHeadXRot());
+            getLookControl().setLookAt(mark, TURNS, TILTS);
         }
     }
 
@@ -128,6 +131,7 @@ public class Autocaster extends ConstructWithSlot {
         if (level().isClientSide) {
             return;
         }
+        forgetStrangers();
         if (tickCount % DRAWS_EVERY == 0) {
             drawBreath();
         }
@@ -172,7 +176,7 @@ public class Autocaster extends ConstructWithSlot {
         }
         Focus.Turret turret = focus.turret();
         float far = distanceTo(mark);
-        if (turret == null || far > turret.range() || !getSensing().hasLineOfSight(mark)) {
+        if (turret == null || far > turret.range() || !aimedAt(mark, turret.range())) {
             return;
         }
         if (!holds(focus.cost())) {
@@ -195,6 +199,13 @@ public class Autocaster extends ConstructWithSlot {
         }
         shots++;
         shotLastTick = true;
+    }
+
+    public boolean aimedAt(LivingEntity mark, float range) {
+        Vec3 toMark = new Vec3(mark.getX(), mark.getBoundingBox().minY + mark.getBbHeight() / 2.0, mark.getZ())
+                .subtract(getEyePosition());
+        double along = toMark.dot(getViewVector(1.0F));
+        return along > 0.0 && along / toMark.length() > Math.cos(AIM_CONE / 2.0) && along < range;
     }
 
     // spells read the caster's wand, so make one up
@@ -239,22 +250,13 @@ public class Autocaster extends ConstructWithSlot {
     }
 
     @Override
-    public boolean worthShooting(LivingEntity other) {
-        if (other instanceof Autocaster theirs) {
-            return minds(FRIENDS) && !Objects.equals(theirs.getOwnerUUID(), getOwnerUUID());
-        }
-        return super.worthShooting(other);
+    public boolean canAttack(LivingEntity target) {
+        return mindsKind(target) && super.canAttack(target);
     }
 
     @Override
     protected boolean letsHandle(Player player, InteractionHand hand) {
         return false;
-    }
-
-    @Override
-    protected void takeDown(Player player, InteractionHand hand) {
-        foldUp();
-        player.swing(hand);
     }
 
     @Override
@@ -299,23 +301,6 @@ public class Autocaster extends ConstructWithSlot {
 
     public void setFacing(Direction face) {
         entityData.set(FACING, face);
-    }
-
-    // the game's own sounds, not the constructs' clack
-
-    @Override
-    protected SoundEvent getAmbientSound() {
-        return null;
-    }
-
-    @Override
-    protected SoundEvent getHurtSound(DamageSource source) {
-        return SoundEvents.GENERIC_HURT;
-    }
-
-    @Override
-    protected SoundEvent getDeathSound() {
-        return SoundEvents.GENERIC_DEATH;
     }
 
     public FocusItem fitted() {

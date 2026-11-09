@@ -25,6 +25,8 @@ public class TaintedChicken extends TaintedBeast {
 
     public TaintedChicken(EntityType<? extends TaintedChicken> type, Level level) {
         super(type, level);
+        setPathfindingMalus(net.minecraft.world.level.pathfinder.PathType.WATER,
+                net.minecraft.world.level.pathfinder.PathType.WATER.getMalus());
     }
 
     public TaintedChicken(Level level) {

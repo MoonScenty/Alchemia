@@ -186,7 +186,7 @@ public class EldritchGuardian extends Monster implements RangedAttackMob, Eldrit
             me.moonscenty.alchemia.client.EldritchEffects.smoke(this);
             return;
         }
-        if ((tickCount == 1 || tickCount % 100 == 0) && level().getDifficulty() != Difficulty.EASY) {
+        if (!warded() && (tickCount == 1 || tickCount % 100 == 0) && level().getDifficulty() != Difficulty.EASY) {
             double reach = level().getDifficulty() == Difficulty.HARD ? 24.0 : 16.0;
             for (Player player : level().players()) {
                 if (player instanceof ServerPlayer served && player.isAlive()
@@ -195,6 +195,19 @@ public class EldritchGuardian extends Monster implements RangedAttackMob, Eldrit
                 }
             }
         }
+    }
+
+    // original's: empty-handed and burning, its blows set alight
+    @Override
+    public boolean doHurtTarget(Entity victim) {
+        boolean landed = super.doHurtTarget(victim);
+        if (landed) {
+            int difficulty = level().getDifficulty().getId();
+            if (getMainHandItem().isEmpty() && isOnFire() && random.nextFloat() < difficulty * 0.3F) {
+                victim.igniteForSeconds(2 * difficulty);
+            }
+        }
+        return landed;
     }
 
     @Override
@@ -243,7 +256,7 @@ public class EldritchGuardian extends Monster implements RangedAttackMob, Eldrit
             spawnAtLocation(WispyEssenceItem.of(ModAspects.ELDRITCH), 1.0F);
         }
         int looting = Looting.of(source);
-        if (random.nextInt(10) <= looting / 2.0F) {
+        if (random.nextInt(10 + (warded() ? 10 : 0)) <= looting / 2.0F) {
             spawnAtLocation(new ItemStack(ModItems.ELDRITCH_EYE.get()));
         }
     }

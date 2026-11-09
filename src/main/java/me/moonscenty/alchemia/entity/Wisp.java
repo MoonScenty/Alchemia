@@ -116,6 +116,12 @@ public class Wisp extends FlyingMob implements Enemy, OwnAspects {
         return aspect == null ? AspectList.EMPTY : AspectList.of(aspect, 2);
     }
 
+    // it does not breathe
+    @Override
+    protected int decreaseAirSupply(int air) {
+        return air;
+    }
+
     @Override
     public boolean hurt(DamageSource source, float amount) {
         if (source.getDirectEntity() instanceof LivingEntity direct) {

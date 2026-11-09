@@ -39,11 +39,11 @@ public class TaintLogBlock extends RotatedPillarBlock implements Tainted {
 
     @Override
     public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-        return 5;
+        return 4;
     }
 
     @Override
     public int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-        return 5;
+        return 4;
     }
 }

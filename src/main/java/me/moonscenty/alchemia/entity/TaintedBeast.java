@@ -9,19 +9,17 @@ import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
-import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.pathfinder.PathType;
 
 public abstract class TaintedBeast extends Monster implements TaintedMob {
     protected TaintedBeast(EntityType<? extends TaintedBeast> type, Level level) {
         super(type, level);
-        if (getNavigation() instanceof GroundPathNavigation ground) {
-            ground.setCanOpenDoors(true);
-        }
+        setPathfindingMalus(PathType.WATER, -1.0F);
     }
 
     @Override

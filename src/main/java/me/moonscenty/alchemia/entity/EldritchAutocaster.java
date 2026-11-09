@@ -62,6 +62,15 @@ public class EldritchAutocaster extends Autocaster implements EldritchMob {
     }
 
     @Override
+    protected boolean mindsKind(LivingEntity other) {
+        return !(other instanceof EldritchMob);
+    }
+
+    @Override
+    protected void forgetStrangers() {
+    }
+
+    @Override
     public boolean worthShooting(LivingEntity other) {
         if (other instanceof EldritchMob || other.getType().is(EntityTypeTags.UNDEAD)) {
             return false;
@@ -90,10 +99,13 @@ public class EldritchAutocaster extends Autocaster implements EldritchMob {
             spawnAtLocation(new ItemStack(ModItems.ZOMBIE_BRAIN.get()), 0.5F);
         }
         if (salvaged(0.3F)) {
-            spawnAtLocation(new ItemStack(ModItems.VOID_INGOT.get(), 2), 0.5F);
+            spawnAtLocation(new ItemStack(ModItems.VOID_INGOT.get()), 0.5F);
         }
-        if (salvaged(0.15F) && !getMainHandItem().isEmpty()) {
-            spawnAtLocation(getMainHandItem().copy(), 0.0F);
+        if (salvaged(0.3F)) {
+            spawnAtLocation(new ItemStack(ModItems.VOID_INGOT.get()), 0.5F);
+        }
+        if (salvagedHalfHelped(0.15F) && !getMainHandItem().isEmpty()) {
+            spawnAtLocation(getMainHandItem().copy(), 0.5F);
         }
         setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
     }

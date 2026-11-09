@@ -186,7 +186,7 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
         add(ModBlocks.TAINT_CRUST.get(), noDrop());
         add(ModBlocks.TAINT_ROCK.get(), noDrop());
         add(ModBlocks.TAINT_GEYSER.get(), noDrop());
-        add(ModBlocks.TAINT_LOG.get(), noDrop());
+        dropSelf(ModBlocks.TAINT_LOG.get());
         add(ModBlocks.FLUX_GOO.get(), noDrop());
         dropSelf(ModBlocks.AMBER_BLOCK.get());
         dropSelf(ModBlocks.AMBER_BRICKS.get());

@@ -16,6 +16,7 @@ import net.minecraft.world.level.block.state.BlockState;
 public class TaintedVillager extends TaintedBeast {
     public TaintedVillager(EntityType<? extends TaintedVillager> type, Level level) {
         super(type, level);
+        ((net.minecraft.world.entity.ai.navigation.GroundPathNavigation) getNavigation()).setCanOpenDoors(true);
     }
 
     public TaintedVillager(Level level) {
@@ -67,6 +68,8 @@ public class TaintedVillager extends TaintedBeast {
         super.registerGoals();
         goalSelector.addGoal(4, new net.minecraft.world.entity.ai.goal.OpenDoorGoal(this, true));
         goalSelector.addGoal(5, new net.minecraft.world.entity.ai.goal.MoveTowardsRestrictionGoal(this, 1.0));
+        goalSelector.addGoal(6, new net.minecraft.world.entity.ai.goal.MoveThroughVillageGoal(this, 1.0, false, 4,
+                () -> true));
         goalSelector.addGoal(9, new net.minecraft.world.entity.ai.goal.LookAtPlayerGoal(this,
                 net.minecraft.world.entity.npc.AbstractVillager.class, 5.0F, 0.02F));
         goalSelector.addGoal(10, new net.minecraft.world.entity.ai.goal.LookAtPlayerGoal(this,

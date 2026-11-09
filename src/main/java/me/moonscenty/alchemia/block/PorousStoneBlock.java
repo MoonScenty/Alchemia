@@ -41,7 +41,7 @@ public class PorousStoneBlock extends Block {
         return drops;
     }
 
-    static boolean silky(LootParams.Builder params) {
+    public static boolean silky(LootParams.Builder params) {
         ItemStack tool = params.getOptionalParameter(LootContextParams.TOOL);
         return tool != null && !tool.isEmpty() && EnchantmentHelper.getItemEnchantmentLevel(params.getLevel().registryAccess()
                 .registryOrThrow(Registries.ENCHANTMENT).getHolderOrThrow(Enchantments.SILK_TOUCH), tool) > 0;

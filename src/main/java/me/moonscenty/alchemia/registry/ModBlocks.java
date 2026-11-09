@@ -753,7 +753,6 @@ public class ModBlocks {
                 .mapColor(MapColor.COLOR_PURPLE)
                 .strength(10.0F, 60.0F)
                 .sound(SoundType.SLIME_BLOCK)
-                .requiresCorrectToolForDrops()
                 .randomTicks()));
     }
 

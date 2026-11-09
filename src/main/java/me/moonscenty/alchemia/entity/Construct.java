@@ -1,6 +1,5 @@
 package me.moonscenty.alchemia.entity;
 
-import java.util.Objects;
 import java.util.UUID;
 
 import me.moonscenty.alchemia.item.WandItem;
@@ -20,9 +19,13 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.OwnableEntity;
 import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.ambient.AmbientCreature;
+import net.minecraft.world.entity.animal.AbstractGolem;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.WaterAnimal;
+import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
@@ -110,26 +113,60 @@ public abstract class Construct extends PathfinderMob implements OwnableEntity {
         setTarget(null);
     }
 
-    public boolean worthShooting(LivingEntity other) {
-        boolean friendly = minds(FRIENDS);
-        if (other instanceof Player player) {
-            if (!minds(PLAYERS) || player.isCreative() || player.isSpectator()) {
+    // the original's canAttackClass: villagers and constructs are neither animals nor monsters
+    protected boolean mindsKind(LivingEntity other) {
+        if (other instanceof Player) {
+            if (!minds(PLAYERS)) {
                 return false;
             }
-            return player.getUUID().equals(getOwnerUUID()) ? friendly : shootsStrangers();
+            if (!pvp() && !minds(FRIENDS)) {
+                mind(PLAYERS, false);
+                return false;
+            }
+            return true;
         }
-        boolean monster = other.getType().getCategory() == MobCategory.MONSTER;
-        if (!minds(monster ? MONSTERS : ANIMALS)) {
-            return false;
+        if (other instanceof Enemy) {
+            return minds(MONSTERS);
         }
-        if (other instanceof OwnableEntity owned && Objects.equals(owned.getOwnerUUID(), getOwnerUUID())) {
-            return friendly;
-        }
-        return true;
+        return minds(ANIMALS) && (other instanceof Animal || other instanceof AmbientCreature
+                || other instanceof WaterAnimal || other instanceof AbstractGolem);
     }
 
-    protected boolean shootsStrangers() {
-        return true;
+    // minding friends turns every rule about sides around
+    public boolean worthShooting(LivingEntity other) {
+        boolean friendly = minds(FRIENDS);
+        if (!mindsKind(other) || other instanceof Player player && (player.isCreative() || player.isSpectator())) {
+            return false;
+        }
+        var team = getTeam();
+        if (team != null && (other.getTeam() == team) != friendly) {
+            return false;
+        }
+        UUID owner = getOwnerUUID();
+        if (other instanceof Player player) {
+            return player.getUUID().equals(owner) ? friendly : pvp();
+        }
+        if (owner == null) {
+            return true;
+        }
+        return other instanceof OwnableEntity owned ? owner.equals(owned.getOwnerUUID()) == friendly : !friendly;
+    }
+
+    protected void forgetStrangers() {
+        if (getTarget() instanceof Player player && !pvp() && !player.getUUID().equals(getOwnerUUID())) {
+            setTarget(null);
+        }
+    }
+
+    // it does not turn on its owner or what they own unless told to mind friends
+    @Override
+    public boolean isAlliedTo(Entity other) {
+        UUID owner = getOwnerUUID();
+        if (owner != null && !minds(FRIENDS) && (owner.equals(other.getUUID())
+                || other instanceof OwnableEntity owned && owner.equals(owned.getOwnerUUID()))) {
+            return true;
+        }
+        return super.isAlliedTo(other);
     }
 
     protected boolean pvp() {
@@ -205,6 +242,10 @@ public abstract class Construct extends PathfinderMob implements OwnableEntity {
 
     protected boolean salvaged(float chance) {
         return getRandom().nextFloat() < chance + looting * LOOTING_HELPS;
+    }
+
+    protected boolean salvagedHalfHelped(float chance) {
+        return getRandom().nextFloat() < chance + looting * LOOTING_HELPS / 2.0F;
     }
 
     // a hit knocks its aim off

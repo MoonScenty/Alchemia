@@ -8,7 +8,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
@@ -61,15 +60,14 @@ public class AdvancedAutomatedCrossbow extends AutomatedCrossbow {
     @Override
     public void tick() {
         super.tick();
-        if (!level().isClientSide && getTarget() instanceof Player player && !pvp()
-                && !player.getUUID().equals(getOwnerUUID())) {
-            setTarget(null);
+        if (!level().isClientSide) {
+            forgetStrangers();
         }
     }
 
     @Override
-    protected boolean shootsStrangers() {
-        return pvp();
+    public boolean canAttack(LivingEntity target) {
+        return mindsKind(target) && super.canAttack(target);
     }
 
     @Override

@@ -171,16 +171,31 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
                 ModBlocks.TAINT_GEYSER.get());
         tag(ModTags.Blocks.TAINT_ROTS_TO_SOIL)
                 .addTag(BlockTags.DIRT).addTag(BlockTags.SAND)
-                .add(Blocks.CLAY, Blocks.GRAVEL, Blocks.SOUL_SAND, Blocks.SOUL_SOIL, Blocks.FARMLAND, Blocks.DIRT_PATH);
+                .add(Blocks.CLAY, Blocks.GRAVEL, Blocks.SOUL_SAND, Blocks.SOUL_SOIL, Blocks.FARMLAND, Blocks.DIRT_PATH,
+                        Blocks.HAY_BLOCK);
         tag(ModTags.Blocks.TAINT_ROTS_TO_ROCK)
                 .addTag(BlockTags.BASE_STONE_OVERWORLD).addTag(Tags.Blocks.COBBLESTONES).addTag(Tags.Blocks.STONES)
-                .addTag(BlockTags.STONE_BRICKS).add(Blocks.SANDSTONE, Blocks.RED_SANDSTONE, Blocks.CALCITE);
+                .addTag(BlockTags.STONE_BRICKS).addTag(BlockTags.BASE_STONE_NETHER).addTag(Tags.Blocks.ORES)
+                .addTag(Tags.Blocks.NETHERRACKS).addTag(Tags.Blocks.END_STONES).addTag(Tags.Blocks.SANDSTONE_BLOCKS)
+                .addTag(BlockTags.TERRACOTTA).addTag(BlockTags.WALLS)
+                .add(ModBlocks.ARCANE_STONE.block().get(), ModBlocks.ARCANE_STONE_BRICKS.block().get())
+                .add(Blocks.CALCITE, Blocks.BRICKS, Blocks.NETHER_BRICKS, Blocks.RED_NETHER_BRICKS, Blocks.QUARTZ_BLOCK,
+                        Blocks.PRISMARINE, Blocks.PRISMARINE_BRICKS, Blocks.DARK_PRISMARINE, Blocks.COAL_BLOCK,
+                        Blocks.SMOOTH_STONE, Blocks.FURNACE, Blocks.DISPENSER, Blocks.DROPPER, Blocks.NETHER_BRICK_FENCE,
+                        Blocks.COBBLESTONE_STAIRS, Blocks.STONE_BRICK_STAIRS, Blocks.BRICK_STAIRS,
+                        Blocks.NETHER_BRICK_STAIRS, Blocks.SANDSTONE_STAIRS, Blocks.RED_SANDSTONE_STAIRS,
+                        Blocks.QUARTZ_STAIRS, Blocks.STONE_SLAB, Blocks.SMOOTH_STONE_SLAB, Blocks.SANDSTONE_SLAB,
+                        Blocks.COBBLESTONE_SLAB, Blocks.BRICK_SLAB, Blocks.STONE_BRICK_SLAB, Blocks.NETHER_BRICK_SLAB,
+                        Blocks.QUARTZ_SLAB, Blocks.RED_SANDSTONE_SLAB);
         tag(ModTags.Blocks.TAINT_ROTS_TO_CRUST)
                 .addTag(BlockTags.PLANKS).addTag(BlockTags.WOODEN_FENCES).addTag(BlockTags.WOODEN_SLABS)
-                .addTag(BlockTags.WOODEN_STAIRS).addTag(BlockTags.WOOL)
+                .addTag(BlockTags.WOODEN_STAIRS).addTag(BlockTags.FENCE_GATES).addTag(BlockTags.WOODEN_DOORS)
+                .addTag(BlockTags.WOODEN_TRAPDOORS)
                 .add(Blocks.RED_MUSHROOM_BLOCK, Blocks.BROWN_MUSHROOM_BLOCK, Blocks.MUSHROOM_STEM,
-                        Blocks.PUMPKIN, Blocks.CARVED_PUMPKIN, Blocks.MELON, Blocks.CACTUS, Blocks.SPONGE,
-                        Blocks.WET_SPONGE, Blocks.HAY_BLOCK, Blocks.BOOKSHELF);
+                        Blocks.PUMPKIN, Blocks.CARVED_PUMPKIN, Blocks.JACK_O_LANTERN, Blocks.MELON, Blocks.CACTUS,
+                        Blocks.SPONGE, Blocks.WET_SPONGE, Blocks.BOOKSHELF, Blocks.CHEST, Blocks.TRAPPED_CHEST,
+                        Blocks.CRAFTING_TABLE, Blocks.JUKEBOX, Blocks.NOTE_BLOCK);
+        tag(BlockTags.LOGS).add(ModBlocks.TAINT_LOG.get());
 
         tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.TAINT_SOIL.get(), ModBlocks.TAINT_CRUST.get(), ModBlocks.TAINT_ROCK.get());
         tag(BlockTags.MINEABLE_WITH_AXE).add(ModBlocks.TAINT_GEYSER.get());

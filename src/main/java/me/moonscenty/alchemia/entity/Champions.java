@@ -218,13 +218,15 @@ public final class Champions {
         if (hurt.level().isClientSide) {
             return;
         }
-        ChampionModifier defending = hurt instanceof Monster ? modifier(hurt) : null;
-        if (defending != null) {
-            if (defending == ChampionModifier.WARDED && hurt.getAbsorptionAmount() > 0.0F) {
+        if (hurt instanceof Monster) {
+            ChampionModifier defending = modifier(hurt);
+            // eldritch mobs shield like warded champions: nothing else happens while it holds
+            if ((defending == ChampionModifier.WARDED || hurt instanceof EldritchMob)
+                    && hurt.getAbsorptionAmount() > 0.0F) {
                 hurt.level().playSound(null, hurt.getX(), hurt.getY(), hurt.getZ(),
                         ModSounds.RUNIC_SHIELD_EFFECT.get(), SoundSource.HOSTILE, 0.66F,
                         1.1F + hurt.getRandom().nextFloat() * 0.1F);
-            } else if (defending.when() == ChampionModifier.When.HURT
+            } else if (defending != null && defending.when() == ChampionModifier.When.HURT
                     && source.getDirectEntity() instanceof LivingEntity attacker) {
                 event.setAmount(defend(defending, hurt, attacker, source, event.getAmount()));
             }

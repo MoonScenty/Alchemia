@@ -18,7 +18,9 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BushBlock;
+import net.minecraft.world.level.block.CactusBlock;
 import net.minecraft.world.level.block.RotatedPillarBlock;
+import net.minecraft.world.level.block.SugarCaneBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
 public final class TaintSpread {
@@ -50,7 +52,8 @@ public final class TaintSpread {
         }
 
         boolean leaves = state.is(BlockTags.LEAVES);
-        boolean soft = state.isAir() || state.canBeReplaced() || state.getBlock() instanceof BushBlock;
+        boolean soft = state.isAir() || state.canBeReplaced() || state.getBlock() instanceof BushBlock
+                || state.getBlock() instanceof CactusBlock || state.getBlock() instanceof SugarCaneBlock;
         if (!leaves && soft && state.getFluidState().isEmpty() && besideSolid(level, at) && !onlyBesideTaint(level, at)) {
             settle(level, at, fibres(level, at), random, 1);
             return;

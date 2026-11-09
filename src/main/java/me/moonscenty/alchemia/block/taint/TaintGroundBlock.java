@@ -1,18 +1,33 @@
 package me.moonscenty.alchemia.block.taint;
 
+import java.util.List;
+
+import me.moonscenty.alchemia.block.PorousStoneBlock;
+import me.moonscenty.alchemia.item.CrystallizedEssenceItem;
+import me.moonscenty.alchemia.registry.ModAspects;
+import me.moonscenty.alchemia.registry.ModBlocks;
+import me.moonscenty.alchemia.registry.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.item.FallingBlockEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.FallingBlock;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.Fallable;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
-public class TaintGroundBlock extends Block implements Tainted {
+public class TaintGroundBlock extends Block implements Tainted, Fallable {
     public enum Kind implements StringRepresentable {
         SOIL("soil"), CRUST("crust"), ROCK("rock"), GEYSER("geyser");
 
@@ -82,8 +97,8 @@ public class TaintGroundBlock extends Block implements Tainted {
         if (kind != Kind.ROCK) {
             TaintSpread.spread(level, pos, random);
         }
-        if (kind == Kind.CRUST) {
-            slump(level, pos, random);
+        if (kind == Kind.CRUST && !fall(level, pos, pos, state)) {
+            slump(level, pos, state, random);
         }
         if (kind == Kind.GEYSER) {
             vent(level, pos, random);
@@ -102,32 +117,56 @@ public class TaintGroundBlock extends Block implements Tainted {
         }
     }
 
+    // only silk touch keeps it; tainted rock may leave a flux crystal, more often with fortune
     @Override
-    protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston) {
-        if (kind == Kind.CRUST) {
-            level.scheduleTick(pos, this, 2);
+    protected List<ItemStack> getDrops(BlockState state, LootParams.Builder params) {
+        if (PorousStoneBlock.silky(params)) {
+            return List.of(new ItemStack(this));
         }
+        if (kind != Kind.ROCK) {
+            return List.of();
+        }
+        ItemStack tool = params.getOptionalParameter(LootContextParams.TOOL);
+        int fortune = tool == null ? 0 : EnchantmentHelper.getItemEnchantmentLevel(params.getLevel().registryAccess()
+                .registryOrThrow(Registries.ENCHANTMENT).getHolderOrThrow(Enchantments.FORTUNE), tool);
+        return params.getLevel().random.nextInt(15) + fortune > 13
+                ? List.of(CrystallizedEssenceItem.of(ModAspects.FLUX))
+                : List.of();
     }
 
     @Override
-    protected BlockState updateShape(BlockState state, Direction direction, BlockState neighborState,
-            LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
-        if (kind == Kind.CRUST) {
-            level.scheduleTick(pos, this, 2);
-        }
-        return super.updateShape(state, direction, neighborState, level, pos, neighborPos);
+    public void onLand(Level level, BlockPos pos, BlockState state, BlockState replaced, FallingBlockEntity falling) {
+        level.playSound(null, pos, ModSounds.GORE.get(), SoundSource.BLOCKS, 0.5F,
+                ((level.random.nextFloat() - level.random.nextFloat()) * 0.2F + 1.0F) * 0.8F);
     }
 
-    @Override
-    protected void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-        if (kind == Kind.CRUST && FallingBlock.isFree(level.getBlockState(pos.below())) && !besideWood(level, pos.below())
-                && pos.getY() >= level.getMinBuildHeight()) {
-            FallingBlockEntity.fall(level, pos, state);
+    // anything but taint holding it up keeps it in place
+    private boolean fall(ServerLevel level, BlockPos pos, BlockPos over, BlockState state) {
+        if (!TaintSpread.onlyBesideTaint(level, pos) || !canFallInto(level, over.below())
+                || over.getY() < level.getMinBuildHeight() || !over.equals(pos) && !level.isEmptyBlock(over)) {
+            return false;
         }
+        if (!over.equals(pos)) {
+            level.removeBlock(pos, false);
+        }
+        FallingBlockEntity.fall(level, over, state).dropItem = false;
+        return true;
+    }
+
+    public static boolean canFallInto(LevelReader level, BlockPos pos) {
+        if (besideWood(level, pos)) {
+            return false;
+        }
+        BlockState there = level.getBlockState(pos);
+        if (there.is(ModBlocks.FLUX_GOO.get())) {
+            return false;
+        }
+        return there.isAir() || there.is(Blocks.FIRE) || there.is(ModBlocks.TAINT_FIBRE.get()) || there.canBeReplaced()
+                || !there.getFluidState().isEmpty();
     }
 
     // the original's crust hangs on anywhere within a block of a log
-    private static boolean besideWood(LevelAccessor level, BlockPos pos) {
+    private static boolean besideWood(LevelReader level, BlockPos pos) {
         for (BlockPos near : BlockPos.betweenClosed(pos.offset(-1, -1, -1), pos.offset(1, 1, 1))) {
             if (level.getBlockState(near).is(net.minecraft.tags.BlockTags.LOGS)) {
                 return true;
@@ -136,20 +175,17 @@ public class TaintGroundBlock extends Block implements Tainted {
         return false;
     }
 
-    private void slump(ServerLevel level, BlockPos pos, RandomSource random) {
+    private void slump(ServerLevel level, BlockPos pos, BlockState state, RandomSource random) {
         if (!level.isEmptyBlock(pos.above())) {
             return;
         }
         Direction way = Direction.Plane.HORIZONTAL.getRandomDirection(random);
         for (int down = 1; down < SLUMP_FROM + 1; down++) {
-            if (!level.isEmptyBlock(pos.relative(way).below(down)) || !level.getBlockState(pos.below(down)).is(this)) {
+            if (!level.isEmptyBlock(pos.relative(way).below(down))
+                    || !(level.getBlockState(pos.below(down)).getBlock() instanceof TaintGroundBlock)) {
                 return;
             }
         }
-        BlockPos over = pos.relative(way);
-        if (level.isEmptyBlock(over) && !besideWood(level, over.below())) {
-            level.removeBlock(pos, false);
-            FallingBlockEntity.fall(level, over, defaultBlockState());
-        }
+        fall(level, pos, pos.relative(way), state);
     }
 }

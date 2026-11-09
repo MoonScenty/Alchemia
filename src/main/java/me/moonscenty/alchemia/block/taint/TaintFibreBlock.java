@@ -60,7 +60,7 @@ public class TaintFibreBlock extends Block implements Tainted {
 
     public static int lightOf(BlockState state) {
         int growth = state.getValue(GROWTH);
-        return growth == 2 || growth == HANGING ? 6 : 0;
+        return growth == LUMP ? 12 : growth == 2 || growth == HANGING ? 6 : 0;
     }
 
     @Override
@@ -191,12 +191,12 @@ public class TaintFibreBlock extends Block implements Tainted {
 
     @Override
     public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-        return 100;
+        return 3;
     }
 
     @Override
     public int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-        return 60;
+        return 3;
     }
 
     @Override

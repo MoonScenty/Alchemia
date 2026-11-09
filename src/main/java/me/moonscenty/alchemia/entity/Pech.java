@@ -112,6 +112,7 @@ public class Pech extends Monster implements RangedAttackMob, OwnAspects {
     public Pech(EntityType<? extends Pech> type, Level level) {
         super(type, level);
         ((GroundPathNavigation) getNavigation()).setCanOpenDoors(true);
+        setPathfindingMalus(net.minecraft.world.level.pathfinder.PathType.WATER, -1.0F);
         setDropChance(EquipmentSlot.MAINHAND, 0.2F);
         if (!level.isClientSide) {
             fight();
@@ -137,6 +138,8 @@ public class Pech extends Monster implements RangedAttackMob, OwnAspects {
         goalSelector.addGoal(3, new FetchItems(this));
         goalSelector.addGoal(5, new OpenDoorGoal(this, true));
         goalSelector.addGoal(6, new MoveTowardsRestrictionGoal(this, 0.5));
+        goalSelector.addGoal(6, new net.minecraft.world.entity.ai.goal.MoveThroughVillageGoal(this, 1.0, false, 4,
+                () -> true));
         goalSelector.addGoal(9, new RandomStrollGoal(this, 0.6));
         goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 3.0F, 1.0F));
         goalSelector.addGoal(10, new LookAtPlayerGoal(this, net.minecraft.world.entity.Mob.class, 8.0F));
