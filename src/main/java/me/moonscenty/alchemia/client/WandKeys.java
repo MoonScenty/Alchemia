@@ -62,7 +62,7 @@ public final class WandKeys {
                 || inHand instanceof me.moonscenty.alchemia.item.tool.ElementalShovelItem)) {
             PacketDistributor.sendToServer(new me.moonscenty.alchemia.network.ToolSetting());
         }
-        if (!(inHand instanceof WandItem) || client.screen != null) {
+        if (!(inHand instanceof WandItem) || WandItem.isSceptre(player.getMainHandItem()) || client.screen != null) {
             held = 0;
             return;
         }

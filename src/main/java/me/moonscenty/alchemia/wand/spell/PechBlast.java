@@ -24,8 +24,8 @@ public class PechBlast extends ThrowableProjectile {
     private static final double REACHES = 2.0;
     private static final float HURTS = 2.0F;
     private static final int LASTS = 100;
-    private static final float FALLS = 0.015F;
-    private static final int GIVES_UP = 100;
+    private static final float FALLS = 0.025F;
+    private static final int GIVES_UP = 500;
     // ticks per rank of extend
     private static final int LONGER = 40;
 

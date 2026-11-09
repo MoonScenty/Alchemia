@@ -58,7 +58,7 @@ public class ShockOrb extends Bolt {
         Entity thrower = getOwner();
         for (LivingEntity caught : level.getEntitiesOfClass(LivingEntity.class,
                 new AABB(position(), position()).inflate(reaches),
-                alive -> alive != thrower && alive.hasLineOfSight(this))) {
+                alive -> alive.hasLineOfSight(this))) {
             caught.hurt(damageSources().indirectMagic(this, thrower), hurts);
         }
         level.sendParticles(ParticleTypes.ELECTRIC_SPARK, getX(), getY(), getZ(),

@@ -135,10 +135,9 @@ public class AutocasterTests {
 
         LivingEntity mark = helper.spawn(EntityType.PIG, new BlockPos(6, 3, 2));
         float whole = mark.getHealth();
-        helper.runAfterDelay(160, () -> {
+        helper.succeedWhen(() -> {
             helper.assertTrue(!mark.isAlive() || mark.getHealth() < whole, "the pig was shot at");
             helper.assertTrue(turret.vis().get(ModAspects.AIR) < Autocaster.HOLDS, "and it was paid for");
-            helper.succeed();
         });
     }
 

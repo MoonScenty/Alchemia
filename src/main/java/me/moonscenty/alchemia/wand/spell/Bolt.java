@@ -1,8 +1,11 @@
 package me.moonscenty.alchemia.wand.spell;
 
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -24,6 +27,11 @@ public abstract class Bolt extends ThrowableProjectile {
     protected abstract int lives();
 
     protected abstract void land(ServerLevel level, HitResult where);
+
+    protected DamageSource fireball() {
+        return new DamageSource(level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
+                .getHolderOrThrow(DamageTypes.FIREBALL), this, getOwner());
+    }
 
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {

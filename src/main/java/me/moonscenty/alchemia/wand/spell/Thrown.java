@@ -14,9 +14,11 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 
 public final class Thrown {
-    // speed and inaccuracy
+    // speed and inaccuracy, of everything and of the slower or faster things
     private static final float FLIES = 1.5F;
-    private static final float TRUE = 0.0F;
+    private static final float TRUE = 1.0F;
+    private static final float EMBER_FLIES = 1.0F;
+    private static final float GRAPPLE_FLIES = 3.0F;
 
     // embers per tick and spray angle in degrees
     private static final int MOTES = 2;
@@ -37,7 +39,6 @@ public final class Thrown {
     private static final float SHARPENS_SPIKE = 1.5F;
     private static final float BOULDER = 4.0F;
     private static final float SHARPENS_BOULDER = 2.0F;
-    private static final int WALLS = 6;
 
     // vis shard damage, and what each rank of potency adds
     private static final float SLIVER = 1.0F;
@@ -66,8 +67,9 @@ public final class Thrown {
             if (beam) {
                 ember.lasting(REACHES);
             }
-            ember.shootFromRotation(caster, caster.getXRot(), caster.getYRot(), 0.0F, FLIES,
+            ember.shootFromRotation(caster, caster.getXRot(), caster.getYRot(), 0.0F, EMBER_FLIES,
                     beam ? NARROW : SCATTERS);
+            ember.setPos(ember.position().add(caster.getLookAngle().scale(0.5)).add(ember.getDeltaMovement()));
             level.addFreshEntity(ember);
         }
         if (heldFor % ROARS_EVERY == 0) {
@@ -94,7 +96,7 @@ public final class Thrown {
         }
         if (Casting.has(wand, FocusUpgrade.ICE_BOULDER)) {
             return let(level, caster, new FrostShard(level, caster)
-                    .biting(BOULDER + potency * SHARPENS_BOULDER, chills).bouncing(WALLS),
+                    .biting(BOULDER + potency * SHARPENS_BOULDER, chills).asBoulder(),
                     ModSounds.ICE.get(), 0.4F, 1.0F + level.random.nextFloat() * 0.1F);
         }
         return let(level, caster, new FrostShard(level, caster)
@@ -110,7 +112,10 @@ public final class Thrown {
         int potency = Casting.worked(wand, FocusUpgrade.POTENCY);
         VisShard shard = new VisShard(level, caster, mark)
                 .chasing(SLIVER + potency * SHARPENS_SLIVER, Casting.has(wand, FocusUpgrade.PERSISTENT));
-        return let(level, caster, shard, ModSounds.SCAN.get(), 0.3F, 1.1F + level.random.nextFloat() * 0.1F);
+        level.addFreshEntity(shard);
+        level.playSound(null, caster.getX(), caster.getY(), caster.getZ(), ModSounds.SCAN.get(), SoundSource.PLAYERS,
+                0.3F, 1.1F + level.random.nextFloat() * 0.1F);
+        return true;
     }
 
     public static boolean primal(ServerLevel level, LivingEntity caster, ItemStack wand, HitResult aim,
@@ -135,7 +140,11 @@ public final class Thrown {
         Grapple hook = new Grapple(level, caster).hauling(
                 Casting.worked(wand, FocusUpgrade.POTENCY),
                 Casting.has(wand, FocusUpgrade.STICKY));
-        return let(level, caster, hook, ModSounds.ICE.get(), 0.3F, 0.8F + level.random.nextFloat() * 0.1F);
+        hook.shootFromRotation(caster, caster.getXRot(), caster.getYRot(), 0.0F, GRAPPLE_FLIES, TRUE);
+        level.addFreshEntity(hook);
+        level.playSound(null, caster.getX(), caster.getY(), caster.getZ(), ModSounds.ICE.get(), SoundSource.PLAYERS,
+                0.3F, 0.8F + level.random.nextFloat() * 0.1F);
+        return true;
     }
 
     private static boolean let(ServerLevel level, LivingEntity caster, ThrowableProjectile thrown, SoundEvent sound,

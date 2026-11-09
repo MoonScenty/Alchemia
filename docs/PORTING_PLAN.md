@@ -1283,6 +1283,12 @@ python tools/remap_srg.py MCP-919/conf decompiled/thaumcraft src/thaumcraft
     - 사건 76은 고착 뒤틀림 1을 덜어 주는 맑은 정신이다. 소리·흐린 시야·실명 사건은 문구가 없다.
     - 죽음의 응시, 알케설사의 플럭스 구, 부자연스러운 허기의 살점·뇌 해소, 햇빛 거부의 어둠 회복이 동작한다. 우유는 사건 질병 가운데 흐린 시야만 푼다.
     - 비네트와 셰이더 화면 효과는 HUD 묶음에서 다룬다.
+  - [x] **2차 대조 5-4 완드와 포커스** (2026-11-09). 원본 `ItemFocus*`·`EntityExplosiveOrb`·`EntityEmber`·`EntityFrostShard`·`EntityHomingShard`·`ItemWand`·`WandTriggers`대로. 자세한 값은 대조 문서의 "고친 것".
+    - 포커스마다 시전 거리와 블록만 보는지를 지닌다(`Focus.reach`, `blocksOnly`).
+    - 원본과 다른 점:
+      - Ember의 피해는 바닐라 화염구 종류라 화염 저항이 막는다. 원본 피해에는 불 표시가 없어 막지 못했다. 불 면역 몹은 양쪽 다 맞지 않는다.
+      - 굴착의 빠른 판정은 원본 재질이 사라져서 곡괭이·삽 태그로 본다. 금속과 얼음은 뺐다.
+      - Equal Trade는 틱마다 한 칸이 아니라 한 번에 바뀐다.
 
 ## 미결 사항
 

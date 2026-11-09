@@ -11,12 +11,13 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 
@@ -50,16 +51,17 @@ public final class Excavation {
         if (!(who instanceof Player caster)) {
             return false;
         }
+        // original: the beam costs vis whether or not it finds anything
         if (!(aim instanceof BlockHitResult struck) || aim.getType() != HitResult.Type.BLOCK) {
             DIGGING.remove(caster.getUUID());
-            return false;
+            return true;
         }
         BlockPos at = struck.getBlockPos();
         BlockState block = level.getBlockState(at);
         float hardness = block.getDestroySpeed(level, at);
         if (hardness < 0.0F || block.isAir() || !mayBreak(level, caster, at)) {
             DIGGING.remove(caster.getUUID());
-            return false;
+            return true;
         }
 
         int potency = me.moonscenty.alchemia.wand.Casting.worked(wand,
@@ -157,11 +159,18 @@ public final class Excavation {
     }
 
     private static float bites(BlockState block, int potency) {
-        MapColor colour = block.getMapColor(null, null);
-        boolean soft = colour == MapColor.STONE || colour == MapColor.DIRT || colour == MapColor.SAND
-                || colour == MapColor.GRASS || colour == MapColor.COLOR_BROWN;
-        float bite = soft ? EATS_SOFT + potency * FASTER_SOFT : EATS + potency * FASTER;
+        float bite = soft(block) ? EATS_SOFT + potency * FASTER_SOFT : EATS + potency * FASTER;
         return block.is(net.minecraft.world.level.block.Blocks.OBSIDIAN) ? bite * EATS_OBSIDIAN : bite;
+    }
+
+    // the original's rock, ground, grass and sand materials; metal and ice were their own
+    private static boolean soft(BlockState block) {
+        if (block.is(BlockTags.MINEABLE_WITH_SHOVEL)) {
+            return true;
+        }
+        SoundType sound = block.getSoundType();
+        return block.is(BlockTags.MINEABLE_WITH_PICKAXE) && !block.is(BlockTags.ICE)
+                && sound != SoundType.METAL && sound != SoundType.ANVIL && sound != SoundType.COPPER;
     }
 
     private static boolean mayBreak(ServerLevel level, Player caster, BlockPos at) {

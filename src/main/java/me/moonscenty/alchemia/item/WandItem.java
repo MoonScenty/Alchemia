@@ -263,6 +263,15 @@ public class WandItem extends Item implements VisHolder, Rechargeable {
     }
 
     @Override
+    public boolean onEntitySwing(ItemStack wand, LivingEntity swinger, net.minecraft.world.InteractionHand hand) {
+        if (swinger.level() instanceof ServerLevel served && swinger instanceof Player player
+                && focus(wand).is(ModItems.FOCI.get("trade").get())) {
+            me.moonscenty.alchemia.wand.spell.Swapping.swing(served, player, wand);
+        }
+        return false;
+    }
+
+    @Override
     public void onUseTick(Level level, LivingEntity using, ItemStack wand, int remaining) {
         if (!(using instanceof Player caster)) {
             return;
@@ -295,7 +304,7 @@ public class WandItem extends Item implements VisHolder, Rechargeable {
         Level level = context.getLevel();
         BlockPos pos = context.getClickedPos();
 
-        if (level.getBlockState(pos).is(Blocks.BOOKSHELF)) {
+        if (level.getBlockState(pos).is(Blocks.BOOKSHELF) && focus(context.getItemInHand()).isEmpty()) {
             if (!level.isClientSide) {
                 level.removeBlock(pos, false);
                 drop(level, pos, new ItemStack(ModItems.ALCHEMONOMICON.get()));

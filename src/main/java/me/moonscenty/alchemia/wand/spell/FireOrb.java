@@ -17,7 +17,7 @@ public class FireOrb extends Bolt {
     public static final float HARDER = 0.4F;
     // a direct hit first takes this share of the blast as damage; original's rule
     private static final float DIRECT = 1.5F;
-    private static final int BURNS_OUT = 100;
+    private static final int BURNS_OUT = 500;
 
     private float blast = BLAST;
     private boolean alight;
@@ -38,7 +38,7 @@ public class FireOrb extends Bolt {
 
     @Override
     protected double getDefaultGravity() {
-        return 0.03;
+        return 0.01;
     }
 
     @Override
@@ -54,10 +54,10 @@ public class FireOrb extends Bolt {
     @Override
     protected void land(ServerLevel level, HitResult where) {
         if (where instanceof EntityHitResult struck) {
-            struck.getEntity().hurt(damageSources().indirectMagic(this, getOwner()), blast * DIRECT);
+            struck.getEntity().hurt(fireball(), blast * DIRECT);
         }
-        level.explode(getOwner(), getX(), getY(), getZ(), blast, alight,
-                Level.ExplosionInteraction.TNT);
+        // original: spares the terrain, and nobody is safe from the blast
+        level.explode(null, getX(), getY(), getZ(), blast, alight, Level.ExplosionInteraction.NONE);
     }
 
     @Override

@@ -2,6 +2,8 @@ package me.moonscenty.alchemia.wand.spell;
 
 import me.moonscenty.alchemia.block.HoleBlock;
 import me.moonscenty.alchemia.block.entity.HoleBlockEntity;
+import me.moonscenty.alchemia.outer.OuterLands;
+import me.moonscenty.alchemia.registry.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -30,13 +32,18 @@ public final class Hole {
         if (!(who instanceof Player caster)) {
             return false;
         }
+        // original: only the outer lands refuse; any other failure still costs vis
         if (!(aim instanceof BlockHitResult struck) || aim.getType() != HitResult.Type.BLOCK) {
-            return false;
+            return true;
         }
         BlockPos face = struck.getBlockPos();
         Direction in = struck.getDirection().getOpposite();
-        if (!caster.mayInteract(level, face)) {
+        if (level.dimension() == OuterLands.LEVEL) {
+            level.playSound(null, face, ModSounds.WAND_FAIL.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
             return false;
+        }
+        if (!caster.mayInteract(level, face)) {
+            return true;
         }
 
         int looks = LOOKS_IN + me.moonscenty.alchemia.wand.Casting.worked(wand,
@@ -44,11 +51,8 @@ public final class Hole {
         int holds = STAYS_OPEN + me.moonscenty.alchemia.wand.Casting.worked(wand,
                 me.moonscenty.alchemia.wand.FocusUpgrade.EXTEND) * LONGER;
         int thick = thickness(level, face, in, looks);
-        if (thick == 0) {
-            return false;
-        }
-        if (!HoleBlockEntity.bore(level, face, holds, thick, in)) {
-            return false;
+        if (thick > 0) {
+            HoleBlockEntity.bore(level, face, holds, thick, in);
         }
         level.playSound(null, face, SoundEvents.ENDERMAN_TELEPORT, SoundSource.PLAYERS, 1.0F, 1.0F);
         return true;

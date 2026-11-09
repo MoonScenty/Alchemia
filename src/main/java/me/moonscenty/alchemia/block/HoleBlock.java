@@ -67,6 +67,16 @@ public class HoleBlock extends BaseEntityBlock {
     }
 
     public static boolean borable(BlockState state) {
-        return !state.isAir() && !state.canBeReplaced() && !isHole(state);
+        return !state.isAir() && !state.canBeReplaced() && !isHole(state) && !refuses(state);
+    }
+
+    // original's blacklist
+    private static boolean refuses(BlockState state) {
+        return state.is(net.minecraft.tags.BlockTags.BEDS) || state.is(net.minecraft.tags.BlockTags.DOORS)
+                || state.is(net.minecraft.world.level.block.Blocks.PISTON)
+                || state.is(net.minecraft.world.level.block.Blocks.STICKY_PISTON)
+                || state.is(net.minecraft.world.level.block.Blocks.PISTON_HEAD)
+                || state.is(net.minecraft.world.level.block.Blocks.MOVING_PISTON)
+                || state.is(me.moonscenty.alchemia.registry.ModBlocks.INFERNAL_FURNACE.get());
     }
 }

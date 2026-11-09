@@ -162,7 +162,7 @@ public class Autocaster extends ConstructWithSlot {
         }
     }
 
-    // vis is only taken once the spell actually does something, or a turret firing into a wall drains itself
+    // vis is only taken when the spell reports it went
     // the pitch is raised for the focus's drop during the shot only, then restored
     private void shoot() {
         LivingEntity mark = getTarget();

@@ -283,10 +283,10 @@ public class FocusUpgradeTests {
     @GameTest(template = TEMPLATE)
     public static void earthShockNeedsNothingToAimAt(GameTestHelper helper) {
         Player caster = helper.makeMockPlayer(GameType.SURVIVAL);
-        helper.assertFalse(me.moonscenty.alchemia.wand.spell.Shock.cast(helper.getLevel(), caster,
+        helper.assertTrue(me.moonscenty.alchemia.wand.spell.Shock.cast(helper.getLevel(), caster,
                         wand("shock"), net.minecraft.world.phys.BlockHitResult.miss(
                                 net.minecraft.world.phys.Vec3.ZERO, Direction.UP, BlockPos.ZERO), 0),
-                "a plain bolt wants something to hit");
+                "a plain bolt goes off at nothing too");
         helper.assertTrue(me.moonscenty.alchemia.wand.spell.Shock.cast(helper.getLevel(), caster,
                         wand("shock", FocusUpgrade.EARTH_SHOCK), net.minecraft.world.phys.BlockHitResult.miss(
                                 net.minecraft.world.phys.Vec3.ZERO, Direction.UP, BlockPos.ZERO), 0),

@@ -1,15 +1,24 @@
 package me.moonscenty.alchemia.wand.spell;
 
 import me.moonscenty.alchemia.registry.ModEntities;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseFireBlock;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 
 public class Ember extends Bolt {
     // damage, and seconds of burning
@@ -18,6 +27,12 @@ public class Ember extends Bolt {
     private static final int GOES_OUT = 20;
     // chance per rank of alchemist's fire to set the ground alight
     private static final float CATCHES = 0.025F;
+    // original: share of speed kept each tick, a beam's, and off the ground
+    private static final double SLOWS = 0.95;
+    private static final double SLOWS_BEAM = 0.975;
+    private static final double SCRAPES = 0.66;
+    private static final EntityDataAccessor<Boolean> BEAM =
+            SynchedEntityData.defineId(Ember.class, EntityDataSerializers.BOOLEAN);
 
     private float hurts = HURTS;
     private int burns = BURNS_FOR;
@@ -56,30 +71,36 @@ public class Ember extends Bolt {
 
     public Ember lasting(int ticks) {
         this.goesOut = ticks;
+        entityData.set(BEAM, ticks > GOES_OUT);
         return this;
+    }
+
+    @Override
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        builder.define(BEAM, false);
+    }
+
+    @Override
+    public void tick() {
+        Vec3 going = getDeltaMovement().scale(entityData.get(BEAM) ? SLOWS_BEAM : SLOWS);
+        setDeltaMovement(onGround() ? going.scale(SCRAPES) : going);
+        super.tick();
     }
 
     @Override
     protected void land(ServerLevel level, HitResult where) {
         level.sendParticles(ParticleTypes.LARGE_SMOKE, getX(), getY(), getZ(), 3, 0.1, 0.1, 0.1, 0.01);
-        if (!(where instanceof EntityHitResult struck)) {
-            return;
-        }
-        Entity hit = struck.getEntity();
-        if (hit.hurt(damageSources().indirectMagic(this, getOwner()), hurts)) {
-            hit.igniteForSeconds(burns);
-        }
-        if (random.nextFloat() < CATCHES * alchemists) {
-            catchGround(level);
-        }
-    }
-
-    private void catchGround(ServerLevel level) {
-        net.minecraft.core.BlockPos at = blockPosition();
-        if (level.isEmptyBlock(at)
-                && net.minecraft.world.level.block.BaseFireBlock.canBePlacedAt(level, at,
-                        getDirection())) {
-            level.setBlock(at, net.minecraft.world.level.block.BaseFireBlock.getState(level, at), 3);
+        if (where instanceof EntityHitResult struck) {
+            Entity hit = struck.getEntity();
+            if (!hit.fireImmune() && hit.hurt(fireball(), hurts)) {
+                hit.igniteForSeconds(burns);
+            }
+        } else if (where instanceof BlockHitResult wall && random.nextFloat() < CATCHES * alchemists
+                && (!(getOwner() instanceof Mob) || level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING))) {
+            BlockPos at = wall.getBlockPos().relative(wall.getDirection());
+            if (level.isEmptyBlock(at)) {
+                level.setBlockAndUpdate(at, BaseFireBlock.getState(level, at));
+            }
         }
     }
 }

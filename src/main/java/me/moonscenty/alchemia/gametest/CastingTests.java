@@ -69,15 +69,14 @@ public class CastingTests {
     }
 
     @GameTest(template = TEMPLATE)
-    public static void aShockAtNothingIsNotPaidFor(GameTestHelper helper) {
+    public static void aShockAtNothingIsStillPaidFor(GameTestHelper helper) {
         Player caster = helper.makeMockPlayer(GameType.SURVIVAL);
         ItemStack wand = wand("shock", 100);
         int had = ((WandItem) wand.getItem()).held(wand, ModAspects.AIR);
 
         boolean went = Casting.cast(helper.getLevel(), caster, wand, 0);
-        helper.assertFalse(went, "nothing was in the way");
-        helper.assertValueEqual(((WandItem) wand.getItem()).held(wand, ModAspects.AIR), had,
-                "so nothing was spent");
+        helper.assertTrue(went, "nothing was in the way, but the bolt went");
+        helper.assertTrue(((WandItem) wand.getItem()).held(wand, ModAspects.AIR) < had, "and it was paid for");
         helper.succeed();
     }
 
@@ -149,7 +148,6 @@ public class CastingTests {
         LivingEntity mark = helper.spawn(EntityType.PIG, new BlockPos(2, 2, 2));
         VisShard shard = new VisShard(helper.getLevel(), caster, mark);
         shard.setPos(caster.getX(), caster.getY() + 1.0, caster.getZ());
-        shard.setDeltaMovement(0.0, 0.0, 0.0);
         helper.getLevel().addFreshEntity(shard);
 
         shard.tick();
@@ -195,7 +193,8 @@ public class CastingTests {
         helper.setBlock(wall, Blocks.STONE);
         caster.setPos(helper.absoluteVec(new Vec3(5.5, 2.0, 1.5)));
 
-        BlockHitResult face = new BlockHitResult(Vec3.ZERO, Direction.EAST, helper.absolutePos(wall), false);
+        BlockHitResult face = new BlockHitResult(helper.absoluteVec(new Vec3(2.0, 2.5, 1.5)), Direction.EAST,
+                helper.absolutePos(wall), false);
         helper.assertFalse(Swapping.builder(helper.getLevel(), caster, wand, face, 0),
                 "with nothing shown to it, it lays nothing");
 
@@ -254,13 +253,14 @@ public class CastingTests {
     }
 
     @GameTest(template = TEMPLATE, timeoutTicks = 200)
-    public static void aHoleInThinAirDoesNothing(GameTestHelper helper) {
+    public static void aHoleInThinAirOpensNothingButIsPaidFor(GameTestHelper helper) {
         Player caster = helper.makeMockPlayer(GameType.CREATIVE);
         ItemStack wand = wand("hole", 100);
         BlockPos nothing = new BlockPos(4, 3, 4);
-        helper.assertFalse(Hole.cast(helper.getLevel(), caster, wand,
+        helper.assertTrue(Hole.cast(helper.getLevel(), caster, wand,
                         new BlockHitResult(Vec3.ZERO, Direction.WEST, helper.absolutePos(nothing), false), 0),
-                "there was nothing there to bore");
+                "it went off regardless");
+        helper.assertBlockNotPresent(ModBlocks.HOLE.get(), nothing);
         helper.succeed();
     }
 

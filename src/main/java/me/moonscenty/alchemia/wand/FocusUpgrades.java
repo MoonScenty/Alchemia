@@ -154,7 +154,15 @@ public final class FocusUpgrades {
             return List.of();
         }
         List<List<FocusUpgrade>> ranks = OFFERED.get(kind(focus));
-        return ranks == null ? List.of() : ranks.get(rank - 1);
+        return ranks == null ? List.of() : ranks.get(rank - 1).stream().filter(upgrade -> fits(focus, upgrade)).toList();
+    }
+
+    // original's canApplyUpgrade
+    private static boolean fits(ItemStack focus, FocusUpgrade upgrade) {
+        if (upgrade == ENLARGE && kind(focus).equals("shock")) {
+            return has(focus, CHAIN_LIGHTNING) || has(focus, EARTH_SHOCK);
+        }
+        return upgrade != ALCHEMISTS_FIRE || !has(focus, FIREBALL) || !has(focus, ALCHEMISTS_FIRE);
     }
 
     public static List<FocusUpgrade> offers(ItemStack focus, int rank, net.minecraft.world.entity.player.Player who) {

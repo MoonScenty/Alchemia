@@ -13,6 +13,7 @@ import me.moonscenty.alchemia.item.VisHolder;
 import me.moonscenty.alchemia.item.WandItem;
 import me.moonscenty.alchemia.registry.ModDataComponents;
 import me.moonscenty.alchemia.registry.ModSounds;
+import me.moonscenty.alchemia.registry.ModTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
@@ -34,7 +35,7 @@ public final class Swapping {
     private static final int LAYS_FURTHER = 8;
     // trade spread in steps, and what each rank of enlarge adds; original's value
     private static final int SPREADS = 3;
-    private static final int SPREADS_FURTHER = 2;
+    private static final int SPREADS_FURTHER = 1;
 
     private Swapping() {
     }
@@ -48,7 +49,8 @@ public final class Swapping {
             return false;
         }
         if (caster.isShiftKeyDown()) {
-            return shown(level, caster, wand, struck);
+            return struck.getLocation().distanceTo(caster.getEyePosition()) <= Casting.HAND
+                    && shown(level, caster, wand, struck);
         }
         Block laying = remembered(wand);
         if (laying == null) {
@@ -81,11 +83,53 @@ public final class Swapping {
             return false;
         }
         BlockPos first = struck.getBlockPos();
-        Block was = level.getBlockState(first).getBlock();
-        if (was == laying) {
+        BlockState was = level.getBlockState(first);
+        if (level.getBlockEntity(first) != null || was.is(ModTags.Blocks.TAINT)) {
             return false;
         }
-        return lay(level, caster, wand, laying, spreadFrom(level, first, was, spreads(wand)), true);
+        // original: the cast itself is paid for, then each block swapped
+        trade(level, caster, wand, laying, spreadFrom(level, first, was, spreads(wand)));
+        return true;
+    }
+
+    // original: a swing swaps the one block looked at
+    public static void swing(ServerLevel level, Player caster, ItemStack wand) {
+        Block laying = remembered(wand);
+        if (laying == null || !(Casting.aim(caster, Casting.fitted(wand)) instanceof BlockHitResult struck)
+                || struck.getType() != HitResult.Type.BLOCK) {
+            return;
+        }
+        BlockPos at = struck.getBlockPos();
+        if (level.getBlockEntity(at) == null && !level.getBlockState(at).is(ModTags.Blocks.TAINT)) {
+            trade(level, caster, wand, laying, List.of(at));
+        }
+    }
+
+    private static void trade(ServerLevel level, Player caster, ItemStack wand, Block laying, List<BlockPos> where) {
+        var price = Casting.fitted(wand).cost();
+        VisHolder holder = VisHolder.of(wand);
+        for (BlockPos at : where) {
+            BlockState there = level.getBlockState(at);
+            if (there.isAir() || there.is(laying) || level.getBlockEntity(at) != null
+                    || there.getDestroySpeed(level, at) < 0.0F || !caster.mayInteract(level, at)
+                    || holder == null || !holder.holds(wand, price, caster, VisHolder.Spending.WORKING)
+                    || !takeOne(caster, laying)) {
+                continue;
+            }
+            if (!caster.isCreative()) {
+                for (ItemStack drop : Block.getDrops(there, level, at, null, caster, tool(level, wand))) {
+                    if (!caster.getInventory().add(drop)) {
+                        Block.popResource(level, at, drop);
+                    }
+                }
+                holder.take(wand, price, caster, VisHolder.Spending.WORKING);
+            }
+            level.setBlockAndUpdate(at, laying.defaultBlockState());
+            level.playSound(null, caster.getX(), caster.getY(), caster.getZ(), ModSounds.WAND.get(),
+                    SoundSource.PLAYERS, 0.25F, 1.0F);
+            level.playSound(null, at, ModSounds.POOF.get(), SoundSource.BLOCKS, 0.4F,
+                    1.0F + (float) level.random.nextGaussian() * 0.05F);
+        }
     }
 
     // returns false so choosing a block is never charged
@@ -152,7 +196,7 @@ public final class Swapping {
         caster.displayClientMessage(Component.translatable("item.alchemia.focus.reach", now), true);
     }
 
-    private static List<BlockPos> spreadFrom(ServerLevel level, BlockPos first, Block kind, int reach) {
+    private static List<BlockPos> spreadFrom(ServerLevel level, BlockPos first, BlockState kind, int reach) {
         List<BlockPos> found = new ArrayList<>();
         Set<BlockPos> seen = new HashSet<>();
         Deque<BlockPos> edge = new ArrayDeque<>();
@@ -168,15 +212,23 @@ public final class Swapping {
             if (taken >= reach) {
                 continue;
             }
-            for (Direction side : Direction.values()) {
-                BlockPos next = at.relative(side);
-                if (seen.add(next) && level.getBlockState(next).is(kind)) {
-                    edge.add(next);
+            for (BlockPos next : BlockPos.betweenClosed(at.offset(-1, -1, -1), at.offset(1, 1, 1))) {
+                if (level.getBlockState(next) == kind && exposed(level, next) && seen.add(next.immutable())) {
+                    edge.add(next.immutable());
                     steps.add(taken + 1);
                 }
             }
         }
         return found;
+    }
+
+    private static boolean exposed(ServerLevel level, BlockPos at) {
+        for (Direction side : Direction.values()) {
+            if (!level.getBlockState(at.relative(side)).canOcclude()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static boolean lay(ServerLevel level, Player caster, ItemStack wand, Block laying,

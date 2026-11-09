@@ -11,6 +11,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.OwnableEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
@@ -41,11 +43,15 @@ public final class Shock {
         int potency = Casting.worked(wand, FocusUpgrade.POTENCY);
         int wider = Casting.worked(wand, FocusUpgrade.ENLARGE);
         if (Casting.has(wand, FocusUpgrade.EARTH_SHOCK)) {
-            return lob(level, caster, BALL_REACHES + wider * WIDER, BALL_HURTS + potency * BALL_HARDER);
+            return lob(level, caster, BALL_REACHES + wider * WIDER, (int) (BALL_HURTS + potency * BALL_HARDER));
         }
 
-        if (!(aim instanceof EntityHitResult struck) || !(struck.getEntity() instanceof LivingEntity hit)) {
-            return false;
+        // original: the bolt costs vis whether or not it finds anything
+        if (!(aim instanceof EntityHitResult struck) || !(struck.getEntity() instanceof LivingEntity hit)
+                || !mayHurt(level, hit)) {
+            level.playSound(null, caster.getX(), caster.getY(), caster.getZ(),
+                    ModSounds.SHOCK.get(), SoundSource.PLAYERS, 0.25F, 1.0F);
+            return true;
         }
         int chained = Casting.worked(wand, FocusUpgrade.CHAIN_LIGHTNING);
         hit.hurt(level.damageSources().indirectMagic(caster, caster),
@@ -81,7 +87,8 @@ public final class Shock {
         double closest = Double.MAX_VALUE;
         for (LivingEntity other : level.getEntitiesOfClass(LivingEntity.class,
                 new AABB(from.position(), from.position()).inflate(JUMPS))) {
-            if (already.contains(other) || !other.isAlive()) {
+            if (already.contains(other) || !other.isAlive() || !mayHurt(level, other)
+                    || other instanceof OwnableEntity pet && already.get(1).equals(pet.getOwner())) {
                 continue;
             }
             double away = other.distanceToSqr(from);
@@ -91,6 +98,10 @@ public final class Shock {
             }
         }
         return found;
+    }
+
+    private static boolean mayHurt(ServerLevel level, Entity target) {
+        return !(target instanceof Player) || level.getServer().isPvpAllowed();
     }
 
     private static void arc(ServerLevel level, Entity from, Entity to) {
@@ -105,7 +116,7 @@ public final class Shock {
 
     private static boolean lob(ServerLevel level, LivingEntity caster, int reaches, float hurts) {
         ShockOrb orb = new ShockOrb(level, caster).striking(reaches, hurts);
-        orb.shootFromRotation(caster, caster.getXRot(), caster.getYRot(), 0.0F, 1.2F, 0.0F);
+        orb.shootFromRotation(caster, caster.getXRot(), caster.getYRot(), 0.0F, 1.5F, 1.0F);
         level.addFreshEntity(orb);
         level.playSound(null, caster.getX(), caster.getY(), caster.getZ(),
                 ModSounds.ZAP.get(), SoundSource.PLAYERS, 1.0F,

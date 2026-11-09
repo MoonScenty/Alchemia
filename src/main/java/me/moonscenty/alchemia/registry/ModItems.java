@@ -14,6 +14,7 @@ import me.moonscenty.alchemia.item.FocusItem;
 import me.moonscenty.alchemia.item.FocusPouchItem;
 import me.moonscenty.alchemia.item.FortressArmorItem;
 import me.moonscenty.alchemia.item.RobeItem;
+import me.moonscenty.alchemia.wand.Casting;
 import me.moonscenty.alchemia.wand.Focus;
 import me.moonscenty.alchemia.wand.spell.Excavation;
 import me.moonscenty.alchemia.wand.spell.Shock;
@@ -412,7 +413,7 @@ public class ModItems {
         kinds.put("shock", () -> Focus.of(0x9FB3BF, AspectList.of(ModAspects.AIR, 8))
                 .cooldown(250).inTurrets(20.0F, 0.0F).casts(Shock::cast));
         kinds.put("excavation", () -> Focus.of(0x064006, AspectList.of(ModAspects.EARTH, 1))
-                .heldDown().casts(Excavation::cast));
+                .heldDown().reaching(10.0, true).casts(Excavation::cast));
         kinds.put("grapple", () -> Focus.of(0x1515FF, AspectList.of(ModAspects.WATER, 10)
                 .add(ModAspects.AIR, 10)).cooldown(250).casts(Thrown::grapple));
         kinds.put("hellbat", () -> Focus.of(0xDC3602, AspectList.of(ModAspects.FIRE, 10)
@@ -421,16 +422,16 @@ public class ModItems {
                 .add(ModAspects.ENTROPY, 2).add(ModAspects.WATER, 2))
                 .cooldown(250).inTurrets(32.0F, 12.0F).casts(Thrown::pech));
         kinds.put("hole", () -> Focus.of(0x091429, AspectList.of(ModAspects.ENTROPY, 25)
-                .add(ModAspects.AIR, 25).add(ModAspects.EARTH, 25)).casts(Hole::cast));
+                .add(ModAspects.AIR, 25).add(ModAspects.EARTH, 25)).reaching(Casting.HAND, true).casts(Hole::cast));
         kinds.put("primal", () -> Focus.of(0xA5A1C1, primalCost())
                 .cooldown(500).inTurrets().casts(Thrown::primal));
         kinds.put("shard", () -> Focus.of(0x9929BD, AspectList.of(ModAspects.FIRE, 1)
                 .add(ModAspects.ENTROPY, 1).add(ModAspects.AIR, 1))
-                .cooldown(300).inTurrets().casts(Thrown::visShard));
+                .cooldown(300).inTurrets().reaching(32.0, false).casts(Thrown::visShard));
         kinds.put("trade", () -> Focus.of(0x857B93, AspectList.of(ModAspects.ENTROPY, 1)
-                .add(ModAspects.EARTH, 1).add(ModAspects.ORDER, 1)).casts(Swapping::trade));
+                .add(ModAspects.EARTH, 1).add(ModAspects.ORDER, 1)).reaching(Casting.HAND, true).casts(Swapping::trade));
         kinds.put("builder", () -> Focus.of(0x85EB93, AspectList.of(ModAspects.AIR, 1)
-                .add(ModAspects.EARTH, 1).add(ModAspects.ORDER, 1)).casts(Swapping::builder));
+                .add(ModAspects.EARTH, 1).add(ModAspects.ORDER, 1)).reaching(64.0, true).casts(Swapping::builder));
 
         Map<String, DeferredItem<FocusItem>> made = new java.util.LinkedHashMap<>();
         kinds.forEach((name, kind) -> made.put(name, ITEMS.register("focus_" + name,

@@ -23,6 +23,9 @@ import net.minecraft.world.phys.Vec3;
 public final class Casting {
     // original's value
     public static final double REACH = 20.0;
+    // an unaided hand, for the foci that use the wand's own ray
+    public static final double HAND = 5.0;
+    private static final double SLACK = 1.1;
 
     // focus cooldowns are in milliseconds
     private static final int A_SECOND = 1000;
@@ -62,7 +65,7 @@ public final class Casting {
         if (!VisHolder.canPay(wand, focus.cost(), caster, VisHolder.Spending.WORKING)) {
             return false;
         }
-        if (!focus.spell().cast(level, caster, wand, aim(caster), heldFor)) {
+        if (!focus.spell().cast(level, caster, wand, aim(caster, focus), heldFor)) {
             return false;
         }
 
@@ -83,7 +86,11 @@ public final class Casting {
     }
 
     public static HitResult aim(LivingEntity caster) {
-        return aim(caster, REACH, 1.0, Casting::catchable);
+        return aim(caster, REACH, SLACK, Casting::catchable);
+    }
+
+    public static HitResult aim(LivingEntity caster, Focus focus) {
+        return aim(caster, focus.reach(), SLACK, focus.blocksOnly() ? entity -> false : Casting::catchable);
     }
 
     // slack: how far either side of the line of sight an entity is still caught

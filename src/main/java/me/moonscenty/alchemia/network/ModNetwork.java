@@ -66,6 +66,9 @@ public class ModNetwork {
     // the wand comes from the server-side hand, not the packet, so a lagging client cannot target the wrong item
     private static void onChangeFocus(ChangeFocus payload, IPayloadContext context) {
         withWand(context, (player, wand) -> {
+            if (WandItem.isSceptre(wand)) {
+                return;
+            }
             if (payload.remove()) {
                 Foci.remove(player, wand);
             } else {
@@ -75,7 +78,11 @@ public class ModNetwork {
     }
 
     private static void onChooseFocus(ChooseFocus payload, IPayloadContext context) {
-        withWand(context, (player, wand) -> Foci.fit(player, wand, payload.focus()));
+        withWand(context, (player, wand) -> {
+            if (!WandItem.isSceptre(wand)) {
+                Foci.fit(player, wand, payload.focus());
+            }
+        });
     }
 
     private static void withWand(IPayloadContext context, BiConsumer<ServerPlayer, ItemStack> work) {
