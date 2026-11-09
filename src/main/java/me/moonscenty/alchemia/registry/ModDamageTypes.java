@@ -14,6 +14,7 @@ public final class ModDamageTypes {
     public static final ResourceKey<DamageType> AIR_ARROW = key("air_arrow");
     public static final ResourceKey<DamageType> FIRE_ARROW = key("fire_arrow");
     public static final ResourceKey<DamageType> ORDER_ARROW = key("order_arrow");
+    public static final ResourceKey<DamageType> DISSOLVE = key("dissolve");
 
     private ModDamageTypes() {
     }
@@ -26,6 +27,12 @@ public final class ModDamageTypes {
         context.register(AIR_ARROW, new DamageType("alchemia.air_arrow", 0.1F));
         context.register(FIRE_ARROW, new DamageType("alchemia.fire_arrow", 0.1F));
         context.register(ORDER_ARROW, new DamageType("alchemia.order_arrow", 0.1F));
+        context.register(DISSOLVE, new DamageType("alchemia.dissolve", 0.1F));
+    }
+
+    public static DamageSource dissolve(Level level) {
+        return new DamageSource(level.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
+                .getHolderOrThrow(DISSOLVE));
     }
 
     public static DamageSource arrow(Level level, CrystalType kind, Entity arrow, Entity shooter) {

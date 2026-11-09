@@ -1391,13 +1391,12 @@ public class ModRecipeProvider extends RecipeProvider {
                 new ItemStack(ModItems.ALUMENTUM.get()), "alumentum");
         crucible(output, "nitor", Ingredient.of(Items.GLOWSTONE_DUST),
                 AspectList.of(ModAspects.ENERGY, 3).add(ModAspects.FIRE, 3).add(ModAspects.LIGHT, 3),
-                new ItemStack(ModBlocks.NITOR.get(DyeColor.WHITE).get(), NITOR_AT_A_TIME), "nitor");
+                new ItemStack(ModBlocks.NITOR.get(DyeColor.YELLOW).get()), "nitor");
         nitorDyes(output);
         leftovers(output);
         foci(output);
     }
 
-    private static final int NITOR_AT_A_TIME = 4;
 
     private Ingredient shard(me.moonscenty.alchemia.block.CrystalType type) {
         return Ingredient.of(ModItems.SHARDS.get(type));

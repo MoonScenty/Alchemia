@@ -1,6 +1,11 @@
 package me.moonscenty.alchemia.block.eldritch;
 
+import me.moonscenty.alchemia.Alchemia;
+import me.moonscenty.alchemia.aspect.AspectList;
+import me.moonscenty.alchemia.aspect.Aspects;
 import me.moonscenty.alchemia.client.EldritchEffects;
+import me.moonscenty.alchemia.item.CrystallizedEssenceItem;
+import me.moonscenty.alchemia.registry.ModDamageTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -11,7 +16,13 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FlowingFluid;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.living.LivingDropsEvent;
 
+@EventBusSubscriber(modid = Alchemia.MODID)
 public class LiquidDeathBlock extends LiquidBlock {
     public LiquidDeathBlock(FlowingFluid fluid, Properties properties) {
         super(fluid, properties);
@@ -21,7 +32,26 @@ public class LiquidDeathBlock extends LiquidBlock {
     protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
         if (!level.isClientSide && entity instanceof LivingEntity) {
             int flowed = Math.min(state.getValue(LEVEL), 3);
-            entity.hurt(level.damageSources().magic(), 4 - flowed + 1);
+            entity.hurt(ModDamageTypes.dissolve(level), 4 - flowed + 1);
+        }
+    }
+
+    // what dissolves leaves crystals of what it was made of, each aspect half the time
+    @SubscribeEvent
+    public static void dissolved(LivingDropsEvent event) {
+        if (!event.getSource().is(ModDamageTypes.DISSOLVE)) {
+            return;
+        }
+        LivingEntity dead = event.getEntity();
+        RandomSource random = dead.level().random;
+        AspectList made = Aspects.of(dead);
+        for (var aspect : made.sortedByName()) {
+            if (random.nextBoolean()) {
+                continue;
+            }
+            ItemStack crystals = CrystallizedEssenceItem.of(aspect);
+            crystals.setCount(Math.max(1, (1 + random.nextInt(made.get(aspect))) / 2));
+            event.getDrops().add(new ItemEntity(dead.level(), dead.getX(), dead.getEyeY(), dead.getZ(), crystals));
         }
     }
 

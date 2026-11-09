@@ -24,6 +24,8 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 
 public class LootBagItem extends Item {
+    private static final float GEAR_PER_RARITY = 0.025F;
+
     private final int rarity;
 
     public LootBagItem(Properties properties, int rarity) {
@@ -62,6 +64,9 @@ public class LootBagItem extends Item {
     }
 
     public static ItemStack loot(ServerLevel level, int rarity, RandomSource random) {
+        if (rarity > 0 && random.nextFloat() < GEAR_PER_RARITY * rarity) {
+            return gear(level, rarity, random);
+        }
         List<ItemStack> things = new ArrayList<>();
         List<Integer> weights = new ArrayList<>();
         add(things, weights, new ItemStack(ModItems.COIN.get(), rarity + 1), new int[] {2500, 2250, 2000}[rarity]);
@@ -108,12 +113,47 @@ public class LootBagItem extends Item {
                 break;
             }
         }
-        if (picked.is(Items.BOOK)) {
-            picked = EnchantmentHelper.enchantItem(random, picked, (int) (5 + rarity * 0.75F * random.nextInt(18)),
-                    level.registryAccess(), level.registryAccess().registryOrThrow(Registries.ENCHANTMENT)
-                            .getTag(net.minecraft.tags.EnchantmentTags.IN_ENCHANTING_TABLE));
+        return picked.is(Items.BOOK) ? enchanted(level, picked, rarity, random) : picked;
+    }
+
+    private static ItemStack enchanted(ServerLevel level, ItemStack stack, int rarity, RandomSource random) {
+        return EnchantmentHelper.enchantItem(random, stack, (int) (5 + rarity * 0.75F * random.nextInt(18)),
+                level.registryAccess(), level.registryAccess().registryOrThrow(Registries.ENCHANTMENT)
+                        .getTag(net.minecraft.tags.EnchantmentTags.IN_ENCHANTING_TABLE));
+    }
+
+    // original's odds: a little worn, sometimes enchanted, better the luckier the roll
+    private static ItemStack gear(ServerLevel level, int rarity, RandomSource random) {
+        int quality = random.nextInt(2);
+        for (float odds : new float[] {0.2F, 0.15F, 0.1F, 0.095F, 0.095F}) {
+            if (random.nextFloat() < odds) {
+                quality++;
+            }
         }
-        return picked;
+        ItemStack made = new ItemStack(gearFor(random.nextInt(5)).get(quality));
+        made.setDamageValue(random.nextInt(1 + made.getMaxDamage() / 6));
+        return random.nextInt(4) < rarity ? enchanted(level, made, rarity, random) : made;
+    }
+
+    private static List<Item> gearFor(int slot) {
+        return switch (slot) {
+            case 0 -> List.of(Items.IRON_AXE, Items.IRON_SWORD, Items.GOLDEN_AXE, Items.GOLDEN_SWORD,
+                    ModItems.METAL_TOOLS.get("alchemium_sword").get(), Items.DIAMOND_SWORD,
+                    ModItems.METAL_TOOLS.get("void_sword").get());
+            case 1 -> armour(Items.LEATHER_BOOTS, Items.GOLDEN_BOOTS, Items.CHAINMAIL_BOOTS, Items.IRON_BOOTS,
+                    "boots", Items.DIAMOND_BOOTS);
+            case 2 -> armour(Items.LEATHER_LEGGINGS, Items.GOLDEN_LEGGINGS, Items.CHAINMAIL_LEGGINGS, Items.IRON_LEGGINGS,
+                    "leggings", Items.DIAMOND_LEGGINGS);
+            case 3 -> armour(Items.LEATHER_CHESTPLATE, Items.GOLDEN_CHESTPLATE, Items.CHAINMAIL_CHESTPLATE,
+                    Items.IRON_CHESTPLATE, "chestplate", Items.DIAMOND_CHESTPLATE);
+            default -> armour(Items.LEATHER_HELMET, Items.GOLDEN_HELMET, Items.CHAINMAIL_HELMET, Items.IRON_HELMET,
+                    "helmet", Items.DIAMOND_HELMET);
+        };
+    }
+
+    private static List<Item> armour(Item leather, Item gold, Item chain, Item iron, String piece, Item diamond) {
+        return List.of(leather, gold, chain, iron, ModItems.METAL_ARMOUR.get("alchemium_" + piece).get(), diamond,
+                ModItems.METAL_ARMOUR.get("void_" + piece).get());
     }
 
     private static void add(List<ItemStack> things, List<Integer> weights, ItemStack thing, int weight) {

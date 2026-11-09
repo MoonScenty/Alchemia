@@ -6,6 +6,10 @@ import java.util.Map;
 import me.moonscenty.alchemia.registry.ModAspects;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.CrossbowItem;
@@ -13,10 +17,14 @@ import net.minecraft.world.item.DiggerItem;
 import net.minecraft.world.item.HoeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.LingeringPotionItem;
+import net.minecraft.world.item.PotionItem;
 import net.minecraft.world.item.ShearsItem;
+import net.minecraft.world.item.SplashPotionItem;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.Tiers;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -69,6 +77,27 @@ public final class AspectBonuses {
         FROM_ENCHANTMENT.put(me.moonscenty.alchemia.enchantment.ModEnchantments.REPAIR, ModAspects.TOOL);
     }
 
+    // original's potion table, worth three a level
+    private static final Map<Holder<MobEffect>, Holder<Aspect>> FROM_EFFECT = Map.ofEntries(
+            Map.entry(MobEffects.BLINDNESS, ModAspects.DARKNESS),
+            Map.entry(MobEffects.CONFUSION, ModAspects.ELDRITCH),
+            Map.entry(MobEffects.DAMAGE_BOOST, ModAspects.AVERSION),
+            Map.entry(MobEffects.DIG_SLOWDOWN, ModAspects.TRAP),
+            Map.entry(MobEffects.DIG_SPEED, ModAspects.TOOL),
+            Map.entry(MobEffects.HARM, ModAspects.DEATH),
+            Map.entry(MobEffects.HEAL, ModAspects.LIFE),
+            Map.entry(MobEffects.HUNGER, ModAspects.DEATH),
+            Map.entry(MobEffects.INVISIBILITY, ModAspects.SENSES),
+            Map.entry(MobEffects.JUMP, ModAspects.FLIGHT),
+            Map.entry(MobEffects.MOVEMENT_SLOWDOWN, ModAspects.TRAP),
+            Map.entry(MobEffects.MOVEMENT_SPEED, ModAspects.MOTION),
+            Map.entry(MobEffects.NIGHT_VISION, ModAspects.SENSES),
+            Map.entry(MobEffects.POISON, ModAspects.DEATH),
+            Map.entry(MobEffects.REGENERATION, ModAspects.LIFE),
+            Map.entry(MobEffects.DAMAGE_RESISTANCE, ModAspects.PROTECT),
+            Map.entry(MobEffects.WATER_BREATHING, ModAspects.AIR),
+            Map.entry(MobEffects.WEAKNESS, ModAspects.DEATH));
+
     private AspectBonuses() {
     }
 
@@ -85,22 +114,63 @@ public final class AspectBonuses {
         if (item instanceof DiggerItem digger) {
             return base.mergeMax(ModAspects.TOOL, harvestRank(digger.getTier()) + 1);
         }
-        if (item instanceof HoeItem hoe) {
-            return base.mergeMax(ModAspects.TOOL, harvestRank(hoe.getTier()) + 1);
-        }
-        if (item instanceof ShearsItem) {
-            return base.mergeMax(ModAspects.TOOL, 2);
+        if (item instanceof HoeItem || item instanceof ShearsItem) {
+            return base.mergeMax(ModAspects.TOOL, byDurability(new ItemStack(item).getMaxDamage()));
         }
         return base;
     }
 
-    public static AspectList ofStack(ItemStack stack, AspectList base) {
-        ItemEnchantments enchantments = EnchantmentHelper.getEnchantmentsForCrafting(stack);
-        if (enchantments.isEmpty()) {
+    // original's: shears and hoes are ranked by how long they last
+    private static int byDurability(int lasts) {
+        if (lasts <= Tiers.WOOD.getUses()) {
+            return 1;
+        }
+        if (lasts <= Tiers.STONE.getUses()) {
+            return 2;
+        }
+        return lasts <= Tiers.IRON.getUses() ? 3 : 4;
+    }
+
+    private static AspectList ofWand(ItemStack stack, AspectList base) {
+        if (!(stack.getItem() instanceof me.moonscenty.alchemia.item.WandItem)) {
             return base;
         }
+        int cost = me.moonscenty.alchemia.item.WandItem.rod(stack).craftCost()
+                + me.moonscenty.alchemia.item.WandItem.cap(stack).craftCost();
+        return base.mergeMax(ModAspects.ENERGY, cost / 2).mergeMax(ModAspects.TOOL, cost / 3);
+    }
 
-        AspectList result = base;
+    private static AspectList ofPotion(ItemStack stack, AspectList base) {
+        if (!(stack.getItem() instanceof PotionItem)) {
+            return base;
+        }
+        AspectList result = base.mergeMax(ModAspects.WATER, 1).mergeMax(ModAspects.CRYSTAL, 1);
+        if (stack.getItem() instanceof SplashPotionItem || stack.getItem() instanceof LingeringPotionItem) {
+            result = result.mergeMax(ModAspects.ENTROPY, 2);
+        }
+        for (MobEffectInstance effect : stack.getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY)
+                .getAllEffects()) {
+            int level = effect.getAmplifier() + 1;
+            result = result.mergeMax(ModAspects.ENERGY, level * 2);
+            Holder<Aspect> aspect = FROM_EFFECT.get(effect.getEffect());
+            if (aspect != null) {
+                result = result.mergeMax(aspect, level * 3);
+            } else if (effect.getEffect().equals(MobEffects.FIRE_RESISTANCE)) {
+                result = result.mergeMax(ModAspects.PROTECT, level).mergeMax(ModAspects.FIRE, level * 2);
+            } else if (effect.getEffect().equals(MobEffects.ABSORPTION)) {
+                result = result.mergeMax(ModAspects.PROTECT, level).mergeMax(ModAspects.LIFE, level * 2);
+            }
+        }
+        return result;
+    }
+
+    public static AspectList ofStack(ItemStack stack, AspectList base) {
+        AspectList result = ofPotion(stack, ofWand(stack, base));
+        ItemEnchantments enchantments = EnchantmentHelper.getEnchantmentsForCrafting(stack);
+        if (enchantments.isEmpty()) {
+            return result;
+        }
+
         int levels = 0;
         for (Holder<Enchantment> enchantment : enchantments.keySet()) {
             int level = enchantments.getLevel(enchantment);
@@ -114,7 +184,7 @@ public final class AspectBonuses {
         return levels > 0 ? result.mergeMax(ModAspects.ENERGY, levels) : result;
     }
 
-    // original's scale: wood/gold 0 .. diamond 3; anything stronger, modded tiers included, is 4
+    // original's scale: wood/gold 0 .. diamond 3, alchemium with diamond; anything stronger is 4
     private static int harvestRank(Tier tier) {
         if (tier == Tiers.WOOD || tier == Tiers.GOLD) {
             return 0;
@@ -125,7 +195,8 @@ public final class AspectBonuses {
         if (tier == Tiers.IRON) {
             return 2;
         }
-        if (tier == Tiers.DIAMOND) {
+        if (tier == Tiers.DIAMOND || tier == me.moonscenty.alchemia.item.ModTiers.ALCHEMIUM
+                || tier == me.moonscenty.alchemia.item.ModTiers.ELEMENTAL) {
             return 3;
         }
         return 4;

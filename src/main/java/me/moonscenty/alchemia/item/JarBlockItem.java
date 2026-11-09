@@ -21,9 +21,14 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 
-public class JarBlockItem extends BlockItem {
+public class JarBlockItem extends BlockItem implements me.moonscenty.alchemia.aspect.ContainedAspects {
     public JarBlockItem(Block block, Properties properties) {
         super(block, properties);
+    }
+
+    @Override
+    public AspectList contained(ItemStack stack) {
+        return stack.getOrDefault(ModDataComponents.CONTENTS.get(), AspectList.EMPTY);
     }
 
     // original: a jar held against an alembic scoops it out

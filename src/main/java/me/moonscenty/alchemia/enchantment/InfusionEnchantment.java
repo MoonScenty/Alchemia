@@ -19,8 +19,8 @@ public enum InfusionEnchantment implements StringRepresentable {
     BURROWING("burrowing", 1, () -> List.of(ItemTags.PICKAXES, ItemTags.AXES)),
     REFINING("refining", 4, () -> List.of(ItemTags.PICKAXES)),
     SOUNDING("sounding", 4, () -> List.of(ItemTags.PICKAXES)),
-    ARCING("arcing", 4, () -> List.of(ItemTags.SWORDS, ItemTags.AXES)),
-    ESSENCE("essence", 5, () -> List.of(ItemTags.SWORDS, ItemTags.AXES));
+    ARCING("arcing", 4, () -> List.of(ItemTags.SWORDS, ItemTags.AXES, ItemTags.PICKAXES, ItemTags.SHOVELS)),
+    ESSENCE("essence", 5, () -> List.of(ItemTags.SWORDS, ItemTags.AXES, ItemTags.PICKAXES, ItemTags.SHOVELS));
 
     public static final Codec<InfusionEnchantment> CODEC = StringRepresentable.fromEnum(InfusionEnchantment::values);
     public static final StreamCodec<io.netty.buffer.ByteBuf, InfusionEnchantment> STREAM_CODEC =

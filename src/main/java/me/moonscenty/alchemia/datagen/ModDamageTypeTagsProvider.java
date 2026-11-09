@@ -22,7 +22,8 @@ public class ModDamageTypeTagsProvider extends TagsProvider<DamageType> {
     protected void addTags(HolderLookup.Provider provider) {
         tag(DamageTypeTags.IS_PROJECTILE).add(ModDamageTypes.AIR_ARROW, ModDamageTypes.FIRE_ARROW,
                 ModDamageTypes.ORDER_ARROW);
-        tag(DamageTypeTags.BYPASSES_ARMOR).add(ModDamageTypes.AIR_ARROW, ModDamageTypes.ORDER_ARROW);
+        tag(DamageTypeTags.BYPASSES_ARMOR).add(ModDamageTypes.AIR_ARROW, ModDamageTypes.ORDER_ARROW,
+                ModDamageTypes.DISSOLVE);
         tag(DamageTypeTags.WITCH_RESISTANT_TO).add(ModDamageTypes.AIR_ARROW, ModDamageTypes.ORDER_ARROW);
         tag(DamageTypeTags.IS_FIRE).add(ModDamageTypes.FIRE_ARROW);
     }

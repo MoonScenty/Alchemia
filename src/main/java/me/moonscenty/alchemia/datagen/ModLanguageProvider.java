@@ -1006,6 +1006,13 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("warp.alchemia.hunger.unsatisfied", pick("Ordinary food does nothing for this hunger.",
                 "평범한 음식으로는 이 허기를 달랠 수 없다."));
         add("warp.alchemia.hunger.fading", pick("The hunger starts to ebb.", "허기가 가라앉기 시작한다."));
+        add("message.alchemia.no_flight", pick("Something here will not let you stay aloft.",
+                "이곳의 무언가가 비행을 막는다."));
+        add("message.alchemia.taint_item_poison", pick("The %s melts away and leaves its taint in you.",
+                "%s이(가) 녹아내리며 오염을 옮겼다."));
+        add("death.attack.alchemia.dissolve", pick("%1$s melted away", "%1$s이(가) 녹아 없어졌다"));
+        add("death.attack.alchemia.dissolve.player", pick("%1$s melted away while fighting %2$s",
+                "%1$s이(가) %2$s와(과) 싸우다 녹아 없어졌다"));
         add("note.alchemia.already_known", pick("You already know that.", "이미 알고 있다."));
         add("note.alchemia.no_ink", pick("Your scribing tools have run dry.", "필기구의 잉크가 말랐다."));
 

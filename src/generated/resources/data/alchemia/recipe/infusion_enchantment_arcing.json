@@ -6,6 +6,12 @@
     },
     {
       "tag": "minecraft:axes"
+    },
+    {
+      "tag": "minecraft:pickaxes"
+    },
+    {
+      "tag": "minecraft:shovels"
     }
   ],
   "enchants": "arcing",

@@ -31,8 +31,6 @@ public final class InfusionEnchantmentEvents {
     private static final java.util.Map<java.util.UUID, Direction> STRUCK = new java.util.HashMap<>();
     // re-entrancy guards, so the extra blocks and blows don't trigger the effect again
     private static boolean spreading;
-    private static boolean burrowing;
-    private static boolean arcing;
 
     private InfusionEnchantmentEvents() {
     }
@@ -47,21 +45,52 @@ public final class InfusionEnchantmentEvents {
 
     @SubscribeEvent
     public static void onBroken(BlockDropsEvent event) {
-        // the shift key rather than the crouching pose, so a player in a two-block gap still gets one block
-        if (!(event.getBreaker() instanceof Player player) || player.isShiftKeyDown()) {
+        if (!(event.getBreaker() instanceof Player player)) {
             return;
         }
         ItemStack held = player.getMainHandItem();
+        if (!(effective(held, event.getState()) || silky(event.getLevel(), held))) {
+            return;
+        }
         // refine first so collected or dropped items are already clusters
-        if (InfusionEnchantments.has(held, InfusionEnchantment.REFINING)
-                && held.isCorrectToolForDrops(event.getState())) {
+        if (InfusionEnchantments.has(held, InfusionEnchantment.REFINING)) {
             refine(event, InfusionEnchantments.level(held, InfusionEnchantment.REFINING));
+        }
+        // the shift key rather than the crouching pose, so a player in a two-block gap still gets one block
+        if (player.isShiftKeyDown()) {
+            return;
         }
         if (InfusionEnchantments.has(held, InfusionEnchantment.DESTRUCTIVE)) {
             spread(event.getLevel(), event.getPos(), player, held);
         }
         if (InfusionEnchantments.has(held, InfusionEnchantment.COLLECTOR)) {
-            collect(event, player);
+            gather(event.getDrops(), player);
+        }
+    }
+
+    private static boolean effective(ItemStack tool, BlockState state) {
+        return tool.isCorrectToolForDrops(state) || tool.getDestroySpeed(state) > 1.0F;
+    }
+
+    private static boolean silky(net.minecraft.world.level.Level level, ItemStack tool) {
+        return net.minecraft.world.item.enchantment.EnchantmentHelper.getItemEnchantmentLevel(level.registryAccess()
+                .registryOrThrow(net.minecraft.core.registries.Registries.ENCHANTMENT)
+                .getHolderOrThrow(net.minecraft.world.item.enchantment.Enchantments.SILK_TOUCH), tool) > 0;
+    }
+
+    private static boolean ore(BlockState state) {
+        return state.is(Tags.Blocks.ORES) || state.is(me.moonscenty.alchemia.registry.ModTags.Blocks.CRYSTALS);
+    }
+
+    // the blocks an enchantment takes beyond the struck one: the tool's own fortune and silk apply, no event fires
+    private static void harvest(ServerLevel level, Player player, BlockPos at, ItemStack tool) {
+        BlockState state = level.getBlockState(at);
+        var entity = level.getBlockEntity(at);
+        level.levelEvent(2001, at, Block.getId(state));
+        boolean drops = !player.getAbilities().instabuild && state.canHarvestBlock(level, at, player);
+        level.removeBlock(at, false);
+        if (drops) {
+            state.getBlock().playerDestroy(level, player, at, state, entity, tool);
         }
     }
 
@@ -85,16 +114,16 @@ public final class InfusionEnchantmentEvents {
         }
     }
 
-    private static void collect(BlockDropsEvent event, Player player) {
+    private static void gather(java.util.Collection<ItemEntity> drops, Player player) {
         List<ItemEntity> left = new ArrayList<>();
-        for (ItemEntity dropped : event.getDrops()) {
+        for (ItemEntity dropped : drops) {
             ItemStack stack = dropped.getItem();
             if (!player.getInventory().add(stack) && !stack.isEmpty()) {
                 left.add(dropped);
             }
         }
-        event.getDrops().clear();
-        event.getDrops().addAll(left);
+        drops.clear();
+        drops.addAll(left);
     }
 
     private static void spread(net.minecraft.world.level.Level level, BlockPos struck, Player player, ItemStack held) {
@@ -106,88 +135,76 @@ public final class InfusionEnchantmentEvents {
         try {
             for (BlockPos beside : around(struck, face)) {
                 BlockState there = server.getBlockState(beside);
-                if (there.isAir() || there.getDestroySpeed(server, beside) < 0.0F
-                        || !held.isCorrectToolForDrops(there)) {
+                if (there.isAir() || there.getDestroySpeed(server, beside) < 0.0F || !effective(held, there)) {
                     continue;
                 }
-                server.destroyBlock(beside, true, player);
                 held.hurtAndBreak(1, player, EquipmentSlot.MAINHAND);
+                harvest(server, player, beside, held);
             }
         } finally {
             spreading = false;
         }
     }
 
-    // how far each step may stray from the struck block; trunks reach further than seams
+    // how far each step may look; trunks reach further than seams
     private static final int SEAM_REACH = 1;
     private static final int TRUNK_REACH = 2;
-    private static final int FOLLOWS_AT_MOST = 128;
+    // original's limits on the walk away from the struck block
+    private static final int STRAYS_ACROSS = 24;
+    private static final int STRAYS_UP = 48;
 
-    // breaks the furthest joined block of the same kind instead of the struck one
+    // breaks the far end of what is joined to the struck block, whose own break is spent there; costs the tool nothing
     @SubscribeEvent
     public static void onBurrowing(BlockEvent.BreakEvent event) {
-        if (burrowing || event.getPlayer().isShiftKeyDown()) {
+        if (event.getPlayer().isShiftKeyDown()) {
             return;
         }
         ItemStack held = event.getPlayer().getMainHandItem();
         BlockState struck = event.getState();
         if (!InfusionEnchantments.has(held, InfusionEnchantment.BURROWING)
-                || !held.isCorrectToolForDrops(struck)
-                || !(event.getLevel() instanceof net.minecraft.world.level.Level level)) {
+                || !effective(held, struck)
+                || !(event.getLevel() instanceof ServerLevel level)) {
             return;
         }
         boolean trunk = struck.is(BlockTags.LOGS);
-        if (!trunk && !struck.is(Tags.Blocks.ORES)) {
-            return;
-        }
-
-        BlockPos furthest = furthest(level, event.getPos(), struck.getBlock(),
-                trunk ? TRUNK_REACH : SEAM_REACH);
-        if (furthest.equals(event.getPos())) {
+        if (!trunk && !ore(struck)) {
             return;
         }
         event.setCanceled(true);
-        burrowing = true;
-        try {
-            level.destroyBlock(furthest, true, event.getPlayer());
-            held.hurtAndBreak(1, event.getPlayer(), EquipmentSlot.MAINHAND);
-        } finally {
-            burrowing = false;
-        }
+        harvest(level, event.getPlayer(), furthest(level, event.getPos(), struck.getBlock(),
+                trunk ? TRUNK_REACH : SEAM_REACH), held);
     }
 
-    // joined only; reach limits distance from the start, not the number of steps
+    // walks to the first further block it finds, again and again
     private static BlockPos furthest(net.minecraft.world.level.Level level, BlockPos from, Block kind, int reach) {
-        java.util.Set<BlockPos> seen = new java.util.HashSet<>();
-        java.util.Deque<BlockPos> todo = new java.util.ArrayDeque<>();
-        seen.add(from);
-        todo.add(from);
-        BlockPos best = from;
+        BlockPos at = from;
         double furthest = 0.0;
-        while (!todo.isEmpty() && seen.size() < FOLLOWS_AT_MOST) {
-            BlockPos at = todo.removeFirst();
-            for (int east = -1; east <= 1; east++) {
-                for (int up = -1; up <= 1; up++) {
-                    for (int south = -1; south <= 1; south++) {
-                        BlockPos beside = at.offset(east, up, south);
-                        if (seen.contains(beside) || !level.getBlockState(beside).is(kind)
-                                || stepsAway(from, beside) > reach) {
-                            continue;
+        search:
+        while (true) {
+            for (int east = -reach; east <= reach; east++) {
+                for (int up = reach; up >= -reach; up--) {
+                    for (int south = -reach; south <= reach; south++) {
+                        BlockPos next = at.offset(east, up, south);
+                        if (Math.abs(next.getX() - from.getX()) > STRAYS_ACROSS
+                                || Math.abs(next.getY() - from.getY()) > STRAYS_UP
+                                || Math.abs(next.getZ() - from.getZ()) > STRAYS_ACROSS) {
+                            return at;
                         }
-                        seen.add(beside);
-                        todo.add(beside);
-                        double away = beside.distSqr(from);
-                        if (away > furthest) {
+                        BlockState there = level.getBlockState(next);
+                        double away = next.distSqr(from);
+                        if (there.is(kind) && there.getDestroySpeed(level, next) >= 0.0F && away > furthest) {
                             furthest = away;
-                            best = beside;
+                            at = next;
+                            continue search;
                         }
                     }
                 }
             }
+            return at;
         }
-        return best;
     }
 
+    private static final int HEARS_AT_LEAST = 4;
     private static final int HEARS_PER_RANK = 4;
     private static final int TAP_COSTS = 5;
 
@@ -205,11 +222,11 @@ public final class InfusionEnchantmentEvents {
         if (!(event.getEntity() instanceof net.minecraft.server.level.ServerPlayer listener)) {
             return;
         }
-        int hears = rank * HEARS_PER_RANK;
+        int hears = HEARS_AT_LEAST + rank * HEARS_PER_RANK;
         BlockPos tapped = event.getPos();
         for (BlockPos found : BlockPos.betweenClosed(tapped.offset(-hears, -hears, -hears),
                 tapped.offset(hears, hears, hears))) {
-            if (!level.getBlockState(found).is(Tags.Blocks.ORES)) {
+            if (!ore(level.getBlockState(found))) {
                 continue;
             }
             // only the tapping player sees the marks; they spread one block per tick, as in the original
@@ -225,71 +242,84 @@ public final class InfusionEnchantmentEvents {
 
     private static final double ARCS_PER_RANK = 1.0;
     private static final double ARCS_AT_ALL = 1.5;
+    // original's values
+    private static final float ARC_HURTS = 0.5F;
+    private static final float ARC_SHOVES = 0.5F;
 
+    // a separate lesser blow on each neighbour, so the swing itself is untouched
     @SubscribeEvent
     public static void onArcing(net.neoforged.neoforge.event.entity.player.AttackEntityEvent event) {
         Player player = event.getEntity();
         ItemStack held = player.getMainHandItem();
         int rank = InfusionEnchantments.level(held, InfusionEnchantment.ARCING);
-        if (arcing || rank <= 0 || player.level().isClientSide || !event.getTarget().isAlive()) {
+        if (rank <= 0 || !(player.level() instanceof ServerLevel level) || !event.getTarget().isAlive()) {
             return;
         }
 
         double out = ARCS_AT_ALL + rank * ARCS_PER_RANK;
+        float hurts = (float) player.getAttributeValue(net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_DAMAGE)
+                * ARC_HURTS;
+        float facing = player.getYRot() * Mth.DEG_TO_RAD;
         int struck = 0;
-        arcing = true;
-        try {
-            for (net.minecraft.world.entity.LivingEntity beside : player.level().getEntitiesOfClass(
-                    net.minecraft.world.entity.LivingEntity.class,
-                    event.getTarget().getBoundingBox().inflate(out, 1.0 + rank / 2.0, out))) {
-                if (struck >= rank) {
-                    break;
-                }
-                if (beside == player || beside == event.getTarget() || !beside.isAlive()
-                        || beside instanceof Player
-                        || beside instanceof net.minecraft.world.entity.OwnableEntity owned
-                                && player.getUUID().equals(owned.getOwnerUUID())) {
-                    continue;
-                }
-                player.attack(beside);
+        for (net.minecraft.world.entity.Entity beside : level.getEntities(player,
+                event.getTarget().getBoundingBox().inflate(out, 1.0 + rank / 2.0, out))) {
+            if (struck >= rank) {
+                break;
+            }
+            if (!(beside instanceof net.minecraft.world.entity.Mob) || beside == event.getTarget() || !beside.isAlive()
+                    || beside instanceof net.minecraft.world.entity.OwnableEntity owned
+                            && player.getUUID().equals(owned.getOwnerUUID())) {
+                continue;
+            }
+            var blow = player.damageSources().playerAttack(player);
+            if (beside.hurt(blow, hurts)) {
+                net.minecraft.world.item.enchantment.EnchantmentHelper.doPostAttackEffectsWithItemSource(level, beside,
+                        blow, null);
+                beside.push(-Mth.sin(facing) * ARC_SHOVES, 0.1, Mth.cos(facing) * ARC_SHOVES);
                 struck++;
             }
-        } finally {
-            arcing = false;
         }
         if (struck > 0) {
             net.minecraft.world.entity.Entity target = event.getTarget();
-            player.level().playSound(null, target.getX(), target.getY(), target.getZ(),
+            level.playSound(null, target.getX(), target.getY(), target.getZ(),
                     me.moonscenty.alchemia.registry.ModSounds.SWING.get(), net.minecraft.sounds.SoundSource.PLAYERS,
-                    1.0F, 0.9F + player.level().random.nextFloat() * 0.2F);
+                    1.0F, 0.9F + level.random.nextFloat() * 0.2F);
         }
     }
 
     private static final int ESSENCE_IN_FIVE = 5;
 
     @SubscribeEvent
-    public static void onEssence(net.neoforged.neoforge.event.entity.living.LivingDropsEvent event) {
+    public static void onMobDrops(net.neoforged.neoforge.event.entity.living.LivingDropsEvent event) {
         if (!(event.getSource().getEntity() instanceof Player player)) {
             return;
         }
         ItemStack held = player.getMainHandItem();
         int rank = InfusionEnchantments.level(held, InfusionEnchantment.ESSENCE);
-        if (rank <= 0) {
-            return;
+        if (rank > 0) {
+            essence(event, rank);
         }
-        AspectList made = Aspects.of(event.getEntity());
-        if (made.isEmpty() || player.level().random.nextInt(ESSENCE_IN_FIVE) >= rank) {
-            return;
+        if (InfusionEnchantments.has(held, InfusionEnchantment.COLLECTOR)) {
+            gather(event.getDrops(), player);
         }
+    }
 
+    // each crystal also has a one-in-rank chance of cutting the run short
+    private static void essence(net.neoforged.neoforge.event.entity.living.LivingDropsEvent event, int rank) {
         var level = event.getEntity().level();
+        var random = level.random;
+        AspectList left = Aspects.of(event.getEntity());
         var where = event.getEntity().position().add(0.0, event.getEntity().getEyeHeight(), 0.0);
-        AspectList left = made;
-        for (int taken = 0; taken < rank && !left.isEmpty(); taken++) {
-            var aspect = left.sortedByAmount().get(player.level().random.nextInt(left.sortedByAmount().size()));
+        int taken = random.nextInt(ESSENCE_IN_FIVE) < rank ? 0 : rank;
+        while (taken < rank && !left.isEmpty()) {
+            var aspect = left.sortedByAmount().get(random.nextInt(left.size()));
             left = left.reduce(aspect, 1);
             event.getDrops().add(new ItemEntity(level, where.x, where.y, where.z,
                     me.moonscenty.alchemia.item.CrystallizedEssenceItem.of(aspect)));
+            taken++;
+            if (random.nextInt(rank) == 0) {
+                taken += 1 + random.nextInt(2);
+            }
         }
     }
 

@@ -36,6 +36,8 @@ public class ModDataMapProvider extends DataMapProvider {
     @Override
     protected void gather(HolderLookup.Provider provider) {
         compostables();
+        builder(NeoForgeDataMaps.FURNACE_FUELS)
+                .add(ModItems.ALUMENTUM.getId(), new net.neoforged.neoforge.registries.datamaps.builtin.FurnaceFuel(6400), false);
         vanillaAspects();
         modAspects();
         mobAspects();

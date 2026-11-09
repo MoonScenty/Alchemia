@@ -191,8 +191,10 @@ public class ModItems {
     public static final DeferredItem<net.neoforged.neoforge.common.DeferredSpawnEggItem> ALCHEMIC_SLIME_SPAWN_EGG =
             ITEMS.register("alchemic_slime_spawn_egg", () -> new net.neoforged.neoforge.common.DeferredSpawnEggItem(
                     ModEntities.ALCHEMIC_SLIME, 0xA206A2, 0xFF80FF, new Item.Properties()));
-    public static final DeferredItem<Item> TAINTED_GOO = ITEMS.registerSimpleItem("tainted_goo");
-    public static final DeferredItem<Item> TAINT_TENDRIL = ITEMS.registerSimpleItem("taint_tendril");
+    public static final DeferredItem<me.moonscenty.alchemia.item.TaintedItem> TAINTED_GOO =
+            ITEMS.registerItem("tainted_goo", me.moonscenty.alchemia.item.TaintedItem::new);
+    public static final DeferredItem<me.moonscenty.alchemia.item.TaintedItem> TAINT_TENDRIL =
+            ITEMS.registerItem("taint_tendril", me.moonscenty.alchemia.item.TaintedItem::new);
     public static final DeferredItem<Item> COIN = ITEMS.registerSimpleItem("coin");
     public static final DeferredItem<me.moonscenty.alchemia.item.KnowledgeFragmentItem> KNOWLEDGE_FRAGMENT =
             ITEMS.register("knowledge_fragment",

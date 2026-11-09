@@ -22,7 +22,7 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 
 // a phial is always either a full DRAUGHT or empty
-public class PhialItem extends Item {
+public class PhialItem extends Item implements me.moonscenty.alchemia.aspect.ContainedAspects {
     public static final int DRAUGHT = 8;
 
     public PhialItem(Properties properties) {
@@ -31,6 +31,12 @@ public class PhialItem extends Item {
 
     public static Optional<Holder<Aspect>> inside(ItemStack stack) {
         return Optional.ofNullable(stack.get(ModDataComponents.ESSENTIA.get()));
+    }
+
+    @Override
+    public me.moonscenty.alchemia.aspect.AspectList contained(ItemStack stack) {
+        return inside(stack).map(aspect -> me.moonscenty.alchemia.aspect.AspectList.of(aspect, DRAUGHT))
+                .orElse(me.moonscenty.alchemia.aspect.AspectList.EMPTY);
     }
 
     public static ItemStack filled(ItemStack from, Holder<Aspect> aspect) {

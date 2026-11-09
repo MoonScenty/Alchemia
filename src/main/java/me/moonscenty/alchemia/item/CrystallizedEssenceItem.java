@@ -12,7 +12,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 
-public class CrystallizedEssenceItem extends Item {
+public class CrystallizedEssenceItem extends Item implements me.moonscenty.alchemia.aspect.ContainedAspects {
     public CrystallizedEssenceItem(Properties properties) {
         super(properties);
     }
@@ -25,6 +25,12 @@ public class CrystallizedEssenceItem extends Item {
         ItemStack crystal = new ItemStack(me.moonscenty.alchemia.registry.ModItems.CRYSTALLIZED_ESSENCE.get());
         crystal.set(ModDataComponents.ESSENTIA.get(), aspect);
         return crystal;
+    }
+
+    @Override
+    public me.moonscenty.alchemia.aspect.AspectList contained(ItemStack stack) {
+        return inside(stack).map(aspect -> me.moonscenty.alchemia.aspect.AspectList.of(aspect, 1))
+                .orElse(me.moonscenty.alchemia.aspect.AspectList.EMPTY);
     }
 
     @Override

@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import me.moonscenty.alchemia.Alchemia;
+import me.moonscenty.alchemia.crafting.ArcaneRecipe;
 import me.moonscenty.alchemia.crafting.CrucibleRecipe;
 import me.moonscenty.alchemia.crafting.InfusionRecipe;
 import net.minecraft.core.HolderLookup;
@@ -19,6 +20,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeType;
 
 // Data-map aspects first; anything else is traced back through the recipes that make it.
 public final class Aspects {
@@ -88,56 +90,80 @@ public final class Aspects {
         }
 
         try {
-            for (RecipeHolder<?> holder : byResult.getOrDefault(item, List.of())) {
-                AspectList derived = fromRecipe(holder.value(), visiting);
-                if (!derived.isEmpty()) {
-                    return derived;
-                }
-            }
-            return AspectList.EMPTY;
+            return fromRecipes(byResult.getOrDefault(item, List.of()), visiting);
         } finally {
             visiting.remove(item);
         }
     }
 
-    private static AspectList fromRecipe(Recipe<?> recipe, Set<Item> visiting) {
-        ItemStack result = resultOf(recipe);
-        if (result.isEmpty()) {
-            return AspectList.EMPTY;
-        }
-
-        AspectList total = paid(recipe);
-        for (Ingredient ingredient : recipe.getIngredients()) {
-            if (ingredient.isEmpty()) {
-                continue;
+    // original's order: the crucible's word, then the arcane table, the altar, and last the cheapest plain recipe
+    private static AspectList fromRecipes(List<RecipeHolder<?>> recipes, Set<Item> visiting) {
+        for (RecipeHolder<?> holder : recipes) {
+            if (holder.value() instanceof CrucibleRecipe boiled && boiled.catalyst().getItems().length > 0) {
+                return lookup(boiled.catalyst().getItems()[0].getItem(), visiting)
+                        .add(rooted(boiled.aspects(), boiled.result().getCount())).cull();
             }
-            // the first choice of a tag ingredient that has aspects speaks for the rest
-            for (ItemStack choice : ingredient.getItems()) {
-                AspectList carried = lookup(choice.getItem(), visiting);
-                if (!carried.isEmpty()) {
-                    total = total.add(carried);
+        }
+        AspectList arcane = null;
+        for (RecipeHolder<?> holder : recipes) {
+            if (holder.value() instanceof ArcaneRecipe recipe) {
+                int makes = resultOf(recipe).getCount();
+                arcane = fromIngredients(recipe, makes, false, visiting).add(rooted(recipe.cost(), makes));
+            }
+        }
+        if (arcane != null) {
+            return arcane.cull();
+        }
+        for (RecipeHolder<?> holder : recipes) {
+            if (holder.value() instanceof InfusionRecipe infused) {
+                int makes = infused.result().getCount();
+                return fromIngredients(infused, makes, true, visiting).add(rooted(infused.essentia(), makes)).cull();
+            }
+        }
+        AspectList cheapest = AspectList.EMPTY;
+        for (RecipeHolder<?> holder : recipes) {
+            if (holder.value().getType() == RecipeType.CRAFTING) {
+                AspectList made = fromIngredients(holder.value(), resultOf(holder.value()).getCount(), false, visiting);
+                if (made.total() > 0 && (cheapest.isEmpty() || made.total() < cheapest.total())) {
+                    cheapest = made;
+                }
+            }
+        }
+        return cheapest;
+    }
+
+    private static AspectList rooted(AspectList paid, int makes) {
+        AspectList out = AspectList.EMPTY;
+        for (var aspect : paid.sortedByName()) {
+            out = out.add(aspect, (int) (Math.sqrt(paid.get(aspect)) / makes));
+        }
+        return out;
+    }
+
+    private static AspectList fromIngredients(Recipe<?> recipe, int makes, boolean cheapestChoice, Set<Item> visiting) {
+        AspectList total = AspectList.EMPTY;
+        for (Ingredient ingredient : recipe.getIngredients()) {
+            if (!ingredient.isEmpty()) {
+                total = total.add(carried(ingredient, cheapestChoice, visiting));
+            }
+        }
+        return total.scale(CRAFTING_LOSS / makes);
+    }
+
+    // a tag ingredient speaks through its first choice with aspects, or at the altar its cheapest
+    private static AspectList carried(Ingredient ingredient, boolean cheapestChoice, Set<Item> visiting) {
+        AspectList picked = AspectList.EMPTY;
+        for (ItemStack choice : ingredient.getItems()) {
+            AspectList carried = lookup(choice.getItem(), visiting);
+            if (!carried.isEmpty() && (picked.isEmpty() || carried.total() < picked.total())) {
+                picked = carried;
+                if (!cheapestChoice) {
                     break;
                 }
             }
         }
-
-        return total.scale(CRAFTING_LOSS / result.getCount());
+        return picked;
     }
-
-    // crucible/infusion essentia counts towards the result; arcane vis does not (it goes back to the aura)
-    private static AspectList paid(Recipe<?> recipe) {
-        if (recipe instanceof CrucibleRecipe boiled) {
-            return boiled.aspects();
-        }
-        if (recipe instanceof InfusionRecipe infused) {
-            return infused.essentia();
-        }
-        return AspectList.EMPTY;
-    }
-
-    // essentia recipes first: reversible ones (nuggets -> ingot) would trace back to plain metal
-    private static final java.util.Comparator<RecipeHolder<?>> BY_WHAT_IT_SAYS =
-            java.util.Comparator.comparingInt(holder -> paid(holder.value()).isEmpty() ? 1 : 0);
 
     private static ItemStack resultOf(Recipe<?> recipe) {
         try {
@@ -161,7 +187,7 @@ public final class Aspects {
                 index.computeIfAbsent(result.getItem(), item -> new ArrayList<>()).add(holder);
             }
         }
-        index.values().forEach(made -> made.sort(BY_WHAT_IT_SAYS));
+        index.values().forEach(made -> made.sort(java.util.Comparator.comparing(holder -> holder.id().toString())));
         return index;
     }
 }

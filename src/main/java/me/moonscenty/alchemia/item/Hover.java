@@ -56,6 +56,7 @@ public final class Hover {
             }
             return;
         }
+        groundedIfOuter(player, harness);
         boolean lifted = player.getPersistentData().getBoolean(LIFTED);
         boolean hover = !harness.isEmpty() && ThaumostaticHarnessItem.hovering(harness);
         if (hover && ThaumostaticHarnessItem.fuel(harness) <= 0) {
@@ -81,14 +82,37 @@ public final class Hover {
 
     private static void lift(Player player, boolean up) {
         player.getPersistentData().putBoolean(LIFTED, up);
-        if (player.getAbilities().mayfly == up) {
+        if (player.getAbilities().mayfly == up && (!up || player.getAbilities().flying)) {
             return;
         }
         player.getAbilities().mayfly = up;
-        if (!up) {
-            player.getAbilities().flying = false;
-        }
+        player.getAbilities().flying = up;
         player.onUpdateAbilities();
+    }
+
+    // nothing flies in the Outer Lands
+    private static void groundedIfOuter(Player player, ItemStack harness) {
+        boolean hovering = !harness.isEmpty() && ThaumostaticHarnessItem.hovering(harness);
+        if (player.level().dimension() != me.moonscenty.alchemia.outer.OuterLands.LEVEL || player.tickCount % 20 != 0
+                || !hovering && !player.getAbilities().flying) {
+            return;
+        }
+        if (hovering) {
+            harness.set(ModDataComponents.HOVERING.get(), false);
+        }
+        player.getAbilities().flying = false;
+        player.onUpdateAbilities();
+        player.sendSystemMessage(net.minecraft.network.chat.Component.translatable("message.alchemia.no_flight")
+                .withStyle(net.minecraft.ChatFormatting.ITALIC, net.minecraft.ChatFormatting.GRAY));
+    }
+
+    // cancels the penalty for digging with no ground underfoot
+    @SubscribeEvent
+    public static void digsAloft(net.neoforged.neoforge.event.entity.player.PlayerEvent.BreakSpeed event) {
+        ItemStack harness = worn(event.getEntity());
+        if (!event.getEntity().onGround() && !harness.isEmpty() && ThaumostaticHarnessItem.hovering(harness)) {
+            event.setNewSpeed(event.getOriginalSpeed() * 5.0F);
+        }
     }
 
     private static void drag(Player player) {

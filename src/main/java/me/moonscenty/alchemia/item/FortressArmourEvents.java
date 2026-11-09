@@ -1,10 +1,13 @@
 package me.moonscenty.alchemia.item;
 
 import me.moonscenty.alchemia.Alchemia;
+import me.moonscenty.alchemia.registry.ModArmorMaterials;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -54,12 +57,44 @@ public final class FortressArmourEvents {
         return source.is(Tags.DamageTypes.IS_MAGIC) ? TURNS_WORKINGS : TURNS_BLOWS;
     }
 
+    // original's: what vanilla armour never touches gets the whole of the armour's share here
+    public static float throughBypass(LivingEntity wearer, DamageSource source) {
+        boolean magic = source.is(Tags.DamageTypes.IS_MAGIC);
+        if (!magic && !source.is(DamageTypeTags.IS_FIRE) && !source.is(DamageTypeTags.IS_EXPLOSION)) {
+            return 0.0F;
+        }
+        float set = 1.0F;
+        if (wearer instanceof Player) {
+            set = 0.875F;
+            for (EquipmentSlot slot : Worn.ARMOUR) {
+                ItemStack piece = wearer.getItemBySlot(slot);
+                if (piece.getItem() instanceof FortressArmorItem) {
+                    set += 0.125F;
+                    if (FortressArmorItem.fitting(piece).map(HelmFitting::isMask).orElse(false)) {
+                        set += 0.05F;
+                    }
+                }
+            }
+        }
+        float share = 0.0F;
+        for (EquipmentSlot slot : Worn.ARMOUR) {
+            if (!(wearer.getItemBySlot(slot).getItem() instanceof ArmorItem armor)) {
+                continue;
+            }
+            if (armor instanceof FortressArmorItem) {
+                share += armor.getDefense() / (magic ? 35.0F : 20.0F) * set;
+            } else if (magic && armor.getMaterial().value() == ModArmorMaterials.VOID_ROBE.value()) {
+                share += armor.getDefense() / 35.0F;
+            }
+        }
+        return Math.min(1.0F, share);
+    }
+
     @SubscribeEvent
     public static void turnsBlows(LivingDamageEvent.Pre event) {
-        if (event.getSource().is(DamageTypeTags.BYPASSES_ARMOR)) {
-            return;
-        }
-        float turned = turnedAside(event.getEntity(), event.getSource());
+        float turned = event.getSource().is(DamageTypeTags.BYPASSES_ARMOR)
+                ? throughBypass(event.getEntity(), event.getSource())
+                : turnedAside(event.getEntity(), event.getSource());
         if (turned <= 0.0F) {
             return;
         }
