@@ -51,7 +51,12 @@ public final class WandKeys {
         if (player == null) {
             return;
         }
-        drain(CHANGE_FOCUS);
+        boolean focusKey = drain(CHANGE_FOCUS);
+        // original: the focus key changes what an alchemometer shows
+        if (focusKey && client.screen == null
+                && player.getMainHandItem().getItem() instanceof me.moonscenty.alchemia.item.AlchemometerItem) {
+            PacketDistributor.sendToServer(new me.moonscenty.alchemia.network.ToolSetting());
+        }
         // drain before anything else reads it, or this never fires
         boolean setting = drain(TOOL_SETTING);
         if (drain(HOVER) && client.screen == null && !me.moonscenty.alchemia.item.Hover.worn(player).isEmpty()) {

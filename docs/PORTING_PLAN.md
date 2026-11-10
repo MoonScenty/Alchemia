@@ -1336,6 +1336,14 @@ python tools/remap_srg.py MCP-919/conf decompiled/thaumcraft src/thaumcraft
     - 청크 오라의 바이옴 값은 `AuraGeneration.strength`·`leaning`이 `BiomeLeanings` 표에서 바로 셈한다. 바이옴 데이터 맵(`alchemia:aura`)은 데이터팩이 한 바이옴을 직접 정할 때만 쓴다(생성 파일은 지웠다).
     - 언덕 상자의 두 번째 전리품은 상자를 놓을 때 바로 채우고, 첫 번째는 바닐라처럼 열 때 채운다.
     - 원본과 다른 점: 원본 설정의 특수 노드 확률과 오염 노드 생성 끄기는 옮기지 않았다. 이미 만들어진 청크의 오라는 바뀌지 않는다.
+  - [x] **2차 대조 5-11 HUD와 화면** (2026-11-10). 자세한 값은 대조 문서의 "고친 것".
+    - `client/WandDial`·`ChargeMeters`·`AlchemometerHud`·`GogglesTags`·`ShovelPreview`·`ItemTooltips`. HUD 그림은 이식본 `textures/gui/hud.png`(원본 그림을 실행 때 읽는다)의 원본 좌표 그대로.
+    - 알케모미터의 읽기는 `AuraReading` 패킷, 고른 상은 `aura_shown` 컴포넌트. 충전량은 `Rechargeable.chargeLevel`.
+    - 원본과 다른 점:
+      - 다이얼 위치(아래쪽)와 충전 막대 위치 설정은 옮기지 않았다. 원본 기본값(왼쪽 위, 왼쪽)으로 고정.
+      - 알케모미터 전환 키는 원본 F 대신 이 포트의 포커스 키(V)다. F는 바닐라 손 바꾸기와 겹친다.
+      - 계전기의 In/Out 글씨와 비전 귀의 음 번호, 원소 삽의 축 표시는 옮기지 않았다.
+      - 고글 상 태그의 숫자는 바닐라 글꼴 그리기로 벽을 투과해 그린다.
 
 ## 미결 사항
 

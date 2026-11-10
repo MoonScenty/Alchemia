@@ -146,7 +146,7 @@ public final class Swapping {
         return false;
     }
 
-    private static Block remembered(ItemStack wand) {
+    public static Block remembered(ItemStack wand) {
         Holder<Block> picked = WandItem.focus(wand).get(ModDataComponents.PICKED_BLOCK.get());
         return picked == null ? null : picked.value();
     }

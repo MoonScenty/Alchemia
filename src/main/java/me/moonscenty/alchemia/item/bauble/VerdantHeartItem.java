@@ -85,6 +85,11 @@ public class VerdantHeartItem extends BaubleItem implements Rechargeable {
     }
 
     @Override
+    public float chargeLevel(ItemStack stack) {
+        return 1.0F - stack.getDamageValue() / (float) stack.getMaxDamage();
+    }
+
+    @Override
     public boolean charge(ItemStack stack, ServerLevel level, BlockPos at, int amount) {
         if (AuraHandler.shouldSpareAny(level, at, ModAspects.EARTH, ModAspects.WATER)) {
             return false;

@@ -199,6 +199,7 @@ public class FocalManipulatorScreen extends AbstractContainerScreen<FocalManipul
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partial) {
         super.render(graphics, mouseX, mouseY, partial);
         renderTooltip(graphics, mouseX, mouseY);
+        hint(graphics, mouseX, mouseY);
 
         List<FocusUpgrade> offered = offered();
         for (int which = 0; which < offered.size(); which++) {
@@ -213,6 +214,28 @@ public class FocalManipulatorScreen extends AbstractContainerScreen<FocalManipul
                 explain(graphics, fitted.get(rank), mouseX, mouseY);
                 return;
             }
+        }
+    }
+
+    // original's hints for the parts of the bench once an upgrade is picked
+    private void hint(GuiGraphics graphics, int mouseX, int mouseY) {
+        FocalManipulatorBlockEntity bench = bench();
+        if (picked == null || bench == null) {
+            return;
+        }
+        String key = null;
+        if (over(mouseX, mouseY, 48, 48, 36, 36)) {
+            key = "gui.alchemia.manipulator.vis_cost";
+        } else if (over(mouseX, mouseY, 108, 58, 36, 16)) {
+            key = "gui.alchemia.manipulator.experience_cost";
+        } else if (bench.bill() <= 0 && minecraft != null && minecraft.player != null
+                && (minecraft.player.experienceLevel >= FocusUpgrades.levels(FocusUpgrades.nextRank(focus()))
+                        || minecraft.player.getAbilities().instabuild)
+                && over(mouseX, mouseY, BAR_X, BAR_Y, BAR_W, BAR_H)) {
+            key = "gui.alchemia.manipulator.start";
+        }
+        if (key != null) {
+            graphics.renderTooltip(font, Component.translatable(key), mouseX, mouseY);
         }
     }
 

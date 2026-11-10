@@ -52,6 +52,8 @@ public class ModNetwork {
                 () -> me.moonscenty.alchemia.client.EldritchEffects.blockArc(payload)));
         registrar.playToClient(ResearchLearned.TYPE, ResearchLearned.STREAM_CODEC, (payload, context) -> context
                 .enqueueWork(() -> me.moonscenty.alchemia.client.ResearchToast.show(payload.research())));
+        registrar.playToClient(AuraReading.TYPE, AuraReading.STREAM_CODEC, (payload, context) -> context
+                .enqueueWork(() -> me.moonscenty.alchemia.client.AlchemometerHud.read(payload)));
         registrar.playToClient(Mist.TYPE, Mist.STREAM_CODEC, (payload, context) -> context.enqueueWork(
                 () -> me.moonscenty.alchemia.client.WarpFog.bring(payload.ticks(), payload.topUp())));
         registrar.playToClient(SyncSeal.TYPE, SyncSeal.STREAM_CODEC, (payload, context) -> context.enqueueWork(
@@ -108,7 +110,9 @@ public class ModNetwork {
                 return;
             }
             ItemStack held = player.getMainHandItem();
-            if (held.getItem() instanceof WandItem) {
+            if (held.getItem() instanceof me.moonscenty.alchemia.item.AlchemometerItem) {
+                me.moonscenty.alchemia.item.AlchemometerItem.cycle(player, held);
+            } else if (held.getItem() instanceof WandItem) {
                 me.moonscenty.alchemia.wand.spell.Swapping.setReach(player, held);
             } else if (held.getItem() instanceof me.moonscenty.alchemia.item.tool.ElementalShovelItem) {
                 me.moonscenty.alchemia.item.tool.ElementalShovelItem.turn(player, held);

@@ -141,6 +141,14 @@ public class ResearchTableScreen extends AbstractContainerScreen<ResearchTableMe
         drawFragment(graphics, partialTick);
         drawDishes(graphics);
         renderTooltip(graphics, mouseX, mouseY);
+        ItemStack tools = menu.toolStack();
+        // original: a note on the table with no ink to work it
+        if (menu.note() != null && (tools.isEmpty() || tools.getDamageValue() >= tools.getMaxDamage())) {
+            var lines = java.util.List.<Component>of(Component.translatable("gui.alchemia.no_ink.0"),
+                    Component.translatable("gui.alchemia.no_ink.1"));
+            int wide = Math.max(font.width(lines.get(0)), font.width(lines.get(1))) / 2;
+            graphics.renderComponentTooltip(font, lines, leftPos + imageWidth / 2 - wide, topPos + 84);
+        }
     }
 
     @Override

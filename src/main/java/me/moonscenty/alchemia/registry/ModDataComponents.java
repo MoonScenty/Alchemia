@@ -55,6 +55,12 @@ public class ModDataComponents {
                     .networkSynchronized(ByteBufCodecs.VAR_INT)
                     .build());
 
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> AURA_SHOWN =
+            COMPONENTS.register("aura_shown", () -> DataComponentType.<Integer>builder()
+                    .persistent(Codec.INT)
+                    .networkSynchronized(ByteBufCodecs.VAR_INT)
+                    .build());
+
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> HARNESS_FUEL =
             COMPONENTS.register("harness_fuel", () -> DataComponentType.<Integer>builder()
                     .persistent(Codec.INT)

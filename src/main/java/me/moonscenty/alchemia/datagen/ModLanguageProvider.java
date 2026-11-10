@@ -962,6 +962,30 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("research.alchemia.short", pick("You need %s experience levels to learn this",
                 "배우려면 경험치 %s레벨이 필요하다"));
         add("research.alchemia.complete", pick("Research complete", "연구 완료"));
+        add("message.alchemia.alchemometer.one", pick("The alchemometer now reads %s.", "알케모미터가 이제 %s을(를) 읽는다."));
+        add("message.alchemia.alchemometer.all", pick("The alchemometer now reads the whole aura.",
+                "알케모미터가 이제 오라 전체를 읽는다."));
+        add("item.alchemia.alchemometer.key", pick("Press %s to change what it reads", "%s 키로 읽을 것을 바꾼다"));
+        add("item.alchemia.warping", pick("Warping %s", "뒤틀림 %s"));
+        add("item.alchemia.sapless", pick("Lesser Sapping", "약한 흡수"));
+        add("item.alchemia.loot_bag.use", pick("Use to open, or keep it to trade", "써서 열거나, 거래용으로 둔다"));
+        String[][] charm = {{"It seems to be seeping", "무언가 스며 나오는 것 같다"},
+                {"You could swear it is whispering", "속삭이는 소리가 들리는 것만 같다"},
+                {"It shakes in your hand", "손 안에서 떨린다"},
+                {"Its hum is oddly calming", "웅웅거리는 소리가 묘하게 편안하다"},
+                {"Was that a seventh colour?", "방금 일곱 번째 색이 보였던가?"}};
+        for (int line = 0; line < charm.length; line++) {
+            add("item.alchemia.primal_charm." + line, pick(charm[line][0], charm[line][1]));
+        }
+        add("item.alchemia.wand.vis_cost", pick(" %s: %s%% of the price", " %s: 값의 %s%%"));
+        add("item.alchemia.wand.focus_cost", pick(", %s a cast", ", 한 번에 %s"));
+        add("item.alchemia.wand.focus_cost_tick", pick(", %s a tick", ", 틱마다 %s"));
+        add("item.alchemia.wand.vis_cost_average", pick("(%s%% of the price on average)", "(평균 값의 %s%%)"));
+        add("gui.alchemia.no_ink.0", pick("Your scribing tools have run dry!", "필기구의 잉크가 다 떨어졌다!"));
+        add("gui.alchemia.no_ink.1", pick("Refill them to carry on.", "다시 채워야 계속할 수 있다."));
+        add("gui.alchemia.manipulator.vis_cost", pick("Vis cost", "비스 값"));
+        add("gui.alchemia.manipulator.experience_cost", pick("Experience cost", "경험치 값"));
+        add("gui.alchemia.manipulator.start", pick("Start the upgrade", "강화 시작"));
         add("research.alchemia.has_note", pick("You already carry a note for this", "이미 이것의 노트를 지니고 있다"));
         add("research.alchemia.need_scribing", pick("You need scribing tools and paper to take a note",
                 "노트를 쓰려면 필기구와 종이가 필요하다"));

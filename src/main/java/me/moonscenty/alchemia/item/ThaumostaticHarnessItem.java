@@ -64,6 +64,11 @@ public class ThaumostaticHarnessItem extends ArmorItem implements VisDiscount, R
     }
 
     @Override
+    public float chargeLevel(ItemStack stack) {
+        return fuel(stack) / (float) FUEL_MAX;
+    }
+
+    @Override
     public int visDiscount(ItemStack stack, Player wearer) {
         return 1;
     }
