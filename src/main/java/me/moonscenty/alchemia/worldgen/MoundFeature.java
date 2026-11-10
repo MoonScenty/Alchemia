@@ -83,6 +83,11 @@ public class MoundFeature extends Feature<NoneFeatureConfiguration> {
             level.setBlock(chest.below(2), Blocks.TNT.defaultBlockState(), Block.UPDATE_CLIENTS);
         }
         RandomizableContainer.setBlockEntityLootTable(level, random, chest, BuiltInLootTables.SIMPLE_DUNGEON);
+        // original's: one chest in five gets a second helping
+        if (random.nextInt(5) == 0 && level.getBlockEntity(chest)
+                instanceof net.minecraft.world.level.block.entity.ChestBlockEntity box) {
+            secondHelping(level.getLevel(), box, chest, random);
+        }
 
         List<EntityType<?>> keepers = List.of(EntityType.SKELETON, EntityType.ZOMBIE);
         for (int i = 0; i < layout.spawners().size(); i++) {
@@ -124,5 +129,14 @@ public class MoundFeature extends Feature<NoneFeatureConfiguration> {
             }
         }
         return false;
+    }
+
+    public static void secondHelping(net.minecraft.server.level.ServerLevel level,
+            net.minecraft.world.Container box, BlockPos at, net.minecraft.util.RandomSource random) {
+        var table = level.getServer().reloadableRegistries().getLootTable(BuiltInLootTables.SIMPLE_DUNGEON);
+        table.fill(box, new net.minecraft.world.level.storage.loot.LootParams.Builder(level)
+                .withParameter(net.minecraft.world.level.storage.loot.parameters.LootContextParams.ORIGIN,
+                        net.minecraft.world.phys.Vec3.atCenterOf(at))
+                .create(net.minecraft.world.level.storage.loot.parameters.LootContextParamSets.CHEST), random.nextLong());
     }
 }

@@ -36,7 +36,7 @@ public class AuraNode extends Entity {
     // ticks before the neighbour list is refreshed
     private static final int NEIGHBOUR_MEMORY = 750;
     // 1 in N nodes is not plain
-    private static final int ODDITY = 8;
+    private static final int ODDITY = 10;
     // 1 in N has a compound aspect
     private static final int COMPOUND_CHANCE = 20;
     private static final double DRAG = 0.8;
@@ -116,7 +116,12 @@ public class AuraNode extends Entity {
         setSize(span + source.nextInt(span));
 
         NodeType[] kinds = NodeType.values();
-        setType(source.nextInt(ODDITY) == 0 ? kinds[1 + source.nextInt(kinds.length - 1)] : NodeType.PLAIN);
+        NodeType type = source.nextInt(ODDITY) == 0 ? kinds[1 + source.nextInt(kinds.length - 1)] : NodeType.PLAIN;
+        // original's: a third of the tainted ones come out plain after all
+        if (type == NodeType.TAINTED && source.nextFloat() < 0.33F) {
+            type = NodeType.PLAIN;
+        }
+        setType(type);
 
         List<Holder<Aspect>> pool = source.nextInt(COMPOUND_CHANCE) == 0
                 ? ModAspects.compounds()

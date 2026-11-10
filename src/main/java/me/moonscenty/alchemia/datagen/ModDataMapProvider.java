@@ -5,8 +5,6 @@ import java.util.concurrent.CompletableFuture;
 import me.moonscenty.alchemia.aspect.Aspect;
 import me.moonscenty.alchemia.aspect.AspectList;
 import me.moonscenty.alchemia.aspect.ModDataMaps;
-import me.moonscenty.alchemia.aura.AuraTrait;
-import me.moonscenty.alchemia.aura.BiomeLeanings;
 import me.moonscenty.alchemia.block.CrystalType;
 import me.moonscenty.alchemia.registry.ModAspects;
 import me.moonscenty.alchemia.registry.ModBlocks;
@@ -41,15 +39,6 @@ public class ModDataMapProvider extends DataMapProvider {
         vanillaAspects();
         modAspects();
         mobAspects();
-        biomeAura();
-    }
-
-    // a biome in several of these tags gets whichever entry is listed last (sorted by tag name)
-    private void biomeAura() {
-        var aura = builder(AuraTrait.MAP);
-        for (BiomeLeanings.Leaning leaning : BiomeLeanings.ALL) {
-            aura.add(leaning.where(), new AuraTrait(leaning.level(), leaning.aspect()), true);
-        }
     }
 
     private void compostables() {
