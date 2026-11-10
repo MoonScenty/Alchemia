@@ -9,6 +9,16 @@
       "key": "research.alchemia.crucible.page"
     },
     {
+      "type": "construct",
+      "blocks": [
+        "alchemia:wand",
+        "minecraft:cauldron"
+      ],
+      "deep": 1,
+      "tall": 2,
+      "wide": 1
+    },
+    {
       "type": "recipe",
       "recipe": "alchemia:morphic_resonator"
     },

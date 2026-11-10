@@ -168,4 +168,18 @@ public class ResearchRuleTests {
                 research), "with ancient stone seen it is");
         helper.succeed();
     }
+
+    @GameTest(template = TEMPLATE)
+    public static void theAltarIsDrawnAndItsOldFormsWaitForTheirStone(GameTestHelper helper) {
+        ResearchEntry infusion = entries(helper).get(Alchemia.id("infusion"));
+        var built = infusion.pages().stream().filter(page -> page instanceof me.moonscenty.alchemia.research.ResearchPage.Construct)
+                .map(page -> (me.moonscenty.alchemia.research.ResearchPage.Construct) page).toList();
+        helper.assertValueEqual(built.size(), 3, "three altars are drawn");
+        helper.assertValueEqual(built.get(0).blocks().size(), 27, "each three blocks a side");
+        PlayerKnowledge fresh = PlayerKnowledge.of(reader(helper));
+        helper.assertValueEqual(infusion.pagesFor(fresh::hasResearch).stream()
+                .filter(page -> page instanceof me.moonscenty.alchemia.research.ResearchPage.Construct).count(), 1L,
+                "only the plain altar until the old stones are seen");
+        helper.succeed();
+    }
 }

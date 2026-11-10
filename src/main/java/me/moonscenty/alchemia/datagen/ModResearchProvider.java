@@ -650,9 +650,60 @@ public class ModResearchProvider {
                 parents, false, name.equals("fire") ? NodeShape.MAJOR : NodeShape.PLAIN, complexity, "focus_" + name);
     }
 
+    private static ResearchPage construct(AspectList cost, int wide, int tall, int deep, String gate,
+            ItemLike... blocks) {
+        return new ResearchPage.Construct(cost, wide, tall, deep,
+                java.util.Arrays.stream(blocks).map(block -> BuiltInRegistries.ITEM.getKey(block.asItem())).toList(),
+                java.util.Optional.ofNullable(gate).map(Alchemia::id));
+    }
+
+    private static List<ResearchPage> altar(ItemLike stone, ItemLike pedestal, AspectList cost, String gate) {
+        ItemLike air = Items.AIR;
+        return List.of(construct(cost, 3, 3, 3, gate,
+                air, air, air, air, ModBlocks.INFUSION_MATRIX.get(), air, air, air, air,
+                stone, air, stone, air, air, air, stone, air, stone,
+                stone, air, stone, air, pedestal, air, stone, air, stone));
+    }
+
+    // original's compound recipes, with the vis a wand spends to finish them
+    private static java.util.Map<String, List<ResearchPage>> constructs() {
+        ItemLike air = Items.AIR;
+        ItemLike brick = Blocks.NETHER_BRICKS;
+        ItemLike rock = Blocks.OBSIDIAN;
+        AspectList altarCost = AspectList.eachPrimal(75);
+        List<ResearchPage> altars = new java.util.ArrayList<>();
+        altars.addAll(altar(ModBlocks.ARCANE_STONE.block().get(), ModBlocks.ARCANE_PEDESTAL.get(), altarCost, null));
+        altars.addAll(altar(ModBlocks.ANCIENT_STONE.block().get(), ModBlocks.ANCIENT_PEDESTAL.get(), altarCost,
+                Clues.ANCIENT_STONE.getPath()));
+        altars.addAll(altar(ModBlocks.ELDRITCH_STONE.block().get(), ModBlocks.ELDRITCH_PEDESTAL.get(),
+                AspectList.eachPrimal(75).withAmount(ModAspects.ORDER, 125), Clues.ELDRITCH_STONE.getPath()));
+        return java.util.Map.of(
+                "aspects", List.of(
+                        construct(AspectList.EMPTY, 1, 2, 1, null, ModItems.WAND.get(), Blocks.BOOKSHELF),
+                        construct(AspectList.EMPTY, 1, 2, 1, null, ModItems.SCRIBING_TOOLS.get(),
+                                ModBlocks.WOODEN_TABLE.get())),
+                "arcane_workbench", List.of(construct(AspectList.EMPTY, 1, 2, 1, null, ModItems.WAND.get(),
+                        ModBlocks.WOODEN_TABLE.get())),
+                "crucible", List.of(construct(AspectList.EMPTY, 1, 2, 1, null, ModItems.WAND.get(), Blocks.CAULDRON)),
+                "infernal_furnace", List.of(construct(AspectList.of(ModAspects.FIRE, 50).add(ModAspects.EARTH, 50),
+                        3, 3, 3, null,
+                        brick, rock, brick, rock, air, rock, brick, rock, brick,
+                        brick, rock, brick, rock, Items.LAVA_BUCKET, Blocks.IRON_BARS, brick, rock, brick,
+                        brick, rock, brick, rock, rock, rock, brick, rock, brick)),
+                "infusion", altars,
+                "thaumatorium", List.of(construct(AspectList.of(ModAspects.FIRE, 50).add(ModAspects.ORDER, 100)
+                        .add(ModAspects.WATER, 100), 1, 3, 1, null, ModBlocks.ALCHEMICAL_CONSTRUCT.get(),
+                        ModBlocks.ALCHEMICAL_CONSTRUCT.get(), ModBlocks.CRUCIBLE.get())),
+                "clockwork_mind", List.of(construct(AspectList.of(ModAspects.FIRE, 50).add(ModAspects.ORDER, 50)
+                        .add(ModAspects.AIR, 50), 2, 2, 2, null,
+                        air, Blocks.IRON_BARS, air, air, Blocks.CAULDRON, Blocks.PISTON, Blocks.ANVIL,
+                        ModBlocks.STONE_TABLE.get())));
+    }
+
     private static List<ResearchPage> pages(String name, String... recipes) {
         List<ResearchPage> pages = new java.util.ArrayList<>();
         pages.add(new ResearchPage.Text("research." + Alchemia.MODID + "." + name + ".page"));
+        pages.addAll(constructs().getOrDefault(name, List.of()));
         for (String recipe : recipes) {
             pages.add(new ResearchPage.Recipe(Alchemia.id(recipe)));
         }

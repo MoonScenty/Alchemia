@@ -54,9 +54,44 @@ public interface ResearchPage {
         }
     }
 
+    // original's compound pages: a structure built from blocks, drawn layer by layer, top first;
+    // air is left out of the picture
+    record Construct(me.moonscenty.alchemia.aspect.AspectList cost, int wide, int tall, int deep,
+            java.util.List<ResourceLocation> blocks, Optional<ResourceLocation> gate) implements ResearchPage {
+        public static final MapCodec<Construct> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                me.moonscenty.alchemia.aspect.AspectList.CODEC.optionalFieldOf("cost",
+                        me.moonscenty.alchemia.aspect.AspectList.EMPTY).forGetter(Construct::cost),
+                Codec.INT.fieldOf("wide").forGetter(Construct::wide),
+                Codec.INT.fieldOf("tall").forGetter(Construct::tall),
+                Codec.INT.fieldOf("deep").forGetter(Construct::deep),
+                ResourceLocation.CODEC.listOf().fieldOf("blocks").forGetter(Construct::blocks),
+                ResourceLocation.CODEC.optionalFieldOf("gate").forGetter(Construct::gate))
+                .apply(instance, Construct::new));
+
+        @Override
+        public Type type() {
+            return Type.CONSTRUCT;
+        }
+    }
+
+    // up to four aspects with what they are made of
+    record Aspects(java.util.List<ResourceLocation> aspects, Optional<ResourceLocation> gate) implements ResearchPage {
+        public static final MapCodec<Aspects> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                ResourceLocation.CODEC.listOf().fieldOf("aspects").forGetter(Aspects::aspects),
+                ResourceLocation.CODEC.optionalFieldOf("gate").forGetter(Aspects::gate))
+                .apply(instance, Aspects::new));
+
+        @Override
+        public Type type() {
+            return Type.ASPECTS;
+        }
+    }
+
     enum Type implements StringRepresentable {
         TEXT("text", () -> Text.CODEC),
-        RECIPE("recipe", () -> Recipe.CODEC);
+        RECIPE("recipe", () -> Recipe.CODEC),
+        CONSTRUCT("construct", () -> Construct.CODEC),
+        ASPECTS("aspects", () -> Aspects.CODEC);
 
         public static final Codec<Type> CODEC = StringRepresentable.fromEnum(Type::values);
 

@@ -55,8 +55,11 @@ public final class ResearchCompletion {
 
     private static void announce(Player player, ResourceLocation id) {
         learn(player, id);
-        player.displayClientMessage(Component.translatable("note.alchemia.learned", ResearchEntry.displayName(id)),
-                false);
+        if (player instanceof net.minecraft.server.level.ServerPlayer served
+                && !(served instanceof net.neoforged.neoforge.common.util.FakePlayer)) {
+            net.neoforged.neoforge.network.PacketDistributor.sendToPlayer(served,
+                    new me.moonscenty.alchemia.network.ResearchLearned(id));
+        }
     }
 
     private static void learn(Player player, ResourceLocation id) {

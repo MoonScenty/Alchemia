@@ -50,6 +50,8 @@ public class ModNetwork {
                 () -> me.moonscenty.alchemia.client.ShieldRunesRenderer.flare(payload.shielded(), payload.from())));
         registrar.playToClient(BlockArc.TYPE, BlockArc.STREAM_CODEC, (payload, context) -> context.enqueueWork(
                 () -> me.moonscenty.alchemia.client.EldritchEffects.blockArc(payload)));
+        registrar.playToClient(ResearchLearned.TYPE, ResearchLearned.STREAM_CODEC, (payload, context) -> context
+                .enqueueWork(() -> me.moonscenty.alchemia.client.ResearchToast.show(payload.research())));
         registrar.playToClient(Mist.TYPE, Mist.STREAM_CODEC, (payload, context) -> context.enqueueWork(
                 () -> me.moonscenty.alchemia.client.WarpFog.bring(payload.ticks(), payload.topUp())));
         registrar.playToClient(SyncSeal.TYPE, SyncSeal.STREAM_CODEC, (payload, context) -> context.enqueueWork(

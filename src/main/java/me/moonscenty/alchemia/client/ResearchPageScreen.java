@@ -55,13 +55,30 @@ public class ResearchPageScreen extends Screen {
 
     private int spread;
     private long ticks;
+    private int mouseX;
+    private int mouseY;
+    private List<Component> tip;
+    private Holder<Aspect> pointedAspect;
+    private int pointedX;
+    private int pointedY;
+    private static java.util.Map<Aspect, List<ItemStack>> carriers;
 
     public ResearchPageScreen(AlchemonomiconScreen parent, ResourceLocation id, ResearchEntry entry) {
         super(ResearchEntry.displayName(id));
         this.parent = parent;
         this.id = id;
         PlayerKnowledge knowledge = PlayerKnowledge.of(net.minecraft.client.Minecraft.getInstance().player);
-        this.pages = entry.pagesFor(knowledge::hasResearch);
+        List<ResearchPage> shown = new java.util.ArrayList<>(entry.pagesFor(knowledge::hasResearch));
+        // original: the aspects entry ends with every aspect, four to a page
+        if (id.equals(Alchemia.id("aspects"))) {
+            List<ResourceLocation> all = me.moonscenty.alchemia.registry.ModAspects.REGISTRY.holders()
+                    .sorted(java.util.Comparator.comparing(holder -> holder.value().tag()))
+                    .map(holder -> holder.key().location()).toList();
+            for (int from = 0; from < all.size(); from += 4) {
+                shown.add(new ResearchPage.Aspects(all.subList(from, Math.min(all.size(), from + 4)), Optional.empty()));
+            }
+        }
+        this.pages = List.copyOf(shown);
     }
 
     @Override
@@ -79,6 +96,10 @@ public class ResearchPageScreen extends Screen {
 
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+        this.mouseX = mouseX;
+        this.mouseY = mouseY;
+        tip = null;
+        pointedAspect = null;
         super.render(graphics, mouseX, mouseY, partialTick);
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
@@ -92,6 +113,16 @@ public class ResearchPageScreen extends Screen {
         drawSheet(graphics, 0, spread);
         drawSheet(graphics, 1, spread + 1);
         drawTurns(graphics);
+        if (pointedAspect != null) {
+            drawCarriers(graphics, pointedAspect.value());
+        }
+        if (tip != null) {
+            graphics.renderComponentTooltip(font, tip, mouseX, mouseY);
+        }
+    }
+
+    private boolean over(int x, int y, int size) {
+        return mouseX >= x && mouseY >= y && mouseX < x + size && mouseY < y + size;
     }
 
     @Override
@@ -114,6 +145,8 @@ public class ResearchPageScreen extends Screen {
             case TEXT -> drawText(graphics, (ResearchPage.Text) page, x - 15 + side * SIDE_STEP,
                     y - 10 + (first ? 2 * LINE : 0));
             case RECIPE -> drawRecipe(graphics, (ResearchPage.Recipe) page, x - 4 + side * SIDE_STEP, y - 8);
+            case CONSTRUCT -> drawConstruct(graphics, (ResearchPage.Construct) page, x - 4 + side * SIDE_STEP, y - 8);
+            case ASPECTS -> drawAspects(graphics, (ResearchPage.Aspects) page, x - 4 + side * SIDE_STEP, y - 8);
         }
     }
 
@@ -240,6 +273,124 @@ public class ResearchPageScreen extends Screen {
             angle += step;
         }
         drawAspectRows(graphics, infusion.essentia(), 5, x + 8, y + 164);
+        ItemStack[] centrals = infusion.central().getItems();
+        int unstable = Math.min(5, infusion.instabilityFor(centrals.length > 0 ? centrals[0] : ItemStack.EMPTY) / 2);
+        Component instability = Component.translatable("research.alchemia.instability",
+                Component.translatable("research.alchemia.instability." + unstable));
+        graphics.drawString(font, instability, x + 56 - font.width(instability) / 2, y + 194, HEADING_COLOUR, false);
+    }
+
+    private void drawConstruct(GuiGraphics graphics, ResearchPage.Construct page, int x, int y) {
+        heading(graphics, "research.alchemia.construct", x, y);
+        List<Holder<Aspect>> asked = page.cost().sortedByAmount();
+        for (int index = 0; index < asked.size(); index++) {
+            drawAspect(graphics, asked.get(index), page.cost().get(asked.get(index)),
+                    x + 14 + 18 * index + (5 - asked.size()) * 8, y + 182);
+        }
+        int across = 64 - (page.wide() * 16 + page.deep() * 16) / 2;
+        int lift = -page.tall() * 25;
+        int index = 0;
+        for (int layer = 0; layer < page.tall(); layer++) {
+            for (int depth = page.deep() - 1; depth >= 0; depth--) {
+                for (int width = page.wide() - 1; width >= 0; width--) {
+                    if (index < page.blocks().size()) {
+                        var item = net.minecraft.core.registries.BuiltInRegistries.ITEM.get(page.blocks().get(index));
+                        if (item != net.minecraft.world.item.Items.AIR) {
+                            drawStack(graphics, new ItemStack(item), x + across + width * 16 + depth * 16,
+                                    y + 100 + lift - width * 8 + depth * 8 + layer * 50);
+                        }
+                    }
+                    index++;
+                }
+            }
+        }
+    }
+
+    private void drawAspects(GuiGraphics graphics, ResearchPage.Aspects page, int x, int y) {
+        for (int index = 0; index < page.aspects().size(); index++) {
+            var found = me.moonscenty.alchemia.registry.ModAspects.REGISTRY.getHolder(page.aspects().get(index));
+            if (found.isEmpty()) {
+                continue;
+            }
+            Holder<Aspect> aspect = found.get();
+            int top = y + 8 + index * 50;
+            graphics.pose().pushPose();
+            graphics.pose().translate(x, top, 0);
+            graphics.pose().scale(2F, 2F, 1F);
+            drawIcon(graphics, aspect, 0, 0);
+            graphics.pose().popPose();
+            Component name = aspect.value().displayName();
+            graphics.drawString(font, name, x + 16 - font.width(name) / 2, top + 33, HEADING_COLOUR, false);
+            var parts = aspect.value().components();
+            if (parts.isPresent() && parts.get().size() == 2) {
+                for (int part = 0; part < 2; part++) {
+                    Holder<Aspect> from = parts.get().get(part);
+                    graphics.pose().pushPose();
+                    graphics.pose().translate(x + 54 + part * 42, top + 4, 0);
+                    graphics.pose().scale(1.5F, 1.5F, 1F);
+                    drawIcon(graphics, from, 0, 0);
+                    graphics.pose().popPose();
+                    Component partName = from.value().displayName().copy().withStyle(net.minecraft.ChatFormatting.ITALIC);
+                    graphics.drawString(font, partName, x + 66 + part * 42 - font.width(partName) / 2, top + 30,
+                            HEADING_COLOUR, false);
+                }
+                graphics.drawString(font, "=", x + 39, top + 12, 0xFF999999, false);
+                graphics.drawString(font, "+", x + 83, top + 12, 0xFF999999, false);
+            } else {
+                graphics.drawString(font, Component.translatable("research.alchemia.primal_aspect"), x + 48, top + 12,
+                        0xFF444444, false);
+            }
+            if (over(x, top, 40)) {
+                pointedAspect = aspect;
+                pointedX = mouseX;
+                pointedY = mouseY;
+            }
+        }
+    }
+
+    private void drawIcon(GuiGraphics graphics, Holder<Aspect> aspect, int x, int y) {
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        int colour = aspect.value().color();
+        graphics.setColor(((colour >> 16) & 0xFF) / 255F, ((colour >> 8) & 0xFF) / 255F, (colour & 0xFF) / 255F, 1F);
+        graphics.blit(aspect.value().icon(), x, y, 0, 0, ICON, ICON, ICON, ICON);
+        graphics.setColor(1F, 1F, 1F, 1F);
+    }
+
+    // original: pointing at an aspect shows up to sixteen things that carry it
+    private void drawCarriers(GuiGraphics graphics, Aspect aspect) {
+        List<ItemStack> things = carriers().getOrDefault(aspect, List.of());
+        if (things.isEmpty()) {
+            return;
+        }
+        int shown = Math.min(16, things.size());
+        int first = things.size() > 16 ? (int) (ticks / 5 % things.size()) : 0;
+        graphics.pose().pushPose();
+        graphics.pose().translate(0, 0, 300);
+        for (int index = 0; index < shown; index++) {
+            ItemStack thing = things.get((first + index) % things.size());
+            int at = pointedX + 8 + (index % 8) * 17;
+            int down = pointedY - (4 + shown / 8 * 8) + (index / 8) * 17;
+            graphics.renderItem(thing, at, down);
+            graphics.renderItemDecorations(font, thing, at, down);
+        }
+        graphics.pose().popPose();
+    }
+
+    private static java.util.Map<Aspect, List<ItemStack>> carriers() {
+        if (carriers == null) {
+            java.util.Map<Aspect, List<ItemStack>> found = new java.util.HashMap<>();
+            for (var item : net.minecraft.core.registries.BuiltInRegistries.ITEM) {
+                ItemStack stack = new ItemStack(item);
+                AspectList carried = me.moonscenty.alchemia.aspect.Aspects.of(stack);
+                for (Holder<Aspect> aspect : carried.sortedByName()) {
+                    found.computeIfAbsent(aspect.value(), key -> new java.util.ArrayList<>())
+                            .add(stack.copyWithCount(Math.max(1, carried.get(aspect))));
+                }
+            }
+            carriers = found;
+        }
+        return carriers;
     }
 
     private void drawAspectRows(GuiGraphics graphics, AspectList aspects, int across, int x, int y) {
@@ -271,13 +422,22 @@ public class ResearchPageScreen extends Screen {
     private void drawIngredient(GuiGraphics graphics, Ingredient ingredient, int x, int y) {
         ItemStack[] options = ingredient.getItems();
         if (options.length > 0) {
-            graphics.renderItem(options[(int) (ticks / CYCLE_TICKS % options.length)], x, y);
+            ItemStack shown = options[(int) (ticks / CYCLE_TICKS % options.length)];
+            graphics.renderItem(shown, x, y);
+            pointAt(shown, x, y);
         }
     }
 
     private void drawStack(GuiGraphics graphics, ItemStack stack, int x, int y) {
         graphics.renderItem(stack, x, y);
         graphics.renderItemDecorations(font, stack, x, y);
+        pointAt(stack, x, y);
+    }
+
+    private void pointAt(ItemStack stack, int x, int y) {
+        if (!stack.isEmpty() && over(x, y, ICON)) {
+            tip = getTooltipFromItem(minecraft, stack);
+        }
     }
 
     private void drawAspect(GuiGraphics graphics, Holder<Aspect> aspect, int amount, int x, int y) {
@@ -292,6 +452,10 @@ public class ResearchPageScreen extends Screen {
         String count = String.valueOf(amount);
         graphics.drawString(font, count, x + ICON - font.width(count) + 1, y + ICON - 7, 0xFFFFFFFF, true);
         graphics.pose().popPose();
+        if (over(x, y, ICON)) {
+            tip = List.of(aspect.value().displayName(),
+                    aspect.value().description().copy().withStyle(net.minecraft.ChatFormatting.GRAY));
+        }
     }
 
     private int turnX(boolean forward) {
@@ -332,6 +496,28 @@ public class ResearchPageScreen extends Screen {
             return true;
         }
         return super.mouseClicked(mouseX, mouseY, button);
+    }
+
+    // original's keys: left, up and page up go back; right, down and page down go on
+    @Override
+    public boolean keyPressed(int key, int scan, int modifiers) {
+        if (minecraft.options.keyInventory.matches(key, scan)) {
+            onClose();
+            return true;
+        }
+        if ((key == org.lwjgl.glfw.GLFW.GLFW_KEY_LEFT || key == org.lwjgl.glfw.GLFW.GLFW_KEY_UP
+                || key == org.lwjgl.glfw.GLFW.GLFW_KEY_PAGE_UP) && spread > 0) {
+            spread -= 2;
+            turned();
+            return true;
+        }
+        if ((key == org.lwjgl.glfw.GLFW.GLFW_KEY_RIGHT || key == org.lwjgl.glfw.GLFW.GLFW_KEY_DOWN
+                || key == org.lwjgl.glfw.GLFW.GLFW_KEY_PAGE_DOWN) && spread + 2 < pages.size()) {
+            spread += 2;
+            turned();
+            return true;
+        }
+        return super.keyPressed(key, scan, modifiers);
     }
 
     private void turned() {

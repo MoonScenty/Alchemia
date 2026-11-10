@@ -7,6 +7,16 @@
     {
       "type": "text",
       "key": "research.alchemia.arcane_workbench.page"
+    },
+    {
+      "type": "construct",
+      "blocks": [
+        "alchemia:wand",
+        "alchemia:wooden_table"
+      ],
+      "deep": 1,
+      "tall": 2,
+      "wide": 1
     }
   ],
   "parents": [

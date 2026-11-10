@@ -7,6 +7,45 @@
     {
       "type": "text",
       "key": "research.alchemia.infernal_furnace.page"
+    },
+    {
+      "type": "construct",
+      "blocks": [
+        "minecraft:nether_bricks",
+        "minecraft:obsidian",
+        "minecraft:nether_bricks",
+        "minecraft:obsidian",
+        "minecraft:air",
+        "minecraft:obsidian",
+        "minecraft:nether_bricks",
+        "minecraft:obsidian",
+        "minecraft:nether_bricks",
+        "minecraft:nether_bricks",
+        "minecraft:obsidian",
+        "minecraft:nether_bricks",
+        "minecraft:obsidian",
+        "minecraft:lava_bucket",
+        "minecraft:iron_bars",
+        "minecraft:nether_bricks",
+        "minecraft:obsidian",
+        "minecraft:nether_bricks",
+        "minecraft:nether_bricks",
+        "minecraft:obsidian",
+        "minecraft:nether_bricks",
+        "minecraft:obsidian",
+        "minecraft:obsidian",
+        "minecraft:obsidian",
+        "minecraft:nether_bricks",
+        "minecraft:obsidian",
+        "minecraft:nether_bricks"
+      ],
+      "cost": {
+        "alchemia:ignis": 50,
+        "alchemia:terra": 50
+      },
+      "deep": 3,
+      "tall": 3,
+      "wide": 3
     }
   ],
   "parents": [

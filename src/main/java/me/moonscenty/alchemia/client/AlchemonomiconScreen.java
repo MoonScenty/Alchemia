@@ -423,7 +423,14 @@ public class AlchemonomiconScreen extends Screen {
 
     private List<Component> describe(ResearchEntry research, ResourceLocation id, PlayerKnowledge knowledge) {
         List<Component> lines = new ArrayList<>();
-        lines.add(ResearchEntry.displayName(id));
+        lines.add(ResearchEntry.displayName(id).copy().withStyle(ChatFormatting.GOLD));
+        lines.add(ResearchEntry.description(id));
+        if (research.warp() > 0) {
+            int level = Math.min(5, research.warp());
+            lines.add(Component.translatable("research.alchemia.forbidden",
+                    Component.translatable("research.alchemia.forbidden." + level))
+                    .withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.BOLD));
+        }
 
         if (knowledge.hasResearch(id)) {
             lines.add(Component.translatable("research.alchemia.known").withStyle(ChatFormatting.GREEN));
@@ -453,11 +460,41 @@ public class AlchemonomiconScreen extends Screen {
                             .withStyle(ChatFormatting.DARK_PURPLE)),
                     () -> {
                         lines.add(Component.translatable("research.alchemia.ready").withStyle(ChatFormatting.AQUA));
-                        lines.add(Component.translatable("research.alchemia.take_note")
-                                .withStyle(ChatFormatting.DARK_GRAY));
+                        if (carriesNote(id)) {
+                            lines.add(Component.translatable("research.alchemia.has_note")
+                                    .withStyle(ChatFormatting.BLUE, ChatFormatting.ITALIC));
+                        } else if (canScribe()) {
+                            lines.add(Component.translatable("research.alchemia.take_note")
+                                    .withStyle(ChatFormatting.DARK_GREEN, ChatFormatting.ITALIC));
+                        } else {
+                            lines.add(Component.translatable("research.alchemia.need_scribing")
+                                    .withStyle(ChatFormatting.RED, ChatFormatting.ITALIC));
+                        }
                     });
         }
         return lines;
+    }
+
+    private boolean carriesNote(ResourceLocation id) {
+        for (var stack : minecraft.player.getInventory().items) {
+            var note = stack.is(me.moonscenty.alchemia.registry.ModItems.RESEARCH_NOTES.get())
+                    ? me.moonscenty.alchemia.item.ResearchNoteItem.noteOn(stack) : null;
+            if (note != null && note.research().equals(id)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean canScribe() {
+        boolean paper = false;
+        boolean ink = false;
+        for (var stack : minecraft.player.getInventory().items) {
+            paper |= stack.is(net.minecraft.world.item.Items.PAPER);
+            ink |= stack.is(me.moonscenty.alchemia.registry.ModItems.SCRIBING_TOOLS.get())
+                    && stack.getDamageValue() < stack.getMaxDamage();
+        }
+        return paper && ink;
     }
 
     private Component names(AspectList aspects) {

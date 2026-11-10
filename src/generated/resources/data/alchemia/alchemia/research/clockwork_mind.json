@@ -9,6 +9,27 @@
       "key": "research.alchemia.clockwork_mind.page"
     },
     {
+      "type": "construct",
+      "blocks": [
+        "minecraft:air",
+        "minecraft:iron_bars",
+        "minecraft:air",
+        "minecraft:air",
+        "minecraft:cauldron",
+        "minecraft:piston",
+        "minecraft:anvil",
+        "alchemia:stone_table"
+      ],
+      "cost": {
+        "alchemia:aer": 50,
+        "alchemia:ignis": 50,
+        "alchemia:ordo": 50
+      },
+      "deep": 2,
+      "tall": 2,
+      "wide": 2
+    },
+    {
       "type": "recipe",
       "recipe": "alchemia:clockwork_mind"
     },

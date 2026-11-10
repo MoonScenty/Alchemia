@@ -9,6 +9,26 @@
       "key": "research.alchemia.aspects.page"
     },
     {
+      "type": "construct",
+      "blocks": [
+        "alchemia:wand",
+        "minecraft:bookshelf"
+      ],
+      "deep": 1,
+      "tall": 2,
+      "wide": 1
+    },
+    {
+      "type": "construct",
+      "blocks": [
+        "alchemia:scribing_tools",
+        "alchemia:wooden_table"
+      ],
+      "deep": 1,
+      "tall": 2,
+      "wide": 1
+    },
+    {
       "type": "recipe",
       "recipe": "alchemia:alchemometer"
     },

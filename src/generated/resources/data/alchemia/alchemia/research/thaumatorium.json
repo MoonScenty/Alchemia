@@ -9,6 +9,22 @@
       "key": "research.alchemia.thaumatorium.page"
     },
     {
+      "type": "construct",
+      "blocks": [
+        "alchemia:alchemical_construct",
+        "alchemia:alchemical_construct",
+        "alchemia:crucible"
+      ],
+      "cost": {
+        "alchemia:aqua": 100,
+        "alchemia:ignis": 50,
+        "alchemia:ordo": 100
+      },
+      "deep": 1,
+      "tall": 3,
+      "wide": 1
+    },
+    {
       "type": "recipe",
       "recipe": "alchemia:mnemonic_matrix"
     }
