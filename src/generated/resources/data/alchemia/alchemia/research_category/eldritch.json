@@ -1,5 +1,6 @@
 {
   "background": "alchemia:textures/gui/research_background/eldritch.png",
   "icon": "alchemia:textures/gui/research_category/eldritch.png",
-  "sort_order": 5
+  "sort_order": 5,
+  "unlocked_by": "alchemia:eldritch_minor"
 }

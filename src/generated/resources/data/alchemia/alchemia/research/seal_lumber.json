@@ -23,5 +23,6 @@
     "alchemia:humanus": 3,
     "alchemia:instrumentum": 5
   },
-  "row": 6
+  "row": 6,
+  "secondary": true
 }

@@ -1,7 +1,7 @@
 {
+  "auto_unlock": true,
   "category": "alchemia:alchemy",
   "column": 0,
-  "complexity": 2,
   "icon": "alchemia:crucible",
   "pages": [
     {
@@ -37,14 +37,6 @@
       "recipe": "alchemia:balanced_shard_from_entropy"
     }
   ],
-  "parents": [
-    "alchemia:wand"
-  ],
-  "requirements": {
-    "alchemia:aqua": 4,
-    "alchemia:ignis": 4,
-    "alchemia:permutatio": 2
-  },
   "row": 2,
   "shape": "major"
 }

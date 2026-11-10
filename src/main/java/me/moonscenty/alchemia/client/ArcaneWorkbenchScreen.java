@@ -143,7 +143,7 @@ public class ArcaneWorkbenchScreen extends AbstractContainerScreen<ArcaneWorkben
                 && menu.getSlot(ArcaneWorkbenchMenu.SLOT_RESULT).getItem().isEmpty()) {
             menu.matching().ifPresent(found -> {
                 ArcaneRecipe recipe = found.value();
-                if (!menu.known(recipe)) {
+                if (!menu.known(found)) {
                     graphics.renderTooltip(font,
                             Component.translatable("gui.alchemia.not_researched").withStyle(ChatFormatting.RED),
                             mouseX, mouseY);

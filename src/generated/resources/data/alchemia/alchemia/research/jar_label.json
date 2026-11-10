@@ -1,7 +1,6 @@
 {
   "category": "alchemia:alchemy",
   "column": 0,
-  "complexity": 2,
   "hidden": true,
   "icon": "alchemia:jar",
   "pages": [
@@ -29,10 +28,5 @@
   "parents": [
     "alchemia:distillation"
   ],
-  "requirements": {
-    "alchemia:vacuos": 4,
-    "alchemia:vinculum": 2,
-    "alchemia:vitreus": 4
-  },
   "row": 5
 }

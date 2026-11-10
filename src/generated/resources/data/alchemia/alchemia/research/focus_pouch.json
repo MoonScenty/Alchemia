@@ -19,5 +19,6 @@
     "alchemia:instrumentum": 3,
     "alchemia:vacuos": 6
   },
-  "row": 0
+  "row": 0,
+  "secondary": true
 }

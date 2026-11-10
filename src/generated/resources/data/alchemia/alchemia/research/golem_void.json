@@ -27,5 +27,6 @@
     "alchemia:fabrico": 5,
     "alchemia:metallum": 5
   },
-  "row": -6
+  "row": -6,
+  "secondary": true
 }

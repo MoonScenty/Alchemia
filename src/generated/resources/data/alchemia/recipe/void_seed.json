@@ -8,7 +8,7 @@
   "catalyst": {
     "item": "minecraft:wheat_seeds"
   },
-  "research": "alchemia:void_metal",
+  "research": "alchemia:eldritch_minor",
   "result": {
     "count": 1,
     "id": "alchemia:void_seed"

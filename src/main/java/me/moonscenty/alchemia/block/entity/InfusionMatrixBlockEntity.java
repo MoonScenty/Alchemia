@@ -367,7 +367,8 @@ public class InfusionMatrixBlockEntity extends SyncedBlockEntity {
         InfusionInput laid = new InfusionInput(under.held(), standing);
         Optional<RecipeHolder<InfusionRecipe>> found = level.getRecipeManager()
                 .getRecipeFor(ModRecipes.INFUSION.get(), laid, level);
-        if (found.isEmpty() || !known(found.get().value(), player)) {
+        if (found.isEmpty() || !me.moonscenty.alchemia.research.RecipeGates.known(player, found.get().id(),
+                found.get().value().research())) {
             return false;
         }
 
@@ -390,11 +391,6 @@ public class InfusionMatrixBlockEntity extends SyncedBlockEntity {
         return true;
     }
 
-    private static boolean known(InfusionRecipe recipe, Player player) {
-        return recipe.research()
-                .map(research -> player != null && PlayerKnowledge.of(player).hasResearch(research))
-                .orElse(true);
-    }
 
     public static void tick(Level level, BlockPos pos, BlockState state, InfusionMatrixBlockEntity matrix) {
         if (!matrix.awake) {

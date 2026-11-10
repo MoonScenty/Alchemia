@@ -94,6 +94,12 @@ public final class AuraHandler {
         AuraTicker.owe(level, new net.minecraft.world.level.ChunkPos(pos), aspect, amount);
     }
 
+    // original: what a player carries holds back from a thin aura only once they have learned to
+    public static boolean spares(net.minecraft.world.entity.player.Player player) {
+        return player == null || me.moonscenty.alchemia.player.PlayerKnowledge.of(player)
+                .hasResearch(me.moonscenty.alchemia.Alchemia.id("aura_preserve"));
+    }
+
     public static boolean shouldSpare(LevelAccessor level, BlockPos pos, Holder<Aspect> aspect) {
         AuraChunk aura = at(level, pos);
         return aura.exists() && (float) aura.get(aspect) / aura.base() < 0.1F;

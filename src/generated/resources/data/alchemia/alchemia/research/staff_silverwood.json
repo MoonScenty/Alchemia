@@ -22,5 +22,6 @@
     "alchemia:instrumentum": 6,
     "alchemia:potentia": 9
   },
-  "row": 6
+  "row": 6,
+  "secondary": true
 }

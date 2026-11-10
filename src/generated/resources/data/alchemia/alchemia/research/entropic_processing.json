@@ -36,5 +36,6 @@
     "alchemia:perditio": 6,
     "alchemia:potentia": 3
   },
-  "row": 0
+  "row": 0,
+  "secondary": true
 }

@@ -32,5 +32,6 @@
     "alchemia:humanus": 6,
     "alchemia:victus": 8
   },
-  "row": 8
+  "row": 8,
+  "secondary": true
 }

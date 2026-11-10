@@ -35,6 +35,15 @@ public final class Clues {
     public static final ResourceLocation DISPENSER = clue("dispenser");
     public static final ResourceLocation NODE_MAGNET_DANGER = clue("node_magnet_danger");
     public static final ResourceLocation BATH_SALTS = clue("bath_salts");
+    public static final ResourceLocation OUTER_MOB = clue("outer_mob");
+    public static final ResourceLocation OUTER_BOSS = clue("outer_boss");
+    public static final ResourceLocation ANCIENT_STONE = clue("ancient_stone");
+    public static final ResourceLocation ELDRITCH_STONE = clue("eldritch_stone");
+    public static final ResourceLocation GLYPHED_STONE = clue("glyphed_stone");
+    public static final ResourceLocation PRIMORDIAL_PEARL = clue("primordial_pearl");
+    public static final ResourceLocation FOCUS_PRIMAL = clue("focus_primal");
+    // a research rather than a clue: scanning a golem of any kind teaches it outright
+    public static final ResourceLocation BASIC_GOLEMANCY = Alchemia.id("basic_golemancy");
 
     private static final List<Found> FOUND = List.of(
             new Found(BAT, target -> target instanceof ScanTarget.OfEntity seen && seen.entity() instanceof Bat),
@@ -49,7 +58,19 @@ public final class Clues {
                     || target instanceof ScanTarget.OfEntity seen && seen.entity() instanceof AngryZombie),
             new Found(TAINT_SHARD, target -> is(target, ModItems.SHARDS.get(CrystalType.FLUX).get())
                     || isBlock(target, ModBlocks.CRYSTALS.get(CrystalType.FLUX).get())),
-            new Found(DISPENSER, target -> is(target, Items.DISPENSER) || isBlock(target, Blocks.DISPENSER)));
+            new Found(DISPENSER, target -> is(target, Items.DISPENSER) || isBlock(target, Blocks.DISPENSER)),
+            new Found(OUTER_MOB, target -> target instanceof ScanTarget.OfEntity seen
+                    && seen.entity() instanceof me.moonscenty.alchemia.entity.EldritchMob),
+            new Found(OUTER_BOSS, target -> target instanceof ScanTarget.OfEntity seen
+                    && seen.entity() instanceof me.moonscenty.alchemia.entity.boss.ThaumcraftBoss),
+            new Found(ANCIENT_STONE, target -> isBlock(target, ModBlocks.ANCIENT_STONE.block().get())),
+            new Found(ELDRITCH_STONE, target -> isBlock(target, ModBlocks.ELDRITCH_STONE.block().get())),
+            new Found(GLYPHED_STONE, target -> isBlock(target, ModBlocks.GLYPHED_STONE.get())),
+            new Found(PRIMORDIAL_PEARL, target -> is(target, ModItems.PRIMORDIAL_PEARL.get())),
+            new Found(BASIC_GOLEMANCY, target -> target instanceof ScanTarget.OfEntity seen
+                    && (seen.entity() instanceof net.minecraft.world.entity.animal.AbstractGolem
+                            || seen.entity() instanceof me.moonscenty.alchemia.entity.Construct
+                            || seen.entity() instanceof me.moonscenty.alchemia.golem.Golem)));
 
     private record Found(ResourceLocation clue, Predicate<ScanTarget> in) {
     }
@@ -91,6 +112,9 @@ public final class Clues {
         PlayerKnowledge knowledge = PlayerKnowledge.of(player);
         if (knowledge.hasResearch(clue)) {
             return false;
+        }
+        if (!clue.getPath().startsWith("clue/")) {
+            return ResearchCompletion.complete(player, clue);
         }
         PlayerKnowledge.update(player, known -> known.withResearch(clue));
         player.displayClientMessage(Component.translatable("research.alchemia.clue").withStyle(ChatFormatting.GREEN),

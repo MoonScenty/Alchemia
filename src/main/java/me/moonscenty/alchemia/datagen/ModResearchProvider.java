@@ -28,8 +28,8 @@ public class ModResearchProvider {
         category(context, ModResearch.ARCANA, "arcana", 1);
         category(context, ModResearch.ALCHEMY, "alchemy", 2);
         category(context, ModResearch.ARTIFICE, "artifice", 3);
-        category(context, ModResearch.GOLEMANCY, "golemancy", 4);
-        category(context, ModResearch.ELDRITCH, "eldritch", 5);
+        category(context, ModResearch.GOLEMANCY, "golemancy", 4, "basic_golemancy");
+        category(context, ModResearch.ELDRITCH, "eldritch", 5, "eldritch_minor");
     }
 
     public static void entries(BootstrapContext<ResearchEntry> context) {
@@ -63,8 +63,8 @@ public class ModResearchProvider {
                 AspectList.of(ModAspects.PLANT, 4).add(ModAspects.LIFE, 2), List.of("aspects"), false, NodeShape.PLAIN, 1, "greatwood_planks");
         entry(context, "silverwood", ModResearch.ARCANA, ModBlocks.SILVERWOOD.sapling(), 1, 2,
                 AspectList.of(ModAspects.PLANT, 4).add(ModAspects.AURA, 4), List.of("greatwood"), false, NodeShape.SPECIAL, 2, "silverwood_planks");
-        entry(context, "warp", ModResearch.ELDRITCH, Items.ENDER_PEARL, 0, 3,
-                AspectList.of(ModAspects.ELDRITCH, 4).add(ModAspects.FLUX, 2), List.of("vis_crystals"), false, NodeShape.MAJOR, 3);
+        entry(context, "warp", ModResearch.BASICS, Items.ENDER_PEARL, 0, 2, AspectList.EMPTY, List.of(), true,
+                NodeShape.MAJOR, 1);
 
         entry(context, "wand", ModResearch.ARCANA, ModItems.WAND, 3, 0,
                 AspectList.EMPTY, List.of(), true, NodeShape.MAJOR, 1, "wand_cap_iron", "wand");
@@ -91,8 +91,7 @@ public class ModResearchProvider {
                 List.of("arcane_workbench", "greatwood"), false, NodeShape.PLAIN, 1, "wand_rod_greatwood");
 
         entry(context, "crucible", ModResearch.ALCHEMY, ModBlocks.CRUCIBLE, 0, 2,
-                AspectList.of(ModAspects.WATER, 4).add(ModAspects.FIRE, 4).add(ModAspects.EXCHANGE, 2),
-                List.of("wand"), false, NodeShape.MAJOR, 2, "morphic_resonator", "balanced_shard_from_air",
+                AspectList.EMPTY, List.of(), true, NodeShape.MAJOR, 1, "morphic_resonator", "balanced_shard_from_air",
                 "balanced_shard_from_fire", "balanced_shard_from_water", "balanced_shard_from_earth",
                 "balanced_shard_from_order", "balanced_shard_from_entropy");
         entry(context, "metallurgy", ModResearch.ALCHEMY, ModItems.ALCHEMIUM_INGOT, -1, 3,
@@ -136,8 +135,7 @@ public class ModResearchProvider {
                 AspectList.of(ModAspects.WATER, 3).add(ModAspects.VOID, 6), List.of("jar_label"), false,
                 NodeShape.PLAIN, 1, "void_jar");
         entry(context, "jar_label", ModResearch.ALCHEMY, ModBlocks.JAR, 0, 5,
-                AspectList.of(ModAspects.CRYSTAL, 4).add(ModAspects.VOID, 4).add(ModAspects.TRAP, 2),
-                List.of("distillation"), false, NodeShape.PLAIN, 2,
+                AspectList.EMPTY, List.of("distillation"), false, NodeShape.PLAIN, 1,
                 "jar", "phial", "jar_label", "jar_brace");
         entry(context, "tubes", ModResearch.ALCHEMY, ModBlocks.TUBE, 2, 5,
                 AspectList.of(ModAspects.WATER, 3).add(ModAspects.EXCHANGE, 6),
@@ -198,7 +196,8 @@ public class ModResearchProvider {
                 List.of("distillation", "improved_distillation"), false, NodeShape.PLAIN, 1, "alchemium_smelter");
         entry(context, "void_smelter", ModResearch.ALCHEMY, ModBlocks.VOID_SMELTER, 2, 8,
                 AspectList.of(ModAspects.FIRE, 3).add(ModAspects.WATER, 3).add(ModAspects.CRAFT, 3),
-                List.of("alchemium_smelter", "void_metal"), false, NodeShape.PLAIN, 1, "advanced_alchemical_construct",
+                List.of("alchemium_smelter", "primordial_pearl"), false, NodeShape.PLAIN, 1,
+                "advanced_alchemical_construct",
                 "void_smelter");
 
         entry(context, "void_metal", ModResearch.ALCHEMY, ModItems.VOID_INGOT, -2, 4,
@@ -234,8 +233,7 @@ public class ModResearchProvider {
                 List.of("arcane_workbench"), false, NodeShape.PLAIN, 1, "goggles_of_revealing");
 
         entry(context, "enchanted_fabric", ModResearch.ARTIFICE, ModItems.ENCHANTED_FABRIC, 6, 3,
-                AspectList.of(ModAspects.CRAFT, 4).add(ModAspects.AURA, 3).add(ModAspects.BEAST, 2),
-                List.of("arcane_workbench"), false, NodeShape.PLAIN, 2, "enchanted_fabric");
+                AspectList.EMPTY, List.of(), true, NodeShape.PLAIN, 1, "enchanted_fabric");
         entry(context, "robes", ModResearch.ARTIFICE, ModItems.ROBES.get("cloth_chest"), 7, 2,
                 AspectList.of(ModAspects.AURA, 4).add(ModAspects.PROTECT, 4).add(ModAspects.CRAFT, 3)
                         .add(ModAspects.ENERGY, 2),
@@ -314,12 +312,17 @@ public class ModResearchProvider {
 
         hidden(context, "crimson", ModResearch.ELDRITCH, ModItems.CRIMSON_RITES, 0, 2, NodeShape.SPECIAL);
         hidden(context, "enter_outer", ModResearch.ELDRITCH, ModItems.RUNED_TABLET, -3, 5, NodeShape.SPECIAL);
+        entry(context, "outer_revelations", ModResearch.ELDRITCH, ModItems.RUNED_TABLET, -4, 5, AspectList.EMPTY,
+                List.of("enter_outer"), false, NodeShape.SPECIAL, 1);
+        entry(context, "primordial_pearl", ModResearch.ELDRITCH, ModItems.PRIMORDIAL_PEARL, 2, 3,
+                AspectList.of(ModAspects.ENERGY, 9).add(ModAspects.ELDRITCH, 9).add(ModAspects.ORDER, 9),
+                List.of("eldritch_minor"), false, NodeShape.PLAIN, 2);
 
         entry(context, "primal_crusher", ModResearch.ELDRITCH, ModItems.PRIMAL_CRUSHER, 1, 5,
                 AspectList.of(ModAspects.EARTH, 6).add(ModAspects.TOOL, 6).add(ModAspects.ENTROPY, 6)
                         .add(ModAspects.VOID, 6).add(ModAspects.AVERSION, 6).add(ModAspects.ELDRITCH, 6)
                         .add(ModAspects.DESIRE, 6),
-                List.of("elemental_tools", "void_gear", "warp"), false, NodeShape.SPECIAL, 2, "primal_crusher");
+                List.of("primordial_pearl"), false, NodeShape.SPECIAL, 2, "primal_crusher");
 
         entry(context, "autocaster", ModResearch.GOLEMANCY, ModItems.AUTOCASTER, 1, 6,
                 AspectList.of(ModAspects.MECHANISM, 3).add(ModAspects.AVERSION, 3).add(ModAspects.SENSES, 3)
@@ -341,8 +344,9 @@ public class ModResearchProvider {
                         .add(ModAspects.ENERGY, 6).add(ModAspects.LIFE, 3),
                 List.of("golem_wood", "distillation", "tallow", "nitor"), false, NodeShape.PLAIN, 1, "clockwork_mind",
                 "stone_table");
+        hidden(context, "basic_golemancy", ModResearch.GOLEMANCY, ModItems.GOLEM_BELL, 0, 0, NodeShape.MAJOR);
         entry(context, "golem_wood", ModResearch.GOLEMANCY, ModBlocks.GREATWOOD.planks().get(), -2, -2,
-                AspectList.EMPTY, List.of(), true, NodeShape.MAJOR, 1);
+                AspectList.EMPTY, List.of(), false, NodeShape.MAJOR, 1);
         entry(context, "golem_iron", ModResearch.GOLEMANCY, ModItems.IRON_PLATE, -2, -4,
                 AspectList.of(ModAspects.METAL, 5).add(ModAspects.CRAFT, 3),
                 List.of("golem_wood"), false, NodeShape.PLAIN, 1, "iron_plate");
@@ -486,10 +490,19 @@ public class ModResearchProvider {
         entry(context, "focus_pouch", ModResearch.ARCANA, ModItems.FOCUS_POUCH, 2, 0,
                 AspectList.of(ModAspects.VOID, 6).add(ModAspects.TOOL, 3),
                 List.of("wand"), false, NodeShape.PLAIN, 1, "focus_pouch");
+        entry(context, "node_tapper1", ModResearch.ARCANA, ModItems.WAND, 4, 0,
+                AspectList.of(ModAspects.AURA, 6).add(ModAspects.ENERGY, 3).add(ModAspects.MOTION, 3)
+                        .add(ModAspects.EXCHANGE, 3), List.of("wand"), false, NodeShape.MAJOR, 2);
+        entry(context, "node_tapper2", ModResearch.ARCANA, ModItems.WAND_RODS.get("greatwood"), 6, -1,
+                AspectList.of(ModAspects.AURA, 6).add(ModAspects.ENERGY, 3).add(ModAspects.MOTION, 3)
+                        .add(ModAspects.EXCHANGE, 3), List.of("node_tapper1"), false, NodeShape.MAJOR, 2);
+        entry(context, "aura_preserve", ModResearch.ARCANA, ModItems.BALANCED_SHARD, 4, -2,
+                AspectList.of(ModAspects.AURA, 6).add(ModAspects.ENERGY, 3).add(ModAspects.PROTECT, 3)
+                        .add(ModAspects.EXCHANGE, 3), List.of("node_tapper1"), false, NodeShape.MAJOR, 2);
         entry(context, "aura_totem", ModResearch.ARCANA, ModBlocks.AURA_TOTEM_PUSH, 8, 1,
                 AspectList.of(ModAspects.AURA, 6).add(ModAspects.EXCHANGE, 3).add(ModAspects.WATER, 3)
                         .add(ModAspects.AVERSION, 3),
-                List.of("infusion"), false, NodeShape.SPECIAL, 3,
+                List.of("node_tapper2", "infusion"), false, NodeShape.SPECIAL, 3,
                 "aura_totem_push", "aura_totem_pole_inner", "aura_totem_pole_outer");
         entry(context, "aura_totem_pull", ModResearch.ARCANA, ModBlocks.AURA_TOTEM_PULL, 8, 0,
                 AspectList.of(ModAspects.AURA, 6).add(ModAspects.EXCHANGE, 3).add(ModAspects.WATER, 3)
@@ -580,15 +593,20 @@ public class ModResearchProvider {
                 AspectList.of(ModAspects.EARTH, 3).add(ModAspects.AIR, 3).add(ModAspects.MOTION, 3),
                 List.of("arcane_stone"), false, NodeShape.PLAIN, 1, "travel_stone");
         entry(context, "arcane_stone", ModResearch.ARTIFICE, ModBlocks.ARCANE_STONE.block(), 3, 2,
-                AspectList.of(ModAspects.EARTH, 4).add(ModAspects.AURA, 2).add(ModAspects.CRYSTAL, 2),
-                List.of("arcane_workbench"), false, NodeShape.PLAIN, 2, "arcane_stone",
+                AspectList.EMPTY, List.of(), true, NodeShape.PLAIN, 1, "arcane_stone",
                 "arcane_stone_bricks_from_arcane_stone");
     }
 
     private static void category(BootstrapContext<ResearchCategory> context, ResourceKey<ResearchCategory> key,
             String name, int order) {
+        category(context, key, name, order, null);
+    }
+
+    private static void category(BootstrapContext<ResearchCategory> context, ResourceKey<ResearchCategory> key,
+            String name, int order, String unlockedBy) {
         context.register(key, new ResearchCategory(Alchemia.id("textures/gui/research_category/" + name + ".png"),
-                Alchemia.id("textures/gui/research_background/" + name + ".png"), order));
+                Alchemia.id("textures/gui/research_background/" + name + ".png"), order,
+                java.util.Optional.ofNullable(unlockedBy).map(Alchemia::id)));
     }
 
     private static void foci(BootstrapContext<ResearchEntry> context) {
@@ -671,7 +689,18 @@ public class ModResearchProvider {
             "primal_arrows", "brain_jar", "liquid_death", "bottle_taint", "taint_shard", "ethereal_bloom",
             "bath_salts", "jar_label", "clockwork_mind", "bioalchemic_mind", "control_seals", "golem_flyer",
             "autocaster", "crystal_farmer", "oculus", "sinister_stone", "primal_crusher", "void_robes",
-            "focus_primal", "basic_turret", "node_magnet", "staff_primal");
+            "focus_primal", "basic_turret", "node_magnet", "staff_primal", "primordial_pearl", "outer_revelations",
+            "void_smelter");
+
+    // original's secondary research, bought with levels
+    private static final java.util.Set<String> SECONDARY = java.util.Set.of("aura_totem_pull", "aura_totem_pole_pure",
+            "vampire_bats", "focus_pouch", "staves_primal", "staff_silverwood", "charger", "redstone_relay",
+            "thaumostatic_girdle", "bellows", "infusion_boost", "runic_special", "mirror_hand", "mirror_essentia",
+            "arcane_lamp", "verdant_heart_lifegiver", "alchemical_duplication", "alchemical_manufacture",
+            "entropic_processing", "taint_shard", "spa", "jar_void", "tubes", "tube_filter", "hungry_chest",
+            "golem_iron", "golem_clay", "golem_brass", "golem_alchemium", "golem_void", "golem_direct", "seal_store",
+            "seal_empty", "seal_provide", "seal_butcher", "seal_break", "seal_lumber", "golem_combat",
+            "advanced_turret", "outer_revelations");
 
     private static final java.util.Map<String, List<String>> CLUES = java.util.Map.ofEntries(
             java.util.Map.entry("focus_hellbat", List.of(Clues.BAT.getPath())),
@@ -695,13 +724,18 @@ public class ModResearchProvider {
             java.util.Map.entry("levitator", List.of("volatus")),
             java.util.Map.entry("arcane_lamp", List.of("lux")),
             java.util.Map.entry("fortress_armour", List.of("praemunio")),
-            java.util.Map.entry("pattern_crafter", List.of("fabrico")));
+            java.util.Map.entry("pattern_crafter", List.of("fabrico")),
+            java.util.Map.entry("primordial_pearl", List.of(Clues.PRIMORDIAL_PEARL.getPath())),
+            java.util.Map.entry("outer_revelations", List.of(Clues.OUTER_BOSS.getPath(), Clues.OUTER_MOB.getPath(),
+                    Clues.ANCIENT_STONE.getPath(), Clues.ELDRITCH_STONE.getPath(), Clues.GLYPHED_STONE.getPath())));
 
     private static final java.util.Map<String, List<String>> HIDDEN_PARENTS = java.util.Map.of(
             "focal_manipulator", List.of("focus_frost", "focus_shock", "focus_trade", "focus_excavation"),
             "charger", List.of("wand_rod_greatwood"),
             "growth_lamp", List.of("infusion"),
-            "fertility_lamp", List.of("infusion"));
+            "fertility_lamp", List.of("infusion"),
+            "primal_crusher", List.of("void_metal", "elemental_tools"),
+            "void_smelter", List.of("void_metal"));
 
     private static final java.util.Map<String, List<ResearchPage>> LATER_PAGES = java.util.Map.of(
             "node_magnet", List.of(new ResearchPage.Text("research.alchemia.node_magnet.danger",
@@ -710,7 +744,9 @@ public class ModResearchProvider {
     private static final java.util.Map<String, List<String>> SIBLINGS = java.util.Map.of(
             "crimson", List.of("eldritch_minor"),
             "clockwork_mind", List.of("control_seals"),
-            "control_seals", List.of("seal_collect"));
+            "control_seals", List.of("seal_collect"),
+            "distillation", List.of("jar_label"),
+            "basic_golemancy", List.of("golem_wood"));
 
     private static void register(BootstrapContext<ResearchEntry> context, String name,
             ResourceKey<ResearchCategory> category, ItemLike icon, int column, int row, AspectList requirements,
@@ -724,6 +760,7 @@ public class ModResearchProvider {
                         autoUnlock, shape, complexity, hidden || CONCEALED.contains(name), WARP.getOrDefault(name, 0),
                         SIBLINGS.getOrDefault(name, List.of()).stream().map(Alchemia::id).toList(),
                         CLUES.getOrDefault(name, List.of()).stream().map(Alchemia::id).toList(),
-                        HIDDEN_PARENTS.getOrDefault(name, List.of()).stream().map(Alchemia::id).toList()));
+                        HIDDEN_PARENTS.getOrDefault(name, List.of()).stream().map(Alchemia::id).toList(),
+                        SECONDARY.contains(name)));
     }
 }

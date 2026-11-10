@@ -18,5 +18,6 @@
     "alchemia:victus": 5
   },
   "row": 8,
+  "secondary": true,
   "warp": 2
 }

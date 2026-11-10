@@ -1,0 +1,23 @@
+{
+  "category": "alchemia:arcana",
+  "column": 4,
+  "complexity": 2,
+  "icon": "alchemia:balanced_shard",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.aura_preserve.page"
+    }
+  ],
+  "parents": [
+    "alchemia:node_tapper1"
+  ],
+  "requirements": {
+    "alchemia:auram": 6,
+    "alchemia:permutatio": 3,
+    "alchemia:potentia": 3,
+    "alchemia:praemunio": 3
+  },
+  "row": -2,
+  "shape": "major"
+}

@@ -20,11 +20,18 @@ public final class ResearchCompletion {
     }
 
     public static boolean complete(Player player, ResourceLocation id) {
+        return complete(player, id, true);
+    }
+
+    // bought research comes without the experience a solved note gives
+    public static boolean complete(Player player, ResourceLocation id, boolean experience) {
         if (PlayerKnowledge.of(player).hasResearch(id)) {
             return false;
         }
         announce(player, id);
-        player.giveExperiencePoints(EXPERIENCE);
+        if (experience) {
+            player.giveExperiencePoints(EXPERIENCE);
+        }
         entries(player).getOptional(id).ifPresent(entry -> {
             for (ResourceLocation sibling : entry.siblings()) {
                 if (!PlayerKnowledge.of(player).hasResearch(sibling) && ready(player, sibling)) {

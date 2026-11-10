@@ -24,5 +24,6 @@
     "alchemia:machina": 3,
     "alchemia:potentia": 6
   },
-  "row": 2
+  "row": 2,
+  "secondary": true
 }

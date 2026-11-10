@@ -19,5 +19,6 @@
     "alchemia:aqua": 3,
     "alchemia:vacuos": 6
   },
-  "row": 6
+  "row": 6,
+  "secondary": true
 }

@@ -41,6 +41,12 @@ public class ResearchNoteItem extends Item {
                 server.displayClientMessage(Component.translatable("note.alchemia.already_known"), true);
                 return InteractionResultHolder.fail(held);
             }
+            ResearchEntry entry = server.registryAccess()
+                    .registryOrThrow(me.moonscenty.alchemia.research.ModResearch.ENTRY_KEY).get(note.research());
+            if (entry != null && !entry.parentsKnown(knowledge)) {
+                server.displayClientMessage(Component.translatable("research.alchemia.cant_understand"), false);
+                return InteractionResultHolder.fail(held);
+            }
             me.moonscenty.alchemia.research.ResearchCompletion.complete(server, note.research());
             level.playSound(null, server.blockPosition(), ModSounds.LEARN.get(), SoundSource.PLAYERS, 0.75F, 1.0F);
             held.shrink(1);

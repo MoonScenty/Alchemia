@@ -26,5 +26,6 @@
     "alchemia:metallum": 3,
     "alchemia:ordo": 5
   },
-  "row": -7
+  "row": -7,
+  "secondary": true
 }

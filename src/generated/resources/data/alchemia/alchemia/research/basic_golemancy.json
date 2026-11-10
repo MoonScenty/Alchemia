@@ -1,0 +1,17 @@
+{
+  "category": "alchemia:golemancy",
+  "column": 0,
+  "hidden": true,
+  "icon": "alchemia:golem_bell",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.basic_golemancy.page"
+    }
+  ],
+  "row": 0,
+  "shape": "major",
+  "siblings": [
+    "alchemia:golem_wood"
+  ]
+}

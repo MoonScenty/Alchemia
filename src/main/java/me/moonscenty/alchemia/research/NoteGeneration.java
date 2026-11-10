@@ -28,22 +28,14 @@ public final class NoteGeneration {
         int radius = BASE_RADIUS + Math.min(3, entry.complexity());
         List<Holder<Aspect>> wanted = entry.requirements().sortedByName();
 
-        Map<HexGrid.Hex, ResearchNote.Cell> board = new LinkedHashMap<>();
-        for (HexGrid.Hex hex : HexGrid.filled(radius)) {
-            board.put(hex, ResearchNote.Cell.blank(hex));
-        }
-
-        List<HexGrid.Hex> ends = HexGrid.spaceAroundRing(radius, wanted.size(), random);
-        for (int index = 0; index < ends.size(); index++) {
-            board.put(ends.get(index), ResearchNote.Cell.pinned(ends.get(index), wanted.get(index)));
-        }
-
-        // a board that can't be crossed at all is torn again from scratch
-        Map<HexGrid.Hex, ResearchNote.Cell> whole = new LinkedHashMap<>(board);
+        // a board that can't be crossed at all is laid out and torn again from scratch
+        Map<HexGrid.Hex, ResearchNote.Cell> whole = null;
         ResearchNote note = null;
         for (int attempt = 0; attempt < ATTEMPTS && note == null; attempt++) {
-            board = new LinkedHashMap<>(whole);
-            tear(board, entry.complexity() * TEARS_PER_COMPLEXITY, random);
+            whole = laidOut(radius, wanted, random);
+            Map<HexGrid.Hex, ResearchNote.Cell> board = new LinkedHashMap<>(whole);
+            // original: the simplest notes are never torn
+            tear(board, entry.complexity() > 1 ? entry.complexity() * TEARS_PER_COMPLEXITY : 0, random);
             note = affordable(research, board, wanted.size(), radius, random);
         }
         if (note == null) {
@@ -52,6 +44,19 @@ public final class NoteGeneration {
         }
         return note != null ? note
                 : new ResearchNote(research, budget(wanted.size(), radius, random), List.copyOf(whole.values()), false);
+    }
+
+    private static Map<HexGrid.Hex, ResearchNote.Cell> laidOut(int radius, List<Holder<Aspect>> wanted,
+            RandomSource random) {
+        Map<HexGrid.Hex, ResearchNote.Cell> board = new LinkedHashMap<>();
+        for (HexGrid.Hex hex : HexGrid.filled(radius)) {
+            board.put(hex, ResearchNote.Cell.blank(hex));
+        }
+        List<HexGrid.Hex> ends = HexGrid.spaceAroundRing(radius, wanted.size(), random);
+        for (int index = 0; index < ends.size(); index++) {
+            board.put(ends.get(index), ResearchNote.Cell.pinned(ends.get(index), wanted.get(index)));
+        }
+        return board;
     }
 
     // the budget is sized from an actual answer, so a board forcing dear compounds stays affordable;

@@ -10,7 +10,7 @@
     "alchemia:potentia": 25
   },
   "instability": 5,
-  "research": "alchemia:aura_totem_pull",
+  "research": "alchemia:aura_totem",
   "result": {
     "count": 1,
     "id": "alchemia:aura_totem_pull"

@@ -24,5 +24,6 @@
     "alchemia:permutatio": 5,
     "alchemia:vacuos": 3
   },
-  "row": 4
+  "row": 4,
+  "secondary": true
 }

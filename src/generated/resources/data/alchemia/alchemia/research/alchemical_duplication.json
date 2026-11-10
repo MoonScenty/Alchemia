@@ -40,5 +40,6 @@
     "alchemia:desiderium": 6,
     "alchemia:potentia": 3
   },
-  "row": 1
+  "row": 1,
+  "secondary": true
 }

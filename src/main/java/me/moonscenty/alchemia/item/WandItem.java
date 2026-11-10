@@ -190,14 +190,22 @@ public class WandItem extends Item implements VisHolder, Rechargeable {
             return;
         }
         trickle(stack, player);
-        int rate = drawRate(selected, slot);
+        int rate = drawRate(player, stack, selected, slot);
         if (rate > 0 && level instanceof ServerLevel served) {
-            charge(stack, served, player.blockPosition(), rate);
+            chargeFrom(stack, served, player.blockPosition(), rate, AuraHandler.spares(player));
         }
     }
 
-    // only the held wand draws; drawing from the belt needs research not ported yet
-    private static int drawRate(boolean selected, int slot) {
+    // original's: the held wand draws, and with aura tapping research every wand on the hotbar, faster
+    private static int drawRate(Player player, ItemStack stack, boolean selected, int slot) {
+        var knowledge = me.moonscenty.alchemia.player.PlayerKnowledge.of(player);
+        boolean hotbar = slot < 9 && player.getInventory().items.get(slot) == stack;
+        if (hotbar && knowledge.hasResearch(me.moonscenty.alchemia.Alchemia.id("node_tapper2"))) {
+            return 3;
+        }
+        if (hotbar && knowledge.hasResearch(me.moonscenty.alchemia.Alchemia.id("node_tapper1"))) {
+            return 2;
+        }
         return selected ? 1 : 0;
     }
 

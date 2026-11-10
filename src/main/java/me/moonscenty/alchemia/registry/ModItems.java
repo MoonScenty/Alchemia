@@ -138,7 +138,7 @@ public class ModItems {
     public static final DeferredItem<Item> CINNABAR_CLUSTER = ITEMS.registerSimpleItem("cinnabar_cluster");
 
     public static final DeferredItem<Item> PRIMAL_CHARM = ITEMS.register("primal_charm",
-            () -> new Item(new Item.Properties().stacksTo(1).rarity(net.minecraft.world.item.Rarity.UNCOMMON)));
+            () -> new me.moonscenty.alchemia.item.PrimalCharmItem(new Item.Properties().stacksTo(1).rarity(net.minecraft.world.item.Rarity.UNCOMMON)));
     public static final DeferredItem<me.moonscenty.alchemia.item.ZombieBrainItem> ZOMBIE_BRAIN =
             ITEMS.register("zombie_brain", () -> new me.moonscenty.alchemia.item.ZombieBrainItem(new Item.Properties()));
     public static final Map<String, DeferredItem<me.moonscenty.alchemia.item.MeatChunkItem>> MEAT_CHUNKS =

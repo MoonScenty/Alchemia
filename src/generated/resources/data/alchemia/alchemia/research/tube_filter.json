@@ -36,5 +36,6 @@
     "alchemia:ordo": 3,
     "alchemia:permutatio": 6
   },
-  "row": 6
+  "row": 6,
+  "secondary": true
 }

@@ -233,7 +233,8 @@ public class ResearchTests {
             grew = false;
             for (ResourceLocation id : entries.keySet()) {
                 ResearchEntry entry = entries.get(id);
-                if (!earned.contains(id) && !entry.requirements().isEmpty() && waitsOnly(entry, earned)) {
+                if (!earned.contains(id) && (!entry.requirements().isEmpty() || entry.secondary())
+                        && waitsOnly(entry, earned)) {
                     grew |= earned.add(id);
                 }
                 if (earned.contains(id)) {

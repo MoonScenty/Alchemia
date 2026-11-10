@@ -18,5 +18,6 @@
     "alchemia:machina": 5,
     "alchemia:praemunio": 5
   },
-  "row": 2
+  "row": 2,
+  "secondary": true
 }

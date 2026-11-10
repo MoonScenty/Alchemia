@@ -3,6 +3,10 @@
   "column": 1,
   "complexity": 2,
   "hidden": true,
+  "hidden_parents": [
+    "alchemia:void_metal",
+    "alchemia:elemental_tools"
+  ],
   "icon": "alchemia:primal_crusher",
   "pages": [
     {
@@ -15,9 +19,7 @@
     }
   ],
   "parents": [
-    "alchemia:elemental_tools",
-    "alchemia:void_gear",
-    "alchemia:warp"
+    "alchemia:primordial_pearl"
   ],
   "requirements": {
     "alchemia:alienis": 6,

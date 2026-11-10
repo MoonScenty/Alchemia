@@ -22,5 +22,6 @@
     "alchemia:desiderium": 3,
     "alchemia:permutatio": 3
   },
-  "row": 0
+  "row": 0,
+  "secondary": true
 }

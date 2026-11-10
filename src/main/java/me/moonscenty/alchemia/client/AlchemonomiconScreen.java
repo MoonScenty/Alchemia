@@ -80,10 +80,12 @@ public class AlchemonomiconScreen extends Screen {
     @Override
     protected void init() {
         categories.clear();
+        PlayerKnowledge knowledge = PlayerKnowledge.of(minecraft.player);
         categoryRegistry().entrySet().stream()
+                .filter(entry -> entry.getValue().isOpenTo(knowledge))
                 .sorted(Comparator.comparingInt(entry -> entry.getValue().sortOrder()))
                 .forEach(entry -> categories.add(entry.getKey()));
-        if (openCategory == null && !categories.isEmpty()) {
+        if ((openCategory == null || !categories.contains(openCategory)) && !categories.isEmpty()) {
             openCategory = categories.getFirst();
         }
     }
@@ -391,10 +393,27 @@ public class AlchemonomiconScreen extends Screen {
     private void tabTooltip(GuiGraphics graphics, int mouseX, int mouseY) {
         for (int index = 0; index < categories.size(); index++) {
             if (overTab(index, mouseX, mouseY)) {
-                graphics.renderTooltip(font, ResearchCategory.displayName(categories.get(index)), mouseX, mouseY);
+                graphics.renderTooltip(font, Component.empty().append(ResearchCategory.displayName(categories.get(index)))
+                        .append(" (" + completion(categories.get(index)) + "%)"), mouseX, mouseY);
                 return;
             }
         }
+    }
+
+    // original's: the share of a tab's research that is known, leaving out what everyone starts with
+    private int completion(ResourceKey<ResearchCategory> category) {
+        PlayerKnowledge knowledge = PlayerKnowledge.of(minecraft.player);
+        int all = 0;
+        int known = 0;
+        for (var entry : entries().entrySet()) {
+            if (entry.getValue().category().equals(category) && !entry.getValue().autoUnlock()) {
+                all++;
+                if (knowledge.hasResearch(entry.getKey().location())) {
+                    known++;
+                }
+            }
+        }
+        return all == 0 ? 0 : known * 100 / all;
     }
 
     private boolean overTab(int index, double mouseX, double mouseY) {
@@ -423,6 +442,11 @@ public class AlchemonomiconScreen extends Screen {
             } else {
                 lines.add(Component.translatable("research.alchemia.needs_clue").withStyle(ChatFormatting.DARK_PURPLE));
             }
+        } else if (research.secondary()) {
+            boolean affords = me.moonscenty.alchemia.research.ResearchPurchase.affords(minecraft.player, research);
+            lines.add(Component.translatable(affords ? "research.alchemia.purchase" : "research.alchemia.short",
+                    research.experience()).withStyle(affords ? ChatFormatting.DARK_GREEN : ChatFormatting.RED,
+                    ChatFormatting.ITALIC));
         } else {
             research.missingFor(knowledge::knows).ifPresentOrElse(
                     missing -> lines.add(Component.translatable("research.alchemia.needs", names(missing))
@@ -464,6 +488,12 @@ public class AlchemonomiconScreen extends Screen {
             PlayerKnowledge knowledge = PlayerKnowledge.of(minecraft.player);
             if (knowledge.hasResearch(hoveredId)) {
                 minecraft.setScreen(new ResearchPageScreen(this, hoveredId, hovered));
+                return true;
+            }
+            if (me.moonscenty.alchemia.research.ResearchPurchase.canBuy(knowledge, hoveredId, hovered)) {
+                if (me.moonscenty.alchemia.research.ResearchPurchase.affords(minecraft.player, hovered)) {
+                    PacketDistributor.sendToServer(new me.moonscenty.alchemia.network.BuyResearch(hoveredId));
+                }
                 return true;
             }
             if (NoteRequests.isReady(knowledge, hoveredId, hovered)) {

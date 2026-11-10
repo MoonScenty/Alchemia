@@ -20,5 +20,6 @@
     "alchemia:machina": 3,
     "alchemia:ordo": 3
   },
-  "row": 0
+  "row": 0,
+  "secondary": true
 }

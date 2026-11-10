@@ -1,0 +1,25 @@
+{
+  "category": "alchemia:eldritch",
+  "clues": [
+    "alchemia:clue/primordial_pearl"
+  ],
+  "column": 2,
+  "complexity": 2,
+  "hidden": true,
+  "icon": "alchemia:primordial_pearl",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.primordial_pearl.page"
+    }
+  ],
+  "parents": [
+    "alchemia:eldritch_minor"
+  ],
+  "requirements": {
+    "alchemia:alienis": 9,
+    "alchemia:ordo": 9,
+    "alchemia:potentia": 9
+  },
+  "row": 3
+}

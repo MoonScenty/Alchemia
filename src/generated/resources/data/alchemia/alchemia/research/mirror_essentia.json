@@ -22,5 +22,6 @@
     "alchemia:motus": 6,
     "alchemia:potentia": 3
   },
-  "row": 10
+  "row": 10,
+  "secondary": true
 }

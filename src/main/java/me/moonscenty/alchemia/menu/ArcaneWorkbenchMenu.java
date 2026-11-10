@@ -114,10 +114,8 @@ public class ArcaneWorkbenchMenu extends AlchemiaMenu {
         return matching().map(found -> found.value().cost(grid())).orElse(AspectList.EMPTY);
     }
 
-    public boolean known(ArcaneRecipe recipe) {
-        return recipe.research()
-                .map(research -> PlayerKnowledge.of(player).hasResearch(research))
-                .orElse(true);
+    public boolean known(RecipeHolder<ArcaneRecipe> recipe) {
+        return me.moonscenty.alchemia.research.RecipeGates.known(player, recipe.id(), recipe.value().research());
     }
 
     public boolean affordable() {
@@ -132,7 +130,7 @@ public class ArcaneWorkbenchMenu extends AlchemiaMenu {
         ItemStack made = plain()
                 .map(found -> found.value().assemble(grid(), player.level().registryAccess()))
                 .orElseGet(() -> matching()
-                        .filter(found -> known(found.value()))
+                        .filter(this::known)
                         .filter(found -> VisHolder.canPay(wand(), found.value().cost(grid()), player,
                                 VisHolder.Spending.CRAFTING))
                         .map(found -> found.value().assemble(grid(), player.level().registryAccess()))

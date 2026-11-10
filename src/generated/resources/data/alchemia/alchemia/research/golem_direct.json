@@ -18,5 +18,6 @@
     "alchemia:spiritus": 8
   },
   "row": 4,
+  "secondary": true,
   "shape": "major"
 }

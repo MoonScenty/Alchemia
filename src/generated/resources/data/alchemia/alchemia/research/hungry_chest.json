@@ -19,5 +19,6 @@
     "alchemia:desiderium": 3,
     "alchemia:vacuos": 3
   },
-  "row": -1
+  "row": -1,
+  "secondary": true
 }

@@ -24,5 +24,6 @@
     "alchemia:instrumentum": 5,
     "alchemia:perditio": 5
   },
-  "row": 4
+  "row": 4,
+  "secondary": true
 }

@@ -1,0 +1,25 @@
+{
+  "category": "alchemia:eldritch",
+  "clues": [
+    "alchemia:clue/outer_boss",
+    "alchemia:clue/outer_mob",
+    "alchemia:clue/ancient_stone",
+    "alchemia:clue/eldritch_stone",
+    "alchemia:clue/glyphed_stone"
+  ],
+  "column": -4,
+  "hidden": true,
+  "icon": "alchemia:runed_tablet",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.outer_revelations.page"
+    }
+  ],
+  "parents": [
+    "alchemia:enter_outer"
+  ],
+  "row": 5,
+  "secondary": true,
+  "shape": "special"
+}

@@ -24,5 +24,6 @@
     "alchemia:humanus": 3
   },
   "row": 6,
+  "secondary": true,
   "warp": 1
 }

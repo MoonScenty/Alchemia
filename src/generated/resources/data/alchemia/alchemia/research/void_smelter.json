@@ -1,6 +1,10 @@
 {
   "category": "alchemia:alchemy",
   "column": 2,
+  "hidden": true,
+  "hidden_parents": [
+    "alchemia:void_metal"
+  ],
   "icon": "alchemia:void_smelter",
   "pages": [
     {
@@ -18,7 +22,7 @@
   ],
   "parents": [
     "alchemia:alchemium_smelter",
-    "alchemia:void_metal"
+    "alchemia:primordial_pearl"
   ],
   "requirements": {
     "alchemia:aqua": 3,

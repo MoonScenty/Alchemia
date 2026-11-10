@@ -101,8 +101,10 @@ public final class RunicShield {
             state.next = now + BROKEN_WAIT;
             state.last = 0;
         }
-        if (current < state.most && state.next < now && AuraHandler.drainUnlessSpared(level, player.blockPosition(),
-                AspectList.of(ModAspects.AIR, 1).add(ModAspects.EARTH, 1))) {
+        AspectList recharge = AspectList.of(ModAspects.AIR, 1).add(ModAspects.EARTH, 1);
+        if (current < state.most && state.next < now && (AuraHandler.spares(player)
+                ? AuraHandler.drainUnlessSpared(level, player.blockPosition(), recharge)
+                : AuraHandler.drain(level, player.blockPosition(), recharge))) {
             state.next = now + Math.max(0, RECHARGE - state.charged * CHARGED_RING_QUICKER);
             player.setAbsorptionAmount(current + 1);
             state.last = current + 1;

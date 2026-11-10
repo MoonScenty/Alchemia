@@ -46,6 +46,7 @@ public final class NoteRequests {
                 && !entry.onlyGiven()
                 // original: stubs take no note
                 && !entry.requirements().isEmpty()
+                && !entry.secondary()
                 && entry.isAvailableTo(knowledge)
                 && entry.missingFor(knowledge::knows).isEmpty();
     }

@@ -1,0 +1,23 @@
+{
+  "category": "alchemia:arcana",
+  "column": 6,
+  "complexity": 2,
+  "icon": "alchemia:wand_rod_greatwood",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.node_tapper2.page"
+    }
+  ],
+  "parents": [
+    "alchemia:node_tapper1"
+  ],
+  "requirements": {
+    "alchemia:auram": 6,
+    "alchemia:motus": 3,
+    "alchemia:permutatio": 3,
+    "alchemia:potentia": 3
+  },
+  "row": -1,
+  "shape": "major"
+}

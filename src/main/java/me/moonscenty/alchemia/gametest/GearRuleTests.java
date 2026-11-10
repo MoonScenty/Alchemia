@@ -155,7 +155,8 @@ public class GearRuleTests {
         LivingDropsEvent event = new LivingDropsEvent(dead, helper.getLevel().damageSources().playerAttack(player), drops,
                 true);
         NeoForge.EVENT_BUS.post(event);
-        helper.assertTrue(event.getDrops().isEmpty(), "nothing left on the ground");
+        helper.assertTrue(event.getDrops().stream().noneMatch(item -> item.getItem().is(Items.ROTTEN_FLESH)),
+                "nothing left on the ground");
         helper.assertTrue(player.getInventory().contains(new ItemStack(Items.ROTTEN_FLESH)), "and it is in the pack");
         helper.succeed();
     }

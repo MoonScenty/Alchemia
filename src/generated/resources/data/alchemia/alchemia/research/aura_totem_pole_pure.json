@@ -21,5 +21,6 @@
     "alchemia:motus": 3,
     "alchemia:ordo": 3
   },
-  "row": 1
+  "row": 1,
+  "secondary": true
 }

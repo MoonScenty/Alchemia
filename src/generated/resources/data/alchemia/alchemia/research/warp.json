@@ -1,7 +1,7 @@
 {
-  "category": "alchemia:eldritch",
+  "auto_unlock": true,
+  "category": "alchemia:basics",
   "column": 0,
-  "complexity": 3,
   "icon": "minecraft:ender_pearl",
   "pages": [
     {
@@ -9,13 +9,6 @@
       "key": "research.alchemia.warp.page"
     }
   ],
-  "parents": [
-    "alchemia:vis_crystals"
-  ],
-  "requirements": {
-    "alchemia:alienis": 4,
-    "alchemia:vitium": 2
-  },
-  "row": 3,
+  "row": 2,
   "shape": "major"
 }

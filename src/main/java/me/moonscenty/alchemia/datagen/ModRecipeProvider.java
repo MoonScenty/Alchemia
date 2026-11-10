@@ -644,7 +644,7 @@ public class ModRecipeProvider extends RecipeProvider {
     }
 
     private void distillery(RecipeOutput output) {
-        arcane(output, "filter", "distillation", new ItemStack(ModItems.FILTER.get(), 2),
+        arcane(output, "filter", "crucible", new ItemStack(ModItems.FILTER.get(), 2),
                 AspectList.of(ModAspects.ORDER, 15).add(ModAspects.WATER, 15),
                 Map.of('G', Ingredient.of(Tags.Items.INGOTS_GOLD),
                         'W', Ingredient.of(ModBlocks.SILVERWOOD.planks())), "GWG");
@@ -988,7 +988,7 @@ public class ModRecipeProvider extends RecipeProvider {
                         Ingredient.of(ModItems.WISPY_ESSENCE)),
                 new ItemStack(ModBlocks.AURA_TOTEM_PULL.get()),
                 AspectList.of(ModAspects.ENERGY, 25).add(ModAspects.AURA, 25).add(ModAspects.MOTION, 25)
-                        .add(ModAspects.DESIRE, 25), TOTEM_UNSTABLE, "aura_totem_pull");
+                        .add(ModAspects.DESIRE, 25), TOTEM_UNSTABLE, "aura_totem");
         infusion(output, "aura_totem_push", Ingredient.of(ModBlocks.SILVERWOOD.planks()),
                 List.of(Ingredient.of(ModBlocks.GREATWOOD.planks()), Ingredient.of(Items.CHEST),
                         Ingredient.of(ModItems.BALANCED_SHARD), Ingredient.of(ModItems.SALIS_MUNDUS),
@@ -1545,7 +1545,7 @@ public class ModRecipeProvider extends RecipeProvider {
     private void voidMetal(RecipeOutput output) {
         crucible(output, "void_seed", Ingredient.of(Items.WHEAT_SEEDS),
                 AspectList.of(ModAspects.DARKNESS, 8).add(ModAspects.VOID, 8).add(ModAspects.ELDRITCH, 2),
-                new ItemStack(ModItems.VOID_SEED.get()), "void_metal");
+                new ItemStack(ModItems.VOID_SEED.get()), "eldritch_minor");
         crucible(output, "void_ingot", Ingredient.of(ModItems.VOID_SEED),
                 AspectList.of(ModAspects.METAL, 7).add(ModAspects.FLUX, 1),
                 new ItemStack(ModItems.VOID_INGOT.get()), "void_metal");

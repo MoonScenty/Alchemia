@@ -1,0 +1,23 @@
+{
+  "category": "alchemia:arcana",
+  "column": 4,
+  "complexity": 2,
+  "icon": "alchemia:wand",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.node_tapper1.page"
+    }
+  ],
+  "parents": [
+    "alchemia:wand"
+  ],
+  "requirements": {
+    "alchemia:auram": 6,
+    "alchemia:motus": 3,
+    "alchemia:permutatio": 3,
+    "alchemia:potentia": 3
+  },
+  "row": 0,
+  "shape": "major"
+}

@@ -25,5 +25,6 @@
     "alchemia:perditio": 5,
     "alchemia:vitium": 5
   },
-  "row": 0
+  "row": 0,
+  "secondary": true
 }

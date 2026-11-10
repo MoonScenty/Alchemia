@@ -27,5 +27,6 @@
     "alchemia:aqua": 3,
     "alchemia:permutatio": 6
   },
-  "row": 5
+  "row": 5,
+  "secondary": true
 }

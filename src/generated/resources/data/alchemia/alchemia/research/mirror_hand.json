@@ -22,5 +22,6 @@
     "alchemia:motus": 3,
     "alchemia:vitreus": 3
   },
-  "row": 10
+  "row": 10,
+  "secondary": true
 }

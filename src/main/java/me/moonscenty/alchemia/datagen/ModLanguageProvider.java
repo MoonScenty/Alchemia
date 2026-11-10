@@ -957,6 +957,15 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         addItem(ModItems.ALCHEMONOMICON, pick("Alchemonomicon", "알케모노미콘"));
         add("research.alchemia.known", pick("Worked out", "알아냄"));
         add("research.alchemia.locked", pick("Something must come first", "먼저 알아내야 할 것이 있다"));
+        add("research.alchemia.purchase", pick("Click to learn this for %s experience levels",
+                "클릭하면 경험치 %s레벨로 배운다"));
+        add("research.alchemia.short", pick("You need %s experience levels to learn this",
+                "배우려면 경험치 %s레벨이 필요하다"));
+        add("research.alchemia.cant_understand", pick("You lack the knowledge to make sense of this.",
+                "이것을 이해할 만한 지식이 없다."));
+        add("message.alchemia.primal_charm", pick(
+                "Strange energies flicker around the primal charm and fade, and you are left oddly inspired...",
+                "원시 부적 주위에 이상한 기운이 일렁이다 사라진다. 묘하게 영감이 떠오른다..."));
         add("research.alchemia.ready", pick("Ready to be worked on", "연구할 수 있다"));
         add("research.alchemia.needs", pick("Still to be found: %s", "아직 찾지 못함: %s"));
         add("item.alchemia.research_notes.on", pick("Research Notes: %s", "연구 노트: %s"));
@@ -1492,6 +1501,24 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                 {"vampire_bats", "Upgrade: Vampire Bats", "업그레이드: 흡혈 박쥐",
                  "Vicious little bloodsuckers. At the fifth rank a Nine Hells focus may be given bats that drain the life of what they bite and hand some of it back to whoever called them. The focal manipulator will not offer it until this is understood.",
                  "사나운 작은 흡혈귀들. 아홉 지옥 포커스의 5단계에서, 문 것의 생명을 빨아 일부를 부른 이에게 돌려주는 박쥐를 줄 수 있다. 이것을 알기 전에는 초점 조작기가 내놓지 않는다."},
+                {"node_tapper1", "Advanced Aura Tapping", "고급 오라 끌어오기",
+                 "Drawing vis out of the air into a wand has always been slow work, and you have found a better way. A wand now draws twice as fast, and it no longer has to be in your hand: anywhere on your hotbar will do.",
+                 "공기에서 완드로 비스를 끌어오는 일은 늘 더뎠는데, 더 나은 방법을 찾았다. 이제 완드가 두 배로 빨리 끌어오고, 손에 들지 않아도 된다. 핫바 어디에 있든 괜찮다."},
+                {"node_tapper2", "Master Aura Tapping", "오라 끌어오기 숙달",
+                 "More refinements to how you tap the aura. Wands on your hotbar now draw three times as fast as they once did.",
+                 "오라를 끌어오는 방법을 더 다듬었다. 이제 핫바의 완드가 예전보다 세 배 빨리 끌어온다."},
+                {"aura_preserve", "Aura Preserver", "오라 보존",
+                 "You have learned to keep the wands and devices you carry from drawing on the aura once it has run thin here, below a tenth of what the place should hold. Draining a place dry only breeds flux. Machines standing on their own are not held back by this.",
+                 "지니고 다니는 완드와 장치가, 이곳의 오라가 본래의 10분의 1 밑으로 엷어지면 더 끌어 쓰지 않도록 하는 법을 익혔다. 한 곳을 바닥까지 말리면 플럭스만 생길 뿐이다. 따로 놓인 장치에는 상관없다."},
+                {"basic_golemancy", "Basic Golemancy", "기초 골렘학",
+                 "You have looked closely at the simple golems anyone can put together and found them wanting. There is promise in them, but no way to tell them what to do. You are sure you can do better.",
+                 "누구나 만들 수 있는 단순한 골렘을 자세히 살펴보았는데, 부족한 점이 많다. 가능성은 있지만 무엇을 하라고 일러 줄 방법이 없다. 더 잘 만들 수 있을 것 같다."},
+                {"primordial_pearl", "Primordial Pearl", "태고의 진주",
+                 "For once you hold a puzzle you doubt you can solve. The pearl is pure primal essence, yet nothing like the primals you know. Perhaps it is matter left over from the first moments of the world; perhaps it is something older than magic as you understand it. Whichever is true, it holds a vast and nearly limitless power, and it is time to put it to use.",
+                 "이번만은 풀 수 없을 것 같은 수수께끼를 손에 쥐었다. 이 진주는 순수한 원시 기운이지만, 알고 있는 원시와는 전혀 다르다. 세상이 처음 생겨날 때 남은 물질일 수도 있고, 지금 알고 있는 마법보다 오래된 무언가일 수도 있다. 어느 쪽이든 거의 끝없는 힘을 품고 있으니, 이제 쓸 때가 되었다."},
+                {"outer_revelations", "Revelations of the Outer Lands", "바깥 땅의 계시",
+                 "Your suspicions are confirmed: this is not the home of the beings you have taken to calling the Eldritch. The place is something else entirely, and you doubt it belongs to reality as you understand it. It is as much a thing of the mind as of stone, and you cannot say whose mind could hold it. Of what is carved on its walls you have made out only a little.",
+                 "의심이 맞았다. 이곳은 엘드리치라고 불러 온 존재들의 고향이 아니다. 전혀 다른 무언가이며, 알고 있는 현실에 속한 곳인지도 의심스럽다. 돌로 된 곳인 만큼이나 생각으로 된 곳이기도 한데, 그것을 담을 수 있는 생각이 누구의 것인지는 알 수 없다. 벽에 새겨진 것 가운데 읽어 낸 것은 아직 얼마 되지 않는다."},
                 {"focus_primal", "Wand Focus: Primal", "완드 포커스: 원시",
                  "A dangerous, erratic orb of raw primal energy that does terrible damage where it lands. What it costs is never quite the same twice.",
                  "날것의 원시 기운으로 된 위험하고 변덕스러운 구체로, 떨어진 곳에 끔찍한 피해를 준다. 드는 값이 매번 조금씩 다르다."},

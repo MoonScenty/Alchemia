@@ -30,7 +30,8 @@ public record ResearchEntry(
         int warp,
         List<ResourceLocation> siblings,
         List<ResourceLocation> clues,
-        List<ResourceLocation> hiddenParents) {
+        List<ResourceLocation> hiddenParents,
+        boolean secondary) {
 
     public static final Codec<ResearchEntry> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             ResourceKey.codec(ModResearch.CATEGORY_KEY).fieldOf("category").forGetter(ResearchEntry::category),
@@ -48,8 +49,15 @@ public record ResearchEntry(
             ResourceLocation.CODEC.listOf().optionalFieldOf("siblings", List.of()).forGetter(ResearchEntry::siblings),
             ResourceLocation.CODEC.listOf().optionalFieldOf("clues", List.of()).forGetter(ResearchEntry::clues),
             ResourceLocation.CODEC.listOf().optionalFieldOf("hidden_parents", List.of())
-                    .forGetter(ResearchEntry::hiddenParents))
+                    .forGetter(ResearchEntry::hiddenParents),
+            Codec.BOOL.optionalFieldOf("secondary", false).forGetter(ResearchEntry::secondary))
             .apply(instance, ResearchEntry::new));
+
+    // original's: secondary research is bought with levels, the root of what it asks
+    public int experience() {
+        int total = requirements.total();
+        return total > 0 ? Math.max(1, (int) Math.sqrt(total)) : 0;
+    }
 
     public List<ResearchPage> pagesFor(java.util.function.Predicate<ResourceLocation> hasResearch) {
         return pages.stream().filter(page -> page.isVisibleTo(hasResearch)).toList();

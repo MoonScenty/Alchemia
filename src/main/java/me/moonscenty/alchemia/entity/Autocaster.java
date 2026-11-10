@@ -75,6 +75,13 @@ public class Autocaster extends ConstructWithSlot {
     public Autocaster(EntityType<? extends Autocaster> type, Level level) {
         super(type, level);
         xpReward = 6;
+        // the original's look helper kept its pitch between ticks, so a slow tilt still gets there
+        lookControl = new net.minecraft.world.entity.ai.control.LookControl(this) {
+            @Override
+            protected boolean resetXRotOnTick() {
+                return false;
+            }
+        };
     }
 
     public Autocaster(Level level, BlockPos at, Direction face) {

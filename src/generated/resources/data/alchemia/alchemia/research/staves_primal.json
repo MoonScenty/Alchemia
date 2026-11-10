@@ -48,5 +48,6 @@
     "alchemia:potentia": 3,
     "alchemia:terra": 6
   },
-  "row": 4
+  "row": 4,
+  "secondary": true
 }

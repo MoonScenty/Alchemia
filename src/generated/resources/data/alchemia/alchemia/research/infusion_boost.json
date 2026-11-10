@@ -29,5 +29,6 @@
     "alchemia:permutatio": 3,
     "alchemia:potentia": 6
   },
-  "row": 4
+  "row": 4,
+  "secondary": true
 }

@@ -33,5 +33,6 @@
     "alchemia:potentia": 6,
     "alchemia:praemunio": 3
   },
-  "row": 7
+  "row": 7,
+  "secondary": true
 }

@@ -26,5 +26,6 @@
     "alchemia:metallum": 3,
     "alchemia:potentia": 5
   },
-  "row": -5
+  "row": -5,
+  "secondary": true
 }

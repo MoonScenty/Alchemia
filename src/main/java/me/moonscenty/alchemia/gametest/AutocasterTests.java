@@ -133,7 +133,7 @@ public class AutocasterTests {
         turret.fill();
         turret.mind(Autocaster.ANIMALS, true);
 
-        LivingEntity mark = helper.spawn(EntityType.PIG, new BlockPos(6, 3, 2));
+        LivingEntity mark = helper.spawnWithNoFreeWill(EntityType.PIG, new BlockPos(6, 3, 2));
         float whole = mark.getHealth();
         helper.succeedWhen(() -> {
             helper.assertTrue(!mark.isAlive() || mark.getHealth() < whole, "the pig was shot at");
@@ -150,7 +150,7 @@ public class AutocasterTests {
         turret.mind(Autocaster.ANIMALS, false);
         turret.mind(Autocaster.MONSTERS, false);
 
-        LivingEntity mark = helper.spawn(EntityType.PIG, new BlockPos(6, 3, 2));
+        LivingEntity mark = helper.spawnWithNoFreeWill(EntityType.PIG, new BlockPos(6, 3, 2));
         float whole = mark.getHealth();
         helper.runAfterDelay(100, () -> {
             helper.assertValueEqual(mark.getHealth(), whole, "a turret minding nothing shoots nothing");

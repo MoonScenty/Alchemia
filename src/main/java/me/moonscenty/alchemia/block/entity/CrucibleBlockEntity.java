@@ -231,7 +231,8 @@ public class CrucibleBlockEntity extends SyncedBlockEntity {
         for (RecipeHolder<CrucibleRecipe> holder : level.getRecipeManager().getAllRecipesFor(ModRecipes.CRUCIBLE.get())) {
             CrucibleRecipe recipe = holder.value();
             int kinds = recipe.aspects().sortedByName().size();
-            if (kinds > most && known(recipe, thrower) && recipe.matches(input, level)) {
+            if (kinds > most && me.moonscenty.alchemia.research.RecipeGates.known(thrower, holder.id(), recipe.research())
+                    && recipe.matches(input, level)) {
                 best = recipe;
                 most = kinds;
             }
@@ -249,11 +250,6 @@ public class CrucibleBlockEntity extends SyncedBlockEntity {
                 0.4F, 2.0F + served.random.nextFloat() * 0.4F);
     }
 
-    private boolean known(CrucibleRecipe recipe, Player thrower) {
-        return recipe.research()
-                .map(research -> thrower != null && PlayerKnowledge.of(thrower).hasResearch(research))
-                .orElse(true);
-    }
 
     private static void eject(ServerLevel level, BlockPos pos, ItemStack made) {
         ItemEntity out = new ItemEntity(level, pos.getX() + 0.5, pos.getY() + 1.2, pos.getZ() + 0.5, made);

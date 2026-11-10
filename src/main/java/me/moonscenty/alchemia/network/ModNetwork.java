@@ -27,6 +27,12 @@ public class ModNetwork {
     public static void register(RegisterPayloadHandlersEvent event) {
         PayloadRegistrar registrar = event.registrar("1");
         registrar.playToServer(RequestNote.TYPE, RequestNote.STREAM_CODEC, ModNetwork::onRequestNote);
+        registrar.playToServer(BuyResearch.TYPE, BuyResearch.STREAM_CODEC, (payload, context) -> context.enqueueWork(
+                () -> {
+                    if (context.player() instanceof ServerPlayer player) {
+                        me.moonscenty.alchemia.research.ResearchPurchase.buy(player, payload.research());
+                    }
+                }));
         registrar.playToServer(PlaceAspect.TYPE, PlaceAspect.STREAM_CODEC, ModNetwork::onPlaceAspect);
         registrar.playToServer(MixAspects.TYPE, MixAspects.STREAM_CODEC, ModNetwork::onMixAspects);
         registrar.playToServer(SpendFragment.TYPE, SpendFragment.STREAM_CODEC, ModNetwork::onSpendFragment);

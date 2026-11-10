@@ -62,7 +62,8 @@ public class ThaumatoriumMenu extends AlchemiaMenu {
         List<RecipeHolder<CrucibleRecipe>> offered = new ArrayList<>();
         for (RecipeHolder<CrucibleRecipe> recipe
                 : player.level().getRecipeManager().getAllRecipesFor(ModRecipes.CRUCIBLE.get())) {
-            boolean known = recipe.value().research().map(knowledge::hasResearch).orElse(true);
+            boolean known = me.moonscenty.alchemia.research.RecipeGates.known(knowledge, recipe.id(),
+                    recipe.value().research());
             if ((known && !catalyst.isEmpty() && recipe.value().catalyst().test(catalyst))
                     || chosen.contains(recipe.id())) {
                 offered.add(recipe);

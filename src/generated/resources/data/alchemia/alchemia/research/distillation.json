@@ -30,5 +30,8 @@
     "alchemia:ignis": 3
   },
   "row": 4,
-  "shape": "major"
+  "shape": "major",
+  "siblings": [
+    "alchemia:jar_label"
+  ]
 }
