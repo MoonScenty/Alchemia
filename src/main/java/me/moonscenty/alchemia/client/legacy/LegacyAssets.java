@@ -365,6 +365,7 @@ public final class LegacyAssets {
         all.add(LegacyAsset.of("textures/entity/bore.png").five("textures/models/bore.png").forModel(BORE));
         all.add(LegacyAsset.of("textures/entity/jar.png").five("textures/models/jar.png").forModel(JAR));
         all.add(LegacyAsset.of("textures/entity/label.png").five("textures/models/label.png"));
+        all.add(LegacyAsset.of("textures/misc/vignette.png").five("textures/misc/vignette.png"));
         all.add(LegacyAsset.of("textures/gui/arcane_bore.png").five("textures/gui/gui_arcanebore.png"));
         all.add(LegacyAsset.of("textures/misc/bore_beam_1.png").five("textures/misc/beam1.png"));
         all.add(LegacyAsset.of("textures/misc/bore_beam_2.png").five("textures/misc/beam2.png"));

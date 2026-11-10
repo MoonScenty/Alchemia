@@ -54,6 +54,8 @@ public class ModNetwork {
                 .enqueueWork(() -> me.moonscenty.alchemia.client.ResearchToast.show(payload.research())));
         registrar.playToClient(AuraReading.TYPE, AuraReading.STREAM_CODEC, (payload, context) -> context
                 .enqueueWork(() -> me.moonscenty.alchemia.client.AlchemometerHud.read(payload)));
+        registrar.playToClient(WarpVignette.TYPE, WarpVignette.STREAM_CODEC, (payload, context) -> context
+                .enqueueWork(() -> me.moonscenty.alchemia.client.WarpScreenEffects.darken(payload.ticks())));
         registrar.playToClient(Mist.TYPE, Mist.STREAM_CODEC, (payload, context) -> context.enqueueWork(
                 () -> me.moonscenty.alchemia.client.WarpFog.bring(payload.ticks(), payload.topUp())));
         registrar.playToClient(SyncSeal.TYPE, SyncSeal.STREAM_CODEC, (payload, context) -> context.enqueueWork(

@@ -1344,6 +1344,12 @@ python tools/remap_srg.py MCP-919/conf decompiled/thaumcraft src/thaumcraft
       - 알케모미터 전환 키는 원본 F 대신 이 포트의 포커스 키(V)다. F는 바닐라 손 바꾸기와 겹친다.
       - 계전기의 In/Out 글씨와 비전 귀의 음 번호, 원소 삽의 축 표시는 옮기지 않았다.
       - 고글 상 태그의 숫자는 바닐라 글꼴 그리기로 벽을 투과해 그린다.
+  - [x] **2차 대조 5-3 화면 효과** (2026-11-11). 자세한 값은 대조 문서의 "고친 것".
+    - `client/WarpScreenEffects`가 효과마다 `shaders/post/*.json` 후처리를 켜고 끄며 비네트를 그린다. 뒤틀림 이벤트 비네트는 `WarpVignette` 패킷. 비네트 그림은 원본 그림을 실행 때 읽는다.
+    - 응시·흐린 시야·허기는 바닐라 셰이더 프로그램(`color_convolve`, `blur`)에 원본 값을 넣었다.
+    - 원본과 다른 점:
+      - Sun Scorned는 원본 셰이더가 옛 GLSL이라 쓸 수 없어 같은 효과를 내는 셰이더(`program/sun_scorned`)를 새로 썼다. 번짐 모양은 원본과 조금 다르다.
+      - 원본 설정의 셰이더 끄기는 옮기지 않았다.
 
 ## 미결 사항
 

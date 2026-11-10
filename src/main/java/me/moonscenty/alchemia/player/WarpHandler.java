@@ -121,6 +121,10 @@ public class WarpHandler {
         if (triggers(warp, gear, random)) {
             player.setData(ModAttachments.WARP, afterEvent(warp, gear));
             hear(player, ModSounds.HEARTBEAT, player.getX(), player.getY(), player.getZ(), 1.0F, 1.0F);
+            if (!(player instanceof net.neoforged.neoforge.common.util.FakePlayer)) {
+                net.neoforged.neoforge.network.PacketDistributor.sendToPlayer(player,
+                        me.moonscenty.alchemia.network.WarpVignette.EVENT);
+            }
             int severity = severityOf(warp, gear);
             // fortress mask easing; a roll that comes to nothing does nothing (original's rule)
             int roll = random.nextInt(Math.max(1, severity)) - me.moonscenty.alchemia.item.FortressMasks.easing(player);
