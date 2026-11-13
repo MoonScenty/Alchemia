@@ -295,27 +295,31 @@ public class FocusUpgradeTests {
     }
 
     @GameTest(template = TEMPLATE)
-    public static void anArchitectSetsHowFarItWorks(GameTestHelper helper) {
+    public static void anArchitectChoosesTheTradeArea(GameTestHelper helper) {
         Player caster = helper.makeMockPlayer(GameType.CREATIVE);
-        ItemStack wand = wand("builder", FocusUpgrade.ARCHITECT);
-        ItemStack focus = WandItem.focus(wand);
-        helper.assertTrue(focus.get(ModDataComponents.FOCUS_REACH.get()) == null, "it starts at its widest");
+        ItemStack wand = wand("trade", FocusUpgrade.ARCHITECT);
+        helper.assertValueEqual(me.moonscenty.alchemia.wand.spell.Swapping.chosen(wand),
+                new me.moonscenty.alchemia.wand.ArchitectArea(3, 3, 0), "it starts at its widest");
 
-        me.moonscenty.alchemia.wand.spell.Swapping.setReach(caster, wand);
-        Integer first = WandItem.focus(wand).get(ModDataComponents.FOCUS_REACH.get());
-        helper.assertTrue(first != null && first == 16, "the first press sets it to the most it can do");
-        me.moonscenty.alchemia.wand.spell.Swapping.setReach(caster, wand);
-        helper.assertValueEqual(WandItem.focus(wand).get(ModDataComponents.FOCUS_REACH.get()), 15,
-                "and every press after that turns it down one");
+        me.moonscenty.alchemia.wand.spell.Swapping.setArea(caster, wand);
+        helper.assertValueEqual(me.moonscenty.alchemia.wand.spell.Swapping.chosen(wand),
+                new me.moonscenty.alchemia.wand.ArchitectArea(0, 0, 0), "past the most it wraps to one block");
+        me.moonscenty.alchemia.wand.spell.Swapping.setArea(caster, wand);
+        caster.setShiftKeyDown(true);
+        me.moonscenty.alchemia.wand.spell.Swapping.setArea(caster, wand);
+        caster.setShiftKeyDown(false);
+        me.moonscenty.alchemia.wand.spell.Swapping.setArea(caster, wand);
+        helper.assertValueEqual(me.moonscenty.alchemia.wand.spell.Swapping.chosen(wand),
+                new me.moonscenty.alchemia.wand.ArchitectArea(2, 1, 1), "sneaking picks one side to widen");
         helper.succeed();
     }
 
     @GameTest(template = TEMPLATE)
     public static void withoutAnArchitectTheKeyDoesNothing(GameTestHelper helper) {
         Player caster = helper.makeMockPlayer(GameType.CREATIVE);
-        ItemStack wand = wand("builder");
-        me.moonscenty.alchemia.wand.spell.Swapping.setReach(caster, wand);
-        helper.assertTrue(WandItem.focus(wand).get(ModDataComponents.FOCUS_REACH.get()) == null,
+        ItemStack wand = wand("trade");
+        me.moonscenty.alchemia.wand.spell.Swapping.setArea(caster, wand);
+        helper.assertTrue(WandItem.focus(wand).get(ModDataComponents.FOCUS_AREA.get()) == null,
                 "nothing was set");
         helper.succeed();
     }

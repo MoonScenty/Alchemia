@@ -49,7 +49,10 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         robes();
         add("item.alchemia.focus_pouch.holding", pick("Holding %s of %s", "%s / %s 들었음"));
         add("item.alchemia.focus.upgrade_level", "%s %s");
-        add("item.alchemia.focus.reach", pick("Reaching %s", "범위 %s"));
+        add("item.alchemia.focus.area", pick("Area %s × %s", "범위 %s × %s"));
+        add("item.alchemia.focus.changing.0", pick("Changing both sides", "두 변을 함께 바꿈"));
+        add("item.alchemia.focus.changing.1", pick("Changing the first side", "첫째 변을 바꿈"));
+        add("item.alchemia.focus.changing.2", pick("Changing the second side", "둘째 변을 바꿈"));
         upgrades();
         autocaster();
 
@@ -180,6 +183,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                 "저 너머 방에서 살아 있는 것이 바스락거린다..."));
         add("subtitles.alchemia.jacobs", pick("Construct crackles", "구조체가 지직거린다"));
         addBlock(ModBlocks.SAPPING, pick("Sapping", "흡취"));
+        addBlock(ModBlocks.SHOCK, pick("Shock", "전격"));
         addEntityType(me.moonscenty.alchemia.registry.ModEntities.FIRE_BAT, pick("Firebat", "불박쥐"));
         addEntityType(me.moonscenty.alchemia.registry.ModEntities.WISP, pick("Wisp", "위습"));
         addEntityType(me.moonscenty.alchemia.registry.ModEntities.PECH, pick("Pech Forager", "페크 채집꾼"));

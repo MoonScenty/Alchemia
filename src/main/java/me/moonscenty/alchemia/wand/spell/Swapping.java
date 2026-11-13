@@ -5,8 +5,13 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.WeakHashMap;
 
+import me.moonscenty.alchemia.Alchemia;
+import me.moonscenty.alchemia.registry.ModItems;
+import me.moonscenty.alchemia.wand.ArchitectArea;
 import me.moonscenty.alchemia.wand.Casting;
 import me.moonscenty.alchemia.wand.FocusUpgrade;
 import me.moonscenty.alchemia.item.VisHolder;
@@ -21,14 +26,20 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.tick.LevelTickEvent;
 
 // both foci charge per block placed and never replace a block entity
+@EventBusSubscriber(modid = Alchemia.MODID)
 public final class Swapping {
     // longest row, and what each rank of enlarge adds
     private static final int LAYS_AT_MOST = 16;
@@ -36,6 +47,14 @@ public final class Swapping {
     // trade spread in steps, and what each rank of enlarge adds; original's value
     private static final int SPREADS = 3;
     private static final int SPREADS_FURTHER = 1;
+    // architect half-width, and what each rank of enlarge adds; original's values
+    private static final int AREA = 3;
+    private static final int AREA_FURTHER = 2;
+
+    private static final Map<ServerLevel, Deque<Swap>> WAITING = new WeakHashMap<>();
+
+    private record Swap(BlockPos at, BlockState was, Block laying, int spreads, Player caster, int slot) {
+    }
 
     private Swapping() {
     }
@@ -67,7 +86,7 @@ public final class Swapping {
         return lay(level, caster, wand, laying, row, false);
     }
 
-    // spreads through connected blocks of the same kind, not a box
+    // original: the vein spreads from the struck block, or with an architect the chosen area goes, one block a tick
     public static boolean trade(ServerLevel level, LivingEntity who, ItemStack wand, HitResult aim, int heldFor) {
         if (!(who instanceof Player caster)) {
             return false;
@@ -87,8 +106,15 @@ public final class Swapping {
         if (level.getBlockEntity(first) != null || was.is(ModTags.Blocks.TAINT)) {
             return false;
         }
+        int slot = slotOf(caster, wand);
+        if (Casting.has(wand, FocusUpgrade.ARCHITECT)) {
+            for (BlockPos at : area(level, caster, wand, first, struck.getDirection())) {
+                queue(level, at, level.getBlockState(at), laying, 0, caster, slot);
+            }
+        } else {
+            queue(level, first, was, laying, spreads(wand), caster, slot);
+        }
         // original: the cast itself is paid for, then each block swapped
-        trade(level, caster, wand, laying, spreadFrom(level, first, was, spreads(wand)));
         return true;
     }
 
@@ -100,36 +126,85 @@ public final class Swapping {
             return;
         }
         BlockPos at = struck.getBlockPos();
-        if (level.getBlockEntity(at) == null && !level.getBlockState(at).is(ModTags.Blocks.TAINT)) {
-            trade(level, caster, wand, laying, List.of(at));
+        BlockState was = level.getBlockState(at);
+        if (level.getBlockEntity(at) == null && !was.is(ModTags.Blocks.TAINT)) {
+            queue(level, at, was, laying, 0, caster, slotOf(caster, wand));
         }
     }
 
-    private static void trade(ServerLevel level, Player caster, ItemStack wand, Block laying, List<BlockPos> where) {
-        var price = Casting.fitted(wand).cost();
-        VisHolder holder = VisHolder.of(wand);
-        for (BlockPos at : where) {
-            BlockState there = level.getBlockState(at);
-            if (there.isAir() || there.is(laying) || level.getBlockEntity(at) != null
-                    || there.getDestroySpeed(level, at) < 0.0F || !caster.mayInteract(level, at)
-                    || holder == null || !holder.holds(wand, price, caster, VisHolder.Spending.WORKING)
-                    || !takeOne(caster, laying)) {
-                continue;
-            }
-            if (!caster.isCreative()) {
-                for (ItemStack drop : Block.getDrops(there, level, at, null, caster, tool(level, wand))) {
-                    if (!caster.getInventory().add(drop)) {
-                        Block.popResource(level, at, drop);
-                    }
-                }
-                holder.take(wand, price, caster, VisHolder.Spending.WORKING);
-            }
-            level.setBlockAndUpdate(at, laying.defaultBlockState());
-            level.playSound(null, caster.getX(), caster.getY(), caster.getZ(), ModSounds.WAND.get(),
-                    SoundSource.PLAYERS, 0.25F, 1.0F);
-            level.playSound(null, at, ModSounds.POOF.get(), SoundSource.BLOCKS, 0.4F,
-                    1.0F + (float) level.random.nextGaussian() * 0.05F);
+    private static int slotOf(Player caster, ItemStack wand) {
+        return caster.getOffhandItem() == wand ? Inventory.SLOT_OFFHAND : caster.getInventory().selected;
+    }
+
+    private static void queue(ServerLevel level, BlockPos at, BlockState was, Block laying, int spreads,
+            Player caster, int slot) {
+        if (was.isAir() || was.is(laying) || was.getDestroySpeed(level, at) < 0.0F) {
+            return;
         }
+        WAITING.computeIfAbsent(level, waiting -> new ArrayDeque<>())
+                .add(new Swap(at.immutable(), was, laying, spreads, caster, slot));
+        level.playSound(null, caster.getX(), caster.getY(), caster.getZ(), ModSounds.WAND.get(),
+                SoundSource.PLAYERS, 0.25F, 1.0F);
+    }
+
+    @SubscribeEvent
+    public static void onLevelTick(LevelTickEvent.Post event) {
+        if (event.getLevel() instanceof ServerLevel level) {
+            step(level);
+        }
+    }
+
+    // original: one swap a tick in each world; entries that no longer fit are dropped
+    public static void step(ServerLevel level) {
+        Deque<Swap> waiting = WAITING.get(level);
+        if (waiting == null) {
+            return;
+        }
+        Swap next;
+        while ((next = waiting.poll()) != null) {
+            if (swap(level, next, waiting)) {
+                return;
+            }
+        }
+    }
+
+    private static boolean swap(ServerLevel level, Swap swap, Deque<Swap> waiting) {
+        Player caster = swap.caster();
+        BlockPos at = swap.at();
+        ItemStack wand = caster.getInventory().getItem(swap.slot());
+        var focus = wand.getItem() instanceof WandItem ? Casting.fitted(wand) : null;
+        VisHolder holder = VisHolder.of(wand);
+        BlockState there = level.getBlockState(at);
+        if (caster.isRemoved() || caster.level() != level || focus == null || holder == null
+                || there != swap.was() || level.getBlockEntity(at) != null
+                || there.getDestroySpeed(level, at) < 0.0F || !caster.mayInteract(level, at)
+                || !holder.holds(wand, focus.cost(), caster, VisHolder.Spending.WORKING)
+                || !takeOne(caster, swap.laying())) {
+            return false;
+        }
+        if (!caster.isCreative()) {
+            for (ItemStack drop : Block.getDrops(there, level, at, null, caster, tool(level, wand))) {
+                if (!caster.getInventory().add(drop)) {
+                    Block.popResource(level, at, drop);
+                }
+            }
+            holder.take(wand, focus.cost(), caster, VisHolder.Spending.WORKING);
+        }
+        BlockState now = swap.laying().defaultBlockState();
+        level.setBlockAndUpdate(at, now);
+        swap.laying().setPlacedBy(level, at, now, caster, new ItemStack(swap.laying()));
+        level.playSound(null, at, ModSounds.POOF.get(), SoundSource.BLOCKS, 0.4F,
+                1.0F + (float) level.random.nextGaussian() * 0.05F);
+
+        if (swap.spreads() > 0) {
+            for (BlockPos next : BlockPos.betweenClosed(at.offset(-1, -1, -1), at.offset(1, 1, 1))) {
+                if (!next.equals(at) && level.getBlockState(next) == swap.was() && exposed(level, next)) {
+                    waiting.add(new Swap(next.immutable(), swap.was(), swap.laying(), swap.spreads() - 1, caster,
+                            swap.slot()));
+                }
+            }
+        }
+        return true;
     }
 
     // returns false so choosing a block is never charged
@@ -160,69 +235,95 @@ public final class Swapping {
     }
 
     private static int lays(ItemStack wand) {
-        int most = LAYS_AT_MOST + Casting.worked(wand, FocusUpgrade.ENLARGE) * LAYS_FURTHER;
-        return set(wand, most);
+        return LAYS_AT_MOST + Casting.worked(wand, FocusUpgrade.ENLARGE) * LAYS_FURTHER;
     }
 
     private static int spreads(ItemStack wand) {
-        int most = SPREADS + Casting.worked(wand, FocusUpgrade.ENLARGE) * SPREADS_FURTHER;
-        return set(wand, most);
+        return SPREADS + Casting.worked(wand, FocusUpgrade.ENLARGE) * SPREADS_FURTHER;
     }
 
-    private static int set(ItemStack wand, int most) {
-        if (!Casting.has(wand, FocusUpgrade.ARCHITECT)) {
-            return most;
-        }
-        Integer reach = WandItem.focus(wand).get(ModDataComponents.FOCUS_REACH.get());
-        return reach == null ? most : Math.max(1, Math.min(most, reach));
+    private static int widest(ItemStack wand) {
+        return AREA + Casting.worked(wand, FocusUpgrade.ENLARGE) * AREA_FURTHER;
     }
 
-    // the stored reach is a row length for builder and a step count for trade
-    public static void setReach(Player caster, ItemStack wand) {
-        ItemStack focus = WandItem.focus(wand);
-        if (!Casting.has(wand, FocusUpgrade.ARCHITECT) || focus.isEmpty()) {
+    public static ArchitectArea chosen(ItemStack wand) {
+        int most = widest(wand);
+        ArchitectArea set = WandItem.focus(wand).get(ModDataComponents.FOCUS_AREA.get());
+        return set == null ? new ArchitectArea(most, most, 0)
+                : new ArchitectArea(Math.min(most, set.first()), Math.min(most, set.second()), set.changing());
+    }
+
+    public static boolean architect(ItemStack wand) {
+        return WandItem.focus(wand).is(ModItems.FOCI.get("trade").get()) && Casting.has(wand, FocusUpgrade.ARCHITECT);
+    }
+
+    // original: the key widens the chosen sides by one and wraps to nothing past the most; sneaking picks the sides
+    public static void setArea(Player caster, ItemStack wand) {
+        if (!architect(wand)) {
             return;
         }
-        boolean building = focus.is(me.moonscenty.alchemia.registry.ModItems.FOCI.get("builder").get());
-        int most = building
-                ? LAYS_AT_MOST + Casting.worked(wand, FocusUpgrade.ENLARGE) * LAYS_FURTHER
-                : SPREADS + Casting.worked(wand, FocusUpgrade.ENLARGE) * SPREADS_FURTHER;
-        Integer was = focus.get(ModDataComponents.FOCUS_REACH.get());
-        int now = was == null || was <= 1 ? most : Math.min(most, was) - 1;
-
-        ItemStack set = focus.copy();
-        set.set(ModDataComponents.FOCUS_REACH.get(), now);
-        WandItem.setFocus(wand, set);
-        caster.displayClientMessage(Component.translatable("item.alchemia.focus.reach", now), true);
+        ArchitectArea was = chosen(wand);
+        int most = widest(wand);
+        ArchitectArea now;
+        if (caster.isShiftKeyDown()) {
+            now = new ArchitectArea(was.first(), was.second(), (was.changing() + 1) % 3);
+        } else {
+            int first = was.changing() == 2 ? was.first() : was.first() + 1;
+            int second = was.changing() == 1 ? was.second() : was.second() + 1;
+            now = new ArchitectArea(first > most ? 0 : first, second > most ? 0 : second, was.changing());
+        }
+        ItemStack focus = WandItem.focus(wand).copy();
+        focus.set(ModDataComponents.FOCUS_AREA.get(), now);
+        WandItem.setFocus(wand, focus);
+        caster.displayClientMessage(caster.isShiftKeyDown()
+                ? Component.translatable("item.alchemia.focus.changing." + now.changing())
+                : Component.translatable("item.alchemia.focus.area", now.first() * 2 + 1, now.second() * 2 + 1), true);
     }
 
-    private static List<BlockPos> spreadFrom(ServerLevel level, BlockPos first, BlockState kind, int reach) {
+    // original: same blocks joined across the struck face, out to the chosen half-widths
+    public static List<BlockPos> area(Level level, Player caster, ItemStack wand, BlockPos centre, Direction face) {
+        BlockState kind = level.getBlockState(centre);
+        ArchitectArea chosen = chosen(wand);
+        Direction.Axis axis = face.getAxis();
+        // original quirk: on a north or south face the two widths swap
+        int one = axis == Direction.Axis.Z ? chosen.second() : chosen.first();
+        int other = axis == Direction.Axis.Z ? chosen.first() : chosen.second();
         List<BlockPos> found = new ArrayList<>();
         Set<BlockPos> seen = new HashSet<>();
-        Deque<BlockPos> edge = new ArrayDeque<>();
-        Deque<Integer> steps = new ArrayDeque<>();
-        edge.add(first);
-        steps.add(0);
-        seen.add(first);
-
-        while (!edge.isEmpty()) {
-            BlockPos at = edge.poll();
-            int taken = steps.poll();
-            found.add(at);
-            if (taken >= reach) {
+        Deque<BlockPos> open = new ArrayDeque<>();
+        open.push(centre.immutable());
+        while (!open.isEmpty()) {
+            BlockPos at = open.pop();
+            if (!seen.add(at) || !within(centre, at, axis, one, other)) {
                 continue;
             }
-            for (BlockPos next : BlockPos.betweenClosed(at.offset(-1, -1, -1), at.offset(1, 1, 1))) {
-                if (level.getBlockState(next) == kind && exposed(level, next) && seen.add(next.immutable())) {
-                    edge.add(next.immutable());
-                    steps.add(taken + 1);
+            BlockState there = level.getBlockState(at);
+            if (there != kind || there.isAir() || !exposed(level, at) || there.getDestroySpeed(level, at) < 0.0F
+                    || !caster.mayInteract(level, at)) {
+                continue;
+            }
+            found.add(at);
+            for (Direction step : Direction.values()) {
+                if (step.getAxis() != axis) {
+                    open.push(at.relative(step));
                 }
             }
         }
         return found;
     }
 
-    private static boolean exposed(ServerLevel level, BlockPos at) {
+    private static boolean within(BlockPos centre, BlockPos at, Direction.Axis axis, int one, int other) {
+        int x = Math.abs(at.getX() - centre.getX());
+        int y = Math.abs(at.getY() - centre.getY());
+        int z = Math.abs(at.getZ() - centre.getZ());
+        return switch (axis) {
+            case Y -> x <= one && z <= other;
+            case Z -> x <= one && y <= other;
+            case X -> y <= one && z <= other;
+        };
+    }
+
+    private static boolean exposed(Level level, BlockPos at) {
         for (Direction side : Direction.values()) {
             if (!level.getBlockState(at.relative(side)).canOcclude()) {
                 return true;

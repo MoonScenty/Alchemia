@@ -115,7 +115,7 @@ public class ModNetwork {
             if (held.getItem() instanceof me.moonscenty.alchemia.item.AlchemometerItem) {
                 me.moonscenty.alchemia.item.AlchemometerItem.cycle(player, held);
             } else if (held.getItem() instanceof WandItem) {
-                me.moonscenty.alchemia.wand.spell.Swapping.setReach(player, held);
+                me.moonscenty.alchemia.wand.spell.Swapping.setArea(player, held);
             } else if (held.getItem() instanceof me.moonscenty.alchemia.item.tool.ElementalShovelItem) {
                 me.moonscenty.alchemia.item.tool.ElementalShovelItem.turn(player, held);
             }

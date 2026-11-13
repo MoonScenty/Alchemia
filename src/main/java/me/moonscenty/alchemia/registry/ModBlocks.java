@@ -569,6 +569,10 @@ public class ModBlocks {
             () -> new me.moonscenty.alchemia.block.eldritch.SappingBlock(BlockBehaviour.Properties.of()
                     .mapColor(MapColor.NONE).noCollission().replaceable().strength(-1.0F, 999.0F).noLootTable()
                     .lightLevel(state -> 7).randomTicks().air()));
+    public static final DeferredBlock<me.moonscenty.alchemia.block.ShockBlock> SHOCK = registerBlockOnly("shock",
+            () -> new me.moonscenty.alchemia.block.ShockBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.NONE).noCollission().replaceable().strength(-1.0F, 999.0F).noLootTable()
+                    .lightLevel(state -> 7).randomTicks().air()));
     public static final DeferredBlock<me.moonscenty.alchemia.block.eldritch.CrabSpawnerBlock> CRAB_SPAWNER = registerBlockOnly("crab_spawner",
             () -> new me.moonscenty.alchemia.block.eldritch.CrabSpawnerBlock(eldritch().strength(25.0F, 1200.0F)));
     public static final DeferredBlock<me.moonscenty.alchemia.block.eldritch.LiquidDeathBlock> LIQUID_DEATH = registerBlockOnly("liquid_death",

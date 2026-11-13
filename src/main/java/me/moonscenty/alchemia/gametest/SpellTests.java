@@ -211,6 +211,7 @@ public class SpellTests {
         Player caster = helper.makeMockPlayer(GameType.SURVIVAL);
         ItemStack wand = wand("trade");
         WandItem.setFocus(wand, withPicked(WandItem.focus(wand), Blocks.STONE));
+        caster.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, wand);
         caster.getInventory().add(new ItemStack(Items.STONE, 64));
 
         BlockPos first = new BlockPos(4, 4, 4);
@@ -228,10 +229,12 @@ public class SpellTests {
         helper.setBlock(first, Blocks.COAL_ORE);
 
         helper.assertTrue(Swapping.trade(helper.getLevel(), caster, wand, wall(helper, first, Direction.UP), 0), "it went");
-        helper.assertBlockPresent(Blocks.STONE, first);
-        helper.assertBlockPresent(Blocks.STONE, diagonal);
-        helper.assertTrue(caster.getInventory().contains(new ItemStack(Items.COAL)), "the coal went into the bag");
-        helper.succeed();
+        helper.succeedWhen(() -> {
+            helper.assertBlockPresent(Blocks.STONE, first);
+            helper.assertBlockPresent(Blocks.STONE, diagonal);
+            helper.assertBlockPresent(Blocks.COAL_ORE, buried);
+            helper.assertTrue(caster.getInventory().contains(new ItemStack(Items.COAL)), "the coal went into the bag");
+        });
     }
 
     private static ItemStack withPicked(ItemStack focus, Block block) {

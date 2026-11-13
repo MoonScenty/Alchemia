@@ -85,10 +85,10 @@ public class ModDataComponents {
                     .networkSynchronized(ByteBufCodecs.VAR_INT)
                     .build());
 
-    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> FOCUS_REACH =
-            COMPONENTS.register("focus_reach", () -> DataComponentType.<Integer>builder()
-                    .persistent(Codec.INT)
-                    .networkSynchronized(ByteBufCodecs.VAR_INT)
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<me.moonscenty.alchemia.wand.ArchitectArea>> FOCUS_AREA =
+            COMPONENTS.register("focus_area", () -> DataComponentType.<me.moonscenty.alchemia.wand.ArchitectArea>builder()
+                    .persistent(me.moonscenty.alchemia.wand.ArchitectArea.CODEC)
+                    .networkSynchronized(me.moonscenty.alchemia.wand.ArchitectArea.STREAM_CODEC)
                     .build());
 
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> SHOVEL_LAYING =

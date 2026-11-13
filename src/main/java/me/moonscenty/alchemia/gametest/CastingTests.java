@@ -213,6 +213,7 @@ public class CastingTests {
     public static void aTradeFollowsTheVein(GameTestHelper helper) {
         Player caster = helper.makeMockPlayer(GameType.CREATIVE);
         ItemStack wand = wand("trade", 100);
+        caster.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, wand);
         BlockPos first = new BlockPos(2, 2, 2);
         helper.setBlock(first, Blocks.COAL_ORE);
         helper.setBlock(first.east(), Blocks.COAL_ORE);
@@ -227,10 +228,11 @@ public class CastingTests {
         helper.assertTrue(Swapping.trade(helper.getLevel(), caster, wand,
                 new BlockHitResult(Vec3.ZERO, Direction.UP, helper.absolutePos(first), false), 0),
                 "the vein was traded");
-        helper.assertBlockPresent(Blocks.STONE, first);
-        helper.assertBlockPresent(Blocks.STONE, first.east());
-        helper.assertBlockPresent(Blocks.DIRT, first.east().east());
-        helper.succeed();
+        helper.succeedWhen(() -> {
+            helper.assertBlockPresent(Blocks.STONE, first);
+            helper.assertBlockPresent(Blocks.STONE, first.east());
+            helper.assertBlockPresent(Blocks.DIRT, first.east().east());
+        });
     }
     @GameTest(template = TEMPLATE, timeoutTicks = 400)
     public static void aHoleBoresThroughAndTheWallComesBack(GameTestHelper helper) {
