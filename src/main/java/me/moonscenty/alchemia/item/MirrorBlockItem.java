@@ -43,7 +43,7 @@ public class MirrorBlockItem extends BlockItem {
         }
         if (mirror.paired()) {
             player.displayClientMessage(Component.translatable("block.alchemia.mirror.already_linked")
-                    .withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.ITALIC), true);
+                    .withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.ITALIC), false);
             return InteractionResult.CONSUME;
         }
         ItemStack linked = context.getItemInHand().copyWithCount(1);
@@ -74,7 +74,7 @@ public class MirrorBlockItem extends BlockItem {
         GlobalPos link = stack.get(ModDataComponents.MIRROR_LINK.get());
         if (link != null) {
             lines.add(Component.translatable("block.alchemia.mirror.linked_to", link.pos().getX(), link.pos().getY(),
-                    link.pos().getZ(), link.dimension().location().toString()).withStyle(ChatFormatting.GRAY));
+                    link.pos().getZ(), HandMirrorItem.where(link.dimension())).withStyle(ChatFormatting.GRAY));
         }
     }
 }

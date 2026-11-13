@@ -42,7 +42,7 @@ public class HandMirrorItem extends Item {
                     GlobalPos.of(level.dimension(), context.getClickedPos()));
             level.playSound(null, context.getClickedPos(), ModSounds.JAR.get(), SoundSource.BLOCKS, 1.0F, 2.0F);
             context.getPlayer().displayClientMessage(Component.translatable("item.alchemia.hand_mirror.linked")
-                    .withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.ITALIC), true);
+                    .withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.ITALIC), false);
         }
         return InteractionResult.sidedSuccess(level.isClientSide);
     }
@@ -83,7 +83,7 @@ public class HandMirrorItem extends Item {
         mirror.remove(ModDataComponents.MIRROR_LINK.get());
         level.playSound(null, player.blockPosition(), ModSounds.ZAP.get(), SoundSource.PLAYERS, 1.0F, 0.8F);
         player.displayClientMessage(Component.translatable("item.alchemia.hand_mirror.error")
-                .withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.ITALIC), true);
+                .withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.ITALIC), false);
     }
 
     @Override
@@ -96,7 +96,12 @@ public class HandMirrorItem extends Item {
         GlobalPos link = stack.get(ModDataComponents.MIRROR_LINK.get());
         if (link != null) {
             lines.add(Component.translatable("block.alchemia.mirror.linked_to", link.pos().getX(), link.pos().getY(),
-                    link.pos().getZ(), link.dimension().location().toString()).withStyle(ChatFormatting.GRAY));
+                    link.pos().getZ(), where(link.dimension())).withStyle(ChatFormatting.GRAY));
         }
+    }
+
+    public static Component where(net.minecraft.resources.ResourceKey<Level> dimension) {
+        net.minecraft.resources.ResourceLocation id = dimension.location();
+        return Component.translatableWithFallback("dimension." + id.getNamespace() + "." + id.getPath(), id.toString());
     }
 }

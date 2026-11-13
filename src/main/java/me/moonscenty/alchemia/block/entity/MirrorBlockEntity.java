@@ -239,7 +239,7 @@ public class MirrorBlockEntity extends SyncedBlockEntity implements EssentiaHold
         Direction out = partner.facing();
         List<EssentiaHolder> found = new ArrayList<>();
         for (BlockEntity near : EssentiaReach.holders(partner.getLevel(), origin, REACHES * 2)) {
-            if (!(near instanceof MirrorBlockEntity)
+            if (near instanceof JarBlockEntity
                     && TransfuserBlockEntity.inFront(origin, out, near.getBlockPos(), REACHES)) {
                 found.add((EssentiaHolder) near);
             }

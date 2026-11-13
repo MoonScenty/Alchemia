@@ -3,6 +3,11 @@
     "alchemia:eldritch_warden",
     "alchemia:eldritch_golem",
     "alchemia:cultist_leader",
-    "alchemia:taintacle_giant"
+    "alchemia:taintacle_giant",
+    "alchemia:golem",
+    "alchemia:automated_crossbow",
+    "alchemia:advanced_automated_crossbow",
+    "alchemia:autocaster",
+    "alchemia:eldritch_autocaster"
   ]
 }

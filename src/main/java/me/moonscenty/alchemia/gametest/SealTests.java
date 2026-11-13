@@ -226,8 +226,8 @@ public class SealTests {
         ItemStack fresh = new ItemStack(Items.IRON_PICKAXE);
         helper.assertFalse(Matching.Rule.STRICT.alike(worn, fresh), "strictly, worn is not fresh");
         helper.assertTrue(new Matching.Rule(false, true, false, false).alike(worn, fresh), "ignoring damage it is");
-        helper.assertTrue(new Matching.Rule(true, true, true, false).alike(new ItemStack(Items.IRON_INGOT),
-                new ItemStack(Items.GOLD_INGOT)), "two ingots share a common tag");
+        helper.assertTrue(new Matching.Rule(true, true, true, false).alike(new ItemStack(Items.IRON_ORE),
+                new ItemStack(Items.DEEPSLATE_IRON_ORE)), "two iron ores share an ore name");
         helper.assertFalse(Matching.Rule.STRICT.alike(new ItemStack(Items.IRON_INGOT),
                 new ItemStack(Items.GOLD_INGOT)), "but are not the same thing");
         helper.assertTrue(new Matching.Rule(true, true, false, true).alike(new ItemStack(Items.STONE),

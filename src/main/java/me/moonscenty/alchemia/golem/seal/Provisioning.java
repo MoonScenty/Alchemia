@@ -13,9 +13,14 @@ import net.minecraft.world.level.Level;
 public final class Provisioning {
     private static final Map<ResourceKey<Level>, List<Request>> REQUESTS = new ConcurrentHashMap<>();
 
-    public record Request(SealEntity seal, ItemStack stack) {
+    public record Request(SealEntity seal, ItemStack stack, boolean anyDamage) {
         boolean same(Request other) {
-            return seal.pos().equals(other.seal.pos()) && ItemStack.matches(stack, other.stack);
+            return seal.pos().equals(other.seal.pos()) && anyDamage == other.anyDamage
+                    && ItemStack.matches(stack, other.stack);
+        }
+
+        public Matching.Rule rule() {
+            return anyDamage ? new Matching.Rule(false, true, false, false) : Matching.Rule.STRICT;
         }
     }
 
@@ -23,8 +28,12 @@ public final class Provisioning {
     }
 
     public static void request(Level level, SealEntity seal, ItemStack stack) {
+        request(level, seal, stack, false);
+    }
+
+    public static void request(Level level, SealEntity seal, ItemStack stack, boolean anyDamage) {
         List<Request> list = REQUESTS.computeIfAbsent(level.dimension(), key -> new ArrayList<>());
-        Request asked = new Request(seal, stack.copyWithCount(stack.getMaxStackSize()));
+        Request asked = new Request(seal, stack.copyWithCount(stack.getMaxStackSize()), anyDamage);
         synchronized (list) {
             if (list.stream().noneMatch(asked::same)) {
                 list.add(asked);
@@ -33,9 +42,13 @@ public final class Provisioning {
     }
 
     public static void request(Level level, Task task, ItemStack stack) {
+        request(level, task, stack, false);
+    }
+
+    public static void request(Level level, Task task, ItemStack stack, boolean anyDamage) {
         SealEntity seal = Seals.get(level, task.seal());
         if (seal != null) {
-            request(level, seal, stack);
+            request(level, seal, stack, anyDamage);
         }
     }
 

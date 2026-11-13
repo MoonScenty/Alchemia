@@ -57,9 +57,13 @@ public class InstrumentTests {
 
         List<Component> side = EssentiaResonatorItem.report(helper.getLevel(), helper.absolutePos(HERE),
                 Direction.NORTH);
-        helper.assertValueEqual(side.size(), 1, "only the line for what it draws");
-        helper.assertValueEqual(key((Component) argument(side.get(0), 0)),
-                "item.alchemia.essentia_resonator.nothing", "and through the glass it draws nothing");
+        helper.assertValueEqual(side.size(), 2, "through the glass it still shows what it holds");
+        helper.assertValueEqual(key((Component) argument(side.get(1), 0)),
+                "item.alchemia.essentia_resonator.nothing", "but draws nothing");
+
+        helper.setBlock(HERE.east(2), ModBlocks.ESSENTIA_SMELTER.get());
+        helper.assertTrue(EssentiaResonatorItem.report(helper.getLevel(), helper.absolutePos(HERE.east(2)),
+                Direction.UP).isEmpty(), "a smelter is no essentia transport, so it keeps its own click");
         helper.succeed();
     }
 

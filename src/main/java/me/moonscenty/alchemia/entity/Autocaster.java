@@ -293,11 +293,6 @@ public class Autocaster extends ConstructWithSlot {
     }
 
     @Override
-    protected boolean breathes() {
-        return true;
-    }
-
-    @Override
     public int getArmorValue() {
         return PLATING;
     }

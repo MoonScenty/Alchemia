@@ -39,7 +39,7 @@ public final class PechTrades {
         if (stack.isEmpty()) {
             return 0;
         }
-        if (stack.is(Items.GOLD_INGOT) || stack.is(Items.GOLDEN_APPLE)) {
+        if (stack.is(Items.GOLD_INGOT) || stack.is(Items.GOLDEN_APPLE) || stack.is(Items.ENCHANTED_GOLDEN_APPLE)) {
             return 2;
         }
         if (stack.is(Items.ENDER_PEARL)) {

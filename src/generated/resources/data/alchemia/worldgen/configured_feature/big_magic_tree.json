@@ -10,8 +10,8 @@
     },
     "foliage_placer": {
       "type": "minecraft:fancy_foliage_placer",
-      "height": 3,
-      "offset": 3,
+      "height": 4,
+      "offset": 4,
       "radius": 2
     },
     "foliage_provider": {

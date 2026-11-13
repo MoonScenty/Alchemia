@@ -53,11 +53,6 @@ public class AdvancedAutomatedCrossbow extends AutomatedCrossbow {
     }
 
     @Override
-    public void knockback(double strength, double x, double z) {
-        super.knockback(strength / 3.0, x, z);
-    }
-
-    @Override
     public void tick() {
         super.tick();
         if (!level().isClientSide) {

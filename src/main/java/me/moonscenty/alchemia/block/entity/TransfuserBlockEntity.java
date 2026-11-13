@@ -107,7 +107,7 @@ public class TransfuserBlockEntity extends BlockEntity implements EssentiaHolder
         }
         Direction facing = facing();
         for (BlockEntity near : EssentiaReach.holders(level, worldPosition, REACH * 2)) {
-            if (near == this || near instanceof TubeBlockEntity || near instanceof TransfuserBlockEntity
+            if (!(near instanceof JarBlockEntity || near instanceof MirrorBlockEntity mirror && mirror.essentia())
                     || !inFront(worldPosition, facing, near.getBlockPos(), REACH)) {
                 continue;
             }

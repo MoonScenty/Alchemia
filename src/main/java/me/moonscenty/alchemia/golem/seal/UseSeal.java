@@ -121,7 +121,8 @@ public class UseSeal extends Seal {
         boolean found = Matching.firstAllowed(filter(), blacklist(), Arrays.asList(golem.carrying()), rule())
                 .found();
         if (!found && toggle(PROVISION) && !blacklist() && !filter().get(0).isEmpty()) {
-            Provisioning.request(golem.level(), task, filter().get(0));
+            // original: without metadata the request takes any damage
+            Provisioning.request(golem.level(), task, filter().get(0), !rule().damage());
         }
         return found;
     }

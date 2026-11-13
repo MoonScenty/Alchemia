@@ -1920,6 +1920,10 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("block.alchemia.mirror.already_linked", pick("That mirror is already linked to a valid destination.",
                 "그 거울은 이미 짝이 있다."));
         addItem(ModItems.HAND_MIRROR, pick("Magic Hand Mirror", "마법 손거울"));
+        add("dimension.minecraft.overworld", pick("Overworld", "오버월드"));
+        add("dimension.minecraft.the_nether", pick("Nether", "네더"));
+        add("dimension.minecraft.the_end", pick("The End", "엔드"));
+        add("dimension.alchemia.outer_lands", pick("The Outer Lands", "바깥 땅"));
         add("item.alchemia.hand_mirror.linked", pick("Link established.", "이어졌다."));
         add("item.alchemia.hand_mirror.error", pick("Destination mirror is missing or misplaced. Link broken.",
                 "이어진 거울이 없거나 자리를 옮겼다. 끊어졌다."));

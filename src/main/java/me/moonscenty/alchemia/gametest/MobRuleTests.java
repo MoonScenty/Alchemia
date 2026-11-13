@@ -60,7 +60,7 @@ public class MobRuleTests {
     }
 
     @GameTest(template = TEMPLATE)
-    public static void villagersAndConstructsAreNotAnimals(GameTestHelper helper) {
+    public static void villagersAreAnimalsButConstructsAreNot(GameTestHelper helper) {
         Player owner = helper.makeMockPlayer(GameType.SURVIVAL);
         AdvancedAutomatedCrossbow turret = crossbow(helper, owner);
         AdvancedAutomatedCrossbow other = helper.spawnWithNoFreeWill(ModEntities.ADVANCED_AUTOMATED_CROSSBOW.get(),
@@ -69,7 +69,7 @@ public class MobRuleTests {
         Cow cow = helper.spawnWithNoFreeWill(EntityType.COW, AT.north(3));
         turret.mind(Autocaster.ANIMALS, true);
         turret.mind(Autocaster.MONSTERS, true);
-        helper.assertFalse(turret.worthShooting(villager), "a villager is no animal");
+        helper.assertTrue(turret.worthShooting(villager), "a villager counts as an animal, as in the original");
         helper.assertFalse(turret.worthShooting(other), "nor is another construct");
         helper.assertTrue(turret.worthShooting(cow), "a cow is");
         helper.succeed();

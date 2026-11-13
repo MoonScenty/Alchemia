@@ -35,7 +35,10 @@ public class ModEntityTypeTagsProvider extends EntityTypeTagsProvider {
                 ModEntities.INHABITED_ZOMBIE.get(), ModEntities.ELDRITCH_GUARDIAN.get());
         tag(EntityTypeTags.ARTHROPOD).add(ModEntities.MIND_SPIDER.get());
         tag(EntityTypeTags.CAN_BREATHE_UNDER_WATER).add(ModEntities.ELDRITCH_WARDEN.get(),
-                ModEntities.ELDRITCH_GOLEM.get(), ModEntities.CULTIST_LEADER.get(), ModEntities.TAINTACLE_GIANT.get());
+                ModEntities.ELDRITCH_GOLEM.get(), ModEntities.CULTIST_LEADER.get(), ModEntities.TAINTACLE_GIANT.get())
+                .add(ModEntities.GOLEM.get(), ModEntities.AUTOMATED_CROSSBOW.get(),
+                        ModEntities.ADVANCED_AUTOMATED_CROSSBOW.get(), ModEntities.AUTOCASTER.get(),
+                        ModEntities.ELDRITCH_AUTOCASTER.get());
         tag(EntityTypeTags.ZOMBIES).add(ModEntities.ANGRY_ZOMBIE.get(), ModEntities.FURIOUS_ZOMBIE.get(),
                 ModEntities.INHABITED_ZOMBIE.get());
     }

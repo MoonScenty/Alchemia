@@ -128,7 +128,7 @@ public final class InfusionMishaps {
         }
         Player player = watching.get(level.random.nextInt(watching.size()));
         if (level.random.nextFloat() < 0.25F) {
-            WarpHandler.add(player, WarpData.Kind.PERMANENT, 1);
+            WarpHandler.add(player, WarpData.Kind.STICKY, 1);
         } else {
             WarpHandler.add(player, WarpData.Kind.TEMPORARY, 2 + level.random.nextInt(4));
         }

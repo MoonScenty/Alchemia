@@ -5,6 +5,8 @@ import java.util.List;
 
 import me.moonscenty.alchemia.aspect.Aspect;
 import me.moonscenty.alchemia.block.TubeBlock;
+import me.moonscenty.alchemia.block.entity.EssentiaSmelterBlockEntity;
+import me.moonscenty.alchemia.block.entity.MirrorBlockEntity;
 import me.moonscenty.alchemia.block.entity.TubeBlockEntity;
 import me.moonscenty.alchemia.essentia.EssentiaHolder;
 import me.moonscenty.alchemia.registry.ModAspects;
@@ -21,6 +23,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
 // runs before the block's own use, so pipes and jars can be read without being worked
@@ -48,17 +51,16 @@ public class EssentiaResonatorItem extends Item {
     public static List<Component> report(Level level, BlockPos pos, Direction side) {
         List<Component> lines = new ArrayList<>();
         BlockState state = level.getBlockState(pos);
-        if (level.getBlockEntity(pos) instanceof EssentiaHolder holder) {
-            boolean open = holder.reachableFrom(side);
-            if (open) {
-                for (Holder<Aspect> aspect : holder.held().sortedByName()) {
-                    lines.add(Component.translatable("item.alchemia.essentia_resonator.contains",
-                            holder.held().get(aspect), aspect.value().displayName())
-                            .withStyle(ChatFormatting.BLUE));
-                }
+        BlockEntity entity = level.getBlockEntity(pos);
+        if (entity instanceof EssentiaHolder holder && !(entity instanceof EssentiaSmelterBlockEntity)
+                && !(entity instanceof MirrorBlockEntity)) {
+            for (Holder<Aspect> aspect : holder.held().sortedByName()) {
+                lines.add(Component.translatable("item.alchemia.essentia_resonator.contains",
+                        holder.held().get(aspect), aspect.value().displayName())
+                        .withStyle(ChatFormatting.BLUE));
             }
             List<Holder<Aspect>> wanted = new ArrayList<>();
-            if (open && holder.takesFrom(side)) {
+            if (holder.reachableFrom(side) && holder.takesFrom(side)) {
                 ModAspects.REGISTRY.holders().filter(holder::wants).forEach(wanted::add);
             }
             lines.add(draws(wanted));

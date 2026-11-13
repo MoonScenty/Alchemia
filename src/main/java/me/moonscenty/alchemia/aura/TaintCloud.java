@@ -11,11 +11,11 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.level.material.Fluids;
 
 // Bodiless; each puddle costs the chunk a point of flux, and it thins out sooner when the chunk can't pay.
 public class TaintCloud extends Entity {
@@ -70,7 +70,7 @@ public class TaintCloud extends Entity {
     public boolean rain(BlockPos onto) {
         BlockState ground = level().getBlockState(onto.below());
         BlockState there = level().getBlockState(onto);
-        boolean dry = !ground.getFluidState().is(Fluids.WATER) && !ground.getFluidState().is(Fluids.LAVA);
+        boolean dry = !ground.getFluidState().is(FluidTags.WATER) && !ground.getFluidState().is(FluidTags.LAVA);
         boolean spoiled = ground.is(ModTags.Blocks.TAINT) || there.is(ModTags.Blocks.TAINT) || there.is(ModBlocks.FLUX_GOO.get());
         if (!dry || spoiled || !there.canBeReplaced()) {
             return false;

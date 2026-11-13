@@ -130,13 +130,13 @@ public class ModWorldgen {
         context.register(SILVERWOOD_TREE, silverwood(new SilverwoodTrunkPlacer(7, 3, 0)));
         context.register(TALL_SILVERWOOD_TREE, silverwood(new SilverwoodTrunkPlacer(8, 4, 0)));
 
-        // original's big magic tree: fancy-oak growth, 11-22 to the crown, leaf balls three layers deep
+        // original's big magic tree: fancy-oak growth, 11-22 to the crown, leaf balls five layers deep
         context.register(BIG_MAGIC_TREE, new ConfiguredFeature<>(Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
                 BlockStateProvider.simple(Blocks.OAK_LOG),
                 new net.minecraft.world.level.levelgen.feature.trunkplacers.FancyTrunkPlacer(9, 11, 0),
                 BlockStateProvider.simple(Blocks.OAK_LEAVES),
                 new net.minecraft.world.level.levelgen.feature.foliageplacers.FancyFoliagePlacer(ConstantInt.of(2),
-                        ConstantInt.of(3), 3),
+                        ConstantInt.of(4), 4),
                 new TwoLayersFeatureSize(0, 0, 0, java.util.OptionalInt.of(4))).ignoreVines().build()));
 
         context.register(CINDERPEARL_PATCH, new ConfiguredFeature<>(Feature.FLOWER, FeatureUtils.simpleRandomPatchConfiguration(18,

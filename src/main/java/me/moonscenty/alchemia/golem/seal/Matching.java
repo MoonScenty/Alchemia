@@ -31,7 +31,9 @@ public final class Matching {
                 return BuiltInRegistries.ITEM.getKey(one.getItem()).getNamespace()
                         .equals(BuiltInRegistries.ITEM.getKey(other.getItem()).getNamespace());
             }
-            if (tags && one.getTags().anyMatch(tag -> tag.location().getNamespace().equals("c") && other.is(tag))) {
+            // original: a shared ore name like ingotIron, never a catch-all like c:ingots
+            if (tags && one.getTags().anyMatch(tag -> tag.location().getNamespace().equals("c")
+                    && tag.location().getPath().contains("/") && other.is(tag))) {
                 return true;
             }
             if (!one.is(other.getItem())) {

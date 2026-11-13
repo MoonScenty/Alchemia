@@ -337,8 +337,7 @@ public final class MazeBuilder {
     private int exposed(BlockPos pos) {
         int open = 0;
         for (Direction side : SIDES) {
-            BlockPos next = pos.relative(side);
-            if (!level.getBlockState(next).isSolidRender(level, next)) {
+            if (level.isEmptyBlock(pos.relative(side))) {
                 open++;
             }
         }

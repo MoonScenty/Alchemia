@@ -113,7 +113,7 @@ public abstract class Construct extends PathfinderMob implements OwnableEntity {
         setTarget(null);
     }
 
-    // the original's canAttackClass: villagers and constructs are neither animals nor monsters
+    // the original's canAttackClass: villagers count as animals, constructs as neither
     protected boolean mindsKind(LivingEntity other) {
         if (other instanceof Player) {
             if (!minds(PLAYERS)) {
@@ -129,7 +129,8 @@ public abstract class Construct extends PathfinderMob implements OwnableEntity {
             return minds(MONSTERS);
         }
         return minds(ANIMALS) && (other instanceof Animal || other instanceof AmbientCreature
-                || other instanceof WaterAnimal || other instanceof AbstractGolem);
+                || other instanceof WaterAnimal || other instanceof AbstractGolem
+                || other instanceof net.minecraft.world.entity.npc.Npc);
     }
 
     // minding friends turns every rule about sides around
@@ -299,13 +300,9 @@ public abstract class Construct extends PathfinderMob implements OwnableEntity {
         return 90;
     }
 
-    protected boolean breathes() {
-        return false;
-    }
-
     @Override
     protected int decreaseAirSupply(int air) {
-        return breathes() ? super.decreaseAirSupply(air) : air;
+        return air;
     }
 
     @Override

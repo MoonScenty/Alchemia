@@ -49,7 +49,7 @@ public class ProvideSeal extends Seal {
                 Provisioning.Request request = it.next();
                 if (request.seal().pos().pos().distSqr(seal.pos().pos()) < REACH_SQUARED
                         && Matching.firstAllowed(filter(), blacklist(), List.of(request.stack()), rule()).found()
-                        && Matching.count(container, request.stack(), Matching.Rule.STRICT)
+                        && Matching.count(container, request.stack(), request.rule())
                                 > (toggle(LEAVE) ? 1 : 0)) {
                     Task task = new Task(seal.pos(), seal.pos().pos());
                     task.setPriority(request.seal().priority());
@@ -74,7 +74,7 @@ public class ProvideSeal extends Seal {
                 if (toggle(SINGLE)) {
                     stack.setCount(1);
                 }
-                if (takeOut(level, golem, container, stack, Matching.Rule.STRICT, toggle(LEAVE))) {
+                if (takeOut(level, golem, container, stack, request.rule(), toggle(LEAVE))) {
                     golem.addRankXp(1);
                 }
             }

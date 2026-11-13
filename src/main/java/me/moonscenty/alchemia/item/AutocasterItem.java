@@ -22,7 +22,7 @@ public class AutocasterItem extends Item {
         BlockPos against = context.getClickedPos();
         Direction face = context.getClickedFace();
         Player player = context.getPlayer();
-        if (player == null || !level.getBlockState(against).isSolidRender(level, against)) {
+        if (player == null || !level.getBlockState(against).isSolid()) {
             return InteractionResult.PASS;
         }
 
