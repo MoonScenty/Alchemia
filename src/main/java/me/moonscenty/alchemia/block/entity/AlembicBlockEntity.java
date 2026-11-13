@@ -81,6 +81,23 @@ public class AlembicBlockEntity extends SyncedBlockEntity implements EssentiaHol
         return false;
     }
 
+    // original: a side shows a nozzle when what is there draws from the alembic
+    public boolean feeds(Direction side) {
+        if (level == null || side.getAxis() == Direction.Axis.Y || !reachableFrom(side)) {
+            return false;
+        }
+        BlockPos beside = worldPosition.relative(side);
+        BlockState there = level.getBlockState(beside);
+        Direction back = side.getOpposite();
+        if (there.getBlock() instanceof me.moonscenty.alchemia.block.TubeBlock) {
+            return there.getValue(me.moonscenty.alchemia.block.TubeBlock.SIDES.get(back))
+                    == me.moonscenty.alchemia.block.TubeBlock.Link.BLOCK
+                    && !(level.getBlockEntity(beside) instanceof TubeBlockEntity tube && tube.shut(back));
+        }
+        return level.getBlockEntity(beside) instanceof EssentiaHolder holder && holder.reachableFrom(back)
+                && holder.takesFrom(back);
+    }
+
     @Override
     public AspectList held() {
         return holding == null ? AspectList.EMPTY : AspectList.of(holding, amount);

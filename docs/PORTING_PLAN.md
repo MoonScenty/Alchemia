@@ -1359,6 +1359,9 @@ python tools/remap_srg.py MCP-919/conf decompiled/thaumcraft src/thaumcraft
       - 원본은 영역 너비를 완드에 적었다. 여기서는 포커스에 적어서 포커스를 바꿔 끼워도 따라간다.
       - 건설 포커스는 원본에서도 대기열을 썼지만 지금처럼 한 번에 놓는다.
       - 전기 땅의 불꽃은 바닐라 전기 불꽃 입자다.
+  - [x] **2차 대조 5-6 장치와 블록 나머지** (2026-11-13). 자세한 값은 대조 문서의 "고친 것".
+    - 판정은 `AlembicBlockEntity.feeds`, 그림은 Bellows와 같은 `ArcaneBoreBaseRenderer.drawNozzle`(원본 보어 그림을 실행 때 읽는다).
+    - 원본과 다른 점: 증류기 몸체는 이 포트의 요청대로 TC4 모델이라, TC5 노즐이 TC4 솥 옆에 붙는다.
 
 ## 미결 사항
 

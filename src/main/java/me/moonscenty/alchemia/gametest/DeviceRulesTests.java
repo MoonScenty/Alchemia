@@ -91,6 +91,21 @@ public class DeviceRulesTests {
         return alembic;
     }
 
+    @GameTest(template = TEMPLATE)
+    public static void anAlembicShowsANozzleWhereATubeDrawsFromIt(GameTestHelper helper) {
+        helper.setBlock(WHERE.east(), ModBlocks.TUBE.get());
+        helper.setBlock(WHERE.west(), ModBlocks.JAR.get());
+        helper.setBlock(WHERE.south(), ModBlocks.TUBE.get());
+        AlembicBlockEntity alembic = alembic(helper, 0);
+        helper.assertTrue(alembic.feeds(Direction.EAST), "the tube draws from it");
+        helper.assertFalse(alembic.feeds(Direction.WEST), "a jar only fills from above");
+        helper.assertFalse(alembic.feeds(Direction.NORTH), "nothing is there");
+
+        alembic.label(ModAspects.FIRE, Direction.SOUTH);
+        helper.assertFalse(alembic.feeds(Direction.SOUTH), "nothing draws through the label");
+        helper.succeed();
+    }
+
     private static int signal(GameTestHelper helper) {
         BlockState state = helper.getBlockState(WHERE);
         return state.getAnalogOutputSignal(helper.getLevel(), helper.absolutePos(WHERE));

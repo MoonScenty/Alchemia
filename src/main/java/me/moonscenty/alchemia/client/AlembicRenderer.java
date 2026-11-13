@@ -61,6 +61,13 @@ public class AlembicRenderer implements BlockEntityRenderer<AlembicBlockEntity> 
         legacy.render("Pot", pose.last(), buffer, -1, light, overlay);
         legacy.render("Panel", pose.last(), buffer, -1, light, overlay);
         pose.popPose();
+        for (Direction side : Direction.Plane.HORIZONTAL) {
+            if (alembic.feeds(side)) {
+                ArcaneBoreBaseRenderer.drawNozzle(pose,
+                        buffers.getBuffer(RenderType.entityCutoutNoCull(ArcaneBoreRenderer.TEXTURE)), side, light,
+                        overlay);
+            }
+        }
         alembic.filter().ifPresent(aspect -> label(alembic, aspect.value(), pose, buffers, light, overlay));
     }
 
