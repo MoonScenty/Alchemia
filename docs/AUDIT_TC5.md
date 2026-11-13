@@ -61,7 +61,8 @@
 | 2026-11-10 | 5-11 HUD와 화면(완드 다이얼, 충전 막대, 알케모미터 오라 막대와 전환, 고글 상 태그, 툴팁, 잉크 경고, 조작기 힌트, 원소 삽 미리보기) | `c0b89dc` |
 | 2026-11-11 | 5-3 화면 효과(응시·흐린 시야·허기·햇빛 셰이더, 뒤틀림 비네트) | `d1445fd` |
 | 2026-11-13 | 5-4 완드와 포커스 나머지(Equal Trade 대기열과 건축가 영역, 대지 충격의 전기 땅) | `57da037` |
-| 2026-11-13 | 5-6 장치와 블록 나머지(증류기 옆 관 연결부) | (커밋 전) |
+| 2026-11-13 | 5-6 장치와 블록 나머지(증류기 옆 관 연결부) | `3bdda40` |
+| 2026-11-14 | 5-12 도구 공격력 결정(1.21 보정 유지, 괭이 1) | (커밋 전) |
 
 ## 1. 진행을 막는 것
 
@@ -119,13 +120,16 @@
 남은 것이 없다.
 
 ### 5-12. 고칠지 정할 것
-- 도구 공격력(1.8 기준 도끼 3, 곡괭이 2, 삽 1): 1.21 보정으로 볼지.
+남은 것이 없다.
 
 ### 5-13. 끝까지 못 본 곳
 `TileInfusionMatrix` 대부분, `TileGolemBuilder`, `ContainerPech`·`Turret*`, Fill·Empty·Provide·Harvest·Use 봉인, `GolemProperties`, 골렘 길찾기, `FollowingItem`·`TaintSource`·`FallingTaint`, `ItemResonator`·`ItemHandMirror`·`ItemThaumonomicon`, `WorldGenBigMagicTree`, 거대나무 몸통 형상, `Gen2x2`·`GenPassage`·`MazeGenerator`, `EssentiaHandler`, `InventoryUtils`, `WandRenderingHandler` 세부.
 
 ## 고친 것
 
+- **5-12 도구 공격력**(2026-11-14). 결정: 곡괭이·도끼·삽은 1.21 철 도구의 보정(1, 6, 1.5)을 그대로 둔다. 원본 1.8 값(2, 3, 1)이면 도끼가 바닐라 돌 도끼보다 약해진다.
+  - 검·Crimson Blade·Primal Crusher는 원래부터 원본 값(4, 4, 3.5)이다.
+  - 괭이는 재질 보너스만큼 깎아 원본·바닐라처럼 늘 1이다(전에는 Alchemium 1.5, Void·Elemental 2).
 - **5-6 장치와 블록 나머지**(2026-11-13). `TileAlembicRenderer`대로.
   - 증류기 옆(라벨 면 말고)의 관이나 그쪽에서 받는 용기가 있으면 그쪽으로 Arcane Bore의 노즐 모델을 그린다. 관은 그 면이 증류기에 이어져 있고 닫혀 있지 않아야 한다.
 - **5-4 완드와 포커스 나머지**(2026-11-13). `ItemFocusTrade`·`ServerTickEventsFML.tickBlockSwap`·`WandManager.toggleMisc`·`WandRenderingHandler.handleArchitectOverlay`·`EntityShockOrb`·`BlockEffect`대로.

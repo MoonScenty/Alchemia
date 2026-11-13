@@ -546,7 +546,7 @@ public class ModItems {
                             SwordItem.createAttributes(tier, 4, -2.4F)))));
             made.put(metal + "_hoe", ITEMS.register(metal + "_hoe",
                     () -> new HoeItem(tier, new Item.Properties().attributes(
-                            HoeItem.createAttributes(tier, -2.0F, -1.0F)))));
+                            HoeItem.createAttributes(tier, -tier.getAttackDamageBonus(), -1.0F)))));
         }
         return Collections.unmodifiableMap(made);
     }
@@ -579,7 +579,7 @@ public class ModItems {
         made.put("elemental_hoe", ITEMS.register("elemental_hoe",
                 () -> new me.moonscenty.alchemia.item.tool.ElementalHoeItem(tier,
                         me.moonscenty.alchemia.item.tool.ElementalTools.carrying(new Item.Properties()
-                                .attributes(HoeItem.createAttributes(tier, -2.0F, -1.0F))))));
+                                .attributes(HoeItem.createAttributes(tier, -tier.getAttackDamageBonus(), -1.0F))))));
         return Collections.unmodifiableMap(made);
     }
 

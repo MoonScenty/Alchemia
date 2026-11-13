@@ -45,6 +45,13 @@ public class ItemValueTests {
         helper.assertValueEqual(bite(ModItems.METAL_TOOLS.get("alchemium_sword").get()), 6.5,
                 "an alchemium sword bites for 4 + 2.5");
         helper.assertValueEqual(bite(ModItems.CRIMSON_BLADE.get()), 7.5, "a crimson blade for 4 + 3.5");
+        helper.assertValueEqual(bite(ModItems.METAL_TOOLS.get("alchemium_axe").get()), 8.5,
+                "an axe keeps the 1.21 heft, 6 + 2.5");
+        for (String hoe : java.util.List.of("alchemium_hoe", "void_hoe")) {
+            helper.assertValueEqual(bite(ModItems.METAL_TOOLS.get(hoe).get()), 0.0, hoe + " hits like a fist");
+        }
+        helper.assertValueEqual(bite(ModItems.ELEMENTAL_TOOLS.get("elemental_hoe").get()), 0.0,
+                "so does the elemental hoe");
 
         helper.assertValueEqual(new ItemStack(ModItems.LOOT_BAG_COMMON.get()).getMaxStackSize(), 16, "bags stack to 16");
         helper.assertValueEqual(new ItemStack(ModItems.PRIMAL_CHARM.get()).getMaxStackSize(), 1, "a charm alone");

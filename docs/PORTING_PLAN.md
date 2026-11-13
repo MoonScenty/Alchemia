@@ -1362,6 +1362,8 @@ python tools/remap_srg.py MCP-919/conf decompiled/thaumcraft src/thaumcraft
   - [x] **2차 대조 5-6 장치와 블록 나머지** (2026-11-13). 자세한 값은 대조 문서의 "고친 것".
     - 판정은 `AlembicBlockEntity.feeds`, 그림은 Bellows와 같은 `ArcaneBoreBaseRenderer.drawNozzle`(원본 보어 그림을 실행 때 읽는다).
     - 원본과 다른 점: 증류기 몸체는 이 포트의 요청대로 TC4 모델이라, TC5 노즐이 TC4 솥 옆에 붙는다.
+  - [x] **2차 대조 5-12 도구 공격력 결정** (2026-11-14). 괭이 공격력을 원본처럼 1로 고쳤다.
+    - 원본과 다른 점: 곡괭이·도끼·삽은 1.21 철 도구의 보정을 쓴다(Alchemium 기준 4.5, 9.5, 5. 원본은 5.5, 6.5, 4.5).
 
 ## 미결 사항
 
