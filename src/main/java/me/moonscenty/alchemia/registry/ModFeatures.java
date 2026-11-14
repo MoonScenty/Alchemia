@@ -3,7 +3,7 @@ package me.moonscenty.alchemia.registry;
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.worldgen.CrystalClustersFeature;
 import me.moonscenty.alchemia.worldgen.NodeFeature;
-import me.moonscenty.alchemia.worldgen.GreatwoodTrunkPlacer;
+import me.moonscenty.alchemia.worldgen.BigTreeTrunkPlacer;
 import me.moonscenty.alchemia.worldgen.SilverwoodTrunkPlacer;
 import me.moonscenty.alchemia.worldgen.SphereFoliagePlacer;
 import me.moonscenty.alchemia.worldgen.NodeInTreeDecorator;
@@ -23,8 +23,8 @@ public class ModFeatures {
     public static final DeferredRegister<TrunkPlacerType<?>> TRUNK_PLACERS = DeferredRegister.create(Registries.TRUNK_PLACER_TYPE, Alchemia.MODID);
     public static final DeferredRegister<FoliagePlacerType<?>> FOLIAGE_PLACERS = DeferredRegister.create(Registries.FOLIAGE_PLACER_TYPE, Alchemia.MODID);
 
-    public static final DeferredHolder<TrunkPlacerType<?>, TrunkPlacerType<GreatwoodTrunkPlacer>> GREATWOOD_TRUNK = TRUNK_PLACERS.register("greatwood",
-            () -> new TrunkPlacerType<>(GreatwoodTrunkPlacer.CODEC));
+    public static final DeferredHolder<TrunkPlacerType<?>, TrunkPlacerType<BigTreeTrunkPlacer>> BIG_TREE_TRUNK = TRUNK_PLACERS.register("big_tree",
+            () -> new TrunkPlacerType<>(BigTreeTrunkPlacer.CODEC));
     public static final DeferredHolder<TrunkPlacerType<?>, TrunkPlacerType<SilverwoodTrunkPlacer>> SILVERWOOD_TRUNK = TRUNK_PLACERS.register("silverwood",
             () -> new TrunkPlacerType<>(SilverwoodTrunkPlacer.CODEC));
     public static final DeferredHolder<FoliagePlacerType<?>, FoliagePlacerType<SphereFoliagePlacer>> SPHERE_FOLIAGE = FOLIAGE_PLACERS.register("sphere",

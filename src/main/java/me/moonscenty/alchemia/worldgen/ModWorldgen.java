@@ -133,7 +133,8 @@ public class ModWorldgen {
         // original's big magic tree: fancy-oak growth, 11-22 to the crown, leaf balls five layers deep
         context.register(BIG_MAGIC_TREE, new ConfiguredFeature<>(Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
                 BlockStateProvider.simple(Blocks.OAK_LOG),
-                new net.minecraft.world.level.levelgen.feature.trunkplacers.FancyTrunkPlacer(9, 11, 0),
+                new BigTreeTrunkPlacer(9, 11, 0, new BigTreeTrunkPlacer.Shape(1, 0.6618, 0.381, 1.0, List.of(1.0), 5,
+                        true, 2)),
                 BlockStateProvider.simple(Blocks.OAK_LEAVES),
                 new net.minecraft.world.level.levelgen.feature.foliageplacers.FancyFoliagePlacer(ConstantInt.of(2),
                         ConstantInt.of(4), 4),
@@ -183,9 +184,12 @@ public class ModWorldgen {
     private static TreeConfiguration.TreeConfigurationBuilder greatwood() {
         return new TreeConfiguration.TreeConfigurationBuilder(
                 BlockStateProvider.simple(ModBlocks.GREATWOOD.log().get()),
-                new GreatwoodTrunkPlacer(12, 6, 4),
+                // original: 11-21 high, the big-tree crown grown twice, the second wider and stacked on top
+                new BigTreeTrunkPlacer(11, 10, 0, new BigTreeTrunkPlacer.Shape(2, 0.618, 0.38, 0.9,
+                        List.of(1.2, 1.66), 4, false, 0)),
                 BlockStateProvider.simple(ModBlocks.GREATWOOD.leaves().get()),
-                new SphereFoliagePlacer(ConstantInt.of(2), ConstantInt.of(0), 1),
+                new net.minecraft.world.level.levelgen.feature.foliageplacers.FancyFoliagePlacer(ConstantInt.of(2),
+                        ConstantInt.of(3), 3),
                 new TwoLayersFeatureSize(1, 1, 2)).ignoreVines();
     }
 

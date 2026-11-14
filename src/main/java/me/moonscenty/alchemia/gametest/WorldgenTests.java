@@ -33,6 +33,19 @@ public class WorldgenTests {
     }
 
     @GameTest(template = TEMPLATE)
+    public static void aGreatwoodStacksTwoTrunks(GameTestHelper helper) {
+        layGround(helper, 3);
+        place(helper, ModWorldgen.GREATWOOD_TREE);
+        for (int y = 0; y <= 12; y++) {
+            for (BlockPos cell : List.of(BlockPos.ZERO, new BlockPos(1, 0, 0), new BlockPos(1, 0, 1),
+                    new BlockPos(0, 0, 1))) {
+                helper.assertBlockPresent(ModBlocks.GREATWOOD.log().get(), TREE_BASE.offset(cell).above(y));
+            }
+        }
+        helper.succeed();
+    }
+
+    @GameTest(template = TEMPLATE)
     public static void silverwoodTreeGrows(GameTestHelper helper) {
         growAndCheck(helper, ModWorldgen.SILVERWOOD_TREE, ModBlocks.SILVERWOOD, 5 * 7 + 8, 100);
     }
