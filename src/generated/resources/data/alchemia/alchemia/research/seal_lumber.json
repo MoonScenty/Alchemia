@@ -15,7 +15,7 @@
   ],
   "parents": [
     "alchemia:seal_break",
-    "alchemia:bioalchemic_mind"
+    "alchemia:biothaumic_mind"
   ],
   "requirements": {
     "alchemia:cognitio": 3,

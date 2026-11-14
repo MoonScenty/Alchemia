@@ -138,14 +138,14 @@ public class WarpPolishTests {
     }
 
     @GameTest(template = TEMPLATE)
-    public static void alchediarrheaLeavesGoo(GameTestHelper helper) {
+    public static void thaumarhiaLeavesGoo(GameTestHelper helper) {
         Pig pig = helper.spawn(EntityType.PIG, new BlockPos(8, 2, 8));
         pig.setNoAi(true);
         for (int i = 0; i < 400 && pig.level().isEmptyBlock(pig.blockPosition()); i++) {
-            ModEffects.ALCHEDIARRHEA.value().applyEffectTick(pig, 0);
+            ModEffects.THAUMARHIA.value().applyEffectTick(pig, 0);
         }
         helper.assertTrue(pig.level().getBlockState(pig.blockPosition()).is(ModBlocks.FLUX_GOO.get()), "goo at its feet");
-        helper.assertTrue(ModEffects.ALCHEDIARRHEA.value().shouldApplyEffectTickThisTick(20, 0), "once a second");
+        helper.assertTrue(ModEffects.THAUMARHIA.value().shouldApplyEffectTickThisTick(20, 0), "once a second");
         helper.succeed();
     }
 

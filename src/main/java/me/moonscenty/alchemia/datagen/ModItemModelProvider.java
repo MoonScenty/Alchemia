@@ -46,7 +46,7 @@ public class ModItemModelProvider extends ItemModelProvider {
             withExistingParent(tube[0], mcLoc("item/generated")).texture("layer0", modLoc("item/legacy/" + tube[1]));
         }
         withExistingParent("essentia_smelter", modLoc("block/essentia_smelter"));
-        withExistingParent("alchemium_smelter", modLoc("block/alchemium_smelter"));
+        withExistingParent("thaumium_smelter", modLoc("block/thaumium_smelter"));
         withExistingParent("void_smelter", modLoc("block/void_smelter"));
         withExistingParent("smelter_aux", modLoc("block/smelter_aux"));
         withExistingParent("mnemonic_matrix", modLoc("block/mnemonic_matrix"));
@@ -86,9 +86,9 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.COPPER_CLUSTER.get());
         basicItem(ModItems.CINNABAR_CLUSTER.get());
 
-        basicItem(ModItems.ALCHEMIUM_INGOT.get());
+        basicItem(ModItems.THAUMIUM_INGOT.get());
         basicItem(ModItems.BRASS_INGOT.get());
-        basicItem(ModItems.ALCHEMIUM_NUGGET.get());
+        basicItem(ModItems.THAUMIUM_NUGGET.get());
         basicItem(ModItems.BRASS_NUGGET.get());
         basicItem(ModItems.QUICKSILVER_DROP.get());
         basicItem(ModItems.ZOMBIE_BRAIN.get());
@@ -160,12 +160,12 @@ public class ModItemModelProvider extends ItemModelProvider {
                 ModItems.TAINT_CRAWLER_SPAWN_EGG, ModItems.TAINT_SWARM_SPAWN_EGG, ModItems.TAINTACLE_SPAWN_EGG,
                 ModItems.TAINTED_COW_SPAWN_EGG, ModItems.TAINTED_PIG_SPAWN_EGG, ModItems.TAINTED_CHICKEN_SPAWN_EGG,
                 ModItems.TAINTED_SHEEP_SPAWN_EGG, ModItems.TAINTED_CREEPER_SPAWN_EGG, ModItems.TAINTED_VILLAGER_SPAWN_EGG,
-                ModItems.TAINTED_RABBIT_SPAWN_EGG, ModItems.ALCHEMIC_SLIME_SPAWN_EGG)) {
+                ModItems.TAINTED_RABBIT_SPAWN_EGG, ModItems.THAUMIC_SLIME_SPAWN_EGG)) {
             withExistingParent(egg.getId().getPath(), mcLoc("item/template_spawn_egg"));
         }
-        basicItem(ModItems.ALCHEMIUM_GEAR.get());
+        basicItem(ModItems.THAUMIUM_GEAR.get());
         basicItem(ModItems.BRASS_GEAR.get());
-        basicItem(ModItems.ALCHEMIUM_PLATE.get());
+        basicItem(ModItems.THAUMIUM_PLATE.get());
         basicItem(ModItems.BRASS_PLATE.get());
         basicItem(ModItems.IRON_PLATE.get());
         basicItem(ModItems.VOID_PLATE.get());
@@ -181,11 +181,11 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.SALIS_MUNDUS.get());
         basicItem(ModItems.ENCHANTED_FABRIC.get());
         basicItem(ModItems.ALUMENTUM.get());
-        basicItem(ModItems.ALCHEMOMETER.get());
+        basicItem(ModItems.THAUMOMETER.get());
         basicItem(ModItems.NODE_PLACER.get());
         basicItem(ModItems.SCRIBING_TOOLS.get());
         basicItem(ModItems.RESEARCH_NOTES.get());
-        basicItem(ModItems.ALCHEMONOMICON.get());
+        basicItem(ModItems.THAUMONOMICON.get());
 
         ModBlocks.PLANTS.forEach(plant -> {
             String name = plant.getId().getPath();
@@ -265,7 +265,7 @@ public class ModItemModelProvider extends ItemModelProvider {
                 .texture("layer0", modLoc("item/legacy/" + tool)));
         basicItem(ModItems.FOCUS_POUCH.get());
         for (String part : new String[] {"primal_charm", "mirrored_glass", "morphic_resonator", "clockwork_mind",
-                "bioalchemic_mind"}) {
+                "biothaumic_mind"}) {
             withExistingParent(part, mcLoc("item/generated")).texture("layer0", modLoc("item/legacy/" + part));
         }
         withExistingParent("arcane_lamp", modLoc("block/arcane_lamp_on"));

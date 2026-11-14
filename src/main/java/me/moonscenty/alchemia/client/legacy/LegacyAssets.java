@@ -196,7 +196,7 @@ public final class LegacyAssets {
         effect(all, "sun_scorned", 6, 2);
         effect(all, "blurred_vision", 5, 2);
         effect(all, "deadly_gaze", 4, 2);
-        effect(all, "alchediarrhea", 7, 2);
+        effect(all, "thaumarhia", 7, 2);
         effect(all, "warp_ward", 3, 2);
     }
 
@@ -207,16 +207,16 @@ public final class LegacyAssets {
     }
 
     private static void research(List<LegacyAsset> all) {
-        all.add(item("alchemometer", "thaumometer", null));
+        all.add(item("thaumometer", "thaumometer", null));
         all.add(LegacyAsset.of(SCANNER_MESH).four("textures/models/scanner.obj"));
         all.add(LegacyAsset.of("textures/item/legacy/scanner.png").four("textures/models/scanner.png"));
         all.add(LegacyAsset.of("textures/item/legacy/scanscreen.png").four("textures/models/scanscreen.png"));
-        all.add(item("alchemonomicon", "thaumonomicon", "thaumonomicon"));
+        all.add(item("thaumonomicon", "thaumonomicon", "thaumonomicon"));
         all.add(item("research_notes", "researchnotes", "researchnotes"));
         all.add(item("scribing_tools", "scribing_tools", null));
         all.add(LegacyAsset.of("textures/misc/script.png").five("textures/misc/script.png"));
 
-        String[] branches = {"basics", "arcana", "alchemy", "artifice", "golemancy", "eldritch"};
+        String[] branches = {"basics", "thaumaturgy", "alchemy", "artifice", "golemancy", "eldritch"};
         for (int i = 0; i < branches.length; i++) {
             all.add(LegacyAsset.of("textures/gui/research_background/" + branches[i] + ".png")
                     .five("textures/gui/gui_research_back_" + (i + 1) + ".jpg").fromJpeg());
@@ -246,7 +246,7 @@ public final class LegacyAssets {
                 .five("textures/gui/gui_researchbook_overlay.png"));
         all.add(LegacyAsset.of("textures/gui/research_category/basics.png")
                 .five("textures/items/thaumonomicon_cheat.png").four("textures/items/thaumonomiconcheat.png"));
-        String[][] tabs = {{"arcana", "r_thaumaturgy"}, {"alchemy", "r_crucible"}, {"artifice", "r_artifice"},
+        String[][] tabs = {{"thaumaturgy", "r_thaumaturgy"}, {"alchemy", "r_crucible"}, {"artifice", "r_artifice"},
                 {"golemancy", "r_golemancy"}, {"eldritch", "r_eldritch"}};
         for (String[] tab : tabs) {
             all.add(LegacyAsset.of("textures/gui/research_category/" + tab[0] + ".png")
@@ -297,13 +297,13 @@ public final class LegacyAssets {
 
     // the original names a part's loose picture and its material the other way round from ours
     private static void wands(List<LegacyAsset> all) {
-        String[][] caps = {{"iron", "iron"}, {"gold", "gold"}, {"brass", "brass"}, {"alchemium", "thaumium"},
+        String[][] caps = {{"iron", "iron"}, {"gold", "gold"}, {"brass", "brass"}, {"thaumium", "thaumium"},
                 {"void", "void"}};
         for (String[] cap : caps) {
             all.add(wandPart("cap_" + cap[0] + "_mat", "cap_" + cap[1]));
             all.add(wandPart("cap_" + cap[0], "cap_" + cap[1] + "_mat"));
         }
-        all.add(wandPart("cap_alchemium_inert_mat", "cap_thaumium_inert"));
+        all.add(wandPart("cap_thaumium_inert_mat", "cap_thaumium_inert"));
         all.add(wandPart("cap_void_inert_mat", "cap_void_inert"));
 
         for (String rod : List.of("greatwood", "silverwood", "obsidian", "ice", "quartz", "reed", "blaze", "bone")) {
@@ -454,7 +454,7 @@ public final class LegacyAssets {
         all.add(block("smelter_front_on", "smelter_basic_front_on", null));
         all.add(block("smelter_side", "smelter_basic_side", null));
         all.add(block("smelter_top", "smelter_top", null));
-        for (String[] tier : new String[][] {{"alchemium_smelter", "thaumium"}, {"void_smelter", "void"}}) {
+        for (String[] tier : new String[][] {{"thaumium_smelter", "thaumium"}, {"void_smelter", "void"}}) {
             all.add(block(tier[0] + "_front", "smelter_" + tier[1] + "_front_off", null));
             all.add(block(tier[0] + "_front_on", "smelter_" + tier[1] + "_front_on", null));
             all.add(block(tier[0] + "_side", "smelter_" + tier[1] + "_side", null));
@@ -618,7 +618,7 @@ public final class LegacyAssets {
     }
 
     private static void gear(List<LegacyAsset> all) {
-        metalGear(all, "alchemium", "thaumium");
+        metalGear(all, "thaumium", "thaumium");
         metalGear(all, "void", "void");
         for (String[] tool : new String[][] {{"elemental_axe", "elemental_axe"},
                 {"elemental_pickaxe", "elemental_pick"}, {"elemental_sword", "elemental_sword"},
@@ -630,7 +630,7 @@ public final class LegacyAssets {
         all.add(item("enchanted_fabric", "fabric", null));
         for (String[] part : new String[][] {{"primal_charm", "primal_charm"}, {"mirrored_glass", "mirrored_glass"},
                 {"morphic_resonator", "morphic_resonator"}, {"clockwork_mind", "mind_clockwork"},
-                {"bioalchemic_mind", "mind_biothaumic"}}) {
+                {"biothaumic_mind", "mind_biothaumic"}}) {
             all.add(LegacyAsset.of("textures/item/legacy/" + part[0] + ".png").five("textures/items/" + part[1] + ".png"));
         }
         all.add(LegacyAsset.of("textures/entity/bellows.png").five("textures/models/bellows.png"));
@@ -687,7 +687,7 @@ public final class LegacyAssets {
         for (String[] animal : new String[][] {{"tainted_cow", "cow"}, {"tainted_pig", "pig"},
                 {"tainted_chicken", "chicken"}, {"tainted_sheep", "sheep"}, {"tainted_sheep_fur", "sheep_fur"},
                 {"tainted_creeper", "creeper"}, {"tainted_villager", "villager"}, {"tainted_rabbit", "taintrabbit"},
-                {"alchemic_slime", "tslime"}}) {
+                {"thaumic_slime", "tslime"}}) {
             all.add(LegacyAsset.of("textures/entity/" + animal[0] + ".png")
                     .five("textures/models/creature/" + animal[1] + ".png"));
         }
@@ -863,7 +863,7 @@ public final class LegacyAssets {
         }
         all.add(LegacyAsset.of("models/legacy/golem/golem_press.obj").five("models/obj/golembuilder.obj"));
         for (String[] material : new String[][] {{"wood", "wood"}, {"iron", "iron"}, {"clay", "clay"},
-                {"brass", "brass"}, {"alchemium", "thaumium"}, {"void", "void"}}) {
+                {"brass", "brass"}, {"thaumium", "thaumium"}, {"void", "void"}}) {
             all.add(LegacyAsset.of("textures/entity/golem/mat_" + material[0] + ".png")
                     .five("textures/models/golems/mat_" + material[1] + ".png"));
         }
@@ -942,17 +942,17 @@ public final class LegacyAssets {
         all.add(item("flux_shard", "shard_balanced", "shard_balanced").tinted(() -> ModAspects.FLUX.get().color()));
         all.add(item("balanced_shard", "shard_balanced", "shard_balanced"));
 
-        all.add(block("alchemium_block", "thaumium_metal", "thaumiumblock"));
+        all.add(block("thaumium_block", "thaumium_metal", "thaumiumblock"));
         all.add(block("brass_block", "base_brass", null));
         all.add(block("alchemical_construct", "alchemical_metal", null));
         all.add(block("advanced_alchemical_construct", "advanced_alchemical_metal", null));
-        all.add(item("alchemium_ingot", "ingot_thaumium", "thaumiumingot"));
+        all.add(item("thaumium_ingot", "ingot_thaumium", "thaumiumingot"));
         all.add(item("brass_ingot", "ingot_brass", null));
-        all.add(item("alchemium_nugget", "nugget_thaumium", "nuggetthaumium"));
+        all.add(item("thaumium_nugget", "nugget_thaumium", "nuggetthaumium"));
         all.add(item("brass_nugget", "nugget_brass", null));
-        all.add(item("alchemium_gear", "thaumium_gear", null));
+        all.add(item("thaumium_gear", "thaumium_gear", null));
         all.add(item("brass_gear", "brass_gear", null));
-        all.add(item("alchemium_plate", "thaumium_plate", null));
+        all.add(item("thaumium_plate", "thaumium_plate", null));
         all.add(item("brass_plate", "brass_plate", null));
         all.add(item("iron_plate", "iron_plate", null));
         all.add(item("salis_mundus", "salis_mundus", "dust"));

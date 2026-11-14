@@ -320,7 +320,7 @@ public class WandItem extends Item implements VisHolder, Rechargeable {
         if (level.getBlockState(pos).is(Blocks.BOOKSHELF) && focus(context.getItemInHand()).isEmpty()) {
             if (!level.isClientSide) {
                 level.removeBlock(pos, false);
-                drop(level, pos, new ItemStack(ModItems.ALCHEMONOMICON.get()));
+                drop(level, pos, new ItemStack(ModItems.THAUMONOMICON.get()));
                 level.playSound(null, pos, ModSounds.WAND.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
                 level.playSound(null, pos, ModSounds.POOF.get(), SoundSource.BLOCKS, 0.4F,
                         1.0F + (float) level.random.nextGaussian() * 0.05F);

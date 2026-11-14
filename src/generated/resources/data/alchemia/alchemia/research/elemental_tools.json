@@ -30,7 +30,7 @@
     }
   ],
   "parents": [
-    "alchemia:alchemium_gear",
+    "alchemia:thaumium_gear",
     "alchemia:infusion",
     "alchemia:vis_crystals"
   ],

@@ -8,9 +8,9 @@ import net.minecraft.world.item.crafting.Ingredient;
 
 // original's numbers, not rebalanced
 public final class ModTiers {
-    public static final Tier ALCHEMIUM = new SimpleTier(
+    public static final Tier THAUMIUM = new SimpleTier(
             BlockTags.INCORRECT_FOR_DIAMOND_TOOL, 500, 7.0F, 2.5F, 22,
-            () -> Ingredient.of(ModItems.ALCHEMIUM_INGOT));
+            () -> Ingredient.of(ModItems.THAUMIUM_INGOT));
 
     public static final Tier VOID = new SimpleTier(
             BlockTags.INCORRECT_FOR_NETHERITE_TOOL, 150, 8.0F, 3.0F, 10,
@@ -18,7 +18,7 @@ public final class ModTiers {
 
     public static final Tier ELEMENTAL = new SimpleTier(
             BlockTags.INCORRECT_FOR_DIAMOND_TOOL, 1500, 9.0F, 3.0F, 18,
-            () -> Ingredient.of(ModItems.ALCHEMIUM_INGOT));
+            () -> Ingredient.of(ModItems.THAUMIUM_INGOT));
 
     public static final Tier PRIMAL = new SimpleTier(
             BlockTags.INCORRECT_FOR_NETHERITE_TOOL, 500, 8.0F, 4.0F, 20,

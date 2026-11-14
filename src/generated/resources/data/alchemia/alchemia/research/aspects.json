@@ -2,7 +2,7 @@
   "auto_unlock": true,
   "category": "alchemia:basics",
   "column": 0,
-  "icon": "alchemia:alchemometer",
+  "icon": "alchemia:thaumometer",
   "pages": [
     {
       "type": "text",
@@ -30,7 +30,7 @@
     },
     {
       "type": "recipe",
-      "recipe": "alchemia:alchemometer"
+      "recipe": "alchemia:thaumometer"
     },
     {
       "type": "recipe",

@@ -74,7 +74,7 @@ public class FluxGooBlock extends SettlingLayerBlock {
             return false;
         }
         level.removeBlock(pos, false);
-        var slime = new me.moonscenty.alchemia.entity.AlchemicSlime(level);
+        var slime = new me.moonscenty.alchemia.entity.ThaumicSlime(level);
         slime.setSize(depth >= 6 ? 2 : 1, true);
         slime.moveTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0.0F, 0.0F);
         level.addFreshEntity(slime);
@@ -85,7 +85,7 @@ public class FluxGooBlock extends SettlingLayerBlock {
 
     @Override
     protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
-        if (entity instanceof me.moonscenty.alchemia.entity.AlchemicSlime slime) {
+        if (entity instanceof me.moonscenty.alchemia.entity.ThaumicSlime slime) {
             int depth = state.getValue(LEVEL);
             if (!level.isClientSide && slime.getSize() < depth && level.random.nextBoolean()) {
                 slime.setSize(slime.getSize() + 1, true);

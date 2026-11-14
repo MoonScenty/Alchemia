@@ -220,10 +220,10 @@ public final class TaintedAnimalRenderers {
         }
     }
 
-    public static class AlchemicSlime extends SlimeRenderer {
-        private static final ResourceLocation SKIN = Alchemia.id("textures/entity/alchemic_slime.png");
+    public static class ThaumicSlime extends SlimeRenderer {
+        private static final ResourceLocation SKIN = Alchemia.id("textures/entity/thaumic_slime.png");
 
-        public AlchemicSlime(EntityRendererProvider.Context context) {
+        public ThaumicSlime(EntityRendererProvider.Context context) {
             super(context);
         }
 

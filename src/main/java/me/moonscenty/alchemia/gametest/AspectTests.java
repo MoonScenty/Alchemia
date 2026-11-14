@@ -198,8 +198,8 @@ public class AspectTests {
         helper.assertTrue(seed.get(ModAspects.DARKNESS) > 0, "a void seed should reek of tenebrae, was " + seed);
         helper.assertTrue(seed.get(ModAspects.VOID) > 0, "and of vacuos, was " + seed);
 
-        AspectList ingot = Aspects.of(new ItemStack(ModItems.ALCHEMIUM_INGOT.get()));
-        Alchemia.LOGGER.info("alchemium ingot reads as {}", ingot);
+        AspectList ingot = Aspects.of(new ItemStack(ModItems.THAUMIUM_INGOT.get()));
+        Alchemia.LOGGER.info("thaumium ingot reads as {}", ingot);
         helper.assertTrue(ingot.get(ModAspects.METAL) > 0, "it is still metal, was " + ingot);
         helper.assertTrue(ingot.get(ModAspects.ORDER) > 0, "with the ordo it was steeped in, was " + ingot);
         helper.succeed();

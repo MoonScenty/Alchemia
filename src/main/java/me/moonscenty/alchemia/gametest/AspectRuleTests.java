@@ -77,8 +77,8 @@ public class AspectRuleTests {
         helper.assertValueEqual(Aspects.of(Items.SHEARS).get(ModAspects.TOOL), 3, "shears");
         helper.assertValueEqual(Aspects.of(Items.GOLDEN_HOE).get(ModAspects.TOOL), 1, "a gold hoe wears out at once");
         helper.assertValueEqual(Aspects.of(Items.DIAMOND_HOE).get(ModAspects.TOOL), 4, "a diamond hoe");
-        helper.assertValueEqual(Aspects.of(ModItems.METAL_TOOLS.get("alchemium_pickaxe").get()).get(ModAspects.TOOL), 4,
-                "an alchemium pickaxe digs like diamond");
+        helper.assertValueEqual(Aspects.of(ModItems.METAL_TOOLS.get("thaumium_pickaxe").get()).get(ModAspects.TOOL), 4,
+                "an thaumium pickaxe digs like diamond");
         helper.assertValueEqual(Aspects.of(ModItems.METAL_TOOLS.get("void_pickaxe").get()).get(ModAspects.TOOL), 5,
                 "and a void one better");
         helper.succeed();

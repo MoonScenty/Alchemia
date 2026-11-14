@@ -12,10 +12,10 @@ import net.minecraft.world.entity.player.Player;
 // The few recipes the original locked behind two pieces of knowledge.
 public final class RecipeGates {
     private static final Map<ResourceLocation, List<ResourceLocation>> ALSO = Map.of(
-            Alchemia.id("seal_pickup_advanced"), List.of(Alchemia.id("bioalchemic_mind")),
-            Alchemia.id("seal_fill_advanced"), List.of(Alchemia.id("bioalchemic_mind")),
-            Alchemia.id("seal_empty_advanced"), List.of(Alchemia.id("bioalchemic_mind")),
-            Alchemia.id("seal_guard_advanced"), List.of(Alchemia.id("bioalchemic_mind")),
+            Alchemia.id("seal_pickup_advanced"), List.of(Alchemia.id("biothaumic_mind")),
+            Alchemia.id("seal_fill_advanced"), List.of(Alchemia.id("biothaumic_mind")),
+            Alchemia.id("seal_empty_advanced"), List.of(Alchemia.id("biothaumic_mind")),
+            Alchemia.id("seal_guard_advanced"), List.of(Alchemia.id("biothaumic_mind")),
             Alchemia.id("ancient_pedestal"), List.of(Clues.ANCIENT_STONE),
             Alchemia.id("eldritch_pedestal"), List.of(Clues.ELDRITCH_STONE));
 

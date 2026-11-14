@@ -62,8 +62,8 @@ public final class ItemTooltips {
                         .withStyle(ChatFormatting.GOLD));
             }
         }
-        if (stack.getItem() instanceof me.moonscenty.alchemia.item.AlchemometerItem) {
-            lines.add(Component.translatable("item.alchemia.alchemometer.key",
+        if (stack.getItem() instanceof me.moonscenty.alchemia.item.ThaumometerItem) {
+            lines.add(Component.translatable("item.alchemia.thaumometer.key",
                     WandKeys.CHANGE_FOCUS.getTranslatedKeyMessage()).withStyle(ChatFormatting.DARK_PURPLE));
         }
     }

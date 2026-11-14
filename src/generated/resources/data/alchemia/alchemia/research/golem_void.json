@@ -19,7 +19,7 @@
   ],
   "parents": [
     "alchemia:golem_brass",
-    "alchemia:golem_alchemium",
+    "alchemia:golem_thaumium",
     "alchemia:void_metal"
   ],
   "requirements": {

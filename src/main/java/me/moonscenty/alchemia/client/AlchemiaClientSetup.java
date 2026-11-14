@@ -21,7 +21,7 @@ import me.moonscenty.alchemia.client.particle.SparkleParticle;
 import me.moonscenty.alchemia.registry.ModBlocks;
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.registry.ModItems;
-import me.moonscenty.alchemia.item.AlchemonomiconItem;
+import me.moonscenty.alchemia.item.ThaumonomiconItem;
 import me.moonscenty.alchemia.registry.ModBlockEntities;
 import me.moonscenty.alchemia.registry.ModEntities;
 import me.moonscenty.alchemia.registry.ModMenus;
@@ -91,7 +91,7 @@ public class AlchemiaClientSetup {
         event.getModels().computeIfPresent(ModelResourceLocation.inventory(ModBlocks.ARCANE_WORKBENCH_CHARGER.getId()),
                 (location, ours) -> new LegacyMeshItemModel(ours, LegacyAssets.RELAY_MESH, true,
                         Alchemia.id("item/legacy/vis_relay"), charger));
-        event.getModels().computeIfPresent(ModelResourceLocation.inventory(ModItems.ALCHEMOMETER.getId()),
+        event.getModels().computeIfPresent(ModelResourceLocation.inventory(ModItems.THAUMOMETER.getId()),
                 (location, ours) -> new LegacyScannerModel(ours));
     }
 
@@ -103,7 +103,7 @@ public class AlchemiaClientSetup {
 
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event) {
-        AlchemonomiconItem.opener = () -> Minecraft.getInstance().setScreen(new AlchemonomiconScreen());
+        ThaumonomiconItem.opener = () -> Minecraft.getInstance().setScreen(new ThaumonomiconScreen());
 
         for (Item item : List.of(ModItems.PHIAL.get(), ModItems.JAR_LABEL.get())) {
             ItemProperties.register(item, Alchemia.id("filled"), (stack, level, holder, seed) ->
@@ -353,7 +353,7 @@ public class AlchemiaClientSetup {
         event.registerEntityRenderer(ModEntities.TAINTED_CREEPER.get(), TaintedAnimalRenderers.Creeper::new);
         event.registerEntityRenderer(ModEntities.TAINTED_VILLAGER.get(), TaintedAnimalRenderers.Villager::new);
         event.registerEntityRenderer(ModEntities.TAINTED_RABBIT.get(), TaintedAnimalRenderers.TaintedRabbit::new);
-        event.registerEntityRenderer(ModEntities.ALCHEMIC_SLIME.get(), TaintedAnimalRenderers.AlchemicSlime::new);
+        event.registerEntityRenderer(ModEntities.THAUMIC_SLIME.get(), TaintedAnimalRenderers.ThaumicSlime::new);
         event.registerEntityRenderer(ModEntities.GOLEM.get(), GolemRenderer::new);
         event.registerEntityRenderer(ModEntities.GOLEM_DART.get(), GolemDartRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.GOLEM_PRESS.get(), GolemPressRenderer::new);

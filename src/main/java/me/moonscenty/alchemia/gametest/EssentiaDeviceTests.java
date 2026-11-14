@@ -86,7 +86,7 @@ public class EssentiaDeviceTests {
 
         BlockPos at = helper.absolutePos(crucible.above());
         var it = (me.moonscenty.alchemia.block.entity.ThaumatoriumBlockEntity) helper.getLevel().getBlockEntity(at);
-        it.toggle(Alchemia.id("alchemium_ingot_from_iron"));
+        it.toggle(Alchemia.id("thaumium_ingot_from_iron"));
         it.setItem(0, new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.IRON_INGOT, 2));
 
         for (int tick = 0; tick < 200; tick++) {
@@ -100,7 +100,7 @@ public class EssentiaDeviceTests {
         }
         ChestBlockEntity chest =
                 (ChestBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(crucible.above().east()));
-        helper.assertTrue(chest.getItem(0).is(me.moonscenty.alchemia.registry.ModItems.ALCHEMIUM_INGOT.get()),
+        helper.assertTrue(chest.getItem(0).is(me.moonscenty.alchemia.registry.ModItems.THAUMIUM_INGOT.get()),
                 "what it made is in the chest");
         helper.assertTrue(it.getItem(0).getCount() < 2, "and it used up catalyst to make it");
         helper.succeed();
@@ -115,7 +115,7 @@ public class EssentiaDeviceTests {
         helper.setBlock(crucible.above(2), made.setValue(me.moonscenty.alchemia.block.ThaumatoriumBlock.TOP, true));
         BlockPos at = helper.absolutePos(crucible.above());
         var it = (me.moonscenty.alchemia.block.entity.ThaumatoriumBlockEntity) helper.getLevel().getBlockEntity(at);
-        it.toggle(Alchemia.id("alchemium_ingot_from_iron"));
+        it.toggle(Alchemia.id("thaumium_ingot_from_iron"));
         it.setItem(0, new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.IRON_INGOT));
         for (int tick = 0; tick < 50; tick++) {
             me.moonscenty.alchemia.block.entity.ThaumatoriumBlockEntity.serverTick(helper.getLevel(), at,

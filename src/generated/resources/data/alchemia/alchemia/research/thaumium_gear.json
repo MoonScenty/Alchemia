@@ -1,0 +1,57 @@
+{
+  "category": "alchemia:artifice",
+  "column": -1,
+  "complexity": 2,
+  "icon": "alchemia:thaumium_pickaxe",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.thaumium_gear.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:thaumium_pickaxe"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:thaumium_axe"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:thaumium_shovel"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:thaumium_sword"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:thaumium_hoe"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:thaumium_helmet"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:thaumium_chestplate"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:thaumium_leggings"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:thaumium_boots"
+    }
+  ],
+  "parents": [
+    "alchemia:metallurgy"
+  ],
+  "requirements": {
+    "alchemia:instrumentum": 6,
+    "alchemia:metallum": 6,
+    "alchemia:praemunio": 4
+  },
+  "row": 5
+}

@@ -46,7 +46,7 @@ public final class TaintConversion {
                 takeOver(dead, event);
                 return;
             }
-            AlchemicSlime slime = new AlchemicSlime(level);
+            ThaumicSlime slime = new ThaumicSlime(level);
             slime.setSize((int) (1.0F + Math.min(dead.getMaxHealth() / 10.0F, 6.0F)), true);
             made = slime;
         }

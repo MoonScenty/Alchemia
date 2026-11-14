@@ -335,14 +335,14 @@ public class ModEntities {
                     .sized(0.6F, 0.7F)
                     .clientTrackingRange(8)
                     .build("tainted_rabbit"));
-    public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.entity.AlchemicSlime>>
-            ALCHEMIC_SLIME = ENTITIES.register("alchemic_slime", () -> EntityType.Builder
-                    .<me.moonscenty.alchemia.entity.AlchemicSlime>of(me.moonscenty.alchemia.entity.AlchemicSlime::new,
+    public static final DeferredHolder<EntityType<?>, EntityType<me.moonscenty.alchemia.entity.ThaumicSlime>>
+            THAUMIC_SLIME = ENTITIES.register("thaumic_slime", () -> EntityType.Builder
+                    .<me.moonscenty.alchemia.entity.ThaumicSlime>of(me.moonscenty.alchemia.entity.ThaumicSlime::new,
                             MobCategory.MONSTER)
                     .sized(0.52F, 0.52F)
                     .eyeHeight(0.325F)
                     .clientTrackingRange(10)
-                    .build("alchemic_slime"));
+                    .build("thaumic_slime"));
 
     public static final DeferredHolder<EntityType<?>, EntityType<AngryZombie>> ANGRY_ZOMBIE =
             ENTITIES.register("angry_zombie", () -> EntityType.Builder
@@ -493,7 +493,7 @@ public class ModEntities {
         event.put(TAINTED_CREEPER.get(), me.moonscenty.alchemia.entity.TaintedCreeper.attributes().build());
         event.put(TAINTED_VILLAGER.get(), me.moonscenty.alchemia.entity.TaintedVillager.attributes().build());
         event.put(TAINTED_RABBIT.get(), me.moonscenty.alchemia.entity.TaintedRabbit.attributes().build());
-        event.put(ALCHEMIC_SLIME.get(), net.minecraft.world.entity.monster.Monster.createMonsterAttributes().build());
+        event.put(THAUMIC_SLIME.get(), net.minecraft.world.entity.monster.Monster.createMonsterAttributes().build());
         event.put(ANGRY_ZOMBIE.get(), AngryZombie.attributes().build());
         event.put(FURIOUS_ZOMBIE.get(), FuriousZombie.attributes().build());
     }

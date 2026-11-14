@@ -29,8 +29,8 @@ public class RepairTests {
         var enchantments = helper.getLevel().registryAccess().registryOrThrow(Registries.ENCHANTMENT);
         var repair = enchantments.getHolderOrThrow(ModEnchantments.REPAIR);
         helper.assertValueEqual(repair.value().getMaxLevel(), 2, "two levels");
-        helper.assertTrue(repair.value().canEnchant(new ItemStack(ModItems.METAL_TOOLS.get("alchemium_pickaxe").get())),
-                "on an alchemium pickaxe");
+        helper.assertTrue(repair.value().canEnchant(new ItemStack(ModItems.METAL_TOOLS.get("thaumium_pickaxe").get())),
+                "on an thaumium pickaxe");
         helper.assertTrue(repair.value().canEnchant(new ItemStack(ModItems.GOGGLES.get())), "on the goggles");
         helper.assertFalse(repair.value().canEnchant(new ItemStack(Items.IRON_PICKAXE)), "not on an iron pickaxe");
         helper.assertFalse(Enchantment.areCompatible(repair, enchantments.getHolderOrThrow(Enchantments.UNBREAKING)),
@@ -48,7 +48,7 @@ public class RepairTests {
         var repair = helper.getLevel().registryAccess().registryOrThrow(Registries.ENCHANTMENT)
                 .getHolderOrThrow(ModEnchantments.REPAIR);
         BlockPos pos = helper.absolutePos(new BlockPos(1, 2, 1));
-        ItemStack pick = new ItemStack(ModItems.METAL_TOOLS.get("alchemium_pickaxe").get());
+        ItemStack pick = new ItemStack(ModItems.METAL_TOOLS.get("thaumium_pickaxe").get());
         pick.setDamageValue(10);
         helper.assertFalse(Repair.mend(pick.copy(), helper.getLevel(), pos, helper.getLevel().random),
                 "nothing without the enchantment");

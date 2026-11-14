@@ -43,7 +43,7 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
         add(ModBlocks.CINNABAR_ORE.get(), block -> createOreDrop(block, ModItems.RAW_CINNABAR.get()));
         add(ModBlocks.DEEPSLATE_CINNABAR_ORE.get(), block -> createOreDrop(block, ModItems.RAW_CINNABAR.get()));
 
-        dropSelf(ModBlocks.ALCHEMIUM_BLOCK.get());
+        dropSelf(ModBlocks.THAUMIUM_BLOCK.get());
         dropSelf(ModBlocks.VOID_METAL_BLOCK.get());
         dropSelf(ModBlocks.BRASS_BLOCK.get());
 
@@ -81,7 +81,7 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
                 CopyComponentsFunction.copyComponents(CopyComponentsFunction.Source.BLOCK_ENTITY)
                         .include(ModDataComponents.STORED_XP.get())));
         dropSelf(ModBlocks.ESSENTIA_SMELTER.get());
-        dropSelf(ModBlocks.ALCHEMIUM_SMELTER.get());
+        dropSelf(ModBlocks.THAUMIUM_SMELTER.get());
         dropSelf(ModBlocks.VOID_SMELTER.get());
         dropSelf(ModBlocks.SMELTER_AUX.get());
         dropSelf(ModBlocks.SMELTER_VENT.get());

@@ -75,32 +75,32 @@ public class ModItemTagsProvider extends ItemTagsProvider {
         tag(ModTags.Items.RAW_MATERIALS_CINNABAR).add(ModItems.RAW_CINNABAR.get());
         tag(Tags.Items.RAW_MATERIALS).addTag(ModTags.Items.RAW_MATERIALS_CINNABAR);
 
-        copy(ModTags.Blocks.STORAGE_BLOCKS_ALCHEMIUM, ModTags.Items.STORAGE_BLOCKS_ALCHEMIUM);
+        copy(ModTags.Blocks.STORAGE_BLOCKS_THAUMIUM, ModTags.Items.STORAGE_BLOCKS_THAUMIUM);
         copy(ModTags.Blocks.STORAGE_BLOCKS_BRASS, ModTags.Items.STORAGE_BLOCKS_BRASS);
         copy(ModTags.Blocks.STORAGE_BLOCKS_VOID, ModTags.Items.STORAGE_BLOCKS_VOID);
         copy(Tags.Blocks.STORAGE_BLOCKS, Tags.Items.STORAGE_BLOCKS);
 
-        tag(ModTags.Items.INGOTS_ALCHEMIUM).add(ModItems.ALCHEMIUM_INGOT.get());
+        tag(ModTags.Items.INGOTS_THAUMIUM).add(ModItems.THAUMIUM_INGOT.get());
         tag(ModTags.Items.INGOTS_BRASS).add(ModItems.BRASS_INGOT.get());
         tag(ModTags.Items.INGOTS_VOID).add(ModItems.VOID_INGOT.get());
-        tag(Tags.Items.INGOTS).addTag(ModTags.Items.INGOTS_ALCHEMIUM).addTag(ModTags.Items.INGOTS_BRASS)
+        tag(Tags.Items.INGOTS).addTag(ModTags.Items.INGOTS_THAUMIUM).addTag(ModTags.Items.INGOTS_BRASS)
                 .addTag(ModTags.Items.INGOTS_VOID);
-        tag(ModTags.Items.NUGGETS_ALCHEMIUM).add(ModItems.ALCHEMIUM_NUGGET.get());
+        tag(ModTags.Items.NUGGETS_THAUMIUM).add(ModItems.THAUMIUM_NUGGET.get());
         tag(ModTags.Items.NUGGETS_BRASS).add(ModItems.BRASS_NUGGET.get());
         tag(ModTags.Items.NUGGETS_VOID).add(ModItems.VOID_NUGGET.get());
         tag(ModTags.Items.NUGGETS_QUICKSILVER).add(ModItems.QUICKSILVER_DROP.get());
-        tag(Tags.Items.NUGGETS).addTag(ModTags.Items.NUGGETS_ALCHEMIUM).addTag(ModTags.Items.NUGGETS_BRASS).addTag(ModTags.Items.NUGGETS_QUICKSILVER)
+        tag(Tags.Items.NUGGETS).addTag(ModTags.Items.NUGGETS_THAUMIUM).addTag(ModTags.Items.NUGGETS_BRASS).addTag(ModTags.Items.NUGGETS_QUICKSILVER)
                 .addTag(ModTags.Items.NUGGETS_VOID);
-        tag(ModTags.Items.GEARS_ALCHEMIUM).add(ModItems.ALCHEMIUM_GEAR.get());
+        tag(ModTags.Items.GEARS_THAUMIUM).add(ModItems.THAUMIUM_GEAR.get());
         tag(ModTags.Items.GEARS_BRASS).add(ModItems.BRASS_GEAR.get());
-        tag(ModTags.Items.GEARS).addTag(ModTags.Items.GEARS_ALCHEMIUM).addTag(ModTags.Items.GEARS_BRASS);
-        tag(ModTags.Items.PLATES_ALCHEMIUM).add(ModItems.ALCHEMIUM_PLATE.get());
+        tag(ModTags.Items.GEARS).addTag(ModTags.Items.GEARS_THAUMIUM).addTag(ModTags.Items.GEARS_BRASS);
+        tag(ModTags.Items.PLATES_THAUMIUM).add(ModItems.THAUMIUM_PLATE.get());
         tag(ModTags.Items.PLATES_BRASS).add(ModItems.BRASS_PLATE.get());
         tag(ModTags.Items.PLATES_IRON).add(ModItems.IRON_PLATE.get());
         tag(ModTags.Items.PLATES_VOID).add(ModItems.VOID_PLATE.get());
-        tag(ModTags.Items.PLATES).addTag(ModTags.Items.PLATES_ALCHEMIUM).addTag(ModTags.Items.PLATES_BRASS)
+        tag(ModTags.Items.PLATES).addTag(ModTags.Items.PLATES_THAUMIUM).addTag(ModTags.Items.PLATES_BRASS)
                 .addTag(ModTags.Items.PLATES_IRON).addTag(ModTags.Items.PLATES_VOID);
-        tag(ItemTags.BEACON_PAYMENT_ITEMS).add(ModItems.ALCHEMIUM_INGOT.get(), ModItems.BRASS_INGOT.get());
+        tag(ItemTags.BEACON_PAYMENT_ITEMS).add(ModItems.THAUMIUM_INGOT.get(), ModItems.BRASS_INGOT.get());
 
         for (WoodSet wood : ModBlocks.WOODS) {
             copy(wood.logsBlockTag(), wood.logsItemTag());

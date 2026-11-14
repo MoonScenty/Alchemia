@@ -27,7 +27,7 @@ public class StartingToolsTests {
     public static void theFirstThingsCanBeMade(GameTestHelper helper) {
         var recipes = helper.getLevel().getRecipeManager();
         for (String id : new String[] {"wooden_table", "scribing_tools", "scribing_tools_from_bottle",
-                "scribing_tools_refill", "alchemometer", "arcane_workbench_charger", "balanced_shard_from_air",
+                "scribing_tools_refill", "thaumometer", "arcane_workbench_charger", "balanced_shard_from_air",
                 "balanced_shard_from_entropy"}) {
             helper.assertTrue(recipes.byKey(Alchemia.id(id)).isPresent(), "no recipe " + id);
         }

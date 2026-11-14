@@ -101,8 +101,8 @@ public final class GolemParts {
                 GolemTrait.FIREPROOF),
         BRASS("golem_brass", 0xEEA31C, 16, 6, 3, () -> ModItems.BRASS_PLATE.get(), () -> ModItems.BRASS_GEAR.get(),
                 GolemTrait.LIGHT),
-        ALCHEMIUM("golem_alchemium", 0x503772, 24, 10, 4, () -> ModItems.ALCHEMIUM_PLATE.get(),
-                () -> ModItems.ALCHEMIUM_GEAR.get(), GolemTrait.HEAVY, GolemTrait.FIREPROOF, GolemTrait.BLASTPROOF),
+        THAUMIUM("golem_thaumium", 0x503772, 24, 10, 4, () -> ModItems.THAUMIUM_PLATE.get(),
+                () -> ModItems.THAUMIUM_GEAR.get(), GolemTrait.HEAVY, GolemTrait.FIREPROOF, GolemTrait.BLASTPROOF),
         VOID("golem_void", 0x160D29, 20, 6, 4, () -> ModItems.VOID_PLATE.get(), () -> ModItems.VOID_GEAR.get(),
                 GolemTrait.REPAIR);
 
@@ -191,18 +191,18 @@ public final class GolemParts {
     public enum Head implements Part {
         BASIC(List.of("clockwork_mind"), new Look("golem_head_basic", null, Attach.HEAD),
                 List.of(of(() -> ModItems.CLOCKWORK_MIND.get()))),
-        SMART(List.of("bioalchemic_mind"), new Look("golem_head_smart", "golem_head_other", Attach.HEAD),
-                List.of(of(() -> ModItems.BIOALCHEMIC_MIND.get())), GolemTrait.SMART, GolemTrait.FRAGILE),
-        SMART_ARMORED(List.of("bioalchemic_mind", "golem_combat"),
+        SMART(List.of("biothaumic_mind"), new Look("golem_head_smart", "golem_head_other", Attach.HEAD),
+                List.of(of(() -> ModItems.BIOTHAUMIC_MIND.get())), GolemTrait.SMART, GolemTrait.FRAGILE),
+        SMART_ARMORED(List.of("biothaumic_mind", "golem_combat"),
                 new Look("golem_head_smart_armor", null, Attach.HEAD),
-                List.of(of(() -> ModItems.BIOALCHEMIC_MIND.get()), of(() -> ModItems.BRASS_PLATE.get()), Of.BASE,
+                List.of(of(() -> ModItems.BIOTHAUMIC_MIND.get()), of(() -> ModItems.BRASS_PLATE.get()), Of.BASE,
                         of(() -> Blocks.WHITE_WOOL)), GolemTrait.SMART),
         SCOUT(List.of("golem_vision"), new Look("golem_head_scout", "golem_head_other", Attach.HEAD),
                 List.of(of(() -> ModItems.CLOCKWORK_MIND.get()), of(() -> ModItems.VISION_MODULE.get())),
                 GolemTrait.SCOUT, GolemTrait.FRAGILE),
-        SMART_SCOUT(List.of("golem_vision", "bioalchemic_mind"),
+        SMART_SCOUT(List.of("golem_vision", "biothaumic_mind"),
                 new Look("golem_head_scout_smart", "golem_head_other", Attach.HEAD),
-                List.of(of(() -> ModItems.BIOALCHEMIC_MIND.get()), of(() -> ModItems.VISION_MODULE.get())),
+                List.of(of(() -> ModItems.BIOTHAUMIC_MIND.get()), of(() -> ModItems.VISION_MODULE.get())),
                 GolemTrait.SCOUT, GolemTrait.SMART, GolemTrait.FRAGILE);
 
         private final List<String> research;

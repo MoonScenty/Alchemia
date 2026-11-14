@@ -1,7 +1,7 @@
 {
   "type": "alchemia:infusion",
   "central": {
-    "item": "alchemia:alchemium_hoe"
+    "item": "alchemia:thaumium_hoe"
   },
   "essentia": {
     "alchemia:herba": 8,

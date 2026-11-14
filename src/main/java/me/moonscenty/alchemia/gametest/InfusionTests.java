@@ -371,7 +371,7 @@ public class InfusionTests {
                 "a casting is not registered as a cap");
 
         altar(helper);
-        stand(helper, MATRIX.below(2), new ItemStack(ModItems.INERT_CAPS.get("alchemium").get()));
+        stand(helper, MATRIX.below(2), new ItemStack(ModItems.INERT_CAPS.get("thaumium").get()));
         stand(helper, MATRIX.offset(2, -2, 0), new ItemStack(ModItems.SALIS_MUNDUS.get()));
         stand(helper, MATRIX.offset(-2, -2, 0), new ItemStack(ModItems.SALIS_MUNDUS.get()));
         stand(helper, MATRIX.offset(0, -2, 2), new ItemStack(ModItems.SALIS_MUNDUS.get()));
@@ -382,7 +382,7 @@ public class InfusionTests {
                 (InfusionMatrixBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(MATRIX));
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         player.setData(ModAttachments.KNOWLEDGE,
-                PlayerKnowledge.of(player).withResearch(Alchemia.id("wand_cap_alchemium"))
+                PlayerKnowledge.of(player).withResearch(Alchemia.id("wand_cap_thaumium"))
                         .withResearch(Alchemia.id("infusion")));
         matrix.wake(player, wand());
         helper.assertValueEqual(matrix.wake(player, wand()), InfusionMatrixBlockEntity.Woken.STARTED,
@@ -392,7 +392,7 @@ public class InfusionTests {
         run(helper, matrix, 40);
         ArcanePedestalBlockEntity under =
                 (ArcanePedestalBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(MATRIX.below(2)));
-        helper.assertTrue(under.held().is(ModItems.WAND_CAPS.get("alchemium").get()),
+        helper.assertTrue(under.held().is(ModItems.WAND_CAPS.get("thaumium").get()),
                 "and what is left on the pedestal is the finished cap, not the casting: " + under.held());
         helper.succeed();
     }

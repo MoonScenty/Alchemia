@@ -1,7 +1,7 @@
 {
   "type": "alchemia:infusion",
   "central": {
-    "item": "alchemia:alchemium_sword"
+    "item": "alchemia:thaumium_sword"
   },
   "essentia": {
     "alchemia:aer": 8,

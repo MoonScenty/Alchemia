@@ -43,7 +43,7 @@ public final class NodeSight {
         if (wearsLenses(player)) {
             return LENS_RANGE;
         }
-        return holdingAlchemometer(player) && lookingAt(player, node) ? INSTRUMENT_RANGE : 0.0;
+        return holdingThaumometer(player) && lookingAt(player, node) ? INSTRUMENT_RANGE : 0.0;
     }
 
     static boolean wearsLenses(Player player) {
@@ -64,9 +64,9 @@ public final class NodeSight {
                 || FortressArmorItem.fitting(stack).map(HelmFitting::reveals).orElse(false);
     }
 
-    static boolean holdingAlchemometer(Player player) {
-        return player.getMainHandItem().is(ModItems.ALCHEMOMETER.get())
-                || player.getOffhandItem().is(ModItems.ALCHEMOMETER.get());
+    static boolean holdingThaumometer(Player player) {
+        return player.getMainHandItem().is(ModItems.THAUMOMETER.get())
+                || player.getOffhandItem().is(ModItems.THAUMOMETER.get());
     }
 
     private static boolean lookingAt(LivingEntity viewer, AuraNode node) {

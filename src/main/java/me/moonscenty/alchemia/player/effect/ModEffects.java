@@ -43,14 +43,14 @@ public class ModEffects {
     public static final DeferredHolder<MobEffect, MobEffect> DEADLY_GAZE = EFFECTS.register("deadly_gaze",
             () -> WarpEffect.inert(MobEffectCategory.HARMFUL, 0x901020));
 
-    public static final DeferredHolder<MobEffect, MobEffect> ALCHEDIARRHEA = EFFECTS.register("alchediarrhea",
+    public static final DeferredHolder<MobEffect, MobEffect> THAUMARHIA = EFFECTS.register("thaumarhia",
             () -> new WarpEffect(MobEffectCategory.HARMFUL, 0x7030A0, 20, ModEffects::seep));
 
     public static final DeferredHolder<MobEffect, MobEffect> WARP_WARD = EFFECTS.register("warp_ward",
             () -> WarpEffect.inert(MobEffectCategory.BENEFICIAL, 0xFFD700));
 
     public static List<DeferredHolder<MobEffect, MobEffect>> ailments() {
-        return List.of(FLUX_FLU, FLUX_PHAGE, UNNATURAL_HUNGER, SUN_SCORNED, BLURRED_VISION, DEADLY_GAZE, ALCHEDIARRHEA);
+        return List.of(FLUX_FLU, FLUX_PHAGE, UNNATURAL_HUNGER, SUN_SCORNED, BLURRED_VISION, DEADLY_GAZE, THAUMARHIA);
     }
 
     // one level weaker per hop; the last level passes on as plain flu, which spreads no further

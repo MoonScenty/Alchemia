@@ -61,7 +61,7 @@ public class CultistKnight extends Cultist {
                 setItemSlot(EquipmentSlot.HEAD, new ItemStack(ModItems.CRIMSON.get("crimson_robe_helm").get()));
             } else {
                 setItemSlot(EquipmentSlot.MAINHAND,
-                        new ItemStack(ModItems.METAL_TOOLS.get("alchemium_sword").get()));
+                        new ItemStack(ModItems.METAL_TOOLS.get("thaumium_sword").get()));
                 if (random.nextBoolean()) {
                     setItemSlot(EquipmentSlot.HEAD, ItemStack.EMPTY);
                 }

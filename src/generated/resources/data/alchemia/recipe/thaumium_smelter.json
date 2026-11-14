@@ -1,0 +1,31 @@
+{
+  "type": "alchemia:arcane_shaped",
+  "key": {
+    "B": {
+      "item": "alchemia:brass_plate"
+    },
+    "F": {
+      "item": "alchemia:essentia_smelter"
+    },
+    "G": {
+      "item": "alchemia:alchemical_construct"
+    },
+    "I": {
+      "item": "alchemia:thaumium_ingot"
+    }
+  },
+  "pattern": [
+    "BFB",
+    "IGI",
+    "III"
+  ],
+  "research": "alchemia:thaumium_smelter",
+  "result": {
+    "count": 1,
+    "id": "alchemia:thaumium_smelter"
+  },
+  "vis": {
+    "alchemia:aqua": 350,
+    "alchemia:ignis": 350
+  }
+}

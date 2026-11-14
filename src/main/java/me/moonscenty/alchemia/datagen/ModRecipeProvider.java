@@ -69,7 +69,7 @@ public class ModRecipeProvider extends RecipeProvider {
     private static final int PEDESTAL_UNSTABLE = 3;
     private static final int LAMP_UNSTABLE = 4;
     private static final int JUG_UNSTABLE = 1;
-    private static final int BIOALCHEMIC_UNSTABLE = 4;
+    private static final int BIOTHAUMIC_UNSTABLE = 4;
     private static final int AUTOCASTER_UNSTABLE = 5;
 
     public ModRecipeProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
@@ -83,8 +83,8 @@ public class ModRecipeProvider extends RecipeProvider {
         cook(output, "quicksilver_from_ore", Ingredient.of(ModTags.Items.ORES_CINNABAR), has(ModTags.Items.ORES_CINNABAR), new ItemStack(ModItems.QUICKSILVER.get()));
         cook(output, "quicksilver_from_raw_cinnabar", Ingredient.of(ModItems.RAW_CINNABAR), has(ModItems.RAW_CINNABAR), new ItemStack(ModItems.QUICKSILVER.get()));
 
-        compress(output, ModItems.ALCHEMIUM_NUGGET, ModTags.Items.NUGGETS_ALCHEMIUM, ModItems.ALCHEMIUM_INGOT, ModTags.Items.INGOTS_ALCHEMIUM);
-        compress(output, ModItems.ALCHEMIUM_INGOT, ModTags.Items.INGOTS_ALCHEMIUM, ModBlocks.ALCHEMIUM_BLOCK, ModTags.Items.STORAGE_BLOCKS_ALCHEMIUM);
+        compress(output, ModItems.THAUMIUM_NUGGET, ModTags.Items.NUGGETS_THAUMIUM, ModItems.THAUMIUM_INGOT, ModTags.Items.INGOTS_THAUMIUM);
+        compress(output, ModItems.THAUMIUM_INGOT, ModTags.Items.INGOTS_THAUMIUM, ModBlocks.THAUMIUM_BLOCK, ModTags.Items.STORAGE_BLOCKS_THAUMIUM);
         compress(output, ModItems.BRASS_NUGGET, ModTags.Items.NUGGETS_BRASS, ModItems.BRASS_INGOT, ModTags.Items.INGOTS_BRASS);
         compress(output, ModItems.BRASS_INGOT, ModTags.Items.INGOTS_BRASS, ModBlocks.BRASS_BLOCK, ModTags.Items.STORAGE_BLOCKS_BRASS);
         compress(output, ModItems.QUICKSILVER_DROP, ModTags.Items.NUGGETS_QUICKSILVER, ModItems.QUICKSILVER, ModTags.Items.GEMS_QUICKSILVER);
@@ -100,11 +100,11 @@ public class ModRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_coin", has(ModItems.COIN))
                 .save(output, Alchemia.id("gold_nugget_from_smelting_coin"));
 
-        plate(output, ModItems.ALCHEMIUM_PLATE, ModTags.Items.INGOTS_ALCHEMIUM);
+        plate(output, ModItems.THAUMIUM_PLATE, ModTags.Items.INGOTS_THAUMIUM);
         plate(output, ModItems.BRASS_PLATE, ModTags.Items.INGOTS_BRASS);
         plate(output, ModItems.IRON_PLATE, Tags.Items.INGOTS_IRON);
         plate(output, ModItems.VOID_PLATE, ModTags.Items.INGOTS_VOID);
-        gear(output, ModItems.ALCHEMIUM_GEAR, ModTags.Items.NUGGETS_ALCHEMIUM);
+        gear(output, ModItems.THAUMIUM_GEAR, ModTags.Items.NUGGETS_THAUMIUM);
         gear(output, ModItems.BRASS_GEAR, ModTags.Items.NUGGETS_BRASS);
         gear(output, ModItems.VOID_GEAR, ModTags.Items.NUGGETS_VOID);
         ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, ModBlocks.WOODEN_TABLE.get())
@@ -122,7 +122,7 @@ public class ModRecipeProvider extends RecipeProvider {
         ShapelessRecipeBuilder.shapeless(RecipeCategory.TOOLS, ModItems.SCRIBING_TOOLS.get())
                 .requires(ModItems.SCRIBING_TOOLS.get()).requires(Tags.Items.DYES_BLACK)
                 .unlockedBy("has_tools", has(ModItems.SCRIBING_TOOLS.get())).save(output, Alchemia.id("scribing_tools_refill"));
-        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ModItems.ALCHEMOMETER.get())
+        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ModItems.THAUMOMETER.get())
                 .pattern(" 1 ").pattern("IGI").pattern(" 1 ")
                 .define('I', Tags.Items.INGOTS_GOLD).define('G', Tags.Items.GLASS_BLOCKS_COLORLESS)
                 .define('1', ModTags.Items.SHARDS)
@@ -297,9 +297,9 @@ public class ModRecipeProvider extends RecipeProvider {
                 AspectList.of(ModAspects.ORDER, 24).add(ModAspects.FIRE, 24).add(ModAspects.AIR, 24),
                 Map.of('N', Ingredient.of(ModTags.Items.NUGGETS_BRASS)), "NNN", "N N");
 
-        arcane(output, "wand_cap_alchemium_inert", "wand_cap_alchemium", new ItemStack(ModItems.INERT_CAPS.get("alchemium").get()),
+        arcane(output, "wand_cap_thaumium_inert", "wand_cap_thaumium", new ItemStack(ModItems.INERT_CAPS.get("thaumium").get()),
                 AspectList.of(ModAspects.ORDER, 48).add(ModAspects.FIRE, 48).add(ModAspects.AIR, 48),
-                Map.of('N', Ingredient.of(ModTags.Items.NUGGETS_ALCHEMIUM)), "NNN", "N N");
+                Map.of('N', Ingredient.of(ModTags.Items.NUGGETS_THAUMIUM)), "NNN", "N N");
 
         arcane(output, "wand_rod_greatwood", "wand_rod_greatwood", new ItemStack(ModItems.WAND_RODS.get("greatwood").get()),
                 AspectList.of(ModAspects.ENTROPY, 24),
@@ -344,7 +344,7 @@ public class ModRecipeProvider extends RecipeProvider {
         arcane(output, "goggles_of_revealing", "goggles",
                 new ItemStack(ModItems.GOGGLES.get()),
                 AspectList.eachPrimal(25),
-                Map.of('T', Ingredient.of(ModItems.ALCHEMOMETER),
+                Map.of('T', Ingredient.of(ModItems.THAUMOMETER),
                         'G', Ingredient.of(ModTags.Items.INGOTS_BRASS),
                         'L', Ingredient.of(Items.LEATHER)),
                 "LGL", "L L", "TGT");
@@ -668,17 +668,17 @@ public class ModRecipeProvider extends RecipeProvider {
                 Map.of('V', Ingredient.of(ModItems.VOID_INGOT), 'A', Ingredient.of(ModBlocks.ALCHEMICAL_CONSTRUCT),
                         'P', Ingredient.of(ModItems.PRIMORDIAL_PEARL)),
                 "VAV", "APA", "VAV");
-        arcane(output, "alchemium_smelter", "alchemium_smelter", new ItemStack(ModBlocks.ALCHEMIUM_SMELTER.get()),
+        arcane(output, "thaumium_smelter", "thaumium_smelter", new ItemStack(ModBlocks.THAUMIUM_SMELTER.get()),
                 AspectList.of(ModAspects.FIRE, 350).add(ModAspects.WATER, 350),
                 Map.of('B', Ingredient.of(ModItems.BRASS_PLATE),
                         'F', Ingredient.of(ModBlocks.ESSENTIA_SMELTER),
                         'G', Ingredient.of(ModBlocks.ALCHEMICAL_CONSTRUCT),
-                        'I', Ingredient.of(ModItems.ALCHEMIUM_INGOT)),
+                        'I', Ingredient.of(ModItems.THAUMIUM_INGOT)),
                 "BFB", "IGI", "III");
         arcane(output, "void_smelter", "void_smelter", new ItemStack(ModBlocks.VOID_SMELTER.get()),
                 AspectList.of(ModAspects.FIRE, 750).add(ModAspects.WATER, 750),
                 Map.of('B', Ingredient.of(ModItems.BRASS_PLATE),
-                        'F', Ingredient.of(ModBlocks.ALCHEMIUM_SMELTER),
+                        'F', Ingredient.of(ModBlocks.THAUMIUM_SMELTER),
                         'G', Ingredient.of(ModBlocks.ADVANCED_ALCHEMICAL_CONSTRUCT),
                         'I', Ingredient.of(ModItems.VOID_INGOT)),
                 "BFB", "IGI", "III");
@@ -925,14 +925,14 @@ public class ModRecipeProvider extends RecipeProvider {
                 AspectList.of(ModAspects.METAL, 20).add(ModAspects.PROTECT, 20).add(ModAspects.ENERGY, 16)
                         .add(ModAspects.ELDRITCH, 16).add(ModAspects.VOID, 20));
 
-        fortress(output, "fortress_helm", "alchemium_helmet", 2,
+        fortress(output, "fortress_helm", "thaumium_helmet", 2,
                 List.of(Ingredient.of(Items.GOLD_INGOT), Ingredient.of(Items.GOLD_INGOT),
                         Ingredient.of(Items.EMERALD)),
                 AspectList.of(ModAspects.METAL, 24).add(ModAspects.PROTECT, 16).add(ModAspects.ENERGY, 16));
-        fortress(output, "fortress_chest", "alchemium_chestplate", 4,
+        fortress(output, "fortress_chest", "thaumium_chestplate", 4,
                 List.of(Ingredient.of(Items.GOLD_INGOT), Ingredient.of(Items.LEATHER)),
                 AspectList.of(ModAspects.METAL, 24).add(ModAspects.PROTECT, 24).add(ModAspects.ENERGY, 16));
-        fortress(output, "fortress_legs", "alchemium_leggings", 3,
+        fortress(output, "fortress_legs", "thaumium_leggings", 3,
                 List.of(Ingredient.of(Items.GOLD_INGOT), Ingredient.of(Items.LEATHER)),
                 AspectList.of(ModAspects.METAL, 24).add(ModAspects.PROTECT, 20).add(ModAspects.ENERGY, 16));
 
@@ -975,11 +975,11 @@ public class ModRecipeProvider extends RecipeProvider {
                 new ItemStack(ModItems.SEALS.get("breaker").get()),
                 AspectList.of(ModAspects.TOOL, 4).add(ModAspects.ENTROPY, 4).add(ModAspects.MAN, 4), 1,
                 "seal_break");
-        infusion(output, "bioalchemic_mind", Ingredient.of(ModItems.CLOCKWORK_MIND),
+        infusion(output, "biothaumic_mind", Ingredient.of(ModItems.CLOCKWORK_MIND),
                 List.of(Ingredient.of(ModItems.ZOMBIE_BRAIN), Ingredient.of(Items.CLOCK)),
-                new ItemStack(ModItems.BIOALCHEMIC_MIND.get()),
-                AspectList.of(ModAspects.MIND, 16).add(ModAspects.MECHANISM, 16), BIOALCHEMIC_UNSTABLE,
-                "bioalchemic_mind");
+                new ItemStack(ModItems.BIOTHAUMIC_MIND.get()),
+                AspectList.of(ModAspects.MIND, 16).add(ModAspects.MECHANISM, 16), BIOTHAUMIC_UNSTABLE,
+                "biothaumic_mind");
 
         infusion(output, "aura_totem_pull", Ingredient.of(ModBlocks.SILVERWOOD.planks()),
                 List.of(Ingredient.of(ModBlocks.GREATWOOD.planks()), Ingredient.of(Items.CHEST),
@@ -1076,13 +1076,13 @@ public class ModRecipeProvider extends RecipeProvider {
         arcane(output, "advanced_automated_crossbow", "advanced_turret",
                 new ItemStack(ModItems.ADVANCED_AUTOMATED_CROSSBOW.get()),
                 AspectList.of(ModAspects.FIRE, 50).add(ModAspects.AIR, 75).add(ModAspects.ORDER, 125),
-                Map.of('P', Ingredient.of(ModItems.IRON_PLATE), 'M', Ingredient.of(ModItems.BIOALCHEMIC_MIND),
+                Map.of('P', Ingredient.of(ModItems.IRON_PLATE), 'M', Ingredient.of(ModItems.BIOTHAUMIC_MIND),
                         'T', Ingredient.of(ModItems.AUTOMATED_CROSSBOW), 'B', Ingredient.of(ModItems.BRASS_PLATE),
                         'G', Ingredient.of(ModItems.BRASS_GEAR)),
                 "PMP", "PTP", "BGB");
         infusion(output, "node_magnet", Ingredient.of(ModItems.MORPHIC_RESONATOR),
                 List.of(Ingredient.of(ModItems.BRASS_GEAR), Ingredient.of(ModItems.BRASS_PLATE),
-                        Ingredient.of(Tags.Items.STORAGE_BLOCKS_IRON), Ingredient.of(ModItems.BIOALCHEMIC_MIND),
+                        Ingredient.of(Tags.Items.STORAGE_BLOCKS_IRON), Ingredient.of(ModItems.BIOTHAUMIC_MIND),
                         Ingredient.of(ModBlocks.GREATWOOD.planks()),
                         Ingredient.of(ModBlocks.CRYSTALS.get(me.moonscenty.alchemia.block.CrystalType.AIR)),
                         Ingredient.of(ModBlocks.CRYSTALS.get(me.moonscenty.alchemia.block.CrystalType.FIRE)),
@@ -1094,7 +1094,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 AspectList.of(ModAspects.MECHANISM, 16).add(ModAspects.MOTION, 32).add(ModAspects.AURA, 64), 4,
                 "node_magnet");
 
-        infusion(output, "autocaster", Ingredient.of(ModItems.BIOALCHEMIC_MIND),
+        infusion(output, "autocaster", Ingredient.of(ModItems.BIOTHAUMIC_MIND),
                 List.of(Ingredient.of(ModItems.BALANCED_SHARD), Ingredient.of(ModItems.MORPHIC_RESONATOR),
                         Ingredient.of(ModBlocks.GREATWOOD.planks()), Ingredient.of(ModBlocks.GREATWOOD.planks()),
                         Ingredient.of(ModItems.BRASS_GEAR), Ingredient.of(ModItems.BRASS_PLATE),
@@ -1104,15 +1104,15 @@ public class ModRecipeProvider extends RecipeProvider {
                         .add(ModAspects.SENSES, 16).add(ModAspects.AVERSION, 16),
                 AUTOCASTER_UNSTABLE, "autocaster");
 
-        elemental(output, "elemental_axe", "alchemium_axe", CrystalType.WATER, CrystalType.WATER,
+        elemental(output, "elemental_axe", "thaumium_axe", CrystalType.WATER, CrystalType.WATER,
                 AspectList.of(ModAspects.WATER, 16).add(ModAspects.PLANT, 8));
-        elemental(output, "elemental_pickaxe", "alchemium_pickaxe", CrystalType.FIRE, CrystalType.FIRE,
+        elemental(output, "elemental_pickaxe", "thaumium_pickaxe", CrystalType.FIRE, CrystalType.FIRE,
                 AspectList.of(ModAspects.FIRE, 8).add(ModAspects.METAL, 8).add(ModAspects.SENSES, 8));
-        elemental(output, "elemental_sword", "alchemium_sword", CrystalType.AIR, CrystalType.AIR,
+        elemental(output, "elemental_sword", "thaumium_sword", CrystalType.AIR, CrystalType.AIR,
                 AspectList.of(ModAspects.AIR, 8).add(ModAspects.MOTION, 8).add(ModAspects.AVERSION, 8));
-        elemental(output, "elemental_shovel", "alchemium_shovel", CrystalType.EARTH, CrystalType.EARTH,
+        elemental(output, "elemental_shovel", "thaumium_shovel", CrystalType.EARTH, CrystalType.EARTH,
                 AspectList.of(ModAspects.EARTH, 16).add(ModAspects.CRAFT, 8));
-        elemental(output, "elemental_hoe", "alchemium_hoe", CrystalType.ORDER, CrystalType.ENTROPY,
+        elemental(output, "elemental_hoe", "thaumium_hoe", CrystalType.ORDER, CrystalType.ENTROPY,
                 AspectList.of(ModAspects.ORDER, 8).add(ModAspects.PLANT, 8).add(ModAspects.ENTROPY, 8));
 
         infusion(output, "primal_crusher", Ingredient.of(ModItems.PRIMORDIAL_PEARL),
@@ -1128,9 +1128,9 @@ public class ModRecipeProvider extends RecipeProvider {
                         .add(ModAspects.DESIRE, 16),
                 CRUSHER_UNSTABLE, "primal_crusher");
 
-        infusion(output, "wand_cap_alchemium", Ingredient.of(ModItems.INERT_CAPS.get("alchemium")),
-                salis(3), new ItemStack(ModItems.WAND_CAPS.get("alchemium").get()),
-                AspectList.of(ModAspects.ENERGY, 12).add(ModAspects.AURA, 6), 5, "wand_cap_alchemium");
+        infusion(output, "wand_cap_thaumium", Ingredient.of(ModItems.INERT_CAPS.get("thaumium")),
+                salis(3), new ItemStack(ModItems.WAND_CAPS.get("thaumium").get()),
+                AspectList.of(ModAspects.ENERGY, 12).add(ModAspects.AURA, 6), 5, "wand_cap_thaumium");
         infusion(output, "wand_cap_void", Ingredient.of(ModItems.INERT_CAPS.get("void")),
                 salis(4), new ItemStack(ModItems.WAND_CAPS.get("void").get()),
                 AspectList.of(ModAspects.ENERGY, 18).add(ModAspects.VOID, 18)
@@ -1232,7 +1232,7 @@ public class ModRecipeProvider extends RecipeProvider {
             AspectList essentia) {
         List<Ingredient> ring = new java.util.ArrayList<>();
         for (int beaten = 0; beaten < plates; beaten++) {
-            ring.add(Ingredient.of(ModItems.ALCHEMIUM_PLATE));
+            ring.add(Ingredient.of(ModItems.THAUMIUM_PLATE));
         }
         ring.addAll(rest);
         infusion(output, name, Ingredient.of(ModItems.METAL_ARMOUR.get(from)), ring,
@@ -1246,7 +1246,7 @@ public class ModRecipeProvider extends RecipeProvider {
     }
 
     private void metalGear(RecipeOutput output) {
-        forge(output, "alchemium", ModTags.Items.INGOTS_ALCHEMIUM);
+        forge(output, "thaumium", ModTags.Items.INGOTS_THAUMIUM);
         forge(output, "void", ModTags.Items.INGOTS_VOID);
     }
 
@@ -1345,9 +1345,9 @@ public class ModRecipeProvider extends RecipeProvider {
                     Ingredient.of(ModItems.SHARDS.get(from)), others, new ItemStack(ModItems.BALANCED_SHARD.get()),
                     "crucible");
         }
-        crucible(output, "alchemium_ingot_from_iron", Ingredient.of(Tags.Items.INGOTS_IRON),
+        crucible(output, "thaumium_ingot_from_iron", Ingredient.of(Tags.Items.INGOTS_IRON),
                 AspectList.of(ModAspects.EARTH, 2).add(ModAspects.ORDER, 2),
-                new ItemStack(ModItems.ALCHEMIUM_INGOT.get()), "metallurgy");
+                new ItemStack(ModItems.THAUMIUM_INGOT.get()), "metallurgy");
         crucible(output, "brass_ingot_from_iron", Ingredient.of(Tags.Items.INGOTS_IRON),
                 AspectList.of(ModAspects.ENERGY, 1).add(ModAspects.WATER, 1),
                 new ItemStack(ModItems.BRASS_INGOT.get()), "metallurgy");
@@ -1478,7 +1478,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 new ItemStack(ModItems.SINISTER_STONE.get()),
                 AspectList.of(ModAspects.SENSES, 8).add(ModAspects.DARKNESS, 8).add(ModAspects.ELDRITCH, 8)
                         .add(ModAspects.AURA, 8), 5, "sinister_stone");
-        infusion(output, "sanity_checker", Ingredient.of(ModItems.ALCHEMOMETER),
+        infusion(output, "sanity_checker", Ingredient.of(ModItems.THAUMOMETER),
                 List.of(Ingredient.of(ModItems.MIRRORED_GLASS), Ingredient.of(ModItems.ZOMBIE_BRAIN),
                         Ingredient.of(ModItems.MORPHIC_RESONATOR)),
                 new ItemStack(ModItems.SANITY_CHECKER.get()),

@@ -5,7 +5,7 @@ import java.util.UUID;
 import com.mojang.authlib.GameProfile;
 
 import me.moonscenty.alchemia.Alchemia;
-import me.moonscenty.alchemia.item.AlchemometerItem;
+import me.moonscenty.alchemia.item.ThaumometerItem;
 import me.moonscenty.alchemia.item.ThaumostaticHarnessItem;
 import me.moonscenty.alchemia.registry.ModItems;
 import net.minecraft.gametest.framework.GameTest;
@@ -21,16 +21,16 @@ public class HudRuleTests {
     private static final String TEMPLATE = "empty_32x40x32";
 
     @GameTest(template = TEMPLATE)
-    public static void theAlchemometerStepsThroughAllThenEachAspect(GameTestHelper helper) {
+    public static void theThaumometerStepsThroughAllThenEachAspect(GameTestHelper helper) {
         var player = FakePlayerFactory.get(helper.getLevel(), new GameProfile(UUID.randomUUID(), "gauge"));
-        ItemStack gauge = new ItemStack(ModItems.ALCHEMOMETER.get());
-        helper.assertValueEqual(AlchemometerItem.shown(gauge), 0, "it starts on the whole aura");
+        ItemStack gauge = new ItemStack(ModItems.THAUMOMETER.get());
+        helper.assertValueEqual(ThaumometerItem.shown(gauge), 0, "it starts on the whole aura");
         for (int step = 1; step <= 7; step++) {
-            AlchemometerItem.cycle(player, gauge);
-            helper.assertValueEqual(AlchemometerItem.shown(gauge), step, "then one aspect at a time");
+            ThaumometerItem.cycle(player, gauge);
+            helper.assertValueEqual(ThaumometerItem.shown(gauge), step, "then one aspect at a time");
         }
-        AlchemometerItem.cycle(player, gauge);
-        helper.assertValueEqual(AlchemometerItem.shown(gauge), 0, "and back round to all of them");
+        ThaumometerItem.cycle(player, gauge);
+        helper.assertValueEqual(ThaumometerItem.shown(gauge), 0, "and back round to all of them");
         helper.succeed();
     }
 

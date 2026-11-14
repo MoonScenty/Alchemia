@@ -15,7 +15,7 @@ public class ModResearch {
             ResourceKey.createRegistryKey(Alchemia.id("research"));
 
     public static final ResourceKey<ResearchCategory> BASICS = category("basics");
-    public static final ResourceKey<ResearchCategory> ARCANA = category("arcana");
+    public static final ResourceKey<ResearchCategory> THAUMATURGY = category("thaumaturgy");
     public static final ResourceKey<ResearchCategory> ALCHEMY = category("alchemy");
     public static final ResourceKey<ResearchCategory> ARTIFICE = category("artifice");
     public static final ResourceKey<ResearchCategory> GOLEMANCY = category("golemancy");

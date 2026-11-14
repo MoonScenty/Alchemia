@@ -1,7 +1,7 @@
 {
   "type": "alchemia:infusion",
   "central": {
-    "item": "alchemia:alchemometer"
+    "item": "alchemia:thaumometer"
   },
   "essentia": {
     "alchemia:alienis": 8,

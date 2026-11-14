@@ -160,7 +160,7 @@ public class NodeTests {
     public static void aNodeCanBeReadEvenThoughNothingCanTouchIt(GameTestHelper helper) {
         AuraNode node = node(helper, RandomSource.create(8L));
         helper.assertTrue(!node.isPickable(), "a node should still be untouchable");
-        helper.assertTrue(Scanning.readable(node), "an alchemometer should be able to read a node all the same");
+        helper.assertTrue(Scanning.readable(node), "an thaumometer should be able to read a node all the same");
         helper.succeed();
     }
 }

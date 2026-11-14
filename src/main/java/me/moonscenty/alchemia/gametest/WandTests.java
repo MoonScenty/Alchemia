@@ -65,15 +65,15 @@ public class WandTests {
     public static void theCapChangesWhatItCosts(GameTestHelper helper) {
         AspectList price = AspectList.of(ModAspects.FIRE, 100);
         ItemStack iron = wand(ModWandParts.WOOD, ModWandParts.IRON, 100);
-        ItemStack alchemium = wand(ModWandParts.WOOD, ModWandParts.ALCHEMIUM, 100);
+        ItemStack thaumium = wand(ModWandParts.WOOD, ModWandParts.THAUMIUM, 100);
 
         helper.assertFalse(iron.getItem() instanceof WandItem item && item.holds(iron, price, null, me.moonscenty.alchemia.item.VisHolder.Spending.WORKING),
                 "an iron cap asks for more than a full stick holds");
-        helper.assertTrue(alchemium.getItem() instanceof WandItem item && item.holds(alchemium, price, null, me.moonscenty.alchemia.item.VisHolder.Spending.WORKING),
-                "an alchemium cap asks for less");
+        helper.assertTrue(thaumium.getItem() instanceof WandItem item && item.holds(thaumium, price, null, me.moonscenty.alchemia.item.VisHolder.Spending.WORKING),
+                "an thaumium cap asks for less");
 
-        ((WandItem) alchemium.getItem()).take(alchemium, price, null, me.moonscenty.alchemia.item.VisHolder.Spending.WORKING);
-        helper.assertValueEqual(((WandItem) alchemium.getItem()).held(alchemium, ModAspects.FIRE),
+        ((WandItem) thaumium.getItem()).take(thaumium, price, null, me.moonscenty.alchemia.item.VisHolder.Spending.WORKING);
+        helper.assertValueEqual(((WandItem) thaumium.getItem()).held(thaumium, ModAspects.FIRE),
                 10, "the tenth it saved is still in the wand");
         helper.succeed();
     }

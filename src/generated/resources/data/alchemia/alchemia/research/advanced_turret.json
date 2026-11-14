@@ -14,7 +14,7 @@
     }
   ],
   "parents": [
-    "alchemia:bioalchemic_mind",
+    "alchemia:biothaumic_mind",
     "alchemia:basic_turret"
   ],
   "requirements": {

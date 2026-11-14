@@ -21,7 +21,7 @@
     }
   ],
   "parents": [
-    "alchemia:alchemium_smelter",
+    "alchemia:thaumium_smelter",
     "alchemia:primordial_pearl"
   ],
   "requirements": {

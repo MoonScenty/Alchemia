@@ -30,12 +30,12 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         tag(Tags.Blocks.ORE_RATES_SINGULAR).add(ModBlocks.CINNABAR_ORE.get(), ModBlocks.DEEPSLATE_CINNABAR_ORE.get());
         tag(Tags.Blocks.ORE_RATES_DENSE).add(ModBlocks.AMBER_ORE.get(), ModBlocks.DEEPSLATE_AMBER_ORE.get());
 
-        tag(ModTags.Blocks.STORAGE_BLOCKS_ALCHEMIUM).add(ModBlocks.ALCHEMIUM_BLOCK.get());
+        tag(ModTags.Blocks.STORAGE_BLOCKS_THAUMIUM).add(ModBlocks.THAUMIUM_BLOCK.get());
         tag(ModTags.Blocks.STORAGE_BLOCKS_BRASS).add(ModBlocks.BRASS_BLOCK.get());
         tag(ModTags.Blocks.STORAGE_BLOCKS_VOID).add(ModBlocks.VOID_METAL_BLOCK.get());
-        tag(Tags.Blocks.STORAGE_BLOCKS).addTag(ModTags.Blocks.STORAGE_BLOCKS_ALCHEMIUM)
+        tag(Tags.Blocks.STORAGE_BLOCKS).addTag(ModTags.Blocks.STORAGE_BLOCKS_THAUMIUM)
                 .addTag(ModTags.Blocks.STORAGE_BLOCKS_BRASS).addTag(ModTags.Blocks.STORAGE_BLOCKS_VOID);
-        tag(BlockTags.BEACON_BASE_BLOCKS).add(ModBlocks.ALCHEMIUM_BLOCK.get(), ModBlocks.BRASS_BLOCK.get(),
+        tag(BlockTags.BEACON_BASE_BLOCKS).add(ModBlocks.THAUMIUM_BLOCK.get(), ModBlocks.BRASS_BLOCK.get(),
                 ModBlocks.VOID_METAL_BLOCK.get(),
                 ModBlocks.ALCHEMICAL_CONSTRUCT.get(), ModBlocks.ADVANCED_ALCHEMICAL_CONSTRUCT.get());
         tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.ALCHEMICAL_CONSTRUCT.get(),
@@ -44,7 +44,7 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
                 ModBlocks.ADVANCED_ALCHEMICAL_CONSTRUCT.get());
 
         tag(BlockTags.MINEABLE_WITH_PICKAXE)
-                .addTag(ModTags.Blocks.STORAGE_BLOCKS_ALCHEMIUM)
+                .addTag(ModTags.Blocks.STORAGE_BLOCKS_THAUMIUM)
                 .addTag(ModTags.Blocks.STORAGE_BLOCKS_BRASS)
                 .addTag(ModTags.Blocks.STORAGE_BLOCKS_VOID)
                 .addTag(ModTags.Blocks.ORES_AMBER)
@@ -53,7 +53,7 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
                 .add(ModBlocks.THAUMATORIUM.get(), ModBlocks.MNEMONIC_MATRIX.get(), ModBlocks.BRAIN_JAR.get())
                 .add(ModBlocks.INFERNAL_FURNACE.get(), ModBlocks.FURNACE_SHELL.get())
                 .add(ModBlocks.STONE_TABLE.get(), ModBlocks.GOLEM_PRESS.get(), ModBlocks.GOLEM_PRESS_PART.get())
-                .add(ModBlocks.ALCHEMIUM_SMELTER.get(), ModBlocks.VOID_SMELTER.get(), ModBlocks.SMELTER_AUX.get(),
+                .add(ModBlocks.THAUMIUM_SMELTER.get(), ModBlocks.VOID_SMELTER.get(), ModBlocks.SMELTER_AUX.get(),
                         ModBlocks.SMELTER_VENT.get())
                 .add(ModBlocks.CRUCIBLE.get(), ModBlocks.ESSENTIA_SMELTER.get(), ModBlocks.ALEMBIC.get(),
                         ModBlocks.TUBE.get(), ModBlocks.JAR.get(), ModBlocks.VOID_JAR.get())
@@ -103,7 +103,7 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
                 Blocks.CAMPFIRE, Blocks.SOUL_CAMPFIRE);
         tag(BlockTags.NEEDS_STONE_TOOL)
                 .addTag(ModTags.Blocks.ORES_AMBER)
-                .addTag(ModTags.Blocks.STORAGE_BLOCKS_ALCHEMIUM)
+                .addTag(ModTags.Blocks.STORAGE_BLOCKS_THAUMIUM)
                 .addTag(ModTags.Blocks.STORAGE_BLOCKS_BRASS)
                 .addTag(ModTags.Blocks.STORAGE_BLOCKS_VOID);
         tag(BlockTags.NEEDS_IRON_TOOL).addTag(ModTags.Blocks.ORES_CINNABAR);

@@ -1,7 +1,7 @@
 {
   "category": "alchemia:alchemy",
   "column": -1,
-  "icon": "alchemia:alchemium_ingot",
+  "icon": "alchemia:thaumium_ingot",
   "pages": [
     {
       "type": "text",
@@ -9,7 +9,7 @@
     },
     {
       "type": "recipe",
-      "recipe": "alchemia:alchemium_ingot_from_iron"
+      "recipe": "alchemia:thaumium_ingot_from_iron"
     },
     {
       "type": "recipe",

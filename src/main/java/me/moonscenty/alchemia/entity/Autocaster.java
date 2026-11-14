@@ -272,7 +272,7 @@ public class Autocaster extends ConstructWithSlot {
     // original's salvage
     @Override
     protected void salvage() {
-        salvage(ModItems.BIOALCHEMIC_MIND.get(), MIND_SALVAGED);
+        salvage(ModItems.BIOTHAUMIC_MIND.get(), MIND_SALVAGED);
         salvage(ModItems.BRASS_GEAR.get(), SALVAGED);
         salvage(ModBlocks.GREATWOOD.planks().get(), SALVAGED);
         salvage(ModBlocks.GREATWOOD.planks().get(), SALVAGED);

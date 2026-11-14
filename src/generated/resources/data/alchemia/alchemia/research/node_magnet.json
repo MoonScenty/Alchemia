@@ -1,5 +1,5 @@
 {
-  "category": "alchemia:arcana",
+  "category": "alchemia:thaumaturgy",
   "column": 10,
   "complexity": 3,
   "hidden": true,
@@ -22,7 +22,7 @@
   "parents": [
     "alchemia:node_stabilizer",
     "alchemia:aura_totem_pole_pure",
-    "alchemia:bioalchemic_mind",
+    "alchemia:biothaumic_mind",
     "alchemia:crystal_farmer"
   ],
   "requirements": {

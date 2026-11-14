@@ -138,7 +138,7 @@ public class LootBagItem extends Item {
     private static List<Item> gearFor(int slot) {
         return switch (slot) {
             case 0 -> List.of(Items.IRON_AXE, Items.IRON_SWORD, Items.GOLDEN_AXE, Items.GOLDEN_SWORD,
-                    ModItems.METAL_TOOLS.get("alchemium_sword").get(), Items.DIAMOND_SWORD,
+                    ModItems.METAL_TOOLS.get("thaumium_sword").get(), Items.DIAMOND_SWORD,
                     ModItems.METAL_TOOLS.get("void_sword").get());
             case 1 -> armour(Items.LEATHER_BOOTS, Items.GOLDEN_BOOTS, Items.CHAINMAIL_BOOTS, Items.IRON_BOOTS,
                     "boots", Items.DIAMOND_BOOTS);
@@ -152,7 +152,7 @@ public class LootBagItem extends Item {
     }
 
     private static List<Item> armour(Item leather, Item gold, Item chain, Item iron, String piece, Item diamond) {
-        return List.of(leather, gold, chain, iron, ModItems.METAL_ARMOUR.get("alchemium_" + piece).get(), diamond,
+        return List.of(leather, gold, chain, iron, ModItems.METAL_ARMOUR.get("thaumium_" + piece).get(), diamond,
                 ModItems.METAL_ARMOUR.get("void_" + piece).get());
     }
 

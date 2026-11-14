@@ -43,7 +43,7 @@ public final class ChestLoot {
         if (weights != null) {
             LootPool.Builder pool = LootPool.lootPool().name(Alchemia.MODID + ":chest").setRolls(ConstantValue.exactly(1))
                     .add(EmptyLootItem.emptyItem().setWeight(NOTHING));
-            for (ItemLike common : new ItemLike[] {ModItems.LOOT_BAG_COMMON, ModItems.ALCHEMIUM_INGOT, ModItems.AMBER}) {
+            for (ItemLike common : new ItemLike[] {ModItems.LOOT_BAG_COMMON, ModItems.THAUMIUM_INGOT, ModItems.AMBER}) {
                 pool.add(LootItem.lootTableItem(common).setWeight(weights[0])
                         .apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))));
             }
@@ -52,13 +52,13 @@ public final class ChestLoot {
                 pool.add(LootItem.lootTableItem(uncommon).setWeight(weights[1])
                         .apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2))));
             }
-            for (ItemLike rare : new ItemLike[] {ModItems.LOOT_BAG_RARE, ModItems.ALCHEMONOMICON,
+            for (ItemLike rare : new ItemLike[] {ModItems.LOOT_BAG_RARE, ModItems.THAUMONOMICON,
                     ModItems.PROTECTION_RING, ModItems.VIS_STONE, ModItems.APPRENTICE_RINGS.get("air"),
                     ModItems.APPRENTICE_RINGS.get("earth"), ModItems.APPRENTICE_RINGS.get("fire"),
                     ModItems.APPRENTICE_RINGS.get("water"), ModItems.APPRENTICE_RINGS.get("order"),
                     ModItems.APPRENTICE_RINGS.get("entropy"),
-                    ModItems.METAL_TOOLS.get("alchemium_sword"), ModItems.METAL_TOOLS.get("alchemium_axe"),
-                    ModItems.METAL_TOOLS.get("alchemium_hoe"), ModItems.METAL_TOOLS.get("alchemium_pickaxe")}) {
+                    ModItems.METAL_TOOLS.get("thaumium_sword"), ModItems.METAL_TOOLS.get("thaumium_axe"),
+                    ModItems.METAL_TOOLS.get("thaumium_hoe"), ModItems.METAL_TOOLS.get("thaumium_pickaxe")}) {
                 pool.add(LootItem.lootTableItem(rare).setWeight(1));
             }
             event.getTable().addPool(pool.build());
@@ -77,7 +77,7 @@ public final class ChestLoot {
             event.getTable().addPool(LootPool.lootPool().name(Alchemia.MODID + ":smith")
                     .setRolls(ConstantValue.exactly(1))
                     .add(EmptyLootItem.emptyItem().setWeight(NOTHING))
-                    .add(LootItem.lootTableItem(ModItems.ALCHEMIUM_INGOT).setWeight(10)
+                    .add(LootItem.lootTableItem(ModItems.THAUMIUM_INGOT).setWeight(10)
                             .apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
                     .build());
         }

@@ -260,7 +260,7 @@ public class WarpHandler {
         } else if (roll <= 16) {
             return Outcome.stubborn(3, ModEffects.FLUX_FLU, 5000, amp);
         } else if (roll <= 20) {
-            return Outcome.stubborn(4, ModEffects.ALCHEDIARRHEA, Math.min(32000, 10 * warp), 0);
+            return Outcome.stubborn(4, ModEffects.THAUMARHIA, Math.min(32000, 10 * warp), 0);
         } else if (roll <= 24) {
             return Outcome.stubborn(5, ModEffects.UNNATURAL_HUNGER, 5000, amp);
         } else if (roll <= 28) {

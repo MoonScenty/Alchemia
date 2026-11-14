@@ -101,8 +101,8 @@ public class ModBlocks {
 
     public static final DeferredBlock<EssentiaSmelterBlock> ESSENTIA_SMELTER = register("essentia_smelter",
             () -> new EssentiaSmelterBlock(smelter(MapColor.STONE), EssentiaSmelterBlock.Tier.BASIC));
-    public static final DeferredBlock<EssentiaSmelterBlock> ALCHEMIUM_SMELTER = register("alchemium_smelter",
-            () -> new EssentiaSmelterBlock(smelter(MapColor.COLOR_PURPLE), EssentiaSmelterBlock.Tier.ALCHEMIUM));
+    public static final DeferredBlock<EssentiaSmelterBlock> THAUMIUM_SMELTER = register("thaumium_smelter",
+            () -> new EssentiaSmelterBlock(smelter(MapColor.COLOR_PURPLE), EssentiaSmelterBlock.Tier.THAUMIUM));
     public static final DeferredBlock<EssentiaSmelterBlock> VOID_SMELTER = register("void_smelter",
             () -> new EssentiaSmelterBlock(smelter(MapColor.COLOR_BLACK), EssentiaSmelterBlock.Tier.VOID));
     public static final DeferredBlock<me.moonscenty.alchemia.block.InfernalFurnaceBlock> INFERNAL_FURNACE =
@@ -451,7 +451,7 @@ public class ModBlocks {
     private static final float METAL_HARDNESS = 4.0F;
     private static final float METAL_RESISTANCE = 6.0F;
 
-    public static final DeferredBlock<Block> ALCHEMIUM_BLOCK = register("alchemium_block",
+    public static final DeferredBlock<Block> THAUMIUM_BLOCK = register("thaumium_block",
             () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).mapColor(MapColor.COLOR_PURPLE)
                     .strength(METAL_HARDNESS, METAL_RESISTANCE)));
     public static final DeferredBlock<Block> BRASS_BLOCK = register("brass_block",

@@ -1,7 +1,7 @@
 {
   "type": "alchemia:infusion",
   "central": {
-    "item": "alchemia:alchemium_helmet"
+    "item": "alchemia:thaumium_helmet"
   },
   "essentia": {
     "alchemia:metallum": 24,
@@ -16,10 +16,10 @@
   },
   "ring": [
     {
-      "item": "alchemia:alchemium_plate"
+      "item": "alchemia:thaumium_plate"
     },
     {
-      "item": "alchemia:alchemium_plate"
+      "item": "alchemia:thaumium_plate"
     },
     {
       "item": "minecraft:gold_ingot"

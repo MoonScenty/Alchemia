@@ -204,7 +204,7 @@ public class NodeMagnet extends Construct {
 
     @Override
     protected void salvage() {
-        salvage(ModItems.BIOALCHEMIC_MIND.get(), 0.2F);
+        salvage(ModItems.BIOTHAUMIC_MIND.get(), 0.2F);
         salvage(ModItems.MORPHIC_RESONATOR.get(), 0.2F);
         for (CrystalType crystal : CrystalType.values()) {
             salvage(ModBlocks.CRYSTALS.get(crystal).get(), 0.2F);

@@ -1,10 +1,5 @@
 {
   "values": {
-    "alchemia:alchemic_slime": {
-      "alchemia:aqua": 2,
-      "alchemia:victus": 2,
-      "alchemia:vitium": 1
-    },
     "alchemia:angry_zombie": {
       "alchemia:cognitio": 1,
       "alchemia:exanimis": 3,
@@ -138,6 +133,11 @@
     "alchemia:tainted_villager": {
       "alchemia:aer": 2,
       "alchemia:vitium": 3
+    },
+    "alchemia:thaumic_slime": {
+      "alchemia:aqua": 2,
+      "alchemia:victus": 2,
+      "alchemia:vitium": 1
     },
     "alchemia:wisp": {
       "alchemia:aer": 1,

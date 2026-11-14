@@ -108,9 +108,6 @@
       "alchemia:aer": 2,
       "alchemia:vitreus": 1
     },
-    "alchemia:alchemium_nugget": {
-      "alchemia:metallum": 1
-    },
     "alchemia:amber": {
       "alchemia:vinculum": 2,
       "alchemia:vitreus": 2
@@ -498,6 +495,9 @@
       "alchemia:aqua": 1,
       "alchemia:auram": 1,
       "alchemia:vitium": 2
+    },
+    "alchemia:thaumium_nugget": {
+      "alchemia:metallum": 1
     },
     "alchemia:vis_stone": {
       "alchemia:auram": 2,

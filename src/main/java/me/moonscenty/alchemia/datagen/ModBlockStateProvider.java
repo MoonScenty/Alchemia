@@ -39,7 +39,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
         ModBlocks.CRYSTALS.values().forEach(this::crystal);
 
-        simpleBlockWithItem(ModBlocks.ALCHEMIUM_BLOCK);
+        simpleBlockWithItem(ModBlocks.THAUMIUM_BLOCK);
         simpleBlockWithItem(ModBlocks.BRASS_BLOCK);
         simpleBlockWithItem(ModBlocks.VOID_METAL_BLOCK);
 
@@ -263,8 +263,8 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
     private void essentiaSmelter() {
         smelter(ModBlocks.ESSENTIA_SMELTER.get(), "essentia_smelter", "smelter", mcLoc("block/furnace_top"));
-        smelter(ModBlocks.ALCHEMIUM_SMELTER.get(), "alchemium_smelter", "alchemium_smelter",
-                modLoc("block/alchemium_block"));
+        smelter(ModBlocks.THAUMIUM_SMELTER.get(), "thaumium_smelter", "thaumium_smelter",
+                modLoc("block/thaumium_block"));
         smelter(ModBlocks.VOID_SMELTER.get(), "void_smelter", "void_smelter", modLoc("block/legacy/void_metal"));
         horizontalBlock(ModBlocks.SMELTER_AUX.get(), models().getExistingFile(modLoc("block/smelter_aux")));
         horizontalBlock(ModBlocks.SMELTER_VENT.get(), models().getExistingFile(modLoc("block/smelter_vent")));

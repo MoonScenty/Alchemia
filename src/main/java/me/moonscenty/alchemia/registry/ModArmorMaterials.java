@@ -18,12 +18,12 @@ public final class ModArmorMaterials {
     public static final DeferredRegister<ArmorMaterial> MATERIALS =
             DeferredRegister.create(Registries.ARMOR_MATERIAL, Alchemia.MODID);
 
-    public static final int ALCHEMIUM_LASTS = 25;
+    public static final int THAUMIUM_LASTS = 25;
     public static final int VOID_LASTS = 10;
 
-    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> ALCHEMIUM =
-            MATERIALS.register("alchemium", () -> material("alchemium", stops(2, 6, 5, 2), 25,
-                    () -> Ingredient.of(ModItems.ALCHEMIUM_INGOT)));
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> THAUMIUM =
+            MATERIALS.register("thaumium", () -> material("thaumium", stops(2, 6, 5, 2), 25,
+                    () -> Ingredient.of(ModItems.THAUMIUM_INGOT)));
 
     public static final DeferredHolder<ArmorMaterial, ArmorMaterial> VOID =
             MATERIALS.register("void", () -> material("void", stops(3, 7, 6, 3), 10,
@@ -57,7 +57,7 @@ public final class ModArmorMaterials {
 
     public static final DeferredHolder<ArmorMaterial, ArmorMaterial> FORTRESS =
             MATERIALS.register("fortress", () -> new ArmorMaterial(stops(3, 7, 6, 3), 25,
-                    SoundEvents.ARMOR_EQUIP_IRON, () -> Ingredient.of(ModItems.ALCHEMIUM_INGOT),
+                    SoundEvents.ARMOR_EQUIP_IRON, () -> Ingredient.of(ModItems.THAUMIUM_INGOT),
                     List.of(new ArmorMaterial.Layer(Alchemia.id("fortress"))), 0.0F, 0.0F));
 
     public static final int FORTRESS_LASTS = 40;

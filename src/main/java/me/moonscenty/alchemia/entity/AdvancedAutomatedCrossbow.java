@@ -67,7 +67,7 @@ public class AdvancedAutomatedCrossbow extends AutomatedCrossbow {
 
     @Override
     protected void salvage() {
-        salvage(ModItems.BIOALCHEMIC_MIND.get(), 0.2F);
+        salvage(ModItems.BIOTHAUMIC_MIND.get(), 0.2F);
         salvage(ModItems.BRASS_GEAR.get(), 0.5F);
         salvage(ModBlocks.GREATWOOD.planks().get(), 0.5F);
         salvage(ModBlocks.GREATWOOD.planks().get(), 0.5F);

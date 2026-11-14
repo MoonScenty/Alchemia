@@ -49,7 +49,7 @@ public class ResearchPageScreen extends Screen {
     private static final int TURN_W = 12;
     private static final int TURN_H = 8;
 
-    private final AlchemonomiconScreen parent;
+    private final ThaumonomiconScreen parent;
     private final ResourceLocation id;
     private final List<ResearchPage> pages;
 
@@ -63,7 +63,7 @@ public class ResearchPageScreen extends Screen {
     private int pointedY;
     private static java.util.Map<Aspect, List<ItemStack>> carriers;
 
-    public ResearchPageScreen(AlchemonomiconScreen parent, ResourceLocation id, ResearchEntry entry) {
+    public ResearchPageScreen(ThaumonomiconScreen parent, ResourceLocation id, ResearchEntry entry) {
         super(ResearchEntry.displayName(id));
         this.parent = parent;
         this.id = id;

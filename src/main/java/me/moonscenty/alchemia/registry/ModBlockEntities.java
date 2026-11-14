@@ -205,7 +205,7 @@ public class ModBlockEntities {
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<EssentiaSmelterBlockEntity>>
             ESSENTIA_SMELTER = BLOCK_ENTITIES.register("essentia_smelter", () -> BlockEntityType.Builder
                     .of(EssentiaSmelterBlockEntity::new, ModBlocks.ESSENTIA_SMELTER.get(),
-                            ModBlocks.ALCHEMIUM_SMELTER.get(), ModBlocks.VOID_SMELTER.get())
+                            ModBlocks.THAUMIUM_SMELTER.get(), ModBlocks.VOID_SMELTER.get())
                     .build(null));
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<AlembicBlockEntity>> ALEMBIC =

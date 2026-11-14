@@ -97,9 +97,9 @@ public final class PechTrades {
         lots.add(item(3, Items.GOLDEN_APPLE));
         lots.add(potion(3, Potions.LONG_STRENGTH));
         lots.add(potion(3, Potions.LONG_NIGHT_VISION));
-        lots.add(item(4, ModItems.METAL_TOOLS.get("alchemium_pickaxe").get()));
-        lots.add(item(4, ModItems.METAL_TOOLS.get("alchemium_axe").get()));
-        lots.add(item(4, ModItems.METAL_TOOLS.get("alchemium_hoe").get()));
+        lots.add(item(4, ModItems.METAL_TOOLS.get("thaumium_pickaxe").get()));
+        lots.add(item(4, ModItems.METAL_TOOLS.get("thaumium_axe").get()));
+        lots.add(item(4, ModItems.METAL_TOOLS.get("thaumium_hoe").get()));
         lots.add(item(5, Items.ENCHANTED_GOLDEN_APPLE));
         lots.add(item(5, ModBlocks.SILVERWOOD.sapling().get().asItem()));
         return List.copyOf(lots);

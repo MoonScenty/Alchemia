@@ -1,7 +1,7 @@
 package me.moonscenty.alchemia.client;
 
 import me.moonscenty.alchemia.Alchemia;
-import me.moonscenty.alchemia.item.AlchemometerItem;
+import me.moonscenty.alchemia.item.ThaumometerItem;
 import me.moonscenty.alchemia.registry.ModItems;
 import me.moonscenty.alchemia.research.ScanTarget;
 import me.moonscenty.alchemia.research.Scanning;
@@ -24,7 +24,7 @@ public class ScanHintOverlay {
     public static void onRenderGui(RenderGuiEvent.Post event) {
         Minecraft client = Minecraft.getInstance();
         Player player = client.player;
-        if (player == null || client.options.hideGui || !NodeSight.holdingAlchemometer(player)) {
+        if (player == null || client.options.hideGui || !NodeSight.holdingThaumometer(player)) {
             return;
         }
 
@@ -32,7 +32,7 @@ public class ScanHintOverlay {
         int centreX = graphics.guiWidth() / 2;
         int centreY = graphics.guiHeight() / 2;
 
-        if (player.isUsingItem() && player.getUseItem().is(ModItems.ALCHEMOMETER.get())) {
+        if (player.isUsingItem() && player.getUseItem().is(ModItems.THAUMOMETER.get())) {
             drawProgress(graphics, player, centreX, centreY);
             return;
         }
@@ -52,7 +52,7 @@ public class ScanHintOverlay {
 
     private static void drawProgress(GuiGraphics graphics, Player player, int centreX, int centreY) {
         int used = player.getUseItem().getUseDuration(player) - player.getUseItemRemainingTicks();
-        float progress = Math.min(1F, used / (float) AlchemometerItem.SCAN_TICKS);
+        float progress = Math.min(1F, used / (float) ThaumometerItem.SCAN_TICKS);
 
         int left = centreX - BAR_WIDTH / 2;
         int top = centreY + 14;

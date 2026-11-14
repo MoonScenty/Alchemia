@@ -153,7 +153,7 @@ public class ModDataMapProvider extends DataMapProvider {
                 .add(ModAspects.EXCHANGE, 4).add(ModAspects.DEATH, 1));
 
         item(ModItems.GOLEM, a(ModAspects.MOTION, 3).add(ModAspects.MAN, 3).add(ModAspects.MECHANISM, 3));
-        item(ModItems.ALCHEMIUM_NUGGET, a(ModAspects.METAL, 1));
+        item(ModItems.THAUMIUM_NUGGET, a(ModAspects.METAL, 1));
         item(ModItems.BRASS_NUGGET, a(ModAspects.METAL, 1));
         item(ModItems.QUICKSILVER_DROP, a(ModAspects.METAL, 1));
         item(ModItems.SALIS_MUNDUS, a(ModAspects.FLUX, 2).add(ModAspects.ENERGY, 2));
@@ -325,7 +325,7 @@ public class ModDataMapProvider extends DataMapProvider {
                 a(ModAspects.FLUX, 3).add(ModAspects.AIR, 2));
         mob(me.moonscenty.alchemia.registry.ModEntities.TAINTED_CREEPER.get(),
                 a(ModAspects.FLUX, 2).add(ModAspects.FIRE, 2));
-        mob(me.moonscenty.alchemia.registry.ModEntities.ALCHEMIC_SLIME.get(),
+        mob(me.moonscenty.alchemia.registry.ModEntities.THAUMIC_SLIME.get(),
                 a(ModAspects.LIFE, 2).add(ModAspects.WATER, 2).add(ModAspects.FLUX, 1));
         mob(me.moonscenty.alchemia.registry.ModEntities.PECH.get(),
                 a(ModAspects.MAN, 2).add(ModAspects.AURA, 2).add(ModAspects.EXCHANGE, 2));

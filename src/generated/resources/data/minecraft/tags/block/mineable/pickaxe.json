@@ -2,7 +2,7 @@
   "values": [
     "alchemia:alchemical_construct",
     "alchemia:advanced_alchemical_construct",
-    "#c:storage_blocks/alchemium",
+    "#c:storage_blocks/thaumium",
     "#c:storage_blocks/brass",
     "#c:storage_blocks/void",
     "#c:ores/amber",
@@ -16,7 +16,7 @@
     "alchemia:stone_table",
     "alchemia:golem_press",
     "alchemia:golem_press_part",
-    "alchemia:alchemium_smelter",
+    "alchemia:thaumium_smelter",
     "alchemia:void_smelter",
     "alchemia:smelter_aux",
     "alchemia:smelter_vent",

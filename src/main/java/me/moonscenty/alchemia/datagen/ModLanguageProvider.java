@@ -268,8 +268,8 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         addItem(ModItems.TAINTED_VILLAGER_SPAWN_EGG, pick("Tainted Villager Spawn Egg", "오염된 주민 생성 알"));
         addEntityType(me.moonscenty.alchemia.registry.ModEntities.TAINTED_RABBIT, pick("Tainted Rabbit", "오염된 토끼"));
         addItem(ModItems.TAINTED_RABBIT_SPAWN_EGG, pick("Tainted Rabbit Spawn Egg", "오염된 토끼 생성 알"));
-        addEntityType(me.moonscenty.alchemia.registry.ModEntities.ALCHEMIC_SLIME, pick("Alchemic Slime", "연금 슬라임"));
-        addItem(ModItems.ALCHEMIC_SLIME_SPAWN_EGG, pick("Alchemic Slime Spawn Egg", "연금 슬라임 생성 알"));
+        addEntityType(me.moonscenty.alchemia.registry.ModEntities.THAUMIC_SLIME, pick("Thaumic Slime", "타우믹 슬라임"));
+        addItem(ModItems.THAUMIC_SLIME_SPAWN_EGG, pick("Thaumic Slime Spawn Egg", "타우믹 슬라임 생성 알"));
         addItem(ModItems.TAINTED_GOO, pick("Tainted Goo", "오염된 점액"));
         addItem(ModItems.TAINT_TENDRIL, pick("Taint Tendril", "오염 덩굴손"));
         addItem(ModItems.TAINT_CRAWLER_SPAWN_EGG, pick("Tainted Crawler Spawn Egg", "오염 크롤러 생성 알"));
@@ -422,8 +422,8 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("golem.alchemia.material.brass.text",
                 pick("Not so sturdy as iron, and it burns, but brass lets a frame be built light.",
                         "철만큼 튼튼하지 않고 불에도 타지만, 황동이면 몸체를 가볍게 지을 수 있다."));
-        add("golem.alchemia.material.alchemium", pick("Alchemium", "알케미움"));
-        add("golem.alchemia.material.alchemium.text",
+        add("golem.alchemia.material.thaumium", pick("Thaumium", "타우미움"));
+        add("golem.alchemia.material.thaumium.text",
                 pick("Everything iron is and more: it takes more and is better armoured, and is just as heavy.",
                         "철이 가진 것에 더해 더 잘 버티고 방어도 좋다. 무겁기는 마찬가지다."));
         add("golem.alchemia.material.void", pick("Void Metal", "공허 금속"));
@@ -436,8 +436,8 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                         "평범한 머리다. 좋은 것도 나쁜 것도 없다."));
         add("golem.alchemia.head.smart", pick("Smart Head", "영리한 머리"));
         add("golem.alchemia.head.smart.text",
-                pick("A bioalchemic mind in a head: it thinks and learns, but breaks easily.",
-                        "생체연금 두뇌를 넣은 머리다. 생각하고 배우지만 쉽게 부서진다."));
+                pick("A biothaumic mind in a head: it thinks and learns, but breaks easily.",
+                        "바이오타우믹 두뇌를 넣은 머리다. 생각하고 배우지만 쉽게 부서진다."));
         add("golem.alchemia.head.smart_armored", pick("Armored Smart Head", "장갑 두른 영리한 머리"));
         add("golem.alchemia.head.smart_armored.text",
                 pick("The smart head, plated and padded so that it is no longer fragile.",
@@ -446,10 +446,10 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("golem.alchemia.head.scout.text",
                 pick("The clockwork head with a vision module for eyes.",
                         "태엽 머리에 시야 모듈을 눈으로 단 것이다."));
-        add("golem.alchemia.head.smart_scout", pick("Bioalchemic Head", "생체연금 머리"));
+        add("golem.alchemia.head.smart_scout", pick("Biothaumic Head", "바이오타우믹 머리"));
         add("golem.alchemia.head.smart_scout.text",
-                pick("A bioalchemic mind behind a vision module's eyes: the best a golem's head can be.",
-                        "시야 모듈 눈 뒤에 생체연금 두뇌를 둔 머리다. 골렘 머리로는 이보다 나은 것이 없다."));
+                pick("A biothaumic mind behind a vision module's eyes: the best a golem's head can be.",
+                        "시야 모듈 눈 뒤에 바이오타우믹 두뇌를 둔 머리다. 골렘 머리로는 이보다 나은 것이 없다."));
         add("golem.alchemia.arm.basic", pick("Basic Arms", "기본 팔"));
         add("golem.alchemia.arm.basic.text",
                 pick("Plain arms and hands, with nothing for or against them.",
@@ -569,17 +569,17 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         });
         addItem(ModItems.BALANCED_SHARD, pick("Balanced Shard", "균형 조각"));
 
-        addBlock(ModBlocks.ALCHEMIUM_BLOCK, pick("Block of Alchemium", "알케미움 블록"));
+        addBlock(ModBlocks.THAUMIUM_BLOCK, pick("Block of Thaumium", "타우미움 블록"));
         addBlock(ModBlocks.BRASS_BLOCK, pick("Block of Brass", "황동 블록"));
         addBlock(ModBlocks.VOID_METAL_BLOCK, pick("Block of Void Metal", "공허 금속 블록"));
-        addItem(ModItems.ALCHEMIUM_INGOT, pick("Alchemium Ingot", "알케미움 주괴"));
+        addItem(ModItems.THAUMIUM_INGOT, pick("Thaumium Ingot", "타우미움 주괴"));
         addItem(ModItems.BRASS_INGOT, pick("Brass Ingot", "황동 주괴"));
-        addItem(ModItems.ALCHEMIUM_NUGGET, pick("Alchemium Nugget", "알케미움 조각"));
+        addItem(ModItems.THAUMIUM_NUGGET, pick("Thaumium Nugget", "타우미움 조각"));
         addItem(ModItems.BRASS_NUGGET, pick("Brass Nugget", "황동 조각"));
         addItem(ModItems.QUICKSILVER_DROP, pick("Quicksilver Drop", "수은 방울"));
-        addItem(ModItems.ALCHEMIUM_GEAR, pick("Alchemium Gear", "알케미움 톱니바퀴"));
+        addItem(ModItems.THAUMIUM_GEAR, pick("Thaumium Gear", "타우미움 톱니바퀴"));
         addItem(ModItems.BRASS_GEAR, pick("Brass Gear", "황동 톱니바퀴"));
-        addItem(ModItems.ALCHEMIUM_PLATE, pick("Alchemium Plate", "알케미움 판"));
+        addItem(ModItems.THAUMIUM_PLATE, pick("Thaumium Plate", "타우미움 판"));
         addItem(ModItems.BRASS_PLATE, pick("Brass Plate", "황동 판"));
         addItem(ModItems.IRON_PLATE, pick("Iron Plate", "철 판"));
         addItem(ModItems.SALIS_MUNDUS, pick("Salis Mundus", "살리스 문두스"));
@@ -734,7 +734,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
 
 
 
-        addItem(ModItems.ALCHEMOMETER, pick("Alchemometer", "알케모미터"));
+        addItem(ModItems.THAUMOMETER, pick("Thaumometer", "타우모미터"));
         addItem(ModItems.ESSENTIA_RESONATOR, pick("Essentia Resonator", "에센시아 공명기"));
         add("item.alchemia.essentia_resonator.contains", pick("Holds %s %s", "%2$s %1$s 담김"));
         add("item.alchemia.essentia_resonator.draws", pick("Draws %s", "당기는 것: %s"));
@@ -746,7 +746,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         addBlock(ModBlocks.RESEARCH_TABLE, pick("Research Table", "연구 탁자"));
         addBlock(ModBlocks.CRUCIBLE, pick("Crucible", "도가니"));
         addBlock(ModBlocks.ESSENTIA_SMELTER, pick("Essentia Smelter", "에센시아 제련로"));
-        addBlock(ModBlocks.ALCHEMIUM_SMELTER, pick("Alchemium Essentia Smelter", "알케미움 에센시아 제련로"));
+        addBlock(ModBlocks.THAUMIUM_SMELTER, pick("Thaumium Essentia Smelter", "타우미움 에센시아 제련로"));
         addBlock(ModBlocks.VOID_SMELTER, pick("Void Metal Essentia Smelter", "공허 금속 에센시아 제련로"));
         addBlock(ModBlocks.SMELTER_AUX, pick("Auxiliary Slurry Pump", "보조 슬러리 펌프"));
         addBlock(ModBlocks.SMELTER_VENT, pick("Auxiliary Venting Port", "보조 배기구"));
@@ -950,7 +950,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         addWandCap("iron", "Iron", "철");
         addWandCap("gold", "Gold", "금");
         addWandCap("brass", "Brass", "황동");
-        addWandCap("alchemium", "Alchemium", "알케미움");
+        addWandCap("thaumium", "Thaumium", "타우미움");
         addWandCap("void", "Void", "공허");
         add("gui.alchemia.vis_cost", pick("%s of %s", "%s / %s"));
         add("gui.alchemia.no_wand", pick("A wand must be laid on the bench", "작업대에 완드를 올려야 한다"));
@@ -958,7 +958,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("gui.alchemia.not_researched", pick("You do not know how this is made", "만드는 법을 아직 모른다"));
         addItem(ModItems.SCRIBING_TOOLS, pick("Scribing Tools", "필기구"));
         addItem(ModItems.RESEARCH_NOTES, pick("Research Notes", "연구 노트"));
-        addItem(ModItems.ALCHEMONOMICON, pick("Alchemonomicon", "알케모노미콘"));
+        addItem(ModItems.THAUMONOMICON, pick("Thaumonomicon", "타우모노미콘"));
         add("research.alchemia.known", pick("Worked out", "알아냄"));
         add("research.alchemia.locked", pick("Something must come first", "먼저 알아내야 할 것이 있다"));
         add("research.alchemia.purchase", pick("Click to learn this for %s experience levels",
@@ -966,10 +966,10 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("research.alchemia.short", pick("You need %s experience levels to learn this",
                 "배우려면 경험치 %s레벨이 필요하다"));
         add("research.alchemia.complete", pick("Research complete", "연구 완료"));
-        add("message.alchemia.alchemometer.one", pick("The alchemometer now reads %s.", "알케모미터가 이제 %s을(를) 읽는다."));
-        add("message.alchemia.alchemometer.all", pick("The alchemometer now reads the whole aura.",
-                "알케모미터가 이제 오라 전체를 읽는다."));
-        add("item.alchemia.alchemometer.key", pick("Press %s to change what it reads", "%s 키로 읽을 것을 바꾼다"));
+        add("message.alchemia.thaumometer.one", pick("The thaumometer now reads %s.", "타우모미터가 이제 %s을(를) 읽는다."));
+        add("message.alchemia.thaumometer.all", pick("The thaumometer now reads the whole aura.",
+                "타우모미터가 이제 오라 전체를 읽는다."));
+        add("item.alchemia.thaumometer.key", pick("Press %s to change what it reads", "%s 키로 읽을 것을 바꾼다"));
         add("item.alchemia.warping", pick("Warping %s", "뒤틀림 %s"));
         add("item.alchemia.sapless", pick("Lesser Sapping", "약한 흡수"));
         add("item.alchemia.loot_bag.use", pick("Use to open, or keep it to trade", "써서 열거나, 거래용으로 둔다"));
@@ -1090,7 +1090,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         // --- research categories ---
         String[][] categories = {
                 {"basics", "Basics", "기초"},
-                {"arcana", "Arcana", "비학"},
+                {"thaumaturgy", "Thaumaturgy", "마법학"},
                 {"alchemy", "Alchemy", "연금술"},
                 {"artifice", "Artifice", "기교"},
                 {"golemancy", "Golemancy", "골렘학"},
@@ -1102,8 +1102,8 @@ public abstract class ModLanguageProvider extends LanguageProvider {
 
         String[][] research = {
                 {"aspects", "Aspects", "상",
-                 "Everything is made of six primal essences and the things they combine into. An alchemometer will name them for you, one object at a time, and what it names is written down here as you go. To work out what you have found, set scribing tools down on a wooden table: it becomes a research table.",
-                 "모든 것은 여섯 가지 원시 정수와 그것들이 결합한 것으로 이루어져 있다. 알케모미터는 한 번에 하나씩 그것들의 이름을 알려주며, 알아낸 이름은 이곳에 차곡차곡 적힌다. 알아낸 것을 연구하려면 나무 탁자에 필기구를 올려 두어라. 연구 탁자가 된다."},
+                 "Everything is made of six primal essences and the things they combine into. An thaumometer will name them for you, one object at a time, and what it names is written down here as you go. To work out what you have found, set scribing tools down on a wooden table: it becomes a research table.",
+                 "모든 것은 여섯 가지 원시 정수와 그것들이 결합한 것으로 이루어져 있다. 타우모미터는 한 번에 하나씩 그것들의 이름을 알려주며, 알아낸 이름은 이곳에 차곡차곡 적힌다. 알아낸 것을 연구하려면 나무 탁자에 필기구를 올려 두어라. 연구 탁자가 된다."},
                 {"amber", "Amber", "호박",
                  "Sap that hardened around something long ago, and held it there. It breaks out of the ore whole, and takes a polish that the stone around it never will.",
                  "오래전 무언가를 감싼 채 굳어버린 수액. 그것은 아직 갇혀 있다. 광석에서 통째로 떨어져 나오며, 주변의 돌은 결코 내지 못할 광택을 낸다."},
@@ -1140,7 +1140,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                 {"wand_cap_brass", "Brass Caps", "황동 캡",
                  "An alloy that pulls harder at the air than either metal in it. It spends no better than gold, but it fills faster, which over a long afternoon is the same thing.",
                  "섞인 어느 금속보다도 공기를 세게 잡아당기는 합금. 쓰는 값은 금과 다르지 않지만 차는 속도가 빠르다. 긴 오후 동안에는 결국 같은 이야기다."},
-                {"wand_cap_alchemium", "Alchemium Caps", "알케미움 캡",
+                {"wand_cap_thaumium", "Thaumium Caps", "타우미움 캡",
                  "Metal that has been taught what it is for. A tenth of every working comes back, which is the first time a cap has given anything rather than taken it.",
                  "무엇에 쓰이는지를 배운 금속. 일할 때마다 열에 하나가 되돌아온다. 캡이 가져가는 대신 내어준 것은 이번이 처음이다."},
                 {"sceptre", "Sceptres", "셉터",
@@ -1168,8 +1168,8 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                  "A pot of water kept over a fire. Anything dropped into it comes apart into what it is made of, and once the right things are floating in the water, one last thing thrown in boils the lot into something new.",
                  "불 위에 올려 둔 물 냄비. 떨어뜨린 것은 무엇이든 제 본바탕으로 풀어지고, 물에 알맞은 것들이 떠 있게 되면 마지막 하나를 던져 넣어 전부를 새것으로 끓여낸다."},
                 {"metallurgy", "Metallurgy", "야금",
-                 "Iron does not want to be anything else, and a crucible is how you argue with it. Steeped in earth and order it comes out alchemium; in energy and water, brass.",
-                 "철은 다른 것이 되기를 원하지 않으며, 도가니는 그와 다투는 방법이다. 땅과 질서에 담그면 알케미움으로, 힘과 물에 담그면 황동으로 나온다."},
+                 "Iron does not want to be anything else, and a crucible is how you argue with it. Steeped in earth and order it comes out thaumium; in energy and water, brass.",
+                 "철은 다른 것이 되기를 원하지 않으며, 도가니는 그와 다투는 방법이다. 땅과 질서에 담그면 타우미움으로, 힘과 물에 담그면 황동으로 나온다."},
                 {"distillation", "Distillation", "증류",
                  "Burning a thing is a crude way to ask what it is made of, but it is an honest one. A smelter sends the answer up as smoke, and alembics stacked above it catch that smoke one aspect at a time.",
                  "무엇으로 이루어졌는지 묻는 데에 태우는 것은 거칠지만 정직한 방법이다. 제련로가 그 답을 연기로 올려 보내고, 위에 쌓아 올린 증류기가 연기를 상 하나씩 받아 낸다."},
@@ -1188,9 +1188,9 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                 {"improved_distillation", "Improved Distillation", "증류 개량",
                  "Two things to set against a smelter's sides or back. An auxiliary slurry pump draws on what the smelter holds and pours it up into alembics stacked on the pump itself, so one fire fills another column for every pump. An auxiliary venting port catches some of what the smelter loses before it gets into the air: a third with one, more with each one after, though less each time.",
                  "제련로 옆이나 뒤에 붙이는 것 둘. 보조 슬러리 펌프는 제련로에 든 것을 끌어다 펌프 위에 쌓은 증류기로 올려 보낸다. 펌프 하나마다 불 하나로 채우는 기둥이 하나씩 늘어난다. 보조 배기구는 제련로가 흘리는 것이 공기로 나가기 전에 일부를 붙잡는다. 하나면 셋에 하나, 더 붙일수록 더 많이 잡지만 늘어나는 몫은 점점 줄어든다."},
-                {"alchemium_smelter", "Alchemium Essentia Smelter", "알케미움 에센시아 제련로",
-                 "A smelter plated in alchemium. It boils things down no faster, but it loses less of what comes off them, and it pours what it holds up into the alembics above more quickly.",
-                 "알케미움을 입힌 제련로다. 끓여 내는 속도는 같지만 흘리는 것이 적고, 담은 것을 위의 증류기로 더 빨리 올려 보낸다."},
+                {"thaumium_smelter", "Thaumium Essentia Smelter", "타우미움 에센시아 제련로",
+                 "A smelter plated in thaumium. It boils things down no faster, but it loses less of what comes off them, and it pours what it holds up into the alembics above more quickly.",
+                 "타우미움을 입힌 제련로다. 끓여 내는 속도는 같지만 흘리는 것이 적고, 담은 것을 위의 증류기로 더 빨리 올려 보낸다."},
                 {"void_smelter", "Void Metal Essentia Smelter", "공허 금속 에센시아 제련로",
                  "A smelter plated in void metal. Almost nothing that comes off what it burns is lost.",
                  "공허 금속을 입힌 제련로다. 태워서 나오는 것 가운데 잃는 것이 거의 없다."},
@@ -1215,15 +1215,15 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                 {"infusion_boost", "Infusion Stones", "주입석",
                  "Two stones, laid a course below the altar's corners, and an altar takes whatever is under them without being asked. One hurries a turn along and charges a little more for it; the other waits longer and charges less. Four of a kind is the whole of either -- twelve ticks to a turn, or eight parts in a hundred off the bill -- and nothing takes a working below half price. They can be mixed, which is the only reason there are two of them rather than one with a switch.",
                  "제단 귀퉁이보다 한 켜 아래에 까는 돌 둘이다. 제단은 그 밑에 무엇이 깔렸든 묻지 않고 그대로 받는다. 하나는 한 바퀴를 재촉하는 대신 값을 조금 더 받고, 다른 하나는 더 기다리는 대신 덜 받는다. 넷을 같은 것으로 깔면 그것이 한계다 — 한 바퀴 열두 틱, 또는 값에서 백분의 팔. 무엇을 깔아도 반값 아래로는 내려가지 않는다. 섞어 깔 수도 있으니, 돌이 하나가 아니라 둘인 이유가 그것이다."},
-                {"alchemium_gear", "Alchemium Gear", "알케미움 장비",
+                {"thaumium_gear", "Thaumium Gear", "타우미움 장비",
                  "The metal is worth forging with. A tool of it cuts about as fast as diamond, lasts twice what iron does, and takes an enchantment better than anything that can be dug up. A suit of it stops what iron stops and outlasts diamond by half again. Nothing about the shapes is new -- the sticks go where they always went.",
                  "이 금속은 벼려 볼 값어치가 있다. 도구는 다이아몬드만큼 빠르게 깎고 철의 두 배를 가며, 캐낼 수 있는 어떤 것보다 마법을 잘 받는다. 갑옷은 철이 막는 만큼 막으면서 다이아몬드보다 절반 더 간다. 모양은 새로울 것이 없다 — 막대는 늘 있던 자리에 있다."},
                 {"void_gear", "Void Gear", "공허 장비",
                  "The other sort of good. It cuts faster and hits harder than anything, reaches what netherite reaches, and wears out in a hundred and fifty swings. A suit of it stops nearly what diamond stops and goes to pieces faster than leather. It is not the better metal; it is the metal for the one job that has to be done now.",
                  "다른 종류의 좋음이다. 무엇보다 빠르게 깎고 세게 치며 네더라이트가 닿는 데까지 닿는데, 백쉰 번을 휘두르면 닳아 없어진다. 갑옷은 다이아몬드에 가깝게 막으면서 가죽보다 빨리 부서진다. 더 나은 금속이 아니라, 지금 당장 해야 하는 한 가지 일을 위한 금속이다."},
                 {"goggles", "Goggles of Revealing", "계시의 고글",
-                 "Two alchemometers looking through brass. An aura node is invisible to anyone not wearing a pair, which makes these the first thing to build and the last thing to take off: half of what this craft is built on cannot be seen at all until they are on your face.",
-                 "놋쇠에 물린 알케모미터 둘. 이것을 쓰지 않은 사람에게 오라 노드는 보이지 않는다. 그래서 가장 먼저 만들고 가장 나중에 벗는 물건이 된다 — 이 기예가 딛고 선 것의 절반이 이걸 쓰기 전에는 아예 보이지 않는다."},
+                 "Two thaumometers looking through brass. An aura node is invisible to anyone not wearing a pair, which makes these the first thing to build and the last thing to take off: half of what this craft is built on cannot be seen at all until they are on your face.",
+                 "놋쇠에 물린 타우모미터 둘. 이것을 쓰지 않은 사람에게 오라 노드는 보이지 않는다. 그래서 가장 먼저 만들고 가장 나중에 벗는 물건이 된다 — 이 기예가 딛고 선 것의 절반이 이걸 쓰기 전에는 아예 보이지 않는다."},
                 {"traveller_boots", "Traveller's Boots", "여행자의 장화",
                  "They stop almost nothing. What they are worth is the walking: a step up a whole block without jumping, a push along the ground, a hold on the air that is not quite flying, and a fall that is forgotten as fast as it happens. Somebody who spends the day between a works and a mine will not take them off for a suit that stops arrows.",
                  "막아 주는 것은 거의 없다. 값어치는 걷는 데 있다. 뛰지 않고 한 칸을 오르고, 땅을 밀어 나아가고, 허공에서도 발이 듣고, 떨어지는 동안 떨어진 것이 잊힌다. 하루를 공방과 광산 사이에서 보내는 사람은 화살을 막아 주는 갑옷을 위해 이것을 벗지 않는다."},
@@ -1231,8 +1231,8 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                  "An altar will put on a tool what no table will sell. There is no gambling and no book to keep it in: the tool goes under the matrix, the price is paid in essentia, and it comes back with one more thing about it. Collector sends what is broken to the one who broke it. Destructive takes the eight blocks round the one struck, where the tool would have served for them anyway. Burrowing brings a seam or a trunk apart from its far end. Refining makes ore come up now and then as a cluster, which smelts to twice the metal. Sounding taps the stone and shows what is behind it for a moment, at five swings' wear. Arcing carries a blow to whatever is standing beside what was struck. Essence makes what is killed give up a little of what it was made of -- the one way to essentia that wants no smelter, and so the meanest of them. Crouch and the digging ones go quiet.",
                  "작업대가 팔지 않는 것을 제단은 도구에 얹는다. 운에 맡길 것도, 담아 둘 책도 없다. 도구를 결계 아래에 두고 에센시아로 값을 치르면 한 가지를 더 지니고 돌아온다. 수집은 부순 것을 부순 이에게 보낸다. 파괴는 때린 칸 둘레 여덟을 같이 가져가되, 그 도구로 캘 수 있는 것만 가져간다. 굴착은 광맥이나 줄기를 먼 끝에서부터 허문다. 정련은 광석이 이따금 군집으로 나오게 한다. 제련하면 두 배다. 탐지는 돌을 두드려 돌 너머를 잠시 보여 주고, 그 대가로 도구가 다섯 번 닳는다. 전이는 때린 것 옆에 선 것에도 같은 매를 옮긴다. 정수는 죽인 것이 제 만들어진 바를 조금 내놓게 한다 -- 제련로 없이 에센시아를 얻는 유일한 길이고, 그래서 한 번에 주는 것이 적다. 웅크리면 캐는 것들은 조용해진다."},
                 {"fortress_armour", "Fortress Armour", "요새 갑옷",
-                 "A finished suit of alchemium goes under the matrix and comes back out as plate. It stops what void metal stops and lasts as long as the alchemium it was, which no single metal manages, and no enchanting table will ever be offered better steel. The more of the four is worn the less any one blow gets through, and a blow of fire or a blast is turned worse than a blade is. Falling does not wear it at all -- whatever the ground does to the wearer, it does nothing to the plate. A mask worked onto the helm does more than look: the grinning devil keeps the worst of warp at bay, the angry ghost withers what strikes its wearer, and the sipping fiend drinks a little life from what its wearer strikes.",
-                 "완성된 알케미움 한 벌을 결계 아래에 두면 판금이 되어 나온다. 공허 금속이 막는 만큼 막으면서 원래의 알케미움만큼 간다. 어느 금속 하나로도 둘 다 되지 않는다. 마법 탁자가 이보다 나은 쇠를 받아 본 적도 없다. 넷 중 많이 갖춰 입을수록 한 대가 덜 들어오고, 불과 폭발은 칼날보다 더 많이 튕겨 낸다. 떨어지는 것으로는 닳지 않는다. 땅이 입은 사람에게 무슨 짓을 하든 판금에는 아무 짓도 하지 않는다. 투구에 씌운 가면은 모양만이 아니다. 웃는 악귀는 뒤틀림의 해를 덜어 주고, 성난 망령은 쓴 사람을 친 것을 시들게 하며, 들이켜는 마귀는 쓴 사람이 친 것에게서 생명을 조금 마신다."},
+                 "A finished suit of thaumium goes under the matrix and comes back out as plate. It stops what void metal stops and lasts as long as the thaumium it was, which no single metal manages, and no enchanting table will ever be offered better steel. The more of the four is worn the less any one blow gets through, and a blow of fire or a blast is turned worse than a blade is. Falling does not wear it at all -- whatever the ground does to the wearer, it does nothing to the plate. A mask worked onto the helm does more than look: the grinning devil keeps the worst of warp at bay, the angry ghost withers what strikes its wearer, and the sipping fiend drinks a little life from what its wearer strikes.",
+                 "완성된 타우미움 한 벌을 결계 아래에 두면 판금이 되어 나온다. 공허 금속이 막는 만큼 막으면서 원래의 타우미움만큼 간다. 어느 금속 하나로도 둘 다 되지 않는다. 마법 탁자가 이보다 나은 쇠를 받아 본 적도 없다. 넷 중 많이 갖춰 입을수록 한 대가 덜 들어오고, 불과 폭발은 칼날보다 더 많이 튕겨 낸다. 떨어지는 것으로는 닳지 않는다. 땅이 입은 사람에게 무슨 짓을 하든 판금에는 아무 짓도 하지 않는다. 투구에 씌운 가면은 모양만이 아니다. 웃는 악귀는 뒤틀림의 해를 덜어 주고, 성난 망령은 쓴 사람을 친 것을 시들게 하며, 들이켜는 마귀는 쓴 사람이 친 것에게서 생명을 조금 마신다."},
                 {"enchanted_fabric", "Enchanted Fabric", "마법 천",
                  "Wool and string are worked together at the bench with a little of all six primals, and what comes off is cloth that will hold a working the way a wand holds vis. Nothing is made of it that could not be made of cloth; what is different is that it does not forget.",
                  "양털과 실을 작업대에서 여섯 원시를 조금씩 먹여 가며 함께 짠다. 나오는 것은 완드가 비스를 머금듯 걸린 것을 머금는 천이다. 이것으로 만드는 물건 가운데 천으로 못 만들 것은 없다. 다른 점은 이 천이 잊지 않는다는 것뿐이다."},
@@ -1246,8 +1246,8 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                  "A bench for working one more thing into a focus. Five things will go into any focus, one to a rank, and which are on offer depends on the focus and on how deep the rank is -- the shallow ones give a focus more of what it already does, and the deep ones turn it into something else. The price is levels paid up front and vis drawn out of the air afterwards, a little every few ticks, so the bench wants a thick sky above it and a while to work. Take the focus off the bench part-way and the work is lost.",
                  "포커스에 한 가지를 더 박아 넣는 자리다. 어느 포커스든 다섯까지 들어가고 등급마다 하나씩이며, 어떤 것이 올라오는지는 포커스와 등급의 깊이에 달렸다. 얕은 등급은 본래 하던 일을 더 하게 해 주고, 깊은 등급은 아예 다른 것으로 바꾼다. 값은 먼저 경험치 레벨로 치르고 그 뒤로 몇 틱마다 조금씩 공기에서 비스를 길어 올린다. 그래서 하늘이 두터운 곳에 놓아야 하고 시간이 걸린다. 도중에 포커스를 들어내면 하던 일은 사라진다."},
                 {"elemental_tools", "Elemental Tools", "원소 도구",
-                 "Alchemium tools with a primal bound into each on the altar, and what that element is in a tool already worked into them. The axe of the stream fells a tree from its top and sends what falls to whoever felled it, and held up it draws every loose thing nearby in. The pickaxe of the core refines ore into clusters now and then, sounds out the stone it is tapped against, and sets alight whatever it strikes. The sword of the zephyr carries a blow on to what is standing about, and held up it raises a whirlwind that lifts its bearer and throws back anything that comes close. The shovel of the earthmover digs three by three, and used against a face it lays three by three of that same block out of the bag; the setting key turns which way the square stands. The hoe of growth tills three by three and makes things grow where there is nothing to till. Crouch with any of them and it is only a tool.",
-                 "제단에서 알케미움 도구에 원시를 하나씩 묶고, 그 원소가 도구에서 하는 일을 미리 새겨 둔 것이다. 흐름의 도끼는 나무를 꼭대기부터 베고 떨어진 것을 벤 사람에게 보내며, 들고 있으면 둘레의 떨어진 것을 모두 끌어온다. 핵의 곡괭이는 광석을 이따금 군집으로 정련하고, 두드린 돌 너머를 짚어 보며, 친 것에 불을 붙인다. 미풍의 검은 맞은 것 옆에 선 것까지 베고, 들고 있으면 회오리를 일으켜 든 사람을 띄우고 다가오는 것을 밀쳐 낸다. 흙꾼의 삽은 3×3으로 파고, 면에 대고 쓰면 그 블록을 가방에서 꺼내 3×3으로 깐다 — 설정 키로 네모가 서는 방향을 바꾼다. 성장의 괭이는 3×3으로 갈고, 갈 것이 없으면 자라게 한다. 무엇이든 웅크리고 쓰면 그냥 도구다."},
+                 "Thaumium tools with a primal bound into each on the altar, and what that element is in a tool already worked into them. The axe of the stream fells a tree from its top and sends what falls to whoever felled it, and held up it draws every loose thing nearby in. The pickaxe of the core refines ore into clusters now and then, sounds out the stone it is tapped against, and sets alight whatever it strikes. The sword of the zephyr carries a blow on to what is standing about, and held up it raises a whirlwind that lifts its bearer and throws back anything that comes close. The shovel of the earthmover digs three by three, and used against a face it lays three by three of that same block out of the bag; the setting key turns which way the square stands. The hoe of growth tills three by three and makes things grow where there is nothing to till. Crouch with any of them and it is only a tool.",
+                 "제단에서 타우미움 도구에 원시를 하나씩 묶고, 그 원소가 도구에서 하는 일을 미리 새겨 둔 것이다. 흐름의 도끼는 나무를 꼭대기부터 베고 떨어진 것을 벤 사람에게 보내며, 들고 있으면 둘레의 떨어진 것을 모두 끌어온다. 핵의 곡괭이는 광석을 이따금 군집으로 정련하고, 두드린 돌 너머를 짚어 보며, 친 것에 불을 붙인다. 미풍의 검은 맞은 것 옆에 선 것까지 베고, 들고 있으면 회오리를 일으켜 든 사람을 띄우고 다가오는 것을 밀쳐 낸다. 흙꾼의 삽은 3×3으로 파고, 면에 대고 쓰면 그 블록을 가방에서 꺼내 3×3으로 깐다 — 설정 키로 네모가 서는 방향을 바꾼다. 성장의 괭이는 3×3으로 갈고, 갈 것이 없으면 자라게 한다. 무엇이든 웅크리고 쓰면 그냥 도구다."},
                 {"eldritch_minor", "Eldritch Epiphany", "엘드리치의 깨달음",
                  "Warp that does not pass has started to teach. In the moments when the world goes wrong you have glimpsed something under it -- a place outside, older than the aura and colder, that leans against this one. The void seed is a little of it: a seed sown in the crucible with darkness and the void worked into it, that grows something the world did not make.",
                  "사라지지 않는 뒤틀림이 무언가를 가르치기 시작했다. 세상이 어긋나는 순간마다 그 밑의 무언가를 언뜻 보았다. 오라보다 오래되고 차가운 바깥의 장소가 이쪽에 기대어 있다. 공허 씨앗은 그것의 한 조각이다. 도가니에 어둠과 공허를 함께 넣어 기른 씨앗은 이 세상이 만들지 않은 것을 키운다."},
@@ -1320,7 +1320,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                 {"recharge_pedestal", "Recharge Pedestal", "재충전 받침대",
                  "Travelling the countryside to fill a wand is all very well, but a pedestal that does it for you is better. Set a wand on it and it draws vis from the aura of its chunk to fill it, as much as a wand held in the hand would, twice a second. Like a wand in the hand, it leaves alone any aura run down below a tenth of what it should be. A hopper can set a wand on it and take one off.",
                  "지팡이를 채우러 들판을 돌아다니는 것도 좋지만, 대신 해 주는 받침대가 더 낫다. 지팡이를 올려 두면 제 청크의 오라에서 비스를 끌어 채운다. 손에 든 지팡이만큼씩, 1초에 두 번이다. 손에 든 지팡이처럼, 원래의 10분의 1 밑으로 떨어진 오라는 건드리지 않는다. 깔때기로 지팡이를 올리고 내릴 수도 있다."},
-                {"dioptra", "Alchemic Dioptra", "연금 디옵트라",
+                {"dioptra", "Thaumic Dioptra", "타우믹 디옵트라",
                  "A device that shows the aura round it plainly. Set a vis shard in the crystal on its top and it draws, in the air over itself, a map thirteen chunks across of how strong that aspect is in each; a balanced shard shows whichever primal is strongest in each chunk instead. Chunks with a node in them sparkle now and then -- not precise, but a help in finding them. A comparator reads how strong the aura is in its own chunk, and a redstone signal puts it out.",
                  "둘레의 오라를 한눈에 보여 주는 장치다. 위쪽 결정에 비스 조각을 끼우면 13청크 너비의 지도를 제 위 공중에 그려, 각 청크에서 그 상이 얼마나 센지 보여 준다. 균형 잡힌 조각을 끼우면 청크마다 가장 센 원시 상을 보여 준다. 노드가 있는 청크는 이따금 반짝인다. 정확하지는 않아도 노드를 찾는 데 도움이 된다. 비교기를 대면 제 청크의 오라 세기를 읽고, 레드스톤 신호가 들어오면 꺼진다."},
                 {"bath_salts", "Purifying Bath Salts", "정화의 목욕 소금",
@@ -1350,7 +1350,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                 {"clockwork_mind", "Clockwork Mind", "태엽 두뇌",
                  "Gears and a comparator under glass, plated in brass. It is not a mind in any way that matters, but it will follow one rule without being told twice, which is all a machine needs -- a golem most of all. Golems are made at a golem press. Stand a piston facing up with iron bars on it, a stone table beside it, an anvil beside the table and a cauldron beside the anvil and the piston, the four making a square, and strike any of it with a wand. Pick at the press what the golem is to be made of and the parts it is to have: it takes what they need from your pack, and presses it a measure of machina at a time, drawn up a tube or straight out of a jar set against it.",
                  "놋쇠를 댄 유리 속의 톱니와 비교기다. 따질 만한 의미의 두뇌는 아니지만 한 가지 규칙을 두 번 말하지 않아도 따른다. 기계에 필요한 것은 그것뿐이고, 골렘은 더욱 그렇다. 골렘은 골렘 프레스에서 만든다. 위를 보는 피스톤 위에 철창을 얹고, 그 옆에 돌 탁자, 탁자 옆에 모루, 모루와 피스톤 옆에 가마솥을 놓아 넷이 네모를 이루게 한 뒤, 어디든 완드로 친다. 프레스에서 골렘을 무엇으로 만들고 어떤 부품을 달지 고르면, 필요한 것을 가방에서 가져가 마키나를 한 단위씩 들여 찍어 낸다. 마키나는 관으로 끌어 올리거나 옆에 붙인 단지에서 곧장 빨아들인다."},
-                {"bioalchemic_mind", "Bioalchemic Mind", "생체연금 두뇌",
+                {"biothaumic_mind", "Biothaumic Mind", "바이오타우믹 두뇌",
                  "The clockwork mind with something living grown into it on the altar. What comes out can be told to choose rather than only to follow, and the things that have to decide for themselves -- an autocaster picking its mark -- are built round one.",
                  "태엽 두뇌에 제단에서 살아 있는 것을 자라 들게 한 것이다. 나온 것은 따르기만 하는 것이 아니라 고르라고 시킬 수 있다. 스스로 정해야 하는 것들 — 노릴 것을 고르는 자동 시전기 같은 — 은 이것을 둘러싸고 짓는다."},
                 {"mirror", "Mirror Magic", "거울 마법",
@@ -1372,8 +1372,8 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                  "A crossbow given a clockwork mind of its own, on a tripod to stand it up: set it down and it shoots at any monster it sees within twenty-four blocks. It cannot load itself, so open it and give it arrows, plain or primal; or stand it on a dispenser facing up and it takes a whole stack from that whenever it runs dry. Its owner takes it down again with a wand.",
                  "태엽 정신을 넣은 쇠뇌를 삼각대에 세웠다. 내려놓으면 스물네 칸 안에 보이는 몬스터를 쏜다. 스스로 장전하지는 못하니 열어서 보통 화살이나 원시 화살을 넣어 주어야 한다. 위를 향한 디스펜서 위에 세우면 화살이 떨어질 때마다 거기서 한 묶음씩 가져간다. 주인은 완드로 다시 거둘 수 있다."},
                 {"advanced_turret", "Advanced Automated Crossbow", "상급 자동 쇠뇌",
-                 "Much like the basic one, with a few differences that matter. Iron plating makes it far sturdier and harder to shove about, a better loading mechanism has it shoot more often, and a bioalchemic mind lets it be told what to shoot at: animals, monsters, people, and whether its owner's own count. People only where the server allows people to fight.",
-                 "기본 쇠뇌와 거의 같지만 중요한 차이가 몇 있다. 철판을 둘러 훨씬 튼튼하고 잘 밀리지 않으며, 장전 장치가 나아 더 자주 쏜다. 생체연금 정신 덕에 무엇을 쏠지 정해 줄 수 있다. 동물, 몬스터, 사람, 그리고 주인 편도 쏠지. 사람은 서버가 사람끼리 싸움을 허락할 때만 쏜다."},
+                 "Much like the basic one, with a few differences that matter. Iron plating makes it far sturdier and harder to shove about, a better loading mechanism has it shoot more often, and a biothaumic mind lets it be told what to shoot at: animals, monsters, people, and whether its owner's own count. People only where the server allows people to fight.",
+                 "기본 쇠뇌와 거의 같지만 중요한 차이가 몇 있다. 철판을 둘러 훨씬 튼튼하고 잘 밀리지 않으며, 장전 장치가 나아 더 자주 쏜다. 바이오타우믹 정신 덕에 무엇을 쏠지 정해 줄 수 있다. 동물, 몬스터, 사람, 그리고 주인 편도 쏠지. 사람은 서버가 사람끼리 싸움을 허락할 때만 쏜다."},
                 {"node_magnet", "Node Attraction", "노드 끌기",
                  "Steering the aura is one thing; moving a node would put vis where it is wanted, when it is wanted. The magnet finds the nearest node within thirty-two blocks that nothing is holding still and draws it in, the bigger the node the slower, until it is a block away. It runs on vis it draws a little at a time from the air, and now and then the strain shakes loose a wisp or a point of flux. It is fragile: a knock or a fall will shatter it. Its owner takes it up again with a wand.",
                  "오라를 다루는 것과 노드를 옮기는 것은 다른 일이다. 노드를 옮길 수 있다면 비스를 원하는 곳에 원하는 때에 둘 수 있다. 자석은 서른두 칸 안에서 붙잡혀 있지 않은 가장 가까운 노드를 찾아, 큰 노드일수록 느리게, 한 칸 거리까지 끌어온다. 공기에서 조금씩 비스를 빨아들여 움직이고, 이따금 무리가 걸려 위습이나 플럭스 한 점이 떨어져 나온다. 연약해서 세게 부딪히거나 떨어지면 부서진다. 주인은 완드로 다시 거둘 수 있다."},
@@ -1392,9 +1392,9 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                 {"golem_brass", "Brass Golems", "황동 골렘",
                  "Brass is not as sturdy as iron and it burns, but it lets a frame be built light, and a brass golem is quick. Knowing brass is also how fine manipulators are made.",
                  "황동은 철만큼 튼튼하지 않고 불에도 타지만, 몸체를 가볍게 지을 수 있어 황동 골렘은 빠르다. 정밀 조작기도 황동을 알아야 만든다."},
-                {"golem_alchemium", "Alchemium Golems", "알케미움 골렘",
-                 "Everything iron is and more of it: an alchemium golem takes more, is better armoured and hits harder, and is just as heavy.",
-                 "철이 가진 것에 더해, 알케미움 골렘은 더 잘 버티고 방어도 좋고 더 세게 친다. 무겁기는 마찬가지다."},
+                {"golem_thaumium", "Thaumium Golems", "타우미움 골렘",
+                 "Everything iron is and more of it: an thaumium golem takes more, is better armoured and hits harder, and is just as heavy.",
+                 "철이 가진 것에 더해, 타우미움 골렘은 더 잘 버티고 방어도 좋고 더 세게 친다. 무겁기는 마찬가지다."},
                 {"golem_void", "Void Metal Golems", "공허 금속 골렘",
                  "Void metal is a little softer than iron and nowhere near as heavy, and a golem made of it mends itself more than twice as fast as any other. Its gears are made as the others are, of nuggets round an iron ingot.",
                  "공허 금속은 철보다 조금 무르고 훨씬 가벼우며, 그것으로 만든 골렘은 어느 골렘보다 두 배 넘게 빨리 스스로를 고친다. 톱니바퀴는 다른 것처럼 철 주괴 둘레에 조각을 둘러 만든다."},
@@ -1516,8 +1516,8 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                  "Crafts that only ever need one kind of thing laid in a pattern, such as planks into sticks or nuggets into an ingot, can be left to a machine. Put an inventory above it and one below: it takes what it needs from the one above once a second, lays it out in the pattern its window shows, and puts whatever that makes into the one below. Click the brass dial on its face to choose the next pattern. A redstone signal stops it.",
                  "판자를 막대로, 조각을 주괴로 만드는 것처럼 한 가지 재료만 문양대로 놓으면 되는 제작은 기계에 맡길 수 있다. 위아래에 보관함을 하나씩 두면, 1초마다 위 보관함에서 필요한 만큼 가져와 창에 보이는 문양대로 늘어놓고, 만들어진 것을 아래 보관함에 넣는다. 앞면의 황동 다이얼을 누르면 다음 문양으로 바뀐다. 레드스톤 신호를 받으면 멈춘다."},
                 {"sanity_check", "Sanity Check", "정신 검사",
-                 "There has been a good deal going on in your head lately, and it would be as well to look in and see that all is still in order. An alchemometer turned inwards, with a brain and a mirror to look through, shows how much warp has settled on the mind while it is held: the part that passes off, the part that clings, and the part that will never leave.",
-                 "요즘 머릿속이 꽤 어수선했으니 한번 들여다보고 모든 것이 아직 괜찮은지 확인해 두는 편이 좋겠다. 두뇌와 거울을 달아 안쪽을 향하게 한 알케모미터를 손에 들면, 정신에 얼마나 뒤틀림이 쌓였는지 보여 준다. 지나갈 것, 들러붙은 것, 영영 떠나지 않을 것을 나누어서."},
+                 "There has been a good deal going on in your head lately, and it would be as well to look in and see that all is still in order. An thaumometer turned inwards, with a brain and a mirror to look through, shows how much warp has settled on the mind while it is held: the part that passes off, the part that clings, and the part that will never leave.",
+                 "요즘 머릿속이 꽤 어수선했으니 한번 들여다보고 모든 것이 아직 괜찮은지 확인해 두는 편이 좋겠다. 두뇌와 거울을 달아 안쪽을 향하게 한 타우모미터를 손에 들면, 정신에 얼마나 뒤틀림이 쌓였는지 보여 준다. 지나갈 것, 들러붙은 것, 영영 떠나지 않을 것을 나누어서."},
                 {"sinister_stone", "Sinister Lodestone", "불길한 자석",
                  "Studying the rite of the opening eye, you found that the place where the eye opens gives off a distinct energy even while it is shut. Flint infused with the right things lights up whenever it is pointed towards such a place, through stone and all. Its reach is limited, but the ritual stones are hard enough to find that it is worth carrying.",
                  "눈이 열리는 의식을 연구하다가, 눈이 열리는 자리는 닫혀 있을 때도 뚜렷한 기운을 낸다는 것을 알아냈다. 알맞은 것을 주입한 부싯돌은 그런 자리를 향하면 돌벽 너머라도 빛난다. 닿는 거리에는 한계가 있지만, 의식의 돌을 찾기가 워낙 어려워 들고 다닐 만하다."},
@@ -1579,8 +1579,8 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                 {"advanced_turret", "A sharper eye on the trigger", "방아쇠에 더 밝은 눈"},
                 {"alchemical_duplication", "Something from a little more", "조금 더 넣어 하나 더"},
                 {"alchemical_manufacture", "Common things, uncommonly made", "흔한 것을 흔치 않게"},
-                {"alchemium_gear", "Tools that remember magic", "마법을 기억하는 도구"},
-                {"alchemium_smelter", "A hotter, faster furnace", "더 뜨겁고 빠른 화로"},
+                {"thaumium_gear", "Tools that remember magic", "마법을 기억하는 도구"},
+                {"thaumium_smelter", "A hotter, faster furnace", "더 뜨겁고 빠른 화로"},
                 {"alumentum", "Fire in a bottle", "병에 담은 불"},
                 {"amber", "Time held still", "멈춰 선 시간"},
                 {"arcane_bore", "Digging without hands", "손 없이 파는 법"},
@@ -1600,7 +1600,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                 {"basic_turret", "A bow that never tires", "지치지 않는 활"},
                 {"bath_salts", "A soak against the dark", "어둠을 씻는 목욕"},
                 {"bellows", "A breath for the fire", "불에 불어넣는 숨"},
-                {"bioalchemic_mind", "A brain put to work", "일하게 된 두뇌"},
+                {"biothaumic_mind", "A brain put to work", "일하게 된 두뇌"},
                 {"bone_bow", "Quick and quiet", "빠르고 조용하게"},
                 {"bottle_taint", "Corruption, stoppered", "마개 막은 부패"},
                 {"brain_jar", "Thoughts kept in glass", "유리에 담은 생각"},
@@ -1638,7 +1638,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                 {"focus_trade", "Swap one for another", "하나를 다른 하나로"},
                 {"fortress_armour", "Plate against everything", "모든 것을 막는 판금"},
                 {"goggles", "Seeing what is there", "거기 있는 것을 보기"},
-                {"golem_alchemium", "A golem of magic metal", "마법 금속 골렘"},
+                {"golem_thaumium", "A golem of magic metal", "마법 금속 골렘"},
                 {"golem_brass", "A golem that keeps going", "멈추지 않는 골렘"},
                 {"golem_breaker", "Arms for breaking", "부수기 위한 팔"},
                 {"golem_clay", "A golem from the kiln", "가마에서 나온 골렘"},
@@ -1728,7 +1728,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                 {"void_robes", "Cloth of the void", "공허의 천"},
                 {"void_smelter", "Smelting at the edge", "경계에서의 제련"},
                 {"wand", "The tool of the trade", "이 일의 도구"},
-                {"wand_cap_alchemium", "Caps of magic metal", "마법 금속 캡"},
+                {"wand_cap_thaumium", "Caps of magic metal", "마법 금속 캡"},
                 {"wand_cap_brass", "Caps of brass", "황동 캡"},
                 {"wand_cap_gold", "Caps of gold", "금 캡"},
                 {"wand_rod_greatwood", "A rod of greatwood", "거대나무 막대"},
@@ -1747,7 +1747,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         addEffect(ModEffects.SUN_SCORNED, pick("Sun Scorned", "햇빛 거부"));
         addEffect(ModEffects.BLURRED_VISION, pick("Blurred Vision", "흐릿한 시야"));
         addEffect(ModEffects.DEADLY_GAZE, pick("Deadly Gaze", "죽음의 응시"));
-        addEffect(ModEffects.ALCHEDIARRHEA, pick("Alchediarrhea", "알케설사"));
+        addEffect(ModEffects.THAUMARHIA, pick("Thaumarhia", "타우마리아"));
         addEffect(ModEffects.WARP_WARD, pick("Warp Ward", "뒤틀림 방호"));
 
         // --- warp messages, numbered by severity tier ---
@@ -1884,7 +1884,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
     }
 
     private void addMetalGear() {
-        String[][] metals = {{"alchemium", "Alchemium", "알케미움"}, {"void", "Void", "공허"}};
+        String[][] metals = {{"thaumium", "Thaumium", "타우미움"}, {"void", "Void", "공허"}};
         String[][] shapes = {
                 {"pickaxe", "Pickaxe", "곡괭이"}, {"axe", "Axe", "도끼"}, {"shovel", "Shovel", "삽"},
                 {"sword", "Sword", "검"}, {"hoe", "Hoe", "괭이"},
@@ -1910,7 +1910,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("item.alchemia.mirrored_glass", pick("Mirrored Glass", "거울 유리"));
         add("item.alchemia.morphic_resonator", pick("Morphic Resonator", "변형 공명기"));
         add("item.alchemia.clockwork_mind", pick("Clockwork Mind", "태엽 두뇌"));
-        add("item.alchemia.bioalchemic_mind", pick("Bioalchemic Mind", "생체연금 두뇌"));
+        add("item.alchemia.biothaumic_mind", pick("Biothaumic Mind", "바이오타우믹 두뇌"));
         add("block.alchemia.bellows", pick("Bellows", "풀무"));
         add("block.alchemia.centrifuge", pick("Essentia Centrifuge", "에센시아 원심분리기"));
         add("block.alchemia.arcane_bore", pick("Arcane Bore", "비전 굴착기"));
@@ -1958,7 +1958,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         add("block.alchemia.aura_totem_pole_inner", pick("Totem Pole Inner", "안쪽 토템 기둥"));
         add("block.alchemia.aura_totem_pole_outer", pick("Totem Pole Outer", "바깥쪽 토템 기둥"));
         add("block.alchemia.aura_totem_pole_pure", pick("Stabilizing Totem Pole", "안정시키는 토템 기둥"));
-        add("block.alchemia.dioptra", pick("Alchemic Dioptra", "연금 디옵트라"));
+        add("block.alchemia.dioptra", pick("Thaumic Dioptra", "타우믹 디옵트라"));
         add("block.alchemia.dioptra.showing", pick("Showing %s levels in the aura", "오라의 %s 수준을 보여 준다"));
         add("block.alchemia.dioptra.strongest", pick("Showing highest aura levels", "가장 높은 오라 수준을 보여 준다"));
         add("block.alchemia.purifying_fluid", pick("Purifying Fluid", "정화의 액체"));

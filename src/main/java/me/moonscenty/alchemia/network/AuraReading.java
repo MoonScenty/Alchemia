@@ -8,7 +8,7 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 
-// what the alchemometer reads of the chunk: its base, which aspect is picked (0 for all), and the seven amounts
+// what the thaumometer reads of the chunk: its base, which aspect is picked (0 for all), and the seven amounts
 public record AuraReading(int base, int shown, List<Integer> amounts) implements CustomPacketPayload {
     public static final Type<AuraReading> TYPE = new Type<>(Alchemia.id("aura_reading"));
 

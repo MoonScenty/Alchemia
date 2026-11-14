@@ -1,0 +1,27 @@
+{
+  "type": "alchemia:infusion",
+  "central": {
+    "item": "alchemia:wand_cap_thaumium_inert"
+  },
+  "essentia": {
+    "alchemia:auram": 6,
+    "alchemia:potentia": 12
+  },
+  "instability": 5,
+  "research": "alchemia:wand_cap_thaumium",
+  "result": {
+    "count": 1,
+    "id": "alchemia:wand_cap_thaumium"
+  },
+  "ring": [
+    {
+      "item": "alchemia:salis_mundus"
+    },
+    {
+      "item": "alchemia:salis_mundus"
+    },
+    {
+      "item": "alchemia:salis_mundus"
+    }
+  ]
+}

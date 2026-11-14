@@ -1,7 +1,7 @@
 {
   "type": "alchemia:infusion",
   "central": {
-    "item": "alchemia:alchemium_axe"
+    "item": "alchemia:thaumium_axe"
   },
   "essentia": {
     "alchemia:aqua": 16,

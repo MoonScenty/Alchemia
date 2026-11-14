@@ -31,7 +31,7 @@ public class ModTags {
         public static final TagKey<Block> ORES_CINNABAR = common("ores/cinnabar");
 
         public static final TagKey<Block> STORAGE_BLOCKS_AMBER = common("storage_blocks/amber");
-        public static final TagKey<Block> STORAGE_BLOCKS_ALCHEMIUM = common("storage_blocks/alchemium");
+        public static final TagKey<Block> STORAGE_BLOCKS_THAUMIUM = common("storage_blocks/thaumium");
         public static final TagKey<Block> STORAGE_BLOCKS_BRASS = common("storage_blocks/brass");
         public static final TagKey<Block> STORAGE_BLOCKS_VOID = common("storage_blocks/void");
 
@@ -83,21 +83,21 @@ public class ModTags {
         public static final TagKey<Item> RAW_MATERIALS_CINNABAR = common("raw_materials/cinnabar");
 
         public static final TagKey<Item> STORAGE_BLOCKS_AMBER = common("storage_blocks/amber");
-        public static final TagKey<Item> STORAGE_BLOCKS_ALCHEMIUM = common("storage_blocks/alchemium");
+        public static final TagKey<Item> STORAGE_BLOCKS_THAUMIUM = common("storage_blocks/thaumium");
         public static final TagKey<Item> STORAGE_BLOCKS_BRASS = common("storage_blocks/brass");
         public static final TagKey<Item> STORAGE_BLOCKS_VOID = common("storage_blocks/void");
-        public static final TagKey<Item> INGOTS_ALCHEMIUM = common("ingots/alchemium");
+        public static final TagKey<Item> INGOTS_THAUMIUM = common("ingots/thaumium");
         public static final TagKey<Item> INGOTS_BRASS = common("ingots/brass");
-        public static final TagKey<Item> NUGGETS_ALCHEMIUM = common("nuggets/alchemium");
+        public static final TagKey<Item> NUGGETS_THAUMIUM = common("nuggets/thaumium");
         public static final TagKey<Item> NUGGETS_BRASS = common("nuggets/brass");
         public static final TagKey<Item> NUGGETS_QUICKSILVER = common("nuggets/quicksilver");
         public static final TagKey<Item> INGOTS_VOID = common("ingots/void");
         public static final TagKey<Item> NUGGETS_VOID = common("nuggets/void");
         public static final TagKey<Item> GEARS = common("gears");
-        public static final TagKey<Item> GEARS_ALCHEMIUM = common("gears/alchemium");
+        public static final TagKey<Item> GEARS_THAUMIUM = common("gears/thaumium");
         public static final TagKey<Item> GEARS_BRASS = common("gears/brass");
         public static final TagKey<Item> PLATES = common("plates");
-        public static final TagKey<Item> PLATES_ALCHEMIUM = common("plates/alchemium");
+        public static final TagKey<Item> PLATES_THAUMIUM = common("plates/thaumium");
         public static final TagKey<Item> PLATES_BRASS = common("plates/brass");
         public static final TagKey<Item> PLATES_IRON = common("plates/iron");
         public static final TagKey<Item> PLATES_VOID = common("plates/void");

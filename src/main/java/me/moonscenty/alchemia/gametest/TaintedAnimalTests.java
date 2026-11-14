@@ -2,7 +2,7 @@ package me.moonscenty.alchemia.gametest;
 
 import me.moonscenty.alchemia.Alchemia;
 import me.moonscenty.alchemia.block.taint.FluxGooBlock;
-import me.moonscenty.alchemia.entity.AlchemicSlime;
+import me.moonscenty.alchemia.entity.ThaumicSlime;
 import me.moonscenty.alchemia.entity.TaintCrawler;
 import me.moonscenty.alchemia.entity.TaintedCow;
 import me.moonscenty.alchemia.entity.TaintedCreeper;
@@ -80,7 +80,7 @@ public class TaintedAnimalTests {
             grown.setBaby(false);
         }
         zombie.kill();
-        var slimes = helper.getLevel().getEntitiesOfClass(AlchemicSlime.class, zombie.getBoundingBox().inflate(1.0));
+        var slimes = helper.getLevel().getEntitiesOfClass(ThaumicSlime.class, zombie.getBoundingBox().inflate(1.0));
         helper.assertTrue(slimes.size() == 1 && slimes.getFirst().getSize() == 3, "a slime of three");
         helper.succeed();
     }
@@ -126,7 +126,7 @@ public class TaintedAnimalTests {
     public static void aSlimeGrowsInGoo(GameTestHelper helper) {
         helper.setBlock(AT.below(), Blocks.STONE);
         helper.setBlock(AT, ModBlocks.FLUX_GOO.get());
-        AlchemicSlime slime = helper.spawnWithNoFreeWill(ModEntities.ALCHEMIC_SLIME.get(), AT);
+        ThaumicSlime slime = helper.spawnWithNoFreeWill(ModEntities.THAUMIC_SLIME.get(), AT);
         slime.setSize(1, true);
         BlockPos where = helper.absolutePos(AT);
         for (int wade = 0; wade < 50 && slime.getSize() == 1; wade++) {
@@ -141,11 +141,11 @@ public class TaintedAnimalTests {
     @GameTest(template = TEMPLATE, timeoutTicks = 100)
     public static void aSlimeBursts(GameTestHelper helper) {
         helper.setBlock(AT.below(), Blocks.STONE);
-        AlchemicSlime slime = helper.spawnWithNoFreeWill(ModEntities.ALCHEMIC_SLIME.get(), AT);
+        ThaumicSlime slime = helper.spawnWithNoFreeWill(ModEntities.THAUMIC_SLIME.get(), AT);
         slime.setSize(3, true);
         slime.kill();
         helper.runAfterDelay(30, () -> {
-            var little = around(helper, AlchemicSlime.class).stream().filter(s -> s.getSize() == 1).count();
+            var little = around(helper, ThaumicSlime.class).stream().filter(s -> s.getSize() == 1).count();
             helper.assertValueEqual((int) little, 3, "three little slimes");
             helper.succeed();
         });
@@ -162,7 +162,7 @@ public class TaintedAnimalTests {
             helper.setBlock(AT, ModBlocks.FLUX_GOO.get());
             helper.getLevel().getBlockState(where).randomTick(helper.getLevel(), where, random);
         }
-        helper.assertFalse(around(helper, AlchemicSlime.class).isEmpty(), "a slime came of it");
+        helper.assertFalse(around(helper, ThaumicSlime.class).isEmpty(), "a slime came of it");
         helper.succeed();
     }
 }

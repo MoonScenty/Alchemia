@@ -41,7 +41,7 @@ public class ResearchTests {
     public static void thePackLoadsEveryBranchOfStudy(GameTestHelper helper) {
         Registry<ResearchCategory> categories = helper.getLevel().registryAccess().registryOrThrow(ModResearch.CATEGORY_KEY);
         helper.assertTrue(categories.size() == 6, "there should be six branches of study, loaded " + categories.size());
-        helper.assertTrue(categories.containsKey(ModResearch.ARCANA.location()), "arcana should be among them");
+        helper.assertTrue(categories.containsKey(ModResearch.THAUMATURGY.location()), "thaumaturgy should be among them");
         helper.succeed();
     }
 
@@ -291,7 +291,7 @@ public class ResearchTests {
         helper.assertValueEqual(player.totalExperience, experience + ResearchCompletion.EXPERIENCE,
                 "only the entry that was worked for pays");
 
-        ModItems.ALCHEMONOMICON.get().use(helper.getLevel(), player, InteractionHand.MAIN_HAND);
+        ModItems.THAUMONOMICON.get().use(helper.getLevel(), player, InteractionHand.MAIN_HAND);
         helper.assertTrue(PlayerKnowledge.of(player).hasResearch(Alchemia.id("seal_collect")), "reading brings the rest");
         helper.succeed();
     }
@@ -301,7 +301,7 @@ public class ResearchTests {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         player.setData(ModAttachments.KNOWLEDGE, PlayerKnowledge.of(player).withResearch(Alchemia.id("clockwork_mind")));
 
-        ModItems.ALCHEMONOMICON.get().use(helper.getLevel(), player, InteractionHand.MAIN_HAND);
+        ModItems.THAUMONOMICON.get().use(helper.getLevel(), player, InteractionHand.MAIN_HAND);
         helper.assertTrue(PlayerKnowledge.of(player).hasResearch(Alchemia.id("control_seals")),
                 "an old reader still gets the seals");
         helper.succeed();

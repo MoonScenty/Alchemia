@@ -184,7 +184,7 @@ public final class AspectBonuses {
         return levels > 0 ? result.mergeMax(ModAspects.ENERGY, levels) : result;
     }
 
-    // original's scale: wood/gold 0 .. diamond 3, alchemium with diamond; anything stronger is 4
+    // original's scale: wood/gold 0 .. diamond 3, thaumium with diamond; anything stronger is 4
     private static int harvestRank(Tier tier) {
         if (tier == Tiers.WOOD || tier == Tiers.GOLD) {
             return 0;
@@ -195,7 +195,7 @@ public final class AspectBonuses {
         if (tier == Tiers.IRON) {
             return 2;
         }
-        if (tier == Tiers.DIAMOND || tier == me.moonscenty.alchemia.item.ModTiers.ALCHEMIUM
+        if (tier == Tiers.DIAMOND || tier == me.moonscenty.alchemia.item.ModTiers.THAUMIUM
                 || tier == me.moonscenty.alchemia.item.ModTiers.ELEMENTAL) {
             return 3;
         }

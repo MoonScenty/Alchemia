@@ -48,7 +48,7 @@ public class EssentiaSmelterBlock extends BaseEntityBlock {
     // original's values; the void tier pours no faster than basic, as in the original's code despite its description
     public enum Tier {
         BASIC(0.80F, 40),
-        ALCHEMIUM(0.85F, 25),
+        THAUMIUM(0.85F, 25),
         VOID(0.95F, 40);
 
         private final float efficiency;

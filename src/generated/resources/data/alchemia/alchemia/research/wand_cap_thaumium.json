@@ -1,0 +1,33 @@
+{
+  "category": "alchemia:thaumaturgy",
+  "column": 6,
+  "complexity": 2,
+  "icon": "alchemia:wand_cap_thaumium",
+  "pages": [
+    {
+      "type": "text",
+      "key": "research.alchemia.wand_cap_thaumium.page"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:wand_cap_thaumium_inert"
+    },
+    {
+      "type": "recipe",
+      "recipe": "alchemia:wand_cap_thaumium"
+    }
+  ],
+  "parents": [
+    "alchemia:wand_cap_brass",
+    "alchemia:metallurgy",
+    "alchemia:infusion"
+  ],
+  "requirements": {
+    "alchemia:auram": 3,
+    "alchemia:instrumentum": 3,
+    "alchemia:metallum": 6,
+    "alchemia:potentia": 6
+  },
+  "row": 5,
+  "shape": "special"
+}

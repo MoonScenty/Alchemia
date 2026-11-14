@@ -1,7 +1,7 @@
 {
   "type": "alchemia:infusion",
   "central": {
-    "item": "alchemia:bioalchemic_mind"
+    "item": "alchemia:biothaumic_mind"
   },
   "essentia": {
     "alchemia:auram": 16,

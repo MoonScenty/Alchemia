@@ -47,7 +47,7 @@
   ],
   "parents": [
     "alchemia:void_metal",
-    "alchemia:alchemium_gear"
+    "alchemia:thaumium_gear"
   ],
   "requirements": {
     "alchemia:alienis": 2,

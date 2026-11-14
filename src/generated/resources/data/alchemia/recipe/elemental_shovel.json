@@ -1,7 +1,7 @@
 {
   "type": "alchemia:infusion",
   "central": {
-    "item": "alchemia:alchemium_shovel"
+    "item": "alchemia:thaumium_shovel"
   },
   "essentia": {
     "alchemia:fabrico": 8,

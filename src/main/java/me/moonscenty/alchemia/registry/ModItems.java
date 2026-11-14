@@ -29,10 +29,10 @@ import me.moonscenty.alchemia.item.JarLabelItem;
 import me.moonscenty.alchemia.item.PhialItem;
 import me.moonscenty.alchemia.item.WandItem;
 import me.moonscenty.alchemia.block.CrystalType;
-import me.moonscenty.alchemia.item.AlchemonomiconItem;
+import me.moonscenty.alchemia.item.ThaumonomiconItem;
 import me.moonscenty.alchemia.item.NodePlacerItem;
 import me.moonscenty.alchemia.item.ResearchNoteItem;
-import me.moonscenty.alchemia.item.AlchemometerItem;
+import me.moonscenty.alchemia.item.ThaumometerItem;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.minecraft.world.item.Tier;
@@ -55,8 +55,8 @@ public class ModItems {
     public static final DeferredItem<Item> QUICKSILVER = ITEMS.registerSimpleItem("quicksilver");
     public static final DeferredItem<Item> RAW_CINNABAR = ITEMS.registerSimpleItem("raw_cinnabar");
 
-    public static final DeferredItem<Item> ALCHEMOMETER = ITEMS.register("alchemometer",
-            () -> new AlchemometerItem(new Item.Properties().stacksTo(1)));
+    public static final DeferredItem<Item> THAUMOMETER = ITEMS.register("thaumometer",
+            () -> new ThaumometerItem(new Item.Properties().stacksTo(1)));
 
     public static final DeferredItem<Item> SCRIBING_TOOLS = ITEMS.register("scribing_tools",
             () -> new Item(new Item.Properties().stacksTo(1).durability(100)));
@@ -66,8 +66,8 @@ public class ModItems {
     public static final DeferredItem<Item> NODE_PLACER = ITEMS.register("node_placer",
             () -> new NodePlacerItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
 
-    public static final DeferredItem<Item> ALCHEMONOMICON = ITEMS.register("alchemonomicon",
-            () -> new AlchemonomiconItem(new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON)));
+    public static final DeferredItem<Item> THAUMONOMICON = ITEMS.register("thaumonomicon",
+            () -> new ThaumonomiconItem(new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON)));
 
     public static final DeferredItem<Item> WAND = ITEMS.register("wand",
             () -> new WandItem(new Item.Properties().rarity(Rarity.UNCOMMON)));
@@ -188,9 +188,9 @@ public class ModItems {
     public static final DeferredItem<net.neoforged.neoforge.common.DeferredSpawnEggItem> TAINTED_RABBIT_SPAWN_EGG =
             ITEMS.register("tainted_rabbit_spawn_egg", () -> new net.neoforged.neoforge.common.DeferredSpawnEggItem(
                     ModEntities.TAINTED_RABBIT, 0xA206A2, 0xF0C0C0, new Item.Properties()));
-    public static final DeferredItem<net.neoforged.neoforge.common.DeferredSpawnEggItem> ALCHEMIC_SLIME_SPAWN_EGG =
-            ITEMS.register("alchemic_slime_spawn_egg", () -> new net.neoforged.neoforge.common.DeferredSpawnEggItem(
-                    ModEntities.ALCHEMIC_SLIME, 0xA206A2, 0xFF80FF, new Item.Properties()));
+    public static final DeferredItem<net.neoforged.neoforge.common.DeferredSpawnEggItem> THAUMIC_SLIME_SPAWN_EGG =
+            ITEMS.register("thaumic_slime_spawn_egg", () -> new net.neoforged.neoforge.common.DeferredSpawnEggItem(
+                    ModEntities.THAUMIC_SLIME, 0xA206A2, 0xFF80FF, new Item.Properties()));
     public static final DeferredItem<me.moonscenty.alchemia.item.TaintedItem> TAINTED_GOO =
             ITEMS.registerItem("tainted_goo", me.moonscenty.alchemia.item.TaintedItem::new);
     public static final DeferredItem<me.moonscenty.alchemia.item.TaintedItem> TAINT_TENDRIL =
@@ -330,16 +330,16 @@ public class ModItems {
     public static final DeferredItem<Item> SANITY_CHECKER = ITEMS.register("sanity_checker",
             () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON)));
     public static final DeferredItem<Item> CLOCKWORK_MIND = ITEMS.registerSimpleItem("clockwork_mind");
-    public static final DeferredItem<Item> BIOALCHEMIC_MIND = ITEMS.registerSimpleItem("bioalchemic_mind");
+    public static final DeferredItem<Item> BIOTHAUMIC_MIND = ITEMS.registerSimpleItem("biothaumic_mind");
 
-    public static final DeferredItem<Item> ALCHEMIUM_INGOT = ITEMS.registerSimpleItem("alchemium_ingot");
+    public static final DeferredItem<Item> THAUMIUM_INGOT = ITEMS.registerSimpleItem("thaumium_ingot");
     public static final DeferredItem<Item> BRASS_INGOT = ITEMS.registerSimpleItem("brass_ingot");
-    public static final DeferredItem<Item> ALCHEMIUM_NUGGET = ITEMS.registerSimpleItem("alchemium_nugget");
+    public static final DeferredItem<Item> THAUMIUM_NUGGET = ITEMS.registerSimpleItem("thaumium_nugget");
     public static final DeferredItem<Item> BRASS_NUGGET = ITEMS.registerSimpleItem("brass_nugget");
     public static final DeferredItem<Item> QUICKSILVER_DROP = ITEMS.registerSimpleItem("quicksilver_drop");
-    public static final DeferredItem<Item> ALCHEMIUM_GEAR = ITEMS.registerSimpleItem("alchemium_gear");
+    public static final DeferredItem<Item> THAUMIUM_GEAR = ITEMS.registerSimpleItem("thaumium_gear");
     public static final DeferredItem<Item> BRASS_GEAR = ITEMS.registerSimpleItem("brass_gear");
-    public static final DeferredItem<Item> ALCHEMIUM_PLATE = ITEMS.registerSimpleItem("alchemium_plate");
+    public static final DeferredItem<Item> THAUMIUM_PLATE = ITEMS.registerSimpleItem("thaumium_plate");
     public static final DeferredItem<Item> BRASS_PLATE = ITEMS.registerSimpleItem("brass_plate");
     public static final DeferredItem<Item> IRON_PLATE = ITEMS.registerSimpleItem("iron_plate");
     public static final DeferredItem<Item> SALIS_MUNDUS = ITEMS.registerSimpleItem("salis_mundus");
@@ -519,7 +519,7 @@ public class ModItems {
 
     private static Map<String, DeferredItem<Item>> registerWandCaps() {
         Map<String, DeferredItem<Item>> caps = new java.util.LinkedHashMap<>();
-        for (String metal : new String[] {"iron", "gold", "brass", "alchemium", "void"}) {
+        for (String metal : new String[] {"iron", "gold", "brass", "thaumium", "void"}) {
             caps.put(metal, ITEMS.registerSimpleItem("wand_cap_" + metal));
         }
         return caps;
@@ -529,7 +529,7 @@ public class ModItems {
     private static Map<String, DeferredItem<Item>> registerMetalTools() {
         Map<String, DeferredItem<Item>> made = new java.util.LinkedHashMap<>();
         for (Map.Entry<String, Tier> forging
-                : List.of(Map.entry("alchemium", ModTiers.ALCHEMIUM), Map.entry("void", ModTiers.VOID))) {
+                : List.of(Map.entry("thaumium", ModTiers.THAUMIUM), Map.entry("void", ModTiers.VOID))) {
             String metal = forging.getKey();
             Tier tier = forging.getValue();
             made.put(metal + "_pickaxe", ITEMS.register(metal + "_pickaxe",
@@ -586,10 +586,10 @@ public class ModItems {
     private static Map<String, DeferredItem<Item>> registerMetalArmour() {
         Map<String, DeferredItem<Item>> made = new java.util.LinkedHashMap<>();
         Map<String, DeferredHolder<ArmorMaterial, ArmorMaterial>> metals =
-                Map.of("alchemium", ModArmorMaterials.ALCHEMIUM, "void", ModArmorMaterials.VOID);
+                Map.of("thaumium", ModArmorMaterials.THAUMIUM, "void", ModArmorMaterials.VOID);
         Map<String, Integer> lasts =
-                Map.of("alchemium", ModArmorMaterials.ALCHEMIUM_LASTS, "void", ModArmorMaterials.VOID_LASTS);
-        for (String metal : new String[] {"alchemium", "void"}) {
+                Map.of("thaumium", ModArmorMaterials.THAUMIUM_LASTS, "void", ModArmorMaterials.VOID_LASTS);
+        for (String metal : new String[] {"thaumium", "void"}) {
             for (ArmorItem.Type type : new ArmorItem.Type[] {ArmorItem.Type.HELMET, ArmorItem.Type.CHESTPLATE,
                     ArmorItem.Type.LEGGINGS, ArmorItem.Type.BOOTS}) {
                 made.put(metal + "_" + type.getName(), ITEMS.register(metal + "_" + type.getName(),
@@ -603,7 +603,7 @@ public class ModItems {
 
     private static Map<String, DeferredItem<Item>> registerInertCaps() {
         Map<String, DeferredItem<Item>> caps = new java.util.LinkedHashMap<>();
-        for (String metal : new String[] {"alchemium", "void"}) {
+        for (String metal : new String[] {"thaumium", "void"}) {
             caps.put(metal, ITEMS.registerSimpleItem("wand_cap_" + metal + "_inert"));
         }
         return caps;

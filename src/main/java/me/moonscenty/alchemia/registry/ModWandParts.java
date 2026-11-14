@@ -67,8 +67,8 @@ public class ModWandParts {
             CAP_ENTRIES.register("gold", () -> new WandCap(1.0F, 0, 3));
     public static final DeferredHolder<WandCap, WandCap> BRASS =
             CAP_ENTRIES.register("brass", () -> new WandCap(1.0F, 1, 3));
-    public static final DeferredHolder<WandCap, WandCap> ALCHEMIUM =
-            CAP_ENTRIES.register("alchemium", () -> new WandCap(0.9F, 0, 6));
+    public static final DeferredHolder<WandCap, WandCap> THAUMIUM =
+            CAP_ENTRIES.register("thaumium", () -> new WandCap(0.9F, 0, 6));
     public static final DeferredHolder<WandCap, WandCap> VOID =
             CAP_ENTRIES.register("void", () -> new WandCap(1.0F, 3, 9));
 

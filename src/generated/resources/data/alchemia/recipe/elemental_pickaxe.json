@@ -1,7 +1,7 @@
 {
   "type": "alchemia:infusion",
   "central": {
-    "item": "alchemia:alchemium_pickaxe"
+    "item": "alchemia:thaumium_pickaxe"
   },
   "essentia": {
     "alchemia:ignis": 8,
