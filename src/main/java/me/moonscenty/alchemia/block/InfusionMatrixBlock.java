@@ -70,7 +70,7 @@ public class InfusionMatrixBlock extends BaseEntityBlock {
         if (level.isClientSide) {
             return ItemInteractionResult.SUCCESS;
         }
-        switch (matrix.wake(player)) {
+        switch (matrix.wake(player, stack)) {
             case WOKEN -> {
                 say(player, "block.alchemia.infusion_matrix.woken");
                 level.playSound(null, pos, ModSounds.WAND.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
@@ -81,6 +81,7 @@ public class InfusionMatrixBlock extends BaseEntityBlock {
                 say(player, "block.alchemia.infusion_matrix.unbuilt");
                 level.playSound(null, pos, SoundEvents.DISPENSER_FAIL, SoundSource.BLOCKS, 0.6F, 1.0F);
             }
+            case UNPAID -> level.playSound(null, pos, SoundEvents.DISPENSER_FAIL, SoundSource.BLOCKS, 0.6F, 1.0F);
             case BUSY -> say(player, "block.alchemia.infusion_matrix.busy");
             case NOTHING -> {
                 say(player, "block.alchemia.infusion_matrix.nothing");
@@ -141,7 +142,7 @@ public class InfusionMatrixBlock extends BaseEntityBlock {
     protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState replacement, boolean moving) {
         if (!state.is(replacement.getBlock())
                 && level.getBlockEntity(pos) instanceof InfusionMatrixBlockEntity matrix && matrix.awake()) {
-            matrix.sleep(level);
+            matrix.collapse(level);
         }
         super.onRemove(state, level, pos, replacement, moving);
     }

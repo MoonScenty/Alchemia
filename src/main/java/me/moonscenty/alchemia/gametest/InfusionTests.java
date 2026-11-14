@@ -50,11 +50,18 @@ public class InfusionTests {
     private static Player scholar(GameTestHelper helper) {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         player.setData(ModAttachments.KNOWLEDGE,
-                PlayerKnowledge.of(player).withResearch(Alchemia.id("wand_rods")));
+                PlayerKnowledge.of(player).withResearch(Alchemia.id("wand_rods"))
+                        .withResearch(Alchemia.id("infusion")));
         return player;
     }
 
+    private static ItemStack wand() {
+        return me.moonscenty.alchemia.item.WandItem.brimming(
+                me.moonscenty.alchemia.item.WandItem.of(ModWandParts.SILVERWOOD, ModWandParts.GOLD));
+    }
+
     private static void altar(GameTestHelper helper) {
+        helper.setBlock(MATRIX, Blocks.AIR);
         helper.setBlock(MATRIX, ModBlocks.INFUSION_MATRIX.get());
         for (int east = -1; east <= 1; east += 2) {
             for (int south = -1; south <= 1; south += 2) {
@@ -98,12 +105,12 @@ public class InfusionTests {
         Player player = scholar(helper);
 
         helper.assertTrue(!matrix.awake(), "a matrix hung over loose stone is asleep");
-        helper.assertValueEqual(matrix.wake(player), InfusionMatrixBlockEntity.Woken.WOKEN, "the wand woke it");
+        helper.assertValueEqual(matrix.wake(player, wand()), InfusionMatrixBlockEntity.Woken.WOKEN, "the wand woke it");
         helper.assertTrue(matrix.awake(), "and it is awake");
         helper.assertBlockPresent(ModBlocks.ARCANE_PILLAR.get(), MATRIX.offset(1, -2, 1));
         helper.assertBlockPresent(ModBlocks.ARCANE_PILLAR.get(), MATRIX.offset(1, -1, 1));
 
-        helper.assertValueEqual(matrix.wake(player), InfusionMatrixBlockEntity.Woken.STARTED,
+        helper.assertValueEqual(matrix.wake(player, wand()), InfusionMatrixBlockEntity.Woken.STARTED,
                 "and the touch after that starts the working");
         helper.succeed();
     }
@@ -111,7 +118,7 @@ public class InfusionTests {
     @GameTest(template = TEMPLATE)
     public static void breakingOneCornerPutsItToSleep(GameTestHelper helper) {
         InfusionMatrixBlockEntity matrix = laidOut(helper);
-        matrix.wake(scholar(helper));
+        matrix.wake(scholar(helper), wand());
         helper.setBlock(MATRIX.offset(1, -2, 1), Blocks.AIR);
 
         run(helper, matrix, 2);
@@ -126,24 +133,67 @@ public class InfusionTests {
         InfusionMatrixBlockEntity matrix = laidOut(helper);
         helper.setBlock(MATRIX.offset(1, -2, 1), Blocks.AIR);
 
-        helper.assertValueEqual(matrix.wake(scholar(helper)), InfusionMatrixBlockEntity.Woken.UNBUILT,
+        helper.assertValueEqual(matrix.wake(scholar(helper), wand()), InfusionMatrixBlockEntity.Woken.UNBUILT,
                 "three corners is not an altar");
         helper.assertTrue(!matrix.awake(), "so it stayed asleep");
         helper.succeed();
     }
 
     @GameTest(template = TEMPLATE)
-    public static void breakingTheAltarEndsTheWorking(GameTestHelper helper) {
+    public static void formingTheAltarTakesResearchVisAndRoom(GameTestHelper helper) {
+        InfusionMatrixBlockEntity matrix = laidOut(helper);
+        Player novice = helper.makeMockPlayer(GameType.SURVIVAL);
+        helper.assertValueEqual(matrix.wake(novice, wand()), InfusionMatrixBlockEntity.Woken.UNPAID,
+                "without the infusion research nothing happens");
+
+        ItemStack poor = me.moonscenty.alchemia.item.WandItem.of(ModWandParts.SILVERWOOD, ModWandParts.GOLD);
+        helper.assertValueEqual(matrix.wake(scholar(helper), poor), InfusionMatrixBlockEntity.Woken.UNPAID,
+                "nor with an empty wand");
+
+        helper.setBlock(MATRIX.offset(1, -1, 0), Blocks.STONE);
+        helper.assertValueEqual(matrix.wake(scholar(helper), wand()), InfusionMatrixBlockEntity.Woken.UNBUILT,
+                "the cells between the corners must be clear");
+        helper.setBlock(MATRIX.offset(1, -1, 0), Blocks.AIR);
+
+        ItemStack full = wand();
+        me.moonscenty.alchemia.item.WandItem holder = (me.moonscenty.alchemia.item.WandItem) full.getItem();
+        int before = holder.held(full, ModAspects.FIRE);
+        helper.assertValueEqual(matrix.wake(scholar(helper), full), InfusionMatrixBlockEntity.Woken.WOKEN, "woken");
+        helper.assertTrue(before - holder.held(full, ModAspects.FIRE) >= 60,
+                "and it cost the wand about 75 fire, less the cap's discount");
+        helper.succeed();
+    }
+
+    @GameTest(template = TEMPLATE)
+    public static void breakingTheAltarHaltsTheWorking(GameTestHelper helper) {
         InfusionMatrixBlockEntity matrix = laidOut(helper);
         Player player = scholar(helper);
-        matrix.wake(player);
-        matrix.wake(player);
+        matrix.wake(player, wand());
+        matrix.wake(player, wand());
         helper.assertTrue(matrix.busy(), "the working started");
 
         helper.setBlock(MATRIX.offset(-1, -2, 1), Blocks.AIR);
         run(helper, matrix, 2);
-        helper.assertTrue(!matrix.busy(), "and came apart with the altar");
-        helper.assertTrue(!matrix.awake(), "which also put the stones back to sleep");
+        helper.assertTrue(!matrix.awake(), "the stones went back to sleep");
+        helper.assertTrue(matrix.busy(), "but the working only halted, as in the original");
+
+        helper.setBlock(MATRIX.offset(-1, -2, 1), ModBlocks.ARCANE_STONE.block().get());
+        helper.assertValueEqual(matrix.wake(player, wand()), InfusionMatrixBlockEntity.Woken.WOKEN,
+                "forming the altar again");
+        helper.assertTrue(matrix.busy(), "picks the working up where it stopped");
+        helper.succeed();
+    }
+
+    @GameTest(template = TEMPLATE)
+    public static void oneStabiliserPairTakesAPointOffALopsidedRing(GameTestHelper helper) {
+        InfusionMatrixBlockEntity matrix = laidOut(helper);
+        stand(helper, MATRIX.offset(0, -2, 3), new ItemStack(Items.IRON_INGOT));
+        helper.assertValueEqual(matrix.symmetry(helper.getLevel()), 3, "one loaded pedestal unpaired");
+
+        helper.setBlock(MATRIX.offset(4, -2, 1), Blocks.SKELETON_SKULL);
+        helper.setBlock(MATRIX.offset(-4, -2, -1), Blocks.SKELETON_SKULL);
+        helper.assertValueEqual(matrix.symmetry(helper.getLevel()), 2,
+                "three less two tenths is two, as the original truncates the sum");
         helper.succeed();
     }
 
@@ -183,7 +233,7 @@ public class InfusionTests {
         Player player = scholar(helper);
         stand(helper, MATRIX.offset(0, -2, 3), new ItemStack(Items.IRON_INGOT));
 
-        matrix.wake(player);
+        matrix.wake(player, wand());
         matrix.start(player);
         helper.assertTrue(!matrix.busy(), "a ring with a stray ingot on it is not a recipe");
 
@@ -208,10 +258,32 @@ public class InfusionTests {
     }
 
     @GameTest(template = TEMPLATE)
+    public static void aMissedDrinkLeavesTheJarsAloneForAWhile(GameTestHelper helper) {
+        InfusionMatrixBlockEntity matrix = laidOut(helper);
+        Player player = scholar(helper);
+        matrix.wake(player, wand());
+        matrix.start(player);
+        for (BlockPos at : java.util.List.of(MATRIX.offset(0, -2, 3), MATRIX.offset(0, -2, -3),
+                MATRIX.offset(3, -2, 3))) {
+            helper.setBlock(at, Blocks.AIR);
+        }
+        run(helper, matrix, 1);
+        AspectList before = matrix.owed();
+
+        jar(helper, MATRIX.offset(0, -2, 3), ModAspects.EARTH, 16);
+        jar(helper, MATRIX.offset(0, -2, -3), ModAspects.ENERGY, 16);
+        jar(helper, MATRIX.offset(3, -2, 3), ModAspects.DARKNESS, 16);
+        run(helper, matrix, 2);
+        helper.assertValueEqual(matrix.owed().total(), before.total(),
+                "the jars put back are not sought until ten seconds have passed");
+        helper.succeed();
+    }
+
+    @GameTest(template = TEMPLATE)
     public static void itStartsOnWhatIsLaidOut(GameTestHelper helper) {
         InfusionMatrixBlockEntity matrix = laidOut(helper);
         Player player = scholar(helper);
-        matrix.wake(player);
+        matrix.wake(player, wand());
         helper.assertTrue(matrix.start(player), "the working was laid out right");
         helper.assertTrue(matrix.busy(), "so it started");
         helper.assertTrue(!matrix.owed().isEmpty(), "and it owes for it");
@@ -221,7 +293,7 @@ public class InfusionTests {
     @GameTest(template = TEMPLATE)
     public static void itWantsTheResearchDone(GameTestHelper helper) {
         InfusionMatrixBlockEntity matrix = laidOut(helper);
-        matrix.wake(scholar(helper));
+        matrix.wake(scholar(helper), wand());
         helper.assertTrue(!matrix.start(helper.makeMockPlayer(GameType.SURVIVAL)),
                 "nobody makes a rod by accident");
         helper.assertTrue(!matrix.busy(), "and nothing started");
@@ -232,7 +304,7 @@ public class InfusionTests {
     public static void itDrinksAndFinishes(GameTestHelper helper) {
         InfusionMatrixBlockEntity matrix = laidOut(helper);
         Player player = scholar(helper);
-        matrix.wake(player);
+        matrix.wake(player, wand());
         matrix.start(player);
         matrix.steady();
 
@@ -254,7 +326,7 @@ public class InfusionTests {
     public static void takingTheWorkAwayEndsIt(GameTestHelper helper) {
         InfusionMatrixBlockEntity matrix = laidOut(helper);
         Player player = scholar(helper);
-        matrix.wake(player);
+        matrix.wake(player, wand());
         matrix.start(player);
         helper.setBlock(MATRIX.below(2), Blocks.AIR);
 
@@ -267,23 +339,23 @@ public class InfusionTests {
     public static void theStonesUnderAnAltarChangeThePriceAndThePace(GameTestHelper helper) {
         InfusionMatrixBlockEntity plain = laidOut(helper);
         Player player = scholar(helper);
-        plain.wake(player);
-        plain.wake(player);
+        plain.wake(player, wand());
+        plain.wake(player, wand());
         helper.assertValueEqual(plain.cycle(), InfusionMatrixBlockEntity.CYCLE, "a bare altar turns at twenty");
         helper.assertValueEqual(plain.cost(), InfusionMatrixBlockEntity.FULL_COST, "and pays in full");
         AspectList full = plain.owed();
 
         under(helper, ModBlocks.INFUSION_SPEED_STONE);
         InfusionMatrixBlockEntity hurried = laidOut(helper);
-        hurried.wake(player);
-        hurried.wake(player);
+        hurried.wake(player, wand());
+        hurried.wake(player, wand());
         helper.assertValueEqual(hurried.cycle(), 12, "four speed stones take a turn down to twelve");
         helper.assertTrue(hurried.cost() > InfusionMatrixBlockEntity.FULL_COST, "and charge for it");
 
         under(helper, ModBlocks.INFUSION_COST_STONE);
         InfusionMatrixBlockEntity thrifty = laidOut(helper);
-        thrifty.wake(player);
-        thrifty.wake(player);
+        thrifty.wake(player, wand());
+        thrifty.wake(player, wand());
         helper.assertValueEqual(thrifty.cycle(), 24, "four cost stones make a turn longer");
         helper.assertValueEqual(thrifty.cost(), 92, "and take eight parts in a hundred off the bill");
         helper.assertTrue(thrifty.owed().total() <= full.total(),
@@ -310,9 +382,10 @@ public class InfusionTests {
                 (InfusionMatrixBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(MATRIX));
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         player.setData(ModAttachments.KNOWLEDGE,
-                PlayerKnowledge.of(player).withResearch(Alchemia.id("wand_cap_alchemium")));
-        matrix.wake(player);
-        helper.assertValueEqual(matrix.wake(player), InfusionMatrixBlockEntity.Woken.STARTED,
+                PlayerKnowledge.of(player).withResearch(Alchemia.id("wand_cap_alchemium"))
+                        .withResearch(Alchemia.id("infusion")));
+        matrix.wake(player, wand());
+        helper.assertValueEqual(matrix.wake(player, wand()), InfusionMatrixBlockEntity.Woken.STARTED,
                 "the altar took the casting and the salis round it");
         matrix.steady();
 
@@ -340,11 +413,11 @@ public class InfusionTests {
         rebuildCorners(helper, ModBlocks.ELDRITCH_STONE.block().get());
         InfusionMatrixBlockEntity eldritch =
                 (InfusionMatrixBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(MATRIX));
-        eldritch.wake(player);
+        eldritch.wake(player, wand());
         helper.assertTrue(helper.getBlockState(MATRIX.offset(1, -2, 1))
                 .getValue(me.moonscenty.alchemia.block.ArcanePillarBlock.KIND)
                 == me.moonscenty.alchemia.block.PillarKind.ELDRITCH, "it woke into eldritch pillars");
-        eldritch.wake(player);
+        eldritch.wake(player, wand());
         helper.assertValueEqual(eldritch.cycle(), 16, "eldritch corners take a turn down to sixteen");
         helper.assertValueEqual(eldritch.cost(), 105, "and cost five parts in a hundred more");
 
@@ -352,8 +425,8 @@ public class InfusionTests {
         rebuildCorners(helper, ModBlocks.ANCIENT_STONE.block().get());
         InfusionMatrixBlockEntity ancient =
                 (InfusionMatrixBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(MATRIX));
-        ancient.wake(player);
-        ancient.wake(player);
+        ancient.wake(player, wand());
+        ancient.wake(player, wand());
         helper.assertValueEqual(ancient.cycle(), 18, "ancient corners take a turn down to eighteen");
         helper.assertValueEqual(ancient.cost(), 90, "and take a tenth off the bill");
         helper.succeed();
@@ -373,7 +446,7 @@ public class InfusionTests {
     public static void theRingMustStayToTheEnd(GameTestHelper helper) {
         InfusionMatrixBlockEntity matrix = laidOut(helper);
         Player player = scholar(helper);
-        matrix.wake(player);
+        matrix.wake(player, wand());
         matrix.start(player);
         matrix.steady();
         run(helper, matrix, 12);
@@ -393,7 +466,7 @@ public class InfusionTests {
     public static void swappingTheWorkEndsIt(GameTestHelper helper) {
         InfusionMatrixBlockEntity matrix = laidOut(helper);
         Player player = scholar(helper);
-        matrix.wake(player);
+        matrix.wake(player, wand());
         matrix.start(player);
         stand(helper, MATRIX.below(2), new ItemStack(Items.STONE));
         run(helper, matrix, 1);

@@ -54,6 +54,9 @@ public class InfusionMatrixBlockEntity extends SyncedBlockEntity {
     private static final int ELDRITCH_CORNERS_SHAKE = -4;
     private static final int RING = 8;
     private static final int DEEP = 10;
+    private static final int DRY_FOR = 200;
+    private static final int FORMED = 1;
+    private long dryUntil;
     private static final int STEADIED = 12;
     private static final int STEADIED_UP = 5;
     private static final int JARS = 12;
@@ -83,6 +86,7 @@ public class InfusionMatrixBlockEntity extends SyncedBlockEntity {
     private List<ResourceLocation> asked = List.of();
     private int cycle = CYCLE;
     private int cost = FULL_COST;
+    private int extraQuarters;
     private int counter;
     // a timestamp, not a counter, so the client can animate without per-tick sync
     private long woken;
@@ -152,6 +156,22 @@ public class InfusionMatrixBlockEntity extends SyncedBlockEntity {
         return true;
     }
 
+    // original: the cells between the corners are empty, bar the pedestal
+    private boolean clear(Level level) {
+        for (int x = -1; x <= 1; x++) {
+            for (int z = -1; z <= 1; z++) {
+                for (int down = 1; down <= UNDER; down++) {
+                    boolean corner = x != 0 && z != 0;
+                    boolean pedestal = x == 0 && z == 0 && down == UNDER;
+                    if (!corner && !pedestal && !level.isEmptyBlock(worldPosition.offset(x, -down, z))) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
     private boolean standing(Level level, Block corner) {
         if (!(level.getBlockEntity(worldPosition.below(UNDER)) instanceof ArcanePedestalBlockEntity)) {
             return false;
@@ -167,10 +187,14 @@ public class InfusionMatrixBlockEntity extends SyncedBlockEntity {
     // each pedestal adds instability; an identical pedestal mirrored across the matrix cancels it
     public int symmetry(Level level) {
         int against = 0;
+        int ancient = 0;
         for (BlockPos at : around(level, worldPosition)) {
             ArcanePedestalBlockEntity stand = stand(level, at);
             if (stand == null) {
                 continue;
+            }
+            if (kindOf(level, at) == me.moonscenty.alchemia.block.PillarKind.ANCIENT) {
+                ancient++;
             }
             boolean holding = !stand.held().isEmpty();
             against += holding ? 3 : 2;
@@ -195,10 +219,9 @@ public class InfusionMatrixBlockEntity extends SyncedBlockEntity {
         } else if (kind == me.moonscenty.alchemia.block.PillarKind.ELDRITCH) {
             against += ELDRITCH_CORNERS_SHAKE;
         }
-        return against + ancientStands / 4 + steadying(level);
+        // original: the stabilisers' tenths join the whole points before truncating
+        return (10 * (against + ancient / 4) + steadying(level)) / 10;
     }
-
-    private int ancientStands;
 
     // read once when a working starts; rebuilding mid-work does not change its terms
     private void reckon(Level level) {
@@ -214,17 +237,16 @@ public class InfusionMatrixBlockEntity extends SyncedBlockEntity {
         }
         // each ancient pedestal -1%, each eldritch one +0.25%
         int quarters = 0;
-        ancientStands = 0;
         for (BlockPos at : around(level, worldPosition)) {
             me.moonscenty.alchemia.block.PillarKind stand = kindOf(level, at);
             if (stand == me.moonscenty.alchemia.block.PillarKind.ANCIENT) {
                 cost -= 1;
-                ancientStands++;
             } else if (stand == me.moonscenty.alchemia.block.PillarKind.ELDRITCH) {
                 quarters++;
             }
         }
         cost += quarters / 4;
+        extraQuarters = quarters % 4;
         for (Vec3i corner : CORNERS) {
             BlockState under = level.getBlockState(worldPosition.offset(corner).below());
             if (under.is(ModBlocks.INFUSION_SPEED_STONE.get())) {
@@ -236,17 +258,20 @@ public class InfusionMatrixBlockEntity extends SyncedBlockEntity {
             }
         }
         cycle = Math.max(1, cycle);
-        cost = Math.max(CHEAPEST, cost);
+        if (cost < CHEAPEST) {
+            cost = CHEAPEST;
+            extraQuarters = 0;
+        }
     }
 
     // discounts round down; an aspect discounted to zero is dropped
     private AspectList priced(AspectList asked) {
-        if (cost == FULL_COST) {
+        if (cost == FULL_COST && extraQuarters == 0) {
             return asked;
         }
         AspectList paying = AspectList.EMPTY;
-        for (Holder<Aspect> aspect : asked.sortedByAmount()) {
-            int points = asked.get(aspect) * cost / FULL_COST;
+        for (Holder<Aspect> aspect : asked.asMap().keySet()) {
+            int points = asked.get(aspect) * (cost * 4 + extraQuarters) / (FULL_COST * 4);
             if (points > 0) {
                 paying = paying.add(aspect, points);
             }
@@ -259,7 +284,7 @@ public class InfusionMatrixBlockEntity extends SyncedBlockEntity {
                 2 * worldPosition.getZ() - at.getZ());
     }
 
-    // in tenths, truncated: mirrored pairs steady, unpaired ones destabilise
+    // in tenths: mirrored pairs steady, unpaired ones destabilise
     private int steadying(Level level) {
         int tenths = 0;
         for (int east = -STEADIED; east <= STEADIED; east++) {
@@ -276,7 +301,7 @@ public class InfusionMatrixBlockEntity extends SyncedBlockEntity {
                 }
             }
         }
-        return tenths / 10;
+        return tenths;
     }
 
     private List<BlockPos> columns() {
@@ -315,15 +340,26 @@ public class InfusionMatrixBlockEntity extends SyncedBlockEntity {
                 ? stand.kind() : me.moonscenty.alchemia.block.PillarKind.NORMAL;
     }
 
-    public Woken wake(Player player) {
+    // original: forming takes the infusion research and 75 of each primal from the wand
+    public static AspectList formingCost() {
+        return AspectList.eachPrimal(75);
+    }
+
+    public Woken wake(Player player, ItemStack wand) {
         if (level == null || level.isClientSide) {
             return Woken.NOTHING;
         }
         if (!awake) {
-            if (!built(level)) {
+            if (!built(level) || !clear(level)) {
                 return Woken.UNBUILT;
             }
+            if (!PlayerKnowledge.of(player).hasResearch(me.moonscenty.alchemia.Alchemia.id("infusion"))
+                    || !me.moonscenty.alchemia.item.VisHolder.pay(wand, formingCost(), player,
+                            me.moonscenty.alchemia.item.VisHolder.Spending.CRAFTING)) {
+                return Woken.UNPAID;
+            }
             raise(level);
+            level.blockEvent(worldPosition, getBlockState().getBlock(), FORMED, 0);
             awake = true;
             woken = level.getGameTime();
             watch = 0;
@@ -338,6 +374,7 @@ public class InfusionMatrixBlockEntity extends SyncedBlockEntity {
 
     public enum Woken {
         UNBUILT,
+        UNPAID,
         WOKEN,
         STARTED,
         BUSY,
@@ -365,10 +402,13 @@ public class InfusionMatrixBlockEntity extends SyncedBlockEntity {
         }
 
         InfusionInput laid = new InfusionInput(under.held(), standing);
+        // original: recipes the worker has not learned are passed over, not refused
         Optional<RecipeHolder<InfusionRecipe>> found = level.getRecipeManager()
-                .getRecipeFor(ModRecipes.INFUSION.get(), laid, level);
-        if (found.isEmpty() || !me.moonscenty.alchemia.research.RecipeGates.known(player, found.get().id(),
-                found.get().value().research())) {
+                .getRecipesFor(ModRecipes.INFUSION.get(), laid, level).stream()
+                .filter(holder -> me.moonscenty.alchemia.research.RecipeGates.known(player, holder.id(),
+                        holder.value().research()))
+                .findFirst();
+        if (found.isEmpty()) {
             return false;
         }
 
@@ -411,13 +451,14 @@ public class InfusionMatrixBlockEntity extends SyncedBlockEntity {
     }
 
     public static void clientTick(Level level, BlockPos pos, BlockState state, InfusionMatrixBlockEntity matrix) {
-        if (!matrix.busy()) {
+        if (!matrix.busy() || !matrix.awake) {
             matrix.humming = -1;
             return;
         }
         double x = pos.getX() + 0.5;
         double y = pos.getY() + 0.5;
         double z = pos.getZ() + 0.5;
+        me.moonscenty.alchemia.client.InfusionEffects.crackle(level, pos, matrix.instability);
         if (++matrix.humming == 0) {
             level.playLocalSound(x, y, z, ModSounds.INFUSER_START.get(), SoundSource.BLOCKS, 0.5F, 1.0F, false);
         } else if (matrix.humming % HUMS_EVERY == 0) {
@@ -453,9 +494,14 @@ public class InfusionMatrixBlockEntity extends SyncedBlockEntity {
         eat(level);
     }
 
+    // original: recipe order, and one aspect not found leaves the jars unsought for ten seconds
     private void drink(ServerLevel level, BlockPos pos) {
-        for (Holder<Aspect> aspect : owed.sortedByAmount()) {
-            BlockPos from = EssentiaReach.drainForInfusion(level, pos, aspect, JARS);
+        for (Holder<Aspect> aspect : List.copyOf(owed.asMap().keySet())) {
+            BlockPos from = level.getGameTime() < dryUntil ? null
+                    : EssentiaReach.drainForInfusion(level, pos, aspect, JARS);
+            if (from == null && level.getGameTime() >= dryUntil) {
+                dryUntil = level.getGameTime() + DRY_FOR;
+            }
             if (from != null) {
                 owed = owed.reduce(aspect, 1);
                 EssentiaReach.thread(level, from, pos, aspect.value().color());
@@ -523,6 +569,7 @@ public class InfusionMatrixBlockEntity extends SyncedBlockEntity {
             }
         }
         under.hold(made);
+        level.blockEvent(under.getBlockPos(), under.getBlockState().getBlock(), ArcanePedestalBlockEntity.DONE, 0);
         if (worker != null) {
             me.moonscenty.alchemia.player.CraftWarp.made(level.getPlayerByUUID(worker), made);
         }
@@ -553,15 +600,31 @@ public class InfusionMatrixBlockEntity extends SyncedBlockEntity {
         changed();
     }
 
+    // original: a broken altar only halts the working, which goes on once the altar is formed again
     public void sleep(Level level) {
-        if (busy() && level instanceof ServerLevel served) {
-            fail(served, worldPosition);
-        }
         awake = false;
         watch = 0;
         woken = 0;
         lower(level);
         changed();
+    }
+
+    @Override
+    public boolean triggerEvent(int id, int data) {
+        if (id == FORMED) {
+            if (level != null && level.isClientSide) {
+                me.moonscenty.alchemia.client.InfusionEffects.formed(level, worldPosition);
+            }
+            return true;
+        }
+        return super.triggerEvent(id, data);
+    }
+
+    public void collapse(Level level) {
+        if (busy() && level instanceof ServerLevel served) {
+            fail(served, worldPosition);
+        }
+        sleep(level);
     }
 
     public void steady() {

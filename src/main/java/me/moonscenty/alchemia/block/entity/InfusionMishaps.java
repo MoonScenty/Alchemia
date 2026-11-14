@@ -77,6 +77,8 @@ public final class InfusionMishaps {
             }
             ItemStack thrown = stand.held();
             stand.hold(ItemStack.EMPTY);
+            level.blockEvent(at, level.getBlockState(at).getBlock(), ArcanePedestalBlockEntity.BURST,
+                    ArcanePedestalBlockEntity.pack(pos.subtract(at)));
             if (!how.gone) {
                 Containers.dropItemStack(level, at.getX(), at.getY() + 1, at.getZ(), thrown);
             }

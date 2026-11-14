@@ -61,14 +61,18 @@ public final class GogglesTags {
             text(pose, buffers, client.font, camera, at.getX(), at.getY() + 1, at.getZ(),
                     "Note: " + state.getValue(NoteBlock.NOTE));
         }
-        if (client.level.getBlockEntity(at) instanceof EssentiaHolder holder && !holder.held().isEmpty()) {
+        AspectList shown = client.level.getBlockEntity(at) instanceof EssentiaHolder holder ? holder.held()
+                : client.level.getBlockEntity(at)
+                        instanceof me.moonscenty.alchemia.block.entity.InfusionMatrixBlockEntity matrix
+                        ? matrix.owed() : AspectList.EMPTY;
+        if (!shown.isEmpty()) {
             if (scale < 0.3F) {
                 scale += 0.031F - scale / 10.0F;
             }
             float lift = client.level.getBlockEntity(at)
                     instanceof me.moonscenty.alchemia.block.entity.RechargePedestalBlockEntity ? 0.6F : 0.0F;
             tags(pose, buffers, client.font, camera, at.getX(), at.getY() + (roomAbove ? 0.4F : 0.0F) + lift, at.getZ(),
-                    holder.held(), roomAbove ? Direction.UP : hit.getDirection());
+                    shown, roomAbove ? Direction.UP : hit.getDirection());
         }
         buffers.endBatch();
     }

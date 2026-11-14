@@ -24,7 +24,9 @@ public final class EssentiaReach {
     public static BlockPos drainForInfusion(Level level, BlockPos from, Holder<Aspect> aspect, int range) {
         for (BlockEntity holding : nearby(level, from, range * 2)) {
             BlockPos at = holding.getBlockPos();
-            if (Math.abs(at.getX() - from.getX()) > range || Math.abs(at.getY() - from.getY()) > range
+            // original: one block short of the range upward
+            if (Math.abs(at.getX() - from.getX()) > range || at.getY() - from.getY() < -range
+                    || at.getY() - from.getY() >= range
                     || Math.abs(at.getZ() - from.getZ()) > range) {
                 continue;
             }
