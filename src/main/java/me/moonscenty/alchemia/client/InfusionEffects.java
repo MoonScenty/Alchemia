@@ -27,6 +27,10 @@ public final class InfusionEffects {
                     0.3F - random.nextFloat() * 0.1F, 0.0F, 0.3F - random.nextFloat() * 0.1F);
         } else if (id == ArcanePedestalBlockEntity.DONE) {
             CrucibleEffects.bamf(client, x, y, z, 0.5F, 0.1F, 0.6F, true, false);
+        } else if (id == ArcanePedestalBlockEntity.POLLUTED) {
+            for (int i = 0; i < Math.min(me.moonscenty.alchemia.client.particle.ParticleBudget.scale(20), data); i++) {
+                TaintEffects.pollution(client, stand);
+            }
         }
     }
 

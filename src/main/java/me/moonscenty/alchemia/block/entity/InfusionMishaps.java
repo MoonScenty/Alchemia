@@ -86,7 +86,9 @@ public final class InfusionMishaps {
                 level.playSound(null, at, SoundEvents.GENERIC_SWIM, SoundSource.BLOCKS, 0.3F, 1.0F);
             }
             if (how.flux) {
-                AuraHandler.add(level, at, ModAspects.FLUX, 5 + level.random.nextInt(5));
+                int flux = 5 + level.random.nextInt(5);
+                AuraHandler.add(level, at, ModAspects.FLUX, flux);
+                level.blockEvent(at, level.getBlockState(at).getBlock(), ArcanePedestalBlockEntity.POLLUTED, flux);
             }
             if (how.bang) {
                 level.explode(null, at.getX() + 0.5, at.getY() + 0.5, at.getZ() + 0.5, 1.0F,

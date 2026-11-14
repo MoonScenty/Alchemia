@@ -263,6 +263,10 @@ public class MirrorBlockEntity extends SyncedBlockEntity implements EssentiaHold
     public boolean release(Holder<Aspect> aspect) {
         for (EssentiaHolder holder : beyond()) {
             if (holder.held().get(aspect) > 0 && holder.release(aspect)) {
+                MirrorBlockEntity partner = partner();
+                if (partner != null && holder instanceof BlockEntity jar && jar.getLevel() instanceof ServerLevel there) {
+                    EssentiaReach.thread(there, jar.getBlockPos(), partner.getBlockPos(), aspect.value().color());
+                }
                 instability++;
                 setChanged();
                 return true;

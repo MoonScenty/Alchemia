@@ -11,6 +11,7 @@ import net.minecraft.world.level.block.state.BlockState;
 public class ArcanePedestalBlockEntity extends SyncedBlockEntity {
     public static final int BURST = 11;
     public static final int DONE = 12;
+    public static final int POLLUTED = 13;
 
     private ItemStack held = ItemStack.EMPTY;
 
@@ -37,7 +38,7 @@ public class ArcanePedestalBlockEntity extends SyncedBlockEntity {
 
     @Override
     public boolean triggerEvent(int id, int data) {
-        if (id == BURST || id == DONE) {
+        if (id == BURST || id == DONE || id == POLLUTED) {
             if (level != null && level.isClientSide) {
                 me.moonscenty.alchemia.client.InfusionEffects.stand(level, worldPosition, id, data);
             }

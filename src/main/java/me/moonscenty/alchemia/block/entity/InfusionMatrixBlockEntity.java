@@ -504,7 +504,7 @@ public class InfusionMatrixBlockEntity extends SyncedBlockEntity {
             }
             if (from != null) {
                 owed = owed.reduce(aspect, 1);
-                EssentiaReach.thread(level, from, pos, aspect.value().color());
+                EssentiaReach.thread(level, from, pos.below(), aspect.value().color());
                 changed();
                 return;
             }

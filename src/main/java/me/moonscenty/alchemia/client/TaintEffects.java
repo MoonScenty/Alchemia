@@ -29,10 +29,14 @@ public final class TaintEffects {
     }
 
     public static void pollution(Entity crawler, BlockPos at) {
-        if (!(crawler.level() instanceof ClientLevel level)) {
+        pollution(crawler.level(), at);
+    }
+
+    public static void pollution(net.minecraft.world.level.Level world, BlockPos at) {
+        if (!(world instanceof ClientLevel level)) {
             return;
         }
-        RandomSource random = crawler.getRandom();
+        RandomSource random = level.random;
         Minecraft.getInstance().particleEngine.add(new GenericParticle(level,
                 at.getX() + 0.2F + random.nextFloat() * 0.6F, at.getY() + 0.2F + random.nextFloat() * 0.6F,
                 at.getZ() + 0.2F + random.nextFloat() * 0.6F, (random.nextFloat() - random.nextFloat()) * 0.005,
