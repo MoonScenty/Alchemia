@@ -18,9 +18,6 @@ Thaumcraft 5.2.4 (MC 1.8.9)의 기능을 Minecraft 1.21.1 / NeoForge 21.1 로 �
 - **예외**: 원본이 제3자의 공개 라이선스 에셋을 가져다 쓴 경우에는 그 출처에서 직접 가져와 라이선스대로 표기하고 쓸 수 있다. 상 아이콘(game-icons.net, Lorc, CC BY 3.0)이 그렇다. 반드시 출처와 라이선스를 확인한 뒤 [CREDITS.md](../CREDITS.md)에 적는다.
 - **텍스처가 필요한 작업은 진행 전에 MoonScenty에게 확인받는다.** 필요한 텍스처 목록(파일 경로, 크기, 용도)을 정리해 먼저 보고하고, 임의로 텍스처를 만들거나 가져오지 않는다.
 - 클래스/레지스트리 이름에 `thaumcraft`, `TC` 등을 쓰지 않는다.
-- **원본 이름에 들어간 `thaum`은 `alche`로 바꾼다.** 레지스트리 ID, 클래스·상수 이름, 태그, 번역 모두 해당한다.
-  - thaumium → alchemium (알케미움), thaumometer → alchemometer (알케모미터), thaumonomicon → alchemonomicon (알케모노미콘), thaumatorium → alchematorium (알케마토리움), thaumostatic → alchemostatic, thaumaturge → alchemist
-  - 원본 자체를 가리킬 때(Thaumcraft, `thaumref` 경로, 원본 클래스명)와 MoonScenty가 제공한 원본 PNG 파일명은 그대로 둔다.
 - 1.8.9 관용구를 그대로 가져오지 말고 현재 대응물을 쓴다:
   - 메타데이터/NBT 아이템 변형 → 개별 아이템 + Data Components
   - `IExtendedEntityProperties`, 플레이어 NBT → Data Attachments

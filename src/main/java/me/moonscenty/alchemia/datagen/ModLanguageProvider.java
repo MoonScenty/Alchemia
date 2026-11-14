@@ -838,7 +838,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
         addItem(ModItems.VIS_STONE, pick("Vis Stone", "비스 돌"));
         add("item.alchemia.vis_stone.text", pick("Recharges wands in hotbar", "단축바의 완드를 충전한다"));
         addItem(ModItems.VIS_AMULET, pick("Amulet of Vis", "비스 부적"));
-        addItem(ModItems.THAUMOSTATIC_GIRDLE, pick("Thaumostatic Girdle", "알케모스태틱 허리띠"));
+        addItem(ModItems.THAUMOSTATIC_GIRDLE, pick("Thaumostatic Girdle", "타우모스태틱 허리띠"));
         addItem(ModItems.VERDANT_HEART, pick("Verdant Heart Band", "푸른 심장 반지"));
         add("item.alchemia.verdant_heart.lifegiver", pick("Lifegiver", "생명을 주는 것"));
         add("item.alchemia.verdant_heart.sustainer", pick("Sustainer", "지탱하는 것"));
@@ -1275,7 +1275,7 @@ public abstract class ModLanguageProvider extends LanguageProvider {
                 {"verdant_heart_lifegiver", "Lifegiver & Sustainer", "생명을 주는 것과 지탱하는 것",
                  "A verdant heart can be worked once more, into one of two things, not both. A lifegiver spends five to mend a point of its wearer's health. A sustainer spends one to give back breath to someone drowning, or else to feed someone hungry. The sustainer wants a triple meat treat, which is sugar and three meats.",
                  "푸른 심장은 한 번 더, 둘 중 하나로만 다듬을 수 있다. 생명을 주는 것은 5를 써서 착용자의 체력을 1 낫게 한다. 지탱하는 것은 1을 써서 물에 빠진 사람에게 숨을 돌려주거나, 그렇지 않으면 배고픈 사람을 먹인다. 지탱하는 것에는 설탕과 세 가지 고기로 만든 세 고기 간식이 든다."},
-                {"thaumostatic_girdle", "Thaumostatic Girdle", "알케모스태틱 허리띠",
+                {"thaumostatic_girdle", "Thaumostatic Girdle", "타우모스태틱 허리띠",
                  "A belt worked with air and motion that takes a third of a block off every fall for every moment its wearer falls, which is enough that most falls do no harm at all.",
                  "공기와 움직임을 엮은 허리띠다. 착용자가 떨어지는 동안 매 순간 낙하 거리를 3분의 1블록씩 덜어 주어, 웬만한 낙하는 아무 해도 없다."},
                 {"vis_amulet", "Portable Vis Recharging", "들고 다니는 비스 충전",
