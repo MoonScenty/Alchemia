@@ -90,6 +90,25 @@ public class MobRuleTests {
     }
 
     @GameTest(template = TEMPLATE)
+    public static void mindingFriendsMakesTeammatesFairGame(GameTestHelper helper) {
+        Player owner = helper.makeMockPlayer(GameType.SURVIVAL);
+        AdvancedAutomatedCrossbow turret = crossbow(helper, owner);
+        Zombie zombie = helper.spawnWithNoFreeWill(EntityType.ZOMBIE, AT.south(3));
+        var board = helper.getLevel().getScoreboard();
+        var team = board.addPlayerTeam("alchemia_friends_" + helper.absolutePos(AT).asLong());
+        board.addPlayerToTeam(turret.getScoreboardName(), team);
+        board.addPlayerToTeam(zombie.getScoreboardName(), team);
+        try {
+            helper.assertTrue(turret.isAlliedTo(zombie), "a teammate is an ally");
+            turret.mind(Autocaster.FRIENDS, true);
+            helper.assertFalse(turret.isAlliedTo(zombie), "but minding friends, the turret has no allies");
+        } finally {
+            board.removePlayerTeam(team);
+        }
+        helper.succeed();
+    }
+
+    @GameTest(template = TEMPLATE)
     public static void anAutocasterFiresOnlyWhereItIsLooking(GameTestHelper helper) {
         Autocaster turret = caster(helper);
         Pig mark = helper.spawnWithNoFreeWill(EntityType.PIG, AT.south(6));

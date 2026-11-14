@@ -20,8 +20,9 @@ public class FocusWheelScreen extends Screen {
     private static final ResourceLocation RING = Alchemia.id("textures/gui/focus_wheel.png");
     private static final ResourceLocation RING_BACK = Alchemia.id("textures/gui/focus_wheel_back.png");
 
-    private static final float ROOM = 32.0F;
-    private static final float ROOM_EACH = 5.0F;
+    private static final float ROOM = 16.0F;
+    private static final float ROOM_EACH = 2.5F;
+    private static final float RING_SHADE = 0.5F;
     private static final float OUTER = 2.75F;
     private static final float INNER = 2.55F;
     private static final float TURNS = 0.5F;
@@ -43,7 +44,9 @@ public class FocusWheelScreen extends Screen {
 
     public FocusWheelScreen(List<ItemStack> carried, ItemStack fitted, int key) {
         super(CommonComponents.EMPTY);
-        this.carried = List.copyOf(carried);
+        java.util.Map<String, ItemStack> once = new java.util.LinkedHashMap<>();
+        carried.forEach(stack -> once.putIfAbsent(Foci.name(stack), stack));
+        this.carried = List.copyOf(once.values());
         this.fitted = fitted;
         this.key = key;
     }
@@ -105,6 +108,8 @@ public class FocusWheelScreen extends Screen {
 
         if (under >= 0) {
             graphics.renderTooltip(font, carried.get(under), mouseX, mouseY);
+        } else if (!fitted.isEmpty() && Math.abs(mouseX - middleX) <= OVER && Math.abs(mouseY - middleY) <= OVER) {
+            graphics.renderTooltip(font, fitted, mouseX, mouseY);
         }
     }
 
@@ -118,8 +123,10 @@ public class FocusWheelScreen extends Screen {
     private void rings(GuiGraphics graphics, int middleX, int middleY, float room, float age) {
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
+        graphics.setColor(RING_SHADE, RING_SHADE, RING_SHADE, RING_SHADE);
         ring(graphics, RING, middleX, middleY, room * OUTER, age * TURNS);
         ring(graphics, RING_BACK, middleX, middleY, room * INNER, -age * TURNS);
+        graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
     }
 
     private void ring(GuiGraphics graphics, ResourceLocation sheet, int middleX, int middleY, float size,

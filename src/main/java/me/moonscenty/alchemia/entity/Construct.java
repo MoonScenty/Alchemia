@@ -159,9 +159,12 @@ public abstract class Construct extends PathfinderMob implements OwnableEntity {
         }
     }
 
-    // it does not turn on its owner or what they own unless told to mind friends
+    // it does not turn on its owner or what they own unless told to mind friends, and then it has no allies
     @Override
     public boolean isAlliedTo(Entity other) {
+        if (minds(FRIENDS)) {
+            return false;
+        }
         UUID owner = getOwnerUUID();
         if (owner != null && !minds(FRIENDS) && (owner.equals(other.getUUID())
                 || other instanceof OwnableEntity owned && owner.equals(owned.getOwnerUUID()))) {
@@ -194,8 +197,9 @@ public abstract class Construct extends PathfinderMob implements OwnableEntity {
         return opened(player);
     }
 
+    // original: the owner's click is always the construct's own; only a stranger's name tag gets through
     protected boolean letsHandle(Player player, InteractionHand hand) {
-        return player.isSecondaryUseActive() || player.getItemInHand(hand).is(net.minecraft.world.item.Items.NAME_TAG);
+        return !owns(player) && player.getItemInHand(hand).is(net.minecraft.world.item.Items.NAME_TAG);
     }
 
     protected void takeDown(Player player, InteractionHand hand) {

@@ -262,11 +262,6 @@ public class Autocaster extends ConstructWithSlot {
     }
 
     @Override
-    protected boolean letsHandle(Player player, InteractionHand hand) {
-        return false;
-    }
-
-    @Override
     protected void emptyOut() {
         if (!getMainHandItem().isEmpty()) {
             spawnAtLocation(getMainHandItem(), 0.0F);

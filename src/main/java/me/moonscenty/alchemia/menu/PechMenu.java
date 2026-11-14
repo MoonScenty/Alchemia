@@ -115,6 +115,10 @@ public class PechMenu extends AlchemiaMenu {
                 given = pech.fromPack();
             } else if (lot >= 4 && random.nextBoolean()) {
                 given = fromDungeon(level, random);
+                if (given.isEmpty()) {
+                    value += lot;
+                    continue;
+                }
             }
             if (given.isEmpty()) {
                 given = PechTrades.lot(level, pech.getKind(), lot, random);
